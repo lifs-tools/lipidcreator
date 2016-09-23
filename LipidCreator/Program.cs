@@ -519,6 +519,7 @@ namespace LipidCreator
                     {
                         String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
                         all_paths_to_precursor_images.Add(tokens[0], tokens[1]);
+                        Console.WriteLine(tokens[0] + " " + tokens[1]);
                     }
                 }
             }

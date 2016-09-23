@@ -296,9 +296,14 @@ namespace LipidCreator
             className = copy.className;
             MS2Fragments = new Dictionary<String, ArrayList>();
             paths_to_full_image = new Dictionary<String, String>();
+            foreach (KeyValuePair<String, String> item in copy.paths_to_full_image)
+            {
+                paths_to_full_image.Add(item.Key, item.Value);
+            }
+            
             foreach (KeyValuePair<String, ArrayList> item in copy.MS2Fragments)
             {
-                paths_to_full_image.Add(item.Key, copy.paths_to_full_image[item.Key]);
+                MS2Fragments.Add(item.Key, new ArrayList());
                 foreach (MS2Fragment fragment in item.Value)
                 {
                     MS2Fragments[item.Key].Add(new MS2Fragment(fragment));
@@ -519,7 +524,6 @@ namespace LipidCreator
                     {
                         String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
                         all_paths_to_precursor_images.Add(tokens[0], tokens[1]);
-                        Console.WriteLine(tokens[0] + " " + tokens[1]);
                     }
                 }
             }

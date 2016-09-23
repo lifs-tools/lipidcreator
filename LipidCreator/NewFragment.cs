@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,9 +14,11 @@ namespace LipidCreator
     {
 
         DataTable elements;
+        MS2Form ms2form;
 
-        public NewFragment()
+        public NewFragment(MS2Form ms2form)
         {
+            this.ms2form = ms2form;
             elements = new DataTable();
             elements.Clear();
             String count = "Count";
@@ -104,13 +107,13 @@ namespace LipidCreator
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void cancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
         
 
-        private void button2_Click(object sender, EventArgs e)
+        private void add_Click(object sender, EventArgs e)
         {
             int elementsSelected = 0;
             foreach (DataRow row in elements.Rows)
@@ -133,7 +136,9 @@ namespace LipidCreator
                 MessageBox.Show("No name defined");
                 return;
             }
-
+            
+            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
+            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements));
             this.Close();
         }
         private void dataGridView1_CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)

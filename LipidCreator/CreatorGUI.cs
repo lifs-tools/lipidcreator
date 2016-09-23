@@ -831,7 +831,7 @@ namespace LipidCreator
         
         public void open_ms2_form(Object sender, EventArgs e)
         {
-            MS2Form ms2fragments = new MS2Form(currentLipid);
+            MS2Form ms2fragments = new MS2Form(this, currentLipid);
             ms2fragments.Owner = this;
             ms2fragments.ShowInTaskbar = false;
             ms2fragments.ShowDialog();

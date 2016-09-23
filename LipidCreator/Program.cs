@@ -264,9 +264,9 @@ namespace LipidCreator
         public string className;
         public TabPage text_page;
         public Dictionary<String, ArrayList> MS2Fragments;
+        public Dictionary<String, String> paths_to_full_image;
         public String completeName;
         public Dictionary<String, bool> adducts;
-        public ArrayList paths_to_full_image;
     
         public lipid(){
             adducts = new Dictionary<String, bool>();
@@ -279,6 +279,7 @@ namespace LipidCreator
             adducts.Add("+HCOO", false);
             adducts.Add("+CH3COO", false);
             MS2Fragments = new Dictionary<String, ArrayList>();
+            paths_to_full_image = new Dictionary<String, String>();
         }
         
         public lipid(lipid copy)
@@ -294,17 +295,14 @@ namespace LipidCreator
             adducts.Add("+CH3COO", copy.adducts["+CH3COO"]);
             className = copy.className;
             MS2Fragments = new Dictionary<String, ArrayList>();
+            paths_to_full_image = new Dictionary<String, String>();
             foreach (KeyValuePair<String, ArrayList> item in copy.MS2Fragments)
             {
+                paths_to_full_image.Add(item.Key, copy.paths_to_full_image[item.Key]);
                 foreach (MS2Fragment fragment in item.Value)
                 {
                     MS2Fragments[item.Key].Add(new MS2Fragment(fragment));
                 }
-            }
-            paths_to_full_image = new ArrayList();
-            foreach (String path in copy.paths_to_full_image)
-            {
-                paths_to_full_image.Add(path);
             }
         }
     }
@@ -318,13 +316,25 @@ namespace LipidCreator
         public fattyAcidGroup fag4;
         public HashSet<int>[] fa_db_values;
     
-        public cl_lipid()
+        public cl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag1 = new fattyAcidGroup();
             fag2 = new fattyAcidGroup();
             fag3 = new fattyAcidGroup();
             fag4 = new fattyAcidGroup();
             MS2Fragments.Add("CL", new ArrayList());
+            
+            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            {
+                if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
+                if (all_fragments.ContainsKey(kvp.Key))
+                {
+                    foreach (MS2Fragment fragment in all_fragments[kvp.Key])
+                    {
+                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
+                    }
+                }
+            }
         }
         
         public cl_lipid(cl_lipid copy) : base((lipid)copy)
@@ -344,7 +354,7 @@ namespace LipidCreator
         public fattyAcidGroup fag3;
         public HashSet<int>[] fa_db_values;
     
-        public gl_lipid()
+        public gl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag1 = new fattyAcidGroup();
             fag2 = new fattyAcidGroup();
@@ -352,6 +362,18 @@ namespace LipidCreator
             MS2Fragments.Add("MG", new ArrayList());
             MS2Fragments.Add("DG", new ArrayList());
             MS2Fragments.Add("TG", new ArrayList());
+            
+            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            {
+                if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
+                if (all_fragments.ContainsKey(kvp.Key))
+                {
+                    foreach (MS2Fragment fragment in all_fragments[kvp.Key])
+                    {
+                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
+                    }
+                }
+            }
         }
     
         public gl_lipid(gl_lipid copy) : base((lipid)copy) 
@@ -371,7 +393,7 @@ namespace LipidCreator
         public int hgValue;
         public HashSet<int>[] fa_db_values;
     
-        public pl_lipid()
+        public pl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag1 = new fattyAcidGroup();
             fag2 = new fattyAcidGroup();
@@ -385,6 +407,18 @@ namespace LipidCreator
             MS2Fragments.Add("PIP2", new ArrayList());
             MS2Fragments.Add("PIP3", new ArrayList());
             MS2Fragments.Add("PS", new ArrayList());
+            
+            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            {
+                if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
+                if (all_fragments.ContainsKey(kvp.Key))
+                {
+                    foreach (MS2Fragment fragment in all_fragments[kvp.Key])
+                    {
+                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
+                    }
+                }
+            }
         }
     
         public pl_lipid(pl_lipid copy) : base((lipid)copy)
@@ -408,7 +442,7 @@ namespace LipidCreator
         public int hydroxyValue;
         public HashSet<int>[] lcb_fa_db_values;
     
-        public sl_lipid()
+        public sl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag = new fattyAcidGroup();
             hgValue = 0;
@@ -429,6 +463,19 @@ namespace LipidCreator
             MS2Fragments.Add("PECer", new ArrayList());
             MS2Fragments.Add("PICer", new ArrayList());
             MS2Fragments.Add("SM", new ArrayList());
+            
+            
+            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            {
+                if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
+                if (all_fragments.ContainsKey(kvp.Key))
+                {
+                    foreach (MS2Fragment fragment in all_fragments[kvp.Key])
+                    {
+                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
+                    }
+                }
+            }
         }
     
         public sl_lipid(sl_lipid copy) : base((lipid)copy)
@@ -449,7 +496,7 @@ namespace LipidCreator
 
         public ArrayList lipidTabList;
         public ArrayList registered_lipids;
-        public ArrayList all_lipids;
+        //public ArrayList all_lipids;
         public CreatorGUI creatorGUI;
         public Dictionary<String, ArrayList> all_fragments;
         public Dictionary<String, String> all_paths_to_precursor_images;
@@ -457,13 +504,10 @@ namespace LipidCreator
         public LipidCreatorForm()
         {
 
-            lipidTabList = new ArrayList(new lipid[] {new cl_lipid(), new gl_lipid(), new pl_lipid(), new sl_lipid() } );
             registered_lipids = new ArrayList();
             all_paths_to_precursor_images = new Dictionary<String, String>();
             all_fragments = new Dictionary<String, ArrayList>();
-            all_lipids = new ArrayList();
-            creatorGUI = new CreatorGUI(this);
-            creatorGUI.changeTab(0);
+            //all_lipids = new ArrayList();
             
             try
             {
@@ -494,7 +538,8 @@ namespace LipidCreator
                     {
                         if (line.Length < 2) continue;
                         String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
-                        if (!all_fragments.ContainsKey(tokens[0])){
+                        if (!all_fragments.ContainsKey(tokens[0]))
+                        {
                             all_fragments.Add(tokens[0], new ArrayList());
                         }
                         all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], tokens[2], Convert.ToInt32(tokens[3])));
@@ -506,6 +551,15 @@ namespace LipidCreator
                 Console.WriteLine("The file 'data/ms2fragments.csv' could not be read:");
                 Console.WriteLine(e.Message);
             }
+            
+            lipidTabList = new ArrayList(new lipid[] {new cl_lipid(all_paths_to_precursor_images, all_fragments),
+                                                      new gl_lipid(all_paths_to_precursor_images, all_fragments),
+                                                      new pl_lipid(all_paths_to_precursor_images, all_fragments),
+                                                      new sl_lipid(all_paths_to_precursor_images, all_fragments) } );
+                                                      
+                                                      
+            creatorGUI = new CreatorGUI(this);
+            creatorGUI.changeTab(0);
         }
 
 

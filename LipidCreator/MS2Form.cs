@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,28 +16,17 @@ namespace LipidCreator
         
         public Image fragment_complete;
         public lipid currentLipid;
+        public ArrayList positiveIDs;
+        public ArrayList negativeIDs;
 
         public MS2Form(lipid currentLipid)
         {
+        
+            positiveIDs = new ArrayList();
+            negativeIDs = new ArrayList();
             this.currentLipid = currentLipid;
-            InitializeComponent(currentLipid.MS2Fragments);
+            InitializeComponent(currentLipid.MS2Fragments);            
             tabChange(0);
-            /*
-            for (int i = 0; i < currentLipid.MS2Fragments.Count; ++i)
-            {
-                if (((MS2Fragment)currentLipid.MS2Fragments[i]).fragmentCharge > 0)
-                {
-                    checkedListBox1.Items.Add(((MS2Fragment)currentLipid.MS2Fragments[i]).fragmentName);
-                    checkedListBox1.SetItemChecked(checkedListBox1.Items.Count - 1, ((MS2Fragment)currentLipid.MS2Fragments[i]).fragmentSelected);
-                }
-                else 
-                {
-                    checkedListBox2.Items.Add(((MS2Fragment)currentLipid.MS2Fragments[i]).fragmentName);
-                    checkedListBox2.SetItemChecked(checkedListBox2.Items.Count - 1, ((MS2Fragment)currentLipid.MS2Fragments[i]).fragmentSelected);
-                }
-            }
-            fragment_complete = Image.FromFile(currentLipid.path_to_full_image);
-            pictureBox1.Image = fragment_complete;*/
         }
 
         void checkedListBox_MouseLeave(object sender, EventArgs e)
@@ -88,6 +79,34 @@ namespace LipidCreator
             ((TabPage)tabPages[index]).Controls.Add(label1);
             ((TabPage)tabPages[index]).Controls.Add(checkedListBox1);
             ((TabPage)tabPages[index]).Controls.Add(pictureBox1);
+            negativeIDs.Clear();
+            positiveIDs.Clear();
+            checkedListBox1.Items.Clear();
+            checkedListBox2.Items.Clear();
+            
+            ArrayList currentFragments = currentLipid.MS2Fragments[((TabPage)tabPages[index]).Text];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0)
+                {
+                    checkedListBox1.Items.Add(((MS2Fragment)currentFragments[i]).fragmentName);
+                    positiveIDs.Add(i);
+                    checkedListBox1.SetItemChecked(checkedListBox1.Items.Count - 1, ((MS2Fragment)currentFragments[i]).fragmentSelected);
+                }
+                else 
+                {
+                    checkedListBox2.Items.Add(((MS2Fragment)currentFragments[i]).fragmentName);
+                    negativeIDs.Add(i);
+                    checkedListBox2.SetItemChecked(checkedListBox2.Items.Count - 1, ((MS2Fragment)currentFragments[i]).fragmentSelected);
+                }
+            }
+            
+            /*
+            if (currentLipid.paths_to_full_image.Count > index)
+            {
+                fragment_complete = Image.FromFile((String)currentLipid.paths_to_full_image[index]);
+                pictureBox1.Image = fragment_complete;
+            }*/
         }
 
 

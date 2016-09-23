@@ -196,28 +196,28 @@ namespace LipidCreator
         
         public void reset_cl_lipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[0] = new cl_lipid();
+            lipidCreatorForm.lipidTabList[0] = new cl_lipid(lipidCreatorForm.all_paths_to_precursor_images, lipidCreatorForm.all_fragments);
             lipid_modifications[0] = -1;
             changeTab(0);
         }
         
         public void reset_gl_lipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[1] = new gl_lipid();
+            lipidCreatorForm.lipidTabList[1] = new gl_lipid(lipidCreatorForm.all_paths_to_precursor_images, lipidCreatorForm.all_fragments);
             lipid_modifications[1] = -1;
             changeTab(1);
         }
         
         public void reset_pl_lipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[2] = new pl_lipid();
+            lipidCreatorForm.lipidTabList[2] = new pl_lipid(lipidCreatorForm.all_paths_to_precursor_images, lipidCreatorForm.all_fragments);
             lipid_modifications[2] = -1;
             changeTab(2);
         }
         
         public void reset_sl_lipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[3] = new sl_lipid();
+            lipidCreatorForm.lipidTabList[3] = new sl_lipid(lipidCreatorForm.all_paths_to_precursor_images, lipidCreatorForm.all_fragments);
             lipid_modifications[3] = -1;
             changeTab(3);
         }

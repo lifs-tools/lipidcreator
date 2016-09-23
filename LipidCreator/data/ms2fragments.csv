@@ -1,0 +1,10 @@
+class,name,file,charge,C,H,O,N,P,S,Na
+PG,FA1,images/MS2/PG/PG_neg_FA1_complete.png,-1,,,,,,,
+PG,FA1',images/MS2/PG/PG_neg_FA1'.png,-1,,,,,,,
+PG,FA1 + O,images/MS2/PG/PG_neg_FA1'+O.png,-1,,,,,,,
+PG,PG,images/MS2/PG/PG_neg_FA2_complete.png,-1,,,,,,,
+PG,FA2',images/MS2/PG/PG_neg_FA2'.png,-1,,,,,,,
+PG,FA2' + O,images/MS2/PG/PG_neg_FA2'+O.png,-1,,,,,,,
+PG,GP,images/MS2/PG/PG_neg_GP.png,-1,,,,,,,
+PG,HG,images/MS2/PG/PG_neg_HG.png,-1,,,,,,,
+PG,NL,images/MS2/PG/PG_pos_NL.png,1,,,,,,,

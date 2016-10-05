@@ -16,6 +16,7 @@ namespace LipidCreator
         public lipid currentLipid;
         public DataTable registered_lipids_datatable;
         public int[] lipid_modifications;
+        public Color alert_color = Color.FromArgb(255, 180, 180);
         
         public CreatorGUI(LipidCreatorForm lipidCreatorForm)
         {
@@ -35,6 +36,11 @@ namespace LipidCreator
         public void tabIndexChanged(Object sender, EventArgs e)
         {
             changeTab(((TabControl)sender).SelectedIndex);
+        }
+        
+        public void resetTextBoxBackground(Object sender, EventArgs e)
+        {
+            ((TextBox)sender).BackColor = Color.White;
         }
 
         public void changeTab(int index)
@@ -198,6 +204,14 @@ namespace LipidCreator
         {
             lipidCreatorForm.lipidTabList[0] = new cl_lipid(lipidCreatorForm.all_paths_to_precursor_images, lipidCreatorForm.all_fragments);
             lipid_modifications[0] = -1;
+            cl_db_1_textbox.BackColor = Color.White;
+            cl_db_2_textbox.BackColor = Color.White;
+            cl_db_3_textbox.BackColor = Color.White;
+            cl_db_4_textbox.BackColor = Color.White;
+            cl_fa_1_textbox.BackColor = Color.White;
+            cl_fa_2_textbox.BackColor = Color.White;
+            cl_fa_3_textbox.BackColor = Color.White;
+            cl_fa_4_textbox.BackColor = Color.White;
             changeTab(0);
         }
         
@@ -246,35 +260,51 @@ namespace LipidCreator
         public void cl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_fa_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_fa_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.lengthInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         
         public void cl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_db_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         public void cl_db_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.dbInfo = ((TextBox)sender).Text;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
+            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
         }
         
         public void cl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)

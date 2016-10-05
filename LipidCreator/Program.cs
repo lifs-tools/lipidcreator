@@ -568,7 +568,68 @@ namespace LipidCreator
         }
 
 
-
+        public HashSet<int> parseRange(String text){
+            if (text.Length == 0) return null;
+            foreach (char c in text)
+            {
+                int ic = (int)c;
+                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || (48 <= ic && ic < 58)))
+                {
+                    return null;
+                }
+            }
+        
+            string[] delimitors = new string[] { "," };
+            string[] delimitors_range = new string[] { "-" };
+            string[] tokens = text.Split(delimitors, StringSplitOptions.None);
+            
+            HashSet<int> lengths = new HashSet<int>();
+            
+            for (int i = 0; i < tokens.Length; ++i)
+            {
+                if (tokens[i].Length == 0) return null;
+                string[] range_boundaries = tokens[i].Split(delimitors_range, StringSplitOptions.None);
+                if (range_boundaries.Length == 1)
+                {
+                    int range_start = 0;
+                    try 
+                    {
+                        range_start = Convert.ToInt32(range_boundaries[0]);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                    lengths.Add(range_start);
+                }
+                else if (range_boundaries.Length == 2)
+                {
+                    int range_start = 0;
+                    int range_end = 0;
+                    try 
+                    {
+                        range_start = Convert.ToInt32(range_boundaries[0]);
+                        range_end = Convert.ToInt32(range_boundaries[1]);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                    if (range_end < range_start) return null;
+                    if (range_end <= 30 && range_end - range_start <= 30)
+                    {
+                        for (int l = range_start; l <= range_end; ++l)
+                        {
+                            lengths.Add(l);
+                        }
+                    }
+                    else return null;
+                }
+                else return null;
+                
+            }
+            return lengths;
+        }
 
 
 

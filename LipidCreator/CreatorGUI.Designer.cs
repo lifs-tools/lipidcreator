@@ -1364,7 +1364,7 @@ namespace LipidCreator
             send_to_skyline_button.Width = 130;
             send_to_skyline_button.BackColor = SystemColors.Control;
             send_to_skyline_button.Dock = DockStyle.Bottom;
-            //send_to_skyline_button.Click += send_to_Skyline;
+            send_to_skyline_button.Click += send_to_Skyline;
 
             this.Controls.Add(tab_control);
             this.Controls.Add(lipids_groupbox);

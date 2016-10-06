@@ -92,6 +92,15 @@ namespace LipidCreator
                 cl_neg_adduct_checkbox_4.Checked = currentCLLipid.adducts["+CH3COO"];
                 if (lipid_modifications[0] > -1) cl_modify_lipid_button.Enabled = true;
                 else cl_modify_lipid_button.Enabled = false;
+                
+                update_ranges(currentCLLipid.fag1, cl_fa_1_textbox, cl_fa_1_combobox);
+                update_ranges(currentCLLipid.fag1, cl_db_1_textbox, null);
+                update_ranges(currentCLLipid.fag2, cl_fa_2_textbox, cl_fa_2_combobox);
+                update_ranges(currentCLLipid.fag2, cl_db_2_textbox, null);
+                update_ranges(currentCLLipid.fag3, cl_fa_3_textbox, cl_fa_3_combobox);
+                update_ranges(currentCLLipid.fag3, cl_db_3_textbox, null);
+                update_ranges(currentCLLipid.fag4, cl_fa_4_textbox, cl_fa_4_combobox);
+                update_ranges(currentCLLipid.fag4, cl_db_4_textbox, null);
             }
             else if (index == 1)
             {
@@ -243,68 +252,79 @@ namespace LipidCreator
         public void cl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_1_textbox, ((ComboBox)sender));
         }
         public void cl_fa_2_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_2_textbox, ((ComboBox)sender));
         }
         public void cl_fa_3_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_3_textbox, ((ComboBox)sender));
         }
         public void cl_fa_4_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.chainType = ((ComboBox)sender).SelectedIndex;
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_4_textbox, ((ComboBox)sender));
+        }
+        
+        
+        public void update_ranges(fattyAcidGroup fag, TextBox tb, ComboBox cb)
+        {
+            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, (cb != null) ? cb.SelectedIndex : 0);
+            if (cb == null)
+            {
+                fag.dbs = lengths;
+            }
+            else
+            {
+                fag.lengths = lengths;
+            }
+            tb.BackColor = (lengths == null) ? alert_color : Color.White;
         }
         
         public void cl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, cl_fa_1_combobox);
         }
         public void cl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, cl_fa_2_combobox);
         }
         public void cl_fa_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, cl_fa_3_combobox);
         }
         public void cl_fa_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.lengthInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, cl_fa_4_combobox);
         }
         
         public void cl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, null);
         }
         public void cl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, null);
         }
         public void cl_db_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, null);
         }
         public void cl_db_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.dbInfo = ((TextBox)sender).Text;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(((TextBox)sender).Text);
-            ((TextBox)sender).BackColor = (lengths == null) ? alert_color : Color.White;
+            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, null);
         }
         
         public void cl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -866,6 +886,12 @@ namespace LipidCreator
             ms2fragments.ShowInTaskbar = false;
             ms2fragments.ShowDialog();
             ms2fragments.Dispose();
+        }
+        
+        
+        public void send_to_Skyline(Object sender, EventArgs e)
+        {
+            lipidCreatorForm.assemble_lipids();
         }
     }
 }

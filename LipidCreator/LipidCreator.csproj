@@ -52,6 +52,12 @@
     <Compile Include="CreatorGUI.Designer.cs">
       <DependentUpon>CreatorGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="LipidsReview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LipidsReview.Designer.cs">
+      <DependentUpon>LipidsReview.cs</DependentUpon>
+    </Compile>
     <Compile Include="MS2Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +72,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LipidsReview.resx">
+      <DependentUpon>LipidsReview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MS2Form.resx">
       <DependentUpon>MS2Form.cs</DependentUpon>
     </EmbeddedResource>

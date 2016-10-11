@@ -273,7 +273,7 @@ namespace LipidCreator
         
         public void update_ranges(fattyAcidGroup fag, TextBox tb, ComboBox cb)
         {
-            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, (cb != null) ? cb.SelectedIndex : 0);
+            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, (cb != null) ? 2 : 0,  (cb != null) ? 30 : 6, (cb != null) ? cb.SelectedIndex : 0);
             if (cb == null)
             {
                 fag.dbs = lengths;
@@ -879,6 +879,19 @@ namespace LipidCreator
             changeTab(tabIndex);
         }
         
+        
+        public void lipids_gridview_keydown(Object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && lipidCreatorForm.registered_lipids.Count > 0 && ((DataGridView)sender).SelectedRows.Count > 0)
+            {   
+                Console.WriteLine(((DataGridView)sender).SelectedRows[0].Index);
+                lipidCreatorForm.registered_lipids.RemoveAt(((DataGridView)sender).SelectedRows[0].Index);
+                refresh_registered_lipids_table();
+                e.Handled = true;
+            }
+        }
+        
+        
         public void open_ms2_form(Object sender, EventArgs e)
         {
             MS2Form ms2fragments = new MS2Form(this, currentLipid);
@@ -889,9 +902,14 @@ namespace LipidCreator
         }
         
         
-        public void send_to_Skyline(Object sender, EventArgs e)
+        public void open_review_Form(Object sender, EventArgs e)
         {
             lipidCreatorForm.assemble_lipids();
+            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm.all_lipids);
+            lipidsReview.Owner = this;
+            lipidsReview.ShowInTaskbar = false;
+            lipidsReview.ShowDialog();
+            lipidsReview.Dispose();
         }
     }
 }

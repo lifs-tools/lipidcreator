@@ -1,4 +1,11 @@
-﻿namespace LipidCreator
+﻿
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace LipidCreator
 {
     partial class LipidsReview
     {
@@ -40,6 +47,14 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(755, 430);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.RowTemplate.Height = 34;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.RowHeadersVisible = false;
             // 
             // button1
             // 

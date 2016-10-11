@@ -206,7 +206,7 @@ namespace LipidCreator
         ToolTip toolTip1;
 
         DataGridView lipids_gridview;
-        Button send_to_skyline_button;
+        Button open_review_form_button;
         DataTable dt;
 
         ArrayList all_lipids;
@@ -248,7 +248,7 @@ namespace LipidCreator
             sl_ms2fragments_lipid_button = new Button();
 
             lipids_gridview = new DataGridView();
-            send_to_skyline_button = new Button();
+            open_review_form_button = new Button();
 
             cl_picture_box = new PictureBox();
             gl_picture_box = new PictureBox();
@@ -1235,7 +1235,7 @@ namespace LipidCreator
 
 
             lipids_groupbox.Controls.Add(lipids_gridview);
-            lipids_groupbox.Controls.Add(send_to_skyline_button);
+            lipids_groupbox.Controls.Add(open_review_form_button);
             lipids_groupbox.Dock = DockStyle.Bottom;
             lipids_groupbox.Text = "Lipid list";
             lipids_groupbox.Height = 280;
@@ -1341,7 +1341,7 @@ namespace LipidCreator
             lipids_gridview.Dock = DockStyle.Fill;
             
             lipids_gridview.DataSource = registered_lipids_datatable;
-            lipids_gridview.ReadOnly = true;
+            //lipids_gridview.ReadOnly = true;
             lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             foreach (DataGridViewColumn col in lipids_gridview.Columns)
             {
@@ -1356,15 +1356,20 @@ namespace LipidCreator
             lipids_gridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             lipids_gridview.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             lipids_gridview.AllowUserToResizeRows = false;
+            lipids_gridview.ReadOnly = true;
+            lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            lipids_gridview.MultiSelect = false;
             lipids_gridview.RowTemplate.Height = 34;
             lipids_gridview.DoubleClick += new EventHandler(lipids_gridview_double_click);
-            //lipids_gridview.UserDeletingRow += new DataGridViewRowCancelEventHandler(lipids_gridview_delete_row);
+            lipids_gridview.KeyDown += new KeyEventHandler(lipids_gridview_keydown);
+            lipids_gridview.EditMode = DataGridViewEditMode.EditOnEnter;
+            //lipids_gridview.RowsRemoved += new DataGridViewRowsRemovedEventHandler(lipids_gridview_delete_row);
 
-            send_to_skyline_button.Text = "Send to Skyline";
-            send_to_skyline_button.Width = 130;
-            send_to_skyline_button.BackColor = SystemColors.Control;
-            send_to_skyline_button.Dock = DockStyle.Bottom;
-            send_to_skyline_button.Click += send_to_Skyline;
+            open_review_form_button.Text = "Review Lipids";
+            open_review_form_button.Width = 130;
+            open_review_form_button.BackColor = SystemColors.Control;
+            open_review_form_button.Dock = DockStyle.Bottom;
+            open_review_form_button.Click += open_review_Form;
 
             this.Controls.Add(tab_control);
             this.Controls.Add(lipids_groupbox);

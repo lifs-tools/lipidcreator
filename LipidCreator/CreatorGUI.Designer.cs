@@ -124,10 +124,6 @@ namespace LipidCreator
         CheckBox pl_fa_2_gb_1_checkbox_2;
         CheckBox pl_fa_2_gb_1_checkbox_3;
         CheckBox pl_fa_2_gb_1_checkbox_4;
-        CheckBox sl_fa_gb_1_checkbox_1;
-        CheckBox sl_fa_gb_1_checkbox_2;
-        CheckBox sl_fa_gb_1_checkbox_3;
-        CheckBox sl_fa_gb_1_checkbox_4;
 
         GroupBox cl_positive_adduct;
         GroupBox cl_negative_adduct;
@@ -194,14 +190,16 @@ namespace LipidCreator
         Label pl_db_2_label;
         Label sl_db_1_label;
         Label sl_db_2_label;
-        Label sl_hydroxy_label;
+        Label sl_lcb_hydroxy_label;
+        Label sl_fa_hydroxy_label;
 
         Label pl_hg_label;
         ComboBox pl_hg_combobox;
 
         Label sl_hg_label;
         ComboBox sl_hg_combobox;
-        ComboBox sl_hydroxy_combobox;
+        ComboBox sl_lcb_hydroxy_combobox;
+        ComboBox sl_fa_hydroxy_combobox;
 
         ToolTip toolTip1;
 
@@ -339,7 +337,8 @@ namespace LipidCreator
             sl_db_1_label = new Label();
             sl_db_2_label = new Label();
             sl_hg_label = new Label();
-            sl_hydroxy_label = new Label();
+            sl_lcb_hydroxy_label = new Label();
+            sl_fa_hydroxy_label = new Label();
 
             cl_fa_1_gb_1_checkbox_1 = new CheckBox();
             cl_fa_1_gb_1_checkbox_2 = new CheckBox();
@@ -377,10 +376,6 @@ namespace LipidCreator
             pl_fa_2_gb_1_checkbox_2 = new CheckBox();
             pl_fa_2_gb_1_checkbox_3 = new CheckBox();
             pl_fa_2_gb_1_checkbox_4 = new CheckBox();
-            sl_fa_gb_1_checkbox_1 = new CheckBox();
-            sl_fa_gb_1_checkbox_2 = new CheckBox();
-            sl_fa_gb_1_checkbox_3 = new CheckBox();
-            sl_fa_gb_1_checkbox_4 = new CheckBox();
 
             cl_positive_adduct = new GroupBox();
             cl_negative_adduct = new GroupBox();
@@ -455,10 +450,19 @@ namespace LipidCreator
             sl_hg_combobox.Items.Add("PECer");
             sl_hg_combobox.Items.Add("PICer");
             sl_hg_combobox.Items.Add("SM");
-
-            sl_hydroxy_combobox = new ComboBox();
-            sl_hydroxy_combobox.Items.Add("2");
-            sl_hydroxy_combobox.Items.Add("3");
+            sl_hg_combobox.Items.Add("SPH");
+            sl_hg_combobox.Items.Add("S1P");
+            sl_hg_combobox.Items.Add("SPC");
+            
+            sl_lcb_hydroxy_combobox = new ComboBox();
+            sl_lcb_hydroxy_combobox.Items.Add("2");
+            sl_lcb_hydroxy_combobox.Items.Add("3");
+            
+            sl_fa_hydroxy_combobox = new ComboBox();
+            sl_fa_hydroxy_combobox.Items.Add("0");
+            sl_fa_hydroxy_combobox.Items.Add("1");
+            sl_fa_hydroxy_combobox.Items.Add("2");
+            sl_fa_hydroxy_combobox.Items.Add("3");
 
 
 
@@ -1102,10 +1106,6 @@ namespace LipidCreator
             sphingolipids_tab.Controls.Add(sl_reset_lipid_button);
             sphingolipids_tab.Controls.Add(sl_modify_lipid_button);
             sphingolipids_tab.Controls.Add(sl_ms2fragments_lipid_button);
-            sphingolipids_tab.Controls.Add(sl_fa_gb_1_checkbox_4);
-            sphingolipids_tab.Controls.Add(sl_fa_gb_1_checkbox_3);
-            sphingolipids_tab.Controls.Add(sl_fa_gb_1_checkbox_2);
-            sphingolipids_tab.Controls.Add(sl_fa_gb_1_checkbox_1);
             sphingolipids_tab.Controls.Add(sl_picture_box);
             sphingolipids_tab.Controls.Add(sl_lcb_textbox);
             sphingolipids_tab.Controls.Add(sl_fa_textbox);
@@ -1117,8 +1117,10 @@ namespace LipidCreator
             sphingolipids_tab.Controls.Add(sl_db_2_label);
             sphingolipids_tab.Controls.Add(sl_hg_label);
             sphingolipids_tab.Controls.Add(sl_hg_combobox);
-            sphingolipids_tab.Controls.Add(sl_hydroxy_combobox);
-            sphingolipids_tab.Controls.Add(sl_hydroxy_label);
+            sphingolipids_tab.Controls.Add(sl_lcb_hydroxy_combobox);
+            sphingolipids_tab.Controls.Add(sl_fa_hydroxy_combobox);
+            sphingolipids_tab.Controls.Add(sl_fa_hydroxy_label);
+            sphingolipids_tab.Controls.Add(sl_lcb_hydroxy_label);
             sphingolipids_tab.Controls.Add(sl_positive_adduct);
             sphingolipids_tab.Controls.Add(sl_negative_adduct);
             sphingolipids_tab.Parent = tab_control;
@@ -1151,24 +1153,19 @@ namespace LipidCreator
             sl_db_1_label.Location = new Point(sl_db_1_textbox.Left, sl_db_1_textbox.Top - sep);
             sl_db_1_label.Width = 150;
             sl_db_1_label.Text = "No. of double bonds";
+            sl_fa_hydroxy_combobox.Location = new Point(sl_db_1_textbox.Left + sl_db_1_textbox.Width + sep, sl_db_1_textbox.Top);
+            sl_fa_hydroxy_combobox.SelectedItem = "2";
+            sl_fa_hydroxy_combobox.Width = 60;
+            sl_fa_hydroxy_combobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            sl_fa_hydroxy_combobox.SelectedIndexChanged += new EventHandler(sl_fa_hydroxy_combobox_valueChanged);
+            sl_fa_hydroxy_label.Location = new Point(sl_fa_hydroxy_combobox.Left, sl_fa_hydroxy_combobox.Top - sep);
+            sl_fa_hydroxy_label.Text = "Hydroxy No.";
 
-            sl_fa_gb_1_checkbox_1.Location = new Point(sl_fa_textbox.Left, sl_fa_textbox.Top + sl_fa_textbox.Height);
-            sl_fa_gb_1_checkbox_1.Text = "FA";
-            sl_fa_gb_1_checkbox_1.Checked = true;
-            sl_fa_gb_1_checkbox_1.CheckedChanged += new EventHandler(sl_fa_gb_1_checkbox_1_checkedChanged);
-            sl_fa_gb_1_checkbox_2.Location = new Point(sl_fa_textbox.Left + 40, sl_fa_textbox.Top + sl_fa_textbox.Height);
-            sl_fa_gb_1_checkbox_2.Text = "FAp";
-            sl_fa_gb_1_checkbox_2.CheckedChanged += new EventHandler(sl_fa_gb_1_checkbox_2_checkedChanged);
-            sl_fa_gb_1_checkbox_3.Location = new Point(sl_fa_textbox.Left + 90, sl_fa_textbox.Top + sl_fa_textbox.Height);
-            sl_fa_gb_1_checkbox_3.Text = "FAe";
-            sl_fa_gb_1_checkbox_3.CheckedChanged += new EventHandler(sl_fa_gb_1_checkbox_3_checkedChanged);
-            sl_fa_gb_1_checkbox_4.Location = new Point(sl_fa_textbox.Left + 140, sl_fa_textbox.Top + sl_fa_textbox.Height);
-            sl_fa_gb_1_checkbox_4.Text = "FAh";
-            sl_fa_gb_1_checkbox_4.CheckedChanged += new EventHandler(sl_fa_gb_1_checkbox_4_checkedChanged);
 
             sl_lcb_combobox.BringToFront();
             sl_lcb_textbox.BringToFront();
-            sl_hydroxy_combobox.BringToFront();
+            sl_lcb_hydroxy_combobox.BringToFront();
+            sl_fa_hydroxy_combobox.BringToFront();
             sl_lcb_textbox.Location = new Point(280, 198);
             sl_lcb_textbox.Width = 200;
             sl_lcb_textbox.Text = "14, 16-18, 22";
@@ -1189,13 +1186,13 @@ namespace LipidCreator
             sl_db_2_label.Location = new Point(sl_db_2_textbox.Left, sl_db_2_textbox.Top - sep);
             sl_db_2_label.Width = 150;
             sl_db_2_label.Text = "No. of double bonds";
-            sl_hydroxy_combobox.Location = new Point(sl_db_2_textbox.Left + sl_db_2_textbox.Width + sep, sl_db_2_textbox.Top);
-            sl_hydroxy_combobox.SelectedItem = "2";
-            sl_hydroxy_combobox.Width = 60;
-            sl_hydroxy_combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            sl_hydroxy_combobox.SelectedIndexChanged += new EventHandler(sl_hydroxy_combobox_valueChanged);
-            sl_hydroxy_label.Location = new Point(sl_hydroxy_combobox.Left, sl_hydroxy_combobox.Top - sep);
-            sl_hydroxy_label.Text = "Hydroxy No.";
+            sl_lcb_hydroxy_combobox.Location = new Point(sl_db_2_textbox.Left + sl_db_2_textbox.Width + sep, sl_db_2_textbox.Top);
+            sl_lcb_hydroxy_combobox.SelectedItem = "2";
+            sl_lcb_hydroxy_combobox.Width = 60;
+            sl_lcb_hydroxy_combobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            sl_lcb_hydroxy_combobox.SelectedIndexChanged += new EventHandler(sl_lcb_hydroxy_combobox_valueChanged);
+            sl_lcb_hydroxy_label.Location = new Point(sl_lcb_hydroxy_combobox.Left, sl_lcb_hydroxy_combobox.Top - sep);
+            sl_lcb_hydroxy_label.Text = "Hydroxy No.";
 
             sl_hg_label.BringToFront();
             sl_hg_combobox.BringToFront();

@@ -23,7 +23,7 @@ namespace LipidCreator
             db = _db;
             suffix = "";
             atomsCount = MS2Fragment.createEmptyElementTable();
-            if (l > 0 && _db > 0){
+            if (l > 0 || _db > 0){
                 atomsCount.Rows[0]["Count"] = l;
                 atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db;
                 atomsCount.Rows[2]["Count"] = 1;
@@ -36,7 +36,7 @@ namespace LipidCreator
             db = _db;
             suffix = (_suffix.Length > 2) ? _suffix.Substring(2, 1) : "";
             atomsCount = MS2Fragment.createEmptyElementTable();
-            if (l > 0 && _db > 0){
+            if (l > 0 || _db > 0){
                 atomsCount.Rows[0]["Count"] = l;
                 switch(suffix)
                 {
@@ -112,6 +112,7 @@ namespace LipidCreator
         public Dictionary<String, bool> faTypes;
         public HashSet<int> lengths;
         public HashSet<int> dbs;
+        public bool disabled;
     
         public fattyAcidGroup()
         {
@@ -126,6 +127,7 @@ namespace LipidCreator
             faTypes.Add("FAx", false);  // no fatty acid dummy
             lengths = new HashSet<int>();
             dbs = new HashSet<int>();
+            disabled = false;
         }
         
         public fattyAcidGroup(fattyAcidGroup copy)
@@ -140,6 +142,7 @@ namespace LipidCreator
             faTypes.Add("FAh", copy.faTypes["FAh"]);
             faTypes.Add("FAx", copy.faTypes["FAx"]);  // no fatty acid dummy
             lengths = new HashSet<int>();
+            disabled = copy.disabled;
             foreach (int l in copy.lengths)
             {
                 lengths.Add(l);
@@ -384,7 +387,6 @@ namespace LipidCreator
         
         public virtual void add_lipids(DataTable dt, Dictionary<String, DataTable> ddt)
         {
-            Console.WriteLine("wrong");
         }
         
         public lipid(lipid copy)
@@ -513,6 +515,7 @@ namespace LipidCreator
             check_fatty_acids += fag3.faTypes["FAx"] ? 1 : 0;
             check_fatty_acids += fag4.faTypes["FAx"] ? 1 : 0;
             if (check_fatty_acids > 1) return;
+            
             
             HashSet<String> used_keys = new HashSet<String>();
             int contains_mono_lyso = 0;
@@ -751,7 +754,7 @@ namespace LipidCreator
                                                             int pc_contains_mono_lyso = contains_mono_lyso - ((contains_mono_lyso >> 1) & 0x55555555);
                                                             pc_contains_mono_lyso = (pc_contains_mono_lyso & 0x33333333) + ((pc_contains_mono_lyso >> 2) & 0x33333333);
                                                             pc_contains_mono_lyso = ((pc_contains_mono_lyso + (pc_contains_mono_lyso >> 4) & 0xF0F0F0F) * 0x1010101) >> 24;
-                                                            //Console.WriteLine("-> " + pc_contains_mono_lyso);
+                                                            
                                                             String headgroup = "";
                                                             switch(pc_contains_mono_lyso)
                                                             {
@@ -769,8 +772,10 @@ namespace LipidCreator
                                                             int i = 0;
                                                             foreach (fatty_acid fa in sorted_acids)
                                                             {
-                                                                if (i++ > 0) key += "_";
-                                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
+                                                                if (fa.length > 0){
+                                                                    if (i++ > 0) key += "_";
+                                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
+                                                                }
                                                             }
                                                             if (!used_keys.Contains(key))
                                                             {
@@ -819,9 +824,9 @@ namespace LipidCreator
         public string[] fa_db_texts;
         public fattyAcidGroup fag1;
         public fattyAcidGroup fag2;
-        public string hg;
         public int hgValue;
         public HashSet<int>[] fa_db_values;
+        public List<String> headGroupNames = new List<String>{"PA", "PC", "PE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
     
         public pl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
@@ -869,11 +874,10 @@ namespace LipidCreator
             // check if more than one fatty acids are 0:0
             int check_fatty_acids = 0;
             check_fatty_acids += fag1.faTypes["FAx"] ? 1 : 0;
-            check_fatty_acids += fag2.faTypes["FAx"] ? 1 : 0;
-            if (check_fatty_acids > 2) return;
+            check_fatty_acids += fag2.faTypes["FAx"] && !fag2.disabled ? 1 : 0;
+            if (check_fatty_acids > 0) return;
             
             HashSet<String> used_keys = new HashSet<String>();
-            int contains_mono_lyso = 0;
             foreach (int fa_l_1 in fag1.lengths)
             {
                 int max_db_1 = (fa_l_1 - 1) >> 1;
@@ -884,11 +888,9 @@ namespace LipidCreator
                         if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                         {
                             fatty_acid fa1 = new fatty_acid(fa_l_1, fa_db_1, fa_kvp_1.Key);
-                            contains_mono_lyso &= ~1;
                             if (fa_kvp_1.Key == "FAx")
                             {
                                 fa1 = new fatty_acid(0, 0, "FA");
-                                contains_mono_lyso |= 1;
                             }
                             foreach (int fa_l_2 in fag2.lengths)
                             {
@@ -900,39 +902,26 @@ namespace LipidCreator
                                         if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                         {
                                             fatty_acid fa2 = new fatty_acid(fa_l_2, fa_db_2, fa_kvp_2.Key);
-                                            contains_mono_lyso &= ~2;
                                             if (fa_kvp_2.Key == "FAx")
                                             {
                                                 fa2 = new fatty_acid(0, 0, "FA");
-                                                contains_mono_lyso |= 2;
                                             }
-                                            
-                                                                    
-                                                                            
+                                                                  
                                             List<fatty_acid> sorted_acids = new List<fatty_acid>();
                                             sorted_acids.Add(fa1);
                                             sorted_acids.Add(fa2);
                                             sorted_acids.Sort();
                                             
-                                            String headgroup = hg;
-                                            switch(contains_mono_lyso)
-                                            {
-                                                case 0:
-                                                headgroup = "TG";
-                                                    break;
-                                                case 1:
-                                                headgroup = "DG";
-                                                    break;
-                                                case 2:
-                                                headgroup = "MG";
-                                                    break;
-                                            }
+                                            
+                                            String headgroup = headGroupNames[hgValue];
                                             String key = headgroup + " ";
                                             int i = 0;
                                             foreach (fatty_acid fa in sorted_acids)
                                             {
-                                                if (i++ > 0) key += "_";
-                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
+                                                if (fa.length > 0){
+                                                    if (i++ > 0) key += "_";
+                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
+                                                }
                                             }
                                             if (!used_keys.Contains(key))
                                             {
@@ -949,6 +938,7 @@ namespace LipidCreator
                                                         int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                         String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                         double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                        
                                                         
                                                         DataRow lipid_row = all_lipids.NewRow();
                                                         lipid_row["Molecule List Name"] = headgroup;
@@ -974,24 +964,21 @@ namespace LipidCreator
     public class sl_lipid : lipid
     {
         public string[] lcb_fa_db_texts;
-        public string hg;
+        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "S1P", "SPC"};
         public int hgValue;
         public fattyAcidGroup fag;
-        public string lcb;
-        public int lcbType;
-        public string lcb_db;
-        public string hydroxy;
-        public int hydroxyValue;
+        public fattyAcidGroup lcb;       
+        public int lcb_hydroxyValue;        
+        public int fa_hydroxyValue;
         public HashSet<int>[] lcb_fa_db_values;
     
         public sl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag = new fattyAcidGroup();
+            lcb = new fattyAcidGroup();
             hgValue = 0;
-            lcbType = 0;
-            hydroxyValue = 0;
-            lcb = "5,7-8,10";
-            lcb_db = "0-2";
+            lcb_hydroxyValue = 2;
+            fa_hydroxyValue = 0;
             MS2Fragments.Add("Cer", new ArrayList());
             MS2Fragments.Add("CerP", new ArrayList());
             MS2Fragments.Add("GB3Cer", new ArrayList());
@@ -1005,6 +992,9 @@ namespace LipidCreator
             MS2Fragments.Add("PECer", new ArrayList());
             MS2Fragments.Add("PICer", new ArrayList());
             MS2Fragments.Add("SM", new ArrayList());
+            MS2Fragments.Add("SPH", new ArrayList());
+            MS2Fragments.Add("S1P", new ArrayList());
+            MS2Fragments.Add("SPC", new ArrayList());
             
             
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
@@ -1023,11 +1013,122 @@ namespace LipidCreator
         public sl_lipid(sl_lipid copy) : base((lipid)copy)
         {
             fag = new fattyAcidGroup(copy.fag);
+            lcb = new fattyAcidGroup(copy.lcb);
             hgValue = copy.hgValue;
-            lcbType = copy.lcbType;
-            hydroxyValue = copy.hydroxyValue;
-            lcb = copy.lcb;
-            lcb_db = copy.lcb_db;
+            lcb_hydroxyValue = copy.lcb_hydroxyValue;
+            fa_hydroxyValue = copy.fa_hydroxyValue;
+        }
+        
+        
+        public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
+        {
+            
+            
+            HashSet<String> used_keys = new HashSet<String>();
+            foreach (int lcb_l in lcb.lengths)
+            {
+                int max_db_1 = (lcb_l - 1) >> 1;
+                foreach (int lcb_db_1 in lcb.dbs)
+                {
+                    if (max_db_1 < lcb_db_1) continue;
+                    if (!fag.disabled)
+                    {
+                        foreach (int fa_l in fag.lengths)
+                        {
+                            if (fa_l < fa_hydroxyValue + 2) continue;
+                            int max_db_2 = (fa_l - 1) >> 1;
+                            foreach (int fa_db_2 in fag.dbs)
+                            {
+                                if (max_db_2 < fa_db_2) continue;
+                                String headgroup = headGroupNames[hgValue];
+                                String key = headgroup + " ";
+                                
+                                key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+                                key += "/";
+                                key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2) + ";" + Convert.ToString(fa_hydroxyValue);
+
+                                if (!used_keys.Contains(key))
+                                {
+                                    foreach (KeyValuePair<string, bool> adduct in adducts)
+                                    {
+                                        if (adduct.Value)
+                                        {
+                                            used_keys.Add(key);
+                                            
+                                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                            MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                            
+                                            // long chain base
+                                            atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
+                                            atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
+                                            atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
+                                            atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
+                                            
+                                            // add fatty acid
+                                            atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + fa_l;
+                                            atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * fa_l - 1 - 2 * fa_db_2);
+                                            atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + (1 + fa_hydroxyValue);
+                                            
+                                            
+                                            int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                            String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                            double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                            
+                                            DataRow lipid_row = all_lipids.NewRow();
+                                            lipid_row["Molecule List Name"] = headgroup;
+                                            lipid_row["Precursor Name"] = key;
+                                            lipid_row["Precursor Ion Formula"] = chemForm;
+                                            lipid_row["Precursor m/z"] = mass;
+                                            lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                            all_lipids.Rows.Add(lipid_row);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        String headgroup = headGroupNames[hgValue];
+                        String key = headgroup + " ";
+                        
+                        key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+
+                        if (!used_keys.Contains(key))
+                        {
+                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                            {
+                                if (adduct.Value)
+                                {
+                                    used_keys.Add(key);
+                                    
+                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                    
+                                    // long chain base
+                                    atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
+                                    atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
+                                    atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
+                                    atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
+                                    
+                                    
+                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                    String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                    
+                                    DataRow lipid_row = all_lipids.NewRow();
+                                    lipid_row["Molecule List Name"] = headgroup;
+                                    lipid_row["Precursor Name"] = key;
+                                    lipid_row["Precursor Ion Formula"] = chemForm;
+                                    lipid_row["Precursor m/z"] = mass;
+                                    lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                    all_lipids.Rows.Add(lipid_row);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1181,7 +1282,10 @@ namespace LipidCreator
                         return null;
                     }
                     if (range_start < lower || upper < range_start) return null;
-                    if (odd_even == 0 || (odd_even == 1 && (range_start % 2 == 1)) || (odd_even == 2 && (range_start % 2 == 0))) lengths.Add(range_start);
+                    if (odd_even == 0 || (odd_even == 1 && (range_start % 2 == 1)) || (odd_even == 2 && (range_start % 2 == 0)))
+                    {
+                        lengths.Add(range_start);
+                    }
                 }
                 else if (range_boundaries.Length == 2)
                 {
@@ -1199,7 +1303,10 @@ namespace LipidCreator
                     if (range_end < range_start || range_start < lower || upper < range_end) return null;
                     for (int l = range_start; l <= range_end; ++l)
                     {
-                        if (odd_even == 0 || (odd_even == 1 && (range_start % 2 == 1)) || (odd_even == 2 && (range_start % 2 == 0))) lengths.Add(l);
+                        if (odd_even == 0 || (odd_even == 1 && (l % 2 == 1)) || (odd_even == 2 && (l % 2 == 0)))
+                        {
+                            lengths.Add(l);
+                        }
                     }
                 }
                 else return null;
@@ -1226,7 +1333,7 @@ namespace LipidCreator
             {
                 if (Convert.ToInt32(row["Count"]) > 0)
                 {
-                    chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(row["Count"]);
+                    chemForm += Convert.ToString(row["Shortcut"]) + (((int)row["Count"] > 1) ? Convert.ToString(row["Count"]) : "");
                 }
             }
             return chemForm;

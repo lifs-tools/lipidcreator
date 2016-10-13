@@ -434,6 +434,12 @@ namespace LipidCreator
             pl_hg_combobox.Items.Add("PIP2");
             pl_hg_combobox.Items.Add("PIP3");
             pl_hg_combobox.Items.Add("PS");
+            pl_hg_combobox.Items.Add("LPA");
+            pl_hg_combobox.Items.Add("LPC");
+            pl_hg_combobox.Items.Add("LPE");
+            pl_hg_combobox.Items.Add("LPG");
+            pl_hg_combobox.Items.Add("LPI");
+            pl_hg_combobox.Items.Add("LPS");
 
             sl_hg_combobox = new ComboBox();
             sl_hg_combobox.Items.Add("Cer");
@@ -768,7 +774,8 @@ namespace LipidCreator
             gl_fa_1_textbox.Location = new Point(240, 90);
             gl_fa_1_textbox.Width = 200;
             gl_fa_1_textbox.Text = "0, 2, 4, 6-7";
-            gl_fa_1_textbox.TextChanged += new EventHandler(gl_fa_1_textbox_valueChanged);
+            gl_fa_1_textbox.LostFocus += new EventHandler(gl_fa_1_textbox_valueChanged);
+            gl_fa_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_fa_1_textbox, formatting_fa);
             gl_fa_1_combobox.Location = new Point(gl_fa_1_textbox.Left, gl_fa_1_textbox.Top - sepText);
             gl_fa_1_combobox.Width = 200;
@@ -778,7 +785,8 @@ namespace LipidCreator
             gl_db_1_textbox.Location = new Point(gl_fa_1_textbox.Left + gl_fa_1_textbox.Width + sep, gl_fa_1_textbox.Top);
             gl_db_1_textbox.Width = 150;
             gl_db_1_textbox.Text = "0-2";
-            gl_db_1_textbox.TextChanged += new EventHandler(gl_db_1_textbox_valueChanged);
+            gl_db_1_textbox.LostFocus += new EventHandler(gl_db_1_textbox_valueChanged);
+            gl_db_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_db_1_textbox, formatting_db);
             gl_db_1_label.Location = new Point(gl_db_1_textbox.Left, gl_db_1_textbox.Top - sep);
             gl_db_1_label.Width = 150;
@@ -803,7 +811,8 @@ namespace LipidCreator
             gl_fa_2_textbox.Location = new Point(298, 186);
             gl_fa_2_textbox.Width = 200;
             gl_fa_2_textbox.Text = "0, 5, 17-19";
-            gl_fa_2_textbox.TextChanged += new EventHandler(gl_fa_2_textbox_valueChanged);
+            gl_fa_2_textbox.LostFocus += new EventHandler(gl_fa_2_textbox_valueChanged);
+            gl_fa_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_fa_2_textbox, formatting_fa);
             gl_fa_2_combobox.Location = new Point(gl_fa_2_textbox.Left, gl_fa_2_textbox.Top - sepText);
             gl_fa_2_combobox.Width = 200;
@@ -813,7 +822,8 @@ namespace LipidCreator
             gl_db_2_textbox.Location = new Point(gl_fa_2_textbox.Left + gl_fa_2_textbox.Width + sep, gl_fa_2_textbox.Top);
             gl_db_2_textbox.Width = 150;
             gl_db_2_textbox.Text = "5-6";
-            gl_db_2_textbox.TextChanged += new EventHandler(gl_db_2_textbox_valueChanged);
+            gl_db_2_textbox.LostFocus += new EventHandler(gl_db_2_textbox_valueChanged);
+            gl_db_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_db_2_textbox, formatting_db);
             gl_db_2_label.Location = new Point(gl_db_2_textbox.Left, gl_db_2_textbox.Top - sep);
             gl_db_2_label.Width = 150;
@@ -838,7 +848,8 @@ namespace LipidCreator
             gl_fa_3_textbox.Location = new Point(238, 290);
             gl_fa_3_textbox.Width = 200;
             gl_fa_3_textbox.Text = "20-22";
-            gl_fa_3_textbox.TextChanged += new EventHandler(gl_fa_3_textbox_valueChanged);
+            gl_fa_3_textbox.LostFocus += new EventHandler(gl_fa_3_textbox_valueChanged);
+            gl_fa_3_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_fa_3_textbox, formatting_fa);
             gl_fa_3_combobox.Location = new Point(gl_fa_3_textbox.Left, gl_fa_3_textbox.Top - sepText);
             gl_fa_3_combobox.Width = 200;
@@ -848,7 +859,8 @@ namespace LipidCreator
             gl_db_3_textbox.Location = new Point(gl_fa_3_textbox.Left + gl_fa_3_textbox.Width + sep, gl_fa_3_textbox.Top);
             gl_db_3_textbox.Width = 150;
             gl_db_3_textbox.Text = "0";
-            gl_db_3_textbox.TextChanged += new EventHandler(gl_db_3_textbox_valueChanged);
+            gl_db_3_textbox.LostFocus += new EventHandler(gl_db_3_textbox_valueChanged);
+            gl_db_3_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(gl_db_3_textbox, formatting_db);
             gl_db_3_label.Location = new Point(gl_db_3_textbox.Left, gl_db_3_textbox.Top - sep);
             gl_db_3_label.Width = 150;
@@ -958,7 +970,8 @@ namespace LipidCreator
             pl_fa_1_textbox.Location = new Point(298, 186);
             pl_fa_1_textbox.Width = 200;
             pl_fa_1_textbox.Text = "0, 2, 4, 6-7";
-            pl_fa_1_textbox.TextChanged += new EventHandler(pl_fa_1_textbox_valueChanged);
+            pl_fa_1_textbox.LostFocus += new EventHandler(pl_fa_1_textbox_valueChanged);
+            pl_fa_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(pl_fa_1_textbox, formatting_fa);
             pl_fa_1_combobox.Location = new Point(pl_fa_1_textbox.Left, pl_fa_1_textbox.Top - sepText);
             pl_fa_1_combobox.Width = 200;
@@ -968,7 +981,8 @@ namespace LipidCreator
             pl_db_1_textbox.Location = new Point(pl_fa_1_textbox.Left + pl_fa_1_textbox.Width + sep, pl_fa_1_textbox.Top);
             pl_db_1_textbox.Width = 150;
             pl_db_1_textbox.Text = "0-2";
-            pl_db_1_textbox.TextChanged += new EventHandler(pl_db_1_textbox_valueChanged);
+            pl_db_1_textbox.LostFocus += new EventHandler(pl_db_1_textbox_valueChanged);
+            pl_db_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(pl_db_1_textbox, formatting_db);
             pl_db_1_label.Location = new Point(pl_db_1_textbox.Left, pl_db_1_textbox.Top - sep);
             pl_db_1_label.Width = 150;
@@ -993,7 +1007,8 @@ namespace LipidCreator
             pl_fa_2_textbox.Location = new Point(238, 290);
             pl_fa_2_textbox.Width = 200;
             pl_fa_2_textbox.Text = "2, 5, 17-19";
-            pl_fa_2_textbox.TextChanged += new EventHandler(pl_fa_2_textbox_valueChanged);
+            pl_fa_2_textbox.LostFocus += new EventHandler(pl_fa_2_textbox_valueChanged);
+            pl_fa_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(pl_fa_2_textbox, formatting_fa);
             pl_fa_2_combobox.Location = new Point(pl_fa_2_textbox.Left, pl_fa_2_textbox.Top - sepText);
             pl_fa_2_combobox.Width = 200;
@@ -1003,7 +1018,8 @@ namespace LipidCreator
             pl_db_2_textbox.Location = new Point(pl_fa_2_textbox.Left + pl_fa_2_textbox.Width + sep, pl_fa_2_textbox.Top);
             pl_db_2_textbox.Width = 150;
             pl_db_2_textbox.Text = "5-6";
-            pl_db_2_textbox.TextChanged += new EventHandler(pl_db_2_textbox_valueChanged);
+            pl_db_2_textbox.LostFocus += new EventHandler(pl_db_2_textbox_valueChanged);
+            pl_db_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(pl_db_2_textbox, formatting_db);
             pl_db_2_label.Location = new Point(pl_db_2_textbox.Left, pl_db_2_textbox.Top - sep);
             pl_db_2_label.Width = 150;
@@ -1118,7 +1134,8 @@ namespace LipidCreator
             sl_fa_textbox.Location = new Point(242, 272);
             sl_fa_textbox.Width = 200;
             sl_fa_textbox.Text = "2, 5, 17-19";
-            sl_fa_textbox.TextChanged += new EventHandler(sl_fa_textbox_valueChanged);
+            sl_fa_textbox.LostFocus += new EventHandler(sl_fa_textbox_valueChanged);
+            sl_fa_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(sl_fa_textbox, formatting_fa);
             sl_fa_combobox.Location = new Point(sl_fa_textbox.Left, sl_fa_textbox.Top - sepText);
             sl_fa_combobox.Width = 200;
@@ -1128,7 +1145,8 @@ namespace LipidCreator
             sl_db_1_textbox.Location = new Point(sl_fa_textbox.Left + sl_fa_textbox.Width + sep, sl_fa_textbox.Top);
             sl_db_1_textbox.Width = 150;
             sl_db_1_textbox.Text = "5-6";
-            sl_db_1_textbox.TextChanged += new EventHandler(sl_db_1_textbox_valueChanged);
+            sl_db_1_textbox.LostFocus += new EventHandler(sl_db_1_textbox_valueChanged);
+            sl_db_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(sl_db_1_textbox, formatting_db);
             sl_db_1_label.Location = new Point(sl_db_1_textbox.Left, sl_db_1_textbox.Top - sep);
             sl_db_1_label.Width = 150;
@@ -1154,7 +1172,8 @@ namespace LipidCreator
             sl_lcb_textbox.Location = new Point(280, 198);
             sl_lcb_textbox.Width = 200;
             sl_lcb_textbox.Text = "14, 16-18, 22";
-            sl_lcb_textbox.TextChanged += new EventHandler(sl_lcb_textbox_valueChanged);
+            sl_lcb_textbox.LostFocus += new EventHandler(sl_lcb_textbox_valueChanged);
+            sl_lcb_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(sl_lcb_textbox, formatting_fa);
             sl_lcb_combobox.Location = new Point(sl_lcb_textbox.Left, sl_lcb_textbox.Top - sepText);
             sl_lcb_combobox.Width = 200;
@@ -1164,7 +1183,8 @@ namespace LipidCreator
             sl_db_2_textbox.Location = new Point(sl_lcb_textbox.Left + sl_lcb_textbox.Width + sep, sl_lcb_textbox.Top);
             sl_db_2_textbox.Width = 150;
             sl_db_2_textbox.Text = "0-2";
-            sl_db_2_textbox.TextChanged += new EventHandler(sl_db_2_textbox_valueChanged);
+            sl_db_2_textbox.LostFocus += new EventHandler(sl_db_2_textbox_valueChanged);
+            sl_db_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
             toolTip1.SetToolTip(sl_db_2_textbox, formatting_db);
             sl_db_2_label.Location = new Point(sl_db_2_textbox.Left, sl_db_2_textbox.Top - sep);
             sl_db_2_label.Width = 150;
@@ -1363,7 +1383,6 @@ namespace LipidCreator
             lipids_gridview.DoubleClick += new EventHandler(lipids_gridview_double_click);
             lipids_gridview.KeyDown += new KeyEventHandler(lipids_gridview_keydown);
             lipids_gridview.EditMode = DataGridViewEditMode.EditOnEnter;
-            //lipids_gridview.RowsRemoved += new DataGridViewRowsRemovedEventHandler(lipids_gridview_delete_row);
 
             open_review_form_button.Text = "Review Lipids";
             open_review_form_button.Width = 130;

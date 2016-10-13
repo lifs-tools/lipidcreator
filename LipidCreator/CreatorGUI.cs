@@ -174,6 +174,16 @@ namespace LipidCreator
                 pl_neg_adduct_checkbox_4.Checked = currentPLLipid.adducts["+CH3COO"];
                 if (lipid_modifications[2] > -1) pl_modify_lipid_button.Enabled = true;
                 else pl_modify_lipid_button.Enabled = false;
+                
+                if (currentPLLipid.hg[0] == 'L') {
+                    pl_fa_2_gb_1_checkbox_1.Enabled = false;
+                    pl_fa_2_gb_1_checkbox_2.Enabled = false;
+                    pl_fa_2_gb_1_checkbox_3.Enabled = false;
+                    pl_fa_2_gb_1_checkbox_4.Enabled = false;
+                    pl_fa_2_combobox.Enabled = false;
+                    pl_fa_2_textbox.Enabled = false;
+                    pl_db_2_textbox.Enabled = false;
+                }
             }
             else if (index == 3)
             {
@@ -330,69 +340,85 @@ namespace LipidCreator
         public void cl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void cl_fa_1_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void cl_fa_1_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void cl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
         }
         
         public void cl_fa_2_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void cl_fa_2_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void cl_fa_2_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void cl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
         }
         
         public void cl_fa_3_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void cl_fa_3_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void cl_fa_3_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void cl_fa_3_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
         }
         
         public void cl_fa_4_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
         }
         public void cl_fa_4_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
         }
         public void cl_fa_4_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
         }
         public void cl_fa_4_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
         }
         
         public void cl_pos_adduct_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -447,27 +473,33 @@ namespace LipidCreator
         public void gl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, gl_fa_1_combobox);
         }
         public void gl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, gl_fa_2_combobox);
         }
         public void gl_fa_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, gl_fa_3_combobox);
         }
         
         public void gl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, null);
         }
         public void gl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, null);
         }
         public void gl_db_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, null);
         }
         
         public void gl_pos_adduct_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -506,52 +538,64 @@ namespace LipidCreator
         public void gl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void gl_fa_1_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void gl_fa_1_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void gl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
         }
         
         public void gl_fa_2_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void gl_fa_2_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void gl_fa_2_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void gl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
         }
         
         public void gl_fa_3_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void gl_fa_3_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void gl_fa_3_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
         }
         public void gl_fa_3_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
         }
         
         
@@ -574,19 +618,23 @@ namespace LipidCreator
         public void pl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, pl_fa_1_combobox);
         }
         public void pl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, pl_fa_2_combobox);
         }
         
         public void pl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, null);
         }
         public void pl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, null);
         }
         
         public void pl_pos_adduct_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -625,35 +673,43 @@ namespace LipidCreator
         public void pl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void pl_fa_1_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void pl_fa_1_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
         }
         public void pl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
         }
         
         public void pl_fa_2_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void pl_fa_2_gb_1_checkbox_2_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void pl_fa_2_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
         public void pl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
+            ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
         
         

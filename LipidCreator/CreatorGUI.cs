@@ -624,6 +624,22 @@ namespace LipidCreator
         }
         
         
+        public void trigger_easteregg(Object sender, EventArgs e)
+        {
+            eastertext.Left = 1030;
+            eastertext.Visible = true;
+            this.timer1.Enabled = true;
+        }
+        
+        private void timer1_Tick(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            eastertext.Left -= 2;
+            if (eastertext.Left < -eastertext.Width){
+                this.timer1.Enabled = false;
+                eastertext.Visible = false;
+            }
+        }
+        
         ////////////////////// PL ////////////////////////////////
         
         
@@ -1005,7 +1021,6 @@ namespace LipidCreator
         {
             if (e.KeyCode == Keys.Delete && lipidCreatorForm.registered_lipids.Count > 0 && ((DataGridView)sender).SelectedRows.Count > 0)
             {   
-                Console.WriteLine(((DataGridView)sender).SelectedRows[0].Index);
                 lipidCreatorForm.registered_lipids.RemoveAt(((DataGridView)sender).SelectedRows[0].Index);
                 refresh_registered_lipids_table();
                 e.Handled = true;

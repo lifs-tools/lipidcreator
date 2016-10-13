@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Collections;
+using System.ComponentModel;
 using System.Collections.Generic;
 
 namespace LipidCreator
@@ -28,6 +29,7 @@ namespace LipidCreator
         }
 
         #region Windows Form Designer generated code
+        private System.Timers.Timer timer1;
         
         private TabControl tab_control = new TabControl();
         private TabPage cardiolipins_tab;
@@ -178,6 +180,7 @@ namespace LipidCreator
         TextBox pl_db_2_textbox;
         TextBox sl_db_1_textbox;
         TextBox sl_db_2_textbox;
+        
 
         Label cl_db_1_label;
         Label cl_db_2_label;
@@ -192,6 +195,9 @@ namespace LipidCreator
         Label sl_db_2_label;
         Label sl_lcb_hydroxy_label;
         Label sl_fa_hydroxy_label;
+        
+        
+        Label eastertext;
 
         Label pl_hg_label;
         ComboBox pl_hg_combobox;
@@ -219,6 +225,10 @@ namespace LipidCreator
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Text = "LipidCreator";
+            
+            this.components = new System.ComponentModel.Container();
+            this.timer1 = new System.Timers.Timer(5);
+            this.timer1.Elapsed += this.timer1_Tick;
             
         
             tab_control = new TabControl();
@@ -339,6 +349,7 @@ namespace LipidCreator
             sl_hg_label = new Label();
             sl_lcb_hydroxy_label = new Label();
             sl_fa_hydroxy_label = new Label();
+            eastertext = new Label();
 
             cl_fa_1_gb_1_checkbox_1 = new CheckBox();
             cl_fa_1_gb_1_checkbox_2 = new CheckBox();
@@ -764,6 +775,7 @@ namespace LipidCreator
             glycerolipids_tab.Controls.Add(gl_db_3_label);
             glycerolipids_tab.Controls.Add(gl_positive_adduct);
             glycerolipids_tab.Controls.Add(gl_negative_adduct);
+            glycerolipids_tab.Controls.Add(eastertext);
             glycerolipids_tab.Parent = tab_control;
             glycerolipids_tab.Text = "Glycerolipids";
             glycerolipids_tab.Location = new Point(0, 0);
@@ -772,6 +784,14 @@ namespace LipidCreator
             glycerolipids_tab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             glycerolipids_tab.BackColor = Color.White;
 
+            
+            
+            eastertext.Location = new Point(1030, 5);
+            eastertext.Text = "Fat is unfair, it sticks 2 minutes in your mouth, 2 hours in your stomach and 2 decades at your hips.";
+            eastertext.Visible = false;
+            eastertext.Font = new Font(new Font(eastertext.Font.FontFamily, 40), FontStyle.Bold);
+            eastertext.AutoSize = true;
+            
 
             gl_fa_1_combobox.BringToFront();
             gl_fa_1_textbox.BringToFront();
@@ -889,6 +909,7 @@ namespace LipidCreator
             gl_positive_adduct.Width = 120;
             gl_positive_adduct.Height = 120;
             gl_positive_adduct.Text = "Positive adducts";
+            gl_positive_adduct.DoubleClick += new EventHandler(trigger_easteregg);
             gl_pos_adduct_checkbox_1.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_1.Location = new Point(10, 15);
             gl_pos_adduct_checkbox_1.Text = "+H";
@@ -1207,6 +1228,7 @@ namespace LipidCreator
             sl_positive_adduct.Width = 120;
             sl_positive_adduct.Height = 120;
             sl_positive_adduct.Text = "Positive adducts";
+            
             sl_pos_adduct_checkbox_1.Parent = sl_positive_adduct;
             sl_pos_adduct_checkbox_1.Location = new Point(10, 15);
             sl_pos_adduct_checkbox_1.Text = "+H";

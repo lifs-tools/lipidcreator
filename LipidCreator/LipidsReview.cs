@@ -12,17 +12,17 @@ namespace LipidCreator
 {
     public partial class LipidsReview : Form
     {
-        DataTable atomsCount;
-        public LipidsReview(DataTable atomsCount)
+        DataTable allFragments;
+        public LipidsReview(DataTable allFragments)
         {
-            this.atomsCount = atomsCount;
+            this.allFragments = allFragments;
             InitializeComponent();
-            dataGridView1.DataSource = this.atomsCount;
-            dataGridView1.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridView1.DataSource = this.allFragments;
+            Console.WriteLine(dataGridView1.Columns.Count);
+            foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
+            {
+                dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
             dataGridView1.Update();
             dataGridView1.Refresh();
         }

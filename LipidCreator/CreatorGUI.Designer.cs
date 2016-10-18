@@ -211,9 +211,7 @@ namespace LipidCreator
 
         DataGridView lipids_gridview;
         Button open_review_form_button;
-        DataTable dt;
 
-        ArrayList all_lipids;
         
 
         /// <summary>

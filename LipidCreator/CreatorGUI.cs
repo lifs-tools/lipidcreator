@@ -1041,7 +1041,7 @@ namespace LipidCreator
         public void open_review_Form(Object sender, EventArgs e)
         {
             lipidCreatorForm.assemble_lipids();
-            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm.all_lipids);
+            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.all_lipids);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();

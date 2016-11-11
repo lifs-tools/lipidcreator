@@ -138,7 +138,7 @@ namespace LipidCreator
             }
             
             String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
-            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, ""));
+            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, "", ""));
             this.Close();
         }
         private void dataGridView1_CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)

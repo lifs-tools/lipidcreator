@@ -1,6 +1,14 @@
 class,file
+Cer,images/MS2/Cer_pos_pre.png
+CerP,images/MS2/CerP_pos_pre.png
 CL,images/MS2/CL_neg_pre.png
+DG,images/MS2/DG_pos_pre.png
+HexCer,images/MS2/HexCer_pos_pre.png
+HexCerS,images/MS2/HexCerS_pos_pre.png
+PA,images/MS2/PA_neg_pre.png
+PC,images/MS2/PC_neg_pre.png
+pPC,images/MS2/pPC_neg_pre.png
 PG,images/MS2/PG_neg_pre.png
 PI,images/MS2/PI_neg_pre.png
-PS,images/MS2/PS_neg_pre.png
 PIP,images/MS2/PIP_neg_pre.png
+PS,images/MS2/PS_neg_pre.png

@@ -261,10 +261,11 @@ namespace LipidCreator
             pl_picture_box = new PictureBox();
             sl_picture_box = new PictureBox();
 
-            cardio_backbone_image = Image.FromFile("images/cardio_backbone.png");
-            glycero_backbone_image = Image.FromFile("images/GL backbone_2.png");
-            phospho_backbone_image = Image.FromFile("images/GL backbone_2.png");
-            sphingo_backbone_image = Image.FromFile("images/SL backbone_30.png");
+            
+            cardio_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/cardio_backbone.png");
+            glycero_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/GL backbone_2.png");
+            phospho_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/GL backbone_2.png");
+            sphingo_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/SL backbone_30.png");
 
             cl_fa_1_textbox = new TextBox();
             cl_fa_2_textbox = new TextBox();

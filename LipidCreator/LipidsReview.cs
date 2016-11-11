@@ -12,19 +12,26 @@ namespace LipidCreator
 {
     public partial class LipidsReview : Form
     {
-        DataTable allFragments;
-        public LipidsReview(DataTable allFragments)
+        public DataTable allFragments;
+        public LipidCreatorForm lipidCreatorForm;
+        public LipidsReview(LipidCreatorForm lipidCreatorForm, DataTable allFragments)
         {
+            this.lipidCreatorForm = lipidCreatorForm;
             this.allFragments = allFragments;
             InitializeComponent();
             dataGridView1.DataSource = this.allFragments;
-            Console.WriteLine(dataGridView1.Columns.Count);
             foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
             {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             dataGridView1.Update();
             dataGridView1.Refresh();
+        }
+    
+        public void send_to_Skyline(Object sender, EventArgs e)
+        {
+            lipidCreatorForm.send_to_Skyline(allFragments);
+            this.Close();
         }
     }
 }

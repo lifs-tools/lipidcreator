@@ -64,6 +64,7 @@ namespace LipidCreator
             this.button1.TabIndex = 1;
             this.button1.Text = "Send to Skyline";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += send_to_Skyline;
             // 
             // LipidsReview
             // 

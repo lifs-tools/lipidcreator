@@ -5,7 +5,7 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
+using SkylineTool;
 
 namespace LipidCreator
 {
@@ -168,6 +168,7 @@ namespace LipidCreator
         public bool fragmentSelected;
         public DataTable fragmentElements;
         public ArrayList fragmentBase;
+        public HashSet<string> restrictions;
     
     
         public static void addCounts(DataTable dt1, DataTable dt2)
@@ -211,14 +212,14 @@ namespace LipidCreator
             hydrogen[count] = "0";
             hydrogen[shortcut] = "H";
             hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007276;
+            hydrogen[monoMass] = 1.007825035;
             elements.Rows.Add(hydrogen);
 
             DataRow oxygen = elements.NewRow();
             oxygen[count] = "0";
             oxygen[shortcut] = "O";
             oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.994915;
+            oxygen[monoMass] = 15.99491463;
             elements.Rows.Add(oxygen);
 
             DataRow nitrogen = elements.NewRow();
@@ -232,21 +233,21 @@ namespace LipidCreator
             phosphor[count] = "0";
             phosphor[shortcut] = "P";
             phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973763;
+            phosphor[monoMass] = 30.973762;
             elements.Rows.Add(phosphor);
 
             DataRow sulfur = elements.NewRow();
             sulfur[count] = "0";
             sulfur[shortcut] = "S";
             sulfur[element] = "sulfur";
-            sulfur[monoMass] = 31.972072;
+            sulfur[monoMass] = 31.9720707;
             elements.Rows.Add(sulfur);
 
             DataRow sodium = elements.NewRow();
             sodium[count] = "0";
             sodium[shortcut] = "Na";
             sodium[element] = "sodium";
-            sodium[monoMass] = 22.989770;
+            sodium[monoMass] = 22.9897677;
             elements.Rows.Add(sodium);
             return elements;
         }
@@ -329,6 +330,7 @@ namespace LipidCreator
             fragmentSelected = true;
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
+            restrictions = new HashSet<string>();
         }
     
 
@@ -340,16 +342,19 @@ namespace LipidCreator
             fragmentSelected = true;
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
+            restrictions = new HashSet<string>();
         }
         
-        public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms)
+        public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions)
         {
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentSelected = selected;
             fragmentElements = dataElements;
+            this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
 
         public MS2Fragment(MS2Fragment copy)
@@ -360,10 +365,9 @@ namespace LipidCreator
             fragmentSelected = copy.fragmentSelected;
             fragmentElements = createEmptyElementTable(copy.fragmentElements);
             fragmentBase = new ArrayList();
-            foreach (string fbase in copy.fragmentBase)
-            {
-                fragmentBase.Add(fbase);
-            }
+            restrictions = new HashSet<string>();
+            foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
+            foreach (string restriction in copy.restrictions) restrictions.Add(restriction);
         }
     }
 
@@ -607,6 +611,13 @@ namespace LipidCreator
                                                                             }
                                                                             if (!used_keys.Contains(key))
                                                                             {
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
                                                                                 foreach (KeyValuePair<string, bool> adduct in adducts)
                                                                                 {
                                                                                     if (adduct.Value)
@@ -619,9 +630,11 @@ namespace LipidCreator
                                                                                         MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
                                                                                         MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
                                                                                         MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                                                         String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                                                         double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                                        
+                                                                                        
                                                                                         
                                                                                         
                                                                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
@@ -660,12 +673,12 @@ namespace LipidCreator
                                                                                                 lipid_row["Molecule List Name"] = headgroup;
                                                                                                 lipid_row["Precursor Name"] = key;
                                                                                                 lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                                                lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                                                                                lipid_row["Precursor m/z"] = mass;
+                                                                                                lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                                lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
                                                                                                 lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
                                                                                                 lipid_row["Pruduct Name"] = fragment.fragmentName;
                                                                                                 lipid_row["Pruduct Ion Formula"] = chemFormFragment;
-                                                                                                lipid_row["Pruduct m/z"] = massFragment;
+                                                                                                lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                                                                 lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                                                 all_lipids.Rows.Add(lipid_row);
                                                                                             }
@@ -982,13 +995,13 @@ namespace LipidCreator
                                                         MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                                         MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                                         MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                         String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                         double mass = LipidCreatorForm.compute_mass(atomsCount);
                                                         
                                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                         {
-                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
+                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                                             {
                                                                 DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                                 foreach (string fbase in fragment.fragmentBase)
@@ -1016,12 +1029,12 @@ namespace LipidCreator
                                                                 lipid_row["Molecule List Name"] = headgroup;
                                                                 lipid_row["Precursor Name"] = key;
                                                                 lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                                                lipid_row["Precursor m/z"] = mass;
+                                                                lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
                                                                 lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
                                                                 lipid_row["Pruduct Name"] = fragment.fragmentName;
                                                                 lipid_row["Pruduct Ion Formula"] = chemFormFragment;
-                                                                lipid_row["Pruduct m/z"] = massFragment;
+                                                                lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                                 lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                 all_lipids.Rows.Add(lipid_row);
                                                             }
@@ -1225,10 +1238,14 @@ namespace LipidCreator
         public Dictionary<String, String> all_paths_to_precursor_images;
         public Dictionary<String, DataTable> headgroups;
         public DataTable all_lipids;
-
-        public LipidCreatorForm()
+        public SkylineToolClient skylineToolClient;
+        public bool opened_as_external;
+        public string prefix_path = "Tools/LipidCreator/";
+        
+        public LipidCreatorForm(String pipe)
         {
-
+            opened_as_external = (pipe != null);
+            skylineToolClient = opened_as_external ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registered_lipids = new ArrayList();
             all_paths_to_precursor_images = new Dictionary<String, String>();
             all_fragments = new Dictionary<String, ArrayList>();
@@ -1247,28 +1264,30 @@ namespace LipidCreator
             
             
             
+            String precursor_file = (opened_as_external ? prefix_path : "") + "data/precursors.csv";
             try
             {
-                using (StreamReader sr = new StreamReader("data/precursors.csv"))
+                using (StreamReader sr = new StreamReader(precursor_file))
                 {
                     // omit titles
                     String line = sr.ReadLine();
                     while((line = sr.ReadLine()) != null)
                     {
                         String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
-                        all_paths_to_precursor_images.Add(tokens[0], tokens[1]);
+                        all_paths_to_precursor_images.Add(tokens[0], (opened_as_external ? prefix_path : "") + tokens[1]);
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file 'data/precursors.csv' could not be read:");
+                Console.WriteLine("The file '" + precursor_file + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
+            String ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
             try
             {
-                using (StreamReader sr = new StreamReader("data/ms2fragments.csv"))
+                using (StreamReader sr = new StreamReader(ms2fragments_file))
                 {
                     // omit titles
                     String line = sr.ReadLine();
@@ -1288,20 +1307,21 @@ namespace LipidCreator
                         atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[9]);
                         atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[10]);
                         atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[11]);
-                        all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), tokens[2], true, atomsCount, tokens[4]));
+                        all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), (opened_as_external ? prefix_path : "") + tokens[2], true, atomsCount, tokens[4], tokens[12]));
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file 'data/ms2fragments.csv' could not be read:");
+                Console.WriteLine("The file '" + ms2fragments_file + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
             
+            String headgroups_file = (opened_as_external ? prefix_path : "") + "data/headgroups.csv";
             try
             {
-                using (StreamReader sr = new StreamReader("data/headgroups.csv"))
+                using (StreamReader sr = new StreamReader(headgroups_file))
                 {
                     // omit titles
                     String line = sr.ReadLine();
@@ -1323,7 +1343,7 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file 'data/headgroups.csv' could not be read:");
+                Console.WriteLine("The file '" + headgroups_file + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
@@ -1443,11 +1463,47 @@ namespace LipidCreator
             return mass;
         }
         
+        public void send_to_Skyline(DataTable dt)
+        {
+            if (skylineToolClient == null) return;
+            
+            var header = string.Join(",", new string[]
+            {
+                "MoleculeGroup",
+                "PrecursorName",
+                "PrecursorFormula",
+                "PrecursorAdduct",
+                "PrecursorMz",
+                "PrecursorCharge",
+                "ProductName",
+                "ProductFormula",
+                "ProductMz",
+                "ProductCharge"
+            });
+            string pipe_string = header + "\n";
+            foreach (DataRow entry in dt.Rows)
+            {
+                // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
+                pipe_string += entry["Molecule List Name"] + ","; // listname
+                pipe_string += entry["Precursor Name"] + ","; // preName
+                pipe_string += entry["Precursor Ion Formula"] + ","; // PreFormula
+                pipe_string += entry["Precursor Adduct"] + ","; // preAdduct
+                pipe_string += entry["Precursor m/z"] + ","; // preMz
+                pipe_string += entry["Precursor Charge"] + ","; // preCharge
+                pipe_string += entry["Pruduct Name"] + ","; // prodName
+                pipe_string += entry["Pruduct Ion Formula"] + ","; // ProdFormula, no prodAdduct
+                pipe_string += entry["Pruduct m/z"] + ","; // prodMz
+                pipe_string += entry["Pruduct Charge"]; // prodCharge
+                pipe_string += "\n";
+            }
+            skylineToolClient.InsertSmallMoleculeTransitionList(pipe_string);
+            skylineToolClient.Dispose();
+        }
 
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
-            LipidCreatorForm lcf = new LipidCreatorForm();
+            LipidCreatorForm lcf = new LipidCreatorForm((args.Length > 0) ? args[0] : null);
             Application.Run(lcf.creatorGUI);
         }
     }

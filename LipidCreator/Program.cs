@@ -4,12 +4,13 @@ using System.Windows.Forms;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.IO;
 using SkylineTool;
 
 namespace LipidCreator
 {
-
+    [Serializable]
     public class fatty_acid : IComparable<fatty_acid>
     {
         public int length;
@@ -91,6 +92,7 @@ namespace LipidCreator
     }
     
     
+    [Serializable]
     public class fatty_acid_comparer : EqualityComparer<fatty_acid>
     {
         public override int GetHashCode(fatty_acid obj)
@@ -104,6 +106,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class fattyAcidGroup
     {
         public int chainType; // 0 = no restriction, 1 = odd carbon number, 2 = even carbon number
@@ -118,7 +121,7 @@ namespace LipidCreator
         {
             chainType = 0;
             lengthInfo = "2-5";
-            dbInfo = "0-1";
+            dbInfo = "0";
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", true);
             faTypes.Add("FAp", false);
@@ -160,6 +163,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class MS2Fragment
     {
         public String fragmentName;
@@ -281,14 +285,14 @@ namespace LipidCreator
             hydrogen[count] = copy.Rows[1][count];
             hydrogen[shortcut] = "H";
             hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007276;
+            hydrogen[monoMass] = 1.007825035;
             elements.Rows.Add(hydrogen);
 
             DataRow oxygen = elements.NewRow();
             oxygen[count] = copy.Rows[2][count];
             oxygen[shortcut] = "O";
             oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.994915;
+            oxygen[monoMass] = 15.99491463;
             elements.Rows.Add(oxygen);
 
             DataRow nitrogen = elements.NewRow();
@@ -302,21 +306,21 @@ namespace LipidCreator
             phosphor[count] = copy.Rows[4][count];
             phosphor[shortcut] = "P";
             phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973763;
+            phosphor[monoMass] = 30.973762;
             elements.Rows.Add(phosphor);
 
             DataRow sulfur = elements.NewRow();
             sulfur[count] = copy.Rows[5][count];
             sulfur[shortcut] = "S";
             sulfur[element] = "sulfur";
-            sulfur[monoMass] = 31.972072;
+            sulfur[monoMass] =  31.9720707;
             elements.Rows.Add(sulfur);
 
             DataRow sodium = elements.NewRow();
             sodium[count] = copy.Rows[6][count];
             sodium[shortcut] = "Na";
             sodium[element] = "sodium";
-            sodium[monoMass] = 22.989770;
+            sodium[monoMass] = 22.9897677;
             elements.Rows.Add(sodium);
             return elements;
         }
@@ -372,6 +376,7 @@ namespace LipidCreator
     }
 
 
+    [Serializable]
     public class lipid
     {
         public string className;
@@ -476,6 +481,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class cl_lipid : lipid
     {
         public string[] fa_db_texts;
@@ -705,6 +711,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class gl_lipid : lipid
     {
         public string[] fa_db_texts;
@@ -879,6 +886,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class pl_lipid : lipid
     {
         public string[] fa_db_texts;
@@ -1053,6 +1061,7 @@ namespace LipidCreator
         }
     }
 
+    [Serializable]
     public class sl_lipid : lipid
     {
         public string[] lcb_fa_db_texts;
@@ -1077,6 +1086,7 @@ namespace LipidCreator
             MS2Fragments.Add("GM3Cer", new ArrayList());
             MS2Fragments.Add("GM4Cer", new ArrayList());
             MS2Fragments.Add("HexCer", new ArrayList());
+            MS2Fragments.Add("HexCerS", new ArrayList());
             MS2Fragments.Add("LacCer", new ArrayList());
             MS2Fragments.Add("Lc3Cer", new ArrayList());
             MS2Fragments.Add("MIPCer", new ArrayList());
@@ -1228,6 +1238,7 @@ namespace LipidCreator
 
 
 
+    [Serializable]
     public class LipidCreatorForm
     {
 
@@ -1481,6 +1492,8 @@ namespace LipidCreator
                 "ProductCharge"
             });
             string pipe_string = header + "\n";
+            double max_mass = 0;
+            
             foreach (DataRow entry in dt.Rows)
             {
                 // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
@@ -1489,6 +1502,7 @@ namespace LipidCreator
                 pipe_string += entry["Precursor Ion Formula"] + ","; // PreFormula
                 pipe_string += entry["Precursor Adduct"] + ","; // preAdduct
                 pipe_string += entry["Precursor m/z"] + ","; // preMz
+                max_mass = Math.Max(max_mass, Convert.ToDouble((string)entry["Precursor m/z"]));
                 pipe_string += entry["Precursor Charge"] + ","; // preCharge
                 pipe_string += entry["Pruduct Name"] + ","; // prodName
                 pipe_string += entry["Pruduct Ion Formula"] + ","; // ProdFormula, no prodAdduct
@@ -1496,8 +1510,18 @@ namespace LipidCreator
                 pipe_string += entry["Pruduct Charge"]; // prodCharge
                 pipe_string += "\n";
             }
-            skylineToolClient.InsertSmallMoleculeTransitionList(pipe_string);
-            skylineToolClient.Dispose();
+            try
+            {
+                //Console.WriteLine(pipe_string);
+                
+                skylineToolClient.InsertSmallMoleculeTransitionList(pipe_string);
+                skylineToolClient.Dispose();
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.ToString());
+                MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + max_mass + "Da.");
+            }
         }
 
         [STAThread]

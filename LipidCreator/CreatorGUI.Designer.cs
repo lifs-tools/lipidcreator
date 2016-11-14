@@ -453,6 +453,7 @@ namespace LipidCreator
             sl_hg_combobox.Items.Add("GM3Cer");
             sl_hg_combobox.Items.Add("GM4Cer");
             sl_hg_combobox.Items.Add("HexCer");
+            sl_hg_combobox.Items.Add("HexCerS");
             sl_hg_combobox.Items.Add("LacCer");
             sl_hg_combobox.Items.Add("Lc3Cer");
             sl_hg_combobox.Items.Add("MIPCer");

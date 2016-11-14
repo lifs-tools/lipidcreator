@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace LipidCreator
 {
+    [Serializable]
     public partial class NewFragment : Form
     {
 
@@ -46,14 +47,14 @@ namespace LipidCreator
             hydrogen[count] = "0";
             hydrogen[shortcut] = "H";
             hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007276;
+            hydrogen[monoMass] = 1.007825035;
             elements.Rows.Add(hydrogen);
 
             DataRow oxygen = elements.NewRow();
             oxygen[count] = "0";
             oxygen[shortcut] = "O";
             oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.994915;
+            oxygen[monoMass] = 15.99491463;
             elements.Rows.Add(oxygen);
 
             DataRow nitrogen = elements.NewRow();
@@ -67,21 +68,21 @@ namespace LipidCreator
             phosphor[count] = "0";
             phosphor[shortcut] = "P";
             phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973763;
+            phosphor[monoMass] = 30.973762;
             elements.Rows.Add(phosphor);
 
             DataRow sulfur = elements.NewRow();
             sulfur[count] = "0";
             sulfur[shortcut] = "S";
             sulfur[element] = "sulfur";
-            sulfur[monoMass] = 31.972072;
+            sulfur[monoMass] =  31.9720707;
             elements.Rows.Add(sulfur);
 
             DataRow sodium = elements.NewRow();
             sodium[count] = "0";
             sodium[shortcut] = "Na";
             sodium[element] = "sodium";
-            sodium[monoMass] = 22.989770;
+            sodium[monoMass] = 22.9897677;
             elements.Rows.Add(sodium);
 
 

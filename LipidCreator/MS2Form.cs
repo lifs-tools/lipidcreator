@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace LipidCreator
 {
+    [Serializable]
     public partial class MS2Form : Form
     {
         

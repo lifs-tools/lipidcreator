@@ -478,6 +478,80 @@ namespace LipidCreator
         }
         
         
+        
+        void cl_fa_1_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa1e;
+        }
+        
+        void cl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa1p;
+        }
+        
+        void cl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa2e;
+        }
+        void cl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+
+        private void cl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa2p;
+        }
+        
+        void cl_fa_3_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_3_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa3e;
+        }
+        
+        void cl_fa_3_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_3_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa3p;
+        }
+        
+        void cl_fa_4_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+        private void cl_fa_4_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa4e;
+        }
+        void cl_fa_4_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image;
+        }
+
+        private void cl_fa_4_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            cl_picture_box.Image = cardio_backbone_image_fa4p;
+        }
+        
+        
         ////////////////////// GL ////////////////////////////////
         
         public void gl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
@@ -783,7 +857,202 @@ namespace LipidCreator
             ((pl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
             ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
+        public void pl_is_cl_checkedChanged(Object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+            {
+                pl_picture_box.Image = cardio_backbone_image;
+                pl_picture_box.Location = new Point(5, 5);
+                pl_hg_combobox.Visible = false;
+                pl_hg_label.Visible = false;
+                pl_add_lipid_button.Visible = false;
+                pl_reset_lipid_button.Visible = false;
+                pl_modify_lipid_button.Visible = false;
+                pl_ms2fragments_lipid_button.Visible = false;
+                pl_fa_1_gb_1_checkbox_4.Visible = false;
+                pl_fa_1_gb_1_checkbox_3.Visible = false;
+                pl_fa_1_gb_1_checkbox_2.Visible = false;
+                pl_fa_1_gb_1_checkbox_1.Visible = false;
+                pl_fa_2_gb_1_checkbox_4.Visible = false;
+                pl_fa_2_gb_1_checkbox_3.Visible = false;
+                pl_fa_2_gb_1_checkbox_2.Visible = false;
+                pl_fa_2_gb_1_checkbox_1.Visible = false;
+                pl_picture_box.Visible = false;
+                pl_fa_1_textbox.Visible = false;
+                pl_fa_2_textbox.Visible = false;
+                pl_db_1_textbox.Visible = false;
+                pl_db_2_textbox.Visible = false;
+                pl_fa_1_combobox.Visible = false;
+                pl_fa_2_combobox.Visible = false;
+                pl_db_1_label.Visible = false;
+                pl_db_2_label.Visible = false;
+                pl_hg_label.Visible = false;
+                pl_hg_combobox.Visible = false;
+                pl_positive_adduct.Visible = false;
+                pl_negative_adduct.Visible = false;
+                
+                cl_fa_1_gb_1_checkbox_4.Visible = true;
+                cl_fa_1_gb_1_checkbox_3.Visible = true;
+                cl_fa_1_gb_1_checkbox_2.Visible = true;
+                cl_fa_1_gb_1_checkbox_1.Visible = true;
+                cl_fa_2_gb_1_checkbox_4.Visible = true;
+                cl_fa_2_gb_1_checkbox_3.Visible = true;
+                cl_fa_2_gb_1_checkbox_2.Visible = true;
+                cl_fa_2_gb_1_checkbox_1.Visible = true;
+                cl_fa_3_gb_1_checkbox_4.Visible = true;
+                cl_fa_3_gb_1_checkbox_3.Visible = true;
+                cl_fa_3_gb_1_checkbox_2.Visible = true;
+                cl_fa_3_gb_1_checkbox_1.Visible = true;
+                cl_fa_4_gb_1_checkbox_4.Visible = true;
+                cl_fa_4_gb_1_checkbox_3.Visible = true;
+                cl_fa_4_gb_1_checkbox_2.Visible = true;
+                cl_fa_4_gb_1_checkbox_1.Visible = true;
+                cl_positive_adduct.Visible = true;
+                cl_negative_adduct.Visible = true;
+                cl_add_lipid_button.Visible = true;
+                cl_reset_lipid_button.Visible = true;
+                cl_modify_lipid_button.Visible = true;
+                cl_ms2fragments_lipid_button.Visible = true;
+                cl_picture_box.Visible = true;
+                cl_fa_1_textbox.Visible = true;
+                cl_fa_2_textbox.Visible = true;
+                cl_fa_3_textbox.Visible = true;
+                cl_fa_4_textbox.Visible = true;
+                cl_db_1_textbox.Visible = true;
+                cl_db_2_textbox.Visible = true;
+                cl_db_3_textbox.Visible = true;
+                cl_db_4_textbox.Visible = true;
+                cl_fa_1_combobox.Visible = true;
+                cl_fa_2_combobox.Visible = true;
+                cl_fa_3_combobox.Visible = true;
+                cl_fa_4_combobox.Visible = true;
+                cl_db_1_label.Visible = true;
+                cl_db_2_label.Visible = true;
+                cl_db_3_label.Visible = true;
+                cl_db_4_label.Visible = true;
+                
+            }
+            else
+            {
+                pl_picture_box.Image = phospho_backbone_image;
+                pl_picture_box.Location = new Point(107, 13);
+                
+                cl_fa_1_gb_1_checkbox_4.Visible = false;
+                cl_fa_1_gb_1_checkbox_3.Visible = false;
+                cl_fa_1_gb_1_checkbox_2.Visible = false;
+                cl_fa_1_gb_1_checkbox_1.Visible = false;
+                cl_fa_2_gb_1_checkbox_4.Visible = false;
+                cl_fa_2_gb_1_checkbox_3.Visible = false;
+                cl_fa_2_gb_1_checkbox_2.Visible = false;
+                cl_fa_2_gb_1_checkbox_1.Visible = false;
+                cl_fa_3_gb_1_checkbox_4.Visible = false;
+                cl_fa_3_gb_1_checkbox_3.Visible = false;
+                cl_fa_3_gb_1_checkbox_2.Visible = false;
+                cl_fa_3_gb_1_checkbox_1.Visible = false;
+                cl_fa_4_gb_1_checkbox_4.Visible = false;
+                cl_fa_4_gb_1_checkbox_3.Visible = false;
+                cl_fa_4_gb_1_checkbox_2.Visible = false;
+                cl_fa_4_gb_1_checkbox_1.Visible = false;
+                cl_positive_adduct.Visible = false;
+                cl_negative_adduct.Visible = false;
+                cl_add_lipid_button.Visible = false;
+                cl_reset_lipid_button.Visible = false;
+                cl_modify_lipid_button.Visible = false;
+                cl_ms2fragments_lipid_button.Visible = false;
+                cl_picture_box.Visible = false;
+                cl_fa_1_textbox.Visible = false;
+                cl_fa_2_textbox.Visible = false;
+                cl_fa_3_textbox.Visible = false;
+                cl_fa_4_textbox.Visible = false;
+                cl_db_1_textbox.Visible = false;
+                cl_db_2_textbox.Visible = false;
+                cl_db_3_textbox.Visible = false;
+                cl_db_4_textbox.Visible = false;
+                cl_fa_1_combobox.Visible = false;
+                cl_fa_2_combobox.Visible = false;
+                cl_fa_3_combobox.Visible = false;
+                cl_fa_4_combobox.Visible = false;
+                cl_db_1_label.Visible = false;
+                cl_db_2_label.Visible = false;
+                cl_db_3_label.Visible = false;
+                cl_db_4_label.Visible = false;
+                
+                pl_hg_combobox.Visible = true;
+                pl_hg_label.Visible = true;
+                pl_add_lipid_button.Visible = true;
+                pl_reset_lipid_button.Visible = true;
+                pl_modify_lipid_button.Visible = true;
+                pl_ms2fragments_lipid_button.Visible = true;
+                pl_fa_1_gb_1_checkbox_4.Visible = true;
+                pl_fa_1_gb_1_checkbox_3.Visible = true;
+                pl_fa_1_gb_1_checkbox_2.Visible = true;
+                pl_fa_1_gb_1_checkbox_1.Visible = true;
+                pl_fa_2_gb_1_checkbox_4.Visible = true;
+                pl_fa_2_gb_1_checkbox_3.Visible = true;
+                pl_fa_2_gb_1_checkbox_2.Visible = true;
+                pl_fa_2_gb_1_checkbox_1.Visible = true;
+                pl_picture_box.Visible = true;
+                pl_fa_1_textbox.Visible = true;
+                pl_fa_2_textbox.Visible = true;
+                pl_db_1_textbox.Visible = true;
+                pl_db_2_textbox.Visible = true;
+                pl_fa_1_combobox.Visible = true;
+                pl_fa_2_combobox.Visible = true;
+                pl_db_1_label.Visible = true;
+                pl_db_2_label.Visible = true;
+                pl_hg_label.Visible = true;
+                pl_hg_combobox.Visible = true;
+                pl_positive_adduct.Visible = true;
+                pl_negative_adduct.Visible = true;
+                
+            }
+            pl_is_cl.BringToFront();
+        }
         
+        void pl_fa_1_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image;
+            pl_picture_box.Location = new Point(107, 13);
+        }
+        private void pl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image_fa1e;
+            pl_picture_box.Location = new Point(107, 58);
+        }
+        
+        void pl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image;
+            pl_picture_box.Location = new Point(107, 13);
+        }
+        private void pl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image_fa1p;
+            pl_picture_box.Location = new Point(107, 58);
+        }
+
+        
+        void pl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image;
+            pl_picture_box.Location = new Point(107, 13);
+        }
+        private void pl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image_fa2e;
+            pl_picture_box.Location = new Point(107, 13);
+        }
+        void pl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image;
+            pl_picture_box.Location = new Point(107, 13);
+        }
+
+        private void pl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
+        {
+            pl_picture_box.Image = phospho_backbone_image_fa2p;
+            pl_picture_box.Location = new Point(107, 13);
+        }
         
         ////////////////////// SL ////////////////////////////////
         

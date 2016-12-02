@@ -121,7 +121,7 @@ namespace LipidCreator
         {
             chainType = 0;
             lengthInfo = "2-5";
-            dbInfo = "0";
+            dbInfo = "0-1";
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", true);
             faTypes.Add("FAp", false);

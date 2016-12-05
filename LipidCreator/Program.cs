@@ -112,6 +112,7 @@ namespace LipidCreator
         public int chainType; // 0 = no restriction, 1 = odd carbon number, 2 = even carbon number
         public String lengthInfo;
         public String dbInfo;
+        public String hydroxylInfo;
         public Dictionary<String, bool> faTypes;
         public HashSet<int> lengths;
         public HashSet<int> dbs;
@@ -121,7 +122,8 @@ namespace LipidCreator
         {
             chainType = 0;
             lengthInfo = "2-5";
-            dbInfo = "0-1";
+            dbInfo = "0";
+            hydroxylInfo = "0";
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", true);
             faTypes.Add("FAp", false);
@@ -138,6 +140,7 @@ namespace LipidCreator
             chainType = copy.chainType;
             lengthInfo = copy.lengthInfo;
             dbInfo = copy.dbInfo;
+            hydroxylInfo = copy.hydroxylInfo;
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", copy.faTypes["FA"]);
             faTypes.Add("FAp", copy.faTypes["FAp"]);
@@ -1274,7 +1277,7 @@ namespace LipidCreator
             all_lipids.Columns.Add("Pruduct Charge");
             
             
-            
+            int line_counter = 1;
             String precursor_file = (opened_as_external ? prefix_path : "") + "data/precursors.csv";
             try
             {
@@ -1286,16 +1289,18 @@ namespace LipidCreator
                     {
                         String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
                         all_paths_to_precursor_images.Add(tokens[0], (opened_as_external ? prefix_path : "") + tokens[1]);
+                        line_counter++;
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file '" + precursor_file + "' could not be read:");
+                Console.WriteLine("The file '" + precursor_file + "' in line '" + line_counter + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
             String ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
+            line_counter = 1;
             try
             {
                 using (StreamReader sr = new StreamReader(ms2fragments_file))
@@ -1318,18 +1323,21 @@ namespace LipidCreator
                         atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[9]);
                         atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[10]);
                         atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[11]);
+                        
                         all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), (opened_as_external ? prefix_path : "") + tokens[2], true, atomsCount, tokens[4], tokens[12]));
+                        line_counter++;
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file '" + ms2fragments_file + "' could not be read:");
+                Console.WriteLine("The file '" + ms2fragments_file + "' in line '" + line_counter + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
             
             String headgroups_file = (opened_as_external ? prefix_path : "") + "data/headgroups.csv";
+            line_counter = 1;
             try
             {
                 using (StreamReader sr = new StreamReader(headgroups_file))
@@ -1349,12 +1357,13 @@ namespace LipidCreator
                         headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
                         headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
                         headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
+                        line_counter++;
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file '" + headgroups_file + "' could not be read:");
+                Console.WriteLine("The file '" + headgroups_file + "' in line '" + line_counter + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
             
@@ -1365,7 +1374,7 @@ namespace LipidCreator
                                                       
                                                       
             creatorGUI = new CreatorGUI(this);
-            creatorGUI.changeTab(0);
+            creatorGUI.changeTab(1);
         }
 
 

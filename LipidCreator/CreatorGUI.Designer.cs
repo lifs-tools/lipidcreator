@@ -32,7 +32,6 @@ namespace LipidCreator
         private System.Timers.Timer timer1;
         
         private TabControl tab_control = new TabControl();
-        private TabPage cardiolipins_tab;
         private TabPage glycerolipids_tab;
         private TabPage phospholipids_tab;
         private TabPage sphingolipids_tab;
@@ -65,6 +64,12 @@ namespace LipidCreator
         Image cardio_backbone_image_fa4e;
         Image cardio_backbone_image_fa4p;
         Image glycero_backbone_image;
+        Image glycero_backbone_image_fa1e;
+        Image glycero_backbone_image_fa1p;
+        Image glycero_backbone_image_fa2e;
+        Image glycero_backbone_image_fa2p;
+        Image glycero_backbone_image_fa3e;
+        Image glycero_backbone_image_fa3p;
         Image phospho_backbone_image;
         Image phospho_backbone_image_fa1e;
         Image phospho_backbone_image_fa1p;
@@ -194,6 +199,16 @@ namespace LipidCreator
         TextBox sl_db_1_textbox;
         TextBox sl_db_2_textbox;
         
+        TextBox cl_hydroxyl_1_textbox;
+        TextBox cl_hydroxyl_2_textbox;
+        TextBox cl_hydroxyl_3_textbox;
+        TextBox cl_hydroxyl_4_textbox;
+        TextBox gl_hydroxyl_1_textbox;
+        TextBox gl_hydroxyl_2_textbox;
+        TextBox gl_hydroxyl_3_textbox;
+        TextBox pl_hydroxyl_1_textbox;
+        TextBox pl_hydroxyl_2_textbox;
+        
 
         Label cl_db_1_label;
         Label cl_db_2_label;
@@ -244,7 +259,6 @@ namespace LipidCreator
         
             tab_control = new TabControl();
             this.Size = new System.Drawing.Size(1024, 768);
-            cardiolipins_tab = new TabPage();
             glycerolipids_tab = new TabPage();
             phospholipids_tab = new TabPage();
             sphingolipids_tab = new TabPage();
@@ -287,7 +301,13 @@ namespace LipidCreator
             cardio_backbone_image_fa2p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp2.png");
             cardio_backbone_image_fa3p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp3.png");
             cardio_backbone_image_fa4p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp4.png");
-            glycero_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/GL backbone_2.png");
+            glycero_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_backbones.png");
+            glycero_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe1.png");
+            glycero_backbone_image_fa2e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe2.png");
+            glycero_backbone_image_fa3e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe3.png");
+            glycero_backbone_image_fa1p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp1.png");
+            glycero_backbone_image_fa2p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp2.png");
+            glycero_backbone_image_fa3p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp3.png");
             phospho_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_backbones.png");
             phospho_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_FAe1.png");
             phospho_backbone_image_fa2e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_FAe2.png");
@@ -319,6 +339,10 @@ namespace LipidCreator
             cl_db_2_textbox = new TextBox();
             cl_db_3_textbox = new TextBox();
             cl_db_4_textbox = new TextBox();
+            cl_hydroxyl_1_textbox = new TextBox();
+            cl_hydroxyl_2_textbox = new TextBox();
+            cl_hydroxyl_3_textbox = new TextBox();
+            cl_hydroxyl_4_textbox = new TextBox();
             cl_db_1_label = new Label();
             cl_db_2_label = new Label();
             cl_db_3_label = new Label();
@@ -514,7 +538,6 @@ namespace LipidCreator
             string formatting_db = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
 
 
-            tab_control.Controls.Add(cardiolipins_tab);
             tab_control.Controls.Add(glycerolipids_tab);
             tab_control.Controls.Add(phospholipids_tab);
             tab_control.Controls.Add(sphingolipids_tab);
@@ -557,6 +580,10 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(cl_db_2_textbox);
             phospholipids_tab.Controls.Add(cl_db_3_textbox);
             phospholipids_tab.Controls.Add(cl_db_4_textbox);
+            phospholipids_tab.Controls.Add(cl_hydroxyl_1_textbox);
+            phospholipids_tab.Controls.Add(cl_hydroxyl_2_textbox);
+            phospholipids_tab.Controls.Add(cl_hydroxyl_3_textbox);
+            phospholipids_tab.Controls.Add(cl_hydroxyl_4_textbox);
             phospholipids_tab.Controls.Add(cl_fa_1_combobox);
             phospholipids_tab.Controls.Add(cl_fa_2_combobox);
             phospholipids_tab.Controls.Add(cl_fa_3_combobox);
@@ -566,6 +593,7 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(cl_db_3_label);
             phospholipids_tab.Controls.Add(cl_db_4_label);
             
+            /*
             cardiolipins_tab.Parent = tab_control;
             cardiolipins_tab.Text = "Cardiolipins";
             cardiolipins_tab.Location = new Point(0, 0);
@@ -573,6 +601,8 @@ namespace LipidCreator
             cardiolipins_tab.AutoSize = true;
             cardiolipins_tab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             cardiolipins_tab.BackColor = Color.White;
+            */
+            
             
             cl_fa_1_gb_1_checkbox_4.Visible = false;
             cl_fa_1_gb_1_checkbox_3.Visible = false;
@@ -605,6 +635,10 @@ namespace LipidCreator
             cl_db_2_textbox.Visible = false;
             cl_db_3_textbox.Visible = false;
             cl_db_4_textbox.Visible = false;
+            cl_hydroxyl_1_textbox.Visible = false;
+            cl_hydroxyl_2_textbox.Visible = false;
+            cl_hydroxyl_3_textbox.Visible = false;
+            cl_hydroxyl_4_textbox.Visible = false;
             cl_fa_1_combobox.Visible = false;
             cl_fa_2_combobox.Visible = false;
             cl_fa_3_combobox.Visible = false;
@@ -618,6 +652,7 @@ namespace LipidCreator
             cl_picture_box.Image = cardio_backbone_image;
             cl_picture_box.Location = new Point(5, 5);
             cl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
+            cl_picture_box.SendToBack();
             
 
 
@@ -640,6 +675,9 @@ namespace LipidCreator
             cl_db_1_label.Width = db_length;
             cl_db_1_label.Location = new Point(cl_db_1_textbox.Left, cl_db_1_textbox.Top - sep);
             cl_db_1_label.Text = db_text;
+            cl_hydroxyl_1_textbox.Width = db_length;
+            cl_hydroxyl_1_textbox.Location = new Point(cl_db_1_textbox.Left + cl_db_1_textbox.Width + sep, cl_db_1_textbox.Top);
+            
 
             cl_fa_1_gb_1_checkbox_4.Location = new Point(cl_fa_1_textbox.Left + 140, cl_fa_1_textbox.Top + cl_fa_1_textbox.Height);
             cl_fa_1_gb_1_checkbox_4.Text = "FAh";
@@ -722,6 +760,8 @@ namespace LipidCreator
             cl_db_2_label.Location = new Point(cl_db_2_textbox.Left, cl_db_2_textbox.Top - sep);
             cl_db_2_label.Width = db_length;
             cl_db_2_label.Text = db_text;
+            cl_hydroxyl_2_textbox.Width = db_length;
+            cl_hydroxyl_2_textbox.Location = new Point(cl_db_2_textbox.Left + cl_db_2_textbox.Width + sep, cl_db_2_textbox.Top);
 
             cl_fa_2_gb_1_checkbox_4.Location = new Point(cl_fa_2_textbox.Left + 140, cl_fa_2_textbox.Top + cl_fa_2_textbox.Height);
             cl_fa_2_gb_1_checkbox_4.Text = "FAh";
@@ -765,6 +805,8 @@ namespace LipidCreator
             cl_db_3_label.Location = new Point(cl_db_3_textbox.Left, cl_db_3_textbox.Top - sep);
             cl_db_3_label.Width = db_length;
             cl_db_3_label.Text = db_text;
+            cl_hydroxyl_3_textbox.Width = db_length;
+            cl_hydroxyl_3_textbox.Location = new Point(cl_db_3_textbox.Left + cl_db_3_textbox.Width + sep, cl_db_3_textbox.Top);
 
             cl_fa_3_gb_1_checkbox_4.Location = new Point(cl_fa_3_textbox.Left + 140, cl_fa_3_textbox.Top + cl_fa_3_textbox.Height);
             cl_fa_3_gb_1_checkbox_4.Text = "FAh";
@@ -807,6 +849,8 @@ namespace LipidCreator
             cl_db_4_label.Location = new Point(cl_db_4_textbox.Left, cl_db_4_textbox.Top - sep);
             cl_db_4_label.Width = db_length;
             cl_db_4_label.Text = db_text;
+            cl_hydroxyl_4_textbox.Width = db_length;
+            cl_hydroxyl_4_textbox.Location = new Point(cl_db_4_textbox.Left + cl_db_4_textbox.Width + sep, cl_db_4_textbox.Top);
 
             cl_fa_4_gb_1_checkbox_4.Location = new Point(cl_fa_4_textbox.Left + 140, cl_fa_4_textbox.Top + cl_fa_4_textbox.Height);
             cl_fa_4_gb_1_checkbox_4.Text = "FAh";
@@ -880,7 +924,7 @@ namespace LipidCreator
 
             gl_fa_1_combobox.BringToFront();
             gl_fa_1_textbox.BringToFront();
-            gl_fa_1_textbox.Location = new Point(240, 90);
+            gl_fa_1_textbox.Location = new Point(128, 68);
             gl_fa_1_textbox.Width = 200;
             gl_fa_1_textbox.Text = "0, 2, 4, 6-7";
             gl_fa_1_textbox.LostFocus += new EventHandler(gl_fa_1_textbox_valueChanged);
@@ -907,9 +951,13 @@ namespace LipidCreator
             gl_fa_1_gb_1_checkbox_3.Location = new Point(gl_fa_1_textbox.Left + 90, gl_fa_1_textbox.Top + gl_fa_1_textbox.Height);
             gl_fa_1_gb_1_checkbox_3.Text = "FAe";
             gl_fa_1_gb_1_checkbox_3.CheckedChanged += new EventHandler(gl_fa_1_gb_1_checkbox_3_checkedChanged);
+            gl_fa_1_gb_1_checkbox_3.MouseLeave += new System.EventHandler(gl_fa_1_gb_1_checkbox_3_MouseLeave);
+            gl_fa_1_gb_1_checkbox_3.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_1_gb_1_checkbox_3_MouseHover);
             gl_fa_1_gb_1_checkbox_2.Location = new Point(gl_fa_1_textbox.Left + 40, gl_fa_1_textbox.Top + gl_fa_1_textbox.Height);
             gl_fa_1_gb_1_checkbox_2.Text = "FAp";
             gl_fa_1_gb_1_checkbox_2.CheckedChanged += new EventHandler(gl_fa_1_gb_1_checkbox_2_checkedChanged);
+            gl_fa_1_gb_1_checkbox_2.MouseLeave += new System.EventHandler(gl_fa_1_gb_1_checkbox_2_MouseLeave);
+            gl_fa_1_gb_1_checkbox_2.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_1_gb_1_checkbox_2_MouseHover);
             gl_fa_1_gb_1_checkbox_1.Location = new Point(gl_fa_1_textbox.Left, gl_fa_1_textbox.Top + gl_fa_1_textbox.Height);
             gl_fa_1_gb_1_checkbox_1.Text = "FA";
             gl_fa_1_gb_1_checkbox_1.Checked = true;
@@ -917,7 +965,7 @@ namespace LipidCreator
 
             gl_fa_2_combobox.BringToFront();
             gl_fa_2_textbox.BringToFront();
-            gl_fa_2_textbox.Location = new Point(298, 186);
+            gl_fa_2_textbox.Location = new Point(358, 190);
             gl_fa_2_textbox.Width = 200;
             gl_fa_2_textbox.Text = "0, 5, 17-19";
             gl_fa_2_textbox.LostFocus += new EventHandler(gl_fa_2_textbox_valueChanged);
@@ -944,9 +992,13 @@ namespace LipidCreator
             gl_fa_2_gb_1_checkbox_3.Location = new Point(gl_fa_2_textbox.Left + 90, gl_fa_2_textbox.Top + gl_fa_2_textbox.Height);
             gl_fa_2_gb_1_checkbox_3.Text = "FAe";
             gl_fa_2_gb_1_checkbox_3.CheckedChanged += new EventHandler(gl_fa_2_gb_1_checkbox_3_checkedChanged);
+            gl_fa_2_gb_1_checkbox_3.MouseLeave += new System.EventHandler(gl_fa_2_gb_1_checkbox_3_MouseLeave);
+            gl_fa_2_gb_1_checkbox_3.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_2_gb_1_checkbox_3_MouseHover);
             gl_fa_2_gb_1_checkbox_2.Location = new Point(gl_fa_2_textbox.Left + 40, gl_fa_2_textbox.Top + gl_fa_2_textbox.Height);
             gl_fa_2_gb_1_checkbox_2.Text = "FAp";
             gl_fa_2_gb_1_checkbox_2.CheckedChanged += new EventHandler(gl_fa_2_gb_1_checkbox_2_checkedChanged);
+            gl_fa_2_gb_1_checkbox_2.MouseLeave += new System.EventHandler(gl_fa_2_gb_1_checkbox_2_MouseLeave);
+            gl_fa_2_gb_1_checkbox_2.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_2_gb_1_checkbox_2_MouseHover);
             gl_fa_2_gb_1_checkbox_1.Location = new Point(gl_fa_2_textbox.Left, gl_fa_2_textbox.Top + gl_fa_2_textbox.Height);
             gl_fa_2_gb_1_checkbox_1.Text = "FA";
             gl_fa_2_gb_1_checkbox_1.Checked = true;
@@ -954,7 +1006,7 @@ namespace LipidCreator
 
             gl_fa_3_combobox.BringToFront();
             gl_fa_3_textbox.BringToFront();
-            gl_fa_3_textbox.Location = new Point(238, 290);
+            gl_fa_3_textbox.Location = new Point(270, 270);
             gl_fa_3_textbox.Width = 200;
             gl_fa_3_textbox.Text = "20-22";
             gl_fa_3_textbox.LostFocus += new EventHandler(gl_fa_3_textbox_valueChanged);
@@ -981,9 +1033,13 @@ namespace LipidCreator
             gl_fa_3_gb_1_checkbox_3.Location = new Point(gl_fa_3_textbox.Left + 90, gl_fa_3_textbox.Top + gl_fa_3_textbox.Height);
             gl_fa_3_gb_1_checkbox_3.Text = "FAe";
             gl_fa_3_gb_1_checkbox_3.CheckedChanged += new EventHandler(gl_fa_3_gb_1_checkbox_3_checkedChanged);
+            gl_fa_3_gb_1_checkbox_3.MouseLeave += new System.EventHandler(gl_fa_3_gb_1_checkbox_3_MouseLeave);
+            gl_fa_3_gb_1_checkbox_3.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_3_gb_1_checkbox_3_MouseHover);
             gl_fa_3_gb_1_checkbox_2.Location = new Point(gl_fa_3_textbox.Left + 40, gl_fa_3_textbox.Top + gl_fa_3_textbox.Height);
             gl_fa_3_gb_1_checkbox_2.Text = "FAp";
             gl_fa_3_gb_1_checkbox_2.CheckedChanged += new EventHandler(gl_fa_3_gb_1_checkbox_2_checkedChanged);
+            gl_fa_3_gb_1_checkbox_2.MouseLeave += new System.EventHandler(gl_fa_3_gb_1_checkbox_2_MouseLeave);
+            gl_fa_3_gb_1_checkbox_2.MouseMove += new System.Windows.Forms.MouseEventHandler(gl_fa_3_gb_1_checkbox_2_MouseHover);
             gl_fa_3_gb_1_checkbox_1.Location = new Point(gl_fa_3_textbox.Left, gl_fa_3_textbox.Top + gl_fa_3_textbox.Height);
             gl_fa_3_gb_1_checkbox_1.Text = "FA";
             gl_fa_3_gb_1_checkbox_1.Checked = true;
@@ -1034,8 +1090,9 @@ namespace LipidCreator
             gl_neg_adduct_checkbox_4.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_4_checkedChanged);
 
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point((int)(214 - glycero_backbone_image.Width * 0.5), (int)(204 - glycero_backbone_image.Height * 0.5));
+            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
+            gl_picture_box.SendToBack();
 
 
 
@@ -1220,6 +1277,7 @@ namespace LipidCreator
             //pl_picture_box.Location = new Point((int)(214 - phospho_backbone_image.Width * 0.5), (int)(204 - phospho_backbone_image.Height * 0.5));
             pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
+            pl_picture_box.SendToBack();
 
 
 
@@ -1371,6 +1429,7 @@ namespace LipidCreator
             sl_picture_box.Image = sphingo_backbone_image;
             sl_picture_box.Location = new Point((int)(214 - sphingo_backbone_image.Width * 0.5), (int)(204 - sphingo_backbone_image.Height * 0.5));
             sl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
+            sl_picture_box.SendToBack();
 
 
 

@@ -17,8 +17,8 @@ LPG,6,14,8,0,1,0,0,images/MS2/LPG_neg_pre.png
 LPI,9,18,11,0,1,0,0,images/MS2/LPI_neg_pre.png
 LPS,6,13,8,1,1,0,0,images/MS2/LPS_neg_pre.png
 MG,3,7,3,0,0,0,0,images/MS2/MG_pos_pre.png
-MIP2Cer,18,33,21,0,2,0,0,images/MS2/MIP2C_neg_pre.png
-MIPCer,12,22,13,0,1,0,0,images/MS2/MIPC_neg_pre.png
+MIP2Cer,18,33,21,0,2,0,0,images/MS2/MIP2Cer_neg_pre.png
+MIPCer,12,22,13,0,1,0,0,images/MS2/MIPCer_neg_pre.png
 MLCL,9,19,13,0,2,0,0,images/MS2/MLCL_neg_pre.png
 PA,3,7,6,0,1,0,0,images/MS2/PA_neg_pre.png
 PC,8,18,6,1,1,0,0,images/MS2/PC_neg_pre.png

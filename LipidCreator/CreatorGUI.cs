@@ -9,10 +9,11 @@ using System.Windows.Forms;
 
 namespace LipidCreator
 {
+
     [Serializable]
     public partial class CreatorGUI : Form
     {
-    
+        public bool changing_tab_forced;
         public LipidCreatorForm lipidCreatorForm;
         public lipid currentLipid;
         public DataTable registered_lipids_datatable;
@@ -24,6 +25,7 @@ namespace LipidCreator
             this.lipidCreatorForm = lipidCreatorForm;
             InitializeComponent();
             lipid_modifications = new int[]{-1, -1, -1, -1};
+            changing_tab_forced = false;
             
             registered_lipids_datatable = new DataTable("Daten");
             registered_lipids_datatable.Columns.Add(new DataColumn("Class"));
@@ -34,9 +36,20 @@ namespace LipidCreator
             
         }
         
-        public void tabIndexChanged(Object sender, EventArgs e)
+        public void changeTab(int index)
         {
-            changeTab(((TabControl)sender).SelectedIndex + 1);
+            changing_tab_forced = true;
+            int tab_index = index - 1 >= 0 ? index - 1 : 1;
+            tab_control.SelectedIndex = tab_index;
+            changeTab(index, true);
+            changing_tab_forced = false;
+            
+        }
+        
+        public void tabIndexChanged(Object sender,  EventArgs e)
+        {
+            if (changing_tab_forced) return;
+            changeTab(((TabControl)sender).SelectedIndex + 1, false);            
         }
         
         public void resetTextBoxBackground(Object sender, EventArgs e)
@@ -44,8 +57,20 @@ namespace LipidCreator
             ((TextBox)sender).BackColor = Color.White;
         }
 
-        public void changeTab(int index)
-        {        
+        public void changeTab(int index, bool forced)
+        {     
+            if ((index == 2 || index == 0) && !forced)
+            {
+                if (pl_is_cl.Checked)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index = 2;
+                }
+            }
+        
             currentLipid = (lipid)lipidCreatorForm.lipidTabList[index];
             
             if (index == 0)
@@ -58,7 +83,6 @@ namespace LipidCreator
                 cl_fa_1_gb_1_checkbox_1.Checked = currentCLLipid.fag1.faTypes["FA"];
                 cl_fa_1_gb_1_checkbox_2.Checked = currentCLLipid.fag1.faTypes["FAp"];
                 cl_fa_1_gb_1_checkbox_3.Checked = currentCLLipid.fag1.faTypes["FAe"];
-                cl_fa_1_gb_1_checkbox_4.Checked = currentCLLipid.fag1.faTypes["FAh"];
                 
                 cl_fa_2_textbox.Text = currentCLLipid.fag2.lengthInfo;
                 cl_db_2_textbox.Text = currentCLLipid.fag2.dbInfo;
@@ -67,7 +91,6 @@ namespace LipidCreator
                 cl_fa_2_gb_1_checkbox_1.Checked = currentCLLipid.fag2.faTypes["FA"];
                 cl_fa_2_gb_1_checkbox_2.Checked = currentCLLipid.fag2.faTypes["FAp"];
                 cl_fa_2_gb_1_checkbox_3.Checked = currentCLLipid.fag2.faTypes["FAe"];
-                cl_fa_2_gb_1_checkbox_4.Checked = currentCLLipid.fag2.faTypes["FAh"];
                 
                 cl_fa_3_textbox.Text = currentCLLipid.fag3.lengthInfo;
                 cl_db_3_textbox.Text = currentCLLipid.fag3.dbInfo;
@@ -76,7 +99,6 @@ namespace LipidCreator
                 cl_fa_3_gb_1_checkbox_1.Checked = currentCLLipid.fag3.faTypes["FA"];
                 cl_fa_3_gb_1_checkbox_2.Checked = currentCLLipid.fag3.faTypes["FAp"];
                 cl_fa_3_gb_1_checkbox_3.Checked = currentCLLipid.fag3.faTypes["FAe"];
-                cl_fa_3_gb_1_checkbox_4.Checked = currentCLLipid.fag3.faTypes["FAh"];
                 
                 cl_fa_4_textbox.Text = currentCLLipid.fag4.lengthInfo;
                 cl_db_4_textbox.Text = currentCLLipid.fag4.dbInfo;
@@ -85,7 +107,6 @@ namespace LipidCreator
                 cl_fa_4_gb_1_checkbox_1.Checked = currentCLLipid.fag4.faTypes["FA"];
                 cl_fa_4_gb_1_checkbox_2.Checked = currentCLLipid.fag4.faTypes["FAp"];
                 cl_fa_4_gb_1_checkbox_3.Checked = currentCLLipid.fag4.faTypes["FAe"];
-                cl_fa_4_gb_1_checkbox_4.Checked = currentCLLipid.fag4.faTypes["FAh"];
                 
                 cl_pos_adduct_checkbox_1.Checked = currentCLLipid.adducts["+H"];
                 cl_pos_adduct_checkbox_2.Checked = currentCLLipid.adducts["+2H"];
@@ -99,15 +120,20 @@ namespace LipidCreator
                 else cl_modify_lipid_button.Enabled = false;
                 
                 pl_is_cl.Checked = true;
+                cl_picture_box.SendToBack();
                 
-                update_ranges(currentCLLipid.fag1, cl_fa_1_textbox, cl_fa_1_combobox);
-                update_ranges(currentCLLipid.fag1, cl_db_1_textbox, null);
-                update_ranges(currentCLLipid.fag2, cl_fa_2_textbox, cl_fa_2_combobox);
-                update_ranges(currentCLLipid.fag2, cl_db_2_textbox, null);
-                update_ranges(currentCLLipid.fag3, cl_fa_3_textbox, cl_fa_3_combobox);
-                update_ranges(currentCLLipid.fag3, cl_db_3_textbox, null);
-                update_ranges(currentCLLipid.fag4, cl_fa_4_textbox, cl_fa_4_combobox);
-                update_ranges(currentCLLipid.fag4, cl_db_4_textbox, null);
+                update_ranges(currentCLLipid.fag1, cl_fa_1_textbox, cl_fa_1_combobox.SelectedIndex);
+                update_ranges(currentCLLipid.fag1, cl_db_1_textbox, 3);
+                update_ranges(currentCLLipid.fag1, cl_hydroxyl_1_textbox, 4);
+                update_ranges(currentCLLipid.fag2, cl_fa_2_textbox, cl_fa_2_combobox.SelectedIndex);
+                update_ranges(currentCLLipid.fag2, cl_db_2_textbox, 3);
+                update_ranges(currentCLLipid.fag2, cl_hydroxyl_2_textbox, 4);
+                update_ranges(currentCLLipid.fag3, cl_fa_3_textbox, cl_fa_3_combobox.SelectedIndex);
+                update_ranges(currentCLLipid.fag3, cl_db_3_textbox, 3);
+                update_ranges(currentCLLipid.fag3, cl_hydroxyl_3_textbox, 4);
+                update_ranges(currentCLLipid.fag4, cl_fa_4_textbox, cl_fa_4_combobox.SelectedIndex);
+                update_ranges(currentCLLipid.fag4, cl_db_4_textbox, 3);
+                update_ranges(currentCLLipid.fag4, cl_hydroxyl_4_textbox, 4);
             }
             else if (index == 1)
             {
@@ -115,27 +141,27 @@ namespace LipidCreator
                 gl_lipid currentGLLipid = (gl_lipid)currentLipid;
                 gl_fa_1_textbox.Text = currentGLLipid.fag1.lengthInfo;
                 gl_db_1_textbox.Text = currentGLLipid.fag1.dbInfo;
+                gl_hydroxyl_1_textbox.Text = currentGLLipid.fag1.hydroxylInfo;
                 gl_fa_1_combobox.SelectedIndex = currentGLLipid.fag1.chainType;
                 gl_fa_1_gb_1_checkbox_1.Checked = currentGLLipid.fag1.faTypes["FA"];
                 gl_fa_1_gb_1_checkbox_2.Checked = currentGLLipid.fag1.faTypes["FAp"];
                 gl_fa_1_gb_1_checkbox_3.Checked = currentGLLipid.fag1.faTypes["FAe"];
-                gl_fa_1_gb_1_checkbox_4.Checked = currentGLLipid.fag1.faTypes["FAh"];
                 
                 gl_fa_2_textbox.Text = currentGLLipid.fag2.lengthInfo;
                 gl_db_2_textbox.Text = currentGLLipid.fag2.dbInfo;
+                gl_hydroxyl_2_textbox.Text = currentGLLipid.fag2.hydroxylInfo;
                 gl_fa_2_combobox.SelectedIndex = currentGLLipid.fag2.chainType;
                 gl_fa_2_gb_1_checkbox_1.Checked = currentGLLipid.fag2.faTypes["FA"];
                 gl_fa_2_gb_1_checkbox_2.Checked = currentGLLipid.fag2.faTypes["FAp"];
                 gl_fa_2_gb_1_checkbox_3.Checked = currentGLLipid.fag2.faTypes["FAe"];
-                gl_fa_2_gb_1_checkbox_4.Checked = currentGLLipid.fag2.faTypes["FAh"];
                 
                 gl_fa_3_textbox.Text = currentGLLipid.fag3.lengthInfo;
                 gl_db_3_textbox.Text = currentGLLipid.fag3.dbInfo;
+                gl_hydroxyl_3_textbox.Text = currentGLLipid.fag3.hydroxylInfo;
                 gl_fa_3_combobox.SelectedIndex = currentGLLipid.fag3.chainType;
                 gl_fa_3_gb_1_checkbox_1.Checked = currentGLLipid.fag3.faTypes["FA"];
                 gl_fa_3_gb_1_checkbox_2.Checked = currentGLLipid.fag3.faTypes["FAp"];
                 gl_fa_3_gb_1_checkbox_3.Checked = currentGLLipid.fag3.faTypes["FAe"];
-                gl_fa_3_gb_1_checkbox_4.Checked = currentGLLipid.fag3.faTypes["FAh"];
                 
                 gl_pos_adduct_checkbox_1.Checked = currentGLLipid.adducts["+H"];
                 gl_pos_adduct_checkbox_2.Checked = currentGLLipid.adducts["+2H"];
@@ -147,12 +173,16 @@ namespace LipidCreator
                 gl_neg_adduct_checkbox_4.Checked = currentGLLipid.adducts["+CH3COO"];
                 if (lipid_modifications[1] > -1) gl_modify_lipid_button.Enabled = true;
                 else gl_modify_lipid_button.Enabled = false;
-                update_ranges(currentGLLipid.fag1, gl_fa_1_textbox, gl_fa_1_combobox);
-                update_ranges(currentGLLipid.fag1, gl_db_1_textbox, null);
-                update_ranges(currentGLLipid.fag2, gl_fa_2_textbox, gl_fa_2_combobox);
-                update_ranges(currentGLLipid.fag2, gl_db_2_textbox, null);
-                update_ranges(currentGLLipid.fag3, gl_fa_3_textbox, gl_fa_3_combobox);
-                update_ranges(currentGLLipid.fag3, gl_db_3_textbox, null);
+                update_ranges(currentGLLipid.fag1, gl_fa_1_textbox, gl_fa_1_combobox.SelectedIndex);
+                update_ranges(currentGLLipid.fag1, gl_db_1_textbox, 3);
+                update_ranges(currentGLLipid.fag1, gl_hydroxyl_1_textbox, 4);
+                update_ranges(currentGLLipid.fag2, gl_fa_2_textbox, gl_fa_2_combobox.SelectedIndex);
+                update_ranges(currentGLLipid.fag2, gl_db_2_textbox, 3);
+                update_ranges(currentGLLipid.fag2, gl_hydroxyl_2_textbox, 4);
+                update_ranges(currentGLLipid.fag3, gl_fa_3_textbox, gl_fa_3_combobox.SelectedIndex);
+                update_ranges(currentGLLipid.fag3, gl_db_3_textbox, 3);
+                update_ranges(currentGLLipid.fag3, gl_hydroxyl_3_textbox, 4);
+                gl_picture_box.SendToBack();
             }
             else if (index == 2)
             {
@@ -162,19 +192,19 @@ namespace LipidCreator
                 
                 pl_fa_1_textbox.Text = currentPLLipid.fag1.lengthInfo;
                 pl_db_1_textbox.Text = currentPLLipid.fag1.dbInfo;
+                pl_hydroxyl_1_textbox.Text = currentPLLipid.fag1.hydroxylInfo;
                 pl_fa_1_combobox.SelectedIndex = currentPLLipid.fag1.chainType;
                 pl_fa_1_gb_1_checkbox_1.Checked = currentPLLipid.fag1.faTypes["FA"];
                 pl_fa_1_gb_1_checkbox_2.Checked = currentPLLipid.fag1.faTypes["FAp"];
                 pl_fa_1_gb_1_checkbox_3.Checked = currentPLLipid.fag1.faTypes["FAe"];
-                pl_fa_1_gb_1_checkbox_4.Checked = currentPLLipid.fag1.faTypes["FAh"];
                 
                 pl_fa_2_textbox.Text = currentPLLipid.fag2.lengthInfo;
                 pl_db_2_textbox.Text = currentPLLipid.fag2.dbInfo;
+                pl_hydroxyl_2_textbox.Text = currentPLLipid.fag2.hydroxylInfo;
                 pl_fa_2_combobox.SelectedIndex = currentPLLipid.fag2.chainType;
                 pl_fa_2_gb_1_checkbox_1.Checked = currentPLLipid.fag2.faTypes["FA"];
                 pl_fa_2_gb_1_checkbox_2.Checked = currentPLLipid.fag2.faTypes["FAp"];
                 pl_fa_2_gb_1_checkbox_3.Checked = currentPLLipid.fag2.faTypes["FAe"];
-                pl_fa_2_gb_1_checkbox_4.Checked = currentPLLipid.fag2.faTypes["FAh"];
             
                 
                 pl_pos_adduct_checkbox_1.Checked = currentPLLipid.adducts["+H"];
@@ -193,15 +223,17 @@ namespace LipidCreator
                     pl_fa_2_gb_1_checkbox_1.Enabled = false;
                     pl_fa_2_gb_1_checkbox_2.Enabled = false;
                     pl_fa_2_gb_1_checkbox_3.Enabled = false;
-                    pl_fa_2_gb_1_checkbox_4.Enabled = false;
                     pl_fa_2_combobox.Enabled = false;
                     pl_fa_2_textbox.Enabled = false;
                     pl_db_2_textbox.Enabled = false;
                 }
-                update_ranges(currentPLLipid.fag1, pl_fa_1_textbox, pl_fa_1_combobox);
-                update_ranges(currentPLLipid.fag1, pl_db_1_textbox, null);
-                update_ranges(currentPLLipid.fag2, pl_fa_2_textbox, pl_fa_2_combobox);
-                update_ranges(currentPLLipid.fag2, pl_db_2_textbox, null);
+                update_ranges(currentPLLipid.fag1, pl_fa_1_textbox, pl_fa_1_combobox.SelectedIndex);
+                update_ranges(currentPLLipid.fag1, pl_db_1_textbox, 3);
+                update_ranges(currentPLLipid.fag1, pl_hydroxyl_1_textbox, 4);
+                update_ranges(currentPLLipid.fag2, pl_fa_2_textbox, pl_fa_2_combobox.SelectedIndex);
+                update_ranges(currentPLLipid.fag2, pl_db_2_textbox, 3);
+                update_ranges(currentPLLipid.fag2, pl_hydroxyl_2_textbox, 4);
+                pl_picture_box.SendToBack();
             }
             else if (index == 3)
             {
@@ -232,10 +264,10 @@ namespace LipidCreator
                 else sl_modify_lipid_button.Enabled = false;
                 
                 
-                update_ranges(currentSLLipid.lcb, sl_lcb_textbox, sl_lcb_combobox);
-                update_ranges(currentSLLipid.lcb, sl_db_2_textbox, null);
-                update_ranges(currentSLLipid.fag, sl_fa_textbox, sl_fa_combobox);
-                update_ranges(currentSLLipid.fag, sl_db_1_textbox, null);
+                update_ranges(currentSLLipid.lcb, sl_lcb_textbox, sl_lcb_combobox.SelectedIndex);
+                update_ranges(currentSLLipid.lcb, sl_db_2_textbox, 3);
+                update_ranges(currentSLLipid.fag, sl_fa_textbox, sl_fa_combobox.SelectedIndex);
+                update_ranges(currentSLLipid.fag, sl_db_1_textbox, 3);
                 
                 string headgroup = sl_hg_combobox.SelectedItem.ToString();
                 if (headgroup == "SPH" || headgroup == "S1P" || headgroup == "SPC"){
@@ -245,6 +277,7 @@ namespace LipidCreator
                     sl_db_1_textbox.Enabled = false;
                     sl_fa_hydroxy_combobox.Enabled = false;
                 }
+                sl_picture_box.SendToBack();
             }
             
         }
@@ -292,35 +325,42 @@ namespace LipidCreator
         public void cl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_1_textbox, ((ComboBox)sender));
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_1_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void cl_fa_2_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_2_textbox, ((ComboBox)sender));
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_2_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void cl_fa_3_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_3_textbox, ((ComboBox)sender));
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_3_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void cl_fa_4_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_4_textbox, ((ComboBox)sender));
+            update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_4_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
-        
-        public void update_ranges(fattyAcidGroup fag, TextBox tb, ComboBox cb)
+        // ob_type (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
+        public void update_ranges(fattyAcidGroup fag, TextBox tb, int ob_type)
         {
-            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, (cb != null) ? 2 : 0,  (cb != null) ? 30 : 6, (cb != null) ? cb.SelectedIndex : 0);
-            if (cb == null)
+            int max_range = 30;
+            if (ob_type == 3) max_range = 6;
+            else if (ob_type == 4) max_range = 29;
+            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, 0,  max_range, ob_type);
+            if (ob_type <= 2)
             {
-                fag.dbs = lengths;
+                fag.lengths = lengths; 
             }
-            else
+            else if (ob_type == 3)
+            { 
+                fag.dbs = lengths;          
+            }
+            else if (ob_type == 4)
             {
-                fag.lengths = lengths;
+                fag.hydroxyls = lengths;
             }
             tb.BackColor = (lengths == null) ? alert_color : Color.White;
         }
@@ -328,43 +368,64 @@ namespace LipidCreator
         public void cl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, cl_fa_1_combobox);
+            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, cl_fa_1_combobox.SelectedIndex);
         }
         public void cl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, cl_fa_2_combobox);
+            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, cl_fa_2_combobox.SelectedIndex);
         }
         public void cl_fa_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, cl_fa_3_combobox);
+            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, cl_fa_3_combobox.SelectedIndex);
         }
         public void cl_fa_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, cl_fa_4_combobox);
+            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, cl_fa_4_combobox.SelectedIndex);
         }
         
         public void cl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, null);
+            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, 3);
         }
         public void cl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, null);
+            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, 3);
         }
         public void cl_db_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, null);
+            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, 3);
         }
         public void cl_db_4_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, null);
+            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, 3);
+        }
+        
+        public void cl_hydroxyl_1_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((cl_lipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((cl_lipid)currentLipid).fag1, (TextBox)sender, 4);
+        }
+        public void cl_hydroxyl_2_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((cl_lipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((cl_lipid)currentLipid).fag2, (TextBox)sender, 4);
+        }
+        public void cl_hydroxyl_3_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((cl_lipid)currentLipid).fag3.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((cl_lipid)currentLipid).fag3, (TextBox)sender, 4);
+        }
+        public void cl_hydroxyl_4_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((cl_lipid)currentLipid).fag4.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((cl_lipid)currentLipid).fag4, (TextBox)sender, 4);
         }
         
         public void cl_fa_1_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -380,11 +441,6 @@ namespace LipidCreator
         public void cl_fa_1_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
-            ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
-        }
-        public void cl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((cl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
             ((cl_lipid)currentLipid).fag1.faTypes["FAx"] = !((cl_lipid)currentLipid).fag1.any_fa_checked();
         }
         
@@ -403,11 +459,6 @@ namespace LipidCreator
             ((cl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
         }
-        public void cl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((cl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((cl_lipid)currentLipid).fag2.faTypes["FAx"] = !((cl_lipid)currentLipid).fag2.any_fa_checked();
-        }
         
         public void cl_fa_3_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
@@ -424,11 +475,6 @@ namespace LipidCreator
             ((cl_lipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
         }
-        public void cl_fa_3_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((cl_lipid)currentLipid).fag3.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((cl_lipid)currentLipid).fag3.faTypes["FAx"] = !((cl_lipid)currentLipid).fag3.any_fa_checked();
-        }
         
         public void cl_fa_4_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
@@ -443,11 +489,6 @@ namespace LipidCreator
         public void cl_fa_4_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((cl_lipid)currentLipid).fag4.faTypes["FAe"] = ((CheckBox)sender).Checked;
-            ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
-        }
-        public void cl_fa_4_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((cl_lipid)currentLipid).fag4.faTypes["FAh"] = ((CheckBox)sender).Checked;
             ((cl_lipid)currentLipid).fag4.faTypes["FAx"] = !((cl_lipid)currentLipid).fag4.any_fa_checked();
         }
         
@@ -489,73 +530,89 @@ namespace LipidCreator
         void cl_fa_1_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa1e;
+            cl_picture_box.SendToBack();
         }
         
         void cl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa1p;
+            cl_picture_box.SendToBack();
         }
         
         void cl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa2e;
+            cl_picture_box.SendToBack();
         }
         void cl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
 
         private void cl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa2p;
+            cl_picture_box.SendToBack();
         }
         
         void cl_fa_3_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_3_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa3e;
+            cl_picture_box.SendToBack();
         }
         
         void cl_fa_3_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_3_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa3p;
+            cl_picture_box.SendToBack();
         }
         
         void cl_fa_4_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
         private void cl_fa_4_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa4e;
+            cl_picture_box.SendToBack();
         }
         void cl_fa_4_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image;
+            cl_picture_box.SendToBack();
         }
 
         private void cl_fa_4_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             cl_picture_box.Image = cardio_backbone_image_fa4p;
+            cl_picture_box.SendToBack();
         }
         
         
@@ -564,49 +621,49 @@ namespace LipidCreator
         public void gl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((gl_lipid)currentLipid).fag1, gl_fa_1_textbox, ((ComboBox)sender));
+            update_ranges(((gl_lipid)currentLipid).fag1, gl_fa_1_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void gl_fa_2_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((gl_lipid)currentLipid).fag2, gl_fa_2_textbox, ((ComboBox)sender));
+            update_ranges(((gl_lipid)currentLipid).fag2, gl_fa_2_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void gl_fa_3_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((gl_lipid)currentLipid).fag3, gl_fa_3_textbox, ((ComboBox)sender));
+            update_ranges(((gl_lipid)currentLipid).fag3, gl_fa_3_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void gl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, gl_fa_1_combobox);
+            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, 3);
         }
         public void gl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, gl_fa_2_combobox);
+            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, 3);
         }
         public void gl_fa_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, gl_fa_3_combobox);
+            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, 3);
         }
         
         public void gl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, null);
+            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, 3);
         }
         public void gl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, null);
+            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, 3);
         }
         public void gl_db_3_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, null);
+            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, 3);
         }
         
         public void gl_pos_adduct_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -657,11 +714,6 @@ namespace LipidCreator
             ((gl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
         }
-        public void gl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((gl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((gl_lipid)currentLipid).fag1.faTypes["FAx"] = !((gl_lipid)currentLipid).fag1.any_fa_checked();
-        }
         
         public void gl_fa_2_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
@@ -676,11 +728,6 @@ namespace LipidCreator
         public void gl_fa_2_gb_1_checkbox_3_checkedChanged(Object sender, EventArgs e)
         {
             ((gl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
-            ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
-        }
-        public void gl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((gl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
             ((gl_lipid)currentLipid).fag2.faTypes["FAx"] = !((gl_lipid)currentLipid).fag2.any_fa_checked();
         }
         
@@ -699,12 +746,21 @@ namespace LipidCreator
             ((gl_lipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
         }
-        public void gl_fa_3_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
+        public void gl_hydroxyl_1_textbox_valueChanged(Object sender, EventArgs e)
         {
-            ((gl_lipid)currentLipid).fag3.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((gl_lipid)currentLipid).fag3.faTypes["FAx"] = !((gl_lipid)currentLipid).fag3.any_fa_checked();
+            ((gl_lipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag1, (TextBox)sender, 4);
         }
-        
+        public void gl_hydroxyl_2_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((gl_lipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag2, (TextBox)sender, 4);
+        }
+        public void gl_hydroxyl_3_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((gl_lipid)currentLipid).fag3.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((gl_lipid)currentLipid).fag3, (TextBox)sender, 4);
+        }
         
         public void trigger_easteregg(Object sender, EventArgs e)
         {
@@ -726,48 +782,57 @@ namespace LipidCreator
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
         private void gl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Location = new Point(116, 79);
             gl_picture_box.Image = glycero_backbone_image_fa1e;
+            gl_picture_box.SendToBack();
         }
         
         void gl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
         private void gl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Location = new Point(116, 79);
             gl_picture_box.Image = glycero_backbone_image_fa1p;
+            gl_picture_box.SendToBack();
         }
         
         void gl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
         private void gl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image_fa2e;
+            gl_picture_box.SendToBack();
         }
         void gl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
 
         private void gl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image_fa2p;
+            gl_picture_box.SendToBack();
         }
         
         void gl_fa_3_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
         private void gl_fa_3_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
@@ -778,10 +843,12 @@ namespace LipidCreator
         {
             gl_picture_box.Image = glycero_backbone_image;
             gl_picture_box.Location = new Point(77, 79);
+            gl_picture_box.SendToBack();
         }
         private void gl_fa_3_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image_fa3p;
+            gl_picture_box.SendToBack();
         }
         
         
@@ -791,7 +858,7 @@ namespace LipidCreator
         ////////////////////// PL ////////////////////////////////
         
         
-        
+        /*
         public void pl_hg_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).hgValue = ((ComboBox)sender).SelectedIndex;
@@ -799,11 +866,9 @@ namespace LipidCreator
                 pl_fa_2_gb_1_checkbox_1.Enabled = false;
                 pl_fa_2_gb_1_checkbox_2.Enabled = false;
                 pl_fa_2_gb_1_checkbox_3.Enabled = false;
-                pl_fa_2_gb_1_checkbox_4.Enabled = false;
                 ((pl_lipid)currentLipid).fag2.faTypes["FA"] = false;
                 ((pl_lipid)currentLipid).fag2.faTypes["FAp"] = false;
                 ((pl_lipid)currentLipid).fag2.faTypes["FAe"] = false;
-                ((pl_lipid)currentLipid).fag2.faTypes["FAh"] = false;
                 ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = true;
                 ((pl_lipid)currentLipid).fag2.disabled = true;
                 pl_fa_2_combobox.Enabled = false;
@@ -815,45 +880,55 @@ namespace LipidCreator
                 pl_fa_2_gb_1_checkbox_1.Enabled = true;
                 pl_fa_2_gb_1_checkbox_2.Enabled = true;
                 pl_fa_2_gb_1_checkbox_3.Enabled = true;
-                pl_fa_2_gb_1_checkbox_4.Enabled = true;
                 ((pl_lipid)currentLipid).fag2.disabled = false;
                 pl_fa_2_combobox.Enabled = true;
                 pl_fa_2_textbox.Enabled = true;
                 pl_db_2_textbox.Enabled = true;
             }
         }
+        */
     
         public void pl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((pl_lipid)currentLipid).fag1, pl_fa_1_textbox, ((ComboBox)sender));
+            update_ranges(((pl_lipid)currentLipid).fag1, pl_fa_1_textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void pl_fa_2_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((pl_lipid)currentLipid).fag2, pl_fa_2_textbox, ((ComboBox)sender));
+            update_ranges(((pl_lipid)currentLipid).fag2, pl_fa_2_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void pl_fa_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, pl_fa_1_combobox);
+            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, pl_fa_1_combobox.SelectedIndex);
         }
         public void pl_fa_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, pl_fa_2_combobox);
+            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, pl_fa_2_combobox.SelectedIndex);
         }
         
         public void pl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, null);
+            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, 3);
         }
         public void pl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((pl_lipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, null);
+            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, 3);
+        }
+        public void pl_hydroxyl_1_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((pl_lipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag1, (TextBox)sender, 4);
+        }
+        public void pl_hydroxyl_2_textbox_valueChanged(Object sender, EventArgs e)
+        {
+            ((pl_lipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
+            update_ranges(((pl_lipid)currentLipid).fag2, (TextBox)sender, 4);
         }
         
         public void pl_pos_adduct_checkbox_1_checkedChanged(Object sender, EventArgs e)
@@ -904,11 +979,6 @@ namespace LipidCreator
             ((pl_lipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
         }
-        public void pl_fa_1_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((pl_lipid)currentLipid).fag1.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((pl_lipid)currentLipid).fag1.faTypes["FAx"] = !((pl_lipid)currentLipid).fag1.any_fa_checked();
-        }
         
         public void pl_fa_2_gb_1_checkbox_1_checkedChanged(Object sender, EventArgs e)
         {
@@ -925,11 +995,7 @@ namespace LipidCreator
             ((pl_lipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
             ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
         }
-        public void pl_fa_2_gb_1_checkbox_4_checkedChanged(Object sender, EventArgs e)
-        {
-            ((pl_lipid)currentLipid).fag2.faTypes["FAh"] = ((CheckBox)sender).Checked;
-            ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = !((pl_lipid)currentLipid).fag2.any_fa_checked();
-        }
+        
         public void pl_is_cl_checkedChanged(Object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked)
@@ -942,11 +1008,9 @@ namespace LipidCreator
                 pl_reset_lipid_button.Visible = false;
                 pl_modify_lipid_button.Visible = false;
                 pl_ms2fragments_lipid_button.Visible = false;
-                pl_fa_1_gb_1_checkbox_4.Visible = false;
                 pl_fa_1_gb_1_checkbox_3.Visible = false;
                 pl_fa_1_gb_1_checkbox_2.Visible = false;
                 pl_fa_1_gb_1_checkbox_1.Visible = false;
-                pl_fa_2_gb_1_checkbox_4.Visible = false;
                 pl_fa_2_gb_1_checkbox_3.Visible = false;
                 pl_fa_2_gb_1_checkbox_2.Visible = false;
                 pl_fa_2_gb_1_checkbox_1.Visible = false;
@@ -959,24 +1023,24 @@ namespace LipidCreator
                 pl_fa_2_combobox.Visible = false;
                 pl_db_1_label.Visible = false;
                 pl_db_2_label.Visible = false;
+                pl_hydroxyl_1_textbox.Visible = false;
+                pl_hydroxyl_2_textbox.Visible = false;
+                pl_hydroxyl_1_label.Visible = false;
+                pl_hydroxyl_2_label.Visible = false;
                 pl_hg_label.Visible = false;
                 pl_hg_combobox.Visible = false;
                 pl_positive_adduct.Visible = false;
                 pl_negative_adduct.Visible = false;
                 
-                cl_fa_1_gb_1_checkbox_4.Visible = true;
                 cl_fa_1_gb_1_checkbox_3.Visible = true;
                 cl_fa_1_gb_1_checkbox_2.Visible = true;
                 cl_fa_1_gb_1_checkbox_1.Visible = true;
-                cl_fa_2_gb_1_checkbox_4.Visible = true;
                 cl_fa_2_gb_1_checkbox_3.Visible = true;
                 cl_fa_2_gb_1_checkbox_2.Visible = true;
                 cl_fa_2_gb_1_checkbox_1.Visible = true;
-                cl_fa_3_gb_1_checkbox_4.Visible = true;
                 cl_fa_3_gb_1_checkbox_3.Visible = true;
                 cl_fa_3_gb_1_checkbox_2.Visible = true;
                 cl_fa_3_gb_1_checkbox_1.Visible = true;
-                cl_fa_4_gb_1_checkbox_4.Visible = true;
                 cl_fa_4_gb_1_checkbox_3.Visible = true;
                 cl_fa_4_gb_1_checkbox_2.Visible = true;
                 cl_fa_4_gb_1_checkbox_1.Visible = true;
@@ -994,11 +1058,15 @@ namespace LipidCreator
                 cl_db_1_textbox.Visible = true;
                 cl_db_2_textbox.Visible = true;
                 cl_db_3_textbox.Visible = true;
-                cl_db_4_textbox.Visible = true;                
+                cl_db_4_textbox.Visible = true;
                 cl_hydroxyl_1_textbox.Visible = true;
                 cl_hydroxyl_2_textbox.Visible = true;
                 cl_hydroxyl_3_textbox.Visible = true;
                 cl_hydroxyl_4_textbox.Visible = true;
+                cl_hydroxyl_1_label.Visible = true;
+                cl_hydroxyl_2_label.Visible = true;
+                cl_hydroxyl_3_label.Visible = true;
+                cl_hydroxyl_4_label.Visible = true;
                 cl_fa_1_combobox.Visible = true;
                 cl_fa_2_combobox.Visible = true;
                 cl_fa_3_combobox.Visible = true;
@@ -1007,6 +1075,7 @@ namespace LipidCreator
                 cl_db_2_label.Visible = true;
                 cl_db_3_label.Visible = true;
                 cl_db_4_label.Visible = true;
+                cl_db_4_label.SendToBack();
                 
                 changeTab(0);
             }
@@ -1015,19 +1084,15 @@ namespace LipidCreator
                 pl_picture_box.Image = phospho_backbone_image;
                 pl_picture_box.Location = new Point(107, 13);
                 
-                cl_fa_1_gb_1_checkbox_4.Visible = false;
                 cl_fa_1_gb_1_checkbox_3.Visible = false;
                 cl_fa_1_gb_1_checkbox_2.Visible = false;
                 cl_fa_1_gb_1_checkbox_1.Visible = false;
-                cl_fa_2_gb_1_checkbox_4.Visible = false;
                 cl_fa_2_gb_1_checkbox_3.Visible = false;
                 cl_fa_2_gb_1_checkbox_2.Visible = false;
                 cl_fa_2_gb_1_checkbox_1.Visible = false;
-                cl_fa_3_gb_1_checkbox_4.Visible = false;
                 cl_fa_3_gb_1_checkbox_3.Visible = false;
                 cl_fa_3_gb_1_checkbox_2.Visible = false;
                 cl_fa_3_gb_1_checkbox_1.Visible = false;
-                cl_fa_4_gb_1_checkbox_4.Visible = false;
                 cl_fa_4_gb_1_checkbox_3.Visible = false;
                 cl_fa_4_gb_1_checkbox_2.Visible = false;
                 cl_fa_4_gb_1_checkbox_1.Visible = false;
@@ -1050,6 +1115,10 @@ namespace LipidCreator
                 cl_hydroxyl_2_textbox.Visible = false;
                 cl_hydroxyl_3_textbox.Visible = false;
                 cl_hydroxyl_4_textbox.Visible = false;
+                cl_hydroxyl_1_label.Visible = false;
+                cl_hydroxyl_2_label.Visible = false;
+                cl_hydroxyl_3_label.Visible = false;
+                cl_hydroxyl_4_label.Visible = false;
                 cl_fa_1_combobox.Visible = false;
                 cl_fa_2_combobox.Visible = false;
                 cl_fa_3_combobox.Visible = false;
@@ -1065,11 +1134,9 @@ namespace LipidCreator
                 pl_reset_lipid_button.Visible = true;
                 pl_modify_lipid_button.Visible = true;
                 pl_ms2fragments_lipid_button.Visible = true;
-                pl_fa_1_gb_1_checkbox_4.Visible = true;
                 pl_fa_1_gb_1_checkbox_3.Visible = true;
                 pl_fa_1_gb_1_checkbox_2.Visible = true;
                 pl_fa_1_gb_1_checkbox_1.Visible = true;
-                pl_fa_2_gb_1_checkbox_4.Visible = true;
                 pl_fa_2_gb_1_checkbox_3.Visible = true;
                 pl_fa_2_gb_1_checkbox_2.Visible = true;
                 pl_fa_2_gb_1_checkbox_1.Visible = true;
@@ -1082,10 +1149,15 @@ namespace LipidCreator
                 pl_fa_2_combobox.Visible = true;
                 pl_db_1_label.Visible = true;
                 pl_db_2_label.Visible = true;
+                pl_hydroxyl_1_textbox.Visible = true;
+                pl_hydroxyl_2_textbox.Visible = true;
+                pl_hydroxyl_1_label.Visible = true;
+                pl_hydroxyl_2_label.Visible = true;
                 pl_hg_label.Visible = true;
                 pl_hg_combobox.Visible = true;
                 pl_positive_adduct.Visible = true;
                 pl_negative_adduct.Visible = true;
+                pl_picture_box.SendToBack();
                 
                 changeTab(2);
             }
@@ -1096,22 +1168,26 @@ namespace LipidCreator
         {
             pl_picture_box.Image = phospho_backbone_image;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
         private void pl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa1e;
             pl_picture_box.Location = new Point(107, 58);
+            pl_picture_box.SendToBack();
         }
         
         void pl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
         private void pl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa1p;
             pl_picture_box.Location = new Point(107, 58);
+            pl_picture_box.SendToBack();
         }
 
         
@@ -1119,22 +1195,26 @@ namespace LipidCreator
         {
             pl_picture_box.Image = phospho_backbone_image;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
         private void pl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa2e;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
         void pl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
 
         private void pl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa2p;
             pl_picture_box.Location = new Point(107, 13);
+            pl_picture_box.SendToBack();
         }
         
         ////////////////////// SL ////////////////////////////////
@@ -1198,36 +1278,36 @@ namespace LipidCreator
         public void sl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).fag.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((sl_lipid)currentLipid).fag, (TextBox)sender, null);
+            update_ranges(((sl_lipid)currentLipid).fag, (TextBox)sender, 3);
         }
         public void sl_db_2_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).lcb.dbInfo = ((TextBox)sender).Text;
-            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, null);
+            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, 3);
         }
         
         public void sl_fa_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).fag.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((sl_lipid)currentLipid).fag, (TextBox)sender, sl_fa_combobox);
+            update_ranges(((sl_lipid)currentLipid).fag, (TextBox)sender, sl_fa_combobox.SelectedIndex);
         }
         public void sl_lcb_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).lcb.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, sl_lcb_combobox);
+            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, sl_lcb_combobox.SelectedIndex);
         }
         
         
         public void sl_fa_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).fag.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((sl_lipid)currentLipid).fag, sl_fa_textbox, ((ComboBox)sender));
+            update_ranges(((sl_lipid)currentLipid).fag, sl_fa_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void sl_lcb_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).lcb.chainType = ((ComboBox)sender).SelectedIndex;
-            update_ranges(((sl_lipid)currentLipid).lcb, sl_lcb_textbox, ((ComboBox)sender));
+            update_ranges(((sl_lipid)currentLipid).lcb, sl_lcb_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void sl_lcb_hydroxy_combobox_valueChanged(Object sender, EventArgs e)

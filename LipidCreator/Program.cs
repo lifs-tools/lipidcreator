@@ -116,6 +116,7 @@ namespace LipidCreator
         public Dictionary<String, bool> faTypes;
         public HashSet<int> lengths;
         public HashSet<int> dbs;
+        public HashSet<int> hydroxyls;
         public bool disabled;
     
         public fattyAcidGroup()
@@ -128,10 +129,10 @@ namespace LipidCreator
             faTypes.Add("FA", true);
             faTypes.Add("FAp", false);
             faTypes.Add("FAe", false);
-            faTypes.Add("FAh", false);
             faTypes.Add("FAx", false);  // no fatty acid dummy
             lengths = new HashSet<int>();
             dbs = new HashSet<int>();
+            hydroxyls = new HashSet<int>();
             disabled = false;
         }
         
@@ -145,7 +146,6 @@ namespace LipidCreator
             faTypes.Add("FA", copy.faTypes["FA"]);
             faTypes.Add("FAp", copy.faTypes["FAp"]);
             faTypes.Add("FAe", copy.faTypes["FAe"]);
-            faTypes.Add("FAh", copy.faTypes["FAh"]);
             faTypes.Add("FAx", copy.faTypes["FAx"]);  // no fatty acid dummy
             lengths = new HashSet<int>();
             disabled = copy.disabled;
@@ -158,11 +158,16 @@ namespace LipidCreator
             {
                 dbs.Add(d);
             }
+            hydroxyls = new HashSet<int>();
+            foreach (int d in copy.hydroxyls)
+            {
+                hydroxyls.Add(d);
+            }
         }
         
         public bool any_fa_checked()
         {
-            return faTypes["FA"] || faTypes["FAp"] || faTypes["FAe"] || faTypes["FAh"];
+            return faTypes["FA"] || faTypes["FAp"] || faTypes["FAe"];
         }
     }
 
@@ -1068,7 +1073,7 @@ namespace LipidCreator
     public class sl_lipid : lipid
     {
         public string[] lcb_fa_db_texts;
-        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "S1P", "SPC"};
+        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "SPH-P", "SPC"};
         public int hgValue;
         public fattyAcidGroup fag;
         public fattyAcidGroup lcb;       
@@ -1098,7 +1103,7 @@ namespace LipidCreator
             MS2Fragments.Add("PICer", new ArrayList());
             MS2Fragments.Add("SM", new ArrayList());
             MS2Fragments.Add("SPH", new ArrayList());
-            MS2Fragments.Add("S1P", new ArrayList());
+            MS2Fragments.Add("SPH-P", new ArrayList());
             MS2Fragments.Add("SPC", new ArrayList());
             
             
@@ -1278,6 +1283,7 @@ namespace LipidCreator
             
             
             int line_counter = 1;
+            /*
             String precursor_file = (opened_as_external ? prefix_path : "") + "data/precursors.csv";
             try
             {
@@ -1298,6 +1304,7 @@ namespace LipidCreator
                 Console.WriteLine("The file '" + precursor_file + "' in line '" + line_counter + "' could not be read:");
                 Console.WriteLine(e.Message);
             }
+            */
             
             String ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
             line_counter = 1;
@@ -1347,8 +1354,8 @@ namespace LipidCreator
                     while((line = sr.ReadLine()) != null)
                     {
                         if (line.Length < 2) continue;
-                        String[] tokens = line.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
-                        if (tokens.Length != 8) throw new Exception("invalid line in file");
+                        String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
+                        if (tokens.Length != 9) throw new Exception("invalid line in file");
                         headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
                         headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
                         headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
@@ -1357,6 +1364,7 @@ namespace LipidCreator
                         headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
                         headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
                         headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
+                        all_paths_to_precursor_images.Add(tokens[0], (opened_as_external ? prefix_path : "") + tokens[8]);
                         line_counter++;
                     }
                 }
@@ -1383,7 +1391,10 @@ namespace LipidCreator
             return parseRange(text, lower, upper, 0);
         }
         
-        public HashSet<int> parseRange(String text, int lower, int upper, int odd_even){
+        // ob_type (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
+        public HashSet<int> parseRange(String text, int lower, int upper, int ob_type)
+        {
+            int odd_even = (ob_type <= 2) ? ob_type : 0;
             if (text.Length == 0) return null;
             foreach (char c in text)
             {

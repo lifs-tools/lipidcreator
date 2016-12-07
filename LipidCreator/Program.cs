@@ -344,7 +344,7 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
         }
-    
+
 
         public MS2Fragment(String name, String fileName, int charge)
         {

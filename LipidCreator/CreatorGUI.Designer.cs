@@ -81,6 +81,8 @@ namespace LipidCreator
         PictureBox gl_picture_box;
         PictureBox pl_picture_box;
         PictureBox sl_picture_box;
+        
+        ListBox pl_hg_listbox;
 
         TextBox cl_fa_1_textbox;
         TextBox cl_fa_2_textbox;
@@ -228,7 +230,6 @@ namespace LipidCreator
         Label eastertext;
 
         Label pl_hg_label;
-        ComboBox pl_hg_combobox;
 
         Label sl_hg_label;
         ComboBox sl_hg_combobox;
@@ -294,7 +295,9 @@ namespace LipidCreator
             int sep = 15;
             int sepText = 20;
             int fa_length = 140;
-
+            
+            pl_hg_listbox = new ListBox();
+            pl_hg_listbox.Items.AddRange(new String[]{"PA", "PC", "PE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
             
             cardio_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_backbones.png");
             cardio_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAe1.png");
@@ -491,16 +494,6 @@ namespace LipidCreator
             sl_neg_adduct_checkbox_3 = new CheckBox();
             sl_neg_adduct_checkbox_4 = new CheckBox();
 
-            pl_hg_combobox = new ComboBox();
-            pl_hg_combobox.Items.Add("PA");
-            pl_hg_combobox.Items.Add("PC");
-            pl_hg_combobox.Items.Add("PE");
-            pl_hg_combobox.Items.Add("PG");
-            pl_hg_combobox.Items.Add("PI");
-            pl_hg_combobox.Items.Add("PIP");
-            pl_hg_combobox.Items.Add("PIP2");
-            pl_hg_combobox.Items.Add("PIP3");
-            pl_hg_combobox.Items.Add("PS");
             /*
             pl_hg_combobox.Items.Add("LPA");
             pl_hg_combobox.Items.Add("LPC");
@@ -723,7 +716,7 @@ namespace LipidCreator
             cl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_2_checkedChanged);
             cl_pos_adduct_checkbox_3.Parent = cl_positive_adduct;
             cl_pos_adduct_checkbox_3.Location = new Point(10, 55);
-            cl_pos_adduct_checkbox_3.Text = "+NH₄⁺";
+            cl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             cl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_3_checkedChanged);
             cl_pos_adduct_checkbox_4.Parent = cl_positive_adduct;
             cl_pos_adduct_checkbox_4.Location = new Point(10, 75);
@@ -739,7 +732,7 @@ namespace LipidCreator
             cl_neg_adduct_checkbox_1.CheckedChanged += new EventHandler(cl_neg_adduct_checkbox_1_checkedChanged);
             cl_neg_adduct_checkbox_2.Parent = cl_negative_adduct;
             cl_neg_adduct_checkbox_2.Location = new Point(10, 35);
-            cl_neg_adduct_checkbox_2.Text = "-2H⁻⁻";
+            cl_neg_adduct_checkbox_2.Text = "-2H⁻ ⁻";
             cl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(cl_neg_adduct_checkbox_2_checkedChanged);
             cl_neg_adduct_checkbox_3.Parent = cl_negative_adduct;
             cl_neg_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1094,7 +1087,7 @@ namespace LipidCreator
             gl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_2_checkedChanged);
             gl_pos_adduct_checkbox_3.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_3.Location = new Point(10, 55);
-            gl_pos_adduct_checkbox_3.Text = "+NH₄⁺";
+            gl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             gl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_3_checkedChanged);
             gl_pos_adduct_checkbox_4.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_4.Location = new Point(10, 75);
@@ -1110,7 +1103,7 @@ namespace LipidCreator
             gl_neg_adduct_checkbox_1.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_1_checkedChanged);
             gl_neg_adduct_checkbox_2.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_2.Location = new Point(10, 35);
-            gl_neg_adduct_checkbox_2.Text = "-2H⁻⁻";
+            gl_neg_adduct_checkbox_2.Text = "-2H⁻ ⁻";
             gl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_2_checkedChanged);
             gl_neg_adduct_checkbox_3.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1154,8 +1147,8 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(pl_db_2_label);
             phospholipids_tab.Controls.Add(pl_hydroxyl_1_label);
             phospholipids_tab.Controls.Add(pl_hydroxyl_2_label);
+            phospholipids_tab.Controls.Add(pl_hg_listbox);
             phospholipids_tab.Controls.Add(pl_hg_label);
-            phospholipids_tab.Controls.Add(pl_hg_combobox);
             phospholipids_tab.Controls.Add(pl_positive_adduct);
             phospholipids_tab.Controls.Add(pl_negative_adduct);
             phospholipids_tab.Parent = tab_control;
@@ -1262,14 +1255,18 @@ namespace LipidCreator
             pl_is_cl.CheckedChanged += new EventHandler(pl_is_cl_checkedChanged);
             pl_is_cl.BringToFront();
 
-            pl_hg_label.BringToFront();
-            pl_hg_combobox.BringToFront();
-            pl_hg_combobox.Location = new Point(25, 40);
-            pl_hg_combobox.Width = 80;
-            pl_hg_combobox.SelectedItem = "PA";
-            pl_hg_combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            //pl_hg_combobox.SelectedIndexChanged += new EventHandler(pl_hg_combobox_valueChanged);
-            pl_hg_label.Location = new Point(pl_hg_combobox.Left, pl_hg_combobox.Top - sep);
+            
+            pl_hg_listbox.Location = new Point(25, 40);
+            pl_hg_listbox.Size = new Size(70, 140);
+            pl_hg_listbox.BringToFront();
+            pl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
+            //pl_hg_listbox.MultiColumn = true;
+            //pl_hg_listbox.HorizontalScrollbar = false;
+            //pl_hg_listbox.VerticalScrollbar = false;
+            pl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
+            pl_hg_listbox.SelectedValueChanged += new System.EventHandler(pl_hg_listbox_SelectedValueChanged);
+            
+            pl_hg_label.Location = new Point(pl_hg_listbox.Left, pl_hg_listbox.Top - sep);
             pl_hg_label.Text = "Head group";
 
             pl_positive_adduct.Location = new Point(800, 60);
@@ -1287,7 +1284,7 @@ namespace LipidCreator
             pl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_2_checkedChanged);
             pl_pos_adduct_checkbox_3.Parent = pl_positive_adduct;
             pl_pos_adduct_checkbox_3.Location = new Point(10, 55);
-            pl_pos_adduct_checkbox_3.Text = "+NH₄⁺";
+            pl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             pl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_3_checkedChanged);
             pl_pos_adduct_checkbox_4.Parent = pl_positive_adduct;
             pl_pos_adduct_checkbox_4.Location = new Point(10, 75);
@@ -1303,7 +1300,7 @@ namespace LipidCreator
             pl_neg_adduct_checkbox_1.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_1_checkedChanged);
             pl_neg_adduct_checkbox_2.Parent = pl_negative_adduct;
             pl_neg_adduct_checkbox_2.Location = new Point(10, 35);
-            pl_neg_adduct_checkbox_2.Text = "-2H⁻⁻";
+            pl_neg_adduct_checkbox_2.Text = "-2H⁻ ⁻";
             pl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_2_checkedChanged);
             pl_neg_adduct_checkbox_3.Parent = pl_negative_adduct;
             pl_neg_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1441,7 +1438,7 @@ namespace LipidCreator
             sl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_2_checkedChanged);
             sl_pos_adduct_checkbox_3.Parent = sl_positive_adduct;
             sl_pos_adduct_checkbox_3.Location = new Point(10, 55);
-            sl_pos_adduct_checkbox_3.Text = "+NH₄⁺";
+            sl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             sl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_3_checkedChanged);
             sl_pos_adduct_checkbox_4.Parent = sl_positive_adduct;
             sl_pos_adduct_checkbox_4.Location = new Point(10, 75);

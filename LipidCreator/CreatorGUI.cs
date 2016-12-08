@@ -19,6 +19,7 @@ namespace LipidCreator
         public DataTable registered_lipids_datatable;
         public int[] lipid_modifications;
         public Color alert_color = Color.FromArgb(255, 180, 180);
+        public bool setting_listbox = false;
         
         public CreatorGUI(LipidCreatorForm lipidCreatorForm)
         {
@@ -187,8 +188,16 @@ namespace LipidCreator
             else if (index == 2)
             {
                 pl_lipid currentPLLipid = (pl_lipid)currentLipid;
-                
-                pl_hg_combobox.SelectedIndex = currentPLLipid.hgValue;
+                setting_listbox = true;
+                for (int i = 0; i < pl_hg_listbox.Items.Count; ++i)
+                {
+                    pl_hg_listbox.SetSelected(i, false);
+                }
+                foreach (int hgValue in currentPLLipid.hgValues)
+                {
+                    pl_hg_listbox.SetSelected(hgValue, true);
+                }
+                setting_listbox = false;
                 
                 pl_fa_1_textbox.Text = currentPLLipid.fag1.lengthInfo;
                 pl_db_1_textbox.Text = currentPLLipid.fag1.dbInfo;
@@ -219,14 +228,7 @@ namespace LipidCreator
                 else pl_modify_lipid_button.Enabled = false;
                 pl_is_cl.Checked = false;
                 
-                if (pl_hg_combobox.SelectedItem.ToString()[0] == 'L') {
-                    pl_fa_2_gb_1_checkbox_1.Enabled = false;
-                    pl_fa_2_gb_1_checkbox_2.Enabled = false;
-                    pl_fa_2_gb_1_checkbox_3.Enabled = false;
-                    pl_fa_2_combobox.Enabled = false;
-                    pl_fa_2_textbox.Enabled = false;
-                    pl_db_2_textbox.Enabled = false;
-                }
+                
                 update_ranges(currentPLLipid.fag1, pl_fa_1_textbox, pl_fa_1_combobox.SelectedIndex);
                 update_ranges(currentPLLipid.fag1, pl_db_1_textbox, 3);
                 update_ranges(currentPLLipid.fag1, pl_hydroxyl_1_textbox, 4);
@@ -786,7 +788,7 @@ namespace LipidCreator
         }
         private void gl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
-            gl_picture_box.Location = new Point(116, 79);
+            gl_picture_box.Location = new Point(77, 126);
             gl_picture_box.Image = glycero_backbone_image_fa1e;
             gl_picture_box.SendToBack();
         }
@@ -799,7 +801,7 @@ namespace LipidCreator
         }
         private void gl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
-            gl_picture_box.Location = new Point(116, 79);
+            gl_picture_box.Location = new Point(77, 126);
             gl_picture_box.Image = glycero_backbone_image_fa1p;
             gl_picture_box.SendToBack();
         }
@@ -1002,7 +1004,7 @@ namespace LipidCreator
             {
                 pl_picture_box.Image = cardio_backbone_image;
                 pl_picture_box.Location = new Point(5, 5);
-                pl_hg_combobox.Visible = false;
+                pl_hg_listbox.Visible = false;
                 pl_hg_label.Visible = false;
                 pl_add_lipid_button.Visible = false;
                 pl_reset_lipid_button.Visible = false;
@@ -1028,7 +1030,7 @@ namespace LipidCreator
                 pl_hydroxyl_1_label.Visible = false;
                 pl_hydroxyl_2_label.Visible = false;
                 pl_hg_label.Visible = false;
-                pl_hg_combobox.Visible = false;
+                pl_hg_listbox.Visible = false;
                 pl_positive_adduct.Visible = false;
                 pl_negative_adduct.Visible = false;
                 
@@ -1128,7 +1130,7 @@ namespace LipidCreator
                 cl_db_3_label.Visible = false;
                 cl_db_4_label.Visible = false;
                 
-                pl_hg_combobox.Visible = true;
+                pl_hg_listbox.Visible = true;
                 pl_hg_label.Visible = true;
                 pl_add_lipid_button.Visible = true;
                 pl_reset_lipid_button.Visible = true;
@@ -1154,7 +1156,7 @@ namespace LipidCreator
                 pl_hydroxyl_1_label.Visible = true;
                 pl_hydroxyl_2_label.Visible = true;
                 pl_hg_label.Visible = true;
-                pl_hg_combobox.Visible = true;
+                pl_hg_listbox.Visible = true;
                 pl_positive_adduct.Visible = true;
                 pl_negative_adduct.Visible = true;
                 pl_picture_box.SendToBack();
@@ -1215,6 +1217,18 @@ namespace LipidCreator
             pl_picture_box.Image = phospho_backbone_image_fa2p;
             pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
+        }
+        
+        private void pl_hg_listbox_SelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (setting_listbox) return;
+            ((pl_lipid)currentLipid).hgValues.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                int hgValue = ((ListBox)sender).Items.IndexOf(itemChecked);
+                ((pl_lipid)currentLipid).hgValues.Add(hgValue);
+            }
+            
         }
         
         ////////////////////// SL ////////////////////////////////
@@ -1394,7 +1408,7 @@ namespace LipidCreator
                 {
                     pl_lipid currentPLLipid = (pl_lipid)current_lipid;
                     row["Class"] = "Phospholipid";
-                    row["Building Block 1"] = "HG: " + pl_hg_combobox.Items[currentPLLipid.hgValue];
+                    row["Building Block 1"] = "HG: " + currentPLLipid.headGroupNames[currentPLLipid.hgValues[0]];
                     row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo;
                     row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo;
                 }

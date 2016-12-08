@@ -240,8 +240,17 @@ namespace LipidCreator
             else if (index == 3)
             {
                 sl_lipid currentSLLipid = (sl_lipid)currentLipid;
+                setting_listbox = true;
+                for (int i = 0; i < sl_hg_listbox.Items.Count; ++i)
+                {
+                    sl_hg_listbox.SetSelected(i, false);
+                }
+                foreach (int hgValue in currentSLLipid.hgValues)
+                {
+                    sl_hg_listbox.SetSelected(hgValue, true);
+                }
+                setting_listbox = false;
                 
-                sl_hg_combobox.SelectedIndex = currentSLLipid.hgValue;
                 
                 sl_lcb_textbox.Text = currentSLLipid.lcb.lengthInfo;
                 sl_db_2_textbox.Text = currentSLLipid.lcb.dbInfo;
@@ -271,6 +280,7 @@ namespace LipidCreator
                 update_ranges(currentSLLipid.fag, sl_fa_textbox, sl_fa_combobox.SelectedIndex);
                 update_ranges(currentSLLipid.fag, sl_db_1_textbox, 3);
                 
+                /*
                 string headgroup = sl_hg_combobox.SelectedItem.ToString();
                 if (headgroup == "SPH" || headgroup == "S1P" || headgroup == "SPC"){
                     ((sl_lipid)currentLipid).fag.disabled = true;
@@ -278,7 +288,7 @@ namespace LipidCreator
                     sl_fa_textbox.Enabled = false;
                     sl_db_1_textbox.Enabled = false;
                     sl_fa_hydroxy_combobox.Enabled = false;
-                }
+                }*/
                 sl_picture_box.SendToBack();
             }
             
@@ -860,35 +870,6 @@ namespace LipidCreator
         ////////////////////// PL ////////////////////////////////
         
         
-        /*
-        public void pl_hg_combobox_valueChanged(Object sender, EventArgs e)
-        {
-            ((pl_lipid)currentLipid).hgValue = ((ComboBox)sender).SelectedIndex;
-            if (((ComboBox)sender).SelectedItem.ToString()[0] == 'L'){
-                pl_fa_2_gb_1_checkbox_1.Enabled = false;
-                pl_fa_2_gb_1_checkbox_2.Enabled = false;
-                pl_fa_2_gb_1_checkbox_3.Enabled = false;
-                ((pl_lipid)currentLipid).fag2.faTypes["FA"] = false;
-                ((pl_lipid)currentLipid).fag2.faTypes["FAp"] = false;
-                ((pl_lipid)currentLipid).fag2.faTypes["FAe"] = false;
-                ((pl_lipid)currentLipid).fag2.faTypes["FAx"] = true;
-                ((pl_lipid)currentLipid).fag2.disabled = true;
-                pl_fa_2_combobox.Enabled = false;
-                pl_fa_2_textbox.Enabled = false;
-                pl_db_2_textbox.Enabled = false;
-            }
-            else
-            {
-                pl_fa_2_gb_1_checkbox_1.Enabled = true;
-                pl_fa_2_gb_1_checkbox_2.Enabled = true;
-                pl_fa_2_gb_1_checkbox_3.Enabled = true;
-                ((pl_lipid)currentLipid).fag2.disabled = false;
-                pl_fa_2_combobox.Enabled = true;
-                pl_fa_2_textbox.Enabled = true;
-                pl_db_2_textbox.Enabled = true;
-            }
-        }
-        */
     
         public void pl_fa_1_combobox_valueChanged(Object sender, EventArgs e)
         {
@@ -1268,6 +1249,7 @@ namespace LipidCreator
             ((sl_lipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
         }
         
+        /*
         public void sl_hg_combobox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).hgValue = ((ComboBox)sender).SelectedIndex;
@@ -1287,7 +1269,7 @@ namespace LipidCreator
                 sl_db_1_textbox.Enabled = true;
                 sl_fa_hydroxy_combobox.Enabled = true;
             }
-        }
+        }*/
         
         public void sl_db_1_textbox_valueChanged(Object sender, EventArgs e)
         {
@@ -1333,6 +1315,19 @@ namespace LipidCreator
         {
             ((sl_lipid)currentLipid).fa_hydroxyValue = ((ComboBox)sender).SelectedIndex;
         }
+        
+        private void sl_hg_listbox_SelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (setting_listbox) return;
+            ((sl_lipid)currentLipid).hgValues.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                int hgValue = ((ListBox)sender).Items.IndexOf(itemChecked);
+                ((sl_lipid)currentLipid).hgValues.Add(hgValue);
+            }
+        }
+        
+        ////////////////////// Remaining parts ////////////////////////////////
         
         public void modify_cl_lipid(Object sender, EventArgs e)
         {
@@ -1407,16 +1402,28 @@ namespace LipidCreator
                 else if (current_lipid is pl_lipid)
                 {
                     pl_lipid currentPLLipid = (pl_lipid)current_lipid;
+                    String headgroups = "";
+                    foreach (int hgValue in currentPLLipid.hgValues)
+                    {
+                        if (headgroups != "") headgroups += ", ";
+                        headgroups += currentPLLipid.headGroupNames[hgValue];
+                    }
                     row["Class"] = "Phospholipid";
-                    row["Building Block 1"] = "HG: " + currentPLLipid.headGroupNames[currentPLLipid.hgValues[0]];
+                    row["Building Block 1"] = "HG: " + headgroups;
                     row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo;
                     row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo;
                 }
                 else if (current_lipid is sl_lipid)
                 {
                     sl_lipid currentSLLipid = (sl_lipid)current_lipid;
+                    String headgroups = "";
+                    foreach (int hgValue in currentSLLipid.hgValues)
+                    {
+                        if (headgroups != "") headgroups += ", ";
+                        headgroups += currentSLLipid.headGroupNames[hgValue];
+                    }
                     row["Class"] = "Sphingolipid";
-                    row["Building Block 1"] = "HG: " + sl_hg_combobox.Items[currentSLLipid.hgValue];
+                    row["Building Block 1"] = "HG: " + headgroups;
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
                     row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo;
                 }

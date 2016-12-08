@@ -1083,7 +1083,7 @@ namespace LipidCreator
     {
         public string[] lcb_fa_db_texts;
         public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "SPH-P", "SPC"};
-        public int hgValue;
+        public List<int> hgValues;
         public fattyAcidGroup fag;
         public fattyAcidGroup lcb;       
         public int lcb_hydroxyValue;        
@@ -1094,7 +1094,7 @@ namespace LipidCreator
         {
             fag = new fattyAcidGroup();
             lcb = new fattyAcidGroup();
-            hgValue = 0;
+            hgValues = new List<int>();
             lcb_hydroxyValue = 2;
             fa_hydroxyValue = 0;
             MS2Fragments.Add("Cer", new ArrayList());
@@ -1133,9 +1133,13 @@ namespace LipidCreator
         {
             fag = new fattyAcidGroup(copy.fag);
             lcb = new fattyAcidGroup(copy.lcb);
-            hgValue = copy.hgValue;
             lcb_hydroxyValue = copy.lcb_hydroxyValue;
             fa_hydroxyValue = copy.fa_hydroxyValue;
+            hgValues = new List<int>();
+            foreach (int hgValue in copy.hgValues)
+            {
+                hgValues.Add(hgValue);
+            }
         }
         
         
@@ -1159,48 +1163,51 @@ namespace LipidCreator
                             foreach (int fa_db_2 in fag.dbs)
                             {
                                 if (max_db_2 < fa_db_2) continue;
-                                String headgroup = headGroupNames[hgValue];
-                                String key = headgroup + " ";
-                                
-                                key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
-                                key += "/";
-                                key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2) + ";" + Convert.ToString(fa_hydroxyValue);
-
-                                if (!used_keys.Contains(key))
+                                foreach (int hgValue in hgValues)
                                 {
-                                    foreach (KeyValuePair<string, bool> adduct in adducts)
+                                    String headgroup = headGroupNames[hgValue];
+                                    String key = headgroup + " ";
+                                    
+                                    key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+                                    key += "/";
+                                    key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2) + ";" + Convert.ToString(fa_hydroxyValue);
+
+                                    if (!used_keys.Contains(key))
                                     {
-                                        if (adduct.Value)
+                                        foreach (KeyValuePair<string, bool> adduct in adducts)
                                         {
-                                            used_keys.Add(key);
-                                            
-                                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                                            MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                            
-                                            // long chain base
-                                            atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
-                                            atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
-                                            atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
-                                            atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
-                                            
-                                            // add fatty acid
-                                            atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + fa_l;
-                                            atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * fa_l - 1 - 2 * fa_db_2);
-                                            atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + (1 + fa_hydroxyValue);
-                                            
-                                            
-                                            int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                            String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                            double mass = LipidCreatorForm.compute_mass(atomsCount);
-                                            
-                                            DataRow lipid_row = all_lipids.NewRow();
-                                            lipid_row["Molecule List Name"] = headgroup;
-                                            lipid_row["Precursor Name"] = key;
-                                            lipid_row["Precursor Ion Formula"] = chemForm;
-                                            lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                            lipid_row["Precursor m/z"] = mass;
-                                            lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                            all_lipids.Rows.Add(lipid_row);
+                                            if (adduct.Value)
+                                            {
+                                                used_keys.Add(key);
+                                                
+                                                DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                
+                                                // long chain base
+                                                atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
+                                                atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
+                                                atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
+                                                atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
+                                                
+                                                // add fatty acid
+                                                atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + fa_l;
+                                                atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * fa_l - 1 - 2 * fa_db_2);
+                                                atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + (1 + fa_hydroxyValue);
+                                                
+                                                
+                                                int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                
+                                                DataRow lipid_row = all_lipids.NewRow();
+                                                lipid_row["Molecule List Name"] = headgroup;
+                                                lipid_row["Precursor Name"] = key;
+                                                lipid_row["Precursor Ion Formula"] = chemForm;
+                                                lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
+                                                lipid_row["Precursor m/z"] = mass;
+                                                lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                all_lipids.Rows.Add(lipid_row);
+                                            }
                                         }
                                     }
                                 }
@@ -1209,41 +1216,44 @@ namespace LipidCreator
                     }
                     else
                     {
-                        String headgroup = headGroupNames[hgValue];
-                        String key = headgroup + " ";
-                        
-                        key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
-
-                        if (!used_keys.Contains(key))
+                        foreach (int hgValue in hgValues)
                         {
-                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                            String headgroup = headGroupNames[hgValue];
+                            String key = headgroup + " ";
+                            
+                            key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+
+                            if (!used_keys.Contains(key))
                             {
-                                if (adduct.Value)
+                                foreach (KeyValuePair<string, bool> adduct in adducts)
                                 {
-                                    used_keys.Add(key);
-                                    
-                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                    
-                                    // long chain base
-                                    atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
-                                    atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
-                                    atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
-                                    atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
-                                    
-                                    
-                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                    String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
-                                    
-                                    DataRow lipid_row = all_lipids.NewRow();
-                                    lipid_row["Molecule List Name"] = headgroup;
-                                    lipid_row["Precursor Name"] = key;
-                                    lipid_row["Precursor Ion Formula"] = chemForm;
-                                        lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                    lipid_row["Precursor m/z"] = mass;
-                                    lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                    all_lipids.Rows.Add(lipid_row);
+                                    if (adduct.Value)
+                                    {
+                                        used_keys.Add(key);
+                                        
+                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                        
+                                        // long chain base
+                                        atomsCount.Rows[0]["Count"] = (int)(atomsCount.Rows[0]["Count"]) + lcb_l;
+                                        atomsCount.Rows[1]["Count"] = (int)(atomsCount.Rows[1]["Count"]) + (2 * (lcb_l + lcb_db_1) + 1);
+                                        atomsCount.Rows[2]["Count"] = (int)(atomsCount.Rows[2]["Count"]) + lcb_hydroxyValue;
+                                        atomsCount.Rows[3]["Count"] = (int)(atomsCount.Rows[3]["Count"]) + 1;
+                                        
+                                        
+                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                        String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                        
+                                        DataRow lipid_row = all_lipids.NewRow();
+                                        lipid_row["Molecule List Name"] = headgroup;
+                                        lipid_row["Precursor Name"] = key;
+                                        lipid_row["Precursor Ion Formula"] = chemForm;
+                                            lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
+                                        lipid_row["Precursor m/z"] = mass;
+                                        lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                        all_lipids.Rows.Add(lipid_row);
+                                    }
                                 }
                             }
                         }

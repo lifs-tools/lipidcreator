@@ -83,6 +83,7 @@ namespace LipidCreator
         PictureBox sl_picture_box;
         
         ListBox pl_hg_listbox;
+        ListBox sl_hg_listbox;
 
         TextBox cl_fa_1_textbox;
         TextBox cl_fa_2_textbox;
@@ -232,7 +233,6 @@ namespace LipidCreator
         Label pl_hg_label;
 
         Label sl_hg_label;
-        ComboBox sl_hg_combobox;
         ComboBox sl_lcb_hydroxy_combobox;
         ComboBox sl_fa_hydroxy_combobox;
 
@@ -297,7 +297,9 @@ namespace LipidCreator
             int fa_length = 140;
             
             pl_hg_listbox = new ListBox();
+            sl_hg_listbox = new ListBox();
             pl_hg_listbox.Items.AddRange(new String[]{"PA", "PC", "PE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
+            sl_hg_listbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "S1P", "SPC"});
             
             cardio_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_backbones.png");
             cardio_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAe1.png");
@@ -494,33 +496,7 @@ namespace LipidCreator
             sl_neg_adduct_checkbox_3 = new CheckBox();
             sl_neg_adduct_checkbox_4 = new CheckBox();
 
-            /*
-            pl_hg_combobox.Items.Add("LPA");
-            pl_hg_combobox.Items.Add("LPC");
-            pl_hg_combobox.Items.Add("LPE");
-            pl_hg_combobox.Items.Add("LPG");
-            pl_hg_combobox.Items.Add("LPI");
-            pl_hg_combobox.Items.Add("LPS");
-            */
             
-            sl_hg_combobox = new ComboBox();
-            sl_hg_combobox.Items.Add("Cer");
-            sl_hg_combobox.Items.Add("CerP");
-            sl_hg_combobox.Items.Add("GB3Cer");
-            sl_hg_combobox.Items.Add("GM3Cer");
-            sl_hg_combobox.Items.Add("GM4Cer");
-            sl_hg_combobox.Items.Add("HexCer");
-            sl_hg_combobox.Items.Add("HexCerS");
-            sl_hg_combobox.Items.Add("LacCer");
-            sl_hg_combobox.Items.Add("Lc3Cer");
-            sl_hg_combobox.Items.Add("MIPCer");
-            sl_hg_combobox.Items.Add("MIP2Cer");
-            sl_hg_combobox.Items.Add("PECer");
-            sl_hg_combobox.Items.Add("PICer");
-            sl_hg_combobox.Items.Add("SM");
-            sl_hg_combobox.Items.Add("SPH");
-            sl_hg_combobox.Items.Add("S1P");
-            sl_hg_combobox.Items.Add("SPC");
             
             sl_lcb_hydroxy_combobox = new ComboBox();
             sl_lcb_hydroxy_combobox.Items.Add("2");
@@ -937,7 +913,7 @@ namespace LipidCreator
 
             gl_fa_1_combobox.BringToFront();
             gl_fa_1_textbox.BringToFront();
-            gl_fa_1_textbox.Location = new Point(192, 130);
+            gl_fa_1_textbox.Location = new Point(196, 130);
             gl_fa_1_textbox.Width = fa_length;
             gl_fa_1_textbox.Text = "0, 2, 4, 6-7";
             gl_fa_1_textbox.LostFocus += new EventHandler(gl_fa_1_textbox_valueChanged);
@@ -1027,7 +1003,7 @@ namespace LipidCreator
 
             gl_fa_3_combobox.BringToFront();
             gl_fa_3_textbox.BringToFront();
-            gl_fa_3_textbox.Location = new Point(154, 302);
+            gl_fa_3_textbox.Location = new Point(158, 302);
             gl_fa_3_textbox.Width = fa_length;
             gl_fa_3_textbox.Text = "20-22";
             gl_fa_3_textbox.LostFocus += new EventHandler(gl_fa_3_textbox_valueChanged);
@@ -1260,9 +1236,6 @@ namespace LipidCreator
             pl_hg_listbox.Size = new Size(70, 140);
             pl_hg_listbox.BringToFront();
             pl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
-            //pl_hg_listbox.MultiColumn = true;
-            //pl_hg_listbox.HorizontalScrollbar = false;
-            //pl_hg_listbox.VerticalScrollbar = false;
             pl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
             pl_hg_listbox.SelectedValueChanged += new System.EventHandler(pl_hg_listbox_SelectedValueChanged);
             
@@ -1335,7 +1308,7 @@ namespace LipidCreator
             sphingolipids_tab.Controls.Add(sl_db_1_label);
             sphingolipids_tab.Controls.Add(sl_db_2_label);
             sphingolipids_tab.Controls.Add(sl_hg_label);
-            sphingolipids_tab.Controls.Add(sl_hg_combobox);
+            sphingolipids_tab.Controls.Add(sl_hg_listbox);
             sphingolipids_tab.Controls.Add(sl_lcb_hydroxy_combobox);
             sphingolipids_tab.Controls.Add(sl_fa_hydroxy_combobox);
             sphingolipids_tab.Controls.Add(sl_fa_hydroxy_label);
@@ -1352,7 +1325,7 @@ namespace LipidCreator
 
             sl_fa_combobox.BringToFront();
             sl_fa_textbox.BringToFront();
-            sl_fa_textbox.Location = new Point(244, 278);
+            sl_fa_textbox.Location = new Point(258, 280);
             sl_fa_textbox.Width = fa_length;
             sl_fa_textbox.Text = "2, 5, 17-19";
             sl_fa_textbox.LostFocus += new EventHandler(sl_fa_textbox_valueChanged);
@@ -1385,7 +1358,7 @@ namespace LipidCreator
             sl_lcb_textbox.BringToFront();
             sl_lcb_hydroxy_combobox.BringToFront();
             sl_fa_hydroxy_combobox.BringToFront();
-            sl_lcb_textbox.Location = new Point(281, 202);
+            sl_lcb_textbox.Location = new Point(294, 203);
             sl_lcb_textbox.Width = fa_length;
             sl_lcb_textbox.Text = "14, 16-18, 22";
             sl_lcb_textbox.LostFocus += new EventHandler(sl_lcb_textbox_valueChanged);
@@ -1414,13 +1387,15 @@ namespace LipidCreator
             sl_lcb_hydroxy_label.Text = hydroxyl_text;
 
             sl_hg_label.BringToFront();
-            sl_hg_combobox.BringToFront();
-            sl_hg_combobox.Location = new Point(214, 106);
-            sl_hg_combobox.SelectedItem = "Cer";
-            sl_hg_combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            sl_hg_combobox.SelectedIndexChanged += new EventHandler(sl_hg_combobox_valueChanged);
-            sl_hg_label.Location = new Point(sl_hg_combobox.Left, sl_hg_combobox.Top - sep);
+            sl_hg_listbox.Location = new Point(54, 80);
+            sl_hg_listbox.Size = new Size(80, 234);
+            sl_hg_listbox.BringToFront();
+            sl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
+            sl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
+            sl_hg_listbox.SelectedValueChanged += new System.EventHandler(sl_hg_listbox_SelectedValueChanged);
+            sl_hg_label.Location = new Point(sl_hg_listbox.Left, sl_hg_listbox.Top - sep);
             sl_hg_label.Text = "Head group";
+            
 
             sl_positive_adduct.Location = new Point(800, 60);
             sl_positive_adduct.Width = 120;

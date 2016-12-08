@@ -1222,26 +1222,22 @@ namespace LipidCreator
         void pl_fa_1_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
         private void pl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa1e;
-            pl_picture_box.Location = new Point(107, 58);
             pl_picture_box.SendToBack();
         }
         
         void pl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
         private void pl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa1p;
-            pl_picture_box.Location = new Point(107, 58);
             pl_picture_box.SendToBack();
         }
 
@@ -1249,26 +1245,22 @@ namespace LipidCreator
         void pl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
         private void pl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa2e;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
         void pl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
 
         private void pl_fa_2_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
             pl_picture_box.Image = phospho_backbone_image_fa2p;
-            pl_picture_box.Location = new Point(107, 13);
             pl_picture_box.SendToBack();
         }
         

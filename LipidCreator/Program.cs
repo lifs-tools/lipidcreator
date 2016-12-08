@@ -727,12 +727,18 @@ namespace LipidCreator
         public fattyAcidGroup fag2;
         public fattyAcidGroup fag3;
         public HashSet<int>[] fa_db_values;
+        public bool contains_sugar;
+        public List<int> hgValues;
+        public List<String> headGroupNames = new List<String>{"MGDG", "DGDG", "SQDG"};
+    
     
         public gl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
             fag1 = new fattyAcidGroup();
             fag2 = new fattyAcidGroup();
             fag3 = new fattyAcidGroup();
+            contains_sugar = false;
+            hgValues = new List<int>();
             MS2Fragments.Add("MG", new ArrayList());
             MS2Fragments.Add("DG", new ArrayList());
             MS2Fragments.Add("TG", new ArrayList());
@@ -755,6 +761,13 @@ namespace LipidCreator
             fag1 = new fattyAcidGroup(copy.fag1);
             fag2 = new fattyAcidGroup(copy.fag2);
             fag3 = new fattyAcidGroup(copy.fag3);
+            contains_sugar = copy.contains_sugar;
+            hgValues = new List<int>();
+            foreach (int hgValue in copy.hgValues)
+            {
+                hgValues.Add(hgValue);
+            }
+            
         }
         
         public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
@@ -903,7 +916,7 @@ namespace LipidCreator
         public List<int> hgValues;
         
         public HashSet<int>[] fa_db_values;
-        public List<String> headGroupNames = new List<String>{"PA", "PC", "PE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
+        public List<String> headGroupNames = new List<String>{"PA", "PC", "PE", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
     
         public pl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
@@ -913,6 +926,8 @@ namespace LipidCreator
             MS2Fragments.Add("PA", new ArrayList());
             MS2Fragments.Add("PC", new ArrayList());
             MS2Fragments.Add("PE", new ArrayList());
+            MS2Fragments.Add("DMPE", new ArrayList());
+            MS2Fragments.Add("MMPE", new ArrayList());
             MS2Fragments.Add("PG", new ArrayList());
             MS2Fragments.Add("PI", new ArrayList());
             MS2Fragments.Add("PIP", new ArrayList());

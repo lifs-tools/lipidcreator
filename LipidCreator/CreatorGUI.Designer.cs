@@ -64,12 +64,24 @@ namespace LipidCreator
         Image cardio_backbone_image_fa4e;
         Image cardio_backbone_image_fa4p;
         Image glycero_backbone_image;
+        Image glycero_backbone_image_orig;
+        Image glycero_backbone_image_plant;
         Image glycero_backbone_image_fa1e;
         Image glycero_backbone_image_fa1p;
         Image glycero_backbone_image_fa2e;
         Image glycero_backbone_image_fa2p;
         Image glycero_backbone_image_fa3e;
         Image glycero_backbone_image_fa3p;
+        Image glycero_backbone_image_fa1e_orig;
+        Image glycero_backbone_image_fa1p_orig;
+        Image glycero_backbone_image_fa2e_orig;
+        Image glycero_backbone_image_fa2p_orig;
+        Image glycero_backbone_image_fa3e_orig;
+        Image glycero_backbone_image_fa3p_orig;
+        Image glycero_backbone_image_fa2e_plant;
+        Image glycero_backbone_image_fa2p_plant;
+        Image glycero_backbone_image_fa3e_plant;
+        Image glycero_backbone_image_fa3p_plant;
         Image phospho_backbone_image;
         Image phospho_backbone_image_fa1e;
         Image phospho_backbone_image_fa1p;
@@ -82,6 +94,7 @@ namespace LipidCreator
         PictureBox pl_picture_box;
         PictureBox sl_picture_box;
         
+        ListBox gl_hg_listbox;
         ListBox pl_hg_listbox;
         ListBox sl_hg_listbox;
 
@@ -138,6 +151,7 @@ namespace LipidCreator
         CheckBox pl_fa_2_gb_1_checkbox_2;
         CheckBox pl_fa_2_gb_1_checkbox_3;
         CheckBox pl_is_cl;
+        CheckBox gl_contains_sugar;
 
         GroupBox cl_positive_adduct;
         GroupBox cl_negative_adduct;
@@ -230,9 +244,10 @@ namespace LipidCreator
         
         Label eastertext;
 
+        Label gl_hg_label;
         Label pl_hg_label;
-
         Label sl_hg_label;
+        
         ComboBox sl_lcb_hydroxy_combobox;
         ComboBox sl_fa_hydroxy_combobox;
 
@@ -296,9 +311,11 @@ namespace LipidCreator
             int sepText = 20;
             int fa_length = 140;
             
+            gl_hg_listbox = new ListBox();
             pl_hg_listbox = new ListBox();
             sl_hg_listbox = new ListBox();
-            pl_hg_listbox.Items.AddRange(new String[]{"PA", "PC", "PE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
+            gl_hg_listbox.Items.AddRange(new String[]{"MGDG", "DGDG", "SQDG"});
+            pl_hg_listbox.Items.AddRange(new String[]{"PA", "PC", "PE", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
             sl_hg_listbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "S1P", "SPC"});
             
             cardio_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_backbones.png");
@@ -310,13 +327,18 @@ namespace LipidCreator
             cardio_backbone_image_fa2p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp2.png");
             cardio_backbone_image_fa3p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp3.png");
             cardio_backbone_image_fa4p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAp4.png");
-            glycero_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_backbones.png");
-            glycero_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe1.png");
-            glycero_backbone_image_fa2e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe2.png");
-            glycero_backbone_image_fa3e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe3.png");
-            glycero_backbone_image_fa1p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp1.png");
-            glycero_backbone_image_fa2p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp2.png");
-            glycero_backbone_image_fa3p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp3.png");
+            glycero_backbone_image_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_backbones.png");
+            glycero_backbone_image_fa1e_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe1.png");
+            glycero_backbone_image_fa2e_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe2.png");
+            glycero_backbone_image_fa3e_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAe3.png");
+            glycero_backbone_image_fa1p_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp1.png");
+            glycero_backbone_image_fa2p_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp2.png");
+            glycero_backbone_image_fa3p_orig = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_FAp3.png");
+            glycero_backbone_image_plant = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_backbones_plant.png");
+            glycero_backbone_image_fa2e_plant = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_plant_FAe1.png");
+            glycero_backbone_image_fa3e_plant = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_plant_FAe2.png");
+            glycero_backbone_image_fa2p_plant = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_plant_FAp1.png");
+            glycero_backbone_image_fa3p_plant = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/GL_plant_FAp2.png");
             phospho_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_backbones.png");
             phospho_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_FAe1.png");
             phospho_backbone_image_fa2e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_FAe2.png");
@@ -324,6 +346,16 @@ namespace LipidCreator
             phospho_backbone_image_fa2p = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/PL_FAp2.png");
             sphingo_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/SL_backbones.png");
 
+            
+            glycero_backbone_image = glycero_backbone_image_orig;
+            glycero_backbone_image_fa1e = glycero_backbone_image_fa1e_orig;
+            glycero_backbone_image_fa2e = glycero_backbone_image_fa2e_orig;
+            glycero_backbone_image_fa3e = glycero_backbone_image_fa3e_orig;
+            glycero_backbone_image_fa1p = glycero_backbone_image_fa1p_orig;
+            glycero_backbone_image_fa2p = glycero_backbone_image_fa2p_orig;
+            glycero_backbone_image_fa3p = glycero_backbone_image_fa3p_orig;
+            
+            
             cl_fa_1_textbox = new TextBox();
             cl_fa_2_textbox = new TextBox();
             cl_fa_3_textbox = new TextBox();
@@ -384,6 +416,7 @@ namespace LipidCreator
             gl_db_1_label = new Label();
             gl_db_2_label = new Label();
             gl_db_3_label = new Label();
+            gl_hg_label = new Label();
             gl_hydroxyl_1_label = new Label();
             gl_hydroxyl_2_label = new Label();
             gl_hydroxyl_3_label = new Label();
@@ -453,6 +486,7 @@ namespace LipidCreator
             pl_fa_2_gb_1_checkbox_2 = new CheckBox();
             pl_fa_2_gb_1_checkbox_3 = new CheckBox();
             pl_is_cl = new CheckBox();
+            gl_contains_sugar = new CheckBox();
 
             cl_positive_adduct = new GroupBox();
             cl_negative_adduct = new GroupBox();
@@ -885,6 +919,9 @@ namespace LipidCreator
             glycerolipids_tab.Controls.Add(gl_fa_1_combobox);
             glycerolipids_tab.Controls.Add(gl_fa_2_combobox);
             glycerolipids_tab.Controls.Add(gl_fa_3_combobox);
+            glycerolipids_tab.Controls.Add(gl_hg_listbox);
+            glycerolipids_tab.Controls.Add(gl_hg_label);
+            glycerolipids_tab.Controls.Add(gl_contains_sugar);
             glycerolipids_tab.Controls.Add(gl_db_1_label);
             glycerolipids_tab.Controls.Add(gl_db_2_label);
             glycerolipids_tab.Controls.Add(gl_db_3_label);
@@ -1046,6 +1083,19 @@ namespace LipidCreator
             gl_fa_3_gb_1_checkbox_1.Checked = true;
             gl_fa_3_gb_1_checkbox_1.CheckedChanged += new EventHandler(gl_fa_3_gb_1_checkbox_1_checkedChanged);
 
+            
+            gl_hg_listbox.Location = new Point(172, 103);
+            gl_hg_listbox.Size = new Size(70, 50);
+            gl_hg_listbox.BringToFront();
+            gl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
+            gl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
+            gl_hg_listbox.SelectedValueChanged += new System.EventHandler(gl_hg_listbox_SelectedValueChanged);
+            gl_hg_listbox.Visible = false;
+            
+            gl_hg_label.Location = new Point(gl_hg_listbox.Left, gl_hg_listbox.Top - sep);
+            gl_hg_label.Text = "Sugar head";
+            gl_hg_label.Visible = false;
+            
 
             gl_positive_adduct.Location = new Point(800, 60);
             gl_positive_adduct.Width = 120;
@@ -1096,6 +1146,11 @@ namespace LipidCreator
             gl_picture_box.SendToBack();
 
 
+            gl_contains_sugar.Location = new Point(20, 105);
+            gl_contains_sugar.Width = 120;
+            gl_contains_sugar.Text = "Contains sugar";
+            gl_contains_sugar.CheckedChanged += new EventHandler(gl_contains_sugar_checkedChanged);
+            gl_contains_sugar.BringToFront();
 
 
             // tab for phospholipids
@@ -1233,7 +1288,7 @@ namespace LipidCreator
 
             
             pl_hg_listbox.Location = new Point(25, 40);
-            pl_hg_listbox.Size = new Size(70, 140);
+            pl_hg_listbox.Size = new Size(70, 150);
             pl_hg_listbox.BringToFront();
             pl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
             pl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;

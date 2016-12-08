@@ -138,8 +138,18 @@ namespace LipidCreator
             }
             else if (index == 1)
             {
-            
                 gl_lipid currentGLLipid = (gl_lipid)currentLipid;
+                setting_listbox = true;
+                for (int i = 0; i < gl_hg_listbox.Items.Count; ++i)
+                {
+                    gl_hg_listbox.SetSelected(i, false);
+                }
+                foreach (int hgValue in currentGLLipid.hgValues)
+                {
+                    gl_hg_listbox.SetSelected(hgValue, true);
+                }
+                setting_listbox = false;
+                
                 gl_fa_1_textbox.Text = currentGLLipid.fag1.lengthInfo;
                 gl_db_1_textbox.Text = currentGLLipid.fag1.dbInfo;
                 gl_hydroxyl_1_textbox.Text = currentGLLipid.fag1.hydroxylInfo;
@@ -147,6 +157,8 @@ namespace LipidCreator
                 gl_fa_1_gb_1_checkbox_1.Checked = currentGLLipid.fag1.faTypes["FA"];
                 gl_fa_1_gb_1_checkbox_2.Checked = currentGLLipid.fag1.faTypes["FAp"];
                 gl_fa_1_gb_1_checkbox_3.Checked = currentGLLipid.fag1.faTypes["FAe"];
+                
+                
                 
                 gl_fa_2_textbox.Text = currentGLLipid.fag2.lengthInfo;
                 gl_db_2_textbox.Text = currentGLLipid.fag2.dbInfo;
@@ -174,6 +186,10 @@ namespace LipidCreator
                 gl_neg_adduct_checkbox_4.Checked = currentGLLipid.adducts["+CH3COO"];
                 if (lipid_modifications[1] > -1) gl_modify_lipid_button.Enabled = true;
                 else gl_modify_lipid_button.Enabled = false;
+                
+                gl_contains_sugar.Checked = currentGLLipid.contains_sugar;
+                
+                
                 update_ranges(currentGLLipid.fag1, gl_fa_1_textbox, gl_fa_1_combobox.SelectedIndex);
                 update_ranges(currentGLLipid.fag1, gl_db_1_textbox, 3);
                 update_ranges(currentGLLipid.fag1, gl_hydroxyl_1_textbox, 4);
@@ -793,12 +809,10 @@ namespace LipidCreator
         void gl_fa_1_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
         private void gl_fa_1_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
-            gl_picture_box.Location = new Point(77, 126);
             gl_picture_box.Image = glycero_backbone_image_fa1e;
             gl_picture_box.SendToBack();
         }
@@ -806,12 +820,10 @@ namespace LipidCreator
         void gl_fa_1_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
         private void gl_fa_1_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
         {
-            gl_picture_box.Location = new Point(77, 126);
             gl_picture_box.Image = glycero_backbone_image_fa1p;
             gl_picture_box.SendToBack();
         }
@@ -819,7 +831,6 @@ namespace LipidCreator
         void gl_fa_2_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
         private void gl_fa_2_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
@@ -830,7 +841,6 @@ namespace LipidCreator
         void gl_fa_2_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
 
@@ -843,18 +853,17 @@ namespace LipidCreator
         void gl_fa_3_gb_1_checkbox_3_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
         private void gl_fa_3_gb_1_checkbox_3_MouseHover(object sender, MouseEventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image_fa3e;
+            gl_picture_box.SendToBack();
         }
         
         void gl_fa_3_gb_1_checkbox_2_MouseLeave(object sender, EventArgs e)
         {
             gl_picture_box.Image = glycero_backbone_image;
-            gl_picture_box.Location = new Point(77, 79);
             gl_picture_box.SendToBack();
         }
         private void gl_fa_3_gb_1_checkbox_2_MouseHover(object sender, MouseEventArgs e)
@@ -864,7 +873,70 @@ namespace LipidCreator
         }
         
         
+        private void gl_hg_listbox_SelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (setting_listbox) return;
+            ((gl_lipid)currentLipid).hgValues.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                int hgValue = ((ListBox)sender).Items.IndexOf(itemChecked);
+                ((gl_lipid)currentLipid).hgValues.Add(hgValue);
+            }
+            
+        }
         
+        public void gl_contains_sugar_checkedChanged(Object sender, EventArgs e)
+        {
+            ((gl_lipid)currentLipid).contains_sugar = ((CheckBox)sender).Checked;
+            
+            gl_picture_box.Visible = false;
+            if (((gl_lipid)currentLipid).contains_sugar)
+            {
+                gl_fa_1_textbox.Visible = false;
+                gl_db_1_textbox.Visible = false;
+                gl_hydroxyl_1_textbox.Visible = false;
+                gl_fa_1_combobox.Visible = false;
+                gl_fa_1_gb_1_checkbox_1.Visible = false;
+                gl_fa_1_gb_1_checkbox_2.Visible = false;
+                gl_fa_1_gb_1_checkbox_3.Visible = false;
+                gl_db_1_label.Visible = false;
+                gl_hydroxyl_1_label.Visible = false;
+                
+                gl_hg_listbox.Visible = true;
+                gl_hg_label.Visible = true;
+                
+                glycero_backbone_image = glycero_backbone_image_plant;
+                glycero_backbone_image_fa2e = glycero_backbone_image_fa2e_plant;
+                glycero_backbone_image_fa3e = glycero_backbone_image_fa3e_plant;
+                glycero_backbone_image_fa2p = glycero_backbone_image_fa2p_plant;
+                glycero_backbone_image_fa3p = glycero_backbone_image_fa3p_plant;
+            }
+            else
+            {
+                gl_fa_1_textbox.Visible = true;
+                gl_db_1_textbox.Visible = true;
+                gl_hydroxyl_1_textbox.Visible = true;
+                gl_fa_1_combobox.Visible = true;
+                gl_fa_1_gb_1_checkbox_1.Visible = true;
+                gl_fa_1_gb_1_checkbox_2.Visible = true;
+                gl_fa_1_gb_1_checkbox_3.Visible = true;
+                gl_db_1_label.Visible = true;
+                gl_hydroxyl_1_label.Visible = true;
+                
+                gl_hg_listbox.Visible = false;
+                gl_hg_label.Visible = false;
+                
+                glycero_backbone_image = glycero_backbone_image_orig;
+                glycero_backbone_image_fa1e = glycero_backbone_image_fa1e_orig;
+                glycero_backbone_image_fa2e = glycero_backbone_image_fa2e_orig;
+                glycero_backbone_image_fa3e = glycero_backbone_image_fa3e_orig;
+                glycero_backbone_image_fa1p = glycero_backbone_image_fa1p_orig;
+                glycero_backbone_image_fa2p = glycero_backbone_image_fa2p_orig;
+                glycero_backbone_image_fa3p = glycero_backbone_image_fa3p_orig;
+            }
+            gl_picture_box.Image = glycero_backbone_image;
+            gl_picture_box.Visible = true;
+        }
         
         
         ////////////////////// PL ////////////////////////////////

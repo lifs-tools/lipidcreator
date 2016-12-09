@@ -741,6 +741,9 @@ namespace LipidCreator
             hgValues = new List<int>();
             MS2Fragments.Add("MG", new ArrayList());
             MS2Fragments.Add("DG", new ArrayList());
+            MS2Fragments.Add("MGDG", new ArrayList());
+            MS2Fragments.Add("DGDG", new ArrayList());
+            MS2Fragments.Add("SQDG", new ArrayList());
             MS2Fragments.Add("TG", new ArrayList());
             
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)

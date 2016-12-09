@@ -393,6 +393,7 @@ namespace LipidCreator
         public Dictionary<String, String> paths_to_full_image;
         public String completeName;
         public Dictionary<String, bool> adducts;
+        public bool representative_fa;
     
         public lipid(){
             adducts = new Dictionary<String, bool>();
@@ -406,6 +407,7 @@ namespace LipidCreator
             adducts.Add("+CH3COO", false);
             MS2Fragments = new Dictionary<String, ArrayList>();
             paths_to_full_image = new Dictionary<String, String>();
+            representative_fa = false;
         }
         
         public virtual void add_lipids(DataTable dt, Dictionary<String, DataTable> ddt)
@@ -424,6 +426,7 @@ namespace LipidCreator
             adducts.Add("+HCOO", copy.adducts["+HCOO"]);
             adducts.Add("+CH3COO", copy.adducts["+CH3COO"]);
             className = copy.className;
+            representative_fa = copy.representative_fa;
             MS2Fragments = new Dictionary<String, ArrayList>();
             paths_to_full_image = new Dictionary<String, String>();
             foreach (KeyValuePair<String, String> item in copy.paths_to_full_image)

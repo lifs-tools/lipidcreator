@@ -278,7 +278,7 @@ namespace LipidCreator
             
         
             tab_control = new TabControl();
-            this.Size = new System.Drawing.Size(1024, 768);
+            this.Size = new System.Drawing.Size(1060, 800);
             glycerolipids_tab = new TabPage();
             phospholipids_tab = new TabPage();
             sphingolipids_tab = new TabPage();
@@ -314,6 +314,8 @@ namespace LipidCreator
             int sep = 15;
             int sepText = 20;
             int fa_length = 140;
+            int top_low_buttons = 420;
+            int left_groupboxes = 850;
             
             gl_hg_listbox = new ListBox();
             pl_hg_listbox = new ListBox();
@@ -720,7 +722,7 @@ namespace LipidCreator
             cl_fa_1_gb_1_checkbox_1.Checked = true;
             cl_fa_1_gb_1_checkbox_1.CheckedChanged += new EventHandler(cl_fa_1_gb_1_checkbox_1_checkedChanged);
 
-            cl_positive_adduct.Location = new Point(800, 60);
+            cl_positive_adduct.Location = new Point(left_groupboxes, 60);
             cl_positive_adduct.Width = 120;
             cl_positive_adduct.Height = 120;
             cl_positive_adduct.Text = "Positive adducts";
@@ -741,7 +743,7 @@ namespace LipidCreator
             cl_pos_adduct_checkbox_4.Location = new Point(10, 75);
             cl_pos_adduct_checkbox_4.Text = "+Na⁺";
             cl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_4_checkedChanged);
-            cl_negative_adduct.Location = new Point(800, 200);
+            cl_negative_adduct.Location = new Point(left_groupboxes, 200);
             cl_negative_adduct.Width = 120;
             cl_negative_adduct.Height = 120;
             cl_negative_adduct.Text = "Negative adducts";
@@ -855,7 +857,7 @@ namespace LipidCreator
 
 
             
-            cl_representative_fa.Location = new Point(800, 20);
+            cl_representative_fa.Location = new Point(left_groupboxes, 20);
             cl_representative_fa.Width = 120;
             cl_representative_fa.Text = "First FA representative";
             cl_representative_fa.CheckedChanged += new EventHandler(cl_representative_fa_checkedChanged);
@@ -1113,7 +1115,7 @@ namespace LipidCreator
             gl_hg_label.Visible = false;
             
 
-            gl_positive_adduct.Location = new Point(800, 60);
+            gl_positive_adduct.Location = new Point(left_groupboxes, 60);
             gl_positive_adduct.Width = 120;
             gl_positive_adduct.Height = 120;
             gl_positive_adduct.Text = "Positive adducts";
@@ -1135,7 +1137,7 @@ namespace LipidCreator
             gl_pos_adduct_checkbox_4.Location = new Point(10, 75);
             gl_pos_adduct_checkbox_4.Text = "+Na⁺";
             gl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_4_checkedChanged);
-            gl_negative_adduct.Location = new Point(800, 200);
+            gl_negative_adduct.Location = new Point(left_groupboxes, 200);
             gl_negative_adduct.Width = 120;
             gl_negative_adduct.Height = 120;
             gl_negative_adduct.Text = "Negative adducts";
@@ -1168,7 +1170,7 @@ namespace LipidCreator
             gl_contains_sugar.CheckedChanged += new EventHandler(gl_contains_sugar_checkedChanged);
             gl_contains_sugar.BringToFront();
             
-            gl_representative_fa.Location = new Point(800, 20);
+            gl_representative_fa.Location = new Point(left_groupboxes, 20);
             gl_representative_fa.Width = 120;
             gl_representative_fa.Text = "First FA representative";
             gl_representative_fa.CheckedChanged += new EventHandler(gl_representative_fa_checkedChanged);
@@ -1320,7 +1322,7 @@ namespace LipidCreator
             pl_hg_label.Location = new Point(pl_hg_listbox.Left, pl_hg_listbox.Top - sep);
             pl_hg_label.Text = "Head group";
 
-            pl_positive_adduct.Location = new Point(800, 60);
+            pl_positive_adduct.Location = new Point(left_groupboxes, 60);
             pl_positive_adduct.Width = 120;
             pl_positive_adduct.Height = 120;
             pl_positive_adduct.Text = "Positive adducts";
@@ -1341,7 +1343,7 @@ namespace LipidCreator
             pl_pos_adduct_checkbox_4.Location = new Point(10, 75);
             pl_pos_adduct_checkbox_4.Text = "+Na⁺";
             pl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_4_checkedChanged);
-            pl_negative_adduct.Location = new Point(800, 200);
+            pl_negative_adduct.Location = new Point(left_groupboxes, 200);
             pl_negative_adduct.Width = 120;
             pl_negative_adduct.Height = 120;
             pl_negative_adduct.Text = "Negative adducts";
@@ -1369,7 +1371,7 @@ namespace LipidCreator
             pl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
             pl_picture_box.SendToBack();
             
-            pl_representative_fa.Location = new Point(800, 20);
+            pl_representative_fa.Location = new Point(left_groupboxes, 20);
             pl_representative_fa.Width = 120;
             pl_representative_fa.Text = "First FA representative";
             pl_representative_fa.CheckedChanged += new EventHandler(pl_representative_fa_checkedChanged);
@@ -1481,7 +1483,7 @@ namespace LipidCreator
             sl_hg_label.Text = "Head group";
             
 
-            sl_positive_adduct.Location = new Point(800, 60);
+            sl_positive_adduct.Location = new Point(left_groupboxes, 60);
             sl_positive_adduct.Width = 120;
             sl_positive_adduct.Height = 120;
             sl_positive_adduct.Text = "Positive adducts";
@@ -1503,7 +1505,7 @@ namespace LipidCreator
             sl_pos_adduct_checkbox_4.Location = new Point(10, 75);
             sl_pos_adduct_checkbox_4.Text = "+Na⁺";
             sl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_4_checkedChanged);
-            sl_negative_adduct.Location = new Point(800, 200);
+            sl_negative_adduct.Location = new Point(left_groupboxes, 200);
             sl_negative_adduct.Width = 120;
             sl_negative_adduct.Height = 120;
             sl_negative_adduct.Text = "Negative adducts";
@@ -1539,97 +1541,97 @@ namespace LipidCreator
 
             cl_add_lipid_button.Text = "Add cardiolipins";
             cl_add_lipid_button.Width = 130;
-            cl_add_lipid_button.Location = new Point(800, 380);
+            cl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             cl_add_lipid_button.BackColor = SystemColors.Control;
             cl_add_lipid_button.Click += register_lipid;
 
             cl_reset_lipid_button.Text = "Reset lipid";
             cl_reset_lipid_button.Width = 130;
-            cl_reset_lipid_button.Location = new Point(20, 380);
+            cl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             cl_reset_lipid_button.BackColor = SystemColors.Control;
             cl_reset_lipid_button.Click += reset_cl_lipid;
 
             cl_modify_lipid_button.Text = "Modify lipid";
             cl_modify_lipid_button.Width = 130;
-            cl_modify_lipid_button.Location = new Point(660, 380);
+            cl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             cl_modify_lipid_button.BackColor = SystemColors.Control;
             cl_modify_lipid_button.Click += modify_cl_lipid;
 
             cl_ms2fragments_lipid_button.Text = "MS2 fragments";
             cl_ms2fragments_lipid_button.Width = 130;
-            cl_ms2fragments_lipid_button.Location = new Point(160, 380);
+            cl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             cl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             cl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             gl_add_lipid_button.Text = "Add glycerolipids";
             gl_add_lipid_button.Width = 130;
-            gl_add_lipid_button.Location = new Point(800, 380);
+            gl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             gl_add_lipid_button.BackColor = SystemColors.Control;
             gl_add_lipid_button.Click += register_lipid;
 
             gl_reset_lipid_button.Text = "Reset lipid";
             gl_reset_lipid_button.Width = 130;
-            gl_reset_lipid_button.Location = new Point(20, 380);
+            gl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             gl_reset_lipid_button.BackColor = SystemColors.Control;
             gl_reset_lipid_button.Click += reset_gl_lipid;
 
             gl_modify_lipid_button.Text = "Modify lipid";
             gl_modify_lipid_button.Width = 130;
-            gl_modify_lipid_button.Location = new Point(660, 380);
+            gl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             gl_modify_lipid_button.BackColor = SystemColors.Control;
             gl_modify_lipid_button.Click += modify_gl_lipid;
 
             gl_ms2fragments_lipid_button.Text = "MS2 fragments";
             gl_ms2fragments_lipid_button.Width = 130;
-            gl_ms2fragments_lipid_button.Location = new Point(160, 380);
+            gl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             gl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             gl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             pl_add_lipid_button.Text = "Add phospholipids";
             pl_add_lipid_button.Width = 130;
-            pl_add_lipid_button.Location = new Point(800, 380);
+            pl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             pl_add_lipid_button.BackColor = SystemColors.Control;
             pl_add_lipid_button.Click += register_lipid;
 
             pl_reset_lipid_button.Text = "Reset lipid";
             pl_reset_lipid_button.Width = 130;
-            pl_reset_lipid_button.Location = new Point(20, 380);
+            pl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             pl_reset_lipid_button.BackColor = SystemColors.Control;
             pl_reset_lipid_button.Click += reset_pl_lipid;
 
             pl_modify_lipid_button.Text = "Modify lipid";
             pl_modify_lipid_button.Width = 130;
-            pl_modify_lipid_button.Location = new Point(660, 380);
+            pl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             pl_modify_lipid_button.BackColor = SystemColors.Control;
             pl_modify_lipid_button.Click += modify_pl_lipid;
 
             pl_ms2fragments_lipid_button.Text = "MS2 fragments";
             pl_ms2fragments_lipid_button.Width = 130;
-            pl_ms2fragments_lipid_button.Location = new Point(160, 380);
+            pl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             pl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             pl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             sl_add_lipid_button.Text = "Add sphingolipids";
             sl_add_lipid_button.Width = 130;
-            sl_add_lipid_button.Location = new Point(800, 380);
+            sl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             sl_add_lipid_button.BackColor = SystemColors.Control;
             sl_add_lipid_button.Click += register_lipid;
 
             sl_reset_lipid_button.Text = "Reset lipid";
             sl_reset_lipid_button.Width = 130;
-            sl_reset_lipid_button.Location = new Point(20, 380);
+            sl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             sl_reset_lipid_button.BackColor = SystemColors.Control;
             sl_reset_lipid_button.Click += reset_sl_lipid;
 
             sl_modify_lipid_button.Text = "Modify lipid";
             sl_modify_lipid_button.Width = 130;
-            sl_modify_lipid_button.Location = new Point(660, 380);
+            sl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             sl_modify_lipid_button.BackColor = SystemColors.Control;
             sl_modify_lipid_button.Click += modify_sl_lipid;
 
             sl_ms2fragments_lipid_button.Text = "MS2 fragments";
             sl_ms2fragments_lipid_button.Width = 130;
-            sl_ms2fragments_lipid_button.Location = new Point(160, 380);
+            sl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             sl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             sl_ms2fragments_lipid_button.Click += open_ms2_form;
 

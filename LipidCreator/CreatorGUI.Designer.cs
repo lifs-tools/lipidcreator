@@ -30,6 +30,16 @@ namespace LipidCreator
 
         #region Windows Form Designer generated code
         private System.Timers.Timer timer1;
+        private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuFile;
+        private System.Windows.Forms.MenuItem menuImport;
+        private System.Windows.Forms.MenuItem menuImportPredefined;
+        private System.Windows.Forms.MenuItem menuExport;
+        private System.Windows.Forms.MenuItem menuDash;
+        private System.Windows.Forms.MenuItem menuExit;
+        private System.Windows.Forms.MenuItem menuPredefinedHumanBlood;
+        private System.Windows.Forms.MenuItem menuPredefinedMouseLiver;
+        private System.Windows.Forms.MenuItem menuPredefinedFSMHeart;
         
         private TabControl tab_control = new TabControl();
         private TabPage glycerolipids_tab;
@@ -276,7 +286,48 @@ namespace LipidCreator
             this.timer1 = new System.Timers.Timer(5);
             this.timer1.Elapsed += this.timer1_Tick;
             
-        
+            this.mainMenu1 = new System.Windows.Forms.MainMenu();
+            this.Menu = this.mainMenu1;
+            this.menuFile = new System.Windows.Forms.MenuItem ();
+            this.menuImport = new System.Windows.Forms.MenuItem ();
+            this.menuImportPredefined = new System.Windows.Forms.MenuItem();
+            this.menuPredefinedHumanBlood = new System.Windows.Forms.MenuItem();
+            this.menuPredefinedMouseLiver = new System.Windows.Forms.MenuItem();
+            this.menuPredefinedFSMHeart = new System.Windows.Forms.MenuItem();
+            this.menuExport = new System.Windows.Forms.MenuItem ();
+            this.menuDash = new System.Windows.Forms.MenuItem ();
+            this.menuExit = new System.Windows.Forms.MenuItem ();
+            this.mainMenu1.MenuItems.AddRange(new MenuItem[] { this.menuFile } );
+            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuExit});
+            this.menuImportPredefined.MenuItems.AddRange(new MenuItem[] {menuPredefinedHumanBlood, menuPredefinedMouseLiver, menuPredefinedFSMHeart});
+            this.menuFile.Index = 0;
+            this.menuFile.Text = "&File";
+            
+            this.menuImport.Index = 0;
+            this.menuImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
+            this.menuImport.Text = "&Import";
+            this.menuImport.Click += new System.EventHandler (menuImport_Click);
+            
+            this.menuImportPredefined.Index = 1;
+            this.menuImportPredefined.Text = "Import Predefined";
+            
+            this.menuExport.Index = 2;
+            this.menuExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
+            this.menuExport.Text = "&Export";
+            this.menuExport.Click += new System.EventHandler (menuExport_Click);
+            
+            this.menuDash.Index = 3;
+            this.menuDash.Text = "-";
+            
+            this.menuExit.Index = 4;
+            this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
+            this.menuExit.Text = "E&xit";
+            this.menuExit.Click += new System.EventHandler (menuExit_Click);
+            
+            this.menuPredefinedHumanBlood.Text = "Human - blood";
+            this.menuPredefinedMouseLiver.Text = "Mouse - liver";
+            this.menuPredefinedFSMHeart.Text = "Flying Spaghetti Monster - Heart";
+            
             tab_control = new TabControl();
             this.Size = new System.Drawing.Size(1060, 800);
             glycerolipids_tab = new TabPage();
@@ -1537,7 +1588,7 @@ namespace LipidCreator
             lipids_groupbox.Controls.Add(open_review_form_button);
             lipids_groupbox.Dock = DockStyle.Bottom;
             lipids_groupbox.Text = "Lipid list";
-            lipids_groupbox.Height = 280;
+            lipids_groupbox.Height = 180;
 
             cl_add_lipid_button.Text = "Add cardiolipins";
             cl_add_lipid_button.Width = 130;

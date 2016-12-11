@@ -6,6 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using SkylineTool;
 
 namespace LipidCreator
@@ -117,7 +120,6 @@ namespace LipidCreator
         public HashSet<int> lengths;
         public HashSet<int> dbs;
         public HashSet<int> hydroxyls;
-        public bool disabled;
     
         public fattyAcidGroup()
         {
@@ -133,7 +135,6 @@ namespace LipidCreator
             lengths = new HashSet<int>();
             dbs = new HashSet<int>();
             hydroxyls = new HashSet<int>();
-            disabled = false;
         }
         
         public fattyAcidGroup(fattyAcidGroup copy)
@@ -148,7 +149,6 @@ namespace LipidCreator
             faTypes.Add("FAe", copy.faTypes["FAe"]);
             faTypes.Add("FAx", copy.faTypes["FAx"]);  // no fatty acid dummy
             lengths = new HashSet<int>();
-            disabled = copy.disabled;
             foreach (int l in copy.lengths)
             {
                 lengths.Add(l);
@@ -164,6 +164,46 @@ namespace LipidCreator
                 hydroxyls.Add(d);
             }
         }
+        
+        public void import(XElement node)
+        {
+            foreach(XElement child in node.Elements())
+            {
+                Console.WriteLine(child.Name);
+            }
+        }
+        
+        public string serialize()
+        {
+            string xml = "<fattyAcidGroup";
+            xml += " chainType=\"" + chainType + "\"";
+            xml += " lengthInfo=\"" + lengthInfo + "\"";
+            xml += " dbInfo=\"" + dbInfo + "\"";
+            xml += " hydroxylInfo=\"" + hydroxylInfo + "\">\n";
+            foreach (KeyValuePair<String, bool> item in faTypes)
+            {
+                xml += "<faType";
+                xml += " type=\"" + item.Key + "\">";
+                xml += (item.Value ? 1 : 0);
+                xml += "</faType>\n";
+            }
+            foreach (int len in lengths)
+            {
+                xml += "<length>" + len + "</length>\n";
+            }
+            foreach (int db in dbs)
+            {
+                xml += "<doublebond>" + db + "</doublebond>\n";
+            }
+            foreach (int hydroxyl in hydroxyls)
+            {
+                xml += "<hydroxyl>" + hydroxyl + "</hydroxyl>\n";
+            }
+            xml += "</fattyAcidGroup>\n";
+            return xml;
+        }
+        
+        
         
         public bool any_fa_checked()
         {
@@ -182,6 +222,28 @@ namespace LipidCreator
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
     
+        public string serialize()
+        {
+            string xml = "<MS2Fragment";
+            xml += " fragmentName=\"" + fragmentName + "\"";
+            xml += " fragmentCharge=\"" + fragmentCharge + "\"";
+            xml += " fragmentFile=\"" + fragmentFile + "\"";
+            xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
+            foreach (string restriction in restrictions)
+            {
+                xml += "<restriction>" + restriction + "</restriction>\n";
+            }
+            foreach (string fbase in fragmentBase)
+            {
+                xml += "<fragmentBase>" + fbase + "</fragmentBase>\n";
+            }
+            foreach (DataRow dr in fragmentElements.Rows)
+            {
+                xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+            }
+            xml += "</MS2Fragment>\n";
+            return xml;
+        }
     
         public static void addCounts(DataTable dt1, DataTable dt2)
         {
@@ -388,10 +450,8 @@ namespace LipidCreator
     public class lipid
     {
         public string className;
-        public TabPage text_page;
         public Dictionary<String, ArrayList> MS2Fragments;
         public Dictionary<String, String> paths_to_full_image;
-        public String completeName;
         public Dictionary<String, bool> adducts;
         public bool representative_fa;
     
@@ -412,6 +472,31 @@ namespace LipidCreator
         
         public virtual void add_lipids(DataTable dt, Dictionary<String, DataTable> ddt)
         {
+        }
+        
+        public virtual string serialize()
+        {
+            string xml = "<className>" + className + "</className>\n";
+            xml += "<representativeFA>" + (representative_fa ? 1 : 0) + "</representativeFA>\n";
+            foreach (KeyValuePair<String, String> item in paths_to_full_image)
+            {
+                xml += "<pathToImage type=\"" + item.Key + "\">" + item.Value + "</pathToImage>\n";
+            }            
+            foreach (KeyValuePair<String, bool> item in adducts)
+            {
+                xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
+            }
+            
+            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
+            {
+                xml += "<MS2FragmentGroup name=\"" + item.Key + "\">\n";
+                foreach (MS2Fragment fragment in item.Value)
+                {
+                    xml += fragment.serialize();
+                }
+                xml += "</MS2FragmentGroup>\n";
+            }
+            return xml;
         }
         
         public lipid(lipid copy)
@@ -495,12 +580,10 @@ namespace LipidCreator
     [Serializable]
     public class cl_lipid : lipid
     {
-        public string[] fa_db_texts;
         public fattyAcidGroup fag1;
         public fattyAcidGroup fag2;
         public fattyAcidGroup fag3;
         public fattyAcidGroup fag4;
-        public HashSet<int>[] fa_db_values;
     
         public cl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
@@ -532,6 +615,17 @@ namespace LipidCreator
             fag4 = new fattyAcidGroup(copy.fag4);
         }
         
+        public override string serialize()
+        {
+            string xml = "<lipid type=\"CL\">\n";
+            xml += fag1.serialize();
+            xml += fag2.serialize();
+            xml += fag3.serialize();
+            xml += fag4.serialize();
+            xml += base.serialize();
+            xml += "</lipid>\n";
+            return xml;
+        }
         
         public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
         {
@@ -725,11 +819,9 @@ namespace LipidCreator
     [Serializable]
     public class gl_lipid : lipid
     {
-        public string[] fa_db_texts;
         public fattyAcidGroup fag1;
         public fattyAcidGroup fag2;
         public fattyAcidGroup fag3;
-        public HashSet<int>[] fa_db_values;
         public bool contains_sugar;
         public List<int> hgValues;
         public List<String> headGroupNames = new List<String>{"MGDG", "DGDG", "SQDG"};
@@ -774,6 +866,77 @@ namespace LipidCreator
                 hgValues.Add(hgValue);
             }
             
+        }
+        
+        
+        public override string serialize()
+        {
+            string xml = "<lipid type=\"GL\">\n";
+            xml += fag1.serialize();
+            xml += fag2.serialize();
+            xml += fag3.serialize();
+            xml += "<containsSugar>" + (contains_sugar ? 1 : 0) + "</containsSugar>\n";
+            foreach (int hgValue in hgValues)
+            {
+                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+            }
+            xml += base.serialize();
+            xml += "</lipid>\n";
+            return xml;
+        }
+        
+        
+        public void import(XElement node)
+        {
+            int fa_counter = 0;
+            foreach (XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "fattyAcidGroup":
+                        if (fa_counter == 0)
+                        {
+                            fag1.import(child);
+                        }
+                        else if (fa_counter == 1)
+                        {
+                            fag2.import(child);
+                        }
+                        if (fa_counter == 2)
+                        {
+                            fag3.import(child);
+                        }
+                        else throw new Exception();
+                        ++fa_counter;
+                        break;
+                        
+                    case "containsSugar":
+                        contains_sugar = child.Value == "1";
+                        break;
+                        
+                    case "className":
+                        className = child.Value.ToString();
+                        break;
+                        
+                    case "representativeFA":
+                        representative_fa = child.Value == "1";
+                        break;
+                    
+                    case "pathToImage":
+                        break;
+                        
+                    case "adduct":
+                        string key = child.Attribute("type").Value.ToString();
+                        adducts[key] = child.Value == "1";
+                        break;
+                        
+                    case "MS2FragmentGroup":
+                        break;
+                        
+                    default:
+                        throw new Exception();
+                }
+            }
         }
         
         public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
@@ -916,12 +1079,10 @@ namespace LipidCreator
     [Serializable]
     public class pl_lipid : lipid
     {
-        public string[] fa_db_texts;
         public fattyAcidGroup fag1;
         public fattyAcidGroup fag2;
         public List<int> hgValues;
         
-        public HashSet<int>[] fa_db_values;
         public List<String> headGroupNames = new List<String>{"PA", "PC", "PE", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
     
         public pl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
@@ -971,12 +1132,27 @@ namespace LipidCreator
             }
         }
         
+        public override string serialize()
+        {
+            string xml = "<lipid type=\"PL\">\n";
+            xml += fag1.serialize();
+            xml += fag2.serialize();
+            foreach (int hgValue in hgValues)
+            {
+                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+            }
+            xml += base.serialize();
+            xml += "</lipid>\n";
+            return xml;
+        }
+        
+        
         public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
         {
             // check if more than one fatty acids are 0:0
             int check_fatty_acids = 0;
             check_fatty_acids += fag1.faTypes["FAx"] ? 1 : 0;
-            check_fatty_acids += fag2.faTypes["FAx"] && !fag2.disabled ? 1 : 0;
+            check_fatty_acids += fag2.faTypes["FAx"] ? 1 : 0;
             if (check_fatty_acids > 0) return;
             if (hgValues.Count == 0) return;
             
@@ -1102,19 +1278,17 @@ namespace LipidCreator
     [Serializable]
     public class sl_lipid : lipid
     {
-        public string[] lcb_fa_db_texts;
         public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "SPH-P", "SPC"};
         public List<int> hgValues;
         public fattyAcidGroup fag;
         public fattyAcidGroup lcb;       
         public int lcb_hydroxyValue;        
         public int fa_hydroxyValue;
-        public HashSet<int>[] lcb_fa_db_values;
     
         public sl_lipid(Dictionary<String, String> all_paths, Dictionary<String, ArrayList> all_fragments)
         {
-            fag = new fattyAcidGroup();
             lcb = new fattyAcidGroup();
+            fag = new fattyAcidGroup();
             hgValues = new List<int>();
             lcb_hydroxyValue = 2;
             fa_hydroxyValue = 0;
@@ -1152,8 +1326,8 @@ namespace LipidCreator
     
         public sl_lipid(sl_lipid copy) : base((lipid)copy)
         {
-            fag = new fattyAcidGroup(copy.fag);
             lcb = new fattyAcidGroup(copy.lcb);
+            fag = new fattyAcidGroup(copy.fag);
             lcb_hydroxyValue = copy.lcb_hydroxyValue;
             fa_hydroxyValue = copy.fa_hydroxyValue;
             hgValues = new List<int>();
@@ -1161,6 +1335,23 @@ namespace LipidCreator
             {
                 hgValues.Add(hgValue);
             }
+        }
+        
+        
+        public override string serialize()
+        {
+            string xml = "<lipid type=\"SL\">\n";
+            xml += lcb.serialize();
+            xml += fag.serialize();
+            xml += "<lcbHydroxyValue>" + lcb_hydroxyValue + "</lcbHydroxyValue>\n";
+            xml += "<faHydroxyValue>" + fa_hydroxyValue + "</faHydroxyValue>\n";
+            foreach (int hgValue in hgValues)
+            {
+                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+            }
+            xml += base.serialize();
+            xml += "</lipid>\n";
+            return xml;
         }
         
         
@@ -1175,7 +1366,7 @@ namespace LipidCreator
                 foreach (int lcb_db_1 in lcb.dbs)
                 {
                     if (max_db_1 < lcb_db_1) continue;
-                    if (!fag.disabled)
+                    if (true) // TODO: sphingolipids without fatty acid
                     {
                         foreach (int fa_l in fag.lengths)
                         {
@@ -1583,6 +1774,48 @@ namespace LipidCreator
             {
                 //Console.WriteLine(e.ToString());
                 MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + max_mass + "Da.");
+            }
+        }
+        
+        
+        public string serialize()
+        {
+            string xml = "<LipidCreator>\n";
+            foreach (lipid curr_lipid in registered_lipids)
+            {
+                xml += curr_lipid.serialize();
+            }
+            xml += "</LipidCreator>\n";
+            return xml;
+        }
+        
+        public void import(XDocument doc)
+        {
+        
+            var lipids = doc.Descendants("lipid");
+            foreach ( var lipid in lipids )
+            {
+                string lipid_type = lipid.Attribute("type").Value;
+                switch (lipid_type)
+                {
+                    case "CL":
+                        break;
+                        
+                    case "GL":
+                        gl_lipid gll = new gl_lipid(all_paths_to_precursor_images, all_fragments);
+                        gll.import(lipid);
+                        registered_lipids.Add(gll);
+                        break;
+                        
+                    case "PL":
+                        break;
+                        
+                    case "SL":
+                        break;
+                        
+                    default:
+                        throw new Exception();
+                }
             }
         }
 

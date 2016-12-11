@@ -5,7 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace LipidCreator
 {
@@ -1884,6 +1886,46 @@ namespace LipidCreator
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();
             lipidsReview.Dispose();
+        }
+        
+        protected void menuImport_Click(object sender, System.EventArgs e)
+        {
+            XDocument doc;
+            try 
+            {
+                doc = XDocument.Load("/tmp/lipids.lcXML");
+                lipidCreatorForm.import(doc);
+                refresh_registered_lipids_table();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+            }
+        }
+        
+        protected void menuExport_Click(object sender, System.EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter writer;
+                if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                {
+                    writer.Write(lipidCreatorForm.serialize());
+                    writer.Dispose();
+                    writer.Close();
+                }
+            }
+        }
+        
+        protected void menuExit_Click(object sender, System.EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

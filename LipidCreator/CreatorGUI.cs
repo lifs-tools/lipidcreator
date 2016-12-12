@@ -54,11 +54,6 @@ namespace LipidCreator
             if (changing_tab_forced) return;
             changeTab(((TabControl)sender).SelectedIndex + 1, false);            
         }
-        
-        public void resetTextBoxBackground(Object sender, EventArgs e)
-        {
-            ((TextBox)sender).BackColor = Color.White;
-        }
 
         public void changeTab(int index, bool forced)
         {     
@@ -1749,7 +1744,79 @@ namespace LipidCreator
             }
         
             if (currentLipid is cl_lipid)
-            {                
+            {   
+                int cnt_active_fas = 0;
+                cnt_active_fas += ((cl_lipid)currentLipid).fag1.faTypes["FAx"] ? 0 : 1;
+                cnt_active_fas += ((cl_lipid)currentLipid).fag2.faTypes["FAx"] ? 0 : 1;
+                cnt_active_fas += ((cl_lipid)currentLipid).fag3.faTypes["FAx"] ? 0 : 1;
+                cnt_active_fas += ((cl_lipid)currentLipid).fag4.faTypes["FAx"] ? 0 : 1;
+                if (cnt_active_fas < 3)
+                {
+                    MessageBox.Show("At least three fatty acids must be selected!", "Lipid not registable");
+                    return;
+                }
+            
+                if (cl_fa_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_fa_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_fa_3_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Third fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_fa_4_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Fourth fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_db_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_db_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_db_3_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Third double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_db_4_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Fourth double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_hydroxyl_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_hydroxyl_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_hydroxyl_3_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Third hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (cl_hydroxyl_4_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Fourth hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                
                 lipidCreatorForm.registered_lipids.Add(new cl_lipid((cl_lipid)currentLipid));
             }
             

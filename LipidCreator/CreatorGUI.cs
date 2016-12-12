@@ -1757,12 +1757,12 @@ namespace LipidCreator
             {
                 if (gl_fa_1_textbox.BackColor == alert_color)
                 {
-                    MessageBox.Show("First fatty acid content not valid!", "Lipid not registable");
+                    MessageBox.Show("First fatty acid length content not valid!", "Lipid not registable");
                     return;
                 }
                 if (gl_fa_2_textbox.BackColor == alert_color)
                 {
-                    MessageBox.Show("Second fatty acid content not valid!", "Lipid not registable");
+                    MessageBox.Show("Second fatty acid length content not valid!", "Lipid not registable");
                     return;
                 }
                 if (gl_db_1_textbox.BackColor == alert_color)
@@ -1807,7 +1807,7 @@ namespace LipidCreator
                     }
                     if (gl_fa_3_textbox.BackColor == alert_color)
                     {
-                        MessageBox.Show("Third fatty acid content not valid!", "Lipid not registable");
+                        MessageBox.Show("Third fatty acid length content not valid!", "Lipid not registable");
                         return;
                     }
                     if (gl_db_3_textbox.BackColor == alert_color)
@@ -1823,12 +1823,86 @@ namespace LipidCreator
                 }
                 lipidCreatorForm.registered_lipids.Add(new gl_lipid((gl_lipid)currentLipid));
             }
+            
+            
             else if (currentLipid is pl_lipid)
             {
+                if (((pl_lipid)currentLipid).hgValues.Count == 0)
+                {
+                    MessageBox.Show("No head group selected!", "Lipid not registable");
+                    return;                    
+                }
+                
+                if (((pl_lipid)currentLipid).fag1.faTypes["FAx"] && ((pl_lipid)currentLipid).fag2.faTypes["FAx"])
+                {
+                    MessageBox.Show("At least one fatty acid must be selected!", "Lipid not registable");
+                    return;
+                }
+                
+                if (pl_fa_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (pl_fa_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (pl_db_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (pl_db_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (pl_hydroxyl_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (pl_hydroxyl_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+            
                 lipidCreatorForm.registered_lipids.Add(new pl_lipid((pl_lipid)currentLipid));
             }
+            
+            
             else if (currentLipid is sl_lipid)
             {
+                if (((sl_lipid)currentLipid).hgValues.Count == 0)
+                {
+                    MessageBox.Show("No head group selected!", "Lipid not registable");
+                    return;                    
+                }
+                
+                if (sl_lcb_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Long chain base length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (sl_fa_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Fatty acid length content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (sl_db_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("FA double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (sl_db_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("LCB double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                
                 lipidCreatorForm.registered_lipids.Add(new sl_lipid((sl_lipid)currentLipid));
             }
             refresh_registered_lipids_table();

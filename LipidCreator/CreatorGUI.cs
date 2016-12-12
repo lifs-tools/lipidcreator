@@ -390,9 +390,11 @@ namespace LipidCreator
         public void update_ranges(fattyAcidGroup fag, TextBox tb, int ob_type)
         {
             int max_range = 30;
+            int min_range = 0;
+            if (ob_type < 3) min_range = 2;
             if (ob_type == 3) max_range = 6;
             else if (ob_type == 4) max_range = 29;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, 0,  max_range, ob_type);
+            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, min_range,  max_range, ob_type);
             if (ob_type <= 2)
             {
                 fag.lengths = lengths; 
@@ -969,6 +971,11 @@ namespace LipidCreator
             eastertext.Left = 1030;
             eastertext.Visible = true;
             this.timer1.Enabled = true;
+        }
+        
+        public void sugar_heady(Object sender, EventArgs e)
+        {
+            MessageBox.Show("Who is your sugar heady?");
         }
         
         private void timer1_Tick(object sender, System.Timers.ElapsedEventArgs e)
@@ -1730,12 +1737,90 @@ namespace LipidCreator
         
         public void register_lipid(Object sender, EventArgs e)
         {
-            if (currentLipid is cl_lipid)
+            int cnt_active_adducts = 0;
+            foreach (KeyValuePair<String, bool> adduct in currentLipid.adducts)
             {
+                cnt_active_adducts += adduct.Value ? 1 : 0;
+            }
+            if (cnt_active_adducts < 1)
+            {
+                MessageBox.Show("No adduct selected!", "Lipid not registable");
+                return;
+            }
+        
+            if (currentLipid is cl_lipid)
+            {                
                 lipidCreatorForm.registered_lipids.Add(new cl_lipid((cl_lipid)currentLipid));
             }
+            
             else if (currentLipid is gl_lipid)
             {
+                if (gl_fa_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First fatty acid content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (gl_fa_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second fatty acid content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (gl_db_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (gl_db_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second double bond content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (gl_hydroxyl_1_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("First hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (gl_hydroxyl_2_textbox.BackColor == alert_color)
+                {
+                    MessageBox.Show("Second hydroxyl content not valid!", "Lipid not registable");
+                    return;
+                }
+                if (((gl_lipid)currentLipid).contains_sugar)
+                {
+                    if (((gl_lipid)currentLipid).hgValues.Count == 0)
+                    {
+                        MessageBox.Show("No head group selected!", "Lipid not registable");
+                        return;                    
+                    }
+                    if (((gl_lipid)currentLipid).fag1.faTypes["FAx"] || ((gl_lipid)currentLipid).fag2.faTypes["FAx"])
+                    {
+                        MessageBox.Show("Both fatty acids must be selected!", "Lipid not registable");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (((gl_lipid)currentLipid).fag1.faTypes["FAx"] && ((gl_lipid)currentLipid).fag2.faTypes["FAx"] && ((gl_lipid)currentLipid).fag3.faTypes["FAx"])
+                    {
+                        MessageBox.Show("No fatty acid selected!", "Lipid not registable");
+                        return;
+                    }
+                    if (gl_fa_3_textbox.BackColor == alert_color)
+                    {
+                        MessageBox.Show("Third fatty acid content not valid!", "Lipid not registable");
+                        return;
+                    }
+                    if (gl_db_3_textbox.BackColor == alert_color)
+                    {
+                        MessageBox.Show("Third double bond content not valid!", "Lipid not registable");
+                        return;
+                    }
+                    if (gl_hydroxyl_3_textbox.BackColor == alert_color)
+                    {
+                        MessageBox.Show("Third hydroxyl content not valid!", "Lipid not registable");
+                        return;
+                    }
+                }
                 lipidCreatorForm.registered_lipids.Add(new gl_lipid((gl_lipid)currentLipid));
             }
             else if (currentLipid is pl_lipid)

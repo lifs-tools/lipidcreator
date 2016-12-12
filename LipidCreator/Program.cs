@@ -857,6 +857,10 @@ namespace LipidCreator
                                                                                 fa4 = new fatty_acid(0, 0, "FA");
                                                                                 contains_mono_lyso |= 8;
                                                                             }
+                                                                            
+                                                                            
+                                                                            
+                                                                            
                                                                             List<fatty_acid> sorted_acids = new List<fatty_acid>();
                                                                             sorted_acids.Add(fa1);
                                                                             sorted_acids.Add(fa2);
@@ -875,11 +879,6 @@ namespace LipidCreator
                                                                             }
                                                                             if (!used_keys.Contains(key))
                                                                             {
-                                                                            
-                                                                            
-                                                                            
-                                                                            
-                                                                            
                                                                             
                                                                             
                                                                                 foreach (KeyValuePair<string, bool> adduct in adducts)

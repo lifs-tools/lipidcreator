@@ -364,7 +364,7 @@ namespace LipidCreator
             int db_length = 70;
             int sep = 15;
             int sepText = 20;
-            int fa_length = 140;
+            int fa_length = 150;
             int top_low_buttons = 420;
             int left_groupboxes = 850;
             
@@ -610,6 +610,7 @@ namespace LipidCreator
 
             string formatting_fa = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formatting_db = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
+            string formatting_hydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
 
 
             tab_control.Controls.Add(glycerolipids_tab);
@@ -744,6 +745,7 @@ namespace LipidCreator
             cl_hydroxyl_1_textbox.Location = new Point(cl_db_1_textbox.Left + cl_db_1_textbox.Width + sep, cl_db_1_textbox.Top);
             cl_hydroxyl_1_textbox.TextChanged += new EventHandler(cl_hydroxyl_1_textbox_valueChanged);
             cl_hydroxyl_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(cl_hydroxyl_1_textbox, formatting_hydroxyl);
             cl_hydroxyl_1_label.Width = db_length;
             cl_hydroxyl_1_label.Location = new Point(cl_hydroxyl_1_textbox.Left, cl_hydroxyl_1_textbox.Top - sep);
             cl_hydroxyl_1_label.Text = hydroxyl_text;
@@ -831,6 +833,7 @@ namespace LipidCreator
             cl_hydroxyl_2_textbox.Location = new Point(cl_db_2_textbox.Left + cl_db_2_textbox.Width + sep, cl_db_2_textbox.Top);
             cl_hydroxyl_2_textbox.TextChanged += new EventHandler(cl_hydroxyl_2_textbox_valueChanged);
             cl_hydroxyl_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(cl_hydroxyl_2_textbox, formatting_hydroxyl);
             cl_hydroxyl_2_label.Width = db_length;
             cl_hydroxyl_2_label.Location = new Point(cl_hydroxyl_2_textbox.Left, cl_hydroxyl_2_textbox.Top - sep);
             cl_hydroxyl_2_label.Text = hydroxyl_text;
@@ -878,6 +881,7 @@ namespace LipidCreator
             cl_hydroxyl_3_textbox.Location = new Point(cl_db_3_textbox.Left + cl_db_3_textbox.Width + sep, cl_db_3_textbox.Top);
             cl_hydroxyl_3_textbox.TextChanged += new EventHandler(cl_hydroxyl_3_textbox_valueChanged);
             cl_hydroxyl_3_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(cl_hydroxyl_3_textbox, formatting_hydroxyl);
             cl_hydroxyl_3_label.Width = db_length;
             cl_hydroxyl_3_label.Location = new Point(cl_hydroxyl_3_textbox.Left, cl_hydroxyl_3_textbox.Top - sep);
             cl_hydroxyl_3_label.Text = hydroxyl_text;
@@ -899,11 +903,11 @@ namespace LipidCreator
 
 
             
-            cl_representative_fa.Location = new Point(left_groupboxes, 20);
+            cl_representative_fa.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
             cl_representative_fa.Width = 120;
             cl_representative_fa.Text = "First FA representative";
             cl_representative_fa.CheckedChanged += new EventHandler(cl_representative_fa_checkedChanged);
-            cl_representative_fa.BringToFront();
+            cl_representative_fa.SendToBack();
 
 
 
@@ -930,6 +934,7 @@ namespace LipidCreator
             cl_hydroxyl_4_textbox.Location = new Point(cl_db_4_textbox.Left + cl_db_4_textbox.Width + sep, cl_db_4_textbox.Top);
             cl_hydroxyl_4_textbox.TextChanged += new EventHandler(cl_hydroxyl_4_textbox_valueChanged);
             cl_hydroxyl_4_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(cl_hydroxyl_4_textbox, formatting_hydroxyl);
             cl_hydroxyl_4_label.Width = db_length;
             cl_hydroxyl_4_label.Location = new Point(cl_hydroxyl_4_textbox.Left, cl_hydroxyl_4_textbox.Top - sep);
             cl_hydroxyl_4_label.Text = hydroxyl_text;
@@ -1034,6 +1039,7 @@ namespace LipidCreator
             gl_hydroxyl_1_textbox.Location = new Point(gl_db_1_textbox.Left + gl_db_1_textbox.Width + sep, gl_db_1_textbox.Top);
             gl_hydroxyl_1_textbox.TextChanged += new EventHandler(gl_hydroxyl_1_textbox_valueChanged);
             gl_hydroxyl_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(gl_hydroxyl_1_textbox, formatting_hydroxyl);
             gl_hydroxyl_1_label.Width = db_length;
             gl_hydroxyl_1_label.Location = new Point(gl_hydroxyl_1_textbox.Left, gl_hydroxyl_1_textbox.Top - sep);
             gl_hydroxyl_1_label.Text = hydroxyl_text;
@@ -1079,6 +1085,7 @@ namespace LipidCreator
             gl_hydroxyl_2_textbox.Location = new Point(gl_db_2_textbox.Left + gl_db_2_textbox.Width + sep, gl_db_2_textbox.Top);
             gl_hydroxyl_2_textbox.TextChanged += new EventHandler(gl_hydroxyl_2_textbox_valueChanged);
             gl_hydroxyl_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(gl_hydroxyl_2_textbox, formatting_hydroxyl);
             gl_hydroxyl_2_label.Width = db_length;
             gl_hydroxyl_2_label.Location = new Point(gl_hydroxyl_2_textbox.Left, gl_hydroxyl_2_textbox.Top - sep);
             gl_hydroxyl_2_label.Text = hydroxyl_text;
@@ -1124,6 +1131,7 @@ namespace LipidCreator
             gl_hydroxyl_3_textbox.Location = new Point(gl_db_3_textbox.Left + gl_db_3_textbox.Width + sep, gl_db_3_textbox.Top);
             gl_hydroxyl_3_textbox.TextChanged += new EventHandler(gl_hydroxyl_3_textbox_valueChanged);
             gl_hydroxyl_3_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(gl_hydroxyl_3_textbox, formatting_hydroxyl);
             gl_hydroxyl_3_label.Width = db_length;
             gl_hydroxyl_3_label.Location = new Point(gl_hydroxyl_3_textbox.Left, gl_hydroxyl_3_textbox.Top - sep);
             gl_hydroxyl_3_label.Text = hydroxyl_text;
@@ -1154,6 +1162,7 @@ namespace LipidCreator
             
             gl_hg_label.Location = new Point(gl_hg_listbox.Left, gl_hg_listbox.Top - sep);
             gl_hg_label.Text = "Sugar head";
+            gl_hg_label.DoubleClick += new EventHandler(sugar_heady);
             gl_hg_label.Visible = false;
             
 
@@ -1212,11 +1221,11 @@ namespace LipidCreator
             gl_contains_sugar.CheckedChanged += new EventHandler(gl_contains_sugar_checkedChanged);
             gl_contains_sugar.BringToFront();
             
-            gl_representative_fa.Location = new Point(left_groupboxes, 20);
+            gl_representative_fa.Location = new Point(gl_hydroxyl_1_textbox.Left + gl_hydroxyl_1_textbox.Width + sep, gl_hydroxyl_1_textbox.Top);
             gl_representative_fa.Width = 120;
             gl_representative_fa.Text = "First FA representative";
             gl_representative_fa.CheckedChanged += new EventHandler(gl_representative_fa_checkedChanged);
-            gl_representative_fa.BringToFront();
+            gl_representative_fa.SendToBack();
 
 
             // tab for phospholipids
@@ -1284,6 +1293,7 @@ namespace LipidCreator
             pl_hydroxyl_1_textbox.Location = new Point(pl_db_1_textbox.Left + pl_db_1_textbox.Width + sep, pl_db_1_textbox.Top);
             pl_hydroxyl_1_textbox.TextChanged += new EventHandler(pl_hydroxyl_1_textbox_valueChanged);
             pl_hydroxyl_1_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(pl_hydroxyl_1_textbox, formatting_hydroxyl);
             pl_hydroxyl_1_label.Width = db_length;
             pl_hydroxyl_1_label.Location = new Point(pl_hydroxyl_1_textbox.Left, pl_hydroxyl_1_textbox.Top - sep);
             pl_hydroxyl_1_label.Text = hydroxyl_text;
@@ -1329,6 +1339,7 @@ namespace LipidCreator
             pl_hydroxyl_2_textbox.Location = new Point(pl_db_2_textbox.Left + pl_db_2_textbox.Width + sep, pl_db_2_textbox.Top);
             pl_hydroxyl_2_textbox.TextChanged += new EventHandler(pl_hydroxyl_2_textbox_valueChanged);
             pl_hydroxyl_2_textbox.GotFocus += new EventHandler(resetTextBoxBackground);
+            toolTip1.SetToolTip(pl_hydroxyl_2_textbox, formatting_hydroxyl);
             pl_hydroxyl_2_label.Width = db_length;
             pl_hydroxyl_2_label.Location = new Point(pl_hydroxyl_2_textbox.Left, pl_hydroxyl_2_textbox.Top - sep);
             pl_hydroxyl_2_label.Text = hydroxyl_text;
@@ -1413,11 +1424,11 @@ namespace LipidCreator
             pl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
             pl_picture_box.SendToBack();
             
-            pl_representative_fa.Location = new Point(left_groupboxes, 20);
+            pl_representative_fa.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
             pl_representative_fa.Width = 120;
             pl_representative_fa.Text = "First FA representative";
             pl_representative_fa.CheckedChanged += new EventHandler(pl_representative_fa_checkedChanged);
-            pl_representative_fa.BringToFront();
+            pl_representative_fa.SendToBack();
 
 
 

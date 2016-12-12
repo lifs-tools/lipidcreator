@@ -1890,25 +1890,37 @@ namespace LipidCreator
         
         protected void menuImport_Click(object sender, System.EventArgs e)
         {
-            XDocument doc;
-            try 
+        
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                doc = XDocument.Load("/tmp/lipids.lcXML");
-                lipidCreatorForm.import(doc);
-                refresh_registered_lipids_table();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+               XDocument doc;
+                try 
+                {
+                    doc = XDocument.Load(openFileDialog1.FileName);
+                    lipidCreatorForm.import(doc);
+                    refresh_registered_lipids_table();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+                }
             }
         }
         
         protected void menuExport_Click(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
+            
+            saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.FilterIndex = 0;
             saveFileDialog1.RestoreDirectory = true;
 
             if(saveFileDialog1.ShowDialog() == DialogResult.OK)

@@ -168,9 +168,38 @@ namespace LipidCreator
         
         public void import(XElement node)
         {
+            chainType = Convert.ToInt32(node.Attribute("chainType").Value);
+            lengthInfo = node.Attribute("lengthInfo").Value;
+            dbInfo = node.Attribute("dbInfo").Value;
+            hydroxylInfo = node.Attribute("hydroxylInfo").Value;
+            
+            lengths.Clear();
+            dbs.Clear();
+            hydroxyls.Clear();
+        
             foreach(XElement child in node.Elements())
             {
-                Console.WriteLine(child.Name);
+                switch (child.Name.ToString())
+                {
+                    case "faType":
+                        faTypes[child.Attribute("type").Value.ToString()] = child.Value == "1";
+                        break;
+                        
+                    case "length":
+                        lengths.Add(Convert.ToInt32(child.Value.ToString()));
+                        break;
+                        
+                    case "doublebond":
+                        dbs.Add(Convert.ToInt32(child.Value.ToString()));
+                        break;
+                        
+                    case "hydroxyl":
+                        hydroxyls.Add(Convert.ToInt32(child.Value.ToString()));
+                        break;
+                        
+                    default:
+                        throw new Exception();
+                }
             }
         }
         
@@ -244,6 +273,49 @@ namespace LipidCreator
             }
             xml += "</MS2Fragment>\n";
             return xml;
+        }
+        
+        public void import(XElement node)
+        {
+            Dictionary<String, int> ElementPositions = new Dictionary<String, int>(){
+                {"C", 0},
+                {"H", 1},
+                {"O", 2},
+                {"N", 3},
+                {"P", 4},
+                {"S", 5},
+                {"Na", 6}
+            };
+        
+            restrictions.Clear();
+            fragmentBase.Clear();
+        
+            fragmentName = node.Attribute("fragmentName").Value.ToString();
+            fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
+            fragmentFile = node.Attribute("fragmentFile").Value.ToString();
+            fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
+            
+            
+            foreach(XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "restriction":
+                        restrictions.Add(child.Value.ToString());
+                        break;
+                        
+                    case "fragmentBase":
+                        fragmentBase.Add(child.Value.ToString());
+                        break;
+                        
+                    case "Element":
+                        fragmentElements.Rows[ElementPositions[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
+                        break;
+                        
+                    default:
+                        throw new Exception();
+                }
+            }
         }
     
         public static void addCounts(DataTable dt1, DataTable dt2)
@@ -396,6 +468,16 @@ namespace LipidCreator
             return elements;
         }
     
+        public MS2Fragment()
+        {
+            fragmentName = "-";
+            fragmentCharge = -1;
+            fragmentFile = "-";
+            fragmentSelected = true;
+            fragmentElements = createEmptyElementTable();
+            fragmentBase = new ArrayList();
+            restrictions = new HashSet<string>();
+        }
 
         public MS2Fragment(String name, String fileName)
         {
@@ -479,10 +561,6 @@ namespace LipidCreator
         {
             string xml = "<className>" + className + "</className>\n";
             xml += "<representativeFA>" + (representative_fa ? 1 : 0) + "</representativeFA>\n";
-            foreach (KeyValuePair<String, String> item in paths_to_full_image)
-            {
-                xml += "<pathToImage type=\"" + item.Key + "\">" + item.Value + "</pathToImage>\n";
-            }            
             foreach (KeyValuePair<String, bool> item in adducts)
             {
                 xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
@@ -576,7 +654,42 @@ namespace LipidCreator
             }
             return charge;
         }
+        
+        
+        public virtual void import(XElement node)
+        {
+            switch (node.Name.ToString())
+            {
+                case "className":
+                    className = node.Value.ToString();
+                    break;
+                    
+                case "representativeFA":
+                    representative_fa = node.Value == "1";
+                    break;
+                    
+                case "adduct":
+                    string adductKey = node.Attribute("type").Value.ToString();
+                    adducts[adductKey] = node.Value == "1";
+                    break;
+                    
+                case "MS2FragmentGroup":
+                    string fragmentKey = node.Attribute("name").Value.ToString();
+                    foreach (XElement fragment in node.Elements()){
+                        MS2Fragment ms2fragment = new MS2Fragment();
+                        ms2fragment.import(fragment);
+                        MS2Fragments[fragmentKey].Add(ms2fragment);
+                    }
+                    break;
+                    
+                default:
+                    Console.WriteLine("Error: " + node.Name.ToString());
+                    throw new Exception();
+            }
+        }
     }
+    
+    
 
     [Serializable]
     public class cl_lipid : lipid
@@ -598,7 +711,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
             {
                 if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
-                if (all_fragments.ContainsKey(kvp.Key))
+                if (all_fragments != null && all_fragments.ContainsKey(kvp.Key))
                 {
                     foreach (MS2Fragment fragment in all_fragments[kvp.Key])
                     {
@@ -626,6 +739,45 @@ namespace LipidCreator
             xml += base.serialize();
             xml += "</lipid>\n";
             return xml;
+        }
+        
+        public override void import(XElement node)
+        {
+            int fa_counter = 0;
+            foreach (XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "fattyAcidGroup":
+                        if (fa_counter == 0)
+                        {
+                            fag1.import(child);
+                        }
+                        else if (fa_counter == 1)
+                        {
+                            fag2.import(child);
+                        }
+                        else if (fa_counter == 2)
+                        {
+                            fag3.import(child);
+                        }
+                        else if (fa_counter == 3)
+                        {
+                            fag4.import(child);
+                        }
+                        else
+                        {   
+                            Console.WriteLine("Error, fatty acid");
+                            throw new Exception();
+                        }
+                        ++fa_counter;
+                        break;
+                        
+                    default:
+                        base.import(child);
+                        break;
+                }
+            }
         }
         
         public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
@@ -845,7 +997,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
             {
                 if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
-                if (all_fragments.ContainsKey(kvp.Key))
+                if (all_fragments != null && all_fragments.ContainsKey(kvp.Key))
                 {
                     foreach (MS2Fragment fragment in all_fragments[kvp.Key])
                     {
@@ -887,9 +1039,10 @@ namespace LipidCreator
         }
         
         
-        public void import(XElement node)
+        public override void import(XElement node)
         {
             int fa_counter = 0;
+            hgValues.Clear();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -903,39 +1056,30 @@ namespace LipidCreator
                         {
                             fag2.import(child);
                         }
-                        if (fa_counter == 2)
+                        else if (fa_counter == 2)
                         {
                             fag3.import(child);
                         }
-                        else throw new Exception();
+                        else
+                        {   
+                            Console.WriteLine("Error, fatty acid");
+                            throw new Exception();
+                        }
                         ++fa_counter;
+                        break;
+                        
+                    case "headGroup":
+                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
                         break;
                         
                     case "containsSugar":
                         contains_sugar = child.Value == "1";
                         break;
                         
-                    case "className":
-                        className = child.Value.ToString();
-                        break;
-                        
-                    case "representativeFA":
-                        representative_fa = child.Value == "1";
-                        break;
-                    
-                    case "pathToImage":
-                        break;
-                        
-                    case "adduct":
-                        string key = child.Attribute("type").Value.ToString();
-                        adducts[key] = child.Value == "1";
-                        break;
-                        
-                    case "MS2FragmentGroup":
-                        break;
                         
                     default:
-                        throw new Exception();
+                        base.import(child);
+                        break;
                 }
             }
         }
@@ -1112,7 +1256,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
             {
                 if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
-                if (all_fragments.ContainsKey(kvp.Key))
+                if (all_fragments != null && all_fragments.ContainsKey(kvp.Key))
                 {
                     foreach (MS2Fragment fragment in all_fragments[kvp.Key])
                     {
@@ -1145,6 +1289,43 @@ namespace LipidCreator
             xml += base.serialize();
             xml += "</lipid>\n";
             return xml;
+        }
+        
+        public override void import(XElement node)
+        {
+            int fa_counter = 0;
+            hgValues.Clear();
+            foreach (XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "fattyAcidGroup":
+                        if (fa_counter == 0)
+                        {
+                            fag1.import(child);
+                        }
+                        else if (fa_counter == 1)
+                        {
+                            fag2.import(child);
+                        }
+                        else
+                        {   
+                            Console.WriteLine("Error, fatty acid");
+                            throw new Exception();
+                        }
+                        ++fa_counter;
+                        break;
+                        
+                    case "headGroup":
+                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
+                        break;
+                        
+                        
+                    default:
+                        base.import(child);
+                        break;
+                }
+            }
         }
         
         
@@ -1315,7 +1496,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
             {
                 if (all_paths.ContainsKey(kvp.Key)) paths_to_full_image.Add(kvp.Key, all_paths[kvp.Key]);
-                if (all_fragments.ContainsKey(kvp.Key))
+                if (all_fragments != null && all_fragments.ContainsKey(kvp.Key))
                 {
                     foreach (MS2Fragment fragment in all_fragments[kvp.Key])
                     {
@@ -1353,6 +1534,51 @@ namespace LipidCreator
             xml += base.serialize();
             xml += "</lipid>\n";
             return xml;
+        }
+        
+        public override void import(XElement node)
+        {
+            int fa_counter = 0;
+            hgValues.Clear();
+            foreach (XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "fattyAcidGroup":
+                        if (fa_counter == 0)
+                        {
+                            lcb.import(child);
+                        }
+                        else if (fa_counter == 1)
+                        {
+                            fag.import(child);
+                        }
+                        else
+                        {   
+                            Console.WriteLine("Error, fatty acid");
+                            throw new Exception();
+                        }
+                        ++fa_counter;
+                        break;
+                        
+                    case "lcbHydroxyValue":
+                        lcb_hydroxyValue = Convert.ToInt32(child.Value.ToString());
+                        break;
+                        
+                    case "faHydroxyValue":
+                        fa_hydroxyValue = Convert.ToInt32(child.Value.ToString());
+                        break;
+                        
+                    case "headGroup":
+                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
+                        break;
+                        
+                        
+                    default:
+                        base.import(child);
+                        break;
+                }
+            }
         }
         
         
@@ -1800,21 +2026,31 @@ namespace LipidCreator
                 switch (lipid_type)
                 {
                     case "CL":
+                        cl_lipid cll = new cl_lipid(all_paths_to_precursor_images, null);
+                        cll.import(lipid);
+                        registered_lipids.Add(cll);
                         break;
                         
                     case "GL":
-                        gl_lipid gll = new gl_lipid(all_paths_to_precursor_images, all_fragments);
+                        gl_lipid gll = new gl_lipid(all_paths_to_precursor_images, null);
                         gll.import(lipid);
                         registered_lipids.Add(gll);
                         break;
                         
                     case "PL":
+                        pl_lipid pll = new pl_lipid(all_paths_to_precursor_images, null);
+                        pll.import(lipid);
+                        registered_lipids.Add(pll);
                         break;
                         
                     case "SL":
+                        sl_lipid sll = new sl_lipid(all_paths_to_precursor_images, null);
+                        sll.import(lipid);
+                        registered_lipids.Add(sll);
                         break;
                         
                     default:
+                        Console.WriteLine("Error global import");
                         throw new Exception();
                 }
             }

@@ -666,15 +666,6 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(cl_hydroxyl_3_label);
             phospholipids_tab.Controls.Add(cl_hydroxyl_4_label);
             
-            /*
-            cardiolipins_tab.Parent = tab_control;
-            cardiolipins_tab.Text = "Cardiolipins";
-            cardiolipins_tab.Location = new Point(0, 0);
-            cardiolipins_tab.Size = this.Size;
-            cardiolipins_tab.AutoSize = true;
-            cardiolipins_tab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            cardiolipins_tab.BackColor = Color.White;
-            */
             
             
             cl_fa_1_gb_1_checkbox_3.Visible = false;

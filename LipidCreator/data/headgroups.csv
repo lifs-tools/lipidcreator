@@ -1,14 +1,16 @@
 HG,C,H,O,N,P,S,Na,file
-#GB3Cer,18,31,15,0,0,0,0,
-#GM3Cer,23,38,18,1,0,0,0,
-#GM4Cer,17,28,13,1,0,0,0,
 #Lc3Cer,20,34,15,1,0,0,0,
 Cer,0,1,0,0,0,0,0,images/MS2/Cer_pos_pre.png
 CerP,0,2,3,0,1,0,0,images/MS2/CerP_pos_pre.png
 CL,9,18,13,0,2,0,0,images/MS2/CL_neg_pre.png
 DG,3,6,3,0,0,0,0,images/MS2/DG_pos_pre.png
-#DGDG,15,26,13,0,0,0,0,
+DGDG,15,26,13,0,0,0,0,images/MS2/DGDG_neg_pre.png
 DMPE,7,16,6,1,1,0,0,images/MS2/DMPE_pos_pre.png
+GB3Cer,18,31,15,0,0,0,0,
+GB4Cer,26,44,20,1,0,0,0,
+GD3Cer,34,55,26,2,0,0,0,
+GM3Cer,23,38,18,1,0,0,0,
+GM4Cer,17,28,13,1,0,0,0,
 HexCer,6,11,5,0,0,0,0,images/MS2/HexCer_pos_pre.png
 HexCerS,6,11,8,0,0,1,0,images/MS2/HexCerS_pos_pre.png
 LacCer,12,21,10,0,0,0,0,images/MS2/LacCer_pos_pre.png
@@ -39,5 +41,5 @@ SM,5,13,3,1,1,0,0,images/MS2/SM_pos_pre.png
 SPC,5,14,3,1,1,0,0,images/MS2/SPC_pos_pre.png
 SPH,0,2,0,0,0,0,0,images/MS2/SPH_pos_pre.png
 SPH-P,0,3,3,0,1,0,0,images/MS2/SPH-P_pos_pre.png
-#SQDG,9,16,10,0,0,1,0,
+SQDG,9,16,10,0,0,1,0,images/MS2/SQDG_neg_pre.png
 TG,3,5,3,0,0,0,0,images/MS2/TG_pos_pre.png

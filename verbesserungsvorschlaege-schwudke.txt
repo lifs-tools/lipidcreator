@@ -1,0 +1,21 @@
+- In PL, headgroups should be multiple choice / check
+- Button for switching modes: one FA description for all FAs or every FA individually
+- No of hydroxylations own field / check
+- preview of FA derivative extension when mouse hovers over extension / check
+- use shopping cart / basket logo in "adding lipids" button
+- Possibility to story and load sessions
+- Possibility to load generic predefined organisms, e.g., mouse, human, flying spaghetti monster, ...
+- delete button from cart list
+- delete button from review list
+- Expert mode for define length / double bond / hydroxyl tuples
+- Cardiolipins expandable subversion of phospholipids / check
+
+- MS2 Fragmente-Fenster horizontal anordnen
+- SL headgroups größer / check
+- CL nach rechts / unten verschieben
+- Adducts nur für spezielle Classen
+- Suche nach Replikaten
+- MS2: (un)select all
+- MS2: Tab nach ausgewählter Headgruppe öffnen
+- Einen predefined Ordner erstellen
+- Nichtmarkierte FAs nicht in Grid anzeigen

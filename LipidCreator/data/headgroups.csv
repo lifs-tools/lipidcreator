@@ -6,11 +6,11 @@ CL,9,18,13,0,2,0,0,images/MS2/CL_neg_pre.png
 DG,3,6,3,0,0,0,0,images/MS2/DG_pos_pre.png
 DGDG,15,26,13,0,0,0,0,images/MS2/DGDG_neg_pre.png
 DMPE,7,16,6,1,1,0,0,images/MS2/DMPE_pos_pre.png
-GB3Cer,18,31,15,0,0,0,0,
-GB4Cer,26,44,20,1,0,0,0,
-GD3Cer,34,55,26,2,0,0,0,
-GM3Cer,23,38,18,1,0,0,0,
-GM4Cer,17,28,13,1,0,0,0,
+GB3Cer,18,31,15,0,0,0,0,images/MS2/GB3Cer_pos_pre.png
+GB4Cer,26,44,20,1,0,0,0,images/MS2/GB4Cer_pos_pre.png
+GD3Cer,34,55,26,2,0,0,0,images/MS2/GD3Cer_neg_pre.png
+GM3Cer,23,38,18,1,0,0,0,images/MS2/GM3Cer_neg_pre.png
+GM4Cer,17,28,13,1,0,0,0,images/MS2/GM4Cer_neg_pre.png
 HexCer,6,11,5,0,0,0,0,images/MS2/HexCer_pos_pre.png
 HexCerS,6,11,8,0,0,1,0,images/MS2/HexCerS_pos_pre.png
 LacCer,12,21,10,0,0,0,0,images/MS2/LacCer_pos_pre.png

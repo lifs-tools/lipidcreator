@@ -1459,7 +1459,7 @@ namespace LipidCreator
     [Serializable]
     public class sl_lipid : lipid
     {
-        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "Lc3Cer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "SPH-P", "SPC"};
+        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPH", "SPH-P", "SPC"};
         public List<int> hgValues;
         public fattyAcidGroup fag;
         public fattyAcidGroup lcb;       
@@ -1476,12 +1476,13 @@ namespace LipidCreator
             MS2Fragments.Add("Cer", new ArrayList());
             MS2Fragments.Add("CerP", new ArrayList());
             MS2Fragments.Add("GB3Cer", new ArrayList());
+            MS2Fragments.Add("GB4Cer", new ArrayList());
+            MS2Fragments.Add("GD3Cer", new ArrayList());
             MS2Fragments.Add("GM3Cer", new ArrayList());
             MS2Fragments.Add("GM4Cer", new ArrayList());
             MS2Fragments.Add("HexCer", new ArrayList());
             MS2Fragments.Add("HexCerS", new ArrayList());
             MS2Fragments.Add("LacCer", new ArrayList());
-            MS2Fragments.Add("Lc3Cer", new ArrayList());
             MS2Fragments.Add("MIPCer", new ArrayList());
             MS2Fragments.Add("MIP2Cer", new ArrayList());
             MS2Fragments.Add("PECer", new ArrayList());
@@ -1762,76 +1763,101 @@ namespace LipidCreator
                 Console.WriteLine(e.Message);
             }
             */
-            
-            String ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
-            line_counter = 1;
-            try
+            string ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
+            if (File.Exists(ms2fragments_file))
             {
-                using (StreamReader sr = new StreamReader(ms2fragments_file))
+                line_counter = 1;
+                try
                 {
-                    // omit titles
-                    String line = sr.ReadLine();
-                    while((line = sr.ReadLine()) != null)
+                    using (StreamReader sr = new StreamReader(ms2fragments_file))
                     {
-                        if (line.Length < 2) continue;
-                        if (line[0] == '#') continue;
-                        String[] tokens = line.Split(new char[] {','});
-                        if (!all_fragments.ContainsKey(tokens[0]))
+                        // omit titles
+                        String line = sr.ReadLine();
+                        while((line = sr.ReadLine()) != null)
                         {
-                            all_fragments.Add(tokens[0], new ArrayList());
+                            line_counter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            String[] tokens = line.Split(new char[] {','});
+                            if (!all_fragments.ContainsKey(tokens[0]))
+                            {
+                                all_fragments.Add(tokens[0], new ArrayList());
+                            }
+                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                            atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[5]);
+                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[6]);
+                            atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[7]);
+                            atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[8]);
+                            atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[9]);
+                            atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[10]);
+                            atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[11]);
+                            string fragment_file = (opened_as_external ? prefix_path : "") + tokens[2];
+                            if (!File.Exists(fragment_file))
+                            {
+                                Console.WriteLine("Error (" + line_counter + "): MS2 fragment file " + fragment_file + " does not exist or can not be opened.");
+                            }
+                            
+                            all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragment_file, true, atomsCount, tokens[4], tokens[12]));
                         }
-                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                        atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[5]);
-                        atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[6]);
-                        atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[7]);
-                        atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[8]);
-                        atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[9]);
-                        atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[10]);
-                        atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[11]);
-                        
-                        all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), (opened_as_external ? prefix_path : "") + tokens[2], true, atomsCount, tokens[4], tokens[12]));
-                        line_counter++;
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The file '" + ms2fragments_file + "' in line '" + line_counter + "' could not be read:");
-                Console.WriteLine(e.Message);
-            }
-            
-            
-            String headgroups_file = (opened_as_external ? prefix_path : "") + "data/headgroups.csv";
-            line_counter = 1;
-            try
-            {
-                using (StreamReader sr = new StreamReader(headgroups_file))
+                catch (Exception e)
                 {
-                    // omit titles
-                    String line = sr.ReadLine();
-                    while((line = sr.ReadLine()) != null)
-                    {
-                        if (line.Length < 2) continue;
-                        if (line[0] == '#') continue;
-                        String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                        if (tokens.Length != 9) throw new Exception("invalid line in file");
-                        headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
-                        headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
-                        headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
-                        headgroups[tokens[0]].Rows[2]["Count"] = Convert.ToInt32(tokens[3]);
-                        headgroups[tokens[0]].Rows[3]["Count"] = Convert.ToInt32(tokens[4]);
-                        headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
-                        headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
-                        headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
-                        all_paths_to_precursor_images.Add(tokens[0], (opened_as_external ? prefix_path : "") + tokens[8]);
-                        line_counter++;
-                    }
+                    Console.WriteLine("The file '" + ms2fragments_file + "' in line '" + line_counter + "' could not be read:");
+                    Console.WriteLine(e.Message);
                 }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine("The file '" + headgroups_file + "' in line '" + line_counter + "' could not be read:");
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Error: file " + ms2fragments_file + " does not exist or can not be opened.");
+            }
+            
+            
+            
+            
+            string headgroups_file = (opened_as_external ? prefix_path : "") + "data/headgroups.csv";
+            if (File.Exists(headgroups_file))
+            {
+                line_counter = 1;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(headgroups_file))
+                    {
+                        // omit titles
+                        String line = sr.ReadLine();
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            line_counter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
+                            if (tokens.Length != 9) throw new Exception("invalid line in file");
+                            headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
+                            headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
+                            headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
+                            headgroups[tokens[0]].Rows[2]["Count"] = Convert.ToInt32(tokens[3]);
+                            headgroups[tokens[0]].Rows[3]["Count"] = Convert.ToInt32(tokens[4]);
+                            headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
+                            headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
+                            headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
+                            string precursor_file = (opened_as_external ? prefix_path : "") + tokens[8];
+                            if (!File.Exists(precursor_file))
+                            {
+                                Console.WriteLine("Error (" + line_counter + "): precursor file " + precursor_file + " does not exist or can not be opened.");
+                            }
+                            all_paths_to_precursor_images.Add(tokens[0], precursor_file);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("The file '" + headgroups_file + "' in line '" + line_counter + "' could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: file " + headgroups_file + " does not exist or can not be opened.");
             }
             
             lipidTabList = new ArrayList(new lipid[] {new cl_lipid(all_paths_to_precursor_images, all_fragments),

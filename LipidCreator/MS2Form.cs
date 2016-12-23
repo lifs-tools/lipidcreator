@@ -40,6 +40,38 @@ namespace LipidCreator
         {
             pictureBox1.Image = fragment_complete;
         }
+        
+        void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+            {
+                checkedListBox1.SetItemChecked(i, true);
+            }
+        }
+        
+        void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+            {
+                checkedListBox1.SetItemChecked(i, false);
+            }
+        }
+        
+        void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox2.Items.Count; ++i)
+            {
+                checkedListBox2.SetItemChecked(i, true);
+            }
+        }
+        
+        void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox2.Items.Count; ++i)
+            {
+                checkedListBox2.SetItemChecked(i, false);
+            }
+        }
 
         private void checkedListBox1_MouseHover(object sender, MouseEventArgs e)
         {
@@ -86,13 +118,18 @@ namespace LipidCreator
 
         public void tabChange(int index)
         {
-            ((TabPage)tabPages[index]).Controls.Add(dataGridView1);
             ((TabPage)tabPages[index]).Controls.Add(checkedListBox2);
             ((TabPage)tabPages[index]).Controls.Add(label1);
             ((TabPage)tabPages[index]).Controls.Add(label2);
             ((TabPage)tabPages[index]).Controls.Add(label3);
             ((TabPage)tabPages[index]).Controls.Add(label4);
             ((TabPage)tabPages[index]).Controls.Add(label5);
+            ((TabPage)tabPages[index]).Controls.Add(label6);
+            ((TabPage)tabPages[index]).Controls.Add(label7);
+            ((TabPage)tabPages[index]).Controls.Add(label8);
+            ((TabPage)tabPages[index]).Controls.Add(label9);
+            ((TabPage)tabPages[index]).Controls.Add(label10);
+            ((TabPage)tabPages[index]).Controls.Add(label11);
             ((TabPage)tabPages[index]).Controls.Add(checkedListBox1);
             ((TabPage)tabPages[index]).Controls.Add(pictureBox1);
             negativeIDs.Clear();
@@ -119,9 +156,9 @@ namespace LipidCreator
                 }
             }
             
-            if (currentLipid.paths_to_full_image.ContainsKey(lipidClass))
+            if (currentLipid.pathsToFullImage.ContainsKey(lipidClass))
             {
-                fragment_complete = Image.FromFile((String)currentLipid.paths_to_full_image[lipidClass]);
+                fragment_complete = Image.FromFile((String)currentLipid.pathsToFullImage[lipidClass]);
                 pictureBox1.Image = fragment_complete;
             }
             else

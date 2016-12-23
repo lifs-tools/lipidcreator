@@ -29,6 +29,8 @@ namespace LipidCreator
         }
 
         #region Windows Form Designer generated code
+        private Image trashImage;
+        
         private System.Timers.Timer timer1;
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem menuFile;
@@ -205,9 +207,9 @@ namespace LipidCreator
         CheckBox sl_neg_adduct_checkbox_3;
         CheckBox sl_neg_adduct_checkbox_4;
         
-        CheckBox cl_representative_fa;
-        CheckBox gl_representative_fa;
-        CheckBox pl_representative_fa;
+        CheckBox clRepresentativeFA;
+        CheckBox glRepresentativeFA;
+        CheckBox plRepresentativeFA;
 
         TextBox cl_db_1_textbox;
         TextBox cl_db_2_textbox;
@@ -542,9 +544,9 @@ namespace LipidCreator
             pl_fa_2_gb_1_checkbox_1 = new CheckBox();
             pl_fa_2_gb_1_checkbox_2 = new CheckBox();
             pl_fa_2_gb_1_checkbox_3 = new CheckBox();
-            cl_representative_fa = new CheckBox();
-            gl_representative_fa = new CheckBox();
-            pl_representative_fa = new CheckBox();
+            clRepresentativeFA = new CheckBox();
+            glRepresentativeFA = new CheckBox();
+            plRepresentativeFA = new CheckBox();
             pl_is_cl = new CheckBox();
             gl_contains_sugar = new CheckBox();
 
@@ -649,7 +651,7 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(cl_db_2_textbox);
             phospholipids_tab.Controls.Add(cl_db_3_textbox);
             phospholipids_tab.Controls.Add(cl_db_4_textbox);
-            phospholipids_tab.Controls.Add(cl_representative_fa);
+            phospholipids_tab.Controls.Add(clRepresentativeFA);
             phospholipids_tab.Controls.Add(cl_hydroxyl_1_textbox);
             phospholipids_tab.Controls.Add(cl_hydroxyl_2_textbox);
             phospholipids_tab.Controls.Add(cl_hydroxyl_3_textbox);
@@ -712,7 +714,7 @@ namespace LipidCreator
             cl_hydroxyl_2_label.Visible = false;
             cl_hydroxyl_3_label.Visible = false;
             cl_hydroxyl_4_label.Visible = false;
-            cl_representative_fa.Visible = false;
+            clRepresentativeFA.Visible = false;
             
 
             cl_picture_box.Image = cardio_backbone_image;
@@ -894,11 +896,11 @@ namespace LipidCreator
 
 
             
-            cl_representative_fa.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
-            cl_representative_fa.Width = 120;
-            cl_representative_fa.Text = "First FA representative";
-            cl_representative_fa.CheckedChanged += new EventHandler(cl_representative_fa_checkedChanged);
-            cl_representative_fa.SendToBack();
+            clRepresentativeFA.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
+            clRepresentativeFA.Width = 120;
+            clRepresentativeFA.Text = "First FA representative";
+            clRepresentativeFA.CheckedChanged += new EventHandler(clRepresentativeFA_checkedChanged);
+            clRepresentativeFA.SendToBack();
 
 
 
@@ -980,7 +982,7 @@ namespace LipidCreator
             glycerolipids_tab.Controls.Add(gl_hydroxyl_1_label);
             glycerolipids_tab.Controls.Add(gl_hydroxyl_2_label);
             glycerolipids_tab.Controls.Add(gl_hydroxyl_3_label);
-            glycerolipids_tab.Controls.Add(gl_representative_fa);
+            glycerolipids_tab.Controls.Add(glRepresentativeFA);
             glycerolipids_tab.Controls.Add(gl_positive_adduct);
             glycerolipids_tab.Controls.Add(gl_negative_adduct);
             glycerolipids_tab.Controls.Add(eastertext);
@@ -1200,11 +1202,11 @@ namespace LipidCreator
             gl_contains_sugar.CheckedChanged += new EventHandler(gl_contains_sugar_checkedChanged);
             gl_contains_sugar.BringToFront();
             
-            gl_representative_fa.Location = new Point(gl_hydroxyl_1_textbox.Left + gl_hydroxyl_1_textbox.Width + sep, gl_hydroxyl_1_textbox.Top);
-            gl_representative_fa.Width = 120;
-            gl_representative_fa.Text = "First FA representative";
-            gl_representative_fa.CheckedChanged += new EventHandler(gl_representative_fa_checkedChanged);
-            gl_representative_fa.SendToBack();
+            glRepresentativeFA.Location = new Point(gl_hydroxyl_1_textbox.Left + gl_hydroxyl_1_textbox.Width + sep, gl_hydroxyl_1_textbox.Top);
+            glRepresentativeFA.Width = 120;
+            glRepresentativeFA.Text = "First FA representative";
+            glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFA_checkedChanged);
+            glRepresentativeFA.SendToBack();
 
 
             // tab for phospholipids
@@ -1234,7 +1236,7 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(pl_hydroxyl_2_label);
             phospholipids_tab.Controls.Add(pl_hg_listbox);
             phospholipids_tab.Controls.Add(pl_hg_label);
-            phospholipids_tab.Controls.Add(pl_representative_fa);
+            phospholipids_tab.Controls.Add(plRepresentativeFA);
             phospholipids_tab.Controls.Add(pl_positive_adduct);
             phospholipids_tab.Controls.Add(pl_negative_adduct);
             phospholipids_tab.Parent = tab_control;
@@ -1397,11 +1399,11 @@ namespace LipidCreator
             pl_picture_box.SizeMode = PictureBoxSizeMode.AutoSize;
             pl_picture_box.SendToBack();
             
-            pl_representative_fa.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
-            pl_representative_fa.Width = 120;
-            pl_representative_fa.Text = "First FA representative";
-            pl_representative_fa.CheckedChanged += new EventHandler(pl_representative_fa_checkedChanged);
-            pl_representative_fa.SendToBack();
+            plRepresentativeFA.Location = new Point(cl_hydroxyl_1_textbox.Left + cl_hydroxyl_1_textbox.Width + sep, cl_hydroxyl_1_textbox.Top);
+            plRepresentativeFA.Width = 120;
+            plRepresentativeFA.Text = "First FA representative";
+            plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFA_checkedChanged);
+            plRepresentativeFA.SendToBack();
 
 
 
@@ -1496,7 +1498,7 @@ namespace LipidCreator
 
             sl_hg_label.BringToFront();
             sl_hg_listbox.Location = new Point(54, 105);
-            sl_hg_listbox.Size = new Size(80, 190);
+            sl_hg_listbox.Size = new Size(80, 210);
             sl_hg_listbox.BringToFront();
             sl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
             sl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
@@ -1660,21 +1662,12 @@ namespace LipidCreator
 
             lipids_gridview.AutoSize = true;
             lipids_gridview.Dock = DockStyle.Fill;
-            
             lipids_gridview.DataSource = registered_lipids_datatable;
-            //lipids_gridview.ReadOnly = true;
-            lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            foreach (DataGridViewColumn col in lipids_gridview.Columns)
-            {
-                col.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
             lipids_gridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             lipids_gridview.AllowUserToResizeColumns = false;
             lipids_gridview.AllowUserToAddRows = false;
             lipids_gridview.Width = this.Width;
-            //lipids_gridview.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            //lipids_gridview.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            lipids_gridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            //lipids_gridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             lipids_gridview.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             lipids_gridview.AllowUserToResizeRows = false;
             lipids_gridview.ReadOnly = true;
@@ -1684,6 +1677,11 @@ namespace LipidCreator
             lipids_gridview.DoubleClick += new EventHandler(lipids_gridview_double_click);
             lipids_gridview.KeyDown += new KeyEventHandler(lipids_gridview_keydown);
             lipids_gridview.EditMode = DataGridViewEditMode.EditOnEnter;
+            lipids_gridview.RowHeadersVisible = false;
+            lipids_gridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipids_gridview_DataBindingComplete);
+            
+            trashImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/icon-trash.png");
+            
 
             open_review_form_button.Text = "Review Lipids";
             open_review_form_button.Width = 130;

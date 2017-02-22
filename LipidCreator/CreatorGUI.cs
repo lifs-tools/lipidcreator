@@ -2067,7 +2067,7 @@ namespace LipidCreator
                 lipids_gridview.DataSource = registered_lipids_datatable;
                 for (int i = 0; i < lipids_gridview.Rows.Count; ++i)
                 {
-                    lipids_gridview.Rows[i].Cells["Edit"].Value = trashImage;
+                    lipids_gridview.Rows[i].Cells["Edit"].Value = editImage;
                     lipids_gridview.Rows[i].Cells["Delete"].Value = trashImage;
                 }
                 lipids_gridview.Update();

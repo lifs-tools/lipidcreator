@@ -21,54 +21,54 @@ namespace LipidCreator
         public int db;
         public String suffix;
         public DataTable atomsCount;
+        public FattyAcid(int l, int _db, int _hydro){
+        
+        }
+        
 
-        public FattyAcid(int l, int _db, int LCBhydroxy = 0)
+        public FattyAcid(int l, int _db, int _hydro, bool isLCB = false)
         {
             length = l;
             db = _db;
             suffix = "";
             atomsCount = MS2Fragment.createEmptyElementTable();
             if (l > 0 || _db > 0){
-                if (LCBhydroxy == 0){
-                    atomsCount.Rows[0]["Count"] = l;
-                    atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db;
-                    atomsCount.Rows[2]["Count"] = 1;
+                if (!isLCB){
+                    atomsCount.Rows[0]["Count"] = l; // C
+                    atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
+                    atomsCount.Rows[2]["Count"] = 1 + _hydro; // O
                 }
                 else {
                     // long chain base
-                    atomsCount.Rows[0]["Count"] = l;
-                    atomsCount.Rows[1]["Count"] = (2 * (l + db) + 1);
-                    atomsCount.Rows[2]["Count"] = LCBhydroxy;
-                    atomsCount.Rows[3]["Count"] = 1;
+                    atomsCount.Rows[0]["Count"] = l; // C
+                    atomsCount.Rows[1]["Count"] = (2 * (l + db) + 1); // H
+                    atomsCount.Rows[2]["Count"] = _hydro; // O
+                    atomsCount.Rows[3]["Count"] = 1; // N
                 }
             }
         }
 
-        public FattyAcid(int l, int _db, String _suffix)
+        public FattyAcid(int l, int _db, int _hydro, String _suffix)
         {
             length = l;
             db = _db;
             suffix = (_suffix.Length > 2) ? _suffix.Substring(2, 1) : "";
             atomsCount = MS2Fragment.createEmptyElementTable();
             if (l > 0 || _db > 0){
-                atomsCount.Rows[0]["Count"] = l;
+                atomsCount.Rows[0]["Count"] = l; // C
                 switch(suffix)
                 {
                     case "":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db;
-                        atomsCount.Rows[2]["Count"] = 1;
+                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
+                        atomsCount.Rows[2]["Count"] = 1 + _hydro; // O
                         break;
                     case "p":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db;
-                        atomsCount.Rows[2]["Count"] = 0;
+                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
+                        atomsCount.Rows[2]["Count"] = _hydro; // O
                         break;
                     case "e":
-                        atomsCount.Rows[1]["Count"] = (l + 1) * 2 - 1 - 2 * _db;
-                        atomsCount.Rows[2]["Count"] = 0;
-                        break;
-                    case "h":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db;
-                        atomsCount.Rows[2]["Count"] = 2;
+                        atomsCount.Rows[1]["Count"] = (l + 1) * 2 - 1 - 2 * _db; // H
+                        atomsCount.Rows[2]["Count"] = _hydro; // O
                         break;
                 }
             }
@@ -811,11 +811,11 @@ namespace LipidCreator
                     {
                         if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_kvp_1.Key);
+                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
                             contains_mono_lyso &= ~1;
                             if (fa_kvp_1.Key == "FAx")
                             {
-                                fa1 = new FattyAcid(0, 0, "FA");
+                                fa1 = new FattyAcid(0, 0, 0, "FA");
                                 contains_mono_lyso |= 1;
                             }
                             foreach (int fa_l_2 in fag2.carbonCounts)
@@ -827,11 +827,11 @@ namespace LipidCreator
                                     {
                                         if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_kvp_2.Key);
+                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
                                             contains_mono_lyso &= ~2;
                                             if (fa_kvp_2.Key == "FAx")
                                             {
-                                                fa2 = new FattyAcid(0, 0, "FA");
+                                                fa2 = new FattyAcid(0, 0, 0, "FA");
                                                 contains_mono_lyso |= 2;
                                             }
                                             foreach (int fa_l_3 in fag3.carbonCounts)
@@ -843,11 +843,11 @@ namespace LipidCreator
                                                     {
                                                         if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
                                                         {
-                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_kvp_3.Key);
+                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, 0, fa_kvp_3.Key);
                                                             contains_mono_lyso &= ~4;
                                                             if (fa_kvp_3.Key == "FAx")
                                                             {
-                                                                fa3 = new FattyAcid(0, 0, "FA");
+                                                                fa3 = new FattyAcid(0, 0, 0, "FA");
                                                                 contains_mono_lyso |= 4;
                                                             }
                                                             foreach (int fa_l_4 in fag4.carbonCounts)
@@ -859,11 +859,11 @@ namespace LipidCreator
                                                                     {
                                                                         if (fa_kvp_4.Value && max_db_4 >= fa_db_4)
                                                                         {
-                                                                            FattyAcid fa4 = new FattyAcid(fa_l_4, fa_db_4, fa_kvp_4.Key);
+                                                                            FattyAcid fa4 = new FattyAcid(fa_l_4, fa_db_4, 0, fa_kvp_4.Key);
                                                                             contains_mono_lyso &= ~8;
                                                                             if (fa_kvp_4.Key == "FAx")
                                                                             {
-                                                                                fa4 = new FattyAcid(0, 0, "FA");
+                                                                                fa4 = new FattyAcid(0, 0, 0, "FA");
                                                                                 contains_mono_lyso |= 8;
                                                                             }
                                                                             
@@ -1112,11 +1112,11 @@ namespace LipidCreator
                     {
                         if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_kvp_1.Key);
+                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
                             contains_mono_lyso &= ~1;
                             if (fa_kvp_1.Key == "FAx")
                             {
-                                fa1 = new FattyAcid(0, 0, "FA");
+                                fa1 = new FattyAcid(0, 0, 0, "FA");
                                 contains_mono_lyso |= 1;
                             }
                             foreach (int fa_l_2 in fag2.carbonCounts)
@@ -1128,11 +1128,11 @@ namespace LipidCreator
                                     {
                                         if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_kvp_2.Key);
+                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
                                             contains_mono_lyso &= ~2;
                                             if (fa_kvp_2.Key == "FAx")
                                             {
-                                                fa2 = new FattyAcid(0, 0, "FA");
+                                                fa2 = new FattyAcid(0, 0, 0, "FA");
                                                 contains_mono_lyso |= 2;
                                             }
                                             foreach (int fa_l_3 in fag3.carbonCounts)
@@ -1144,11 +1144,11 @@ namespace LipidCreator
                                                     {
                                                         if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
                                                         {
-                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_kvp_3.Key);
+                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, 0, fa_kvp_3.Key);
                                                             contains_mono_lyso &= ~4;
                                                             if (fa_kvp_3.Key == "FAx")
                                                             {
-                                                                fa3 = new FattyAcid(0, 0, "FA");
+                                                                fa3 = new FattyAcid(0, 0, 0, "FA");
                                                                 contains_mono_lyso |= 4;
                                                             }
                                                                     
@@ -1356,10 +1356,10 @@ namespace LipidCreator
                     {
                         if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_kvp_1.Key);
+                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
                             if (fa_kvp_1.Key == "FAx")
                             {
-                                fa1 = new FattyAcid(0, 0, "FA");
+                                fa1 = new FattyAcid(0, 0, 0, "FA");
                             }
                             foreach (int fa_l_2 in fag2.carbonCounts)
                             {
@@ -1370,10 +1370,10 @@ namespace LipidCreator
                                     {
                                         if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_kvp_2.Key);
+                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
                                             if (fa_kvp_2.Key == "FAx")
                                             {
-                                                fa2 = new FattyAcid(0, 0, "FA");
+                                                fa2 = new FattyAcid(0, 0, 0, "FA");
                                             }
                                                                   
                                             List<FattyAcid> sorted_acids = new List<FattyAcid>();
@@ -1602,7 +1602,7 @@ namespace LipidCreator
                 foreach (int lcb_db_1 in lcb.doubleBondCounts)
                 {
                     if (max_db_1 < lcb_db_1) continue;
-                    FattyAcid lcbType = new FattyAcid(lcb_l, lcb_db_1, lcb_hydroxyValue);
+                    FattyAcid lcbType = new FattyAcid(lcb_l, lcb_db_1, lcb_hydroxyValue, true);
                     foreach (int hgValue in hgValues)
                     {
                         String headgroup = headGroupNames[hgValue];
@@ -1615,7 +1615,7 @@ namespace LipidCreator
                                 foreach (int fa_db_2 in fag.doubleBondCounts)
                                 {
                                     if (max_db_2 < fa_db_2) continue;
-                                    FattyAcid fa = new FattyAcid(fa_l, fa_db_2, "FA");
+                                    FattyAcid fa = new FattyAcid(fa_l, fa_db_2, fa_hydroxyValue, "FA");
                         
                         
                                     String key = headgroup + " ";

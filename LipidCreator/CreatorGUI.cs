@@ -2055,6 +2055,7 @@ namespace LipidCreator
                     foreach (int hgValue in currentSLLipid.hgValues)
                     {
                         if (headgroups != "") headgroups += ", ";
+                        Console.WriteLine(headgroups);
                         headgroups += currentSLLipid.headGroupNames[hgValue];
                     }
                     row["Class"] = "Sphingolipid";

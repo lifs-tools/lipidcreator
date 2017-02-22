@@ -375,7 +375,7 @@ namespace LipidCreator
             sl_hg_listbox = new ListBox();
             gl_hg_listbox.Items.AddRange(new String[]{"MGDG", "DGDG", "SQDG"});
             pl_hg_listbox.Items.AddRange(new String[]{"PA", "PC", "PE", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
-            sl_hg_listbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM"});
+            sl_hg_listbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"});
             
             cardio_backbone_image = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_backbones.png");
             cardio_backbone_image_fa1e = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/backbones/CL_FAe1.png");
@@ -1498,7 +1498,7 @@ namespace LipidCreator
 
             sl_hg_label.BringToFront();
             sl_hg_listbox.Location = new Point(54, 105);
-            sl_hg_listbox.Size = new Size(80, 210);
+            sl_hg_listbox.Size = new Size(80, 250);
             sl_hg_listbox.BringToFront();
             sl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
             sl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;

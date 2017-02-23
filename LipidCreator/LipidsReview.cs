@@ -25,6 +25,7 @@ namespace LipidCreator
             InitializeComponent();
             currentView = this.allFragments;
             dataGridView1.DataSource = currentView;
+            label1.Text = "Number of transitions: " + currentView.Rows.Count;
             foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
             {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -49,6 +50,7 @@ namespace LipidCreator
             {
                 currentView = this.allFragments;
             }
+            label1.Text = "Number of transitions: " + currentView.Rows.Count;
             dataGridView1.DataSource = currentView;
             dataGridView1.Update();
             dataGridView1.Refresh();
@@ -65,25 +67,68 @@ namespace LipidCreator
 
             if(saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                DialogResult mbr = MessageBox.Show("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
                 
-                StreamWriter writer;
-                if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                if (mbr == DialogResult.Yes)
                 {
-                    foreach (DataRow row in currentView.Rows)
-                    {
-                        writer.WriteLine((String)row["Molecule List Name"] + "," +
-                        (String)row["Precursor Name"] + "," +
-                        (String)row["Precursor Ion Formula"] + "," +
-                        (String)row["Precursor Adduct"] + "," +
-                        ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
-                        (String)row["Precursor Charge"] + "," +
-                        (String)row["Pruduct Name"] + "," +
-                        (String)row["Pruduct Ion Formula"] + "," +
-                        ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
-                        (String)row["Pruduct Charge"]);
+                    using (StreamWriter outputFile = new StreamWriter(Path.GetFullPath(saveFileDialog1.FileName).Replace(".csv", "_positive.csv"))) {
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row["Precursor Charge"]) == "+1" || ((String)row["Precursor Charge"]) == "+2")
+                            {
+                                outputFile.WriteLine((String)row["Molecule List Name"] + "," +
+                                (String)row["Precursor Name"] + "," +
+                                (String)row["Precursor Ion Formula"] + "," +
+                                (String)row["Precursor Adduct"] + "," +
+                                ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
+                                (String)row["Precursor Charge"] + "," +
+                                (String)row["Pruduct Name"] + "," +
+                                (String)row["Pruduct Ion Formula"] + "," +
+                                ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
+                                (String)row["Pruduct Charge"]);
+                            }
+                        }
                     }
-                    writer.Dispose();
-                    writer.Close();
+                    using (StreamWriter outputFile = new StreamWriter(Path.GetFullPath(saveFileDialog1.FileName).Replace(".csv", "_negative.csv"))) {
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row["Precursor Charge"]) == "-1" || ((String)row["Precursor Charge"]) == "-2")
+                            {
+                                outputFile.WriteLine((String)row["Molecule List Name"] + "," +
+                                (String)row["Precursor Name"] + "," +
+                                (String)row["Precursor Ion Formula"] + "," +
+                                (String)row["Precursor Adduct"] + "," +
+                                ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
+                                (String)row["Precursor Charge"] + "," +
+                                (String)row["Pruduct Name"] + "," +
+                                (String)row["Pruduct Ion Formula"] + "," +
+                                ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
+                                (String)row["Pruduct Charge"]);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    StreamWriter writer;
+                    if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                    {
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            writer.WriteLine((String)row["Molecule List Name"] + "," +
+                            (String)row["Precursor Name"] + "," +
+                            (String)row["Precursor Ion Formula"] + "," +
+                            (String)row["Precursor Adduct"] + "," +
+                            ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
+                            (String)row["Precursor Charge"] + "," +
+                            (String)row["Pruduct Name"] + "," +
+                            (String)row["Pruduct Ion Formula"] + "," +
+                            ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
+                            (String)row["Pruduct Charge"]);
+                        }
+                        writer.Dispose();
+                        writer.Close();
+                    }
                 }
             }
         }

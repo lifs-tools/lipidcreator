@@ -43,7 +43,7 @@ namespace LipidCreator
                 else {
                     // long chain base
                     atomsCount.Rows[0]["Count"] = l; // C
-                    atomsCount.Rows[1]["Count"] = (2 * (l + db) + 1); // H
+                    atomsCount.Rows[1]["Count"] = (2 * (l - db) + 1); // H
                     atomsCount.Rows[2]["Count"] = _hydro; // O
                     atomsCount.Rows[3]["Count"] = 1; // N
                 }
@@ -1766,11 +1766,24 @@ namespace LipidCreator
                                                 MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                                 MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                                                 MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
-                                                
-                                                
-                                                String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                 int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                 double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                
+                                                
+                                                DataTable facnt = MS2Fragment.createEmptyElementTable();
+                                                MS2Fragment.addCounts(facnt, fa.atomsCount);
+                                                Console.WriteLine(key + " , FA: " + LipidCreatorForm.compute_chemical_formula(facnt));
+                                                
+                                                DataTable lcbcnt = MS2Fragment.createEmptyElementTable();
+                                                MS2Fragment.addCounts(lcbcnt, lcbType.atomsCount);
+                                                Console.WriteLine(key + " , LCB: " + LipidCreatorForm.compute_chemical_formula(lcbcnt));
+                                                
+                                                DataTable hgcnt = MS2Fragment.createEmptyElementTable();
+                                                MS2Fragment.addCounts(hgcnt, ddt[headgroup]);
+                                                Console.WriteLine(key + " , HG: " + LipidCreatorForm.compute_chemical_formula(hgcnt));
+                                                
+                                                
                                                 
                                                 foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                 {

@@ -29,8 +29,10 @@ namespace LipidCreator
         }
 
         #region Windows Form Designer generated code
-        private Image trashImage;
+        private Image deleteImage;
         private Image editImage;
+        private Image addImage;
+        private bool initialCall = true;
         
         private System.Timers.Timer timer1;
         private System.Windows.Forms.MainMenu mainMenu1;
@@ -1681,8 +1683,10 @@ namespace LipidCreator
             lipids_gridview.RowHeadersVisible = false;
             lipids_gridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipids_gridview_DataBindingComplete);
             
-            trashImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete.png");
+            deleteImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete-small.png");
             editImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/edit-small.png");
+            addImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/add-small.png");
+            
             
 
             open_review_form_button.Text = "Review Lipids";

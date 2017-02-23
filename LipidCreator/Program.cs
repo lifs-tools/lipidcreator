@@ -19,6 +19,7 @@ namespace LipidCreator
     {
         public int length;
         public int db;
+        public int hydroxyl;
         public String suffix;
         public DataTable atomsCount;
         public FattyAcid(int l, int _db, int _hydro){
@@ -30,6 +31,7 @@ namespace LipidCreator
         {
             length = l;
             db = _db;
+            hydroxyl = _hydro;
             suffix = "";
             atomsCount = MS2Fragment.createEmptyElementTable();
             if (l > 0 || _db > 0){
@@ -52,6 +54,7 @@ namespace LipidCreator
         {
             length = l;
             db = _db;
+            hydroxyl = _hydro;
             suffix = (_suffix.Length > 2) ? _suffix.Substring(2, 1) : "";
             atomsCount = MS2Fragment.createEmptyElementTable();
             if (l > 0 || _db > 0){
@@ -78,6 +81,7 @@ namespace LipidCreator
         {
             length = copy.length;
             db = copy.length;
+            hydroxyl = copy.hydroxyl;
             suffix = copy.suffix;
             atomsCount = MS2Fragment.createEmptyElementTable(copy.atomsCount);
         }
@@ -110,12 +114,12 @@ namespace LipidCreator
     {
         public override int GetHashCode(FattyAcid obj)
         {
-            return obj.length * 31 + obj.db;
+            return obj.length * 31 * 31 * 6 + obj.db * 31 + obj.hydroxyl;
         }
         
         public override bool Equals(FattyAcid obj, FattyAcid obj2)
         { 
-            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.suffix == obj2.suffix);
+            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.suffix == obj2.suffix) && (obj.hydroxyl == obj2.hydroxyl);
         }
     }
 
@@ -807,152 +811,166 @@ namespace LipidCreator
                 int max_db_1 = (fa_l_1 - 1) >> 1;
                 foreach (int fa_db_1 in fag1.doubleBondCounts)
                 {
-                    foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
                     {
-                        if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
-                            contains_mono_lyso &= ~1;
-                            if (fa_kvp_1.Key == "FAx")
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                             {
-                                fa1 = new FattyAcid(0, 0, 0, "FA");
-                                contains_mono_lyso |= 1;
-                            }
-                            foreach (int fa_l_2 in fag2.carbonCounts)
-                            {
-                                int max_db_2 = (fa_l_2 - 1) >> 1;
-                                foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                contains_mono_lyso &= ~1;
+                                if (fa_kvp_1.Key == "FAx")
                                 {
-                                    foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                    contains_mono_lyso |= 1;
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
                                     {
-                                        if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                        foreach (int fa_hydro_2 in fag1.hydroxylCounts)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
-                                            contains_mono_lyso &= ~2;
-                                            if (fa_kvp_2.Key == "FAx")
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
                                             {
-                                                fa2 = new FattyAcid(0, 0, 0, "FA");
-                                                contains_mono_lyso |= 2;
-                                            }
-                                            foreach (int fa_l_3 in fag3.carbonCounts)
-                                            {
-                                                int max_db_3 = (fa_l_3 - 1) >> 1;
-                                                foreach (int fa_db_3 in fag3.doubleBondCounts)
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                                 {
-                                                    foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    contains_mono_lyso &= ~2;
+                                                    if (fa_kvp_2.Key == "FAx")
                                                     {
-                                                        if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                        contains_mono_lyso |= 2;
+                                                    }
+                                                    foreach (int fa_l_3 in fag3.carbonCounts)
+                                                    {
+                                                        int max_db_3 = (fa_l_3 - 1) >> 1;
+                                                        foreach (int fa_db_3 in fag3.doubleBondCounts)
                                                         {
-                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, 0, fa_kvp_3.Key);
-                                                            contains_mono_lyso &= ~4;
-                                                            if (fa_kvp_3.Key == "FAx")
+                                                            foreach (int fa_hydro_3 in fag1.hydroxylCounts)
                                                             {
-                                                                fa3 = new FattyAcid(0, 0, 0, "FA");
-                                                                contains_mono_lyso |= 4;
-                                                            }
-                                                            foreach (int fa_l_4 in fag4.carbonCounts)
-                                                            {
-                                                                int max_db_4 = (fa_l_4 - 1) >> 1;
-                                                                foreach (int fa_db_4 in fag4.doubleBondCounts)
+                                                                foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
                                                                 {
-                                                                    foreach (KeyValuePair<string, bool> fa_kvp_4 in fag4.faTypes)
+                                                                    if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
                                                                     {
-                                                                        if (fa_kvp_4.Value && max_db_4 >= fa_db_4)
+                                                                        FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_hydro_3, fa_kvp_3.Key);
+                                                                        contains_mono_lyso &= ~4;
+                                                                        if (fa_kvp_3.Key == "FAx")
                                                                         {
-                                                                            FattyAcid fa4 = new FattyAcid(fa_l_4, fa_db_4, 0, fa_kvp_4.Key);
-                                                                            contains_mono_lyso &= ~8;
-                                                                            if (fa_kvp_4.Key == "FAx")
+                                                                            fa3 = new FattyAcid(0, 0, 0, "FA");
+                                                                            contains_mono_lyso |= 4;
+                                                                        }
+                                                                        foreach (int fa_l_4 in fag4.carbonCounts)
+                                                                        {
+                                                                            int max_db_4 = (fa_l_4 - 1) >> 1;
+                                                                            foreach (int fa_db_4 in fag4.doubleBondCounts)
                                                                             {
-                                                                                fa4 = new FattyAcid(0, 0, 0, "FA");
-                                                                                contains_mono_lyso |= 8;
-                                                                            }
-                                                                            
-                                                                            
-                                                                            
-                                                                            
-                                                                            List<FattyAcid> sorted_acids = new List<FattyAcid>();
-                                                                            sorted_acids.Add(fa1);
-                                                                            sorted_acids.Add(fa2);
-                                                                            sorted_acids.Add(fa3);
-                                                                            sorted_acids.Add(fa4);
-                                                                            sorted_acids.Sort();
-                                                                            String headgroup = (contains_mono_lyso == 0) ? "CL" : "MLCL";
-                                                                            String key = headgroup + " ";
-                                                                            int i = 0;
-                                                                            foreach (FattyAcid fa in sorted_acids)
-                                                                            {
-                                                                                if (fa.length > 0){
-                                                                                    if (i++ > 0) key += "_";
-                                                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
-                                                                                }
-                                                                            }
-                                                                            if (!used_keys.Contains(key))
-                                                                            {
-                                                                            
-                                                                            
-                                                                                foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                                                foreach (int fa_hydro_4 in fag1.hydroxylCounts)
                                                                                 {
-                                                                                    if (adduct.Value)
+                                                                                    foreach (KeyValuePair<string, bool> fa_kvp_4 in fag4.faTypes)
                                                                                     {
-                                                                                        used_keys.Add(key);
-                                                                                        
-                                                                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                                                                                        MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
-                                                                                        MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                                                                        MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
-                                                                                        MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
-                                                                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                                                        String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
-                                                                                        
-                                                                                        
-                                                                                        
-                                                                                        
-                                                                                        foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                                        if (fa_kvp_4.Value && max_db_4 >= fa_db_4)
                                                                                         {
-                                                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
+                                                                                            FattyAcid fa4 = new FattyAcid(fa_l_4, fa_db_4, fa_hydro_4, fa_kvp_4.Key);
+                                                                                            contains_mono_lyso &= ~8;
+                                                                                            if (fa_kvp_4.Key == "FAx")
                                                                                             {
-                                                                                                DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                                                                                                foreach (string fbase in fragment.fragmentBase)
+                                                                                                fa4 = new FattyAcid(0, 0, 0, "FA");
+                                                                                                contains_mono_lyso |= 8;
+                                                                                            }
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                                                            sorted_acids.Add(fa1);
+                                                                                            sorted_acids.Add(fa2);
+                                                                                            sorted_acids.Add(fa3);
+                                                                                            sorted_acids.Add(fa4);
+                                                                                            sorted_acids.Sort();
+                                                                                            String headgroup = (contains_mono_lyso == 0) ? "CL" : "MLCL";
+                                                                                            String key = headgroup + " ";
+                                                                                            int i = 0;
+                                                                                            foreach (FattyAcid fa in sorted_acids)
+                                                                                            {
+                                                                                                if (fa.length > 0){
+                                                                                                    if (i++ > 0) key += "_";
+                                                                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                                                    if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                                                    key += fa.suffix;
+                                                                                                }
+                                                                                            }
+                                                                                            if (!used_keys.Contains(key))
+                                                                                            {
+                                                                                            
+                                                                                            
+                                                                                                foreach (KeyValuePair<string, bool> adduct in adducts)
                                                                                                 {
-                                                                                                    switch(fbase)
+                                                                                                    if (adduct.Value)
                                                                                                     {
-                                                                                                        case "FA1":
-                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
-                                                                                                            break;
-                                                                                                        case "FA2":
-                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
-                                                                                                            break;
-                                                                                                        case "FA3":
-                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa3.atomsCount);
-                                                                                                            break;
-                                                                                                        case "FA4":
-                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa4.atomsCount);
-                                                                                                            break;
-                                                                                                        case "PRE":
-                                                                                                            MS2Fragment.addCounts(atomsCountFragment, atomsCount);
-                                                                                                            break;
-                                                                                                        default:
-                                                                                                            break;
+                                                                                                        used_keys.Add(key);
+                                                                                                        
+                                                                                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                                                        String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                                                                                        foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                                                        {
+                                                                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
+                                                                                                            {
+                                                                                                                DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                                                                foreach (string fbase in fragment.fragmentBase)
+                                                                                                                {
+                                                                                                                    switch(fbase)
+                                                                                                                    {
+                                                                                                                        case "FA1":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA2":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA3":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa3.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA4":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa4.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "PRE":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                                                            break;
+                                                                                                                        default:
+                                                                                                                            break;
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                                                                
+                                                                                                            
+                                                                                                                DataRow lipid_row = all_lipids.NewRow();
+                                                                                                                lipid_row["Molecule List Name"] = headgroup;
+                                                                                                                lipid_row["Precursor Name"] = key;
+                                                                                                                lipid_row["Precursor Ion Formula"] = chemForm;
+                                                                                                                lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                                                lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                                                                lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                                                lipid_row["Pruduct Name"] = fragment.fragmentName;
+                                                                                                                lipid_row["Pruduct Ion Formula"] = chemFormFragment;
+                                                                                                                lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                                                                lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                                                                all_lipids.Rows.Add(lipid_row);
+                                                                                                            }
+                                                                                                        }
                                                                                                     }
                                                                                                 }
-                                                                                                String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
-                                                                                                
-                                                                                            
-                                                                                                DataRow lipid_row = all_lipids.NewRow();
-                                                                                                lipid_row["Molecule List Name"] = headgroup;
-                                                                                                lipid_row["Precursor Name"] = key;
-                                                                                                lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                                                lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
-                                                                                                lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
-                                                                                                lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                                                                                lipid_row["Pruduct Name"] = fragment.fragmentName;
-                                                                                                lipid_row["Pruduct Ion Formula"] = chemFormFragment;
-                                                                                                lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                                                                                                lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
-                                                                                                all_lipids.Rows.Add(lipid_row);
                                                                                             }
                                                                                         }
                                                                                     }
@@ -1108,109 +1126,120 @@ namespace LipidCreator
                 int max_db_1 = (fa_l_1 - 1) >> 1;
                 foreach (int fa_db_1 in fag1.doubleBondCounts)
                 {
-                    foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
                     {
-                        if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
-                            contains_mono_lyso &= ~1;
-                            if (fa_kvp_1.Key == "FAx")
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                             {
-                                fa1 = new FattyAcid(0, 0, 0, "FA");
-                                contains_mono_lyso |= 1;
-                            }
-                            foreach (int fa_l_2 in fag2.carbonCounts)
-                            {
-                                int max_db_2 = (fa_l_2 - 1) >> 1;
-                                foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                contains_mono_lyso &= ~1;
+                                if (fa_kvp_1.Key == "FAx")
                                 {
-                                    foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                    contains_mono_lyso |= 1;
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
                                     {
-                                        if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                        foreach (int fa_hydro_2 in fag1.hydroxylCounts)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
-                                            contains_mono_lyso &= ~2;
-                                            if (fa_kvp_2.Key == "FAx")
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
                                             {
-                                                fa2 = new FattyAcid(0, 0, 0, "FA");
-                                                contains_mono_lyso |= 2;
-                                            }
-                                            foreach (int fa_l_3 in fag3.carbonCounts)
-                                            {
-                                                int max_db_3 = (fa_l_3 - 1) >> 1;
-                                                foreach (int fa_db_3 in fag3.doubleBondCounts)
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                                 {
-                                                    foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    contains_mono_lyso &= ~2;
+                                                    if (fa_kvp_2.Key == "FAx")
                                                     {
-                                                        if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                        contains_mono_lyso |= 2;
+                                                    }
+                                                    foreach (int fa_l_3 in fag3.carbonCounts)
+                                                    {
+                                                        int max_db_3 = (fa_l_3 - 1) >> 1;
+                                                        foreach (int fa_db_3 in fag3.doubleBondCounts)
                                                         {
-                                                            FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, 0, fa_kvp_3.Key);
-                                                            contains_mono_lyso &= ~4;
-                                                            if (fa_kvp_3.Key == "FAx")
+                                                            foreach (int fa_hydro_3 in fag1.hydroxylCounts)
                                                             {
-                                                                fa3 = new FattyAcid(0, 0, 0, "FA");
-                                                                contains_mono_lyso |= 4;
-                                                            }
-                                                                    
-                                                                            
-                                                            List<FattyAcid> sorted_acids = new List<FattyAcid>();
-                                                            sorted_acids.Add(fa1);
-                                                            sorted_acids.Add(fa2);
-                                                            sorted_acids.Add(fa3);
-                                                            sorted_acids.Sort();
-                                                            
-                                                            // popcount
-                                                            int pc_contains_mono_lyso = contains_mono_lyso - ((contains_mono_lyso >> 1) & 0x55555555);
-                                                            pc_contains_mono_lyso = (pc_contains_mono_lyso & 0x33333333) + ((pc_contains_mono_lyso >> 2) & 0x33333333);
-                                                            pc_contains_mono_lyso = ((pc_contains_mono_lyso + (pc_contains_mono_lyso >> 4) & 0xF0F0F0F) * 0x1010101) >> 24;
-                                                            
-                                                            String headgroup = "";
-                                                            switch(pc_contains_mono_lyso)
-                                                            {
-                                                                case 0:
-                                                                headgroup = "TG";
-                                                                    break;
-                                                                case 1:
-                                                                headgroup = "DG";
-                                                                    break;
-                                                                case 2:
-                                                                headgroup = "MG";
-                                                                    break;
-                                                            }
-                                                            String key = headgroup + " ";
-                                                            int i = 0;
-                                                            foreach (FattyAcid fa in sorted_acids)
-                                                            {
-                                                                if (fa.length > 0){
-                                                                    if (i++ > 0) key += "_";
-                                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
-                                                                }
-                                                            }
-                                                            if (!used_keys.Contains(key))
-                                                            {
-                                                                foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                                foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
                                                                 {
-                                                                    if (adduct.Value)
+                                                                    if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
                                                                     {
-                                                                        used_keys.Add(key);
+                                                                        FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_hydro_3, fa_kvp_3.Key);
+                                                                        contains_mono_lyso &= ~4;
+                                                                        if (fa_kvp_3.Key == "FAx")
+                                                                        {
+                                                                            fa3 = new FattyAcid(0, 0, 0, "FA");
+                                                                            contains_mono_lyso |= 4;
+                                                                        }
+                                                                                
+                                                                                        
+                                                                        List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                                        sorted_acids.Add(fa1);
+                                                                        sorted_acids.Add(fa2);
+                                                                        sorted_acids.Add(fa3);
+                                                                        sorted_acids.Sort();
                                                                         
-                                                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                                                                        MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
-                                                                        MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                                                        MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
-                                                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                                        String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                        // popcount
+                                                                        int pc_contains_mono_lyso = contains_mono_lyso - ((contains_mono_lyso >> 1) & 0x55555555);
+                                                                        pc_contains_mono_lyso = (pc_contains_mono_lyso & 0x33333333) + ((pc_contains_mono_lyso >> 2) & 0x33333333);
+                                                                        pc_contains_mono_lyso = ((pc_contains_mono_lyso + (pc_contains_mono_lyso >> 4) & 0xF0F0F0F) * 0x1010101) >> 24;
                                                                         
-                                                                        DataRow lipid_row = all_lipids.NewRow();
-                                                                        lipid_row["Molecule List Name"] = headgroup;
-                                                                        lipid_row["Precursor Name"] = key;
-                                                                        lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                        lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                                                        lipid_row["Precursor m/z"] = mass;
-                                                                        lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                                                        all_lipids.Rows.Add(lipid_row);
+                                                                        String headgroup = "";
+                                                                        switch(pc_contains_mono_lyso)
+                                                                        {
+                                                                            case 0:
+                                                                            headgroup = "TG";
+                                                                                break;
+                                                                            case 1:
+                                                                            headgroup = "DG";
+                                                                                break;
+                                                                            case 2:
+                                                                            headgroup = "MG";
+                                                                                break;
+                                                                        }
+                                                                        String key = headgroup + " ";
+                                                                        int i = 0;
+                                                                        foreach (FattyAcid fa in sorted_acids)
+                                                                        {
+                                                                            if (fa.length > 0){
+                                                                                if (i++ > 0) key += "_";
+                                                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                                if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                                key += fa.suffix;
+                                                                            }
+                                                                        }
+                                                                        if (!used_keys.Contains(key))
+                                                                        {
+                                                                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                                            {
+                                                                                if (adduct.Value)
+                                                                                {
+                                                                                    used_keys.Add(key);
+                                                                                    
+                                                                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                                    MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                                    String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                                    
+                                                                                    DataRow lipid_row = all_lipids.NewRow();
+                                                                                    lipid_row["Molecule List Name"] = headgroup;
+                                                                                    lipid_row["Precursor Name"] = key;
+                                                                                    lipid_row["Precursor Ion Formula"] = chemForm;
+                                                                                    lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
+                                                                                    lipid_row["Precursor m/z"] = mass;
+                                                                                    lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                    all_lipids.Rows.Add(lipid_row);
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -1352,102 +1381,110 @@ namespace LipidCreator
                 int max_db_1 = (fa_l_1 - 1) >> 1;
                 foreach (int fa_db_1 in fag1.doubleBondCounts)
                 {
-                    foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
                     {
-                        if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
                         {
-                            FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, 0, fa_kvp_1.Key);
-                            if (fa_kvp_1.Key == "FAx")
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
                             {
-                                fa1 = new FattyAcid(0, 0, 0, "FA");
-                            }
-                            foreach (int fa_l_2 in fag2.carbonCounts)
-                            {
-                                int max_db_2 = (fa_l_2 - 1) >> 1;
-                                foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                if (fa_kvp_1.Key == "FAx")
                                 {
-                                    foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
                                     {
-                                        if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                        foreach (int fa_hydro_2 in fag2.hydroxylCounts)
                                         {
-                                            FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, 0, fa_kvp_2.Key);
-                                            if (fa_kvp_2.Key == "FAx")
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
                                             {
-                                                fa2 = new FattyAcid(0, 0, 0, "FA");
-                                            }
-                                                                  
-                                            List<FattyAcid> sorted_acids = new List<FattyAcid>();
-                                            sorted_acids.Add(fa1);
-                                            sorted_acids.Add(fa2);
-                                            sorted_acids.Sort();
-                                            
-                                            foreach(int hgValue in hgValues)
-                                            {
-                                            
-                                                String headgroup = headGroupNames[hgValue];
-                                                String key = headgroup + " ";
-                                                int i = 0;
-                                                foreach (FattyAcid fa in sorted_acids)
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
                                                 {
-                                                    if (fa.length > 0){
-                                                        if (i++ > 0) key += "_";
-                                                        key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db) + fa.suffix;
-                                                    }
-                                                }
-                                                if (!used_keys.Contains(key))
-                                                {
-                                                    foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    if (fa_kvp_2.Key == "FAx")
                                                     {
-                                                        if (adduct.Value)
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                    }
+                                                                        
+                                                    List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                    sorted_acids.Add(fa1);
+                                                    sorted_acids.Add(fa2);
+                                                    sorted_acids.Sort();
+                                                    
+                                                    foreach(int hgValue in hgValues)
+                                                    {
+                                                    
+                                                        String headgroup = headGroupNames[hgValue];
+                                                        String key = headgroup + " ";
+                                                        int i = 0;
+                                                        foreach (FattyAcid fa in sorted_acids)
                                                         {
-                                                            used_keys.Add(key);
-                                                            
-                                                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                                                            MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
-                                                            MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                                            MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                            String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                                            int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                            double mass = LipidCreatorForm.compute_mass(atomsCount);
-                                                            
-                                                            foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                            if (fa.length > 0){
+                                                                if (i++ > 0) key += "_";
+                                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                key += fa.suffix;
+                                                            }
+                                                        }
+                                                        if (!used_keys.Contains(key))
+                                                        {
+                                                            foreach (KeyValuePair<string, bool> adduct in adducts)
                                                             {
-                                                                if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                if (adduct.Value)
                                                                 {
-                                                                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                                                                    foreach (string fbase in fragment.fragmentBase)
+                                                                    used_keys.Add(key);
+                                                                    
+                                                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                    MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                    MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                    String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                    
+                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                     {
-                                                                        switch(fbase)
+                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                                                         {
-                                                                            case "FA1":
-                                                                                MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
-                                                                                break;
-                                                                            case "FA2":
-                                                                                MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
-                                                                                break;
-                                                                            case "PRE":
-                                                                                MS2Fragment.addCounts(atomsCountFragment, atomsCount);
-                                                                                break;
-                                                                            default:
-                                                                                break;
+                                                                            DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                            foreach (string fbase in fragment.fragmentBase)
+                                                                            {
+                                                                                switch(fbase)
+                                                                                {
+                                                                                    case "FA1":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                        break;
+                                                                                    case "FA2":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                        break;
+                                                                                    case "PRE":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                        break;
+                                                                                    default:
+                                                                                        break;
+                                                                                }
+                                                                            }
+                                                                            String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                            
+                                                                        
+                                                                            DataRow lipid_row = all_lipids.NewRow();
+                                                                            lipid_row["Molecule List Name"] = headgroup;
+                                                                            lipid_row["Precursor Name"] = key;
+                                                                            lipid_row["Precursor Ion Formula"] = chemForm;
+                                                                            lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                            lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                            lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                            lipid_row["Pruduct Name"] = fragment.fragmentName;
+                                                                            lipid_row["Pruduct Ion Formula"] = chemFormFragment;
+                                                                            lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                            lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                            all_lipids.Rows.Add(lipid_row);
                                                                         }
                                                                     }
-                                                                    String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                                    double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
-                                                                    
-                                                                
-                                                                    DataRow lipid_row = all_lipids.NewRow();
-                                                                    lipid_row["Molecule List Name"] = headgroup;
-                                                                    lipid_row["Precursor Name"] = key;
-                                                                    lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                    lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
-                                                                    lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
-                                                                    lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                                                    lipid_row["Pruduct Name"] = fragment.fragmentName;
-                                                                    lipid_row["Pruduct Ion Formula"] = chemFormFragment;
-                                                                    lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                                                                    lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
-                                                                    all_lipids.Rows.Add(lipid_row);
                                                                 }
                                                             }
                                                         }

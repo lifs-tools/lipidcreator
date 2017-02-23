@@ -41,25 +41,41 @@ namespace LipidCreator
         
         private void lipids_gridview_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            DataGridViewImageColumn editColumn = new DataGridViewImageColumn();  
-            editColumn.Name = "Edit";  
-            editColumn.HeaderText = "Edit";  
-            editColumn.ValuesAreIcons = true;
-            lipids_gridview.Columns.Add(editColumn);
-            DataGridViewImageColumn trashColumn = new DataGridViewImageColumn();  
-            trashColumn.Name = "Delete";  
-            trashColumn.HeaderText = "Delete";  
-            trashColumn.ValuesAreIcons = true;
-            lipids_gridview.Columns.Add(trashColumn);
-            int w = (lipids_gridview.Width - 80) / 5;
-            foreach (DataGridViewColumn col in lipids_gridview.Columns)
-            {
-                col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                col.Width = w;
-            }
-            editColumn.Width = 40;
-            trashColumn.Width = 40;
             
+            if (initialCall){
+                DataGridViewImageColumn editColumn = new DataGridViewImageColumn();  
+                editColumn.Name = "Edit";  
+                editColumn.HeaderText = "Edit";  
+                editColumn.ValuesAreIcons = false;
+                lipids_gridview.Columns.Add(editColumn);
+                DataGridViewImageColumn deleteColumn = new DataGridViewImageColumn();  
+                deleteColumn.Name = "Delete";  
+                deleteColumn.HeaderText = "Delete";  
+                deleteColumn.ValuesAreIcons = false;
+                lipids_gridview.Columns.Add(deleteColumn);
+                int w = (lipids_gridview.Width - 80) / 5;
+                foreach (DataGridViewColumn col in lipids_gridview.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    col.Width = w;
+                }
+                editColumn.Width = 40;
+                deleteColumn.Width = 40;
+                initialCall = false;
+            }
+            else {
+                int w = (lipids_gridview.Width - 80) / 5;
+                foreach (DataGridViewColumn col in lipids_gridview.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    if (col.Name != "Edit" && col.Name != "Delete"){
+                        col.Width = w;
+                    }
+                    else {
+                        col.Width = 40;
+                    }
+                }
+            }
         }
         
         public void changeTab(int index)
@@ -2065,10 +2081,12 @@ namespace LipidCreator
                 }
                 registered_lipids_datatable.Rows.Add(row);
                 lipids_gridview.DataSource = registered_lipids_datatable;
+                
+                
                 for (int i = 0; i < lipids_gridview.Rows.Count; ++i)
                 {
                     lipids_gridview.Rows[i].Cells["Edit"].Value = editImage;
-                    lipids_gridview.Rows[i].Cells["Delete"].Value = trashImage;
+                    lipids_gridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
                 lipids_gridview.Update();
                 lipids_gridview.Refresh();

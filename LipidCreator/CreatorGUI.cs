@@ -53,7 +53,7 @@ namespace LipidCreator
                 deleteColumn.HeaderText = "Delete";  
                 deleteColumn.ValuesAreIcons = false;
                 lipids_gridview.Columns.Add(deleteColumn);
-                int w = (lipids_gridview.Width - 80) / 5;
+                int w = (lipids_gridview.Width - 80) / 5 - 4;
                 foreach (DataGridViewColumn col in lipids_gridview.Columns)
                 {
                     col.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -62,19 +62,6 @@ namespace LipidCreator
                 editColumn.Width = 40;
                 deleteColumn.Width = 40;
                 initialCall = false;
-            }
-            else {
-                int w = (lipids_gridview.Width - 80) / 5;
-                foreach (DataGridViewColumn col in lipids_gridview.Columns)
-                {
-                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                    if (col.Name != "Edit" && col.Name != "Delete"){
-                        col.Width = w;
-                    }
-                    else {
-                        col.Width = 40;
-                    }
-                }
             }
         }
         
@@ -2095,33 +2082,44 @@ namespace LipidCreator
         
         public void lipids_gridview_double_click(Object sender, EventArgs e)
         {
-            int index = ((DataGridView)sender).CurrentCell.RowIndex;
-            lipid current_lipid = (lipid)lipidCreatorForm.registered_lipids[index];
-            int tabIndex = 0;
-            if (current_lipid is cl_lipid)
+            int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
+            int colIndex = ((DataGridView)sender).CurrentCell.ColumnIndex;
+            if (((DataGridView)sender).Columns[colIndex].Name == "Edit")
             {
-                tabIndex = 0;
-                lipidCreatorForm.lipidTabList[tabIndex] = new cl_lipid((cl_lipid)current_lipid);
+            
+                lipid current_lipid = (lipid)lipidCreatorForm.registered_lipids[rowIndex];
+                int tabIndex = 0;
+                if (current_lipid is cl_lipid)
+                {
+                    tabIndex = 0;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new cl_lipid((cl_lipid)current_lipid);
+                }
+                else if (current_lipid is gl_lipid)
+                {
+                    tabIndex = 1;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new gl_lipid((gl_lipid)current_lipid);
+                }
+                else if (current_lipid is pl_lipid)
+                {
+                    tabIndex = 2;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new pl_lipid((pl_lipid)current_lipid);
+                }
+                else if (current_lipid is sl_lipid)
+                {
+                    tabIndex = 3;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new sl_lipid((sl_lipid)current_lipid);
+                }
+                currentLipid = current_lipid;
+                lipid_modifications[tabIndex] = rowIndex;
+                tab_control.SelectedIndex = tabIndex;
+                changeTab(tabIndex);
+                
             }
-            else if (current_lipid is gl_lipid)
+            else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
             {
-                tabIndex = 1;
-                lipidCreatorForm.lipidTabList[tabIndex] = new gl_lipid((gl_lipid)current_lipid);
+                lipidCreatorForm.registered_lipids.RemoveAt(rowIndex);
+                refresh_registered_lipids_table();
             }
-            else if (current_lipid is pl_lipid)
-            {
-                tabIndex = 2;
-                lipidCreatorForm.lipidTabList[tabIndex] = new pl_lipid((pl_lipid)current_lipid);
-            }
-            else if (current_lipid is sl_lipid)
-            {
-                tabIndex = 3;
-                lipidCreatorForm.lipidTabList[tabIndex] = new sl_lipid((sl_lipid)current_lipid);
-            }
-            currentLipid = current_lipid;
-            lipid_modifications[tabIndex] = index;
-            tab_control.SelectedIndex = tabIndex;
-            changeTab(tabIndex);
         }
         
         

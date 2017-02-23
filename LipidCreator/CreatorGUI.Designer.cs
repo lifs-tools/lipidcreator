@@ -1671,16 +1671,17 @@ namespace LipidCreator
             lipids_gridview.AllowUserToAddRows = false;
             lipids_gridview.Width = this.Width;
             //lipids_gridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            lipids_gridview.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //lipids_gridview.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             lipids_gridview.AllowUserToResizeRows = false;
             lipids_gridview.ReadOnly = true;
-            lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            //lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             lipids_gridview.MultiSelect = false;
             lipids_gridview.RowTemplate.Height = 34;
             lipids_gridview.DoubleClick += new EventHandler(lipids_gridview_double_click);
             lipids_gridview.KeyDown += new KeyEventHandler(lipids_gridview_keydown);
             lipids_gridview.EditMode = DataGridViewEditMode.EditOnEnter;
             lipids_gridview.RowHeadersVisible = false;
+            lipids_gridview.ScrollBars = ScrollBars.Vertical;
             lipids_gridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipids_gridview_DataBindingComplete);
             
             deleteImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete-small.png");

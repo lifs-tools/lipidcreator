@@ -1212,6 +1212,7 @@ namespace LipidCreator
                                                                                 key += fa.suffix;
                                                                             }
                                                                         }
+                                                                        
                                                                         if (!used_keys.Contains(key))
                                                                         {
                                                                             foreach (KeyValuePair<string, bool> adduct in adducts)
@@ -1225,21 +1226,57 @@ namespace LipidCreator
                                                                                     MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                                                                     MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
                                                                                     MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
-                                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                                                     String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                                                     double mass = LipidCreatorForm.compute_mass(atomsCount);
                                                                                     
-                                                                                    DataRow lipid_row = all_lipids.NewRow();
-                                                                                    lipid_row["Molecule List Name"] = headgroup;
-                                                                                    lipid_row["Precursor Name"] = key;
-                                                                                    lipid_row["Precursor Ion Formula"] = chemForm;
-                                                                                    lipid_row["Precursor Adduct"] = chemForm + "[M" + adduct.Key + "]";
-                                                                                    lipid_row["Precursor m/z"] = mass;
-                                                                                    lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
-                                                                                    all_lipids.Rows.Add(lipid_row);
+                                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                                    {
+                                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                                        {
+                                                                                            DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                                            foreach (string fbase in fragment.fragmentBase)
+                                                                                            {
+                                                                                                switch(fbase)
+                                                                                                {
+                                                                                                    case "FA1":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                                        break;
+                                                                                                    case "FA2":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                                        break;
+                                                                                                    case "FA3":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa3.atomsCount);
+                                                                                                        break;
+                                                                                                    case "PRE":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                                        break;
+                                                                                                    default:
+                                                                                                        break;
+                                                                                                }
+                                                                                            }
+                                                                                            String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                                            
+                                                                                        
+                                                                                            DataRow lipid_row = all_lipids.NewRow();
+                                                                                            lipid_row["Molecule List Name"] = headgroup;
+                                                                                            lipid_row["Precursor Name"] = key;
+                                                                                            lipid_row["Precursor Ion Formula"] = chemForm;
+                                                                                            lipid_row["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                            lipid_row["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                                            lipid_row["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                            lipid_row["Pruduct Name"] = fragment.fragmentName;
+                                                                                            lipid_row["Pruduct Ion Formula"] = chemFormFragment;
+                                                                                            lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                                            lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                                            all_lipids.Rows.Add(lipid_row);
+                                                                                        }
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }
+                                                                       
                                                                     }
                                                                 }
                                                             }

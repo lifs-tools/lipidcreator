@@ -566,7 +566,7 @@ namespace LipidCreator
             representativeFA = false;
         }
         
-        public virtual void add_lipids(DataTable dt, Dictionary<String, DataTable> ddt)
+        public virtual void add_lipids(DataTable dt, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
         }
         
@@ -793,7 +793,7 @@ namespace LipidCreator
             }
         }
         
-        public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -804,7 +804,6 @@ namespace LipidCreator
             if (check_FattyAcids > 1) return;
             
             
-            HashSet<String> used_keys = new HashSet<String>();
             int contains_mono_lyso = 0;
             foreach (int fa_l_1 in fag1.carbonCounts)
             {
@@ -967,6 +966,24 @@ namespace LipidCreator
                                                                                                                 lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                                                                                 lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                                                                 all_lipids.Rows.Add(lipid_row);
+                                                                                                                
+                                                                                                                String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                                                                if (!replicates.Contains(replicates_key))
+                                                                                                                {
+                                                                                                                    replicates.Add(replicates_key);
+                                                                                                                    DataRow lipid_row_unique = all_lipids_unique.NewRow();
+                                                                                                                    lipid_row_unique["Molecule List Name"] = headgroup;
+                                                                                                                    lipid_row_unique["Precursor Name"] = key;
+                                                                                                                    lipid_row_unique["Precursor Ion Formula"] = chemForm;
+                                                                                                                    lipid_row_unique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                                                    lipid_row_unique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                                                                    lipid_row_unique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                                                    lipid_row_unique["Pruduct Name"] = fragment.fragmentName;
+                                                                                                                    lipid_row_unique["Pruduct Ion Formula"] = chemFormFragment;
+                                                                                                                    lipid_row_unique["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                                                                    lipid_row_unique["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                                                                    all_lipids_unique.Rows.Add(lipid_row_unique);
+                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     }
@@ -1019,6 +1036,8 @@ namespace LipidCreator
             MS2Fragments.Add("DGDG", new ArrayList());
             MS2Fragments.Add("SQDG", new ArrayList());
             MS2Fragments.Add("TG", new ArrayList());
+            adducts["+H"] = true;
+            adducts["-H"] = false;
             
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
             {
@@ -1110,7 +1129,7 @@ namespace LipidCreator
             }
         }
         
-        public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -1119,7 +1138,6 @@ namespace LipidCreator
             check_FattyAcids += fag3.faTypes["FAx"] ? 1 : 0;
             if (check_FattyAcids > 2) return;
             
-            HashSet<String> used_keys = new HashSet<String>();
             int contains_mono_lyso = 0;
             foreach (int fa_l_1 in fag1.carbonCounts)
             {
@@ -1271,6 +1289,24 @@ namespace LipidCreator
                                                                                             lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                                                             lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                                             all_lipids.Rows.Add(lipid_row);
+                                                                                                                
+                                                                                            String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                                            if (!replicates.Contains(replicates_key))
+                                                                                            {
+                                                                                                replicates.Add(replicates_key);
+                                                                                                DataRow lipid_row_unique = all_lipids_unique.NewRow();
+                                                                                                lipid_row_unique["Molecule List Name"] = headgroup;
+                                                                                                lipid_row_unique["Precursor Name"] = key;
+                                                                                                lipid_row_unique["Precursor Ion Formula"] = chemForm;
+                                                                                                lipid_row_unique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                                lipid_row_unique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                                                lipid_row_unique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                                lipid_row_unique["Pruduct Name"] = fragment.fragmentName;
+                                                                                                lipid_row_unique["Pruduct Ion Formula"] = chemFormFragment;
+                                                                                                lipid_row_unique["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                                                lipid_row_unique["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                                                all_lipids_unique.Rows.Add(lipid_row_unique);
+                                                                                            }
                                                                                         }
                                                                                     }
                                                                                 }
@@ -1403,7 +1439,7 @@ namespace LipidCreator
         }
         
         
-        public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -1412,7 +1448,6 @@ namespace LipidCreator
             if (check_FattyAcids > 0) return;
             if (hgValues.Count == 0) return;
             
-            HashSet<String> used_keys = new HashSet<String>();
             foreach (int fa_l_1 in fag1.carbonCounts)
             {
                 int max_db_1 = (fa_l_1 - 1) >> 1;
@@ -1520,6 +1555,24 @@ namespace LipidCreator
                                                                             lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                                             lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                             all_lipids.Rows.Add(lipid_row);
+                                                                                                                
+                                                                            String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                            if (!replicates.Contains(replicates_key))
+                                                                            {
+                                                                                replicates.Add(replicates_key);
+                                                                                DataRow lipid_row_unique = all_lipids_unique.NewRow();
+                                                                                lipid_row_unique["Molecule List Name"] = headgroup;
+                                                                                lipid_row_unique["Precursor Name"] = key;
+                                                                                lipid_row_unique["Precursor Ion Formula"] = chemForm;
+                                                                                lipid_row_unique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                                lipid_row_unique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                                lipid_row_unique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                                lipid_row_unique["Pruduct Name"] = fragment.fragmentName;
+                                                                                lipid_row_unique["Pruduct Ion Formula"] = chemFormFragment;
+                                                                                lipid_row_unique["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                                                lipid_row_unique["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                                                all_lipids_unique.Rows.Add(lipid_row_unique);
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -1574,6 +1627,8 @@ namespace LipidCreator
             MS2Fragments.Add("SPC", new ArrayList());
             MS2Fragments.Add("SPH", new ArrayList());
             MS2Fragments.Add("SPH-P", new ArrayList());
+            adducts["+H"] = true;
+            adducts["-H"] = false;
             
             
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
@@ -1665,11 +1720,11 @@ namespace LipidCreator
         }
         
         
-        public override void add_lipids(DataTable all_lipids, Dictionary<String, DataTable> ddt)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
             
             
-            HashSet<String> used_keys = new HashSet<String>();
+            
             foreach (int lcb_l in lcb.carbonCounts)
             {
                 int max_db_1 = (lcb_l - 1) >> 1;
@@ -1696,7 +1751,8 @@ namespace LipidCreator
                                     
                                     key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
                                     key += "/";
-                                    key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2) + ";" + Convert.ToString(fa_hydroxyValue);
+                                    key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2);
+                                    if (fa_hydroxyValue > 0) key += ";" + Convert.ToString(fa_hydroxyValue);
 
                                     if (!used_keys.Contains(key))
                                     {
@@ -1754,6 +1810,24 @@ namespace LipidCreator
                                                         lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                         lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                         all_lipids.Rows.Add(lipid_row);
+                                                                                                                
+                                                        String replicates_key = chemForm + "/" + chemFormFragment;
+                                                        if (!replicates.Contains(replicates_key))
+                                                        {
+                                                            replicates.Add(replicates_key);
+                                                            DataRow lipid_row_unique = all_lipids_unique.NewRow();
+                                                            lipid_row_unique["Molecule List Name"] = headgroup;
+                                                            lipid_row_unique["Precursor Name"] = key;
+                                                            lipid_row_unique["Precursor Ion Formula"] = chemForm;
+                                                            lipid_row_unique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                            lipid_row_unique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                            lipid_row_unique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                            lipid_row_unique["Pruduct Name"] = fragment.fragmentName;
+                                                            lipid_row_unique["Pruduct Ion Formula"] = chemFormFragment;
+                                                            lipid_row_unique["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                            lipid_row_unique["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                            all_lipids_unique.Rows.Add(lipid_row_unique);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1817,6 +1891,24 @@ namespace LipidCreator
                                                 lipid_row["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                                                 lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                 all_lipids.Rows.Add(lipid_row);
+                                                                                                                
+                                                String replicates_key = chemForm + "/" + chemFormFragment;
+                                                if (!replicates.Contains(replicates_key))
+                                                {
+                                                    replicates.Add(replicates_key);
+                                                    DataRow lipid_row_unique = all_lipids_unique.NewRow();
+                                                    lipid_row_unique["Molecule List Name"] = headgroup;
+                                                    lipid_row_unique["Precursor Name"] = key;
+                                                    lipid_row_unique["Precursor Ion Formula"] = chemForm;
+                                                    lipid_row_unique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                    lipid_row_unique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                    lipid_row_unique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                    lipid_row_unique["Pruduct Name"] = fragment.fragmentName;
+                                                    lipid_row_unique["Pruduct Ion Formula"] = chemFormFragment;
+                                                    lipid_row_unique["Pruduct m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                                                    lipid_row_unique["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                                                    all_lipids_unique.Rows.Add(lipid_row_unique);
+                                                }
                                             }
                                         }
                                     }
@@ -1842,6 +1934,7 @@ namespace LipidCreator
         public Dictionary<String, String> all_paths_to_precursor_images;
         public Dictionary<String, DataTable> headgroups;
         public DataTable all_lipids;
+        public DataTable all_lipids_unique;
         public SkylineToolClient skylineToolClient;
         public bool opened_as_external;
         public string prefix_path = "Tools/LipidCreator/";
@@ -1865,6 +1958,18 @@ namespace LipidCreator
             all_lipids.Columns.Add("Pruduct Ion Formula");
             all_lipids.Columns.Add("Pruduct m/z");
             all_lipids.Columns.Add("Pruduct Charge");
+            
+            all_lipids_unique = new DataTable();
+            all_lipids_unique.Columns.Add("Molecule List Name");
+            all_lipids_unique.Columns.Add("Precursor Name");
+            all_lipids_unique.Columns.Add("Precursor Ion Formula");
+            all_lipids_unique.Columns.Add("Precursor Adduct");
+            all_lipids_unique.Columns.Add("Precursor m/z");
+            all_lipids_unique.Columns.Add("Precursor Charge");
+            all_lipids_unique.Columns.Add("Pruduct Name");
+            all_lipids_unique.Columns.Add("Pruduct Ion Formula");
+            all_lipids_unique.Columns.Add("Pruduct m/z");
+            all_lipids_unique.Columns.Add("Pruduct Charge");
             
             
             int line_counter = 1;
@@ -2051,10 +2156,12 @@ namespace LipidCreator
         public void assemble_lipids()
         {
             all_lipids.Clear();
-            
+            all_lipids_unique.Clear();
+            HashSet<String> used_keys = new HashSet<String>();
+            HashSet<String> replicates = new HashSet<String>();
             foreach (lipid curr_lipid in registered_lipids)
             {
-                curr_lipid.add_lipids(all_lipids, headgroups);
+                curr_lipid.add_lipids(all_lipids, all_lipids_unique, headgroups, used_keys, replicates);
             }
         }
 

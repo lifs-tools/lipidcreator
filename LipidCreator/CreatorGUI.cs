@@ -2058,7 +2058,6 @@ namespace LipidCreator
                     foreach (int hgValue in currentSLLipid.hgValues)
                     {
                         if (headgroups != "") headgroups += ", ";
-                        Console.WriteLine(headgroups);
                         headgroups += currentSLLipid.headGroupNames[hgValue];
                     }
                     row["Class"] = "Sphingolipid";
@@ -2147,7 +2146,7 @@ namespace LipidCreator
         public void open_review_Form(Object sender, EventArgs e)
         {
             lipidCreatorForm.assemble_lipids();
-            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.all_lipids);
+            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.all_lipids, lipidCreatorForm.all_lipids_unique);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();

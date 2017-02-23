@@ -373,6 +373,11 @@ namespace LipidCreator
             int top_low_buttons = 420;
             int left_groupboxes = 850;
             
+            
+            deleteImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete-small.png");
+            editImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/edit-small.png");
+            addImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/add-small.png");
+            
             gl_hg_listbox = new ListBox();
             pl_hg_listbox = new ListBox();
             sl_hg_listbox = new ListBox();
@@ -1567,97 +1572,125 @@ namespace LipidCreator
             lipids_groupbox.Height = 180;
 
             cl_add_lipid_button.Text = "Add cardiolipins";
-            cl_add_lipid_button.Width = 130;
+            cl_add_lipid_button.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            cl_add_lipid_button.Width = 146;
+            cl_add_lipid_button.Height = 26;
+            cl_add_lipid_button.Image = addImage;
+            cl_add_lipid_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             cl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             cl_add_lipid_button.BackColor = SystemColors.Control;
             cl_add_lipid_button.Click += register_lipid;
 
             cl_reset_lipid_button.Text = "Reset lipid";
             cl_reset_lipid_button.Width = 130;
+            cl_reset_lipid_button.Height = 26;
             cl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             cl_reset_lipid_button.BackColor = SystemColors.Control;
             cl_reset_lipid_button.Click += reset_cl_lipid;
 
             cl_modify_lipid_button.Text = "Modify lipid";
             cl_modify_lipid_button.Width = 130;
+            cl_modify_lipid_button.Height = 26;
             cl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             cl_modify_lipid_button.BackColor = SystemColors.Control;
             cl_modify_lipid_button.Click += modify_cl_lipid;
 
             cl_ms2fragments_lipid_button.Text = "MS2 fragments";
             cl_ms2fragments_lipid_button.Width = 130;
+            cl_ms2fragments_lipid_button.Height = 26;
             cl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             cl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             cl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             gl_add_lipid_button.Text = "Add glycerolipids";
-            gl_add_lipid_button.Width = 130;
+            gl_add_lipid_button.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            gl_add_lipid_button.Image = addImage;
+            gl_add_lipid_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            gl_add_lipid_button.Width = 146;
+            gl_add_lipid_button.Height = 26;
             gl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             gl_add_lipid_button.BackColor = SystemColors.Control;
             gl_add_lipid_button.Click += register_lipid;
 
             gl_reset_lipid_button.Text = "Reset lipid";
             gl_reset_lipid_button.Width = 130;
+            gl_reset_lipid_button.Height = 26;
             gl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             gl_reset_lipid_button.BackColor = SystemColors.Control;
             gl_reset_lipid_button.Click += reset_gl_lipid;
 
             gl_modify_lipid_button.Text = "Modify lipid";
             gl_modify_lipid_button.Width = 130;
+            gl_modify_lipid_button.Height = 26;
             gl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             gl_modify_lipid_button.BackColor = SystemColors.Control;
             gl_modify_lipid_button.Click += modify_gl_lipid;
 
             gl_ms2fragments_lipid_button.Text = "MS2 fragments";
             gl_ms2fragments_lipid_button.Width = 130;
+            gl_ms2fragments_lipid_button.Height = 26;
             gl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             gl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             gl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             pl_add_lipid_button.Text = "Add phospholipids";
-            pl_add_lipid_button.Width = 130;
+            pl_add_lipid_button.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            pl_add_lipid_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            pl_add_lipid_button.Image = addImage;
+            pl_add_lipid_button.Width = 146;
+            pl_add_lipid_button.Height = 26;
             pl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             pl_add_lipid_button.BackColor = SystemColors.Control;
             pl_add_lipid_button.Click += register_lipid;
 
             pl_reset_lipid_button.Text = "Reset lipid";
             pl_reset_lipid_button.Width = 130;
+            pl_reset_lipid_button.Height = 26;
             pl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             pl_reset_lipid_button.BackColor = SystemColors.Control;
             pl_reset_lipid_button.Click += reset_pl_lipid;
 
             pl_modify_lipid_button.Text = "Modify lipid";
             pl_modify_lipid_button.Width = 130;
+            pl_modify_lipid_button.Height = 26;
             pl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             pl_modify_lipid_button.BackColor = SystemColors.Control;
             pl_modify_lipid_button.Click += modify_pl_lipid;
 
             pl_ms2fragments_lipid_button.Text = "MS2 fragments";
             pl_ms2fragments_lipid_button.Width = 130;
+            pl_ms2fragments_lipid_button.Height = 26;
             pl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             pl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             pl_ms2fragments_lipid_button.Click += open_ms2_form;
 
             sl_add_lipid_button.Text = "Add sphingolipids";
-            sl_add_lipid_button.Width = 130;
+            sl_add_lipid_button.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            sl_add_lipid_button.Height = 26;
+            sl_add_lipid_button.Width = 146;
             sl_add_lipid_button.Location = new Point(left_groupboxes, top_low_buttons);
             sl_add_lipid_button.BackColor = SystemColors.Control;
             sl_add_lipid_button.Click += register_lipid;
+            sl_add_lipid_button.Image = addImage;
+            sl_add_lipid_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
             sl_reset_lipid_button.Text = "Reset lipid";
             sl_reset_lipid_button.Width = 130;
+            sl_reset_lipid_button.Height = 26;
             sl_reset_lipid_button.Location = new Point(20, top_low_buttons);
             sl_reset_lipid_button.BackColor = SystemColors.Control;
             sl_reset_lipid_button.Click += reset_sl_lipid;
 
             sl_modify_lipid_button.Text = "Modify lipid";
             sl_modify_lipid_button.Width = 130;
+            sl_modify_lipid_button.Height = 26;
             sl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             sl_modify_lipid_button.BackColor = SystemColors.Control;
             sl_modify_lipid_button.Click += modify_sl_lipid;
 
             sl_ms2fragments_lipid_button.Text = "MS2 fragments";
             sl_ms2fragments_lipid_button.Width = 130;
+            sl_ms2fragments_lipid_button.Height = 26;
             sl_ms2fragments_lipid_button.Location = new Point(160, top_low_buttons);
             sl_ms2fragments_lipid_button.BackColor = SystemColors.Control;
             sl_ms2fragments_lipid_button.Click += open_ms2_form;
@@ -1684,9 +1717,6 @@ namespace LipidCreator
             lipids_gridview.ScrollBars = ScrollBars.Vertical;
             lipids_gridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipids_gridview_DataBindingComplete);
             
-            deleteImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete-small.png");
-            editImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/edit-small.png");
-            addImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/add-small.png");
             
             
 

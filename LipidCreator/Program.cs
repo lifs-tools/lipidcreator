@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Data.SQLite;
+using Ionic.Zlib;
 
 using System.Xml;
 using System.Xml.Linq;
@@ -566,6 +568,10 @@ namespace LipidCreator
             representativeFA = false;
         }
         
+        public virtual void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
+        {
+        }
+        
         public virtual void add_lipids(DataTable dt, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
         }
@@ -618,6 +624,30 @@ namespace LipidCreator
                 {
                     MS2Fragments[item.Key].Add(new MS2Fragment(fragment));
                 }
+            }
+        }
+        
+        
+        
+        public void subtract_adduct(DataTable atomsCount, String adduct)
+        {
+            switch (adduct)
+            {
+                             
+                case "+NH4":
+                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 3;
+                    atomsCount.Rows[3]["Count"] = (int)atomsCount.Rows[3]["Count"] - 1;
+                    break;
+                case "+HCOO":
+                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 2;
+                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] - 1;
+                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] - 2;
+                    break;
+                case "+CH3COO":
+                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] - 2;
+                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 4;
+                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] - 2;
+                    break;
             }
         }
         
@@ -917,7 +947,8 @@ namespace LipidCreator
                                                                                                         MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                                                                                         String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                                                                         int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                                                        String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount, charge);
                                                                                                         
                                                                                                         
                                                                                                         
@@ -951,7 +982,7 @@ namespace LipidCreator
                                                                                                                     }
                                                                                                                 }
                                                                                                                 String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                                                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                                                                                 
                                                                                                             
                                                                                                                 DataRow lipid_row = all_lipids.NewRow();
@@ -967,7 +998,7 @@ namespace LipidCreator
                                                                                                                 lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                                                                 all_lipids.Rows.Add(lipid_row);
                                                                                                                 
-                                                                                                                String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                                                                String replicates_key = chemFormComplete + "/" + chemFormFragment;
                                                                                                                 if (!replicates.Contains(replicates_key))
                                                                                                                 {
                                                                                                                     replicates.Add(replicates_key);
@@ -1009,6 +1040,11 @@ namespace LipidCreator
                     }
                 }
             }
+        }
+        
+        public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
+        {
+        
         }
     }
 
@@ -1246,7 +1282,8 @@ namespace LipidCreator
                                                                                     MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                                                                     String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                                                     int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                                    String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount, charge);
                                                                                     
                                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                                     {
@@ -1274,7 +1311,7 @@ namespace LipidCreator
                                                                                                 }
                                                                                             }
                                                                                             String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                                                             
                                                                                         
                                                                                             DataRow lipid_row = all_lipids.NewRow();
@@ -1290,7 +1327,7 @@ namespace LipidCreator
                                                                                             lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                                             all_lipids.Rows.Add(lipid_row);
                                                                                                                 
-                                                                                            String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                                            String replicates_key = chemFormComplete + "/" + chemFormFragment;
                                                                                             if (!replicates.Contains(replicates_key))
                                                                                             {
                                                                                                 replicates.Add(replicates_key);
@@ -1328,6 +1365,11 @@ namespace LipidCreator
                     }
                 }
             }
+        }
+        
+        public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
+        {
+        
         }
     }
 
@@ -1515,7 +1557,8 @@ namespace LipidCreator
                                                                     MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                                                     String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                                     int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                                                    String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount, charge);
                                                                     
                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                     {
@@ -1540,7 +1583,7 @@ namespace LipidCreator
                                                                                 }
                                                                             }
                                                                             String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                                             
                                                                         
                                                                             DataRow lipid_row = all_lipids.NewRow();
@@ -1556,7 +1599,7 @@ namespace LipidCreator
                                                                             lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                                             all_lipids.Rows.Add(lipid_row);
                                                                                                                 
-                                                                            String replicates_key = chemForm + "/" + chemFormFragment;
+                                                                            String replicates_key = chemFormComplete + "/" + chemFormFragment;
                                                                             if (!replicates.Contains(replicates_key))
                                                                             {
                                                                                 replicates.Add(replicates_key);
@@ -1589,6 +1632,11 @@ namespace LipidCreator
                     }
                 }
             }
+        }
+        
+        public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
+        {
+        
         }
     }
 
@@ -1722,9 +1770,6 @@ namespace LipidCreator
         
         public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
         {
-            
-            
-            
             foreach (int lcb_l in lcb.carbonCounts)
             {
                 int max_db_1 = (lcb_l - 1) >> 1;
@@ -1735,7 +1780,7 @@ namespace LipidCreator
                     foreach (int hgValue in hgValues)
                     {
                         String headgroup = headGroupNames[hgValue];
-                        if (headgroup != "SPH" && headgroup != "SPH-H" && headgroup != "SPC") // sphingolipids without fatty acid
+                        if (headgroup != "SPH" && headgroup != "SPH-P" && headgroup != "SPC") // sphingolipids without fatty acid
                         {
                             foreach (int fa_l in fag.carbonCounts)
                             {
@@ -1766,23 +1811,11 @@ namespace LipidCreator
                                                 MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                                 MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                                                 MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
-                                                int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                // do not change the order, chem formula must be computed before adding the adduct
                                                 String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                                double mass = LipidCreatorForm.compute_mass(atomsCount);
-                                                
-                                                
-                                                DataTable facnt = MS2Fragment.createEmptyElementTable();
-                                                MS2Fragment.addCounts(facnt, fa.atomsCount);
-                                                Console.WriteLine(key + " , FA: " + LipidCreatorForm.compute_chemical_formula(facnt));
-                                                
-                                                DataTable lcbcnt = MS2Fragment.createEmptyElementTable();
-                                                MS2Fragment.addCounts(lcbcnt, lcbType.atomsCount);
-                                                Console.WriteLine(key + " , LCB: " + LipidCreatorForm.compute_chemical_formula(lcbcnt));
-                                                
-                                                DataTable hgcnt = MS2Fragment.createEmptyElementTable();
-                                                MS2Fragment.addCounts(hgcnt, ddt[headgroup]);
-                                                Console.WriteLine(key + " , HG: " + LipidCreatorForm.compute_chemical_formula(hgcnt));
-                                                
+                                                int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                double mass = LipidCreatorForm.compute_mass(atomsCount, charge);                                                
                                                 
                                                 
                                                 foreach (MS2Fragment fragment in MS2Fragments[headgroup])
@@ -1807,8 +1840,14 @@ namespace LipidCreator
                                                                     break;
                                                             }
                                                         }
+                                                        // some exceptional if conditions
+                                                        if (adduct.Key != "-H" && charge < 0 && (headgroup == "HexCer" || headgroup == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                                                        {
+                                                            subtract_adduct(atomsCountFragment, adduct.Key);
+                                                        }
+                                                        
                                                         String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                        double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                        double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                         
                                                     
                                                         DataRow lipid_row = all_lipids.NewRow();
@@ -1824,7 +1863,7 @@ namespace LipidCreator
                                                         lipid_row["Pruduct Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                                                         all_lipids.Rows.Add(lipid_row);
                                                                                                                 
-                                                        String replicates_key = chemForm + "/" + chemFormFragment;
+                                                        String replicates_key = chemFormComplete + "/" + chemFormFragment;
                                                         if (!replicates.Contains(replicates_key))
                                                         {
                                                             replicates.Add(replicates_key);
@@ -1864,13 +1903,18 @@ namespace LipidCreator
                                         DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                                         MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
                                         MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
-                                        
-                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                        // do not change the order, chem formula must be computed before adding the adduct
                                         String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
-                                        double mass = LipidCreatorForm.compute_mass(atomsCount);
+                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                        String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                        double mass = LipidCreatorForm.compute_mass(atomsCount, charge);
                                         
                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                         {
+                                            // Special cases that are to few to be put in own handling, thus added here as if condidions
+                                            if (headgroup == "SPH" && lcb_db_1 > 0 && fragment.fragmentName == "HG") continue;
+                                        
+                                        
                                             if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                             {
                                                 DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
@@ -1889,7 +1933,7 @@ namespace LipidCreator
                                                     }
                                                 }
                                                 String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
-                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment);
+                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                 
                                             
                                                 DataRow lipid_row = all_lipids.NewRow();
@@ -1932,6 +1976,231 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
+        {
+            String sql;
+            foreach (int lcb_l in lcb.carbonCounts)
+            {
+                int max_db_1 = (lcb_l - 1) >> 1;
+                foreach (int lcb_db_1 in lcb.doubleBondCounts)
+                {
+                    if (max_db_1 < lcb_db_1) continue;
+                    FattyAcid lcbType = new FattyAcid(lcb_l, lcb_db_1, lcb_hydroxyValue, true);
+                    foreach (int hgValue in hgValues)
+                    {
+                        String headgroup = headGroupNames[hgValue];
+                        if (headgroup != "SPH" && headgroup != "SPH-P" && headgroup != "SPC") // sphingolipids without fatty acid
+                        {
+                            foreach (int fa_l in fag.carbonCounts)
+                            {
+                                if (fa_l < fa_hydroxyValue + 2) continue;
+                                int max_db_2 = (fa_l - 1) >> 1;
+                                foreach (int fa_db_2 in fag.doubleBondCounts)
+                                {
+                                    if (max_db_2 < fa_db_2) continue;
+                                    FattyAcid fa = new FattyAcid(fa_l, fa_db_2, fa_hydroxyValue, "FA");
+                        
+                        
+                                    String key = headgroup + " ";
+                                    
+                                    key += Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+                                    key += "/";
+                                    key += Convert.ToString(fa_l) + ":" + Convert.ToString(fa_db_2);
+                                    if (fa_hydroxyValue > 0) key += ";" + Convert.ToString(fa_hydroxyValue);
+                                    
+
+                                    foreach (KeyValuePair<string, bool> adduct in adducts)
+                                    {
+                                        if (adduct.Value)
+                                        {
+                                            String keyAdduct = key + " " + adduct.Key;
+                                            if (!used_keys.Contains(keyAdduct))
+                                            {
+                                                used_keys.Add(keyAdduct);
+                                                
+                                                DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                MS2Fragment.addCounts(atomsCount, fa.atomsCount);
+                                                MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
+                                                // do not change the order, chem formula must be computed before adding the adduct
+                                                int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
+                                                
+                                                ArrayList valuesMZ = new ArrayList();
+                                                
+                                                foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                {
+                                                    if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                    {
+                                                        DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                        foreach (string fbase in fragment.fragmentBase)
+                                                        {
+                                                            switch(fbase)
+                                                            {
+                                                                case "LCB":
+                                                                    MS2Fragment.addCounts(atomsCountFragment, lcbType.atomsCount);
+                                                                    break;
+                                                                case "FA":
+                                                                    MS2Fragment.addCounts(atomsCountFragment, fa.atomsCount);
+                                                                    break;
+                                                                case "PRE":
+                                                                    MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                    break;
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        }
+                                                        // some exceptional if conditions
+                                                        if (adduct.Key != "-H" && charge < 0 && (headgroup == "HexCer" || headgroup == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                                                        {
+                                                            subtract_adduct(atomsCountFragment, adduct.Key);
+                                                        }
+                                                        
+                                                        String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                        double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                                                        
+                                                        valuesMZ.Add(massFragment);
+                                                        
+                                                        
+                                                        // add Annotation
+                                                        sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                        SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                                                        parameterName.Value = fragment.fragmentName;
+                                                        command.CommandText = sql;
+                                                        command.Parameters.Add(parameterName);
+                                                        command.ExecuteNonQuery();
+                                                        
+                                                    }
+                                                }
+                                                
+                                                
+                                                int numFragments = valuesMZ.Count;
+                                                double[] valuesMZArray = new double[numFragments];
+                                                float[] valuesIntens = new float[numFragments];
+                                                for(int i = 0; i < numFragments; ++i)
+                                                {
+                                                    valuesMZArray[i] = (double)valuesMZ[i];
+                                                    valuesIntens[i] = 10000;
+                                                }
+                                                
+                                                
+                                                // add MS1 information
+                                                sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                command.CommandText = sql;
+                                                command.ExecuteNonQuery();
+                                                
+                                                // add spectrum
+                                                command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                                                SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                                                SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                                                parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                                                parameterIntens.Value = Compressing.Compress(valuesIntens);
+                                                command.Parameters.Add(parameterMZ);
+                                                command.Parameters.Add(parameterIntens);
+                                                command.ExecuteNonQuery();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            String key = headgroup + " " + Convert.ToString(lcb_l) + ":" + Convert.ToString(lcb_db_1) + ";" + Convert.ToString(lcb_hydroxyValue);
+
+                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                            {
+                                if (adduct.Value)
+                                {
+                                    String keyAdduct = key + " " + adduct.Key;
+                                    if (!used_keys.Contains(keyAdduct))
+                                    {
+                                        used_keys.Add(keyAdduct);
+                                        
+                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                        MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
+                                        // do not change the order, chem formula must be computed before adding the adduct
+                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                        double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
+                                        
+                                        ArrayList valuesMZ = new ArrayList();
+                                        
+                                        foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                        {
+                                            // Special cases that are to few to be put in own handling, thus added here as if condidions
+                                            if (headgroup == "SPH" && lcb_db_1 > 0 && fragment.fragmentName == "HG") continue;
+                                        
+                                        
+                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                            {
+                                                DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                foreach (string fbase in fragment.fragmentBase)
+                                                {
+                                                    switch(fbase)
+                                                    {
+                                                        case "LCB":
+                                                            MS2Fragment.addCounts(atomsCountFragment, lcbType.atomsCount);
+                                                            break;
+                                                        case "PRE":
+                                                            MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                                String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                                                
+                                                valuesMZ.Add(massFragment);
+                                                
+                                                
+                                                // add Annotation
+                                                sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) ((SELECT MAX(id) + 1 FROM RefSpectra), " + massFragment + ", '" + chemFormFragment + "', '" + fragment.fragmentName + "')";
+                                                command.CommandText = sql;
+                                                command.ExecuteNonQuery();
+                                                
+                                            }
+                                        }
+                                                
+                                                
+                                        int numFragments = valuesMZ.Count;
+                                        double[] valuesMZArray = (double[])valuesMZ.ToArray(typeof(Double));
+                                        float[] valuesIntens = new float[numFragments];
+                                        for(int i = 0; i < numFragments; ++i)
+                                        {
+                                            valuesIntens[i] = 10000;
+                                        }
+                                        
+                                        
+                                        // add MS1 information
+                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                        command.CommandText = sql;
+                                        command.ExecuteNonQuery();
+                                        
+                                        
+                                        
+                                        
+                                        // add spectrum
+                                        command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                                        SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                                        SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                                        parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                                        parameterIntens.Value = Compressing.Compress(valuesIntens);
+                                        command.Parameters.Add(parameterMZ);
+                                        command.Parameters.Add(parameterIntens);
+                                        command.ExecuteNonQuery();
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -1953,7 +2222,7 @@ namespace LipidCreator
         public string prefix_path = "Tools/LipidCreator/";
         
         public LipidCreatorForm(String pipe)
-        {
+        {        
             opened_as_external = (pipe != null);
             skylineToolClient = opened_as_external ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registered_lipids = new ArrayList();
@@ -2191,17 +2460,17 @@ namespace LipidCreator
             return chemForm;
         }
 
-        public static double compute_mass(DataTable elements)
+        public static double compute_mass(DataTable elements, double charge)
         {
             double mass = 0;
             foreach (DataRow row in elements.Rows)
             {
                 mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
             }
-            return mass;
+            return mass - charge * 0.00054857990946;
         }
         
-        public void send_to_Skyline(DataTable dt)
+        public void send_to_Skyline(DataTable dt, string blibName, string blibFile)
         {
             if (skylineToolClient == null) return;
             
@@ -2239,14 +2508,12 @@ namespace LipidCreator
             }
             try
             {
-                //Console.WriteLine(pipe_string);
-                
                 skylineToolClient.InsertSmallMoleculeTransitionList(pipe_string);
+                if (blibName.Length > 0 && blibFile.Length > 0) skylineToolClient.AddSpectralLibrary(blibName, blibFile);
                 skylineToolClient.Dispose();
             }
             catch (Exception e)
             {
-                //Console.WriteLine(e.ToString());
                 MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + max_mass + "Da.");
             }
         }
@@ -2302,6 +2569,99 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        public void createBlib(String filename)
+        {
+            if (File.Exists(filename)) File.Delete(filename);
+        
+            SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");
+            m_dbConnection.Open();
+            SQLiteCommand command = new SQLiteCommand(m_dbConnection);
+            
+            
+            command.CommandText = "PRAGMA synchronous=OFF;";
+            command.ExecuteNonQuery();
+            
+            command.CommandText = "PRAGMA cache_size=" + (double)(250 * 1024 / 1.5) + ";";
+            command.ExecuteNonQuery();
+            
+            command.CommandText = "PRAGMA temp_store=MEMORY;";
+            command.ExecuteNonQuery();
+            
+            String sql = "CREATE TABLE LibInfo(libLSID TEXT, createTime TEXT, numSpecs INTEGER, majorVersion INTEGER, minorVersion INTEGER)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+
+            //fill in the LibInfo first
+            string lsid = "urn:lsid:isas.de:spectral_library:bibliospec:nr:1";
+            sql = "INSERT INTO LibInfo values('" + lsid + "','2017-01-01',-1,4,0)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+
+            sql = "CREATE TABLE RefSpectra (id INTEGER primary key autoincrement not null, peptideSeq VARCHAR(150), precursorMZ REAL, precursorCharge INTEGER, peptideModSeq VARCHAR(200), prevAA CHAR(1), nextAA CHAR(1), copies INTEGER, numPeaks INTEGER, driftTimeMsec REAL, collisionalCrossSectionSqA REAL, driftTimeHighEnergyOffsetMsec REAL, retentionTime REAL, fileID INTEGER, SpecIDinFile VARCHAR(256), score REAL, scoreType TINYINT)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE Modifications (id INTEGER primary key autoincrement not null, RefSpectraID INTEGER, position INTEGER, mass REAL)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE RefSpectraPeaks(RefSpectraID INTEGER, peakMZ BLOB, peakIntensity BLOB)";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE SpectrumSourceFiles (id INTEGER PRIMARY KEY autoincrement not null, fileName VARCHAR(512), cutoffScore REAL )";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE ScoreTypes (id INTEGER PRIMARY KEY, scoreType VARCHAR(128) )";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE Annotations (RefSpectraID INTEGER, precursorMZ REAL, sumComposition VARCHAR(100), shortName VARCHAR(50), chargedFragmentName VARCHAR(256), neutralFragmentName VARCHAR(256))";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, ionMobilityValue REAL, ionMobilityType INTEGER, ionMobilityHighEnergyDriftTimeOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            string[] scoreTypeNames = new string[]{"UNKNOWN", "PERCOLATOR QVALUE", "PEPTIDE PROPHET SOMETHING", "SPECTRUM MILL", "IDPICKER FDR", "MASCOT IONS SCORE",  "TANDEM EXPECTATION VALUE",  "PROTEIN PILOT CONFIDENCE", "SCAFFOLD SOMETHING", "WATERS MSE PEPTIDE SCORE", "OMSSA EXPECTATION SCORE", "PROTEIN PROSPECTOR EXPECTATION SCORE", "SEQUEST XCORR", "MAXQUANT SCORE", "MORPHEUS SCORE", "MSGF+ SCORE", "PEAKS CONFIDENCE SCORE", "BYONIC SCORE", "PEPTIDE SHAKER CONFIDENCE"};
+            
+            for(int i=0; i < scoreTypeNames.Length; ++i){
+                sql = "INSERT INTO ScoreTypes(id, scoreType) VALUES(" + i + ", '" + scoreTypeNames[i] + "')";
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+            }
+            
+            command.CommandText = "CREATE INDEX idxPeptide ON RefSpectra (peptideSeq, precursorCharge)";
+            command.ExecuteNonQuery();
+            command.CommandText = "CREATE INDEX idxPeptideMod ON RefSpectra (peptideModSeq, precursorCharge)";
+            command.ExecuteNonQuery();
+            command.CommandText = "CREATE INDEX idxRefIdPeaks ON RefSpectraPeaks (RefSpectraID)";
+            command.ExecuteNonQuery();
+            command.CommandText = "CREATE INDEX idxRefIdAnnotations ON Annotations (RefSpectraID)";
+            command.ExecuteNonQuery();
+            
+            
+            
+            HashSet<String> used_keys = new HashSet<String>();
+            foreach (lipid curr_lipid in registered_lipids)
+            {
+                curr_lipid.addSpectrum(command, headgroups, used_keys);
+            }
+            
+            
+            // update numspecs
+            sql = "UPDATE LibInfo SET numSpecs = (SELECT MAX(id) FROM RefSpectra);";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+        }
+        
+        
+        
 
         [STAThread]
         public static void Main(string[] args)
@@ -2309,6 +2669,54 @@ namespace LipidCreator
             LipidCreatorForm lcf = new LipidCreatorForm((args.Length > 0) ? args[0] : null);
             Application.Run(lcf.creatorGUI);
         }
+    }
+    
+    public static class Compressing
+    {
+        public static byte[] GetBytes(double[] values)
+        {
+            var result = new byte[values.Length * sizeof(double)];
+            Buffer.BlockCopy(values, 0, result, 0, result.Length);
+            return result;
+        }
+        
+        public static byte[] GetBytes(float[] values)
+        {
+            var result = new byte[values.Length * sizeof(float)];
+            Buffer.BlockCopy(values, 0, result, 0, result.Length);
+            return result;
+        }
+    
+        public static byte[] Compress(this double[] uncompressed)
+        {
+            return Compress(GetBytes(uncompressed), 3);
+            //return GetBytes(uncompressed);
+        }
+    
+        public static byte[] Compress(this float[] uncompressed)
+        {
+            return Compress(GetBytes(uncompressed), 3);
+            //return GetBytes(uncompressed);
+        }
+        
+        public static byte[] Compress(this byte[] uncompressed, int level)
+        {
+            byte[] result;
+            using (var ms = new MemoryStream())
+            {
+                using (var compressor = new ZlibStream(ms, CompressionMode.Compress, CompressionLevel.Level0 + level))
+                    compressor.Write(uncompressed, 0, uncompressed.Length);
+                result =  ms.ToArray();
+            }
+
+
+            // If compression did not improve the situation, then use
+            // uncompressed bytes.
+            if (result.Length >= uncompressed.Length)
+                return uncompressed;
+
+            return result;
+        }    
     }
 
 }

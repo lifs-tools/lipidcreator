@@ -3,8 +3,8 @@ Cer,NL(H2O),images/MS2/Cer/Cer_pos_NL.png,1,PRE,0,-2,-1,0,0,0,0,
 Cer,W',images/MS2/Cer/Cer_pos_W'.png,1,LCB,0,1,-1,0,0,0,0,
 Cer,W'',images/MS2/Cer/Cer_pos_W''.png,1,LCB,0,-1,-2,0,0,0,0,
 Cer,W' - CHO,images/MS2/Cer/Cer_pos_W'-CHO.png,1,LCB,-1,-1,-2,0,0,0,0,
-Cer,NL(CH3COOH),images/MS2/Cer/Cer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,
-Cer,NL(HCOOH),images/MS2/Cer/Cer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,
+Cer,NL(CH3COOH),images/MS2/Cer/Cer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+CH3COO
+Cer,NL(HCOOH),images/MS2/Cer/Cer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,+HCOO
 Cer,F,images/MS2/Cer/Cer_neg_F.png,-1,LCB,-1,-1,-1,0,0,0,0,
 Cer,V',images/MS2/Cer/Cer_neg_V'.png,-1,LCB,0,-4,-1,-1,0,0,0,
 Cer,J,images/MS2/Cer/Cer_neg_J.png,-1,LCB,-2,-6,-1,-1,0,0,0,
@@ -78,8 +78,8 @@ DGDG,Z0 - FA2,images/MS2/DGDG/DGDG_pos_Z0-FA2.png,1,FA1,3,6,2,0,0,0,0,
 DGDG,HG(DGPE),images/MS2/DGDG/DGDG_neg_HG(DGDG).png,-1,,15,27,13,0,0,0,0,
 DGDG,HG(DGPE - H2O),images/MS2/DGDG/DGDG_neg_HG(DGDG-H2O).png,-1,,15,25,12,0,0,0,0,
 DGDG,HG(DGPE - 2 * H2O),images/MS2/DGDG/DGDG_neg_HG(DGDG-2H2O).png,-1,,15,23,11,0,0,0,0,
-DGDG,NL(CH3COOH),images/MS2/DGDG/DGDG_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,CH3COO
-DGDG,NL(HCOOH),images/MS2/DGDG/DGDG_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,HCOO
+DGDG,NL(CH3COOH),images/MS2/DGDG/DGDG_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+CH3COO
+DGDG,NL(HCOOH),images/MS2/DGDG/DGDG_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,+HCOO
 DGDG,FA1,images/MS2/DGDG/DGDG_neg_FA1.png,-1,FA1,0,0,1,0,0,0,0,
 DGDG,FA2,images/MS2/DGDG/DGDG_neg_FA2.png,-1,FA2,0,0,1,0,0,0,0,
 DGDG,FA1',images/MS2/DGDG/DGDG_neg_FA1'.png,-1,FA2,15,24,12,0,0,0,0,
@@ -150,8 +150,8 @@ HexCer,W' - CHO,images/MS2/HexCer/HexCer_pos_W'-CHO.png,1,LCB,-1,-1,-2,0,0,0,0,
 HexCer,Z0,images/MS2/HexCer/HexCer_pos_Z0.png,1,PRE,-6,-12,-6,0,0,0,0,
 HexCer,Z0 - H2O,images/MS2/HexCer/HexCer_pos_Z0-H2O.png,1,PRE,-6,-14,-7,0,0,0,0,
 HexCer,Y0,images/MS2/HexCer/HexCer_pos_Y0.png,1,PRE,-6,-10,-5,0,0,0,0,
-HexCer,NL(CH3COOH),images/MS2/HexCer/HexCer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,CH3COO
-HexCer,NL(HCOOH),images/MS2/HexCer/HexCer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,HCOO
+HexCer,NL(CH3COOH),images/MS2/HexCer/HexCer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+CH3COO
+HexCer,NL(HCOOH),images/MS2/HexCer/HexCer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,+HCOO
 HexCer,Y0,images/MS2/HexCer/HexCer_neg_Y0.png,-1,PRE,-6,-10,-5,0,0,0,0,
 HexCer,Z0,images/MS2/HexCer/HexCer_neg_Z0.png,-1,PRE,-6,-12,-6,0,0,0,0,
 HexCer,F,images/MS2/HexCer/HexCer_neg_F.png,-1,LCB,-1,-1,-1,0,0,0,0,
@@ -177,14 +177,14 @@ HexCerS,S,images/MS2/HexCerS/HexCerS_neg_S.png,-1,FA,2,3,0,1,0,0,0,
 HexCerS,V,images/MS2/HexCerS/HexCerS_neg_V.png,-1,FA,0,1,0,1,0,0,0,
 HexCerS,T,images/MS2/HexCerS/HexCerS_neg_T.png,-1,FA,2,3,1,1,0,0,0,
 LacCer,NL(H2O),images/MS2/LacCer/LacCer_pos_NL.png,1,PRE,0,-2,-1,0,0,0,0,
-LacCer,W',images/MS2/LacCer/LacCer_pos_W'.png,1,LCB,0,1,0,0,0,0,0,
-LacCer,W'',images/MS2/LacCer/LacCer_pos_W''.png,1,LCB,0,-1,-1,0,0,0,0,
-LacCer,W' - CHO,images/MS2/LacCer/LacCer_pos_W'-CHO.png,1,LCB,-1,-1,-1,0,0,0,0,
+LacCer,W',images/MS2/LacCer/LacCer_pos_W'.png,1,LCB,0,1,-1,0,0,0,0,
+LacCer,W'',images/MS2/LacCer/LacCer_pos_W''.png,1,LCB,0,-1,-2,0,0,0,0,
+LacCer,W' - CHO,images/MS2/LacCer/LacCer_pos_W'-CHO.png,1,LCB,-1,-1,-2,0,0,0,0,
 LacCer,Z0,images/MS2/LacCer/LacCer_pos_Z0.png,1,PRE,-12,-22,-11,0,0,0,0,
 LacCer,Z0 - H2O,images/MS2/LacCer/LacCer_pos_Z0-H2O.png,1,PRE,-12,-24,-12,0,0,0,0,
 LacCer,Y0,images/MS2/LacCer/LacCer_pos_Y0.png,1,PRE,-12,-20,-10,0,0,0,0,
-LacCer,NL(CH3COOH),images/MS2/LacCer/LacCer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,CH3COO
-LacCer,NL(HCOOH),images/MS2/LacCer/LacCer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,HCOO
+LacCer,NL(CH3COOH),images/MS2/LacCer/LacCer_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+CH3COO
+LacCer,NL(HCOOH),images/MS2/LacCer/LacCer_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,+HCOO
 LacCer,Y0,images/MS2/LacCer/LacCer_neg_Y0.png,-1,PRE,-12,-20,-10,0,0,0,0,
 LacCer,Y1,images/MS2/LacCer/LacCer_neg_Y1.png,-1,PRE,-6,-10,-5,0,0,0,0,
 LacCer,Z0,images/MS2/LacCer/LacCer_neg_Z0.png,-1,PRE,-12,-22,-11,0,0,0,0,
@@ -246,8 +246,8 @@ MGDG,Z0,images/MS2/MGDG/MGDG_pos_Z0.png,1,PRE,-6,-12,-6,0,0,0,0,
 MGDG,Z0 - FA1,images/MS2/MGDG/MGDG_pos_Z0-FA1.png,1,FA2,3,6,2,0,0,0,0,
 MGDG,Z0 - FA2,images/MS2/MGDG/MGDG_pos_Z0-FA2.png,1,FA1,3,6,2,0,0,0,0,
 MGDG,HG(MGDG),images/MS2/MGDG/MGDG_neg_HG.png,-1,,9,17,8,0,0,0,0,
-MGDG,NL(CH3COOH),images/MS2/MGDG/MGDG_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,CH3COO
-MGDG,NL(HCOOH),images/MS2/MGDG/MGDG_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,HCOO
+MGDG,NL(CH3COOH),images/MS2/MGDG/MGDG_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+CH3COO
+MGDG,NL(HCOOH),images/MS2/MGDG/MGDG_neg_NL.png,-1,PRE,-1,-2,-2,0,0,0,0,+HCOO
 MGDG,FA1,images/MS2/MGDG/MGDG_neg_FA1.png,-1,FA1,0,0,1,0,0,0,0,
 MGDG,FA2,images/MS2/MGDG/MGDG_neg_FA2.png,-1,FA2,0,0,1,0,0,0,0,
 MGDG,FA1',images/MS2/MGDG/MGDG_neg_FA1'.png,-1,FA2,9,14,7,0,0,0,0,
@@ -313,8 +313,8 @@ PA,FA2',images/MS2/PA/PA_neg_FA2'.png,-1,FA1,3,5,5,0,1,0,0,
 PA,FA1' + O,images/MS2/PA/PA_neg_FA1'+O.png,-1,FA2,3,7,6,0,1,0,0,
 PA,FA2' + O,images/MS2/PA/PA_neg_FA2'+O.png,-1,FA1,3,7,6,0,1,0,0,
 PC,HG(PC),images/MS2/PC/PC_pos_HG.png,1,,5,15,4,1,1,0,0,
-PC,NL(CH3 + CH3COO),images/MS2/PC/PC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,CH3COO
-PC,NL(CH3 + HCOO),images/MS2/PC/PC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,HCOO
+PC,NL(CH3 + CH3COO),images/MS2/PC/PC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,+CH3COO
+PC,NL(CH3 + HCOO),images/MS2/PC/PC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+HCOO
 PC,FA1,images/MS2/PC/PC_neg_FA1.png,-1,FA1,0,0,1,0,0,0,0,
 PC,FA2,images/MS2/PC/PC_neg_FA2.png,-1,FA2,0,0,1,0,0,0,0,
 PC,FA1',images/MS2/PC/PC_neg_FA1'.png,-1,FA2,7,14,5,1,1,0,0,
@@ -462,8 +462,8 @@ PIP3,FA2' + O - IP3,images/MS2/PIP3/PIP3_neg_FA2'+O-IP3.png,-1,FA1,3,7,6,0,1,0,0
 PIP3,FA1' - IP3,images/MS2/PIP3/PIP3_neg_FA1'-IP3.png,-1,FA2,3,5,5,0,1,0,0,
 PIP3,FA2' - IP3,images/MS2/PIP3/PIP3_neg_FA2'-IP3.png,-1,FA1,3,5,5,0,1,0,0,
 pPC,HG(pPC),images/MS2/pPC/pPC_neg_HG.png,-1,,7,15,5,1,1,0,0,
-pPC,NL(CH3 + CH3COO) (pPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,CH3COO
-pPC,NL(CH3 + HCOO) (pPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,HCOO
+pPC,NL(CH3 + CH3COO) (pPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,+CH3COO
+pPC,NL(CH3 + HCOO) (pPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+HCOO
 pPC,pFA1 (pPC),images/MS2/pPC/pPC_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,
 pPC,FA2 (pPC),images/MS2/pPC/pPC_neg_FA2.png,-1,FA2,0,0,1,0,0,0,0,
 pPC,FA2' (pPC),images/MS2/pPC/pPC_neg_FA2'.png,-1,FA1,7,16,5,1,1,0,0,
@@ -491,7 +491,7 @@ SM,HG(PC),images/MS2/SM/SM_pos_HG.png,1,,5,15,4,1,1,0,0,
 SM,W'',images/MS2/SM/SM_pos_W''.png,1,LCB,0,-1,-2,0,0,0,0,
 SM,HG(PC),images/MS2/SM/SM_neg_HG.png,-1,,4,11,4,1,1,0,0,
 SM,P,images/MS2/SM/SM_neg_P.png,-1,,0,0,3,0,1,0,0,
-SM,FA,images/MS2/SM/SM_neg_FA.png,-1,FA,0,-1,-1,0,0,0,0,
+SM,FA,images/MS2/SM/SM_neg_FA.png,-1,FA,0,0,1,0,0,0,0,
 SPC,HG(PC),images/MS2/SPC/SPC_pos_HG.png,1,,5,15,4,1,1,0,0,
 SPC,W'',images/MS2/SPC/SPC_pos_W''.png,1,LCB,0,-1,-2,0,0,0,0,
 SPH,HG,images/MS2/SPH/SPH_pos_HG.png,1,,2,6,1,1,0,0,0,

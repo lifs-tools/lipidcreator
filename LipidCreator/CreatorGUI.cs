@@ -16,6 +16,7 @@ namespace LipidCreator
     public partial class CreatorGUI : Form
     {
         public bool changing_tab_forced;
+        public int currentTabIndex = 1;
         public LipidCreatorForm lipidCreatorForm;
         public lipid currentLipid;
         public DataTable registered_lipids_datatable;
@@ -68,9 +69,10 @@ namespace LipidCreator
         public void changeTab(int index)
         {
             changing_tab_forced = true;
-            int tab_index = index - 1 >= 0 ? index - 1 : 1;
+            currentTabIndex = index;
+            int tab_index = currentTabIndex - 1 >= 0 ? currentTabIndex - 1 : 1;
             tab_control.SelectedIndex = tab_index;
-            changeTab(index, true);
+            changeTab(currentTabIndex, true);
             changing_tab_forced = false;
             
         }
@@ -78,7 +80,8 @@ namespace LipidCreator
         public void tabIndexChanged(Object sender,  EventArgs e)
         {
             if (changing_tab_forced) return;
-            changeTab(((TabControl)sender).SelectedIndex + 1, false);            
+            currentTabIndex = ((TabControl)sender).SelectedIndex + 1;
+            changeTab(currentTabIndex, false);            
         }
 
         public void changeTab(int index, bool forced)
@@ -2116,8 +2119,31 @@ namespace LipidCreator
             }
             else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
             {
+                lipid current_lipid = (lipid)lipidCreatorForm.registered_lipids[rowIndex];
+                int tabIndex = 0;
+                if (current_lipid is cl_lipid)
+                {
+                    tabIndex = 0;
+                }
+                else if (current_lipid is gl_lipid)
+                {
+                    tabIndex = 1;
+                }
+                else if (current_lipid is pl_lipid)
+                {
+                    tabIndex = 2;
+                }
+                else if (current_lipid is sl_lipid)
+                {
+                    tabIndex = 3;
+                }
                 lipidCreatorForm.registered_lipids.RemoveAt(rowIndex);
                 refresh_registered_lipids_table();
+                lipid_modifications[tabIndex] = -1;
+                if (tabIndex == currentTabIndex)
+                {
+                    changeTab(tabIndex);
+                }
             }
         }
         

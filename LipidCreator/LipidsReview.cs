@@ -25,6 +25,8 @@ namespace LipidCreator
             InitializeComponent();
             currentView = this.allFragments;
             dataGridView1.DataSource = currentView;
+            button1.Enabled = lipidCreatorForm.opened_as_external;
+            checkBox2.Enabled = lipidCreatorForm.opened_as_external;
             label1.Text = "Number of transitions: " + currentView.Rows.Count;
             foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
             {
@@ -34,10 +36,31 @@ namespace LipidCreator
             dataGridView1.Refresh();
         }
     
-        public void send_to_Skyline(Object sender, EventArgs e)
+        public void button1_Click(Object sender, EventArgs e)
         {
-            lipidCreatorForm.send_to_Skyline(allFragments);
-            this.Close();
+            this.Enabled = false;
+            
+            if (checkBox2.Checked)
+            {
+                String[] specName = new String[]{""};
+                SpectralName spectralName = new SpectralName(specName);
+                spectralName.Owner = this;
+                spectralName.ShowInTaskbar = false;
+                spectralName.ShowDialog();
+                spectralName.Dispose();
+                if (specName[0].Length > 0)
+                {
+                    string blibPath = Application.StartupPath + "\\" + specName[0] + ".blib";
+                    lipidCreatorForm.createBlib(blibPath);
+                    lipidCreatorForm.send_to_Skyline(allFragments, specName[0], blibPath);
+                    MessageBox.Show("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
+                }
+            }
+            else {
+                lipidCreatorForm.send_to_Skyline(allFragments, "", "");
+                MessageBox.Show("Sending transition list to Skyline is complete.", "Sending complete");
+            }
+            this.Enabled = true;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -71,6 +94,7 @@ namespace LipidCreator
                 
                 if (mbr == DialogResult.Yes)
                 {
+                    this.Enabled = false;
                     using (StreamWriter outputFile = new StreamWriter(Path.GetFullPath(saveFileDialog1.FileName).Replace(".csv", "_positive.csv"))) {
                         foreach (DataRow row in currentView.Rows)
                         {
@@ -107,9 +131,12 @@ namespace LipidCreator
                             }
                         }
                     }
+                    MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    this.Enabled = true;
                 }
                 else
                 {
+                    this.Enabled = false;
                     StreamWriter writer;
                     if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
                     {
@@ -129,13 +156,28 @@ namespace LipidCreator
                         writer.Dispose();
                         writer.Close();
                     }
+                    MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    this.Enabled = true;
                 }
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            
+            saveFileDialog1.InitialDirectory = "c:\\";
+            saveFileDialog1.Filter = "blib files (*.blib)|*.blib|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 0;
+            saveFileDialog1.RestoreDirectory = true;
 
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.Enabled = false;
+                lipidCreatorForm.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
+                MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
+                this.Enabled = true;
+            }
         }
     }
 }

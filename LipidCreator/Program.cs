@@ -1,4 +1,28 @@
-﻿using System;
+﻿/*
+MIT License
+
+Copyright (c) 2017 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
@@ -1044,7 +1068,224 @@ namespace LipidCreator
         
         public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
         {
-        
+        // check if more than one fatty acids are 0:0
+            int check_FattyAcids = 0;
+            string sql;
+            check_FattyAcids += fag1.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag2.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag3.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag4.faTypes["FAx"] ? 1 : 0;
+            if (check_FattyAcids > 1) return;
+            
+            
+            int contains_mono_lyso = 0;
+            foreach (int fa_l_1 in fag1.carbonCounts)
+            {
+                int max_db_1 = (fa_l_1 - 1) >> 1;
+                foreach (int fa_db_1 in fag1.doubleBondCounts)
+                {
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
+                    {
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                        {
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                            {
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                contains_mono_lyso &= ~1;
+                                if (fa_kvp_1.Key == "FAx")
+                                {
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                    contains_mono_lyso |= 1;
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                    {
+                                        foreach (int fa_hydro_2 in fag1.hydroxylCounts)
+                                        {
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                            {
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                                {
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    contains_mono_lyso &= ~2;
+                                                    if (fa_kvp_2.Key == "FAx")
+                                                    {
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                        contains_mono_lyso |= 2;
+                                                    }
+                                                    foreach (int fa_l_3 in fag3.carbonCounts)
+                                                    {
+                                                        int max_db_3 = (fa_l_3 - 1) >> 1;
+                                                        foreach (int fa_db_3 in fag3.doubleBondCounts)
+                                                        {
+                                                            foreach (int fa_hydro_3 in fag1.hydroxylCounts)
+                                                            {
+                                                                foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
+                                                                {
+                                                                    if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
+                                                                    {
+                                                                        FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_hydro_3, fa_kvp_3.Key);
+                                                                        contains_mono_lyso &= ~4;
+                                                                        if (fa_kvp_3.Key == "FAx")
+                                                                        {
+                                                                            fa3 = new FattyAcid(0, 0, 0, "FA");
+                                                                            contains_mono_lyso |= 4;
+                                                                        }
+                                                                        foreach (int fa_l_4 in fag4.carbonCounts)
+                                                                        {
+                                                                            int max_db_4 = (fa_l_4 - 1) >> 1;
+                                                                            foreach (int fa_db_4 in fag4.doubleBondCounts)
+                                                                            {
+                                                                                foreach (int fa_hydro_4 in fag1.hydroxylCounts)
+                                                                                {
+                                                                                    foreach (KeyValuePair<string, bool> fa_kvp_4 in fag4.faTypes)
+                                                                                    {
+                                                                                        if (fa_kvp_4.Value && max_db_4 >= fa_db_4)
+                                                                                        {
+                                                                                            FattyAcid fa4 = new FattyAcid(fa_l_4, fa_db_4, fa_hydro_4, fa_kvp_4.Key);
+                                                                                            contains_mono_lyso &= ~8;
+                                                                                            if (fa_kvp_4.Key == "FAx")
+                                                                                            {
+                                                                                                fa4 = new FattyAcid(0, 0, 0, "FA");
+                                                                                                contains_mono_lyso |= 8;
+                                                                                            }
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                                                            sorted_acids.Add(fa1);
+                                                                                            sorted_acids.Add(fa2);
+                                                                                            sorted_acids.Add(fa3);
+                                                                                            sorted_acids.Add(fa4);
+                                                                                            sorted_acids.Sort();
+                                                                                            String headgroup = (contains_mono_lyso == 0) ? "CL" : "MLCL";
+                                                                                            String key = headgroup + " ";
+                                                                                            int i = 0;
+                                                                                            foreach (FattyAcid fa in sorted_acids)
+                                                                                            {
+                                                                                                if (fa.length > 0){
+                                                                                                    if (i++ > 0) key += "_";
+                                                                                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                                                    if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                                                    key += fa.suffix;
+                                                                                                }
+                                                                                            }
+                                                                                            
+                                                                                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                                                            {
+                                                                                                if (adduct.Value)
+                                                                                                {
+                                                                                                    String keyAdduct = key + " " + adduct.Key;
+                                                                                                    if (!used_keys.Contains(keyAdduct))
+                                                                                                    {
+                                                                                                        used_keys.Add(keyAdduct);
+                                                                                                        
+                                                                                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
+                                                                                                        MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                                                        int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                                                        double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
+                                                
+                                                                                                        ArrayList valuesMZ = new ArrayList();
+                                                                                                        
+                                                                                                        foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                                                        {
+                                                                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
+                                                                                                            {
+                                                                                                                DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                                                                foreach (string fbase in fragment.fragmentBase)
+                                                                                                                {
+                                                                                                                    switch(fbase)
+                                                                                                                    {
+                                                                                                                        case "FA1":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA2":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA3":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa3.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "FA4":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, fa4.atomsCount);
+                                                                                                                            break;
+                                                                                                                        case "PRE":
+                                                                                                                            MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                                                            break;
+                                                                                                                        default:
+                                                                                                                            break;
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                                                                double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                                                        
+                                                                                                                valuesMZ.Add(massFragment);
+                                                                                                                
+                                                                                                                
+                                                                                                                // add Annotation
+                                                                                                                sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                                                                SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                                                                                                                parameterName.Value = fragment.fragmentName;
+                                                                                                                command.CommandText = sql;
+                                                                                                                command.Parameters.Add(parameterName);
+                                                                                                                command.ExecuteNonQuery();
+                                                                                                            }
+                                                                                                        }
+                                                
+                                                
+                                                                                                        int numFragments = valuesMZ.Count;
+                                                                                                        double[] valuesMZArray = new double[numFragments];
+                                                                                                        float[] valuesIntens = new float[numFragments];
+                                                                                                        for(int j = 0; j < numFragments; ++j)
+                                                                                                        {
+                                                                                                            valuesMZArray[j] = (double)valuesMZ[j];
+                                                                                                            valuesIntens[j] = 10000;
+                                                                                                        }
+                                                                                                        
+                                                                                                        
+                                                                                                        // add MS1 information
+                                                                                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                                                        command.CommandText = sql;
+                                                                                                        command.ExecuteNonQuery();
+                                                                                                        
+                                                                                                        // add spectrum
+                                                                                                        command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                                                                                                        SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                                                                                                        SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                                                                                                        parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                                                                                                        parameterIntens.Value = Compressing.Compress(valuesIntens);
+                                                                                                        command.Parameters.Add(parameterMZ);
+                                                                                                        command.Parameters.Add(parameterIntens);
+                                                                                                        command.ExecuteNonQuery();
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1369,7 +1610,213 @@ namespace LipidCreator
         
         public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
         {
-        
+        // check if more than one fatty acids are 0:0
+            int check_FattyAcids = 0;
+            string sql;
+            check_FattyAcids += fag1.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag2.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag3.faTypes["FAx"] ? 1 : 0;
+            if (check_FattyAcids > 2) return;
+            
+            int contains_mono_lyso = 0;
+            foreach (int fa_l_1 in fag1.carbonCounts)
+            {
+                int max_db_1 = (fa_l_1 - 1) >> 1;
+                foreach (int fa_db_1 in fag1.doubleBondCounts)
+                {
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
+                    {
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                        {
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                            {
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                contains_mono_lyso &= ~1;
+                                if (fa_kvp_1.Key == "FAx")
+                                {
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                    contains_mono_lyso |= 1;
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                    {
+                                        foreach (int fa_hydro_2 in fag1.hydroxylCounts)
+                                        {
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                            {
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                                {
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    contains_mono_lyso &= ~2;
+                                                    if (fa_kvp_2.Key == "FAx")
+                                                    {
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                        contains_mono_lyso |= 2;
+                                                    }
+                                                    foreach (int fa_l_3 in fag3.carbonCounts)
+                                                    {
+                                                        int max_db_3 = (fa_l_3 - 1) >> 1;
+                                                        foreach (int fa_db_3 in fag3.doubleBondCounts)
+                                                        {
+                                                            foreach (int fa_hydro_3 in fag1.hydroxylCounts)
+                                                            {
+                                                                foreach (KeyValuePair<string, bool> fa_kvp_3 in fag3.faTypes)
+                                                                {
+                                                                    if (fa_kvp_3.Value && max_db_3 >= fa_db_3)
+                                                                    {
+                                                                        FattyAcid fa3 = new FattyAcid(fa_l_3, fa_db_3, fa_hydro_3, fa_kvp_3.Key);
+                                                                        contains_mono_lyso &= ~4;
+                                                                        if (fa_kvp_3.Key == "FAx")
+                                                                        {
+                                                                            fa3 = new FattyAcid(0, 0, 0, "FA");
+                                                                            contains_mono_lyso |= 4;
+                                                                        }
+                                                                                
+                                                                                        
+                                                                        List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                                        sorted_acids.Add(fa1);
+                                                                        sorted_acids.Add(fa2);
+                                                                        sorted_acids.Add(fa3);
+                                                                        sorted_acids.Sort();
+                                                                        
+                                                                        // popcount
+                                                                        int pc_contains_mono_lyso = contains_mono_lyso - ((contains_mono_lyso >> 1) & 0x55555555);
+                                                                        pc_contains_mono_lyso = (pc_contains_mono_lyso & 0x33333333) + ((pc_contains_mono_lyso >> 2) & 0x33333333);
+                                                                        pc_contains_mono_lyso = ((pc_contains_mono_lyso + (pc_contains_mono_lyso >> 4) & 0xF0F0F0F) * 0x1010101) >> 24;
+                                                                        
+                                                                        String headgroup = "";
+                                                                        switch(pc_contains_mono_lyso)
+                                                                        {
+                                                                            case 0:
+                                                                            headgroup = "TG";
+                                                                                break;
+                                                                            case 1:
+                                                                            headgroup = "DG";
+                                                                                break;
+                                                                            case 2:
+                                                                            headgroup = "MG";
+                                                                                break;
+                                                                        }
+                                                                        String key = headgroup + " ";
+                                                                        int i = 0;
+                                                                        foreach (FattyAcid fa in sorted_acids)
+                                                                        {
+                                                                            if (fa.length > 0){
+                                                                                if (i++ > 0) key += "_";
+                                                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                                if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                                key += fa.suffix;
+                                                                            }
+                                                                        }
+                                                                        
+                                                                        
+                                                                        foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                                        {
+                                                                            if (adduct.Value)
+                                                                            {
+                                                                                String keyAdduct = key + " " + adduct.Key;
+                                                                                if (!used_keys.Contains(keyAdduct))
+                                                                                {
+                                                                                    used_keys.Add(keyAdduct);
+                                                                                    
+                                                                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                                    MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
+                                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                                    
+                                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
+                                                
+                                                                                    ArrayList valuesMZ = new ArrayList();
+                                                                                    
+                                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                                    {
+                                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                                        {
+                                                                                            DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                                            foreach (string fbase in fragment.fragmentBase)
+                                                                                            {
+                                                                                                switch(fbase)
+                                                                                                {
+                                                                                                    case "FA1":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                                        break;
+                                                                                                    case "FA2":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                                        break;
+                                                                                                    case "FA3":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa3.atomsCount);
+                                                                                                        break;
+                                                                                                    case "PRE":
+                                                                                                        MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                                        break;
+                                                                                                    default:
+                                                                                                        break;
+                                                                                                }
+                                                                                            }
+                                                                                            String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                                                        
+                                                                                            valuesMZ.Add(massFragment);
+                                                                                            
+                                                                                            
+                                                                                            // add Annotation
+                                                                                            sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                                            SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                                                                                            parameterName.Value = fragment.fragmentName;
+                                                                                            command.CommandText = sql;
+                                                                                            command.Parameters.Add(parameterName);
+                                                                                            command.ExecuteNonQuery();
+                                                                                        }
+                                                                                    }
+                                                
+                                                
+                                                                                    int numFragments = valuesMZ.Count;
+                                                                                    double[] valuesMZArray = new double[numFragments];
+                                                                                    float[] valuesIntens = new float[numFragments];
+                                                                                    for(int j = 0; j < numFragments; ++j)
+                                                                                    {
+                                                                                        valuesMZArray[j] = (double)valuesMZ[j];
+                                                                                        valuesIntens[j] = 10000;
+                                                                                    }
+                                                                                    
+                                                                                    
+                                                                                    // add MS1 information
+                                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                                    command.CommandText = sql;
+                                                                                    command.ExecuteNonQuery();
+                                                                                    
+                                                                                    // add spectrum
+                                                                                    command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                                                                                    SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                                                                                    SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                                                                                    parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                                                                                    parameterIntens.Value = Compressing.Compress(valuesIntens);
+                                                                                    command.Parameters.Add(parameterMZ);
+                                                                                    command.Parameters.Add(parameterIntens);
+                                                                                    command.ExecuteNonQuery();
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                       
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1636,7 +2083,164 @@ namespace LipidCreator
         
         public override void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> ddt, HashSet<String> used_keys)
         {
-        
+        // check if more than one fatty acids are 0:0
+            int check_FattyAcids = 0;
+            string sql;
+            check_FattyAcids += fag1.faTypes["FAx"] ? 1 : 0;
+            check_FattyAcids += fag2.faTypes["FAx"] ? 1 : 0;
+            if (check_FattyAcids > 0) return;
+            if (hgValues.Count == 0) return;
+            
+            foreach (int fa_l_1 in fag1.carbonCounts)
+            {
+                int max_db_1 = (fa_l_1 - 1) >> 1;
+                foreach (int fa_db_1 in fag1.doubleBondCounts)
+                {
+                    foreach (int fa_hydro_1 in fag1.hydroxylCounts)
+                    {
+                        foreach (KeyValuePair<string, bool> fa_kvp_1 in fag1.faTypes)
+                        {
+                            if (fa_kvp_1.Value && max_db_1 >= fa_db_1)
+                            {
+                                FattyAcid fa1 = new FattyAcid(fa_l_1, fa_db_1, fa_hydro_1, fa_kvp_1.Key);
+                                if (fa_kvp_1.Key == "FAx")
+                                {
+                                    fa1 = new FattyAcid(0, 0, 0, "FA");
+                                }
+                                foreach (int fa_l_2 in fag2.carbonCounts)
+                                {
+                                    int max_db_2 = (fa_l_2 - 1) >> 1;
+                                    foreach (int fa_db_2 in fag2.doubleBondCounts)
+                                    {
+                                        foreach (int fa_hydro_2 in fag2.hydroxylCounts)
+                                        {
+                                            foreach (KeyValuePair<string, bool> fa_kvp_2 in fag2.faTypes)
+                                            {
+                                                if (fa_kvp_2.Value && max_db_2 >= fa_db_2)
+                                                {
+                                                    FattyAcid fa2 = new FattyAcid(fa_l_2, fa_db_2, fa_hydro_2, fa_kvp_2.Key);
+                                                    if (fa_kvp_2.Key == "FAx")
+                                                    {
+                                                        fa2 = new FattyAcid(0, 0, 0, "FA");
+                                                    }
+                                                                        
+                                                    List<FattyAcid> sorted_acids = new List<FattyAcid>();
+                                                    sorted_acids.Add(fa1);
+                                                    sorted_acids.Add(fa2);
+                                                    sorted_acids.Sort();
+                                                    
+                                                    foreach(int hgValue in hgValues)
+                                                    {
+                                                    
+                                                        String headgroup = headGroupNames[hgValue];
+                                                        String key = headgroup + " ";
+                                                        int i = 0;
+                                                        foreach (FattyAcid fa in sorted_acids)
+                                                        {
+                                                            if (fa.length > 0){
+                                                                if (i++ > 0) key += "_";
+                                                                key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                                                                if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                                                                key += fa.suffix;
+                                                            }
+                                                        }
+                                                        
+                                                        
+                                                        foreach (KeyValuePair<string, bool> adduct in adducts)
+                                                        {
+                                                            if (adduct.Value)
+                                                            {
+                                                                String keyAdduct = key + " " + adduct.Key;
+                                                                if (!used_keys.Contains(keyAdduct))
+                                                                {
+                                                                    used_keys.Add(keyAdduct);
+                                                        
+                                                                    
+                                                                    DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                                                    MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                                                    MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                    int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
+                                                                    double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
+                                                
+                                                                    ArrayList valuesMZ = new ArrayList();
+                                                                    
+                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                    {
+                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                        {
+                                                                            DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                                                                            foreach (string fbase in fragment.fragmentBase)
+                                                                            {
+                                                                                switch(fbase)
+                                                                                {
+                                                                                    case "FA1":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa1.atomsCount);
+                                                                                        break;
+                                                                                    case "FA2":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, fa2.atomsCount);
+                                                                                        break;
+                                                                                    case "PRE":
+                                                                                        MS2Fragment.addCounts(atomsCountFragment, atomsCount);
+                                                                                        break;
+                                                                                    default:
+                                                                                        break;
+                                                                                }
+                                                                            }
+                                                                            String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
+                                                                            double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                                                        
+                                                                            valuesMZ.Add(massFragment);
+                                                                            
+                                                                            
+                                                                            // add Annotation
+                                                                            sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                            SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                                                                            parameterName.Value = fragment.fragmentName;
+                                                                            command.CommandText = sql;
+                                                                            command.Parameters.Add(parameterName);
+                                                                            command.ExecuteNonQuery();
+                                                                        }
+                                                                    }
+                                                
+                                                                    int numFragments = valuesMZ.Count;
+                                                                    double[] valuesMZArray = new double[numFragments];
+                                                                    float[] valuesIntens = new float[numFragments];
+                                                                    for(int j = 0; j < numFragments; ++j)
+                                                                    {
+                                                                        valuesMZArray[j] = (double)valuesMZ[j];
+                                                                        valuesIntens[j] = 10000;
+                                                                    }
+                                                                    
+                                                                    
+                                                                    // add MS1 information
+                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                    command.CommandText = sql;
+                                                                    command.ExecuteNonQuery();
+                                                                    
+                                                                    // add spectrum
+                                                                    command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                                                                    SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                                                                    SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                                                                    parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                                                                    parameterIntens.Value = Compressing.Compress(valuesIntens);
+                                                                    command.Parameters.Add(parameterMZ);
+                                                                    command.Parameters.Add(parameterIntens);
+                                                                    command.ExecuteNonQuery();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1812,9 +2416,9 @@ namespace LipidCreator
                                                 MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                                                 MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
                                                 // do not change the order, chem formula must be computed before adding the adduct
-                                                String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                string chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                 int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
-                                                String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
+                                                string chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                 double mass = LipidCreatorForm.compute_mass(atomsCount, charge);                                                
                                                 
                                                 

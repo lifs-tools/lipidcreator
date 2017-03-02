@@ -1555,6 +1555,7 @@ namespace LipidCreator
                                                                                             String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
                                                                                             double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                                                             
+                                                                                            
                                                                                         
                                                                                             DataRow lipid_row = all_lipids.NewRow();
                                                                                             lipid_row["Molecule List Name"] = headgroup;
@@ -3068,10 +3069,13 @@ namespace LipidCreator
         public static double compute_mass(DataTable elements, double charge)
         {
             double mass = 0;
+            Console.WriteLine(charge);
             foreach (DataRow row in elements.Rows)
             {
                 mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
+                Console.WriteLine(row["Count"] + " " + row["mass"]);
             }
+            Console.WriteLine();
             return mass - charge * 0.00054857990946;
         }
         

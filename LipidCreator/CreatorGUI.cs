@@ -1028,7 +1028,7 @@ namespace LipidCreator
         
         private void timer1_Tick(object sender, System.Timers.ElapsedEventArgs e)
         {
-            eastertext.Left -= 2;
+            eastertext.Left -= 10;
             if (eastertext.Left < -eastertext.Width){
                 this.timer1.Enabled = false;
                 eastertext.Visible = false;

@@ -2,6 +2,7 @@
 MIT License
 
 Copyright (c) 2017 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
+                   Bing Peng   -   bing.peng {at} isas.de
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1196,7 +1197,7 @@ namespace LipidCreator
                                                                                                         
                                                                                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                                                         {
-                                                                                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
+                                                                                                            if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
                                                                                                             {
                                                                                                                 DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                                                                                 foreach (string fbase in fragment.fragmentBase)
@@ -1229,7 +1230,7 @@ namespace LipidCreator
                                                                                                                 
                                                                                                                 
                                                                                                                 // add Annotation
-                                                                                                                sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                                                                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                                                                                                                 SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
                                                                                                                 parameterName.Value = fragment.fragmentName;
                                                                                                                 command.CommandText = sql;
@@ -1250,7 +1251,7 @@ namespace LipidCreator
                                                                                                         
                                                                                                         
                                                                                                         // add MS1 information
-                                                                                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                                                                                         command.CommandText = sql;
                                                                                                         command.ExecuteNonQuery();
                                                                                                         
@@ -1554,6 +1555,7 @@ namespace LipidCreator
                                                                                             String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
                                                                                             double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge);
                                                                                             
+                                                                                            
                                                                                         
                                                                                             DataRow lipid_row = all_lipids.NewRow();
                                                                                             lipid_row["Molecule List Name"] = headgroup;
@@ -1734,7 +1736,7 @@ namespace LipidCreator
                                                                                     
                                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                                     {
-                                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                                        if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                                                                         {
                                                                                             DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                                                             foreach (string fbase in fragment.fragmentBase)
@@ -1764,7 +1766,7 @@ namespace LipidCreator
                                                                                             
                                                                                             
                                                                                             // add Annotation
-                                                                                            sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                                            sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                                                                                             SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
                                                                                             parameterName.Value = fragment.fragmentName;
                                                                                             command.CommandText = sql;
@@ -1785,7 +1787,7 @@ namespace LipidCreator
                                                                                     
                                                                                     
                                                                                     // add MS1 information
-                                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                                                                     command.CommandText = sql;
                                                                                     command.ExecuteNonQuery();
                                                                                     
@@ -2167,7 +2169,7 @@ namespace LipidCreator
                                                                     
                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                     {
-                                                                        if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                                                        if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                                                         {
                                                                             DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                                             foreach (string fbase in fragment.fragmentBase)
@@ -2194,7 +2196,7 @@ namespace LipidCreator
                                                                             
                                                                             
                                                                             // add Annotation
-                                                                            sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                                            sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                                                                             SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
                                                                             parameterName.Value = fragment.fragmentName;
                                                                             command.CommandText = sql;
@@ -2214,7 +2216,7 @@ namespace LipidCreator
                                                                     
                                                                     
                                                                     // add MS1 information
-                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                                    sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                                                     command.CommandText = sql;
                                                                     command.ExecuteNonQuery();
                                                                     
@@ -2669,7 +2671,7 @@ namespace LipidCreator
                                                         
                                                         
                                                         // add Annotation
-                                                        sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                        sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                                                         SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
                                                         parameterName.Value = fragment.fragmentName;
                                                         command.CommandText = sql;
@@ -2691,7 +2693,7 @@ namespace LipidCreator
                                                 
                                                 
                                                 // add MS1 information
-                                                sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                                sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                                 command.CommandText = sql;
                                                 command.ExecuteNonQuery();
                                                 
@@ -2738,7 +2740,7 @@ namespace LipidCreator
                                             if (headgroup == "SPH" && lcb_db_1 > 0 && fragment.fragmentName == "HG") continue;
                                         
                                         
-                                            if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
+                                            if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                             {
                                                 DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                 foreach (string fbase in fragment.fragmentBase)
@@ -2762,7 +2764,7 @@ namespace LipidCreator
                                                 
                                                 
                                                 // add Annotation
-                                                sql = "INSERT INTO Annotations(RefSpectraID, precursorMZ, sumComposition, shortName) ((SELECT MAX(id) + 1 FROM RefSpectra), " + massFragment + ", '" + chemFormFragment + "', '" + fragment.fragmentName + "')";
+                                                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) ((SELECT MAX(id) + 1 FROM RefSpectra), " + massFragment + ", '" + chemFormFragment + "', '" + fragment.fragmentName + "')";
                                                 command.CommandText = sql;
                                                 command.ExecuteNonQuery();
                                                 
@@ -2780,7 +2782,7 @@ namespace LipidCreator
                                         
                                         
                                         // add MS1 information
-                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '-', 0, 1, 1)";
+                                        sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                         command.CommandText = sql;
                                         command.ExecuteNonQuery();
                                         
@@ -3067,10 +3069,13 @@ namespace LipidCreator
         public static double compute_mass(DataTable elements, double charge)
         {
             double mass = 0;
+            Console.WriteLine(charge);
             foreach (DataRow row in elements.Rows)
             {
                 mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
+                Console.WriteLine(row["Count"] + " " + row["mass"]);
             }
+            Console.WriteLine();
             return mass - charge * 0.00054857990946;
         }
         
@@ -3199,7 +3204,7 @@ namespace LipidCreator
 
             //fill in the LibInfo first
             string lsid = "urn:lsid:isas.de:spectral_library:bibliospec:nr:1";
-            sql = "INSERT INTO LibInfo values('" + lsid + "','2017-01-01',-1,4,0)";
+            sql = "INSERT INTO LibInfo values('" + lsid + "','2017-01-01',-1,1,4)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
@@ -3223,7 +3228,7 @@ namespace LipidCreator
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
-            sql = "CREATE TABLE Annotations (RefSpectraID INTEGER, precursorMZ REAL, sumComposition VARCHAR(100), shortName VARCHAR(50), chargedFragmentName VARCHAR(256), neutralFragmentName VARCHAR(256))";
+            sql = "CREATE TABLE Annotations (RefSpectraID INTEGER, fragmentMZ REAL, sumComposition VARCHAR(100), shortName VARCHAR(50), chargedFragmentName VARCHAR(256), neutralFragmentName VARCHAR(256))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
             

@@ -292,6 +292,7 @@ namespace LipidCreator
         public DataTable fragmentElements;
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
+        public double intensity;
     
         public string serialize()
         {
@@ -518,6 +519,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            intensity = 100;
         }
 
         public MS2Fragment(String name, String fileName)
@@ -529,6 +531,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            intensity = 100;
         }
 
 
@@ -541,6 +544,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            intensity = 100;
         }
         
         public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions)
@@ -552,6 +556,20 @@ namespace LipidCreator
             fragmentElements = dataElements;
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            intensity = 100;
+            if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
+        }
+        
+        public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions, double intens)
+        {
+            fragmentName = name;
+            fragmentCharge = charge;
+            fragmentFile = fileName;
+            fragmentSelected = selected;
+            fragmentElements = dataElements;
+            this.restrictions = new HashSet<string>();
+            fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            intensity = Math.Min(100, Math.Max(0, intens));
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
 
@@ -566,6 +584,7 @@ namespace LipidCreator
             restrictions = new HashSet<string>();
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
             foreach (string restriction in copy.restrictions) restrictions.Add(restriction);
+            intensity = copy.intensity;
         }
     }
 
@@ -1195,6 +1214,7 @@ namespace LipidCreator
                                                                                                         double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
                                                 
                                                                                                         ArrayList valuesMZ = new ArrayList();
+                                                                                                        ArrayList valuesIntensity = new ArrayList();
                                                                                                         
                                                                                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                                                         {
@@ -1228,6 +1248,7 @@ namespace LipidCreator
                                                                                                                 double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                                                                                 valuesMZ.Add(massFragment);
+                                                                                                                valuesIntensity.Add(fragment.intensity);
                                                                                                                 
                                                                                                                 
                                                                                                                 // add Annotation
@@ -1247,7 +1268,7 @@ namespace LipidCreator
                                                                                                         for(int j = 0; j < numFragments; ++j)
                                                                                                         {
                                                                                                             valuesMZArray[j] = (double)valuesMZ[j];
-                                                                                                            valuesIntens[j] = 10000;
+                                                                                                            valuesIntens[j] = 100 * (float)((double)valuesIntensity[j]);
                                                                                                         }
                                                                                                         
                                                                                                         
@@ -1734,6 +1755,7 @@ namespace LipidCreator
                                                                                     double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
                                                 
                                                                                     ArrayList valuesMZ = new ArrayList();
+                                                                                    ArrayList valuesIntensity = new ArrayList();
                                                                                     
                                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                                     {
@@ -1764,6 +1786,7 @@ namespace LipidCreator
                                                                                             double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                                                             valuesMZ.Add(massFragment);
+                                                                                            valuesIntensity.Add(fragment.intensity);
                                                                                             
                                                                                             
                                                                                             // add Annotation
@@ -1783,7 +1806,7 @@ namespace LipidCreator
                                                                                     for(int j = 0; j < numFragments; ++j)
                                                                                     {
                                                                                         valuesMZArray[j] = (double)valuesMZ[j];
-                                                                                        valuesIntens[j] = 10000;
+                                                                                        valuesIntens[j] = 100 * (float)((double)valuesIntensity[j]);
                                                                                     }
                                                                                     
                                                                                     
@@ -2167,6 +2190,7 @@ namespace LipidCreator
                                                                     double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
                                                 
                                                                     ArrayList valuesMZ = new ArrayList();
+                                                                    ArrayList valuesIntensity = new ArrayList();
                                                                     
                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                                     {
@@ -2194,6 +2218,7 @@ namespace LipidCreator
                                                                             double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                                             valuesMZ.Add(massFragment);
+                                                                            valuesIntensity.Add(fragment.intensity);
                                                                             
                                                                             
                                                                             // add Annotation
@@ -2212,7 +2237,7 @@ namespace LipidCreator
                                                                     for(int j = 0; j < numFragments; ++j)
                                                                     {
                                                                         valuesMZArray[j] = (double)valuesMZ[j];
-                                                                        valuesIntens[j] = 10000;
+                                                                        valuesIntens[j] = 100 * (float)((double)valuesIntensity[j]);
                                                                     }
                                                                     
                                                                     
@@ -2636,6 +2661,7 @@ namespace LipidCreator
                                                 double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
                                                 
                                                 ArrayList valuesMZ = new ArrayList();
+                                                ArrayList valuesIntensity = new ArrayList();
                                                 
                                                 foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                                 {
@@ -2669,7 +2695,7 @@ namespace LipidCreator
                                                         double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                         valuesMZ.Add(massFragment);
-                                                        
+                                                        valuesIntensity.Add(fragment.intensity);
                                                         
                                                         // add Annotation
                                                         sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
@@ -2689,7 +2715,7 @@ namespace LipidCreator
                                                 for(int i = 0; i < numFragments; ++i)
                                                 {
                                                     valuesMZArray[i] = (double)valuesMZ[i];
-                                                    valuesIntens[i] = 10000;
+                                                    valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
                                                 }
                                                 
                                                 
@@ -2734,6 +2760,7 @@ namespace LipidCreator
                                         double mass = LipidCreatorForm.compute_mass(atomsCount, charge) / (double)(Math.Abs(charge));                                                
                                         
                                         ArrayList valuesMZ = new ArrayList();
+                                        ArrayList valuesIntensity = new ArrayList();
                                         
                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
                                         {
@@ -2762,6 +2789,7 @@ namespace LipidCreator
                                                 double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                 valuesMZ.Add(massFragment);
+                                                valuesIntensity.Add(fragment.intensity);
                                                 
                                                 
                                                 // add Annotation
@@ -2782,7 +2810,7 @@ namespace LipidCreator
                                         for(int i = 0; i < numFragments; ++i)
                                         {
                                             valuesMZArray[i] = (double)valuesMZ[i];
-                                            valuesIntens[i] = 10000;
+                                            valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
                                         }
                                         
                                         
@@ -2897,7 +2925,14 @@ namespace LipidCreator
                                 Console.WriteLine("Error (" + line_counter + "): MS2 fragment file " + fragment_file + " does not exist or can not be opened.");
                             }
                             
-                            all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragment_file, true, atomsCount, tokens[4], tokens[12]));
+                            if (tokens[13].Length > 0)
+                            {
+                                all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragment_file, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
+                            }
+                            else 
+                            {
+                                all_fragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragment_file, true, atomsCount, tokens[4], tokens[12]));
+                            }
                         }
                     }
                 }

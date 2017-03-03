@@ -33,6 +33,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
+
 namespace LipidCreator
 {
     [Serializable]
@@ -131,10 +132,10 @@ namespace LipidCreator
                                 (String)row["Precursor Adduct"] + "," +
                                 ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
                                 (String)row["Precursor Charge"] + "," +
-                                (String)row["Pruduct Name"] + "," +
-                                (String)row["Pruduct Ion Formula"] + "," +
-                                ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
-                                (String)row["Pruduct Charge"]);
+                                (String)row["Product Name"] + "," +
+                                (String)row["Product Ion Formula"] + "," +
+                                ((String)row["Product m/z"]).Replace(",", ".") + "," +
+                                (String)row["Product Charge"]);
                             }
                         }
                     }
@@ -149,10 +150,10 @@ namespace LipidCreator
                                 (String)row["Precursor Adduct"] + "," +
                                 ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
                                 (String)row["Precursor Charge"] + "," +
-                                (String)row["Pruduct Name"] + "," +
-                                (String)row["Pruduct Ion Formula"] + "," +
-                                ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
-                                (String)row["Pruduct Charge"]);
+                                (String)row["Product Name"] + "," +
+                                (String)row["Product Ion Formula"] + "," +
+                                ((String)row["Product m/z"]).Replace(",", ".") + "," +
+                                (String)row["Product Charge"]);
                             }
                         }
                     }
@@ -173,10 +174,10 @@ namespace LipidCreator
                             (String)row["Precursor Adduct"] + "," +
                             ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
                             (String)row["Precursor Charge"] + "," +
-                            (String)row["Pruduct Name"] + "," +
-                            (String)row["Pruduct Ion Formula"] + "," +
-                            ((String)row["Pruduct m/z"]).Replace(",", ".") + "," +
-                            (String)row["Pruduct Charge"]);
+                            (String)row["Product Name"] + "," +
+                            (String)row["Product Ion Formula"] + "," +
+                            ((String)row["Product m/z"]).Replace(",", ".") + "," +
+                            (String)row["Product Charge"]);
                         }
                         writer.Dispose();
                         writer.Close();

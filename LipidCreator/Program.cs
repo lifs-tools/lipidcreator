@@ -597,7 +597,7 @@ namespace LipidCreator
         {
         }
         
-        public virtual void add_lipids(DataTable dt, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
+        public virtual void add_lipids(DataTable dt, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions, HashSet<String> used_keys, HashSet<String> replicates)
         {
         }
         
@@ -848,7 +848,7 @@ namespace LipidCreator
             }
         }
         
-        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -960,7 +960,7 @@ namespace LipidCreator
                                                                                             
                                                                                                 foreach (KeyValuePair<string, bool> adduct in adducts)
                                                                                                 {
-                                                                                                    if (adduct.Value)
+                                                                                                    if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
                                                                                                     {
                                                                                                         used_keys.Add(key);
                                                                                                         
@@ -1407,7 +1407,7 @@ namespace LipidCreator
             }
         }
         
-        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -1513,7 +1513,7 @@ namespace LipidCreator
                                                                         {
                                                                             foreach (KeyValuePair<string, bool> adduct in adducts)
                                                                             {
-                                                                                if (adduct.Value)
+                                                                                if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
                                                                                 {
                                                                                     used_keys.Add(key);
                                                                                     
@@ -1930,7 +1930,7 @@ namespace LipidCreator
         }
         
         
-        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions, HashSet<String> used_keys, HashSet<String> replicates)
         {
             // check if more than one fatty acids are 0:0
             int check_FattyAcids = 0;
@@ -1996,7 +1996,7 @@ namespace LipidCreator
                                                         {
                                                             foreach (KeyValuePair<string, bool> adduct in adducts)
                                                             {
-                                                                if (adduct.Value)
+                                                                if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
                                                                 {
                                                                     used_keys.Add(key);
                                                                     
@@ -2374,7 +2374,7 @@ namespace LipidCreator
         }
         
         
-        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, HashSet<String> used_keys, HashSet<String> replicates)
+        public override void add_lipids(DataTable all_lipids, DataTable all_lipids_unique, Dictionary<String, DataTable> ddt, Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions, HashSet<String> used_keys, HashSet<String> replicates)
         {
             foreach (int lcb_l in lcb.carbonCounts)
             {
@@ -2409,7 +2409,7 @@ namespace LipidCreator
                                     {
                                         foreach (KeyValuePair<string, bool> adduct in adducts)
                                         {
-                                            if (adduct.Value)
+                                            if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
                                             {
                                                 used_keys.Add(key);
                                                 
@@ -2502,7 +2502,7 @@ namespace LipidCreator
                             {
                                 foreach (KeyValuePair<string, bool> adduct in adducts)
                                 {
-                                    if (adduct.Value)
+                                    if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
                                     {
                                         used_keys.Add(key);
                                         
@@ -2759,13 +2759,16 @@ namespace LipidCreator
                                                 }
                                                 String chemFormFragment = LipidCreatorForm.compute_chemical_formula(atomsCountFragment);
                                                 double massFragment = LipidCreatorForm.compute_mass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
-                                                
+                                                        
                                                 valuesMZ.Add(massFragment);
                                                 
                                                 
                                                 // add Annotation
-                                                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) ((SELECT MAX(id) + 1 FROM RefSpectra), " + massFragment + ", '" + chemFormFragment + "', '" + fragment.fragmentName + "')";
+                                                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                                                SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                                                parameterName.Value = fragment.fragmentName;
                                                 command.CommandText = sql;
+                                                command.Parameters.Add(parameterName);
                                                 command.ExecuteNonQuery();
                                                 
                                             }
@@ -2773,10 +2776,11 @@ namespace LipidCreator
                                                 
                                                 
                                         int numFragments = valuesMZ.Count;
-                                        double[] valuesMZArray = (double[])valuesMZ.ToArray(typeof(Double));
+                                        double[] valuesMZArray = new double[numFragments];
                                         float[] valuesIntens = new float[numFragments];
                                         for(int i = 0; i < numFragments; ++i)
                                         {
+                                            valuesMZArray[i] = (double)valuesMZ[i];
                                             valuesIntens[i] = 10000;
                                         }
                                         
@@ -2785,9 +2789,6 @@ namespace LipidCreator
                                         sql = "INSERT INTO RefSpectra (peptideSeq, precursorMZ, precursorCharge, peptideModSeq, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType) VALUES('" + key + "', " + mass + ", " + charge + ", '" + keyAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1)";
                                         command.CommandText = sql;
                                         command.ExecuteNonQuery();
-                                        
-                                        
-                                        
                                         
                                         // add spectrum
                                         command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
@@ -2821,6 +2822,7 @@ namespace LipidCreator
         public Dictionary<String, ArrayList> all_fragments;
         public Dictionary<String, String> all_paths_to_precursor_images;
         public Dictionary<String, DataTable> headgroups;
+        public Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions;
         public DataTable all_lipids;
         public DataTable all_lipids_unique;
         public SkylineToolClient skylineToolClient;
@@ -2835,6 +2837,7 @@ namespace LipidCreator
             all_paths_to_precursor_images = new Dictionary<String, String>();
             all_fragments = new Dictionary<String, ArrayList>();
             headgroups = new Dictionary<String, DataTable>();
+            headgroup_adduct_restrictions = new Dictionary<String, Dictionary<String, bool>>();
             all_lipids = new DataTable();
             all_lipids.Columns.Add("Molecule List Name");
             all_lipids.Columns.Add("Precursor Name");
@@ -2926,7 +2929,7 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                            if (tokens.Length != 9) throw new Exception("invalid line in file");
+                            if (tokens.Length != 16) throw new Exception("invalid line in file");
                             headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
                             headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
                             headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
@@ -2941,6 +2944,14 @@ namespace LipidCreator
                                 Console.WriteLine("Error (" + line_counter + "): precursor file " + precursor_file + " does not exist or can not be opened.");
                             }
                             all_paths_to_precursor_images.Add(tokens[0], precursor_file);
+                            headgroup_adduct_restrictions.Add(tokens[0], new Dictionary<String, bool>());
+                            headgroup_adduct_restrictions[tokens[0]].Add("+H", tokens[9].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("+2H", tokens[10].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("+NH4", tokens[11].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("-H", tokens[12].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("-2H", tokens[13].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("+HCOO", tokens[14].Equals("Yes"));
+                            headgroup_adduct_restrictions[tokens[0]].Add("+CH3COO", tokens[15].Equals("Yes"));
                         }
                     }
                 }
@@ -3049,7 +3060,7 @@ namespace LipidCreator
             HashSet<String> replicates = new HashSet<String>();
             foreach (lipid curr_lipid in registered_lipids)
             {
-                curr_lipid.add_lipids(all_lipids, all_lipids_unique, headgroups, used_keys, replicates);
+                curr_lipid.add_lipids(all_lipids, all_lipids_unique, headgroups, headgroup_adduct_restrictions, used_keys, replicates);
             }
         }
 
@@ -3069,13 +3080,10 @@ namespace LipidCreator
         public static double compute_mass(DataTable elements, double charge)
         {
             double mass = 0;
-            Console.WriteLine(charge);
             foreach (DataRow row in elements.Rows)
             {
                 mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
-                Console.WriteLine(row["Count"] + " " + row["mass"]);
             }
-            Console.WriteLine();
             return mass - charge * 0.00054857990946;
         }
         

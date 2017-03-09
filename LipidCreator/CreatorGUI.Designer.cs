@@ -814,6 +814,7 @@ namespace LipidCreator
             cl_pos_adduct_checkbox_3.Parent = cl_positive_adduct;
             cl_pos_adduct_checkbox_3.Location = new Point(10, 55);
             cl_pos_adduct_checkbox_3.Text = "+NH4⁺";
+            cl_pos_adduct_checkbox_3.Enabled = false;
             cl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_3_checkedChanged);
             cl_pos_adduct_checkbox_4.Parent = cl_positive_adduct;
             cl_pos_adduct_checkbox_4.Location = new Point(10, 75);
@@ -834,10 +835,12 @@ namespace LipidCreator
             cl_neg_adduct_checkbox_3.Parent = cl_negative_adduct;
             cl_neg_adduct_checkbox_3.Location = new Point(10, 55);
             cl_neg_adduct_checkbox_3.Text = "+HCOO⁻";
+            cl_neg_adduct_checkbox_3.Enabled = false;
             cl_neg_adduct_checkbox_3.CheckedChanged += new EventHandler(cl_neg_adduct_checkbox_3_checkedChanged);
             cl_neg_adduct_checkbox_4.Parent = cl_negative_adduct;
             cl_neg_adduct_checkbox_4.Location = new Point(10, 75);
             cl_neg_adduct_checkbox_4.Text = "+CH3COO⁻";
+            cl_neg_adduct_checkbox_4.Enabled = false;
             cl_neg_adduct_checkbox_4.CheckedChanged += new EventHandler(cl_neg_adduct_checkbox_4_checkedChanged);
 
 

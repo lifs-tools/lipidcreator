@@ -44,12 +44,14 @@ namespace LipidCreator
         public ArrayList positiveIDs;
         public ArrayList negativeIDs;
         public CreatorGUI creatorGUI;
+        public bool senderInterupt;
         
         public MS2Form(CreatorGUI creatorGUI, lipid currentLipid)
         {
             this.creatorGUI = creatorGUI;
             positiveIDs = new ArrayList();
             negativeIDs = new ArrayList();
+            senderInterupt = false;
             
             
             if (currentLipid is cl_lipid ) this.currentLipid = new cl_lipid((cl_lipid)currentLipid);
@@ -68,30 +70,61 @@ namespace LipidCreator
         
         void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
+            senderInterupt = true;
+            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
+            }
             for (int i = 0; i < checkedListBox1.Items.Count; ++i)
             {
                 checkedListBox1.SetItemChecked(i, true);
             }
+            senderInterupt = false;
         }
         
         void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
         {
+            senderInterupt = true;
+            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false;  
+            }
             for (int i = 0; i < checkedListBox1.Items.Count; ++i)
             {
                 checkedListBox1.SetItemChecked(i, false);
             }
+            senderInterupt = false;
         }
         
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {
+            senderInterupt = true;
+            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
+            }
             for (int i = 0; i < checkedListBox2.Items.Count; ++i)
             {
                 checkedListBox2.SetItemChecked(i, true);
             }
+            senderInterupt = false;
         }
         
         void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
         {
+            senderInterupt = true;
+            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false; 
+            }
             for (int i = 0; i < checkedListBox2.Items.Count; ++i)
             {
                 checkedListBox2.SetItemChecked(i, false);
@@ -204,6 +237,7 @@ namespace LipidCreator
 
         void CheckedListBox1_ItemCheck(Object sender, ItemCheckEventArgs e)
         {
+            if (senderInterupt) return;
             int fragmentIndex = (int)positiveIDs[e.Index];
             String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
@@ -211,6 +245,7 @@ namespace LipidCreator
         
         void CheckedListBox2_ItemCheck(Object sender, ItemCheckEventArgs e)
         {
+            if (senderInterupt) return;
             int fragmentIndex = (int)negativeIDs[e.Index];
             String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);

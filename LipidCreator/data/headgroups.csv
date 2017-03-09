@@ -1,4 +1,4 @@
-HG,C,H,O,N,P,S,Na,file,+H +,+2H ++,+NH4 +,-H -,-2H --,+HCOO -,+CH3COO -
+HG,C,H,O,N,P,S,Na,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO
 #Lc3Cer,20,34,15,1,0,0,0,,,,,,,,
 Cer,0,1,0,0,0,0,0,images/MS2/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes
 CerP,0,2,3,0,1,0,0,images/MS2/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes
@@ -37,8 +37,8 @@ PIP,9,18,14,0,2,0,0,images/MS2/PIP_neg_pre.png,No,No,No,Yes,No,No,No
 PIP2,9,19,17,0,3,0,0,images/MS2/PIP2_neg_pre.png,No,No,No,Yes,No,No,No
 PIP3,9,20,20,0,4,0,0,images/MS2/PIP3_neg_pre.png,No,No,No,Yes,No,No,No
 PS,6,12,8,1,1,0,0,images/MS2/PS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes
-SM,5,13,3,1,1,0,0,images/MS2/SM_pos_pre.png,Yes,No,No,No,No,Yes,Yes
-SPC,5,14,3,1,1,0,0,images/MS2/SPC_pos_pre.png,Yes,No,No,No,No,No,No
+SM,5,13,3,1,1,0,0,images/MS2/SM_pos_pre.png,Yes,No,No,No,No,No,No
+SPC,5,14,3,1,1,0,0,images/MS2/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes
 SPH,0,2,0,0,0,0,0,images/MS2/SPH_pos_pre.png,Yes,No,No,No,No,No,No
 SPH-P,0,3,3,0,1,0,0,images/MS2/SPH-P_pos_pre.png,Yes,No,No,No,No,No,No
 SQDG,9,16,10,0,0,1,0,images/MS2/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes

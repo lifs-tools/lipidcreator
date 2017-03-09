@@ -129,6 +129,7 @@ namespace LipidCreator
             {
                 checkedListBox2.SetItemChecked(i, false);
             }
+            senderInterupt = false;
         }
 
         private void checkedListBox1_MouseHover(object sender, MouseEventArgs e)

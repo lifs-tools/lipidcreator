@@ -205,7 +205,6 @@ namespace LipidCreator
         CheckBox cl_pos_adduct_checkbox_1;
         CheckBox cl_pos_adduct_checkbox_2;
         CheckBox cl_pos_adduct_checkbox_3;
-        CheckBox cl_pos_adduct_checkbox_4;
         CheckBox cl_neg_adduct_checkbox_1;
         CheckBox cl_neg_adduct_checkbox_2;
         CheckBox cl_neg_adduct_checkbox_3;
@@ -213,7 +212,6 @@ namespace LipidCreator
         CheckBox gl_pos_adduct_checkbox_1;
         CheckBox gl_pos_adduct_checkbox_2;
         CheckBox gl_pos_adduct_checkbox_3;
-        CheckBox gl_pos_adduct_checkbox_4;
         CheckBox gl_neg_adduct_checkbox_1;
         CheckBox gl_neg_adduct_checkbox_2;
         CheckBox gl_neg_adduct_checkbox_3;
@@ -221,7 +219,6 @@ namespace LipidCreator
         CheckBox pl_pos_adduct_checkbox_1;
         CheckBox pl_pos_adduct_checkbox_2;
         CheckBox pl_pos_adduct_checkbox_3;
-        CheckBox pl_pos_adduct_checkbox_4;
         CheckBox pl_neg_adduct_checkbox_1;
         CheckBox pl_neg_adduct_checkbox_2;
         CheckBox pl_neg_adduct_checkbox_3;
@@ -229,7 +226,6 @@ namespace LipidCreator
         CheckBox sl_pos_adduct_checkbox_1;
         CheckBox sl_pos_adduct_checkbox_2;
         CheckBox sl_pos_adduct_checkbox_3;
-        CheckBox sl_pos_adduct_checkbox_4;
         CheckBox sl_neg_adduct_checkbox_1;
         CheckBox sl_neg_adduct_checkbox_2;
         CheckBox sl_neg_adduct_checkbox_3;
@@ -595,7 +591,6 @@ namespace LipidCreator
             cl_pos_adduct_checkbox_1 = new CheckBox();
             cl_pos_adduct_checkbox_2 = new CheckBox();
             cl_pos_adduct_checkbox_3 = new CheckBox();
-            cl_pos_adduct_checkbox_4 = new CheckBox();
             cl_neg_adduct_checkbox_1 = new CheckBox();
             cl_neg_adduct_checkbox_2 = new CheckBox();
             cl_neg_adduct_checkbox_3 = new CheckBox();
@@ -603,7 +598,6 @@ namespace LipidCreator
             gl_pos_adduct_checkbox_1 = new CheckBox();
             gl_pos_adduct_checkbox_2 = new CheckBox();
             gl_pos_adduct_checkbox_3 = new CheckBox();
-            gl_pos_adduct_checkbox_4 = new CheckBox();
             gl_neg_adduct_checkbox_1 = new CheckBox();
             gl_neg_adduct_checkbox_2 = new CheckBox();
             gl_neg_adduct_checkbox_3 = new CheckBox();
@@ -611,7 +605,6 @@ namespace LipidCreator
             pl_pos_adduct_checkbox_1 = new CheckBox();
             pl_pos_adduct_checkbox_2 = new CheckBox();
             pl_pos_adduct_checkbox_3 = new CheckBox();
-            pl_pos_adduct_checkbox_4 = new CheckBox();
             pl_neg_adduct_checkbox_1 = new CheckBox();
             pl_neg_adduct_checkbox_2 = new CheckBox();
             pl_neg_adduct_checkbox_3 = new CheckBox();
@@ -619,7 +612,6 @@ namespace LipidCreator
             sl_pos_adduct_checkbox_1 = new CheckBox();
             sl_pos_adduct_checkbox_2 = new CheckBox();
             sl_pos_adduct_checkbox_3 = new CheckBox();
-            sl_pos_adduct_checkbox_4 = new CheckBox();
             sl_neg_adduct_checkbox_1 = new CheckBox();
             sl_neg_adduct_checkbox_2 = new CheckBox();
             sl_neg_adduct_checkbox_3 = new CheckBox();
@@ -816,10 +808,6 @@ namespace LipidCreator
             cl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             cl_pos_adduct_checkbox_3.Enabled = false;
             cl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_3_checkedChanged);
-            cl_pos_adduct_checkbox_4.Parent = cl_positive_adduct;
-            cl_pos_adduct_checkbox_4.Location = new Point(10, 75);
-            cl_pos_adduct_checkbox_4.Text = "+Na⁺";
-            cl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(cl_pos_adduct_checkbox_4_checkedChanged);
             cl_negative_adduct.Location = new Point(left_groupboxes, 200);
             cl_negative_adduct.Width = 120;
             cl_negative_adduct.Height = 120;
@@ -1191,20 +1179,18 @@ namespace LipidCreator
             gl_pos_adduct_checkbox_1.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_1.Location = new Point(10, 15);
             gl_pos_adduct_checkbox_1.Text = "+H⁺";
-            gl_pos_adduct_checkbox_1.Checked = true;
             gl_pos_adduct_checkbox_1.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_1_checkedChanged);
+            gl_pos_adduct_checkbox_1.Enabled = false;
             gl_pos_adduct_checkbox_2.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_2.Location = new Point(10, 35);
             gl_pos_adduct_checkbox_2.Text = "+2H⁺⁺";
+            gl_pos_adduct_checkbox_2.Enabled = false;
             gl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_2_checkedChanged);
             gl_pos_adduct_checkbox_3.Parent = gl_positive_adduct;
             gl_pos_adduct_checkbox_3.Location = new Point(10, 55);
             gl_pos_adduct_checkbox_3.Text = "+NH4⁺";
+            gl_pos_adduct_checkbox_3.Checked = true;
             gl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_3_checkedChanged);
-            gl_pos_adduct_checkbox_4.Parent = gl_positive_adduct;
-            gl_pos_adduct_checkbox_4.Location = new Point(10, 75);
-            gl_pos_adduct_checkbox_4.Text = "+Na⁺";
-            gl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(gl_pos_adduct_checkbox_4_checkedChanged);
             gl_negative_adduct.Location = new Point(left_groupboxes, 200);
             gl_negative_adduct.Width = 120;
             gl_negative_adduct.Height = 120;
@@ -1212,18 +1198,22 @@ namespace LipidCreator
             gl_neg_adduct_checkbox_1.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_1.Location = new Point(10, 15);
             gl_neg_adduct_checkbox_1.Text = "-H⁻";
+            gl_neg_adduct_checkbox_1.Enabled = false;
             gl_neg_adduct_checkbox_1.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_1_checkedChanged);
             gl_neg_adduct_checkbox_2.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_2.Location = new Point(10, 35);
             gl_neg_adduct_checkbox_2.Text = "-2H⁻ ⁻";
+            gl_neg_adduct_checkbox_2.Enabled = false;
             gl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_2_checkedChanged);
             gl_neg_adduct_checkbox_3.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_3.Location = new Point(10, 55);
             gl_neg_adduct_checkbox_3.Text = "+HCOO⁻";
+            gl_neg_adduct_checkbox_3.Enabled = false;
             gl_neg_adduct_checkbox_3.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_3_checkedChanged);
             gl_neg_adduct_checkbox_4.Parent = gl_negative_adduct;
             gl_neg_adduct_checkbox_4.Location = new Point(10, 75);
             gl_neg_adduct_checkbox_4.Text = "+CH3COO⁻";
+            gl_neg_adduct_checkbox_4.Enabled = false;
             gl_neg_adduct_checkbox_4.CheckedChanged += new EventHandler(gl_neg_adduct_checkbox_4_checkedChanged);
 
             gl_picture_box.Image = glycero_backbone_image;
@@ -1403,10 +1393,6 @@ namespace LipidCreator
             pl_pos_adduct_checkbox_3.Location = new Point(10, 55);
             pl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             pl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_3_checkedChanged);
-            pl_pos_adduct_checkbox_4.Parent = pl_positive_adduct;
-            pl_pos_adduct_checkbox_4.Location = new Point(10, 75);
-            pl_pos_adduct_checkbox_4.Text = "+Na⁺";
-            pl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_4_checkedChanged);
             pl_negative_adduct.Location = new Point(left_groupboxes, 200);
             pl_negative_adduct.Width = 120;
             pl_negative_adduct.Height = 120;
@@ -1561,10 +1547,6 @@ namespace LipidCreator
             sl_pos_adduct_checkbox_3.Location = new Point(10, 55);
             sl_pos_adduct_checkbox_3.Text = "+NH4⁺";
             sl_pos_adduct_checkbox_3.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_3_checkedChanged);
-            sl_pos_adduct_checkbox_4.Parent = sl_positive_adduct;
-            sl_pos_adduct_checkbox_4.Location = new Point(10, 75);
-            sl_pos_adduct_checkbox_4.Text = "+Na⁺";
-            sl_pos_adduct_checkbox_4.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_4_checkedChanged);
             sl_negative_adduct.Location = new Point(left_groupboxes, 200);
             sl_negative_adduct.Width = 120;
             sl_negative_adduct.Height = 120;

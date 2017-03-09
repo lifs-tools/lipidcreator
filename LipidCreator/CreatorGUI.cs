@@ -163,7 +163,6 @@ namespace LipidCreator
                 cl_pos_adduct_checkbox_1.Checked = currentCLLipid.adducts["+H"];
                 cl_pos_adduct_checkbox_2.Checked = currentCLLipid.adducts["+2H"];
                 cl_pos_adduct_checkbox_3.Checked = currentCLLipid.adducts["+NH4"];
-                cl_pos_adduct_checkbox_4.Checked = currentCLLipid.adducts["+Na"];
                 cl_neg_adduct_checkbox_1.Checked = currentCLLipid.adducts["-H"];
                 cl_neg_adduct_checkbox_2.Checked = currentCLLipid.adducts["-2H"];
                 cl_neg_adduct_checkbox_3.Checked = currentCLLipid.adducts["+HCOO"];
@@ -233,7 +232,6 @@ namespace LipidCreator
                 gl_pos_adduct_checkbox_1.Checked = currentGLLipid.adducts["+H"];
                 gl_pos_adduct_checkbox_2.Checked = currentGLLipid.adducts["+2H"];
                 gl_pos_adduct_checkbox_3.Checked = currentGLLipid.adducts["+NH4"];
-                gl_pos_adduct_checkbox_4.Checked = currentGLLipid.adducts["+Na"];
                 gl_neg_adduct_checkbox_1.Checked = currentGLLipid.adducts["-H"];
                 gl_neg_adduct_checkbox_2.Checked = currentGLLipid.adducts["-2H"];
                 gl_neg_adduct_checkbox_3.Checked = currentGLLipid.adducts["+HCOO"];
@@ -291,7 +289,6 @@ namespace LipidCreator
                 pl_pos_adduct_checkbox_1.Checked = currentPLLipid.adducts["+H"];
                 pl_pos_adduct_checkbox_2.Checked = currentPLLipid.adducts["+2H"];
                 pl_pos_adduct_checkbox_3.Checked = currentPLLipid.adducts["+NH4"];
-                pl_pos_adduct_checkbox_4.Checked = currentPLLipid.adducts["+Na"];
                 pl_neg_adduct_checkbox_1.Checked = currentPLLipid.adducts["-H"];
                 pl_neg_adduct_checkbox_2.Checked = currentPLLipid.adducts["-2H"];
                 pl_neg_adduct_checkbox_3.Checked = currentPLLipid.adducts["+HCOO"];
@@ -340,7 +337,6 @@ namespace LipidCreator
                 sl_pos_adduct_checkbox_1.Checked = currentSLLipid.adducts["+H"];
                 sl_pos_adduct_checkbox_2.Checked = currentSLLipid.adducts["+2H"];
                 sl_pos_adduct_checkbox_3.Checked = currentSLLipid.adducts["+NH4"];
-                sl_pos_adduct_checkbox_4.Checked = currentSLLipid.adducts["+Na"];
                 sl_neg_adduct_checkbox_1.Checked = currentSLLipid.adducts["-H"];
                 sl_neg_adduct_checkbox_2.Checked = currentSLLipid.adducts["-2H"];
                 sl_neg_adduct_checkbox_3.Checked = currentSLLipid.adducts["+HCOO"];

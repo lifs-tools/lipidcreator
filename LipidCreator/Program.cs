@@ -603,7 +603,6 @@ namespace LipidCreator
             adducts.Add("+H", false);
             adducts.Add("+2H", false);
             adducts.Add("+NH4", false);
-            adducts.Add("+Na", false);
             adducts.Add("-H", true);
             adducts.Add("-2H", false);
             adducts.Add("+HCOO", false);
@@ -648,7 +647,6 @@ namespace LipidCreator
             adducts.Add("+H", copy.adducts["+H"]);
             adducts.Add("+2H", copy.adducts["+2H"]);
             adducts.Add("+NH4", copy.adducts["+NH4"]);
-            adducts.Add("+Na", copy.adducts["+Na"]);
             adducts.Add("-H", copy.adducts["-H"]);
             adducts.Add("-2H", copy.adducts["-2H"]);
             adducts.Add("+HCOO", copy.adducts["+HCOO"]);
@@ -713,10 +711,6 @@ namespace LipidCreator
                 case "+NH4":
                     atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 4;
                     atomsCount.Rows[3]["Count"] = (int)atomsCount.Rows[3]["Count"] + 1;
-                    charge = 1;
-                    break;
-                case "+Na":
-                    atomsCount.Rows[6]["Count"] = (int)atomsCount.Rows[6]["Count"] + 1;
                     charge = 1;
                     break;
                 case "-H":

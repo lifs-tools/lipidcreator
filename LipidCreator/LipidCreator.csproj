@@ -786,12 +786,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd $(TargetDir)
+$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>xcopy $(ProjectDir)data $(TargetDir)data /e /i
-xcopy $(ProjectDir)images $(TargetDir)images /e /i</PreBuildEvent>
+    <PreBuildEvent>xcopy /s /y /e /i "$(ProjectDir)data" "$(TargetDir)data"
+xcopy /s /y /e /i "$(ProjectDir)images" "$(TargetDir)images"
+xcopy /s /y /e /i "$(ProjectDir)predefined" "$(TargetDir)predefined"
+xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

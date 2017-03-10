@@ -2855,7 +2855,7 @@ namespace LipidCreator
         public string prefix_path = "Tools/LipidCreator/";
         
         public LipidCreatorForm(String pipe)
-        {        
+        {
             opened_as_external = (pipe != null);
             skylineToolClient = opened_as_external ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registered_lipids = new ArrayList();
@@ -2887,7 +2887,7 @@ namespace LipidCreator
             all_lipids_unique.Columns.Add("Product m/z");
             all_lipids_unique.Columns.Add("Product Charge");
             
-            
+
             int line_counter = 1;
             string ms2fragments_file = (opened_as_external ? prefix_path : "") + "data/ms2fragments.csv";
             if (File.Exists(ms2fragments_file))

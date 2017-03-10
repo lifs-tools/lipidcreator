@@ -64,20 +64,19 @@ namespace LipidCreator
             InitializeComponent();
             lipid_modifications = new int[]{-1, -1, -1, -1};
             changing_tab_forced = false;
-            
             if(Directory.Exists("predefined")) 
             {
                 string [] subdirectoryEntries = Directory.GetDirectories("predefined");
                 foreach (string subdirectoryEntry in subdirectoryEntries)
                 {
-                    string subEntry = subdirectoryEntry.Replace("predefined/", "");   
+                    string subEntry = subdirectoryEntry.Replace("predefined" + Path.DirectorySeparatorChar, "");   
                     System.Windows.Forms.MenuItem predefFolder = new System.Windows.Forms.MenuItem();
                     predefFolder.Text = subEntry;
                     menuImportPredefined.MenuItems.Add(predefFolder);
                     string [] subdirectoryFiles = Directory.GetFiles(subdirectoryEntry);
                     foreach(string subdirectoryFile in subdirectoryFiles)
                     {
-                        string subFile = subdirectoryFile.Replace(subdirectoryEntry + "/", "");
+                        string subFile = subdirectoryFile.Replace(subdirectoryEntry + Path.DirectorySeparatorChar, "");
                         string upperFile = subFile.ToUpper();
                         if (upperFile.EndsWith(".LCXML"))
                         {

@@ -381,7 +381,7 @@ namespace LipidCreator
             int fa_length = 150;
             int top_low_buttons = 420;
             int left_groupboxes = 850;
-            
+
             
             deleteImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/delete-small.png");
             editImage = Image.FromFile((lipidCreatorForm.opened_as_external ? lipidCreatorForm.prefix_path : "") + "images/edit-small.png");

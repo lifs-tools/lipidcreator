@@ -24,6 +24,7 @@ SOFTWARE.
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -48,13 +49,14 @@ namespace LipidCreator
         public int[] lipid_modifications;
         public Color alert_color = Color.FromArgb(255, 180, 180);
         public bool setting_listbox = false;
+        public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
         
         public CreatorGUI(LipidCreatorForm lipidCreatorForm)
         {
             this.lipidCreatorForm = lipidCreatorForm;
             
             registered_lipids_datatable = new DataTable("Daten");
-            registered_lipids_datatable.Columns.Add(new DataColumn("Class"));
+            registered_lipids_datatable.Columns.Add(new DataColumn("Category"));
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 1"));
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 2"));
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 3"));
@@ -63,6 +65,31 @@ namespace LipidCreator
             lipid_modifications = new int[]{-1, -1, -1, -1};
             changing_tab_forced = false;
             
+            if(Directory.Exists("predefined")) 
+            {
+                string [] subdirectoryEntries = Directory.GetDirectories("predefined");
+                foreach (string subdirectoryEntry in subdirectoryEntries)
+                {
+                    string subEntry = subdirectoryEntry.Replace("predefined/", "");   
+                    System.Windows.Forms.MenuItem predefFolder = new System.Windows.Forms.MenuItem();
+                    predefFolder.Text = subEntry;
+                    menuImportPredefined.MenuItems.Add(predefFolder);
+                    string [] subdirectoryFiles = Directory.GetFiles(subdirectoryEntry);
+                    foreach(string subdirectoryFile in subdirectoryFiles)
+                    {
+                        string subFile = subdirectoryFile.Replace(subdirectoryEntry + "/", "");
+                        string upperFile = subFile.ToUpper();
+                        if (upperFile.EndsWith(".LCXML"))
+                        {
+                            System.Windows.Forms.MenuItem predefFile = new System.Windows.Forms.MenuItem();
+                            predefFile.Text = subFile.Remove(subFile.Length - 6);
+                            predefFile.Tag = subdirectoryFile;
+                            predefFile.Click += new System.EventHandler (menuImportPredefined_Click);
+                            predefFolder.MenuItems.Add(predefFile);
+                        }
+                    }
+                }
+            }
         }
         
         private void lipids_gridview_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -345,7 +372,7 @@ namespace LipidCreator
                 else sl_modify_lipid_button.Enabled = false;
                 
                 
-                update_ranges(currentSLLipid.lcb, sl_lcb_textbox, sl_lcb_combobox.SelectedIndex);
+                update_ranges(currentSLLipid.lcb, sl_lcb_textbox, sl_lcb_combobox.SelectedIndex, true);
                 update_ranges(currentSLLipid.lcb, sl_db_2_textbox, 3);
                 update_ranges(currentSLLipid.fag, sl_fa_textbox, sl_fa_combobox.SelectedIndex);
                 update_ranges(currentSLLipid.fag, sl_db_1_textbox, 3);
@@ -431,14 +458,22 @@ namespace LipidCreator
             update_ranges(((cl_lipid)currentLipid).fag1, cl_fa_4_textbox, ((ComboBox)sender).SelectedIndex);
         }
         
-        // ob_type (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
+        
+        
         public void update_ranges(fattyAcidGroup fag, TextBox tb, int ob_type)
+        {
+            update_ranges(fag, tb, ob_type, false);
+        }
+        
+        // ob_type (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
+        public void update_ranges(fattyAcidGroup fag, TextBox tb, int ob_type, bool isLCB)
         {
             int max_range = 30;
             int min_range = 0;
             if (ob_type < 3) min_range = 2;
             if (ob_type == 3) max_range = 6;
             else if (ob_type == 4) max_range = 29;
+            if (isLCB) min_range = 8;
             HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, min_range,  max_range, ob_type);
             if (ob_type <= 2)
             {
@@ -1127,6 +1162,14 @@ namespace LipidCreator
                 gl_fa_3_gb_1_checkbox_3.Visible = false;
                 gl_db_3_label.Visible = false;
                 gl_hydroxyl_3_label.Visible = false;
+                gl_pos_adduct_checkbox_1.Enabled = true;
+                gl_pos_adduct_checkbox_2.Enabled = false;
+                gl_pos_adduct_checkbox_3.Enabled = true;
+                gl_neg_adduct_checkbox_1.Enabled = true;
+                gl_neg_adduct_checkbox_2.Enabled = false;
+                gl_neg_adduct_checkbox_3.Enabled = true;
+                gl_neg_adduct_checkbox_4.Enabled = true;
+                
                 
                 gl_hg_listbox.Visible = true;
                 gl_hg_label.Visible = true;
@@ -1148,6 +1191,19 @@ namespace LipidCreator
                 gl_fa_3_gb_1_checkbox_3.Visible = true;
                 gl_db_3_label.Visible = true;
                 gl_hydroxyl_3_label.Visible = true;
+                gl_pos_adduct_checkbox_1.Enabled = false;
+                gl_pos_adduct_checkbox_2.Enabled = false;
+                gl_pos_adduct_checkbox_3.Enabled = true;
+                gl_neg_adduct_checkbox_1.Enabled = false;
+                gl_neg_adduct_checkbox_2.Enabled = false;
+                gl_neg_adduct_checkbox_3.Enabled = false;
+                gl_neg_adduct_checkbox_4.Enabled = false;
+                gl_pos_adduct_checkbox_1.Checked = false;
+                gl_pos_adduct_checkbox_2.Checked = false;
+                gl_neg_adduct_checkbox_1.Checked = false;
+                gl_neg_adduct_checkbox_2.Checked = false;
+                gl_neg_adduct_checkbox_3.Checked = false;
+                gl_neg_adduct_checkbox_4.Checked = false;
                 
                 gl_hg_listbox.Visible = false;
                 gl_hg_label.Visible = false;
@@ -1637,6 +1693,16 @@ namespace LipidCreator
             update_ranges(((pl_lipid)currentLipid).fag2, pl_hydroxyl_2_textbox, 4);
         }
         
+        void pl_hg_listbox_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
+        void pl_hg_listbox_MouseLeave(object sender, EventArgs e)
+        {
+            
+        }
+        
         ////////////////////// SL ////////////////////////////////
         
         
@@ -1715,7 +1781,7 @@ namespace LipidCreator
         public void sl_lcb_textbox_valueChanged(Object sender, EventArgs e)
         {
             ((sl_lipid)currentLipid).lcb.lengthInfo = ((TextBox)sender).Text;
-            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, sl_lcb_combobox.SelectedIndex);
+            update_ranges(((sl_lipid)currentLipid).lcb, (TextBox)sender, sl_lcb_combobox.SelectedIndex, true);
         }
         
         
@@ -1751,6 +1817,18 @@ namespace LipidCreator
                 ((sl_lipid)currentLipid).hgValues.Add(hgValue);
             }
         }
+        
+        void sl_hg_listbox_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
+        void sl_hg_listbox_MouseLeave(object sender, EventArgs e)
+        {
+            
+        }
+        
+        
         
         ////////////////////// Remaining parts ////////////////////////////////
         
@@ -2034,7 +2112,7 @@ namespace LipidCreator
                 if (current_lipid is cl_lipid)
                 {
                     cl_lipid currentCLLipid = (cl_lipid)current_lipid;
-                    row["Class"] = "Cardiolipin";
+                    row["Category"] = "Cardiolipin";
                     row["Building Block 1"] = "FA: " + currentCLLipid.fag1.lengthInfo + "; DB: " + currentCLLipid.fag1.dbInfo + "; OH: " + currentCLLipid.fag1.hydroxylInfo;
                     row["Building Block 2"] = "FA: " + currentCLLipid.fag2.lengthInfo + "; DB: " + currentCLLipid.fag2.dbInfo + "; OH: " + currentCLLipid.fag2.hydroxylInfo;
                     row["Building Block 3"] = "FA: " + currentCLLipid.fag3.lengthInfo + "; DB: " + currentCLLipid.fag3.dbInfo + "; OH: " + currentCLLipid.fag3.hydroxylInfo;
@@ -2043,7 +2121,7 @@ namespace LipidCreator
                 else if (current_lipid is gl_lipid)
                 {
                     gl_lipid currentGLLipid = (gl_lipid)current_lipid;
-                    row["Class"] = "Glycerolipid";
+                    row["Category"] = "Glycerolipid";
                     row["Building Block 1"] = "FA: " + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
                     row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
                     if (currentGLLipid.contains_sugar)
@@ -2070,7 +2148,7 @@ namespace LipidCreator
                         if (headgroups != "") headgroups += ", ";
                         headgroups += currentPLLipid.headGroupNames[hgValue];
                     }
-                    row["Class"] = "Phospholipid";
+                    row["Category"] = "Phospholipid";
                     row["Building Block 1"] = "HG: " + headgroups;
                     row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
                     row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
@@ -2084,7 +2162,7 @@ namespace LipidCreator
                         if (headgroups != "") headgroups += ", ";
                         headgroups += currentSLLipid.headGroupNames[hgValue];
                     }
-                    row["Class"] = "Sphingolipid";
+                    row["Category"] = "Sphingolipid";
                     row["Building Block 1"] = "HG: " + headgroups;
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
                     row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo;
@@ -2200,6 +2278,25 @@ namespace LipidCreator
             lipidsReview.Dispose();
         }
         
+        protected void menuImportPredefined_Click(object sender, System.EventArgs e)
+        {
+            System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
+            string filePath = (string)PredefItem.Tag;
+            XDocument doc;
+            try 
+            {
+                doc = XDocument.Load(filePath);
+                lipidCreatorForm.import(doc);
+                refresh_registered_lipids_table();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+            }
+        }
+        
+        
+        
         protected void menuImport_Click(object sender, System.EventArgs e)
         {
         
@@ -2212,7 +2309,7 @@ namespace LipidCreator
 
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-               XDocument doc;
+                XDocument doc;
                 try 
                 {
                     doc = XDocument.Load(openFileDialog1.FileName);

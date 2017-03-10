@@ -67,9 +67,6 @@ namespace LipidCreator
         private System.Windows.Forms.MenuItem menuExport;
         private System.Windows.Forms.MenuItem menuDash;
         private System.Windows.Forms.MenuItem menuExit;
-        private System.Windows.Forms.MenuItem menuPredefinedHumanBlood;
-        private System.Windows.Forms.MenuItem menuPredefinedMouseLiver;
-        private System.Windows.Forms.MenuItem menuPredefinedFSMHeart;
         
         private TabControl tab_control = new TabControl();
         private TabPage glycerolipids_tab;
@@ -317,15 +314,11 @@ namespace LipidCreator
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
             this.menuImportPredefined = new System.Windows.Forms.MenuItem();
-            this.menuPredefinedHumanBlood = new System.Windows.Forms.MenuItem();
-            this.menuPredefinedMouseLiver = new System.Windows.Forms.MenuItem();
-            this.menuPredefinedFSMHeart = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem ();
             this.menuDash = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
             this.mainMenu1.MenuItems.AddRange(new MenuItem[] { this.menuFile } );
             this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuExit});
-            this.menuImportPredefined.MenuItems.AddRange(new MenuItem[] {menuPredefinedHumanBlood, menuPredefinedMouseLiver, menuPredefinedFSMHeart});
             this.menuFile.Index = 0;
             this.menuFile.Text = "&File";
             
@@ -348,11 +341,6 @@ namespace LipidCreator
             this.menuExit.Index = 4;
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
-            this.menuExit.Click += new System.EventHandler (menuExit_Click);
-            
-            this.menuPredefinedHumanBlood.Text = "Human - blood";
-            this.menuPredefinedMouseLiver.Text = "Mouse - liver";
-            this.menuPredefinedFSMHeart.Text = "Flying Spaghetti Monster - Heart";
             
             tab_control = new TabControl();
             this.Size = new System.Drawing.Size(1060, 800);
@@ -644,6 +632,8 @@ namespace LipidCreator
             tab_control.Controls.Add(phospholipids_tab);
             tab_control.Controls.Add(sphingolipids_tab);
             tab_control.Dock = DockStyle.Fill;
+            Font tab_fnt = new Font(tab_control.Font.FontFamily, 16);
+            tab_control.Font = tab_fnt;
             tab_control.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
 
 
@@ -693,6 +683,8 @@ namespace LipidCreator
             phospholipids_tab.Controls.Add(cl_hydroxyl_2_label);
             phospholipids_tab.Controls.Add(cl_hydroxyl_3_label);
             phospholipids_tab.Controls.Add(cl_hydroxyl_4_label);
+            Font pl_fnt = new Font(phospholipids_tab.Font.FontFamily, 8.25F);
+            phospholipids_tab.Font = pl_fnt;
             
             
             
@@ -1017,6 +1009,9 @@ namespace LipidCreator
             glycerolipids_tab.AutoSize = true;
             glycerolipids_tab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             glycerolipids_tab.BackColor = Color.White;
+            Font gl_fnt = new Font(glycerolipids_tab.Font.FontFamily, 8.25F);
+            glycerolipids_tab.Font = gl_fnt;
+            
 
             
             
@@ -1372,6 +1367,8 @@ namespace LipidCreator
             pl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
             pl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
             pl_hg_listbox.SelectedValueChanged += new System.EventHandler(pl_hg_listbox_SelectedValueChanged);
+            pl_hg_listbox.MouseLeave += new System.EventHandler(pl_hg_listbox_MouseLeave);
+            pl_hg_listbox.MouseMove += new System.Windows.Forms.MouseEventHandler(pl_hg_listbox_MouseHover);
             
             pl_hg_label.Location = new Point(pl_hg_listbox.Left, pl_hg_listbox.Top - sep);
             pl_hg_label.Text = "Head group";
@@ -1388,6 +1385,7 @@ namespace LipidCreator
             pl_pos_adduct_checkbox_2.Parent = pl_positive_adduct;
             pl_pos_adduct_checkbox_2.Location = new Point(10, 35);
             pl_pos_adduct_checkbox_2.Text = "+2H⁺⁺";
+            pl_pos_adduct_checkbox_2.Enabled = false;
             pl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_2_checkedChanged);
             pl_pos_adduct_checkbox_3.Parent = pl_positive_adduct;
             pl_pos_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1404,6 +1402,7 @@ namespace LipidCreator
             pl_neg_adduct_checkbox_2.Parent = pl_negative_adduct;
             pl_neg_adduct_checkbox_2.Location = new Point(10, 35);
             pl_neg_adduct_checkbox_2.Text = "-2H⁻ ⁻";
+            pl_neg_adduct_checkbox_2.Enabled = false;
             pl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_2_checkedChanged);
             pl_neg_adduct_checkbox_3.Parent = pl_negative_adduct;
             pl_neg_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1458,6 +1457,8 @@ namespace LipidCreator
             sphingolipids_tab.AutoSize = true;
             sphingolipids_tab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             sphingolipids_tab.BackColor = Color.White;
+            Font sl_fnt = new Font(sphingolipids_tab.Font.FontFamily, 8.25F);
+            sphingolipids_tab.Font = sl_fnt;
 
             sl_fa_combobox.BringToFront();
             sl_fa_textbox.BringToFront();
@@ -1525,6 +1526,8 @@ namespace LipidCreator
             sl_hg_listbox.BorderStyle = BorderStyle.Fixed3D;
             sl_hg_listbox.SelectionMode = SelectionMode.MultiSimple;
             sl_hg_listbox.SelectedValueChanged += new System.EventHandler(sl_hg_listbox_SelectedValueChanged);
+            sl_hg_listbox.MouseLeave += new System.EventHandler(sl_hg_listbox_MouseLeave);
+            sl_hg_listbox.MouseMove += new System.Windows.Forms.MouseEventHandler(sl_hg_listbox_MouseHover);
             sl_hg_label.Location = new Point(sl_hg_listbox.Left, sl_hg_listbox.Top - sep);
             sl_hg_label.Text = "Head group";
             
@@ -1542,6 +1545,7 @@ namespace LipidCreator
             sl_pos_adduct_checkbox_2.Parent = sl_positive_adduct;
             sl_pos_adduct_checkbox_2.Location = new Point(10, 35);
             sl_pos_adduct_checkbox_2.Text = "+2H⁺⁺";
+            sl_pos_adduct_checkbox_2.Enabled = false;
             sl_pos_adduct_checkbox_2.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_2_checkedChanged);
             sl_pos_adduct_checkbox_3.Parent = sl_positive_adduct;
             sl_pos_adduct_checkbox_3.Location = new Point(10, 55);
@@ -1558,6 +1562,7 @@ namespace LipidCreator
             sl_neg_adduct_checkbox_2.Parent = sl_negative_adduct;
             sl_neg_adduct_checkbox_2.Location = new Point(10, 35);
             sl_neg_adduct_checkbox_2.Text = "-2H⁻⁻";
+            sl_neg_adduct_checkbox_2.Enabled = false;
             sl_neg_adduct_checkbox_2.CheckedChanged += new EventHandler(sl_neg_adduct_checkbox_2_checkedChanged);
             sl_neg_adduct_checkbox_3.Parent = sl_negative_adduct;
             sl_neg_adduct_checkbox_3.Location = new Point(10, 55);

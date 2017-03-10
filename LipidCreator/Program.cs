@@ -166,7 +166,7 @@ namespace LipidCreator
         public fattyAcidGroup()
         {
             chainType = 0;
-            lengthInfo = "2-5";
+            lengthInfo = "12-15";
             dbInfo = "0";
             hydroxylInfo = "0";
             faTypes = new Dictionary<String, bool>();
@@ -300,6 +300,7 @@ namespace LipidCreator
             xml += " fragmentName=\"" + fragmentName + "\"";
             xml += " fragmentCharge=\"" + fragmentCharge + "\"";
             xml += " fragmentFile=\"" + fragmentFile + "\"";
+            xml += " intensity=\"" + intensity + "\"";
             xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
             foreach (string restriction in restrictions)
             {
@@ -335,6 +336,7 @@ namespace LipidCreator
             fragmentName = node.Attribute("fragmentName").Value.ToString();
             fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
+            intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
             fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
             
             
@@ -1330,7 +1332,7 @@ namespace LipidCreator
             MS2Fragments.Add("DGDG", new ArrayList());
             MS2Fragments.Add("SQDG", new ArrayList());
             MS2Fragments.Add("TG", new ArrayList());
-            adducts["+H"] = true;
+            adducts["+NH4"] = true;
             adducts["-H"] = false;
             
             foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)

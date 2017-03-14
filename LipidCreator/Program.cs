@@ -1858,7 +1858,11 @@ namespace LipidCreator
             hgValues = new List<int>();
             MS2Fragments.Add("PA", new ArrayList());
             MS2Fragments.Add("PC", new ArrayList());
+            MS2Fragments.Add("pPC", new ArrayList());
+            MS2Fragments.Add("ppPC", new ArrayList());
             MS2Fragments.Add("PE", new ArrayList());
+            MS2Fragments.Add("pPE", new ArrayList());
+            MS2Fragments.Add("ppPE", new ArrayList());
             MS2Fragments.Add("DMPE", new ArrayList());
             MS2Fragments.Add("MMPE", new ArrayList());
             MS2Fragments.Add("PG", new ArrayList());
@@ -1958,6 +1962,7 @@ namespace LipidCreator
             check_FattyAcids += fag2.faTypes["FAx"] ? 1 : 0;
             if (check_FattyAcids > 0) return;
             if (hgValues.Count == 0) return;
+            int isPlamalogen = 0;
             
             foreach (int fa_l_1 in fag1.carbonCounts)
             {
@@ -1975,6 +1980,10 @@ namespace LipidCreator
                                 {
                                     fa1 = new FattyAcid(0, 0, 0, "FA");
                                 }
+                                if (fa_kvp_1.Key == "FAp")
+                                {
+                                    isPlamalogen += 1;
+                                }
                                 foreach (int fa_l_2 in fag2.carbonCounts)
                                 {
                                     int max_db_2 = (fa_l_2 - 1) >> 1;
@@ -1991,7 +2000,10 @@ namespace LipidCreator
                                                     {
                                                         fa2 = new FattyAcid(0, 0, 0, "FA");
                                                     }
-                                                                        
+                                                    if (fa_kvp_2.Key == "FAp")
+                                                    {
+                                                        isPlamalogen += 1;
+                                                    }             
                                                     List<FattyAcid> sorted_acids = new List<FattyAcid>();
                                                     sorted_acids.Add(fa1);
                                                     sorted_acids.Add(fa2);
@@ -2001,7 +2013,13 @@ namespace LipidCreator
                                                     {
                                                     
                                                         String headgroup = headGroupNames[hgValue];
+                                                        String headgroupSearch = headgroup;
                                                         String key = headgroup + " ";
+                                                        if (headgroup.Equals("PC") || headgroup.Equals("PE"))
+                                                        {
+                                                            if (isPlamalogen >= 1) headgroupSearch = "p" + headgroupSearch;
+                                                            if (isPlamalogen == 2) headgroupSearch = "p" + headgroupSearch;
+                                                        }
                                                         int i = 0;
                                                         foreach (FattyAcid fa in sorted_acids)
                                                         {
@@ -2016,20 +2034,20 @@ namespace LipidCreator
                                                         {
                                                             foreach (KeyValuePair<string, bool> adduct in adducts)
                                                             {
-                                                                if (adduct.Value && headgroup_adduct_restrictions[headgroup][adduct.Key])
+                                                                if (adduct.Value && headgroup_adduct_restrictions[headgroupSearch][adduct.Key])
                                                                 {
                                                                     used_keys.Add(key);
                                                                     
                                                                     DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                                                                     MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                                                     MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroup]);
+                                                                    MS2Fragment.addCounts(atomsCount, ddt[headgroupSearch]);
                                                                     String chemForm = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                                     int charge = get_charge_and_add_adduct(atomsCount, adduct.Key);
                                                                     String chemFormComplete = LipidCreatorForm.compute_chemical_formula(atomsCount);
                                                                     double mass = LipidCreatorForm.compute_mass(atomsCount, charge);
                                                                     
-                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroup])
+                                                                    foreach (MS2Fragment fragment in MS2Fragments[headgroupSearch])
                                                                     {
                                                                         if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
                                                                         {
@@ -3005,7 +3023,7 @@ namespace LipidCreator
                                                       
                                                       
             creatorGUI = new CreatorGUI(this);
-            creatorGUI.changeTab(1);
+            //creatorGUI.changeTab(0);
         }
 
 

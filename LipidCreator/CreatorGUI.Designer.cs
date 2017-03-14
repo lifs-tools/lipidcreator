@@ -69,6 +69,7 @@ namespace LipidCreator
         private System.Windows.Forms.MenuItem menuExit;
         
         private TabControl tab_control = new TabControl();
+        private TabPage home_tab;
         private TabPage glycerolipids_tab;
         private TabPage phospholipids_tab;
         private TabPage sphingolipids_tab;
@@ -348,6 +349,7 @@ namespace LipidCreator
             
             tab_control = new TabControl();
             this.Size = new System.Drawing.Size(1060, 800);
+            home_tab = new TabPage();
             glycerolipids_tab = new TabPage();
             phospholipids_tab = new TabPage();
             sphingolipids_tab = new TabPage();
@@ -632,6 +634,7 @@ namespace LipidCreator
             string formatting_hydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
 
 
+            tab_control.Controls.Add(home_tab);
             tab_control.Controls.Add(glycerolipids_tab);
             tab_control.Controls.Add(phospholipids_tab);
             tab_control.Controls.Add(sphingolipids_tab);
@@ -640,6 +643,12 @@ namespace LipidCreator
             tab_control.Font = tab_fnt;
             tab_control.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
 
+            
+            
+            home_tab.Text = "Home";
+            
+            
+            
 
             // tab for cardiolipins
 
@@ -1612,7 +1621,7 @@ namespace LipidCreator
             cl_modify_lipid_button.Height = 26;
             cl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             cl_modify_lipid_button.BackColor = SystemColors.Control;
-            cl_modify_lipid_button.Click += modify_cl_lipid;
+            cl_modify_lipid_button.Click += modify_lipid;
 
             cl_ms2fragments_lipid_button.Text = "MS2 fragments";
             cl_ms2fragments_lipid_button.Width = 130;
@@ -1643,7 +1652,7 @@ namespace LipidCreator
             gl_modify_lipid_button.Height = 26;
             gl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             gl_modify_lipid_button.BackColor = SystemColors.Control;
-            gl_modify_lipid_button.Click += modify_gl_lipid;
+            gl_modify_lipid_button.Click += modify_lipid;
 
             gl_ms2fragments_lipid_button.Text = "MS2 fragments";
             gl_ms2fragments_lipid_button.Width = 130;
@@ -1674,7 +1683,7 @@ namespace LipidCreator
             pl_modify_lipid_button.Height = 26;
             pl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             pl_modify_lipid_button.BackColor = SystemColors.Control;
-            pl_modify_lipid_button.Click += modify_pl_lipid;
+            pl_modify_lipid_button.Click += modify_lipid;
 
             pl_ms2fragments_lipid_button.Text = "MS2 fragments";
             pl_ms2fragments_lipid_button.Width = 130;
@@ -1705,7 +1714,7 @@ namespace LipidCreator
             sl_modify_lipid_button.Height = 26;
             sl_modify_lipid_button.Location = new Point(left_groupboxes - 140, top_low_buttons);
             sl_modify_lipid_button.BackColor = SystemColors.Control;
-            sl_modify_lipid_button.Click += modify_sl_lipid;
+            sl_modify_lipid_button.Click += modify_lipid;
 
             sl_ms2fragments_lipid_button.Text = "MS2 fragments";
             sl_ms2fragments_lipid_button.Width = 130;

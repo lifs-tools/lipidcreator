@@ -1692,14 +1692,45 @@ namespace LipidCreator
             update_ranges(((pl_lipid)currentLipid).fag2, pl_hydroxyl_2_textbox, 4);
         }
         
-        void pl_hg_listbox_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
-
         void pl_hg_listbox_MouseLeave(object sender, EventArgs e)
         {
-            
+            pl_pos_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_pos_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_pos_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_neg_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_neg_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_neg_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            pl_neg_adduct_checkbox_4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+        }
+
+        void pl_hg_listbox_MouseHover(object sender, EventArgs e)
+        {
+            Point point = pl_hg_listbox.PointToClient(Cursor.Position);
+            int hoveredIndex = pl_hg_listbox.IndexFromPoint(point);
+
+            if (hoveredIndex != -1)
+            {
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["+H"]) pl_pos_adduct_checkbox_1.BackColor = highlightedCheckboxColor;
+                else pl_pos_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["+2H"]) pl_pos_adduct_checkbox_2.BackColor = highlightedCheckboxColor;
+                else pl_pos_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["+NH4"]) pl_pos_adduct_checkbox_3.BackColor = highlightedCheckboxColor;
+                else pl_pos_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["-H"]) pl_neg_adduct_checkbox_1.BackColor = highlightedCheckboxColor;
+                else pl_neg_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["-2H"]) pl_neg_adduct_checkbox_2.BackColor = highlightedCheckboxColor;
+                else pl_neg_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["+HCOO"]) pl_neg_adduct_checkbox_3.BackColor = highlightedCheckboxColor;
+                else pl_neg_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)pl_hg_listbox.Items[hoveredIndex]]["+CH3COO"]) pl_neg_adduct_checkbox_4.BackColor = highlightedCheckboxColor;
+                else pl_neg_adduct_checkbox_4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            }
         }
         
         ////////////////////// SL ////////////////////////////////
@@ -1817,14 +1848,45 @@ namespace LipidCreator
             }
         }
         
-        void sl_hg_listbox_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
-
         void sl_hg_listbox_MouseLeave(object sender, EventArgs e)
         {
-            
+            sl_pos_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_pos_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_pos_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_neg_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_neg_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_neg_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            sl_neg_adduct_checkbox_4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+        }
+
+        void sl_hg_listbox_MouseHover(object sender, EventArgs e)
+        {
+            Point point = sl_hg_listbox.PointToClient(Cursor.Position);
+            int hoveredIndex = sl_hg_listbox.IndexFromPoint(point);
+
+            if (hoveredIndex != -1)
+            {
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["+H"]) sl_pos_adduct_checkbox_1.BackColor = highlightedCheckboxColor;
+                else sl_pos_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["+2H"]) sl_pos_adduct_checkbox_2.BackColor = highlightedCheckboxColor;
+                else sl_pos_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["+NH4"]) sl_pos_adduct_checkbox_3.BackColor = highlightedCheckboxColor;
+                else sl_pos_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["-H"]) sl_neg_adduct_checkbox_1.BackColor = highlightedCheckboxColor;
+                else sl_neg_adduct_checkbox_1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["-2H"]) sl_neg_adduct_checkbox_2.BackColor = highlightedCheckboxColor;
+                else sl_neg_adduct_checkbox_2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["+HCOO"]) sl_neg_adduct_checkbox_3.BackColor = highlightedCheckboxColor;
+                else sl_neg_adduct_checkbox_3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                if (lipidCreatorForm.headgroup_adduct_restrictions[(string)sl_hg_listbox.Items[hoveredIndex]]["+CH3COO"]) sl_neg_adduct_checkbox_4.BackColor = highlightedCheckboxColor;
+                else sl_neg_adduct_checkbox_4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+            }
         }
         
         

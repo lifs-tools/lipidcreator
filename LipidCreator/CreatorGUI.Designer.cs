@@ -73,6 +73,9 @@ namespace LipidCreator
         private TabPage phospholipids_tab;
         private TabPage sphingolipids_tab;
         private GroupBox lipids_groupbox;
+        private int DefaultCheckboxBGR;
+        private int DefaultCheckboxBGG;
+        private int DefaultCheckboxBGB;
 
         private Button cl_add_lipid_button;
         private Button gl_add_lipid_button;
@@ -231,6 +234,7 @@ namespace LipidCreator
         CheckBox clRepresentativeFA;
         CheckBox glRepresentativeFA;
         CheckBox plRepresentativeFA;
+        Color highlightedCheckboxColor;
 
         TextBox cl_db_1_textbox;
         TextBox cl_db_2_textbox;
@@ -365,6 +369,7 @@ namespace LipidCreator
             pl_ms2fragments_lipid_button = new Button();
             sl_ms2fragments_lipid_button = new Button();
 
+            highlightedCheckboxColor = Color.FromArgb(156, 232, 189);
             lipids_gridview = new DataGridView();
             open_review_form_button = new Button();
 
@@ -604,7 +609,6 @@ namespace LipidCreator
             sl_neg_adduct_checkbox_2 = new CheckBox();
             sl_neg_adduct_checkbox_3 = new CheckBox();
             sl_neg_adduct_checkbox_4 = new CheckBox();
-
             
             
             sl_lcb_hydroxy_combobox = new ComboBox();
@@ -1746,6 +1750,10 @@ namespace LipidCreator
             this.Text = "LipidCreator";
             this.MaximizeBox = false;
             this.Padding = new Padding(5);
+
+            DefaultCheckboxBGR = cl_pos_adduct_checkbox_1.BackColor.R;
+            DefaultCheckboxBGG = cl_pos_adduct_checkbox_1.BackColor.G;
+            DefaultCheckboxBGB = cl_pos_adduct_checkbox_1.BackColor.B;
         }
 
         #endregion

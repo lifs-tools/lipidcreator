@@ -470,12 +470,11 @@ pPC,FA2' (pPC),images/MS2/pPC/pPC_neg_FA2'.png,-1,FA1,7,16,5,1,1,0,0,,100
 pPC,FA2' + O (pPC),images/MS2/pPC/pPC_neg_FA2'+O.png,-1,FA1,7,18,6,1,1,0,0,,100
 pPC,FA2-CO (pPC),images/MS2/pPC/pPC_neg_FA2-CO.png,-1,FA2,-1,0,-1,0,0,0,0,,100
 pPC,HG(pPC),images/MS2/pPC/pPC_neg_HG.png,1,,5,15,4,1,1,0,0,,100
-ppPC,HG(pPC),images/MS2/pPC/pPC_neg_HG.png,-1,,7,15,5,1,1,0,0,,100
-ppPC,NL(CH3 + CH3COO) (ppPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,+CH3COO,100
-ppPC,NL(CH3 + HCOO) (ppPC),images/MS2/pPC/pPC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+HCOO,100
-ppPC,pFA1 (ppPC),images/MS2/pPC/pPC_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
-ppPC,pFA2 (ppPC),images/MS2/pPC/pPC_neg_FA2.png,-1,FA2,0,2,1,0,0,0,0,,100
-ppPC,HG(ppPC),images/MS2/pPC/pPC_neg_HG.png,1,,5,15,4,1,1,0,0,,100
+ppPC,NL(CH3 + CH3COO) (ppPC),images/MS2/ppPC/ppPC_neg_NL.png,-1,PRE,-3,-6,-2,0,0,0,0,+CH3COO,100
+ppPC,NL(CH3 + HCOO) (ppPC),images/MS2/ppPC/ppPC_neg_NL.png,-1,PRE,-2,-4,-2,0,0,0,0,+HCOO,100
+ppPC,pFA1 (ppPC),images/MS2/ppPC/ppPC_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
+ppPC,pFA2 (ppPC),images/MS2/ppPC/ppPC_neg_pFA2.png,-1,FA2,0,2,1,0,0,0,0,,100
+ppPC,HG(ppPC),images/MS2/ppPC/ppPC_pos_HG.png,1,,5,15,4,1,1,0,0,,100
 pPE,pFA1,images/MS2/pPE/pPE_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
 pPE,FA2,images/MS2/pPE/pPE_neg_FA2.png,-1,FA2,0,0,1,0,0,0,0,,100
 pPE,FA2',images/MS2/pPE/pPE_neg_FA2'.png,-1,FA1,5,12,5,1,1,0,0,,100
@@ -484,10 +483,10 @@ pPE,FA2 - CO,images/MS2/pPE/pPE_neg_FA2-CO.png,-1,FA2,-1,0,-1,0,0,0,0,,100
 pPE,FA1' + O,images/MS2/pPE/pPE_pos_FA1'+O.png,1,FA2,5,14,6,1,1,0,0,,100
 pPE,FA1 + HG,images/MS2/pPE/pPE_pos_FA1+HG.png,1,FA1,2,10,4,1,1,0,0,,100
 pPE,FA2 + G,images/MS2/pPE/pPE_pos_FA2+G.png,1,FA2,3,6,2,0,0,0,0,,100
-ppPE,pFA1,images/MS2/pPE/pPE_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
-ppPE,pFA2,images/MS2/pPE/pPE_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
-ppPE,pFA1 + HG,images/MS2/pPE/pPE_pos_FA1+HG.png,1,FA1,2,10,4,1,1,0,0,,100
-ppPE,pFA2 + HG,images/MS2/pPE/pPE_pos_FA1+HG.png,1,FA2,2,10,4,1,1,0,0,,100
+ppPE,pFA1,images/MS2/ppPE/ppPE_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
+ppPE,pFA2,images/MS2/ppPE/ppPE_neg_pFA2.png,-1,FA1,0,2,1,0,0,0,0,,100
+ppPE,pFA1 + HG,images/MS2/ppPE/ppPE_pos_pFA1+HG.png,1,FA1,2,10,4,1,1,0,0,,100
+ppPE,pFA2 + HG,images/MS2/ppPE/ppPE_pos_pFA2+HG.png,1,FA2,2,10,4,1,1,0,0,,100
 PS,FA1' + O,images/MS2/PS/PS_neg_FA1'+O.png,-1,FA1,3,7,6,0,1,0,0,,100
 PS,FA1,images/MS2/PS/PS_neg_FA1.png,-1,FA1,0,0,1,0,0,0,0,,100
 PS,FA1',images/MS2/PS/PS_neg_FA1'.png,-1,FA1,3,5,5,0,1,0,0,,100

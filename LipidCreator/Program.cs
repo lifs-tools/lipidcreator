@@ -2865,6 +2865,7 @@ namespace LipidCreator
         public Dictionary<String, ArrayList> all_fragments;
         public Dictionary<String, String> all_paths_to_precursor_images;
         public Dictionary<String, DataTable> headgroups;
+        public Dictionary<String, int> buildingBlockTypes;
         public Dictionary<String, Dictionary<String, bool>> headgroup_adduct_restrictions;
         public DataTable all_lipids;
         public DataTable all_lipids_unique;
@@ -2880,6 +2881,7 @@ namespace LipidCreator
             all_paths_to_precursor_images = new Dictionary<String, String>();
             all_fragments = new Dictionary<String, ArrayList>();
             headgroups = new Dictionary<String, DataTable>();
+            buildingBlockTypes = new Dictionary<String, int>();
             headgroup_adduct_restrictions = new Dictionary<String, Dictionary<String, bool>>();
             all_lipids = new DataTable();
             all_lipids.Columns.Add("Molecule List Name");
@@ -2979,7 +2981,7 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                            if (tokens.Length != 16) throw new Exception("invalid line in file");
+                            if (tokens.Length != 17) throw new Exception("invalid line in file");
                             headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
                             headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
                             headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
@@ -3002,6 +3004,7 @@ namespace LipidCreator
                             headgroup_adduct_restrictions[tokens[0]].Add("-2H", tokens[13].Equals("Yes"));
                             headgroup_adduct_restrictions[tokens[0]].Add("+HCOO", tokens[14].Equals("Yes"));
                             headgroup_adduct_restrictions[tokens[0]].Add("+CH3COO", tokens[15].Equals("Yes"));
+                            buildingBlockTypes.Add(tokens[0], Convert.ToInt32(tokens[16]));
                         }
                     }
                 }

@@ -41,6 +41,7 @@ namespace LipidCreator
 
         DataTable elements;
         MS2Form ms2form;
+        string[] buildingBlocks;
 
         public NewFragment(MS2Form ms2form)
         {
@@ -121,6 +122,96 @@ namespace LipidCreator
             dataGridView1.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+            
+            
+            // base types:
+            // 0 -> fixed, FA1, FA2, FA3, FA4, FA1 + FA2, FA1 + FA3, FA1 + FA4, FA2 + FA3, FA2 + FA4, FA3 + FA4, FA1 + FA2 + FA3, FA1 + FA2 + FA4, FA1 + FA3 + FA4, PRE
+            // 1 -> fixed, FA1, FA2, FA3, FA1 + FA2, FA1 + FA3, FA2 + FA3, PRE
+            // 2 -> fixed, FA1, FA2, PRE
+            // 3 -> fixed, FA, PRE
+            // 4 -> fixed, LCB, FA, HG, LCB + FA, LCB + HG, FA + HG, PRE
+            // 5 -> fixed, LCB, HG, PRE
+            // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, PRE
+            // 7 -> fixed, FA1, HG, PRE
+            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
+            int bbType = ms2form.creatorGUI.lipidCreatorForm.buildingBlockTypes[lipidClass];
+            
+            select_base_combobox.Items.Add("fixed");
+            switch(bbType)
+            {
+                case 0:
+                    buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA4", "FA1;FA2", "FA1;FA3", "FA1;FA4", "FA2;FA3", "FA2;FA4", "FA3;FA4", "FA1;FA2;FA3", "FA1;FA2;FA4", "FA1;FA3;FA4", "FA2;FA3;FA4", "PRE"};
+                    select_base_combobox.Items.Add("FA1");
+                    select_base_combobox.Items.Add("FA2");
+                    select_base_combobox.Items.Add("FA3");
+                    select_base_combobox.Items.Add("FA4");
+                    select_base_combobox.Items.Add("FA1 + FA2");
+                    select_base_combobox.Items.Add("FA1 + FA3");
+                    select_base_combobox.Items.Add("FA1 + FA4");
+                    select_base_combobox.Items.Add("FA2 + FA3");
+                    select_base_combobox.Items.Add("FA2 + FA4");
+                    select_base_combobox.Items.Add("FA3 + FA4");
+                    select_base_combobox.Items.Add("FA1 + FA2 + FA3");
+                    select_base_combobox.Items.Add("FA1 + FA2 + FA4");
+                    select_base_combobox.Items.Add("FA1 + FA3 + FA4");
+                    select_base_combobox.Items.Add("FA2 + FA3 + FA4");
+                    break;
+                    
+                case 1:
+                    buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA1;FA2", "FA1;FA3", "FA2;FA3", "PRE"};
+                    select_base_combobox.Items.Add("FA1");
+                    select_base_combobox.Items.Add("FA2");
+                    select_base_combobox.Items.Add("FA3");
+                    select_base_combobox.Items.Add("FA1 + FA2");
+                    select_base_combobox.Items.Add("FA1 + FA3");
+                    select_base_combobox.Items.Add("FA2 + FA3");
+                    break;
+                    
+                case 2:
+                    buildingBlocks = new string[]{"", "FA1", "FA2", "PRE"};
+                    select_base_combobox.Items.Add("FA1");
+                    select_base_combobox.Items.Add("FA2");
+                    break;
+                    
+                case 3:
+                    buildingBlocks = new string[]{"", "FA", "PRE"};
+                    select_base_combobox.Items.Add("FA");
+                    break;
+                    
+                case 4:
+                    buildingBlocks = new string[]{"", "LCB", "FA", "HG", "LCB;FA", "LCB;HG", "FA;HG", "PRE"};
+                    select_base_combobox.Items.Add("LCB");
+                    select_base_combobox.Items.Add("FA");
+                    select_base_combobox.Items.Add("HG");
+                    select_base_combobox.Items.Add("LCB + FA");
+                    select_base_combobox.Items.Add("LCB + HG");
+                    select_base_combobox.Items.Add("FA + HG");
+                    break;
+                    
+                case 5:
+                    buildingBlocks = new string[]{"", "LCB", "HG", "PRE"};
+                    select_base_combobox.Items.Add("LCB");
+                    select_base_combobox.Items.Add("HG");
+                    break;
+                    
+                case 6:
+                    buildingBlocks = new string[]{"", "FA1", "FA2", "HG", "FA1;FA2", "FA1;HG", "FA2;HG", "PRE"};
+                    select_base_combobox.Items.Add("FA1");
+                    select_base_combobox.Items.Add("FA2");
+                    select_base_combobox.Items.Add("HG");
+                    select_base_combobox.Items.Add("FA1 + FA2");
+                    select_base_combobox.Items.Add("FA1 + HG");
+                    select_base_combobox.Items.Add("FA2 + HG");
+                    break;
+                    
+                case 7:
+                    buildingBlocks = new string[]{"", "FA", "HG", "PRE"};
+                    select_base_combobox.Items.Add("FA");
+                    select_base_combobox.Items.Add("HG");
+                    break;
+            }
+            select_base_combobox.Items.Add("Precursor");
+            select_base_combobox.SelectedIndex = 0;
         }
 
         private void tableView_KeyPress(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -164,7 +255,7 @@ namespace LipidCreator
             }
             
             String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
-            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, "", ""));
+            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, buildingBlocks[select_base_combobox.SelectedIndex], ""));
             this.Close();
         }
         private void dataGridView1_CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)

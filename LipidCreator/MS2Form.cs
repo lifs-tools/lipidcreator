@@ -40,13 +40,13 @@ namespace LipidCreator
     {
         
         public Image fragment_complete = null;
-        public lipid currentLipid;
+        public Lipid currentLipid;
         public ArrayList positiveIDs;
         public ArrayList negativeIDs;
         public CreatorGUI creatorGUI;
         public bool senderInterupt;
         
-        public MS2Form(CreatorGUI creatorGUI, lipid currentLipid)
+        public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
         {
             this.creatorGUI = creatorGUI;
             positiveIDs = new ArrayList();
@@ -54,10 +54,10 @@ namespace LipidCreator
             senderInterupt = false;
             
             
-            if (currentLipid is cl_lipid ) this.currentLipid = new cl_lipid((cl_lipid)currentLipid);
-            else if (currentLipid is gl_lipid ) this.currentLipid = new gl_lipid((gl_lipid)currentLipid);
-            else if (currentLipid is pl_lipid ) this.currentLipid = new pl_lipid((pl_lipid)currentLipid);
-            else if (currentLipid is sl_lipid ) this.currentLipid = new sl_lipid((sl_lipid)currentLipid);
+            if (currentLipid is CLLipid ) this.currentLipid = new CLLipid((CLLipid)currentLipid);
+            else if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
+            else if (currentLipid is PLLipid ) this.currentLipid = new PLLipid((PLLipid)currentLipid);
+            else if (currentLipid is SLLipid ) this.currentLipid = new SLLipid((SLLipid)currentLipid);
             
             InitializeComponent(currentLipid.MS2Fragments);            
             tabChange(0);
@@ -170,8 +170,8 @@ namespace LipidCreator
                     if (Convert.ToInt32(row["Count"]) != 0)
                     {
                         chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
+                        chemAdding = Convert.ToInt32(row["Count"]) > 0;
                     }
-                    chemAdding = Convert.ToInt32(row["Count"]) > 0;
                 }
                 if (baseName.Length > 0 && chemForm.Length > 0)
                 {
@@ -226,8 +226,8 @@ namespace LipidCreator
                     if (Convert.ToInt32(row["Count"]) != 0)
                     {
                         chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
+                        chemAdding = Convert.ToInt32(row["Count"]) > 0;
                     }
-                    chemAdding = Convert.ToInt32(row["Count"]) > 0;
                 }
                 if (baseName.Length > 0 && chemForm.Length > 0)
                 {
@@ -333,26 +333,26 @@ namespace LipidCreator
         
         private void ok_Click(object sender, EventArgs e)
         {
-            if (currentLipid is cl_lipid)
+            if (currentLipid is CLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[0] = new cl_lipid((cl_lipid)currentLipid);
-                creatorGUI.currentLipid = (lipid)creatorGUI.lipidCreatorForm.lipidTabList[0];
+                creatorGUI.lipidCreatorForm.lipidTabList[0] = new CLLipid((CLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[0];
                 
             }
-            else if (currentLipid is gl_lipid)
+            else if (currentLipid is GLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[1] = new gl_lipid((gl_lipid)currentLipid);
-                creatorGUI.currentLipid = (lipid)creatorGUI.lipidCreatorForm.lipidTabList[1];
+                creatorGUI.lipidCreatorForm.lipidTabList[1] = new GLLipid((GLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[1];
             }
-            else if (currentLipid is pl_lipid)
+            else if (currentLipid is PLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[2] = new pl_lipid((pl_lipid)currentLipid);
-                creatorGUI.currentLipid = (lipid)creatorGUI.lipidCreatorForm.lipidTabList[2];
+                creatorGUI.lipidCreatorForm.lipidTabList[2] = new PLLipid((PLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[2];
             }
-            else if (currentLipid is sl_lipid)
+            else if (currentLipid is SLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[3] = new sl_lipid((sl_lipid)currentLipid);
-                creatorGUI.currentLipid = (lipid)creatorGUI.lipidCreatorForm.lipidTabList[3];
+                creatorGUI.lipidCreatorForm.lipidTabList[3] = new SLLipid((SLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[3];
             }
             
             this.Close();

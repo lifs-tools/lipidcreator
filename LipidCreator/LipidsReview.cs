@@ -51,8 +51,8 @@ namespace LipidCreator
             InitializeComponent();
             currentView = this.allFragments;
             dataGridView1.DataSource = currentView;
-            button1.Enabled = lipidCreatorForm.opened_as_external;
-            checkBox2.Enabled = lipidCreatorForm.opened_as_external;
+            button1.Enabled = lipidCreatorForm.openedAsExternal;
+            checkBox2.Enabled = lipidCreatorForm.openedAsExternal;
             label1.Text = "Number of transitions: " + currentView.Rows.Count;
             foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
             {
@@ -78,12 +78,12 @@ namespace LipidCreator
                 {
                     string blibPath = Application.StartupPath + "\\" + specName[0] + ".blib";
                     lipidCreatorForm.createBlib(blibPath);
-                    lipidCreatorForm.send_to_Skyline(allFragments, specName[0], blibPath);
+                    lipidCreatorForm.sendToSkyline(allFragments, specName[0], blibPath);
                     MessageBox.Show("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
             }
             else {
-                lipidCreatorForm.send_to_Skyline(allFragments, "", "");
+                lipidCreatorForm.sendToSkyline(allFragments, "", "");
                 MessageBox.Show("Sending transition list to Skyline is complete.", "Sending complete");
             }
             this.Enabled = true;

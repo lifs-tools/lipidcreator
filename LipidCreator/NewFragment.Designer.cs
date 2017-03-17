@@ -75,6 +75,9 @@ namespace LipidCreator
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.groupbox = new System.Windows.Forms.GroupBox();
+            this.adding = new System.Windows.Forms.RadioButton();
+            this.subtracting = new System.Windows.Forms.RadioButton();
             select_base_combobox = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -162,7 +165,7 @@ namespace LipidCreator
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(200, 8);
+            this.label4.Location = new System.Drawing.Point(160, 8);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 10);
             this.label4.TabIndex = 7;
@@ -170,7 +173,31 @@ namespace LipidCreator
             // 
             // select_base_combobox
             // 
-            this.select_base_combobox.Location = new System.Drawing.Point(200, 24);
+            this.select_base_combobox.Location = new System.Drawing.Point(160, 24);
+            select_base_combobox.SelectedIndexChanged += new System.EventHandler(this.select_base_combobox_valueChanged);
+            //
+            groupbox.Text = "... chemical formula";
+            groupbox.Location = new System.Drawing.Point(300,8);
+            groupbox.Size = new System.Drawing.Size(120,36);
+            groupbox.Enabled = false;
+            //
+            //
+            //
+            adding.Size = new System.Drawing.Size(40,13);
+            adding.Location = new System.Drawing.Point(10,18);
+            adding.Click += new System.EventHandler(adding_clicked);
+            adding.Text = "Add";
+            adding.Checked = true;
+            groupbox.Controls.Add(adding);
+            //
+            //
+            //
+            subtracting.Size = new System.Drawing.Size(60,13);
+            subtracting.Location = new System.Drawing.Point(50,18);
+            subtracting.Click += new System.EventHandler(subtracting_clicked);
+            subtracting.Text = "Subtract";
+            groupbox.Controls.Add(subtracting);
+
             // 
             // dataGridView1
             // 
@@ -202,8 +229,9 @@ namespace LipidCreator
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Controls.Add(groupbox);
             this.Name = "NewFragment";
-            this.Text = "NewFragment";
+            this.Text = "New Fragment";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -223,5 +251,8 @@ namespace LipidCreator
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ComboBox select_base_combobox;
+        private System.Windows.Forms.GroupBox groupbox;
+        private System.Windows.Forms.RadioButton adding;
+        private System.Windows.Forms.RadioButton subtracting;
     }
 }

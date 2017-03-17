@@ -135,6 +135,8 @@ namespace LipidCreator
         private void checkedListBox1_MouseHover(object sender, MouseEventArgs e)
         {
 
+            toolTip1.Hide(this.checkedListBox1);
+            toolTip1.SetToolTip(this.checkedListBox2, "");
             Point point = checkedListBox1.PointToClient(Cursor.Position);
             int hoveredIndex = checkedListBox1.IndexFromPoint(point);
 
@@ -144,6 +146,41 @@ namespace LipidCreator
                 String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
                 if (filePath != null) pictureBox1.Image = Image.FromFile(filePath);
+                
+                // create tool tip
+                MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
+                string chemForm = "";
+                string baseName = "";
+                string connector = "";
+                string lBracket = "";
+                string rBracket = "";
+                bool chemAdding = true;
+                
+                if (fragment.fragmentBase.Count > 0)
+                {
+                    foreach (string bs in fragment.fragmentBase)
+                    {
+                        if (baseName.Length > 0) baseName += " + ";
+                        baseName += bs;
+                    }
+                }
+                
+                foreach (DataRow row in fragment.fragmentElements.Rows)
+                {
+                    if (Convert.ToInt32(row["Count"]) != 0)
+                    {
+                        chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
+                    }
+                    chemAdding = Convert.ToInt32(row["Count"]) > 0;
+                }
+                if (baseName.Length > 0 && chemForm.Length > 0)
+                {
+                    connector = chemAdding ? " + " : " - ";
+                    lBracket = "(";
+                    rBracket = ")";
+                }
+                string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "+";
+                toolTip1.SetToolTip(this.checkedListBox1, toolTipText);
             }
             else
             {
@@ -154,6 +191,8 @@ namespace LipidCreator
         private void checkedListBox2_MouseHover(object sender, MouseEventArgs e)
         {
 
+            toolTip1.Hide(this.checkedListBox2);
+            toolTip1.SetToolTip(this.checkedListBox1, "");
             Point point = checkedListBox2.PointToClient(Cursor.Position);
             int hoveredIndex = checkedListBox2.IndexFromPoint(point);
 
@@ -163,6 +202,41 @@ namespace LipidCreator
                 String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
                 if (filePath != null) pictureBox1.Image = Image.FromFile(filePath);
+                
+                // create tool tip
+                MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
+                string chemForm = "";
+                string baseName = "";
+                string connector = "";
+                string lBracket = "";
+                string rBracket = "";
+                bool chemAdding = true;
+                
+                if (fragment.fragmentBase.Count > 0)
+                {
+                    foreach (string bs in fragment.fragmentBase)
+                    {
+                        if (baseName.Length > 0) baseName += " + ";
+                        baseName += bs;
+                    }
+                }
+                
+                foreach (DataRow row in fragment.fragmentElements.Rows)
+                {
+                    if (Convert.ToInt32(row["Count"]) != 0)
+                    {
+                        chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
+                    }
+                    chemAdding = Convert.ToInt32(row["Count"]) > 0;
+                }
+                if (baseName.Length > 0 && chemForm.Length > 0)
+                {
+                    connector = chemAdding ? " + " : " - ";
+                    lBracket = "(";
+                    rBracket = ")";
+                }
+                string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "-";
+                toolTip1.SetToolTip(this.checkedListBox2, toolTipText);
             }
             else
             {

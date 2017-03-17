@@ -81,6 +81,7 @@ namespace LipidCreator
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            toolTip1 = new System.Windows.Forms.ToolTip();
             this.tabPages = new ArrayList();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -318,5 +319,6 @@ namespace LipidCreator
         public Button button4;
         public TabControl tabControl1;
         public ArrayList tabPages;
+        public ToolTip toolTip1;
     }
 }

@@ -484,7 +484,7 @@ pPE,FA1' + O,images/MS2/pPE/pPE_pos_FA1'+O.png,1,FA2,5,14,6,1,1,0,0,,100
 pPE,FA1 + HG,images/MS2/pPE/pPE_pos_FA1+HG.png,1,FA1,2,10,4,1,1,0,0,,100
 pPE,FA2 + G,images/MS2/pPE/pPE_pos_FA2+G.png,1,FA2,3,6,2,0,0,0,0,,100
 ppPE,pFA1,images/MS2/ppPE/ppPE_neg_pFA1.png,-1,FA1,0,2,1,0,0,0,0,,100
-ppPE,pFA2,images/MS2/ppPE/ppPE_neg_pFA2.png,-1,FA1,0,2,1,0,0,0,0,,100
+ppPE,pFA2,images/MS2/ppPE/ppPE_neg_pFA2.png,-1,FA2,0,2,1,0,0,0,0,,100
 ppPE,pFA1 + HG,images/MS2/ppPE/ppPE_pos_pFA1+HG.png,1,FA1,2,10,4,1,1,0,0,,100
 ppPE,pFA2 + HG,images/MS2/ppPE/ppPE_pos_pFA2+HG.png,1,FA2,2,10,4,1,1,0,0,,100
 PS,FA1' + O,images/MS2/PS/PS_neg_FA1'+O.png,-1,FA1,3,7,6,0,1,0,0,,100

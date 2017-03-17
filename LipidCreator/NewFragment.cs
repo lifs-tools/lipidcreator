@@ -42,6 +42,7 @@ namespace LipidCreator
         DataTable elements;
         MS2Form ms2form;
         string[] buildingBlocks;
+        bool chemAdding = true;
 
         public NewFragment(MS2Form ms2form)
         {
@@ -253,24 +254,79 @@ namespace LipidCreator
                 MessageBox.Show("No name defined");
                 return;
             }
+            if (numericUpDown1.Value == 0)
+            {
+                MessageBox.Show("Fragment must have an either positive or negative charge");
+                return;
+            }
+            if (!chemAdding)
+            {
+                foreach (DataRow row in elements.Rows)
+                {
+                    row["Count"] = -Convert.ToInt32(row["Count"]);
+                }
+            }
             
             String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
             ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, buildingBlocks[select_base_combobox.SelectedIndex], ""));
             this.Close();
         }
+        
+        
+        
         private void dataGridView1_CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
-            if (string.IsNullOrEmpty(Convert.ToString(elements.Rows[e.RowIndex][0]))) elements.Rows[e.RowIndex][0] = 0;
+            int n;
+            if (string.IsNullOrEmpty(Convert.ToString(elements.Rows[e.RowIndex][0])) || !int.TryParse(Convert.ToString(elements.Rows[e.RowIndex][0]), out n)) elements.Rows[e.RowIndex][0] = 0;
+            updateInfo();
+        }
+        
+        
+        public void select_base_combobox_valueChanged(Object sender, EventArgs e)
+        {
+            if (select_base_combobox.SelectedIndex > 0)
+            {
+                groupbox.Enabled = true;
+            }
+            else
+            {
+                groupbox.Enabled = false;
+                chemAdding = true;
+                adding.Checked = true;
+            }
+            updateInfo();
+        }
+        
+        void adding_clicked(Object sender,EventArgs e)
+        {
+            chemAdding = true;
+            updateInfo();
+        }
+        
+        void subtracting_clicked(Object sender,EventArgs e)
+        {
+            chemAdding = false;
             updateInfo();
         }
 
         private void updateInfo()
         {
-            double mass = 0;
-            String chemForm = "";
+            //double mass = 0;
+            string chemForm = "";
+            string baseName = "";
+            string connector = "";
+            string lBracket = "";
+            string rBracket = "";
+            string chrg = "";
+            
+            if (select_base_combobox.SelectedIndex > 0)
+            {
+                baseName = (string)select_base_combobox.SelectedItem;
+            }
+            
             foreach (DataRow row in elements.Rows)
             {
-                mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
+                //mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
                 if (Convert.ToInt32(row["Count"]) > 0)
                 {
                     chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(row["Count"]);
@@ -278,13 +334,20 @@ namespace LipidCreator
             }
             if (chemForm != "" && numericUpDown1.Value > 0)
             {
-                chemForm += "+";
+                chrg = "+";
             }
             else if (chemForm != "" && numericUpDown1.Value < 0)
             {
-                chemForm += "-";
+                chrg = "-";
             }
-            label1.Text = string.Format("{0:0.0000} Da", mass) + ", " + chemForm;
+            if (baseName.Length > 0 && chemForm.Length > 0)
+            {
+                connector = chemAdding ? " + " : " - ";
+                lBracket = "(";
+                rBracket = ")";
+            }
+            //label1.Text = baseName + string.Format("{0:0.0000} Da", mass) + ", " + chemForm;
+            label1.Text = lBracket + baseName + connector + chemForm + rBracket + chrg;
         }
 
         private void numericUpDown1_TextChanged(object sender, EventArgs e)

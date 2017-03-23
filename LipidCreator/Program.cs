@@ -1849,7 +1849,7 @@ namespace LipidCreator
         public fattyAcidGroup fag2;
         public List<int> hgValues;
         
-        public List<String> headGroupNames = new List<String>{"PA", "PC", "PE", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
+        public List<String> headGroupNames = new List<String>{"CDP-DAG", "PA", "PC", "PE", "PEt", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
     
         public PLLipid(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
         {

@@ -1856,11 +1856,13 @@ namespace LipidCreator
             fag1 = new fattyAcidGroup();
             fag2 = new fattyAcidGroup();
             hgValues = new List<int>();
+            MS2Fragments.Add("CDP-DAG", new ArrayList());
             MS2Fragments.Add("PA", new ArrayList());
             MS2Fragments.Add("PC", new ArrayList());
             MS2Fragments.Add("pPC", new ArrayList());
             MS2Fragments.Add("ppPC", new ArrayList());
             MS2Fragments.Add("PE", new ArrayList());
+            MS2Fragments.Add("PEt", new ArrayList());
             MS2Fragments.Add("pPE", new ArrayList());
             MS2Fragments.Add("ppPE", new ArrayList());
             MS2Fragments.Add("DMPE", new ArrayList());

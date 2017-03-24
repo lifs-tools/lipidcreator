@@ -61,6 +61,7 @@ namespace LipidCreator
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 2"));
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 3"));
             registered_lipids_datatable.Columns.Add(new DataColumn("Building Block 4"));
+            registered_lipids_datatable.Columns.Add(new DataColumn("Adducts"));
             InitializeComponent();
             lipid_modifications = new int[]{-1, -1, -1, -1};
             changing_tab_forced = false;

@@ -96,6 +96,7 @@ namespace LipidCreator
         {
             
             if (initialCall){
+                int numCols = registered_lipids_datatable.Columns.Count;
                 DataGridViewImageColumn editColumn = new DataGridViewImageColumn();  
                 editColumn.Name = "Edit";  
                 editColumn.HeaderText = "Edit";  
@@ -106,7 +107,7 @@ namespace LipidCreator
                 deleteColumn.HeaderText = "Delete";  
                 deleteColumn.ValuesAreIcons = false;
                 lipidsGridview.Columns.Add(deleteColumn);
-                int w = (lipidsGridview.Width - 80) / 5 - 4;
+                int w = (lipidsGridview.Width - 80) / numCols - 4;
                 foreach (DataGridViewColumn col in lipidsGridview.Columns)
                 {
                     col.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -2484,6 +2485,16 @@ namespace LipidCreator
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
                     row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo;
                 }
+                string adductsStr = "";
+                if (current_lipid.adducts["+H"]) adductsStr += "+H⁺";
+                if (current_lipid.adducts["+2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+2H⁺⁺";
+                if (current_lipid.adducts["+NH4"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+NH4⁺";
+                if (current_lipid.adducts["-H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-H⁻";
+                if (current_lipid.adducts["-2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-2H⁻ ⁻";
+                if (current_lipid.adducts["+HCOO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+HCOO⁻";
+                if (current_lipid.adducts["+CH3COO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+CH3COO⁻";
+                row["Adducts"] = adductsStr;
+                
                 registered_lipids_datatable.Rows.Add(row);
                 lipidsGridview.DataSource = registered_lipids_datatable;
                 

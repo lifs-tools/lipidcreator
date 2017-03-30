@@ -60,109 +60,109 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dataGridViewTransitions = new System.Windows.Forms.DataGridView();
+            this.buttonSendToSkyline = new System.Windows.Forms.Button();
+            this.buttonStoreTransitionList = new System.Windows.Forms.Button();
+            this.checkBoxHideReplicates = new System.Windows.Forms.CheckBox();
+            this.checkBoxCreateSpectralLibrary = new System.Windows.Forms.CheckBox();
+            this.buttonStoreSpectralLibrary = new System.Windows.Forms.Button();
+            this.labelNumberOfTransitions = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransitions)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridViewTransitions.AllowUserToAddRows = false;
+            this.dataGridViewTransitions.AllowUserToDeleteRows = false;
             //this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 34;
-            this.dataGridView1.Size = new System.Drawing.Size(955, 409);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridViewTransitions.AllowUserToResizeRows = false;
+            this.dataGridViewTransitions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTransitions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewTransitions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTransitions.Location = new System.Drawing.Point(12, 12);
+            this.dataGridViewTransitions.Name = "dataGridView1";
+            this.dataGridViewTransitions.ReadOnly = true;
+            this.dataGridViewTransitions.RowHeadersVisible = false;
+            this.dataGridViewTransitions.RowTemplate.Height = 34;
+            this.dataGridViewTransitions.Size = new System.Drawing.Size(955, 409);
+            this.dataGridViewTransitions.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(360, 448);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(258, 34);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Send to Skyline";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonSendToSkyline.Location = new System.Drawing.Point(360, 448);
+            this.buttonSendToSkyline.Name = "button1";
+            this.buttonSendToSkyline.Size = new System.Drawing.Size(258, 34);
+            this.buttonSendToSkyline.TabIndex = 1;
+            this.buttonSendToSkyline.Text = "Send to Skyline";
+            this.buttonSendToSkyline.UseVisualStyleBackColor = true;
+            this.buttonSendToSkyline.Click += new System.EventHandler(this.buttonSendToSkylineClick);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 448);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(258, 34);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Store transition list";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonStoreTransitionList.Location = new System.Drawing.Point(12, 448);
+            this.buttonStoreTransitionList.Name = "button2";
+            this.buttonStoreTransitionList.Size = new System.Drawing.Size(258, 34);
+            this.buttonStoreTransitionList.TabIndex = 2;
+            this.buttonStoreTransitionList.Text = "Store transition list";
+            this.buttonStoreTransitionList.UseVisualStyleBackColor = true;
+            this.buttonStoreTransitionList.Click += new System.EventHandler(this.buttonStoreTransitionListClick);
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 426);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(96, 17);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Hide replicates";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBoxHideReplicates.AutoSize = true;
+            this.checkBoxHideReplicates.Location = new System.Drawing.Point(12, 426);
+            this.checkBoxHideReplicates.Name = "checkBox1";
+            this.checkBoxHideReplicates.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxHideReplicates.TabIndex = 3;
+            this.checkBoxHideReplicates.Text = "Hide replicates";
+            this.checkBoxHideReplicates.UseVisualStyleBackColor = true;
+            this.checkBoxHideReplicates.CheckedChanged += new System.EventHandler(this.checkBoxCheckedChanged);
             // 
             // checkBox2
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(450, 426);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(96, 17);
-            this.checkBox2.TabIndex = 3;
-            this.checkBox2.Text = "Create Spectral library";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBoxCreateSpectralLibrary.AutoSize = true;
+            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(450, 426);
+            this.checkBoxCreateSpectralLibrary.Name = "checkBox2";
+            this.checkBoxCreateSpectralLibrary.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxCreateSpectralLibrary.TabIndex = 3;
+            this.checkBoxCreateSpectralLibrary.Text = "Create Spectral library";
+            this.checkBoxCreateSpectralLibrary.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(709, 448);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(258, 34);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Store spectral library";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.buttonStoreSpectralLibrary.Location = new System.Drawing.Point(709, 448);
+            this.buttonStoreSpectralLibrary.Name = "button3";
+            this.buttonStoreSpectralLibrary.Size = new System.Drawing.Size(258, 34);
+            this.buttonStoreSpectralLibrary.TabIndex = 4;
+            this.buttonStoreSpectralLibrary.Text = "Store spectral library";
+            this.buttonStoreSpectralLibrary.UseVisualStyleBackColor = true;
+            this.buttonStoreSpectralLibrary.Click += new System.EventHandler(this.buttonStoreSpectralLibraryClick);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(166, 426);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Number of transitions:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelNumberOfTransitions.AutoSize = true;
+            this.labelNumberOfTransitions.Location = new System.Drawing.Point(166, 426);
+            this.labelNumberOfTransitions.Name = "label1";
+            this.labelNumberOfTransitions.Size = new System.Drawing.Size(109, 13);
+            this.labelNumberOfTransitions.TabIndex = 5;
+            this.labelNumberOfTransitions.Text = "Number of transitions:";
+            this.labelNumberOfTransitions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LipidsReview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(979, 494);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.labelNumberOfTransitions);
+            this.Controls.Add(this.buttonStoreSpectralLibrary);
+            this.Controls.Add(this.checkBoxHideReplicates);
+            this.Controls.Add(this.checkBoxCreateSpectralLibrary);
+            this.Controls.Add(this.buttonStoreTransitionList);
+            this.Controls.Add(this.buttonSendToSkyline);
+            this.Controls.Add(this.dataGridViewTransitions);
             this.Name = "LipidsReview";
             this.Text = "LipidsReview";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransitions)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,12 +170,12 @@ namespace LipidCreator
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button button1;
-        private Button button2;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
-        private Button button3;
-        private Label label1;
+        private System.Windows.Forms.DataGridView dataGridViewTransitions;
+        private System.Windows.Forms.Button buttonSendToSkyline;
+        private Button buttonStoreTransitionList;
+        private CheckBox checkBoxHideReplicates;
+        private CheckBox checkBoxCreateSpectralLibrary;
+        private Button buttonStoreSpectralLibrary;
+        private Label labelNumberOfTransitions;
     }
 }

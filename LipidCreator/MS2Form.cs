@@ -39,7 +39,7 @@ namespace LipidCreator
     public partial class MS2Form : Form
     {
         
-        public Image fragment_complete = null;
+        public Image fragmentComplete = null;
         public Lipid currentLipid;
         public ArrayList positiveIDs;
         public ArrayList negativeIDs;
@@ -63,23 +63,23 @@ namespace LipidCreator
             tabChange(0);
         }
 
-        void checkedListBox_MouseLeave(object sender, EventArgs e)
+        void checkedListBoxMouseLeave(object sender, EventArgs e)
         {
-            pictureBox1.Image = fragment_complete;
+            pictureBoxFragments.Image = fragmentComplete;
         }
         
         void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
                 if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
             }
-            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
             {
-                checkedListBox1.SetItemChecked(i, true);
+                checkedListBoxPositiveFragments.SetItemChecked(i, true);
             }
             senderInterupt = false;
         }
@@ -87,15 +87,15 @@ namespace LipidCreator
         void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
                 if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false;  
             }
-            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
             {
-                checkedListBox1.SetItemChecked(i, false);
+                checkedListBoxPositiveFragments.SetItemChecked(i, false);
             }
             senderInterupt = false;
         }
@@ -103,15 +103,15 @@ namespace LipidCreator
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
                 if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
             }
-            for (int i = 0; i < checkedListBox2.Items.Count; ++i)
+            for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
             {
-                checkedListBox2.SetItemChecked(i, true);
+                checkedListBoxNegativeFragments.SetItemChecked(i, true);
             }
             senderInterupt = false;
         }
@@ -119,33 +119,33 @@ namespace LipidCreator
         void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
                 if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false; 
             }
-            for (int i = 0; i < checkedListBox2.Items.Count; ++i)
+            for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
             {
-                checkedListBox2.SetItemChecked(i, false);
+                checkedListBoxNegativeFragments.SetItemChecked(i, false);
             }
             senderInterupt = false;
         }
 
-        private void checkedListBox1_MouseHover(object sender, MouseEventArgs e)
+        private void checkedListBoxPositiveMouseHover(object sender, MouseEventArgs e)
         {
 
-            toolTip1.Hide(this.checkedListBox1);
-            toolTip1.SetToolTip(this.checkedListBox2, "");
-            Point point = checkedListBox1.PointToClient(Cursor.Position);
-            int hoveredIndex = checkedListBox1.IndexFromPoint(point);
+            toolTip1.Hide(this.checkedListBoxPositiveFragments);
+            toolTip1.SetToolTip(this.checkedListBoxNegativeFragments, "");
+            Point point = checkedListBoxPositiveFragments.PointToClient(Cursor.Position);
+            int hoveredIndex = checkedListBoxPositiveFragments.IndexFromPoint(point);
 
             if (hoveredIndex != -1)
             {
                 int fragmentIndex = (int)positiveIDs[hoveredIndex];
-                String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+                String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
-                if (filePath != null) pictureBox1.Image = Image.FromFile(filePath);
+                if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
                 
                 // create tool tip
                 MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
@@ -180,28 +180,28 @@ namespace LipidCreator
                     rBracket = ")";
                 }
                 string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "+";
-                toolTip1.SetToolTip(this.checkedListBox1, toolTipText);
+                toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, toolTipText);
             }
             else
             {
-                pictureBox1.Image = fragment_complete;
+                pictureBoxFragments.Image = fragmentComplete;
             }
         }
 
-        private void checkedListBox2_MouseHover(object sender, MouseEventArgs e)
+        private void checkedListBoxNegativeMouseHover(object sender, MouseEventArgs e)
         {
 
-            toolTip1.Hide(this.checkedListBox2);
-            toolTip1.SetToolTip(this.checkedListBox1, "");
-            Point point = checkedListBox2.PointToClient(Cursor.Position);
-            int hoveredIndex = checkedListBox2.IndexFromPoint(point);
+            toolTip1.Hide(this.checkedListBoxNegativeFragments);
+            toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
+            Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
+            int hoveredIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
 
             if (hoveredIndex != -1)
             {
                 int fragmentIndex = (int)negativeIDs[hoveredIndex];
-                String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+                String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
-                if (filePath != null) pictureBox1.Image = Image.FromFile(filePath);
+                if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
                 
                 // create tool tip
                 MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
@@ -236,11 +236,11 @@ namespace LipidCreator
                     rBracket = ")";
                 }
                 string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "-";
-                toolTip1.SetToolTip(this.checkedListBox2, toolTipText);
+                toolTip1.SetToolTip(this.checkedListBoxNegativeFragments, toolTipText);
             }
             else
             {
-                pictureBox1.Image = fragment_complete;
+                pictureBoxFragments.Image = fragmentComplete;
             }
         }
 
@@ -251,24 +251,24 @@ namespace LipidCreator
 
         public void tabChange(int index)
         {
-            ((TabPage)tabPages[index]).Controls.Add(checkedListBox2);
-            ((TabPage)tabPages[index]).Controls.Add(label1);
-            ((TabPage)tabPages[index]).Controls.Add(label2);
-            ((TabPage)tabPages[index]).Controls.Add(label3);
-            ((TabPage)tabPages[index]).Controls.Add(label4);
-            ((TabPage)tabPages[index]).Controls.Add(label5);
-            ((TabPage)tabPages[index]).Controls.Add(label6);
-            ((TabPage)tabPages[index]).Controls.Add(label7);
-            ((TabPage)tabPages[index]).Controls.Add(label8);
-            ((TabPage)tabPages[index]).Controls.Add(label9);
-            ((TabPage)tabPages[index]).Controls.Add(label10);
-            ((TabPage)tabPages[index]).Controls.Add(label11);
-            ((TabPage)tabPages[index]).Controls.Add(checkedListBox1);
-            ((TabPage)tabPages[index]).Controls.Add(pictureBox1);
+            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxNegativeFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlack);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionRed);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlue);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveSelectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveDeselectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeSelectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeDeselectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelSlashPositive);
+            ((TabPage)tabPages[index]).Controls.Add(labelSlashNegative);
+            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
+            ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
             negativeIDs.Clear();
             positiveIDs.Clear();
-            checkedListBox1.Items.Clear();
-            checkedListBox2.Items.Clear();
+            checkedListBoxPositiveFragments.Items.Clear();
+            checkedListBoxNegativeFragments.Items.Clear();
             
             String lipidClass = ((TabPage)tabPages[index]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
@@ -277,61 +277,61 @@ namespace LipidCreator
                 MS2Fragment currentFragment = (MS2Fragment)currentFragments[i];
                 if (currentFragment.fragmentCharge > 0)
                 {
-                    checkedListBox1.Items.Add(currentFragment.fragmentName);
+                    checkedListBoxPositiveFragments.Items.Add(currentFragment.fragmentName);
                     positiveIDs.Add(i);
-                    checkedListBox1.SetItemChecked(checkedListBox1.Items.Count - 1, currentFragment.fragmentSelected);
+                    checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, currentFragment.fragmentSelected);
                 }
                 else 
                 {
-                    checkedListBox2.Items.Add(currentFragment.fragmentName);
+                    checkedListBoxNegativeFragments.Items.Add(currentFragment.fragmentName);
                     negativeIDs.Add(i);
-                    checkedListBox2.SetItemChecked(checkedListBox2.Items.Count - 1, currentFragment.fragmentSelected);
+                    checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, currentFragment.fragmentSelected);
                 }
             }
             
             if (currentLipid.pathsToFullImage.ContainsKey(lipidClass))
             {
-                fragment_complete = Image.FromFile((String)currentLipid.pathsToFullImage[lipidClass]);
-                pictureBox1.Image = fragment_complete;
+                fragmentComplete = Image.FromFile((String)currentLipid.pathsToFullImage[lipidClass]);
+                pictureBoxFragments.Image = fragmentComplete;
             }
             else
             {
-                if (fragment_complete != null)
+                if (fragmentComplete != null)
                 {
-                    fragment_complete = null;
+                    fragmentComplete = null;
                 }
                 
-                if (pictureBox1.Image != null)
+                if (pictureBoxFragments.Image != null)
                 {
-                    pictureBox1.Image.Dispose();
-                    pictureBox1.Image = null;
+                    pictureBoxFragments.Image.Dispose();
+                    pictureBoxFragments.Image = null;
                 }
             }
         }
 
 
-        void CheckedListBox1_ItemCheck(Object sender, ItemCheckEventArgs e)
+        void CheckedListBoxPositiveItemCheck(Object sender, ItemCheckEventArgs e)
         {
             if (senderInterupt) return;
             int fragmentIndex = (int)positiveIDs[e.Index];
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
         }
         
-        void CheckedListBox2_ItemCheck(Object sender, ItemCheckEventArgs e)
+        void CheckedListBoxNegativeItemCheck(Object sender, ItemCheckEventArgs e)
         {
             if (senderInterupt) return;
             int fragmentIndex = (int)negativeIDs[e.Index];
-            String lipidClass = ((TabPage)tabPages[tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
         }
         
-        private void cancel_Click(object sender, EventArgs e)
+        private void cancelClick(object sender, EventArgs e)
         {
             this.Close();
         }
         
-        private void ok_Click(object sender, EventArgs e)
+        private void okClick(object sender, EventArgs e)
         {
             if (currentLipid is CLLipid)
             {
@@ -358,14 +358,14 @@ namespace LipidCreator
             this.Close();
         }
         
-        private void add_fragment_Click(object sender, EventArgs e)
+        private void addFragmentClick(object sender, EventArgs e)
         {
             NewFragment newPositiveFragment = new NewFragment(this);
             newPositiveFragment.Owner = this;
             newPositiveFragment.ShowInTaskbar = false;
             newPositiveFragment.ShowDialog();
             newPositiveFragment.Dispose();
-            tabChange(tabControl1.SelectedIndex);
+            tabChange(tabControlFragments.SelectedIndex);
         }
     }
 }

@@ -115,14 +115,14 @@ namespace LipidCreator
 
             InitializeComponent();
 
-            dataGridView1.DataSource = elements;
-            dataGridView1.Columns[3].Visible = false;
-            dataGridView1.Columns[0].Width = 125;
-            dataGridView1.Columns[1].Width = 125;
-            dataGridView1.Columns[2].Width = 247;
-            dataGridView1.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewElements.DataSource = elements;
+            dataGridViewElements.Columns[3].Visible = false;
+            dataGridViewElements.Columns[0].Width = 125;
+            dataGridViewElements.Columns[1].Width = 125;
+            dataGridViewElements.Columns[2].Width = 247;
+            dataGridViewElements.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewElements.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewElements.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
             
             
             // base types:
@@ -134,104 +134,94 @@ namespace LipidCreator
             // 5 -> fixed, LCB, HG, PRE
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, PRE
             // 7 -> fixed, FA1, HG, PRE
-            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
+            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
             int bbType = ms2form.creatorGUI.lipidCreatorForm.buildingBlockTypes[lipidClass];
             
-            select_base_combobox.Items.Add("fixed");
+            selectBaseCombobox.Items.Add("fixed");
             switch(bbType)
             {
                 case 0:
                     buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA4", "FA1;FA2", "FA1;FA3", "FA1;FA4", "FA2;FA3", "FA2;FA4", "FA3;FA4", "FA1;FA2;FA3", "FA1;FA2;FA4", "FA1;FA3;FA4", "FA2;FA3;FA4", "PRE"};
-                    select_base_combobox.Items.Add("FA1");
-                    select_base_combobox.Items.Add("FA2");
-                    select_base_combobox.Items.Add("FA3");
-                    select_base_combobox.Items.Add("FA4");
-                    select_base_combobox.Items.Add("FA1 + FA2");
-                    select_base_combobox.Items.Add("FA1 + FA3");
-                    select_base_combobox.Items.Add("FA1 + FA4");
-                    select_base_combobox.Items.Add("FA2 + FA3");
-                    select_base_combobox.Items.Add("FA2 + FA4");
-                    select_base_combobox.Items.Add("FA3 + FA4");
-                    select_base_combobox.Items.Add("FA1 + FA2 + FA3");
-                    select_base_combobox.Items.Add("FA1 + FA2 + FA4");
-                    select_base_combobox.Items.Add("FA1 + FA3 + FA4");
-                    select_base_combobox.Items.Add("FA2 + FA3 + FA4");
+                    selectBaseCombobox.Items.Add("FA1");
+                    selectBaseCombobox.Items.Add("FA2");
+                    selectBaseCombobox.Items.Add("FA3");
+                    selectBaseCombobox.Items.Add("FA4");
+                    selectBaseCombobox.Items.Add("FA1 + FA2");
+                    selectBaseCombobox.Items.Add("FA1 + FA3");
+                    selectBaseCombobox.Items.Add("FA1 + FA4");
+                    selectBaseCombobox.Items.Add("FA2 + FA3");
+                    selectBaseCombobox.Items.Add("FA2 + FA4");
+                    selectBaseCombobox.Items.Add("FA3 + FA4");
+                    selectBaseCombobox.Items.Add("FA1 + FA2 + FA3");
+                    selectBaseCombobox.Items.Add("FA1 + FA2 + FA4");
+                    selectBaseCombobox.Items.Add("FA1 + FA3 + FA4");
+                    selectBaseCombobox.Items.Add("FA2 + FA3 + FA4");
                     break;
                     
                 case 1:
                     buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA1;FA2", "FA1;FA3", "FA2;FA3", "PRE"};
-                    select_base_combobox.Items.Add("FA1");
-                    select_base_combobox.Items.Add("FA2");
-                    select_base_combobox.Items.Add("FA3");
-                    select_base_combobox.Items.Add("FA1 + FA2");
-                    select_base_combobox.Items.Add("FA1 + FA3");
-                    select_base_combobox.Items.Add("FA2 + FA3");
+                    selectBaseCombobox.Items.Add("FA1");
+                    selectBaseCombobox.Items.Add("FA2");
+                    selectBaseCombobox.Items.Add("FA3");
+                    selectBaseCombobox.Items.Add("FA1 + FA2");
+                    selectBaseCombobox.Items.Add("FA1 + FA3");
+                    selectBaseCombobox.Items.Add("FA2 + FA3");
                     break;
                     
                 case 2:
                     buildingBlocks = new string[]{"", "FA1", "FA2", "PRE"};
-                    select_base_combobox.Items.Add("FA1");
-                    select_base_combobox.Items.Add("FA2");
+                    selectBaseCombobox.Items.Add("FA1");
+                    selectBaseCombobox.Items.Add("FA2");
                     break;
                     
                 case 3:
                     buildingBlocks = new string[]{"", "FA", "PRE"};
-                    select_base_combobox.Items.Add("FA");
+                    selectBaseCombobox.Items.Add("FA");
                     break;
                     
                 case 4:
                     buildingBlocks = new string[]{"", "LCB", "FA", "HG", "LCB;FA", "LCB;HG", "FA;HG", "PRE"};
-                    select_base_combobox.Items.Add("LCB");
-                    select_base_combobox.Items.Add("FA");
-                    select_base_combobox.Items.Add("HG");
-                    select_base_combobox.Items.Add("LCB + FA");
-                    select_base_combobox.Items.Add("LCB + HG");
-                    select_base_combobox.Items.Add("FA + HG");
+                    selectBaseCombobox.Items.Add("LCB");
+                    selectBaseCombobox.Items.Add("FA");
+                    selectBaseCombobox.Items.Add("HG");
+                    selectBaseCombobox.Items.Add("LCB + FA");
+                    selectBaseCombobox.Items.Add("LCB + HG");
+                    selectBaseCombobox.Items.Add("FA + HG");
                     break;
                     
                 case 5:
                     buildingBlocks = new string[]{"", "LCB", "HG", "PRE"};
-                    select_base_combobox.Items.Add("LCB");
-                    select_base_combobox.Items.Add("HG");
+                    selectBaseCombobox.Items.Add("LCB");
+                    selectBaseCombobox.Items.Add("HG");
                     break;
                     
                 case 6:
                     buildingBlocks = new string[]{"", "FA1", "FA2", "HG", "FA1;FA2", "FA1;HG", "FA2;HG", "PRE"};
-                    select_base_combobox.Items.Add("FA1");
-                    select_base_combobox.Items.Add("FA2");
-                    select_base_combobox.Items.Add("HG");
-                    select_base_combobox.Items.Add("FA1 + FA2");
-                    select_base_combobox.Items.Add("FA1 + HG");
-                    select_base_combobox.Items.Add("FA2 + HG");
+                    selectBaseCombobox.Items.Add("FA1");
+                    selectBaseCombobox.Items.Add("FA2");
+                    selectBaseCombobox.Items.Add("HG");
+                    selectBaseCombobox.Items.Add("FA1 + FA2");
+                    selectBaseCombobox.Items.Add("FA1 + HG");
+                    selectBaseCombobox.Items.Add("FA2 + HG");
                     break;
                     
                 case 7:
                     buildingBlocks = new string[]{"", "FA", "HG", "PRE"};
-                    select_base_combobox.Items.Add("FA");
-                    select_base_combobox.Items.Add("HG");
+                    selectBaseCombobox.Items.Add("FA");
+                    selectBaseCombobox.Items.Add("HG");
                     break;
             }
-            select_base_combobox.Items.Add("Precursor");
-            select_base_combobox.SelectedIndex = 0;
+            selectBaseCombobox.Items.Add("Precursor");
+            selectBaseCombobox.SelectedIndex = 0;
         }
 
-        private void tableView_KeyPress(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            // Check for the flag being set in the KeyDown event.
-            if (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9)
-            {
-                // Stop the character from being entered into the control since it is non-numerical.
-                e.Handled = true;
-            }
-        }
-
-        private void cancel_Click(object sender, EventArgs e)
+        private void cancelClick(object sender, EventArgs e)
         {
             this.Close();
         }
         
 
-        private void add_Click(object sender, EventArgs e)
+        private void addClick(object sender, EventArgs e)
         {
             int elementsSelected = 0;
             foreach (DataRow row in elements.Rows)
@@ -249,12 +239,12 @@ namespace LipidCreator
                 MessageBox.Show("No element selected");
                 return;
             }
-            if (textBox1.Text == "")
+            if (textBoxFragmentName.Text == "")
             {
                 MessageBox.Show("No name defined");
                 return;
             }
-            if (numericUpDown1.Value == 0)
+            if (numericUpDownCharge.Value == 0)
             {
                 MessageBox.Show("Fragment must have an either positive or negative charge");
                 return;
@@ -267,14 +257,14 @@ namespace LipidCreator
                 }
             }
             
-            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControl1.SelectedIndex]).Text;
-            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBox1.Text, Convert.ToInt32(numericUpDown1.Value), null, true, elements, buildingBlocks[select_base_combobox.SelectedIndex], ""));
+            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
+            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBoxFragmentName.Text, Convert.ToInt32(numericUpDownCharge.Value), null, true, elements, buildingBlocks[selectBaseCombobox.SelectedIndex], ""));
             this.Close();
         }
         
         
         
-        private void dataGridView1_CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
+        private void dataGridView1CellValueChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
             int n;
             if (string.IsNullOrEmpty(Convert.ToString(elements.Rows[e.RowIndex][0])) || !int.TryParse(Convert.ToString(elements.Rows[e.RowIndex][0]), out n)) elements.Rows[e.RowIndex][0] = 0;
@@ -282,28 +272,28 @@ namespace LipidCreator
         }
         
         
-        public void select_base_combobox_valueChanged(Object sender, EventArgs e)
+        public void selectBaseComboboxValueChanged(Object sender, EventArgs e)
         {
-            if (select_base_combobox.SelectedIndex > 0)
+            if (selectBaseCombobox.SelectedIndex > 0)
             {
-                groupbox.Enabled = true;
+                groupboxAddingSubtracting.Enabled = true;
             }
             else
             {
-                groupbox.Enabled = false;
+                groupboxAddingSubtracting.Enabled = false;
                 chemAdding = true;
-                adding.Checked = true;
+                radioButtonAdding.Checked = true;
             }
             updateInfo();
         }
         
-        void adding_clicked(Object sender,EventArgs e)
+        void addingClicked(Object sender,EventArgs e)
         {
             chemAdding = true;
             updateInfo();
         }
         
-        void subtracting_clicked(Object sender,EventArgs e)
+        void subtractingClicked(Object sender,EventArgs e)
         {
             chemAdding = false;
             updateInfo();
@@ -319,9 +309,9 @@ namespace LipidCreator
             string rBracket = "";
             string chrg = "";
             
-            if (select_base_combobox.SelectedIndex > 0)
+            if (selectBaseCombobox.SelectedIndex > 0)
             {
-                baseName = (string)select_base_combobox.SelectedItem;
+                baseName = (string)selectBaseCombobox.SelectedItem;
             }
             
             foreach (DataRow row in elements.Rows)
@@ -332,11 +322,11 @@ namespace LipidCreator
                     chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(row["Count"]);
                 }
             }
-            if (chemForm != "" && numericUpDown1.Value > 0)
+            if (chemForm != "" && numericUpDownCharge.Value > 0)
             {
                 chrg = "+";
             }
-            else if (chemForm != "" && numericUpDown1.Value < 0)
+            else if (chemForm != "" && numericUpDownCharge.Value < 0)
             {
                 chrg = "-";
             }
@@ -347,10 +337,10 @@ namespace LipidCreator
                 rBracket = ")";
             }
             //label1.Text = baseName + string.Format("{0:0.0000} Da", mass) + ", " + chemForm;
-            label1.Text = lBracket + baseName + connector + chemForm + rBracket + chrg;
+            labelMass.Text = lBracket + baseName + connector + chemForm + rBracket + chrg;
         }
 
-        private void numericUpDown1_TextChanged(object sender, EventArgs e)
+        private void numericUpDown1TextChanged(object sender, EventArgs e)
         {
             updateInfo();
         }

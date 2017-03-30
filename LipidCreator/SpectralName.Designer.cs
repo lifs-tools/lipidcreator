@@ -53,57 +53,57 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.buttonOK = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.labelProvideName = new System.Windows.Forms.Label();
+            this.textLibraryName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(29, 66);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 30);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonOK.Location = new System.Drawing.Point(29, 66);
+            this.buttonOK.Name = "button1";
+            this.buttonOK.Size = new System.Drawing.Size(99, 30);
+            this.buttonOK.TabIndex = 0;
+            this.buttonOK.Text = "OK";
+            this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOKClick);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(134, 66);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(99, 30);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonCancel.Location = new System.Drawing.Point(134, 66);
+            this.buttonCancel.Name = "button2";
+            this.buttonCancel.Size = new System.Drawing.Size(99, 30);
+            this.buttonCancel.TabIndex = 1;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancelClick);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(221, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Please provide a name for the spectral library:";
+            this.labelProvideName.AutoSize = true;
+            this.labelProvideName.Location = new System.Drawing.Point(12, 9);
+            this.labelProvideName.Name = "label1";
+            this.labelProvideName.Size = new System.Drawing.Size(221, 13);
+            this.labelProvideName.TabIndex = 2;
+            this.labelProvideName.Text = "Please provide a name for the spectral library:";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(15, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(218, 20);
-            this.textBox1.TabIndex = 3;
+            this.textLibraryName.Location = new System.Drawing.Point(15, 25);
+            this.textLibraryName.Name = "textBox1";
+            this.textLibraryName.Size = new System.Drawing.Size(218, 20);
+            this.textLibraryName.TabIndex = 3;
             // 
             // SpectralName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(249, 117);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textLibraryName);
+            this.Controls.Add(this.labelProvideName);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SpectralName";
             this.Text = "Spectral library name";
@@ -114,9 +114,9 @@ namespace LipidCreator
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button buttonOK;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label labelProvideName;
+        private System.Windows.Forms.TextBox textLibraryName;
     }
 }

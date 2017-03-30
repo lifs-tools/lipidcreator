@@ -63,215 +63,215 @@ namespace LipidCreator
         {
             this.Size = new System.Drawing.Size(1168, 447);
         
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
+            this.checkedListBoxPositiveFragments = new System.Windows.Forms.CheckedListBox();
+            this.labelPositiveFragments = new System.Windows.Forms.Label();
+            this.labelNegativeFragments = new System.Windows.Forms.Label();
+            this.labelFragmentDescriptionBlack = new System.Windows.Forms.Label();
+            this.labelFragmentDescriptionRed = new System.Windows.Forms.Label();
+            this.labelFragmentDescriptionBlue = new System.Windows.Forms.Label();
+            this.labelPositiveSelectAll = new System.Windows.Forms.Label();
+            this.labelPositiveDeselectAll = new System.Windows.Forms.Label();
+            this.labelNegativeSelectAll = new System.Windows.Forms.Label();
+            this.labelNegativeDeselectAll = new System.Windows.Forms.Label();
+            this.labelSlashPositive = new System.Windows.Forms.Label();
+            this.labelSlashNegative = new System.Windows.Forms.Label();
+            this.checkedListBoxNegativeFragments = new System.Windows.Forms.CheckedListBox();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonOK = new System.Windows.Forms.Button();
+            this.buttonAddFragment = new System.Windows.Forms.Button();
+            this.tabControlFragments = new System.Windows.Forms.TabControl();
             toolTip1 = new System.Windows.Forms.ToolTip();
             this.tabPages = new ArrayList();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.tabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).BeginInit();
+            this.tabControlFragments.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(340, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(736, 358);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxFragments.Location = new System.Drawing.Point(340, 2);
+            this.pictureBoxFragments.Name = "pictureBox1";
+            this.pictureBoxFragments.Size = new System.Drawing.Size(736, 358);
+            this.pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBoxFragments.TabIndex = 1;
+            this.pictureBoxFragments.TabStop = false;
             // 
             // checkedListBox1 - positive fragments
             // 
-            this.checkedListBox1.CheckOnClick = true;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(12, 22);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.ScrollAlwaysVisible = true;
-            this.checkedListBox1.Size = new System.Drawing.Size(150, 294);
-            this.checkedListBox1.TabIndex = 2;
-            this.checkedListBox1.ThreeDCheckBoxes = true;
-            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBox1_ItemCheck);
-            this.checkedListBox1.MouseLeave += new System.EventHandler(this.checkedListBox_MouseLeave);
-            this.checkedListBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBox1_MouseHover);
+            this.checkedListBoxPositiveFragments.CheckOnClick = true;
+            this.checkedListBoxPositiveFragments.FormattingEnabled = true;
+            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 22);
+            this.checkedListBoxPositiveFragments.Name = "checkedListBox1";
+            this.checkedListBoxPositiveFragments.ScrollAlwaysVisible = true;
+            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(150, 294);
+            this.checkedListBoxPositiveFragments.TabIndex = 2;
+            this.checkedListBoxPositiveFragments.ThreeDCheckBoxes = true;
+            this.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
+            this.checkedListBoxPositiveFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
+            this.checkedListBoxPositiveFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxPositiveMouseHover);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 2);
-            this.label1.Name = "label1";
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Positive Fragments";
+            this.labelPositiveFragments.AutoSize = true;
+            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 2);
+            this.labelPositiveFragments.Name = "label1";
+            this.labelPositiveFragments.TabIndex = 3;
+            this.labelPositiveFragments.Text = "Positive Fragments";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(170, 2);
-            this.label2.Name = "label2";
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Negative Fragments";
+            this.labelNegativeFragments.AutoSize = true;
+            this.labelNegativeFragments.Location = new System.Drawing.Point(170, 2);
+            this.labelNegativeFragments.Name = "label2";
+            this.labelNegativeFragments.TabIndex = 4;
+            this.labelNegativeFragments.Text = "Negative Fragments";
             // 
             // label3
             // 
-            this.label3.Size = new Size(200, 13);
-            this.label3.Location = new System.Drawing.Point(1110 - label3.Width, 280);
-            this.label3.Name = "label3";
-            this.label3.TabIndex = 5;
-            this.label3.Text = "black: unspecific";
-            this.label3.TextAlign = ContentAlignment.TopRight;
+            this.labelFragmentDescriptionBlack.Size = new Size(200, 13);
+            this.labelFragmentDescriptionBlack.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlack.Width, 280);
+            this.labelFragmentDescriptionBlack.Name = "label3";
+            this.labelFragmentDescriptionBlack.TabIndex = 5;
+            this.labelFragmentDescriptionBlack.Text = "black: unspecific";
+            this.labelFragmentDescriptionBlack.TextAlign = ContentAlignment.TopRight;
             // 
             // label4
             // 
-            this.label4.Size = new Size(200, 13);
-            this.label4.Location = new System.Drawing.Point(1110 - label4.Width, 295);
-            this.label4.Name = "label4";
-            this.label4.TabIndex = 5;
-            this.label4.Text = "red: specific for lipid category";
-            this.label4.ForeColor = Color.FromArgb(227, 5, 19);
-            this.label4.TextAlign = ContentAlignment.TopRight;
+            this.labelFragmentDescriptionRed.Size = new Size(200, 13);
+            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 295);
+            this.labelFragmentDescriptionRed.Name = "label4";
+            this.labelFragmentDescriptionRed.TabIndex = 5;
+            this.labelFragmentDescriptionRed.Text = "red: specific for lipid category";
+            this.labelFragmentDescriptionRed.ForeColor = Color.FromArgb(227, 5, 19);
+            this.labelFragmentDescriptionRed.TextAlign = ContentAlignment.TopRight;
             // 
             // label5
             // 
-            this.label5.Size = new Size(200, 13);
-            this.label5.Location = new System.Drawing.Point(1110 - label5.Width, 310);
-            this.label5.Name = "label5";
-            this.label5.TabIndex = 5;
-            this.label5.Text = "blue: specific for lipid class";
-            this.label5.ForeColor = Color.FromArgb(48, 38, 131);
-            this.label5.TextAlign = ContentAlignment.TopRight;
+            this.labelFragmentDescriptionBlue.Size = new Size(200, 13);
+            this.labelFragmentDescriptionBlue.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlue.Width, 310);
+            this.labelFragmentDescriptionBlue.Name = "label5";
+            this.labelFragmentDescriptionBlue.TabIndex = 5;
+            this.labelFragmentDescriptionBlue.Text = "blue: specific for lipid class";
+            this.labelFragmentDescriptionBlue.ForeColor = Color.FromArgb(48, 38, 131);
+            this.labelFragmentDescriptionBlue.TextAlign = ContentAlignment.TopRight;
             // 
             // label6 - positive fragments
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 316);
-            this.label6.Name = "label6";
-            this.label6.TabIndex = 6;
-            this.label6.Text = "select all";
-            this.label6.ForeColor = Color.FromArgb(0, 0, 255);
-            this.label6.Click += new System.EventHandler(checkedListBoxPositiveSelectAll);
+            this.labelPositiveSelectAll.AutoSize = true;
+            this.labelPositiveSelectAll.Location = new System.Drawing.Point(12, 316);
+            this.labelPositiveSelectAll.Name = "label6";
+            this.labelPositiveSelectAll.TabIndex = 6;
+            this.labelPositiveSelectAll.Text = "select all";
+            this.labelPositiveSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelPositiveSelectAll.Click += new System.EventHandler(checkedListBoxPositiveSelectAll);
             // 
             // label7 - positive fragments
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(74, 316);
-            this.label7.Name = "label7";
-            this.label7.TabIndex = 6;
-            this.label7.Text = "deselect all";
-            this.label7.ForeColor = Color.FromArgb(0, 0, 255);
-            this.label7.Click += new System.EventHandler(checkedListBoxPositiveDeselectAll);
+            this.labelPositiveDeselectAll.AutoSize = true;
+            this.labelPositiveDeselectAll.Location = new System.Drawing.Point(74, 316);
+            this.labelPositiveDeselectAll.Name = "label7";
+            this.labelPositiveDeselectAll.TabIndex = 6;
+            this.labelPositiveDeselectAll.Text = "deselect all";
+            this.labelPositiveDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelPositiveDeselectAll.Click += new System.EventHandler(checkedListBoxPositiveDeselectAll);
             // 
             // label8 - positive fragments
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(170, 316);
-            this.label8.Name = "label8";
-            this.label8.TabIndex = 6;
-            this.label8.Text = "select all";
-            this.label8.ForeColor = Color.FromArgb(0, 0, 255);
-            this.label8.Click += new System.EventHandler(checkedListBoxNegativeSelectAll);
+            this.labelNegativeSelectAll.AutoSize = true;
+            this.labelNegativeSelectAll.Location = new System.Drawing.Point(170, 316);
+            this.labelNegativeSelectAll.Name = "label8";
+            this.labelNegativeSelectAll.TabIndex = 6;
+            this.labelNegativeSelectAll.Text = "select all";
+            this.labelNegativeSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelNegativeSelectAll.Click += new System.EventHandler(checkedListBoxNegativeSelectAll);
             // 
             // label9 - positive fragments
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(232, 316);
-            this.label9.Name = "label9";
-            this.label9.TabIndex = 6;
-            this.label9.Text = "deselect all";
-            this.label9.ForeColor = Color.FromArgb(0, 0, 255);
-            this.label9.Click += new System.EventHandler(checkedListBoxNegativeDeselectAll);
+            this.labelNegativeDeselectAll.AutoSize = true;
+            this.labelNegativeDeselectAll.Location = new System.Drawing.Point(232, 316);
+            this.labelNegativeDeselectAll.Name = "label9";
+            this.labelNegativeDeselectAll.TabIndex = 6;
+            this.labelNegativeDeselectAll.Text = "deselect all";
+            this.labelNegativeDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelNegativeDeselectAll.Click += new System.EventHandler(checkedListBoxNegativeDeselectAll);
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(67, 316);
-            this.label10.Name = "label10";
-            this.label10.Text = "/";
+            this.labelSlashPositive.AutoSize = true;
+            this.labelSlashPositive.Location = new System.Drawing.Point(67, 316);
+            this.labelSlashPositive.Name = "label10";
+            this.labelSlashPositive.Text = "/";
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(225, 316);
-            this.label11.Name = "label11";
-            this.label11.Text = "/";
+            this.labelSlashNegative.AutoSize = true;
+            this.labelSlashNegative.Location = new System.Drawing.Point(225, 316);
+            this.labelSlashNegative.Name = "label11";
+            this.labelSlashNegative.Text = "/";
             
             // 
             // checkedListBox2 - negative fragments
             // 
-            this.checkedListBox2.CheckOnClick = true;
-            this.checkedListBox2.FormattingEnabled = true;
-            this.checkedListBox2.Location = new System.Drawing.Point(170, 22);
-            this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.ScrollAlwaysVisible = true;
-            this.checkedListBox2.Size = new System.Drawing.Size(150, 294);
-            this.checkedListBox2.TabIndex = 5;
-            this.checkedListBox2.ThreeDCheckBoxes = true;
-            this.checkedListBox2.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBox2_ItemCheck);
-            this.checkedListBox2.MouseLeave += new System.EventHandler(this.checkedListBox_MouseLeave);
-            this.checkedListBox2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBox2_MouseHover);
+            this.checkedListBoxNegativeFragments.CheckOnClick = true;
+            this.checkedListBoxNegativeFragments.FormattingEnabled = true;
+            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(170, 22);
+            this.checkedListBoxNegativeFragments.Name = "checkedListBox2";
+            this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
+            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(150, 294);
+            this.checkedListBoxNegativeFragments.TabIndex = 5;
+            this.checkedListBoxNegativeFragments.ThreeDCheckBoxes = true;
+            this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
+            this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
+            this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1058, 374);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 30);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.cancel_Click);
+            this.buttonCancel.Location = new System.Drawing.Point(1058, 374);
+            this.buttonCancel.Name = "button2";
+            this.buttonCancel.Size = new System.Drawing.Size(98, 30);
+            this.buttonCancel.TabIndex = 7;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.cancelClick);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(954, 374);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(98, 30);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "OK";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.ok_Click);
+            this.buttonOK.Location = new System.Drawing.Point(954, 374);
+            this.buttonOK.Name = "button3";
+            this.buttonOK.Size = new System.Drawing.Size(98, 30);
+            this.buttonOK.TabIndex = 8;
+            this.buttonOK.Text = "OK";
+            this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.okClick);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 374);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(98, 30);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Add fragment";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.add_fragment_Click);
+            this.buttonAddFragment.Location = new System.Drawing.Point(12, 374);
+            this.buttonAddFragment.Name = "button4";
+            this.buttonAddFragment.Size = new System.Drawing.Size(98, 30);
+            this.buttonAddFragment.TabIndex = 9;
+            this.buttonAddFragment.Text = "Add fragment";
+            this.buttonAddFragment.UseVisualStyleBackColor = true;
+            this.buttonAddFragment.Click += new System.EventHandler(this.addFragmentClick);
             // 
             // tabControl1
             // 
-            this.tabControl1.Location = new System.Drawing.Point(12, 6);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1144, 360);
-            this.tabControl1.TabIndex = 11;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
+            this.tabControlFragments.Location = new System.Drawing.Point(12, 6);
+            this.tabControlFragments.Name = "tabControl1";
+            this.tabControlFragments.SelectedIndex = 0;
+            this.tabControlFragments.Size = new System.Drawing.Size(1144, 360);
+            this.tabControlFragments.TabIndex = 11;
+            this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
             // 
             // MS2Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1168, 420);
-            this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.tabControlFragments);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonOK);
+            this.Controls.Add(this.buttonAddFragment);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             
             foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
@@ -284,40 +284,37 @@ namespace LipidCreator
                 tp.TabIndex = 0;
                 tp.Text = item.Key;
                 tp.UseVisualStyleBackColor = true;
-                this.tabControl1.Controls.Add(tp);
+                this.tabControlFragments.Controls.Add(tp);
                 this.tabPages.Add(tp);
 
             }
 
             this.Name = "MS2Form";
             this.Text = "MS2 Fragments";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.tabControl1.ResumeLayout(false);
-            //this.ResumeLayout(false);
-            //this.PerformLayout();
-
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
+            this.tabControlFragments.ResumeLayout(false);
         }
 
         #endregion
 
-        public System.Windows.Forms.PictureBox pictureBox1;
-        public System.Windows.Forms.CheckedListBox checkedListBox1;
-        public Label label1;
-        public Label label2;
-        public Label label3;
-        public Label label4;
-        public Label label5;
-        public Label label6;
-        public Label label7;
-        public Label label8;
-        public Label label9;
-        public Label label10;
-        public Label label11;
-        public CheckedListBox checkedListBox2;
-        public Button button2;
-        public Button button3;
-        public Button button4;
-        public TabControl tabControl1;
+        public PictureBox pictureBoxFragments;
+        public CheckedListBox checkedListBoxPositiveFragments;
+        public CheckedListBox checkedListBoxNegativeFragments;
+        public Label labelPositiveFragments;
+        public Label labelNegativeFragments;
+        public Label labelFragmentDescriptionBlack;
+        public Label labelFragmentDescriptionRed;
+        public Label labelFragmentDescriptionBlue;
+        public Label labelPositiveSelectAll;
+        public Label labelPositiveDeselectAll;
+        public Label labelNegativeSelectAll;
+        public Label labelNegativeDeselectAll;
+        public Label labelSlashPositive;
+        public Label labelSlashNegative;
+        public Button buttonCancel;
+        public Button buttonOK;
+        public Button buttonAddFragment;
+        public TabControl tabControlFragments;
         public ArrayList tabPages;
         public ToolTip toolTip1;
     }

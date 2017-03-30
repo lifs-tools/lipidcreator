@@ -50,23 +50,23 @@ namespace LipidCreator
             this.allFragmentsUnique = allFragmentsUnique;
             InitializeComponent();
             currentView = this.allFragments;
-            dataGridView1.DataSource = currentView;
-            button1.Enabled = lipidCreatorForm.openedAsExternal;
-            checkBox2.Enabled = lipidCreatorForm.openedAsExternal;
-            label1.Text = "Number of transitions: " + currentView.Rows.Count;
-            foreach (DataGridViewColumn dgvc in dataGridView1.Columns)
+            dataGridViewTransitions.DataSource = currentView;
+            buttonSendToSkyline.Enabled = lipidCreatorForm.openedAsExternal;
+            checkBoxCreateSpectralLibrary.Enabled = lipidCreatorForm.openedAsExternal;
+            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
+            foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns)
             {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
-            dataGridView1.Update();
-            dataGridView1.Refresh();
+            dataGridViewTransitions.Update();
+            dataGridViewTransitions.Refresh();
         }
     
-        public void button1_Click(Object sender, EventArgs e)
+        public void buttonSendToSkylineClick(Object sender, EventArgs e)
         {
             this.Enabled = false;
             
-            if (checkBox2.Checked)
+            if (checkBoxCreateSpectralLibrary.Checked)
             {
                 String[] specName = new String[]{""};
                 SpectralName spectralName = new SpectralName(specName);
@@ -89,7 +89,7 @@ namespace LipidCreator
             this.Enabled = true;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxCheckedChanged(object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked)
             {
@@ -99,13 +99,13 @@ namespace LipidCreator
             {
                 currentView = this.allFragments;
             }
-            label1.Text = "Number of transitions: " + currentView.Rows.Count;
-            dataGridView1.DataSource = currentView;
-            dataGridView1.Update();
-            dataGridView1.Refresh();
+            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
+            dataGridViewTransitions.DataSource = currentView;
+            dataGridViewTransitions.Update();
+            dataGridViewTransitions.Refresh();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonStoreTransitionListClick(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             
@@ -188,7 +188,7 @@ namespace LipidCreator
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonStoreSpectralLibraryClick(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             

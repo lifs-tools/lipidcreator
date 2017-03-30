@@ -44,20 +44,20 @@ namespace LipidCreator
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonOKClick(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length == 0)
+            if (textLibraryName.Text.Length == 0)
             {
                 MessageBox.Show("Please provide a name for the spectra library.", "Name not provided");
             }
             else
             {
-                specName[0] = textBox1.Text;
+                specName[0] = textLibraryName.Text;
                 this.Close();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonCancelClick(object sender, EventArgs e)
         {
             this.Close();
         }

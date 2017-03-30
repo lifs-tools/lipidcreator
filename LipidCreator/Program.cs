@@ -49,57 +49,57 @@ namespace LipidCreator
         public int hydroxyl;
         public String suffix;
         public DataTable atomsCount;
-        public FattyAcid(int l, int _db, int _hydro){
+        public FattyAcid(int l, int db, int hydro){
         
         }
         
 
-        public FattyAcid(int l, int _db, int _hydro, bool isLCB = false)
+        public FattyAcid(int l, int db, int hydro, bool isLCB = false)
         {
             length = l;
-            db = _db;
-            hydroxyl = _hydro;
+            this.db = db;
+            hydroxyl = hydro;
             suffix = "";
             atomsCount = MS2Fragment.createEmptyElementTable();
-            if (l > 0 || _db > 0){
+            if (l > 0 || db > 0){
                 if (!isLCB){
                     atomsCount.Rows[0]["Count"] = l; // C
-                    atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
-                    atomsCount.Rows[2]["Count"] = 1 + _hydro; // O
+                    atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * db; // H
+                    atomsCount.Rows[2]["Count"] = 1 + hydro; // O
                 }
                 else {
                     // long chain base
                     atomsCount.Rows[0]["Count"] = l; // C
                     atomsCount.Rows[1]["Count"] = (2 * (l - db) + 1); // H
-                    atomsCount.Rows[2]["Count"] = _hydro; // O
+                    atomsCount.Rows[2]["Count"] = hydro; // O
                     atomsCount.Rows[3]["Count"] = 1; // N
                 }
             }
         }
 
         
-        public FattyAcid(int l, int _db, int _hydro, String _suffix)
+        public FattyAcid(int l, int db, int hydro, String suffix)
         {
             length = l;
-            db = _db;
-            hydroxyl = _hydro;
-            suffix = (_suffix.Length > 2) ? _suffix.Substring(2, 1) : "";
+            this.db = db;
+            hydroxyl = hydro;
+            this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
             atomsCount = MS2Fragment.createEmptyElementTable();
-            if (l > 0 || _db > 0){
+            if (l > 0 || db > 0){
                 atomsCount.Rows[0]["Count"] = l; // C
-                switch(suffix)
+                switch(this.suffix)
                 {
                     case "":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
-                        atomsCount.Rows[2]["Count"] = 1 + _hydro; // O
+                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * db; // H
+                        atomsCount.Rows[2]["Count"] = 1 + hydro; // O
                         break;
                     case "p":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * _db; // H
-                        atomsCount.Rows[2]["Count"] = _hydro; // O
+                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * db; // H
+                        atomsCount.Rows[2]["Count"] = hydro; // O
                         break;
                     case "e":
-                        atomsCount.Rows[1]["Count"] = (l + 1) * 2 - 1 - 2 * _db; // H
-                        atomsCount.Rows[2]["Count"] = _hydro; // O
+                        atomsCount.Rows[1]["Count"] = (l + 1) * 2 - 1 - 2 * db; // H
+                        atomsCount.Rows[2]["Count"] = hydro; // O
                         break;
                 }
             }
@@ -827,25 +827,25 @@ namespace LipidCreator
         
         public override void import(XElement node)
         {
-            int fa_counter = 0;
+            int fattyAcidcounter = 0;
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
                 {
                     case "fattyAcidGroup":
-                        if (fa_counter == 0)
+                        if (fattyAcidcounter == 0)
                         {
                             fag1.import(child);
                         }
-                        else if (fa_counter == 1)
+                        else if (fattyAcidcounter == 1)
                         {
                             fag2.import(child);
                         }
-                        else if (fa_counter == 2)
+                        else if (fattyAcidcounter == 2)
                         {
                             fag3.import(child);
                         }
-                        else if (fa_counter == 3)
+                        else if (fattyAcidcounter == 3)
                         {
                             fag4.import(child);
                         }
@@ -854,7 +854,7 @@ namespace LipidCreator
                             Console.WriteLine("Error, fatty acid");
                             throw new Exception();
                         }
-                        ++fa_counter;
+                        ++fattyAcidcounter;
                         break;
                         
                     default:

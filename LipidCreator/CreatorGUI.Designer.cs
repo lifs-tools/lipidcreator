@@ -59,8 +59,8 @@ namespace LipidCreator
         private Image addImage;
         private bool initialCall = true;
         
-        private System.Timers.Timer timer1;
-        private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Timers.Timer timerEasterEgg;
+        private System.Windows.Forms.MainMenu mainMenuLipidCreator;
         private System.Windows.Forms.MenuItem menuFile;
         private System.Windows.Forms.MenuItem menuImport;
         private System.Windows.Forms.MenuItem menuImportPredefined;
@@ -312,18 +312,18 @@ namespace LipidCreator
             this.Text = "LipidCreator";
             
             this.components = new System.ComponentModel.Container();
-            this.timer1 = new System.Timers.Timer(5);
-            this.timer1.Elapsed += this.timer1_Tick;
+            this.timerEasterEgg = new System.Timers.Timer(5);
+            this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
             
-            this.mainMenu1 = new System.Windows.Forms.MainMenu();
-            this.Menu = this.mainMenu1;
+            this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
+            this.Menu = this.mainMenuLipidCreator;
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
             this.menuImportPredefined = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem ();
             this.menuDash = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
-            this.mainMenu1.MenuItems.AddRange(new MenuItem[] { this.menuFile } );
+            this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile } );
             this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuExit});
             this.menuFile.Index = 0;
             this.menuFile.Text = "&File";
@@ -331,7 +331,7 @@ namespace LipidCreator
             this.menuImport.Index = 0;
             this.menuImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.menuImport.Text = "&Import";
-            this.menuImport.Click += new System.EventHandler (menuImport_Click);
+            this.menuImport.Click += new System.EventHandler (menuImportClick);
             
             this.menuImportPredefined.Index = 1;
             this.menuImportPredefined.Text = "Import Predefined";
@@ -339,7 +339,7 @@ namespace LipidCreator
             this.menuExport.Index = 2;
             this.menuExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
             this.menuExport.Text = "&Export";
-            this.menuExport.Click += new System.EventHandler (menuExport_Click);
+            this.menuExport.Click += new System.EventHandler (menuExportClick);
             
             this.menuDash.Index = 3;
             this.menuDash.Text = "-";
@@ -1350,18 +1350,18 @@ namespace LipidCreator
             plFA2Combobox.Width = faLength;
             plFA2Combobox.SelectedItem = "Fatty acid chain";
             plFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            plFA2Combobox.SelectedIndexChanged += new EventHandler(pl_fa_2_combobox_valueChanged);
+            plFA2Combobox.SelectedIndexChanged += new EventHandler(plFA2ComboboxValueChanged);
             plDB2Textbox.Location = new Point(plFA2Textbox.Left + plFA2Textbox.Width + sep, plFA2Textbox.Top);
             plDB2Textbox.Width = dbLength;
             plDB2Textbox.Text = "5-6";
-            plDB2Textbox.TextChanged += new EventHandler(pl_db_2_textbox_valueChanged);
+            plDB2Textbox.TextChanged += new EventHandler(plDB2TextboxValueChanged);
             toolTip.SetToolTip(plDB2Textbox, formattingDB);
             plDB2Label.Location = new Point(plDB2Textbox.Left, plDB2Textbox.Top - sep);
             plDB2Label.Width = dbLength;
             plDB2Label.Text = dbText;
             plHydroxyl2Textbox.Width = dbLength;
             plHydroxyl2Textbox.Location = new Point(plDB2Textbox.Left + plDB2Textbox.Width + sep, plDB2Textbox.Top);
-            plHydroxyl2Textbox.TextChanged += new EventHandler(pl_hydroxyl_2_textbox_valueChanged);
+            plHydroxyl2Textbox.TextChanged += new EventHandler(plHydroxyl2TextboxValueChanged);
             toolTip.SetToolTip(plHydroxyl2Textbox, formattingHydroxyl);
             plHydroxyl2Label.Width = dbLength;
             plHydroxyl2Label.Location = new Point(plHydroxyl2Textbox.Left, plHydroxyl2Textbox.Top - sep);
@@ -1369,22 +1369,22 @@ namespace LipidCreator
 
             plFA2Checkbox3.Location = new Point(plFA2Textbox.Left + 90, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox3.Text = "FAe";
-            plFA2Checkbox3.CheckedChanged += new EventHandler(pl_fa_2_gb_1_checkbox_3_checkedChanged);
-            plFA2Checkbox3.MouseLeave += new System.EventHandler(pl_fa_2_gb_1_checkbox_3_MouseLeave);
-            plFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(pl_fa_2_gb_1_checkbox_3_MouseHover);
+            plFA2Checkbox3.CheckedChanged += new EventHandler(plFA2Checkbox3CheckedChanged);
+            plFA2Checkbox3.MouseLeave += new System.EventHandler(plFA2Checkbox3MouseLeave);
+            plFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2Checkbox3MouseHover);
             plFA2Checkbox2.Location = new Point(plFA2Textbox.Left + 40, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox2.Text = "FAp";
-            plFA2Checkbox2.CheckedChanged += new EventHandler(pl_fa_2_gb_1_checkbox_2_checkedChanged);
-            plFA2Checkbox2.MouseLeave += new System.EventHandler(pl_fa_2_gb_1_checkbox_2_MouseLeave);
-            plFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(pl_fa_2_gb_1_checkbox_2_MouseHover);
+            plFA2Checkbox2.CheckedChanged += new EventHandler(plFA2Checkbox2CheckedChanged);
+            plFA2Checkbox2.MouseLeave += new System.EventHandler(plFA2Checkbox2MouseLeave);
+            plFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2checkbox2MouseHover);
             plFA2Checkbox1.Location = new Point(plFA2Textbox.Left, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox1.Text = "FA";
             plFA2Checkbox1.Checked = true;
-            plFA2Checkbox1.CheckedChanged += new EventHandler(pl_fa_2_gb_1_checkbox_1_checkedChanged);
+            plFA2Checkbox1.CheckedChanged += new EventHandler(plF2Checkbox1CheckedChanged);
             
             plIsCL.Location = new Point(130, 36);
             plIsCL.Text = "Is cardiolipin";
-            plIsCL.CheckedChanged += new EventHandler(pl_is_cl_checkedChanged);
+            plIsCL.CheckedChanged += new EventHandler(plIsCLCheckedChanged);
             plIsCL.BringToFront();
 
             
@@ -1393,9 +1393,9 @@ namespace LipidCreator
             plHgListbox.BringToFront();
             plHgListbox.BorderStyle = BorderStyle.Fixed3D;
             plHgListbox.SelectionMode = SelectionMode.MultiSimple;
-            plHgListbox.SelectedValueChanged += new System.EventHandler(pl_hg_listbox_SelectedValueChanged);
-            plHgListbox.MouseLeave += new System.EventHandler(pl_hg_listbox_MouseLeave);
-            plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(pl_hg_listbox_MouseHover);
+            plHgListbox.SelectedValueChanged += new System.EventHandler(plHGListboxSelectedValueChanged);
+            plHgListbox.MouseLeave += new System.EventHandler(plHGListboxMouseLeave);
+            plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(plHGListboxMouseHover);
             
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";
@@ -1408,16 +1408,16 @@ namespace LipidCreator
             plPosAdductCheckbox1.Location = new Point(10, 15);
             plPosAdductCheckbox1.Text = "+H⁺";
             plPosAdductCheckbox1.Checked = true;
-            plPosAdductCheckbox1.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_1_checkedChanged);
+            plPosAdductCheckbox1.CheckedChanged += new EventHandler(plPosAdductCheckbox1CheckedChanged);
             plPosAdductCheckbox2.Parent = plPositiveAdduct;
             plPosAdductCheckbox2.Location = new Point(10, 35);
             plPosAdductCheckbox2.Text = "+2H⁺⁺";
             plPosAdductCheckbox2.Enabled = false;
-            plPosAdductCheckbox2.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_2_checkedChanged);
+            plPosAdductCheckbox2.CheckedChanged += new EventHandler(plPosAdductCheckbox2CheckedChanged);
             plPosAdductCheckbox3.Parent = plPositiveAdduct;
             plPosAdductCheckbox3.Location = new Point(10, 55);
             plPosAdductCheckbox3.Text = "+NH4⁺";
-            plPosAdductCheckbox3.CheckedChanged += new EventHandler(pl_pos_adduct_checkbox_3_checkedChanged);
+            plPosAdductCheckbox3.CheckedChanged += new EventHandler(plPosAdductCheckbox3CheckedChanged);
             plNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             plNegativeAdduct.Width = 120;
             plNegativeAdduct.Height = 120;
@@ -1425,24 +1425,23 @@ namespace LipidCreator
             plNegAdductCheckbox1.Parent = plNegativeAdduct;
             plNegAdductCheckbox1.Location = new Point(10, 15);
             plNegAdductCheckbox1.Text = "-H⁻";
-            plNegAdductCheckbox1.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_1_checkedChanged);
+            plNegAdductCheckbox1.CheckedChanged += new EventHandler(plNegAdductCheckbox1CheckedChanged);
             plNegAdductCheckbox2.Parent = plNegativeAdduct;
             plNegAdductCheckbox2.Location = new Point(10, 35);
             plNegAdductCheckbox2.Text = "-2H⁻ ⁻";
             plNegAdductCheckbox2.Enabled = false;
-            plNegAdductCheckbox2.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_2_checkedChanged);
+            plNegAdductCheckbox2.CheckedChanged += new EventHandler(plNegAdductCheckbox2CheckedChanged);
             plNegAdductCheckbox3.Parent = plNegativeAdduct;
             plNegAdductCheckbox3.Location = new Point(10, 55);
             plNegAdductCheckbox3.Text = "+HCOO⁻";
-            plNegAdductCheckbox3.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_3_checkedChanged);
+            plNegAdductCheckbox3.CheckedChanged += new EventHandler(plNegAdductCheckbox3CheckedChanged);
             plNegAdductCheckbox4.Parent = plNegativeAdduct;
             plNegAdductCheckbox4.Location = new Point(10, 75);
             plNegAdductCheckbox4.Text = "+CH3COO⁻";
-            plNegAdductCheckbox4.CheckedChanged += new EventHandler(pl_neg_adduct_checkbox_4_checkedChanged);
+            plNegAdductCheckbox4.CheckedChanged += new EventHandler(plNegAdductCheckbox4CheckedChanged);
 
 
             plPictureBox.Image = phosphoBackboneImage;
-            //pl_picture_box.Location = new Point((int)(214 - phospho_backbone_image.Width * 0.5), (int)(204 - phospho_backbone_image.Height * 0.5));
             plPictureBox.Location = new Point(107, 13);
             plPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             plPictureBox.SendToBack();
@@ -1450,7 +1449,7 @@ namespace LipidCreator
             plRepresentativeFA.Location = new Point(clHydroxyl1Textbox.Left + clHydroxyl1Textbox.Width + sep, clHydroxyl1Textbox.Top);
             plRepresentativeFA.Width = 120;
             plRepresentativeFA.Text = "First FA representative";
-            plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFA_checkedChanged);
+            plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
             plRepresentativeFA.SendToBack();
 
 
@@ -1484,25 +1483,25 @@ namespace LipidCreator
             sphingolipidsRab.AutoSize = true;
             sphingolipidsRab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             sphingolipidsRab.BackColor = Color.White;
-            Font sl_fnt = new Font(sphingolipidsRab.Font.FontFamily, 8.25F);
-            sphingolipidsRab.Font = sl_fnt;
+            Font slFont = new Font(sphingolipidsRab.Font.FontFamily, 8.25F);
+            sphingolipidsRab.Font = slFont;
 
             slFACombobox.BringToFront();
             slFATextbox.BringToFront();
             slFATextbox.Location = new Point(258, 280);
             slFATextbox.Width = faLength;
             slFATextbox.Text = "2, 5, 17-19";
-            slFATextbox.TextChanged += new EventHandler(sl_fa_textbox_valueChanged);
+            slFATextbox.TextChanged += new EventHandler(slFATextboxValueChanged);
             toolTip.SetToolTip(slFATextbox, formattingFA);
             slFACombobox.Location = new Point(slFATextbox.Left, slFATextbox.Top - sepText);
             slFACombobox.Width = faLength;
             slFACombobox.SelectedItem = "Fatty acid chain";
             slFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slFACombobox.SelectedIndexChanged += new EventHandler(sl_fa_combobox_valueChanged);
+            slFACombobox.SelectedIndexChanged += new EventHandler(slFAComboboxValueChanged);
             slDB1Textbox.Location = new Point(slFATextbox.Left + slFATextbox.Width + sep, slFATextbox.Top);
             slDB1Textbox.Width = dbLength;
             slDB1Textbox.Text = "5-6";
-            slDB1Textbox.TextChanged += new EventHandler(sl_db_1_textbox_valueChanged);
+            slDB1Textbox.TextChanged += new EventHandler(slDB1TextboxValueChanged);
             toolTip.SetToolTip(slDB1Textbox, formattingDB);
             slDB1Label.Location = new Point(slDB1Textbox.Left, slDB1Textbox.Top - sep);
             slDB1Label.Width = dbLength;
@@ -1511,7 +1510,7 @@ namespace LipidCreator
             slFAHydroxyCombobox.SelectedItem = "2";
             slFAHydroxyCombobox.Width = dbLength;
             slFAHydroxyCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slFAHydroxyCombobox.SelectedIndexChanged += new EventHandler(sl_fa_hydroxy_combobox_valueChanged);
+            slFAHydroxyCombobox.SelectedIndexChanged += new EventHandler(slFAHydroxyComboboxValueChanged);
             slFAHydroxyLabel.Location = new Point(slFAHydroxyCombobox.Left, slFAHydroxyCombobox.Top - sep);
             slFAHydroxyLabel.Text = hydroxylText;
 
@@ -1523,17 +1522,17 @@ namespace LipidCreator
             slLCBTextbox.Location = new Point(294, 203);
             slLCBTextbox.Width = faLength;
             slLCBTextbox.Text = "14, 16-18, 22";
-            slLCBTextbox.TextChanged += new EventHandler(sl_lcb_textbox_valueChanged);
+            slLCBTextbox.TextChanged += new EventHandler(slLCBTextboxValueChanged);
             toolTip.SetToolTip(slLCBTextbox, formattingFA);
             slLCBCombobox.Location = new Point(slLCBTextbox.Left, slLCBTextbox.Top - sepText);
             slLCBCombobox.Width = faLength;
             slLCBCombobox.SelectedItem = "Long chain base";
             slLCBCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slLCBCombobox.SelectedIndexChanged += new EventHandler(sl_lcb_combobox_valueChanged);
+            slLCBCombobox.SelectedIndexChanged += new EventHandler(slLCBComboboxValueChanged);
             slDB2Textbox.Location = new Point(slLCBTextbox.Left + slLCBTextbox.Width + sep, slLCBTextbox.Top);
             slDB2Textbox.Width = dbLength;
             slDB2Textbox.Text = "0-2";
-            slDB2Textbox.TextChanged += new EventHandler(sl_db_2_textbox_valueChanged);
+            slDB2Textbox.TextChanged += new EventHandler(slDB2TextboxValueChanged);
             toolTip.SetToolTip(slDB2Textbox, formattingDB);
             slDB2Label.Location = new Point(slDB2Textbox.Left, slDB2Textbox.Top - sep);
             slDB2Label.Width = dbLength;
@@ -1542,7 +1541,7 @@ namespace LipidCreator
             slLCBHydroxyCombobox.SelectedItem = "2";
             slLCBHydroxyCombobox.Width = dbLength;
             slLCBHydroxyCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slLCBHydroxyCombobox.SelectedIndexChanged += new EventHandler(sl_lcb_hydroxy_combobox_valueChanged);
+            slLCBHydroxyCombobox.SelectedIndexChanged += new EventHandler(slLCBHydroxyComboboxValueChanged);
             slLCBHydroxyLabel.Location = new Point(slLCBHydroxyCombobox.Left, slLCBHydroxyCombobox.Top - sep);
             slLCBHydroxyLabel.Text = hydroxylText;
 
@@ -1552,9 +1551,9 @@ namespace LipidCreator
             slHgListbox.BringToFront();
             slHgListbox.BorderStyle = BorderStyle.Fixed3D;
             slHgListbox.SelectionMode = SelectionMode.MultiSimple;
-            slHgListbox.SelectedValueChanged += new System.EventHandler(sl_hg_listbox_SelectedValueChanged);
-            slHgListbox.MouseLeave += new System.EventHandler(sl_hg_listbox_MouseLeave);
-            slHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(sl_hg_listbox_MouseHover);
+            slHgListbox.SelectedValueChanged += new System.EventHandler(slHGListboxSelectedValueChanged);
+            slHgListbox.MouseLeave += new System.EventHandler(slHGListboxMouseLeave);
+            slHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(slHGListboxMouseHover);
             slHGLabel.Location = new Point(slHgListbox.Left, slHgListbox.Top - sep);
             slHGLabel.Text = "Head group";
             
@@ -1568,16 +1567,16 @@ namespace LipidCreator
             slPosAdductCheckbox1.Location = new Point(10, 15);
             slPosAdductCheckbox1.Text = "+H⁺";
             slPosAdductCheckbox1.Checked = true;
-            slPosAdductCheckbox1.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_1_checkedChanged);
+            slPosAdductCheckbox1.CheckedChanged += new EventHandler(slPosAdductCheckbox1CheckedChanged);
             slPosAdductCheckbox2.Parent = slPositiveAdduct;
             slPosAdductCheckbox2.Location = new Point(10, 35);
             slPosAdductCheckbox2.Text = "+2H⁺⁺";
             slPosAdductCheckbox2.Enabled = false;
-            slPosAdductCheckbox2.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_2_checkedChanged);
+            slPosAdductCheckbox2.CheckedChanged += new EventHandler(slPosAdductCheckbox2CheckedChanged);
             slPosAdductCheckbox3.Parent = slPositiveAdduct;
             slPosAdductCheckbox3.Location = new Point(10, 55);
             slPosAdductCheckbox3.Text = "+NH4⁺";
-            slPosAdductCheckbox3.CheckedChanged += new EventHandler(sl_pos_adduct_checkbox_3_checkedChanged);
+            slPosAdductCheckbox3.CheckedChanged += new EventHandler(slPosAdductCheckbox3CheckedChanged);
             slNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             slNegativeAdduct.Width = 120;
             slNegativeAdduct.Height = 120;
@@ -1585,20 +1584,20 @@ namespace LipidCreator
             slNegAdductCheckbox1.Parent = slNegativeAdduct;
             slNegAdductCheckbox1.Location = new Point(10, 15);
             slNegAdductCheckbox1.Text = "-H⁻";
-            slNegAdductCheckbox1.CheckedChanged += new EventHandler(sl_neg_adduct_checkbox_1_checkedChanged);
+            slNegAdductCheckbox1.CheckedChanged += new EventHandler(slNegAdductCheckbox1CheckedChanged);
             slNegAdductCheckbox2.Parent = slNegativeAdduct;
             slNegAdductCheckbox2.Location = new Point(10, 35);
             slNegAdductCheckbox2.Text = "-2H⁻⁻";
             slNegAdductCheckbox2.Enabled = false;
-            slNegAdductCheckbox2.CheckedChanged += new EventHandler(sl_neg_adduct_checkbox_2_checkedChanged);
+            slNegAdductCheckbox2.CheckedChanged += new EventHandler(slNegAdductCheckbox2CheckedChanged);
             slNegAdductCheckbox3.Parent = slNegativeAdduct;
             slNegAdductCheckbox3.Location = new Point(10, 55);
             slNegAdductCheckbox3.Text = "+HCOO⁻";
-            slNegAdductCheckbox3.CheckedChanged += new EventHandler(sl_neg_adduct_checkbox_3_checkedChanged);
+            slNegAdductCheckbox3.CheckedChanged += new EventHandler(slNegAdductCheckbox3CheckedChanged);
             slNegAdductCheckbox4.Parent = slNegativeAdduct;
             slNegAdductCheckbox4.Location = new Point(10, 75);
             slNegAdductCheckbox4.Text = "+CH3COO⁻";
-            slNegAdductCheckbox4.CheckedChanged += new EventHandler(sl_neg_adduct_checkbox_4_checkedChanged);
+            slNegAdductCheckbox4.CheckedChanged += new EventHandler(slNegAdductCheckbox4CheckedChanged);
 
             slPictureBox.Image = sphingoBackboneImage;
             slPictureBox.Location = new Point((int)(214 - sphingoBackboneImage.Width * 0.5), (int)(204 - sphingoBackboneImage.Height * 0.5));
@@ -1621,28 +1620,28 @@ namespace LipidCreator
             clAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             clAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
             clAddLipidButton.BackColor = SystemColors.Control;
-            clAddLipidButton.Click += register_lipid;
+            clAddLipidButton.Click += registerLipid;
 
             clResetLipidButton.Text = "Reset lipid";
             clResetLipidButton.Width = 130;
             clResetLipidButton.Height = 26;
             clResetLipidButton.Location = new Point(20, topLowButtons);
             clResetLipidButton.BackColor = SystemColors.Control;
-            clResetLipidButton.Click += reset_cl_lipid;
+            clResetLipidButton.Click += resetCLLipid;
 
             clModifyLipidButton.Text = "Modify lipid";
             clModifyLipidButton.Width = 130;
             clModifyLipidButton.Height = 26;
             clModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
             clModifyLipidButton.BackColor = SystemColors.Control;
-            clModifyLipidButton.Click += modify_lipid;
+            clModifyLipidButton.Click += modifyLipid;
 
             clMS2fragmentsLipidButton.Text = "MS2 fragments";
             clMS2fragmentsLipidButton.Width = 130;
             clMS2fragmentsLipidButton.Height = 26;
             clMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             clMS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            clMS2fragmentsLipidButton.Click += open_ms2_form;
+            clMS2fragmentsLipidButton.Click += openMS2Form;
 
             glAddLipidButton.Text = "Add glycerolipids";
             glAddLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1652,28 +1651,28 @@ namespace LipidCreator
             glAddLipidButton.Height = 26;
             glAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
             glAddLipidButton.BackColor = SystemColors.Control;
-            glAddLipidButton.Click += register_lipid;
+            glAddLipidButton.Click += registerLipid;
 
             glResetLipidButton.Text = "Reset lipid";
             glResetLipidButton.Width = 130;
             glResetLipidButton.Height = 26;
             glResetLipidButton.Location = new Point(20, topLowButtons);
             glResetLipidButton.BackColor = SystemColors.Control;
-            glResetLipidButton.Click += reset_gl_lipid;
+            glResetLipidButton.Click += resetGLLipid;
 
             glModifyLipidButton.Text = "Modify lipid";
             glModifyLipidButton.Width = 130;
             glModifyLipidButton.Height = 26;
             glModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
             glModifyLipidButton.BackColor = SystemColors.Control;
-            glModifyLipidButton.Click += modify_lipid;
+            glModifyLipidButton.Click += modifyLipid;
 
             glMS2fragmentsLipidButton.Text = "MS2 fragments";
             glMS2fragmentsLipidButton.Width = 130;
             glMS2fragmentsLipidButton.Height = 26;
             glMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             glMS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            glMS2fragmentsLipidButton.Click += open_ms2_form;
+            glMS2fragmentsLipidButton.Click += openMS2Form;
 
             plAddLipidButton.Text = "Add phospholipids";
             plAddLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1683,28 +1682,28 @@ namespace LipidCreator
             plAddLipidButton.Height = 26;
             plAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
             plAddLipidButton.BackColor = SystemColors.Control;
-            plAddLipidButton.Click += register_lipid;
+            plAddLipidButton.Click += registerLipid;
 
             plResetLipidButton.Text = "Reset lipid";
             plResetLipidButton.Width = 130;
             plResetLipidButton.Height = 26;
             plResetLipidButton.Location = new Point(20, topLowButtons);
             plResetLipidButton.BackColor = SystemColors.Control;
-            plResetLipidButton.Click += reset_pl_lipid;
+            plResetLipidButton.Click += resetPLLipid;
 
             plModifyLipidButton.Text = "Modify lipid";
             plModifyLipidButton.Width = 130;
             plModifyLipidButton.Height = 26;
             plModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
             plModifyLipidButton.BackColor = SystemColors.Control;
-            plModifyLipidButton.Click += modify_lipid;
+            plModifyLipidButton.Click += modifyLipid;
 
             plMS2fragmentsLipidButton.Text = "MS2 fragments";
             plMS2fragmentsLipidButton.Width = 130;
             plMS2fragmentsLipidButton.Height = 26;
             plMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             plMS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            plMS2fragmentsLipidButton.Click += open_ms2_form;
+            plMS2fragmentsLipidButton.Click += openMS2Form;
 
             slAddLipidButton.Text = "Add sphingolipids";
             slAddLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1712,7 +1711,7 @@ namespace LipidCreator
             slAddLipidButton.Width = 146;
             slAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
             slAddLipidButton.BackColor = SystemColors.Control;
-            slAddLipidButton.Click += register_lipid;
+            slAddLipidButton.Click += registerLipid;
             slAddLipidButton.Image = addImage;
             slAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
@@ -1721,43 +1720,40 @@ namespace LipidCreator
             slResetLipidButton.Height = 26;
             slResetLipidButton.Location = new Point(20, topLowButtons);
             slResetLipidButton.BackColor = SystemColors.Control;
-            slResetLipidButton.Click += reset_sl_lipid;
+            slResetLipidButton.Click += resetSLLipid;
 
             slModifyLipidButton.Text = "Modify lipid";
             slModifyLipidButton.Width = 130;
             slModifyLipidButton.Height = 26;
             slModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
             slModifyLipidButton.BackColor = SystemColors.Control;
-            slModifyLipidButton.Click += modify_lipid;
+            slModifyLipidButton.Click += modifyLipid;
 
             slMS2fragmentsLipidButton.Text = "MS2 fragments";
             slMS2fragmentsLipidButton.Width = 130;
             slMS2fragmentsLipidButton.Height = 26;
             slMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             slMS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            slMS2fragmentsLipidButton.Click += open_ms2_form;
+            slMS2fragmentsLipidButton.Click += openMS2Form;
 
 
             lipidsGridview.AutoSize = true;
             lipidsGridview.Dock = DockStyle.Fill;
-            lipidsGridview.DataSource = registered_lipids_datatable;
+            lipidsGridview.DataSource = registeredLipidsDatatable;
             lipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             lipidsGridview.AllowUserToResizeColumns = false;
             lipidsGridview.AllowUserToAddRows = false;
             lipidsGridview.Width = this.Width;
-            //lipids_gridview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //lipids_gridview.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             lipidsGridview.AllowUserToResizeRows = false;
             lipidsGridview.ReadOnly = true;
-            //lipids_gridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             lipidsGridview.MultiSelect = false;
             lipidsGridview.RowTemplate.Height = 34;
-            lipidsGridview.DoubleClick += new EventHandler(lipids_gridview_double_click);
-            lipidsGridview.KeyDown += new KeyEventHandler(lipids_gridview_keydown);
+            lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
+            lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
             lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
             lipidsGridview.RowHeadersVisible = false;
             lipidsGridview.ScrollBars = ScrollBars.Vertical;
-            lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipids_gridview_DataBindingComplete);
+            lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
             
             
             
@@ -1766,7 +1762,7 @@ namespace LipidCreator
             openReviewFormButton.Width = 130;
             openReviewFormButton.BackColor = SystemColors.Control;
             openReviewFormButton.Dock = DockStyle.Bottom;
-            openReviewFormButton.Click += open_review_Form;
+            openReviewFormButton.Click += openReviewForm;
 
             this.Controls.Add(tabControl);
             this.Controls.Add(lipidsGroupbox);

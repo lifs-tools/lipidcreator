@@ -1,0 +1,36 @@
+﻿<Properties StartupConfiguration="{C82A580E-D9D9-40A6-8890-D93211920552}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="LipidCreator/AboutDialog.Designer.cs">
+    <Files>
+      <File FileName="LipidCreator/CreatorGUI.cs" Line="55" Column="26" />
+      <File FileName="LipidCreator/CreatorGUI.Designer.cs" Line="43" Column="22" />
+      <File FileName="LipidCreator/AboutDialog.Designer.cs" Line="63" Column="69" />
+      <File FileName="LipidCreator/AboutDialog.cs" Line="44" Column="78" />
+      <File FileName="LipidCreator/App.config" Line="6" Column="17" />
+      <File FileName="LipidCreator/Program.cs" Line="2652" Column="76" />
+      <File FileName="LipidCreator/SpectralName.cs" Line="1" Column="1" />
+      <File FileName="LipidCreator/MS2Form.cs" Line="9" Column="72" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="LipidCreator" expanded="True">
+            <Node name="LipidCreator" expanded="True">
+              <Node name="AboutDialog.cs" expanded="True">
+                <Node name="AboutDialog.Designer.cs" selected="True" />
+              </Node>
+              <Node name="CreatorGUI.cs" expanded="True" />
+              <Node name="MS2Form.cs" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.LipidCreator PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

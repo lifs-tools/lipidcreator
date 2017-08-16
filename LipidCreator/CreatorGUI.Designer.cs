@@ -349,6 +349,7 @@ namespace LipidCreator
             this.menuExit.Index = 4;
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
+            this.menuExit.Click += new System.EventHandler (menuExitClick);
 
             this.menuHelp = new System.Windows.Forms.MenuItem ();
             this.menuHelp.Index = 1;

@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -22,10 +23,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -70,6 +71,24 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>3468CDD17A6C14FC1B62CF1BE0F14AB62B880737</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -126,6 +145,9 @@
     <Compile Include="SpectralName.Designer.cs">
       <DependentUpon>SpectralName.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LipidsReview.resx">
       <DependentUpon>LipidsReview.cs</DependentUpon>
     </EmbeddedResource>
@@ -147,6 +169,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="data\headgroups.csv" />
     <None Include="data\ms2fragments.csv" />
+    <None Include="LipidCreator_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,8 +240,8 @@
     <Content Include="images\MS2\CerPI\CerPI_neg_NL.png" />
     <Content Include="images\MS2\CerPI\CerPI_neg_P.png" />
     <Content Include="images\MS2\CerPI_neg_pre.png" />
-    <Content Include="images\MS2\CerP\CerP_neg_P+H2O.png" />
     <Content Include="images\MS2\CerP\CerP_neg_P.png" />
+	<Content Include="images\MS2\CerP\CerP_neg_PO.png" />
     <Content Include="images\MS2\CerP\CerP_pos_NL%28H3PO4%29.png" />
     <Content Include="images\MS2\CerP\CerP_pos_NL%28H3PO4+H2O%29.png" />
     <Content Include="images\MS2\CerP\CerP_pos_W%27%27.png" />
@@ -775,9 +799,9 @@
     <Content Include="images\MS2\TG_pos_pre.png" />
     <Content Include="images\SL backbone_30.png" />
     <Content Include="images\sphingo_backbone.png" />
-    <Content Include="Ionic.Zip.dll" />
+   <!-- <Content Include="Ionic.Zip.dll" />
     <Content Include="SkylineTool.dll" />
-    <Content Include="System.Data.SQLite.dll" />
+    <Content Include="System.Data.SQLite.dll" /> -->
   </ItemGroup>
   <ItemGroup>
     <DataFiles Include="$(ProjectDir)data\*" />
@@ -798,7 +822,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-<!--  <PropertyGroup>
+  <!--  <PropertyGroup>
     <PostBuildEvent>cd $(TargetDir)
 $(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf</PostBuildEvent>
   </PropertyGroup>
@@ -817,6 +841,6 @@ xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' "/>
+    <Exec Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
   </Target>
 </Project>

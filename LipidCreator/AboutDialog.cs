@@ -34,6 +34,7 @@ namespace LipidCreator
         public AboutDialog()
         {
             InitializeComponent();
+            InitializeDialogText();
         }
 
         private void buttonOKClick(object sender, EventArgs e)

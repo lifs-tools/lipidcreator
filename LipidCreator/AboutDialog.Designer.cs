@@ -76,16 +76,16 @@ namespace LipidCreator
             this.linkLabel.Size = new System.Drawing.Size(221, 13);
             this.linkLabel.TabIndex = 2;
             this.linkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.SystemDefault;
-            this.linkLabel.Text = "http://lifs.isas.de/lipidcreator";
+            this.linkLabel.Text = "http://lifs.isas.de/index.php/lipidcreator";
             this.linkLabel.LinkClicked += this.linkLabel_LinkClicked;
             // 
             // textBox1
             // 
             this.textLibraryName.Location = new System.Drawing.Point(15, 25);
             this.textLibraryName.Name = "textBox1";
-            this.textLibraryName.Size = new System.Drawing.Size(400, 200);
+            //this.textLibraryName.ClientSize = new System.Drawing.Size(300, 200);
             this.textLibraryName.TabIndex = 1;
-            this.textLibraryName.Text = "Contributers: \r\nBing Peng\r\nDominik Kopzcyinski\r\nNils Hoffmann";
+            this.textLibraryName.Text = "Contributers: \r\nBing Peng\r\nDominik Kopzcyinski\r\nNils Hoffmann\r\n\r\nCopyright: ISAS e.V. 2017";
             // 
             // AboutDialog
             // 

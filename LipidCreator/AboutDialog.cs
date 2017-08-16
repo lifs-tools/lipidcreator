@@ -41,20 +41,20 @@ namespace LipidCreator
             this.Close();
         }
 
-		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			string url;
-			if (e.Link.LinkData != null)
-				url = e.Link.LinkData.ToString();
-			else
-				url = linkLabel.Text.Substring(e.Link.Start, e.Link.Length);
+        private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string url;
+            if (e.Link.LinkData != null)
+                url = e.Link.LinkData.ToString();
+            else
+                url = linkLabel.Text.Substring(e.Link.Start, e.Link.Length);
 
-			if (!url.Contains("://"))
-				url = "http://" + url;
+            if (!url.Contains("://"))
+                url = "http://" + url;
 
-			var si = new ProcessStartInfo(url);
-			Process.Start(si);
-			linkLabel.LinkVisited = true;
-		}
+            var si = new ProcessStartInfo(url);
+            Process.Start(si);
+            linkLabel.LinkVisited = true;
+        }
     }
 }

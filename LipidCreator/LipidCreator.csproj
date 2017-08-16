@@ -780,6 +780,12 @@
     <Content Include="System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
+    <DataFiles Include="$(ProjectDir)data\*" />
+    <ImageFiles Include="$(ProjectDir)images\**\*.*" />
+    <PredefinedFiles Include="$(ProjectDir)predefined\*" />
+    <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
+  </ItemGroup>
+  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
@@ -792,7 +798,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+<!--  <PropertyGroup>
     <PostBuildEvent>cd $(TargetDir)
 $(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf</PostBuildEvent>
   </PropertyGroup>
@@ -802,12 +808,15 @@ xcopy /s /y /e /i "$(ProjectDir)images" "$(TargetDir)images"
 xcopy /s /y /e /i "$(ProjectDir)predefined" "$(TargetDir)predefined"
 xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
 </PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+  </PropertyGroup>-->
   <Target Name="BeforeBuild">
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data" />
+    <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
+    <Copy SourceFiles="@(PredefinedFiles)" DestinationFolder="$(TargetDir)predefined" />
+    <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
   </Target>
   <Target Name="AfterBuild">
+    <Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' "/>
   </Target>
-  -->
 </Project>

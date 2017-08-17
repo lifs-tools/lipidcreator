@@ -44,6 +44,7 @@ namespace LipidCreator
         public bool changingTabForced;
         public int currentTabIndex = 1;
         public LipidCreatorForm lipidCreatorForm;
+        public AboutDialog aboutDialog;
         public Lipid currentLipid;
         public DataTable registeredLipidsDatatable;
         public int[] lipidModifications;
@@ -2603,6 +2604,15 @@ namespace LipidCreator
         protected void menuExitClick(object sender, System.EventArgs e)
         {
             Application.Exit();
+        }
+
+        protected void menuAboutClick(object sender, System.EventArgs e)
+        {
+            AboutDialog aboutDialog = new AboutDialog ();
+            aboutDialog.Owner = this;
+            aboutDialog.ShowInTaskbar = false;
+            aboutDialog.ShowDialog ();
+            aboutDialog.Dispose ();
         }
     }
 }

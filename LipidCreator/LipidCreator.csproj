@@ -75,7 +75,7 @@
   <PropertyGroup>
     <ManifestCertificateThumbprint>3468CDD17A6C14FC1B62CF1BE0F14AB62B880737</ManifestCertificateThumbprint>
   </PropertyGroup>
-  <PropertyGroup>
+<!--  <PropertyGroup>
     <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
@@ -89,7 +89,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
-  </PropertyGroup>
+  </PropertyGroup>-->
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />

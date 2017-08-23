@@ -67,6 +67,8 @@ namespace LipidCreator
         private System.Windows.Forms.MenuItem menuExport;
         private System.Windows.Forms.MenuItem menuDash;
         private System.Windows.Forms.MenuItem menuExit;
+		private System.Windows.Forms.MenuItem menuHelp;
+		private System.Windows.Forms.MenuItem menuAbout;
         
         private TabControl tabControl = new TabControl();
         private TabPage homeTab;
@@ -347,6 +349,21 @@ namespace LipidCreator
             this.menuExit.Index = 4;
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
+            this.menuExit.Click += new System.EventHandler (menuExitClick);
+
+            this.menuHelp = new System.Windows.Forms.MenuItem ();
+            this.menuHelp.Index = 1;
+            this.menuHelp.Text = "&Help";
+
+            this.menuAbout = new System.Windows.Forms.MenuItem ();
+            this.menuHelp.MenuItems.AddRange(new MenuItem[]{ menuAbout });
+
+            this.menuAbout.Index = 0;
+            this.menuAbout.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
+            this.menuAbout.Text = "&About";
+            this.menuAbout.Click += new System.EventHandler (menuAboutClick);
+
+            this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuHelp } );
             
             tabControl = new TabControl();
             this.Size = new System.Drawing.Size(1060, 800);

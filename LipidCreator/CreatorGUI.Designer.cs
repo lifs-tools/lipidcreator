@@ -350,6 +350,7 @@ namespace LipidCreator
             
             tabControl = new TabControl();
             this.Size = new System.Drawing.Size(1060, 800);
+            this.MinimumSize = new System.Drawing.Size(1060, 800);
             homeTab = new TabPage();
             glycerolipidsTab = new TabPage();
             phospholipidsTab = new TabPage();
@@ -642,10 +643,11 @@ namespace LipidCreator
             tabControl.Controls.Add(phospholipidsTab);
             tabControl.Controls.Add(sphingolipidsRab);
             tabControl.Dock = DockStyle.Fill;
+            tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
             tabControl.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
-
+            tabControl.AutoSize = false;
             
             
             homeTab.Text = "Home";

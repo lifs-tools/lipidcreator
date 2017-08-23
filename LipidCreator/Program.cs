@@ -94,7 +94,7 @@ namespace LipidCreator
                         atomsCount.Rows[2]["Count"] = 1 + hydro; // O
                         break;
                     case "p":
-                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * db; // H
+                        atomsCount.Rows[1]["Count"] = 2 * l - 1 - 2 * db + 2; // H
                         atomsCount.Rows[2]["Count"] = hydro; // O
                         break;
                     case "e":
@@ -2049,6 +2049,42 @@ namespace LipidCreator
                                                                     String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
                                                                     double mass = LipidCreatorForm.computeMass(atomsCount, charge);
                                                                     
+                                                                    
+                                                                    // add precursor as fragment
+                                                                    
+                                                                    DataRow lipidRowPrec = allLipids.NewRow();
+                                                                    lipidRowPrec["Molecule List Name"] = headgroup;
+                                                                    lipidRowPrec["Precursor Name"] = key;
+                                                                    lipidRowPrec["Precursor Ion Formula"] = chemForm;
+                                                                    lipidRowPrec["Precursor Adduct"] = "[M]";
+                                                                    lipidRowPrec["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                    lipidRowPrec["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                    lipidRowPrec["Product Name"] = "Precursor";;
+                                                                    lipidRowPrec["Product Ion Formula"] = chemForm;
+                                                                    lipidRowPrec["Product m/z"] = mass / (double)(Math.Abs(charge));
+                                                                    lipidRowPrec["Product Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                    allLipids.Rows.Add(lipidRowPrec);
+                                                                                                        
+                                                                    String replicatesPrecKey = chemFormComplete + "/" + chemFormComplete;
+                                                                    if (!replicates.Contains(replicatesPrecKey))
+                                                                    {
+                                                                        replicates.Add(replicatesPrecKey);
+                                                                        DataRow lipidRowPrecUnique = allLipidsUnique.NewRow();
+                                                                        lipidRowPrecUnique["Molecule List Name"] = headgroup;
+                                                                        lipidRowPrecUnique["Precursor Name"] = key;
+                                                                        lipidRowPrecUnique["Precursor Ion Formula"] = chemForm;
+                                                                        lipidRowPrecUnique["Precursor Adduct"] = "[M" + adduct.Key + "]";
+                                                                        lipidRowPrecUnique["Precursor m/z"] = mass / (double)(Math.Abs(charge));
+                                                                        lipidRowPrecUnique["Precursor Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                        lipidRowPrecUnique["Product Name"] = "Precursor";
+                                                                        lipidRowPrecUnique["Product Ion Formula"] = chemForm;
+                                                                        lipidRowPrecUnique["Product m/z"] = mass / (double)(Math.Abs(charge));
+                                                                        lipidRowPrecUnique["Product Charge"] = ((charge > 0) ? "+" : "") + Convert.ToString(charge);
+                                                                        allLipidsUnique.Rows.Add(lipidRowPrecUnique);
+                                                                    }
+                                                                    
+                                                                    
+                                                                    
                                                                     foreach (MS2Fragment fragment in MS2Fragments[headgroupSearch])
                                                                     {
                                                                         if (fragment.fragmentSelected && ((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(adduct.Key)))
@@ -2955,7 +2991,7 @@ namespace LipidCreator
                             string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[2];
                             if (!File.Exists(fragmentFile))
                             {
-                                Console.WriteLine("Error (" + lineCounter + "): MS2 fragment file " + fragmentFile + " does not exist or can not be opened.");
+                                Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
                             if (tokens[13].Length > 0)
@@ -2977,7 +3013,7 @@ namespace LipidCreator
             }
             else
             {
-                Console.WriteLine("Error: file " + ms2FragmentsFile + " does not exist or can not be opened.");
+                Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
             
             

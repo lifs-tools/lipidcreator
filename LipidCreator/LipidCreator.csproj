@@ -840,9 +840,9 @@ xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
   </Target>
   <Target Name="AfterBuild">
-    <Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="cd $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
+    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />-->
+    <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
+    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />-->
+    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

@@ -75,7 +75,7 @@
   <PropertyGroup>
     <ManifestCertificateThumbprint>3468CDD17A6C14FC1B62CF1BE0F14AB62B880737</ManifestCertificateThumbprint>
   </PropertyGroup>
-<!--  <PropertyGroup>
+  <!--  <PropertyGroup>
     <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
@@ -188,7 +188,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\add-small.png" />
@@ -241,7 +243,7 @@
     <Content Include="images\MS2\CerPI\CerPI_neg_P.png" />
     <Content Include="images\MS2\CerPI_neg_pre.png" />
     <Content Include="images\MS2\CerP\CerP_neg_P.png" />
-	<Content Include="images\MS2\CerP\CerP_neg_PO.png" />
+    <Content Include="images\MS2\CerP\CerP_neg_PO.png" />
     <Content Include="images\MS2\CerP\CerP_pos_NL%28H3PO4%29.png" />
     <Content Include="images\MS2\CerP\CerP_pos_NL%28H3PO4+H2O%29.png" />
     <Content Include="images\MS2\CerP\CerP_pos_W%27%27.png" />
@@ -799,7 +801,7 @@
     <Content Include="images\MS2\TG_pos_pre.png" />
     <Content Include="images\SL backbone_30.png" />
     <Content Include="images\sphingo_backbone.png" />
-   <!-- <Content Include="Ionic.Zip.dll" />
+    <!-- <Content Include="Ionic.Zip.dll" />
     <Content Include="SkylineTool.dll" />
     <Content Include="System.Data.SQLite.dll" /> -->
   </ItemGroup>
@@ -840,7 +842,9 @@ xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
   </Target>
   <Target Name="AfterBuild">
-    <Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
+    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />-->
+    <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
+    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />-->
+    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

@@ -54,8 +54,7 @@ namespace LipidCreator
             senderInterupt = false;
             
             
-            if (currentLipid is CLLipid ) this.currentLipid = new CLLipid((CLLipid)currentLipid);
-            else if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
+            if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
             else if (currentLipid is PLLipid ) this.currentLipid = new PLLipid((PLLipid)currentLipid);
             else if (currentLipid is SLLipid ) this.currentLipid = new SLLipid((SLLipid)currentLipid);
             
@@ -333,13 +332,7 @@ namespace LipidCreator
         
         private void okClick(object sender, EventArgs e)
         {
-            if (currentLipid is CLLipid)
-            {
-                creatorGUI.lipidCreatorForm.lipidTabList[0] = new CLLipid((CLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[0];
-                
-            }
-            else if (currentLipid is GLLipid)
+            if (currentLipid is GLLipid)
             {
                 creatorGUI.lipidCreatorForm.lipidTabList[1] = new GLLipid((GLLipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[1];

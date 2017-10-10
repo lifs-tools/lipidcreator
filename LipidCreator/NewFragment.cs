@@ -134,6 +134,7 @@ namespace LipidCreator
             // 5 -> fixed, LCB, HG, PRE
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, PRE
             // 7 -> fixed, FA1, HG, PRE
+            // 8 -> fixed, PRE
             String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
             int bbType = ms2form.creatorGUI.lipidCreatorForm.buildingBlockTypes[lipidClass];
             
@@ -209,6 +210,10 @@ namespace LipidCreator
                     buildingBlocks = new string[]{"", "FA", "HG", "PRE"};
                     selectBaseCombobox.Items.Add("FA");
                     selectBaseCombobox.Items.Add("HG");
+                    break;
+                    
+                case 8:
+                    buildingBlocks = new string[]{"", "PRE"};
                     break;
             }
             selectBaseCombobox.Items.Add("Precursor");

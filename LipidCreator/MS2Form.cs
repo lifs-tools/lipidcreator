@@ -57,6 +57,7 @@ namespace LipidCreator
             if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
             else if (currentLipid is PLLipid ) this.currentLipid = new PLLipid((PLLipid)currentLipid);
             else if (currentLipid is SLLipid ) this.currentLipid = new SLLipid((SLLipid)currentLipid);
+            else if (currentLipid is Cholesterol ) this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
             
             InitializeComponent(currentLipid.MS2Fragments);            
             tabChange(0);

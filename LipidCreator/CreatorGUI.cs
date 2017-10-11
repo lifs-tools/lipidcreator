@@ -64,7 +64,7 @@ namespace LipidCreator
             registeredLipidsDatatable.Columns.Add(new DataColumn("Building Block 4"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Adducts"));
             InitializeComponent();
-            lipidModifications = new int[]{-1, -1, -1, -1};
+            lipidModifications = new int[]{-1, -1, -1, -1, -1};
             changingTabForced = false;
             if(Directory.Exists("predefined")) 
             {
@@ -140,7 +140,7 @@ namespace LipidCreator
         public void changeTab(int index, bool forced)
         {
             currentLipid = (Lipid)lipidCreatorForm.lipidTabList[index];
-            if (index == 1)
+            if (index == 1) // Glycerolipid
             {
                 GLLipid currentGLLipid = (GLLipid)currentLipid;
                 settingListbox = true;
@@ -162,8 +162,6 @@ namespace LipidCreator
                 glFA1Checkbox1.Checked = currentGLLipid.fag1.faTypes["FA"];
                 glFA1Checkbox2.Checked = currentGLLipid.fag1.faTypes["FAp"];
                 glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAe"];
-                
-                
                 
                 glFA2Textbox.Text = currentGLLipid.fag2.lengthInfo;
                 glDB2Textbox.Text = currentGLLipid.fag2.dbInfo;
@@ -188,8 +186,7 @@ namespace LipidCreator
                 glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
                 glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
                 glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
-                if (lipidModifications[1] > -1) glModifyLipidButton.Enabled = true;
-                else glModifyLipidButton.Enabled = false;
+                glModifyLipidButton.Enabled = lipidModifications[1] > -1;
                 
                 glContainsSugar.Checked = currentGLLipid.containsSugar;
                 
@@ -207,10 +204,10 @@ namespace LipidCreator
                 glRepresentativeFA.Checked = currentGLLipid.representativeFA;
                 glPictureBox.SendToBack();
             }
-            else if (index == 2)
+            else if (index == 2) // Cardiolipin or Phospholipid
             {
                 PLLipid currentPLLipid = (PLLipid)currentLipid;
-                if (currentPLLipid.isCL)
+                if (currentPLLipid.isCL) // Cardiolipin
                 {
                     clFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
                     clDB1Textbox.Text = currentPLLipid.fag1.dbInfo;
@@ -251,8 +248,7 @@ namespace LipidCreator
                     clNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                     clNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                     clNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                    if (lipidModifications[2] > -1) clModifyLipidButton.Enabled = true;
-                    else clModifyLipidButton.Enabled = false;
+                    clModifyLipidButton.Enabled = lipidModifications[2] > -1;
                     
                     plIsCL.Checked = true;
                     
@@ -273,7 +269,7 @@ namespace LipidCreator
                     clPictureBox.SendToBack();
                 }
                 
-                else
+                else // Phospholipid
                 {
                 
                     settingListbox = true;
@@ -311,8 +307,7 @@ namespace LipidCreator
                     plNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                     plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                     plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                    if (lipidModifications[2] > -1) plModifyLipidButton.Enabled = true;
-                    else plModifyLipidButton.Enabled = false;
+                    plModifyLipidButton.Enabled = lipidModifications[2] > -1;
                     plIsCL.Checked = false;
                     
                     
@@ -327,7 +322,7 @@ namespace LipidCreator
                     plPictureBox.SendToBack();
                 }
             }
-            else if (index == 3)
+            else if (index == 3) // Sphingolipid
             {
                 SLLipid currentSLLipid = (SLLipid)currentLipid;
                 settingListbox = true;
@@ -360,8 +355,7 @@ namespace LipidCreator
                 slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
                 slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
                 slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
-                if (lipidModifications[3] > -1) slModifyLipidButton.Enabled = true;
-                else slModifyLipidButton.Enabled = false;
+                slModifyLipidButton.Enabled = lipidModifications[3] > -1;
                 
                 
                 updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
@@ -371,6 +365,27 @@ namespace LipidCreator
                 slPictureBox.SendToBack();
             }
             
+            else if (index == 4) // Cholesterol
+            {
+                Cholesterol currentCHLipid = (Cholesterol)currentLipid;
+                chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
+                chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
+                chPosAdductCheckbox3.Checked = currentCHLipid.adducts["+NH4"];
+                chNegAdductCheckbox1.Checked = currentCHLipid.adducts["-H"];
+                chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
+                chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
+                chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
+                chModifyLipidButton.Enabled = lipidModifications[4] > -1;
+                chContainsEster.Checked = currentCHLipid.containsEster;
+                
+                chFATextbox.Text = currentCHLipid.fag.lengthInfo;
+                chDBTextbox.Text = currentCHLipid.fag.dbInfo;
+                chHydroxylTextbox.Text = currentCHLipid.fag.hydroxylInfo;
+                chFACombobox.SelectedIndex = currentCHLipid.fag.chainType;
+                updateRanges(currentCHLipid.fag, chFATextbox, chFACombobox.SelectedIndex);
+                updateRanges(currentCHLipid.fag, chDBTextbox, 3);
+                updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
+            }
         }
         
         
@@ -379,14 +394,6 @@ namespace LipidCreator
             lipidCreatorForm.lipidTabList[2] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             ((PLLipid)lipidCreatorForm.lipidTabList[2]).isCL = true;
             lipidModifications[2] = -1;
-            clDB1Textbox.BackColor = Color.White;
-            clDB2Textbox.BackColor = Color.White;
-            clDB3Textbox.BackColor = Color.White;
-            clDB4Textbox.BackColor = Color.White;
-            clFA1Textbox.BackColor = Color.White;
-            clFA2Textbox.BackColor = Color.White;
-            clFA3Textbox.BackColor = Color.White;
-            clFA4Textbox.BackColor = Color.White;
             changeTab(2);
         }
         
@@ -411,6 +418,13 @@ namespace LipidCreator
             changeTab(3);
         }
         
+        public void resetCHLipid(Object sender, EventArgs e)
+        {
+            lipidCreatorForm.lipidTabList[4] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[4] = -1;
+            changeTab(4);
+        }
+        
         
         /////////////////////// CL //////////////////////////////
         
@@ -429,17 +443,17 @@ namespace LipidCreator
         public void clFA2ComboboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((PLLipid)currentLipid).fag1, clFA2Textbox, ((ComboBox)sender).SelectedIndex);
+            updateRanges(((PLLipid)currentLipid).fag2, clFA2Textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void clFA3ComboboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((PLLipid)currentLipid).fag1, clFA3Textbox, ((ComboBox)sender).SelectedIndex);
+            updateRanges(((PLLipid)currentLipid).fag3, clFA3Textbox, ((ComboBox)sender).SelectedIndex);
         }
         public void clFA4ComboboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag4.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((PLLipid)currentLipid).fag1, clFA4Textbox, ((ComboBox)sender).SelectedIndex);
+            updateRanges(((PLLipid)currentLipid).fag4, clFA4Textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         
@@ -485,16 +499,19 @@ namespace LipidCreator
                 clFA4Textbox.Text = ((TextBox)sender).Text;
             }
         }
+        
         public void clFA2TextboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
             updateRanges(((PLLipid)currentLipid).fag2, (TextBox)sender, clFA2Combobox.SelectedIndex);
         }
+        
         public void clFA3TextboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
             updateRanges(((PLLipid)currentLipid).fag3, (TextBox)sender, clFA3Combobox.SelectedIndex);
         }
+        
         public void clFA4TextboxValueChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).fag4.lengthInfo = ((TextBox)sender).Text;
@@ -1836,6 +1853,86 @@ namespace LipidCreator
         
         
         
+        ////////////////////// Cholesterols ////////////////////////////////
+        
+        
+        
+        public void chPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
+        }
+        public void chPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
+        }
+        public void chPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
+        }
+        public void chNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
+        }
+        public void chNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
+        }
+        public void chNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
+        }
+        public void chNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
+        }
+        
+        public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).containsEster = ((CheckBox)sender).Checked;
+            
+            chPictureBox.Visible = false;
+            if (((Cholesterol)currentLipid).containsEster)
+            {
+                chPictureBox.Image = cholesterolEsterBackboneImage;
+            }
+            else
+            {
+                chPictureBox.Image = cholesterolBackboneImage;
+            }
+            chFACombobox.Visible = ((Cholesterol)currentLipid).containsEster;
+            chFATextbox.Visible = ((Cholesterol)currentLipid).containsEster;
+            chDBTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
+            chDBLabel.Visible = ((Cholesterol)currentLipid).containsEster;
+            chHydroxylTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
+            chFAHydroxyLabel.Visible = ((Cholesterol)currentLipid).containsEster;
+            chPictureBox.Visible = true;
+        }
+        
+        public void chFAComboboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).fag.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Cholesterol)currentLipid).fag, chFATextbox, ((ComboBox)sender).SelectedIndex);
+        }
+        
+        public void chFATextboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).fag.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Cholesterol)currentLipid).fag, (TextBox)sender, chFACombobox.SelectedIndex);
+        }
+        
+        public void chDBTextboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).fag.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Cholesterol)currentLipid).fag, (TextBox)sender, 3);
+        }
+        
+        public void chHydroxylTextboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Cholesterol)currentLipid).fag.hydroxylInfo = ((TextBox)sender).Text;
+            updateRanges(((Cholesterol)currentLipid).fag, (TextBox)sender, 4);
+        }
+        
+        
         ////////////////////// Remaining parts ////////////////////////////////
         
         public void modifyLipid(Object sender, EventArgs e)
@@ -2085,6 +2182,28 @@ namespace LipidCreator
                 }
                 
                 lipidCreatorForm.registeredLipids[lipidModifications[3]] = new SLLipid((SLLipid)currentLipid);
+            }
+            
+            
+            else if (currentLipid is Cholesterol)
+            {
+                if (chContainsEster.Checked && chFATextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
+                    return;
+                }
+                if (chContainsEster.Checked && chDBTextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("FA double bond content not valid!", "Not registrable");
+                    return;
+                }
+                if (chContainsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
+                    return;
+                }
+                
+                lipidCreatorForm.registeredLipids[lipidModifications[4]] = new Cholesterol((Cholesterol)currentLipid);
             }
             refreshRegisteredLipidsTable();
         }
@@ -2338,6 +2457,28 @@ namespace LipidCreator
                 
                 lipidCreatorForm.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
             }
+            
+            
+            else if (currentLipid is Cholesterol)
+            {
+                if (chContainsEster.Checked && chFATextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
+                    return;
+                }
+                if (chContainsEster.Checked && chDBTextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("FA double bond content not valid!", "Not registrable");
+                    return;
+                }
+                if (chContainsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
+                {
+                    MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
+                    return;
+                }
+                
+                lipidCreatorForm.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
+            }
             refreshRegisteredLipidsTable();
         }
         
@@ -2405,8 +2546,18 @@ namespace LipidCreator
                     row["Category"] = "Sphingolipid";
                     row["Building Block 1"] = "HG: " + headgroups;
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
-                    row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo;
+                    row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
                 }
+                
+                else if (currentRegisteredLipid is Cholesterol)
+                {
+                    Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
+                    row["Category"] = "Cholesterol";
+                    if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+                    
+                }
+                
+                
                 string adductsStr = "";
                 if (currentRegisteredLipid.adducts["+H"]) adductsStr += "+H⁺";
                 if (currentRegisteredLipid.adducts["+2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+2H⁺⁺";
@@ -2454,6 +2605,11 @@ namespace LipidCreator
                 {
                     tabIndex = 3;
                     lipidCreatorForm.lipidTabList[tabIndex] = new SLLipid((SLLipid)currentRegisteredLipid);
+                }
+                else if (currentRegisteredLipid is Cholesterol)
+                {
+                    tabIndex = 4;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
                 }
                 currentLipid = currentRegisteredLipid;
                 lipidModifications[tabIndex] = rowIndex;

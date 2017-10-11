@@ -347,6 +347,11 @@ namespace LipidCreator
                 creatorGUI.lipidCreatorForm.lipidTabList[3] = new SLLipid((SLLipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[3];
             }
+            else if (currentLipid is Cholesterol)
+            {
+                creatorGUI.lipidCreatorForm.lipidTabList[4] = new Cholesterol((Cholesterol)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[4];
+            }
             
             this.Close();
         }

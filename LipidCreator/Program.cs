@@ -1407,7 +1407,7 @@ namespace LipidCreator
         {
             int fattyAcidCounter = 0;
             hgValues.Clear();
-            isCL = node.Attribute("type").Value == "true";
+            isCL = node.Attribute("type").Value == "True";
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -2920,7 +2920,7 @@ namespace LipidCreator
         public override void import(XElement node)
         {
             int fattyAcidCounter = 0;
-            containsEster = node.Attribute("containsEster").Value == "true";
+            containsEster = node.Attribute("containsEster").Value == "True";
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

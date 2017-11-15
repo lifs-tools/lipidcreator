@@ -1694,7 +1694,7 @@ namespace LipidCreator
             cholesterollipidsTab.Controls.Add(chHydroxylTextbox);
             cholesterollipidsTab.Controls.Add(chFAHydroxyLabel);
             
-            cholesterollipidsTab.Text = "Cholesterol";
+            cholesterollipidsTab.Text = "Cholesterols";
             cholesterollipidsTab.Location = new Point(0, 0);
             cholesterollipidsTab.Size = this.Size;
             cholesterollipidsTab.AutoSize = true;

@@ -1038,7 +1038,7 @@ namespace LipidCreator
                                                                                                 }
                                                                                             }
                                                                                             String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                            int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                            //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                             double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                                                             
                                                                                             
@@ -1247,8 +1247,8 @@ namespace LipidCreator
                                                                                                         break;
                                                                                                 }
                                                                                             }
-                                                                                            String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                            int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                            //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                                                            //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                             double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                                                             valuesMZ.Add(massFragment);
@@ -1279,7 +1279,7 @@ namespace LipidCreator
                                                                                     
                                                                                     
                                                                                     // add MS1 information
-                                                                                    sql = sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + key + "', " + mass + ", " + charge + ", '" + precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + chemForm + "')";
+                                                                                    sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + key + "', " + mass + ", " + charge + ", '" + precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + chemForm + "')";
                                                                                     command.CommandText = sql;
                                                                                     command.ExecuteNonQuery();
                                                                                     
@@ -1611,7 +1611,7 @@ namespace LipidCreator
                                                                                                                         }
                                                                                                                     }
                                                                                                                     String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                                                    int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                                                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                                                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                                                                                     
                                                                                                                 
@@ -1823,7 +1823,7 @@ namespace LipidCreator
                                                                                     }
                                                                                 }
                                                                                 String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                 double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                                                 
                                                                             
@@ -2036,8 +2036,8 @@ namespace LipidCreator
                                                                                                                                 break;
                                                                                                                         }
                                                                                                                     }
-                                                                                                                    String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                                                    int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                                                    //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                                                                                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                                                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                             
                                                                                                                     valuesMZ.Add(massFragment);
@@ -2229,8 +2229,8 @@ namespace LipidCreator
                                                                                             break;
                                                                                     }
                                                                                 }
-                                                                                String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                                                int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                                                //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                                                //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                                                 double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                             
                                                                                 valuesMZ.Add(massFragment);
@@ -2497,7 +2497,7 @@ namespace LipidCreator
                                                             subtractAdduct(atomsCountFragment, adduct.Key);
                                                         }
                                                         String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                        int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                        //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                         double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                         
                                                     
@@ -2557,7 +2557,7 @@ namespace LipidCreator
                                         // do not change the order, chem formula must be computed before adding the adduct
                                         String chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
                                         int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                                        String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                                        //String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
                                         double mass = LipidCreatorForm.computeMass(atomsCount, charge);
                                         
                                         foreach (MS2Fragment fragment in MS2Fragments[headgroup])
@@ -2584,7 +2584,7 @@ namespace LipidCreator
                                                     }
                                                 }
                                                 String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                 double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                 
                                             
@@ -2712,8 +2712,8 @@ namespace LipidCreator
                                                         {
                                                             subtractAdduct(atomsCountFragment, adduct.Key);
                                                         }
-                                                        String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                        int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                        //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                        //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                         double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                         valuesMZ.Add(massFragment);
@@ -2811,8 +2811,8 @@ namespace LipidCreator
                                                             break;
                                                     }
                                                 }
-                                                String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                 double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                                                         
                                                 valuesMZ.Add(massFragment);
@@ -2994,7 +2994,7 @@ namespace LipidCreator
                                                         DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                                         
                                                         String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                        int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                        //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                         double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                                         
                                                     
@@ -3066,7 +3066,7 @@ namespace LipidCreator
                                     DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                                     
                                     String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                    int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
                                     
                                 
@@ -3156,8 +3156,8 @@ namespace LipidCreator
                                                     if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
                                                     {
                                                         DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                                                        String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                                        int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                                        //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                                        //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                                         double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
 
                                                         valuesMZ.Add(massFragment);
@@ -3239,8 +3239,8 @@ namespace LipidCreator
                                 if (((charge < 0 && fragment.fragmentCharge < 0) || (charge > 0 && fragment.fragmentCharge > 0)))
                                 {
                                     DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                                    String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                                    int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                                    //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
 
                                     valuesMZ.Add(massFragment);

@@ -1,5 +1,6 @@
 HG,C,H,O,N,P,S,Na,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks
 #Lc3Cer,20,34,15,1,0,0,0,,,,,,,,,
+BMP,6,13,8,0,1,0,0,images/MS2/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
 Cer,0,1,0,0,0,0,0,images/MS2/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4
 CerP,0,2,3,0,1,0,0,images/MS2/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4
 Ch,27,46,1,0,0,0,0,images/MS2/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,8
@@ -8,8 +9,10 @@ CL,9,18,13,0,2,0,0,images/MS2/Precursors/CL_neg_pre.png,Yes,Yes,No,Yes,Yes,No,No
 DG,3,6,3,0,0,0,0,images/MS2/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,2
 DGDG,15,26,13,0,0,0,0,images/MS2/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
 DMPE,7,16,6,1,1,0,0,images/MS2/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
-eLPC,8,19,6,1,1,0,0,images/MS2/Precursors/LPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7
-eLPE,5,13,6,1,1,0,0,images/MS2/Precursors/LPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7
+eePC,8,18,6,1,1,0,0,images/MS2/Precursors/eePC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6
+eLPC,8,19,6,1,1,0,0,images/MS2/Precursors/eLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7
+eePE,5,12,6,1,1,0,0,images/MS2/Precursors/eePE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
+eLPE,5,13,6,1,1,0,0,images/MS2/Precursors/eLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7
 GB3Cer,18,31,15,0,0,0,0,images/MS2/Precursors/GB3Cer_pos_pre.png,Yes,No,No,No,No,No,No,4
 GB4Cer,26,44,20,1,0,0,0,images/MS2/Precursors/GB4Cer_pos_pre.png,Yes,No,No,No,No,No,No,4
 GD3Cer,34,55,26,2,0,0,0,images/MS2/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4
@@ -17,7 +20,7 @@ GM3Cer,23,38,18,1,0,0,0,images/MS2/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,N
 GM4Cer,17,28,13,1,0,0,0,images/MS2/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4
 HexCer,6,11,5,0,0,0,0,images/MS2/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4
 HexCerS,6,11,8,0,0,1,0,images/MS2/Precursors/HexCerS_pos_pre.png,Yes,No,No,Yes,No,No,No,4
-HexSph,6,12,5,0,0,0,0,,Yes,No,Yes,Yes,No,Yes,Yes,5
+HexSph,6,12,5,0,0,0,0,images/MS2/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5
 LacCer,12,21,10,0,0,0,0,images/MS2/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4
 LPA,3,8,6,0,1,0,0,images/MS2/Precursors/LPA_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7
 LPC,8,19,6,1,1,0,0,images/MS2/Precursors/LPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7
@@ -45,8 +48,8 @@ PICer,6,12,8,0,1,0,0,images/MS2/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,
 PIP,9,18,14,0,2,0,0,images/MS2/Precursors/PIP_neg_pre.png,No,No,No,Yes,No,No,No,6
 PIP2,9,19,17,0,3,0,0,images/MS2/Precursors/PIP2_neg_pre.png,No,No,No,Yes,No,No,No,6
 PIP3,9,20,20,0,4,0,0,images/MS2/Precursors/PIP3_neg_pre.png,No,No,No,Yes,No,No,No,6
-pLPC,8,19,6,1,1,0,0,images/MS2/Precursors/LPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7
-pLPE,5,13,6,1,1,0,0,images/MS2/Precursors/LPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7
+pLPC,8,19,6,1,1,0,0,images/MS2/Precursors/pLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7
+pLPE,5,13,6,1,1,0,0,images/MS2/Precursors/pLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7
 PS,6,12,8,1,1,0,0,images/MS2/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
 SM,5,13,3,1,1,0,0,images/MS2/Precursors/SM_pos_pre.png,Yes,No,No,No,No,No,No,4
 SPC,5,14,3,1,1,0,0,images/MS2/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,5

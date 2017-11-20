@@ -1337,9 +1337,9 @@ namespace LipidCreator
             phospholipidsTab.Controls.Add(plFA1Checkbox3);
             phospholipidsTab.Controls.Add(plFA1Checkbox2);
             phospholipidsTab.Controls.Add(plFA1Checkbox1);
-            phospholipidsTab.Controls.Add(plFA2Checkbox3);
-            phospholipidsTab.Controls.Add(plFA2Checkbox2);
-            phospholipidsTab.Controls.Add(plFA2Checkbox1);
+            //phospholipidsTab.Controls.Add(plFA2Checkbox3);
+            //phospholipidsTab.Controls.Add(plFA2Checkbox2);
+            //phospholipidsTab.Controls.Add(plFA2Checkbox1);
             phospholipidsTab.Controls.Add(plIsCL);
             phospholipidsTab.Controls.Add(plPictureBox);
             phospholipidsTab.Controls.Add(plFA1Textbox);

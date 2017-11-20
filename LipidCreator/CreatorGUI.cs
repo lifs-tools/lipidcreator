@@ -458,13 +458,13 @@ namespace LipidCreator
         
         
         
-        public void updateRanges(fattyAcidGroup fag, TextBox tb, int objectType)
+        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectType)
         {
             updateRanges(fag, tb, objectType, false);
         }
         
         // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public void updateRanges(fattyAcidGroup fag, TextBox tb, int objectType, bool isLCB)
+        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectType, bool isLCB)
         {
             int maxRange = 30;
             int minRange = 0;

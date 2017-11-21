@@ -52,8 +52,7 @@ namespace LipidCreator
         public Dictionary<String, DataTable> headgroups;
         public Dictionary<String, int> buildingBlockTypes;
         public Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions;
-        public DataTable allLipids;
-        public DataTable allLipidsUnique;
+        public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
         public string prefixPath = "Tools/LipidCreator/";
@@ -68,29 +67,7 @@ namespace LipidCreator
             headgroups = new Dictionary<String, DataTable>();
             buildingBlockTypes = new Dictionary<String, int>();
             headgroupAdductRestrictions = new Dictionary<String, Dictionary<String, bool>>();
-            allLipids = new DataTable();
-            allLipids.Columns.Add("Molecule List Name");
-            allLipids.Columns.Add("Precursor Name");
-            allLipids.Columns.Add("Precursor Ion Formula");
-            allLipids.Columns.Add("Precursor Adduct");
-            allLipids.Columns.Add("Precursor m/z");
-            allLipids.Columns.Add("Precursor Charge");
-            allLipids.Columns.Add("Product Name");
-            allLipids.Columns.Add("Product Ion Formula");
-            allLipids.Columns.Add("Product m/z");
-            allLipids.Columns.Add("Product Charge");
-            
-            allLipidsUnique = new DataTable();
-            allLipidsUnique.Columns.Add("Molecule List Name");
-            allLipidsUnique.Columns.Add("Precursor Name");
-            allLipidsUnique.Columns.Add("Precursor Ion Formula");
-            allLipidsUnique.Columns.Add("Precursor Adduct");
-            allLipidsUnique.Columns.Add("Precursor m/z");
-            allLipidsUnique.Columns.Add("Precursor Charge");
-            allLipidsUnique.Columns.Add("Product Name");
-            allLipidsUnique.Columns.Add("Product Ion Formula");
-            allLipidsUnique.Columns.Add("Product m/z");
-            allLipidsUnique.Columns.Add("Product Charge");
+            precursorDataList = new ArrayList();
             
 
             int lineCounter = 1;
@@ -293,32 +270,13 @@ namespace LipidCreator
         
         public void assembleLipids()
         {
-            allLipids.Clear();
-            allLipidsUnique.Clear();
             HashSet<String> usedKeys = new HashSet<String>();
-            HashSet<String> replicates = new HashSet<String>();
-            ArrayList precursorDataList = new ArrayList();
+            precursorDataList.Clear();
             
             foreach (Lipid currentLipid in registeredLipids)
             {
-                if (currentLipid is GLLipid)
-                {
-                    ((GLLipid)currentLipid).computePrecursorData(headgroups, headgroupAdductRestrictions, usedKeys, precursorDataList);
-                }
+                currentLipid.computePrecursorData(headgroups, headgroupAdductRestrictions, usedKeys, precursorDataList);
             }
-            
-            foreach (PrecursorData precursorData in precursorDataList)
-            {
-                Lipid.computeFragmentData(allLipids, allLipidsUnique, precursorData, replicates);
-            }
-            
-            
-            /*
-            foreach (Lipid currentLipid in registeredLipids)
-            {
-                currentLipid.addLipids(allLipids, allLipidsUnique, headgroups, headgroupAdductRestrictions, usedKeys, replicates);
-            }
-            */
         }
 
         public static String computeChemicalFormula(DataTable elements)
@@ -526,11 +484,9 @@ namespace LipidCreator
             //command.ExecuteNonQuery();
             
             
-            
-            HashSet<String> usedKeys = new HashSet<String>();
-            foreach (Lipid currLipid in registeredLipids)
+            foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                currLipid.addSpectrum(command, headgroups, usedKeys);
+                Lipid.addSpectra(command, precursorData);
             }
             
             

@@ -2668,7 +2668,7 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreatorForm.assembleLipids();
-            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.allLipids, lipidCreatorForm.allLipidsUnique);
+            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.precursorDataList);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();

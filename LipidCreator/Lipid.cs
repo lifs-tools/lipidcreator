@@ -82,18 +82,9 @@ namespace LipidCreator
             representativeFA = false;
         }
         
-        public virtual void addSpectrum(SQLiteCommand command, Dictionary<String, DataTable> headGroupsTable, HashSet<String> usedKeys)
+        public virtual void computePrecursorData(Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
         }
-        
-        public virtual void addLipids(DataTable dt, DataTable allLipidsUnique, Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, HashSet<String> replicates)
-        {
-        }
-        
-        /*
-        public virtual void computePrecursorData(DataTable dt, DataTable allLipidsUnique, Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, HashSet<String> replicates)
-        {
-        }*/
         
         
         
@@ -112,8 +103,6 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
                                 break;
                             case "FA":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                                break;
                             case "FA1":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
                                 break;
@@ -122,6 +111,9 @@ namespace LipidCreator
                                 break;
                             case "FA3":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                break;
+                            case "FA4":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                                 break;
                             case "PRE":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
@@ -172,6 +164,100 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        
+        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData)
+        {
+            ArrayList valuesMZ = new ArrayList();
+            ArrayList valuesIntensity = new ArrayList();
+            String sql;
+            
+            foreach (MS2Fragment fragment in precursorData.MS2Fragments)
+            {
+                if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                {
+                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                    foreach (string fbase in fragment.fragmentBase)
+                    {
+                        switch(fbase)
+                        {
+                            case "LCB":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                                break;
+                            case "FA":
+                            case "FA1":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                break;
+                            case "FA2":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                                break;
+                            case "FA3":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                break;
+                            case "FA4":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
+                                break;
+                            case "PRE":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    // some exceptional if conditions
+                    if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                    {
+                        Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
+                    }
+                    //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                    double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                    
+                    valuesMZ.Add(massFragment);
+                    valuesIntensity.Add(fragment.intensity);
+                    
+                    // add Annotation
+                    /*
+                    sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                    SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                    parameterName.Value = fragment.fragmentName;
+                    command.CommandText = sql;
+                    command.Parameters.Add(parameterName);
+                    command.ExecuteNonQuery();
+                    */
+                    
+                }
+            }
+            
+            
+            int numFragments = valuesMZ.Count;
+            double[] valuesMZArray = new double[numFragments];
+            float[] valuesIntens = new float[numFragments];
+            for(int i = 0; i < numFragments; ++i)
+            {
+                valuesMZArray[i] = (double)valuesMZ[i];
+                valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
+            }
+            
+            
+            // add MS1 information
+            sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge + ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
+            // add spectrum
+            command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+            SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+            SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+            parameterMZ.Value = Compressing.Compress(valuesMZArray);
+            parameterIntens.Value = Compressing.Compress(valuesIntens);
+            command.Parameters.Add(parameterMZ);
+            command.Parameters.Add(parameterIntens);
+            command.ExecuteNonQuery();
+        }
+        
+        
         
         public virtual string serialize()
         {

@@ -24,6 +24,7 @@ SOFTWARE.
 */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,15 +40,45 @@ namespace LipidCreator
     [Serializable]
     public partial class LipidsReview : Form
     {
+        public ArrayList precursorDataList;
         public DataTable allFragments;
         public DataTable allFragmentsUnique;
         public DataTable currentView;
         public LipidCreatorForm lipidCreatorForm;
-        public LipidsReview(LipidCreatorForm lipidCreatorForm, DataTable allFragments, DataTable allFragmentsUnique)
+        public LipidsReview(LipidCreatorForm lipidCreatorForm, ArrayList precursorDataList)
         {
+            this.precursorDataList = precursorDataList;
             this.lipidCreatorForm = lipidCreatorForm;
-            this.allFragments = allFragments;
-            this.allFragmentsUnique = allFragmentsUnique;
+            allFragments = new DataTable();
+            allFragments.Columns.Add("Molecule List Name");
+            allFragments.Columns.Add("Precursor Name");
+            allFragments.Columns.Add("Precursor Ion Formula");
+            allFragments.Columns.Add("Precursor Adduct");
+            allFragments.Columns.Add("Precursor m/z");
+            allFragments.Columns.Add("Precursor Charge");
+            allFragments.Columns.Add("Product Name");
+            allFragments.Columns.Add("Product Ion Formula");
+            allFragments.Columns.Add("Product m/z");
+            allFragments.Columns.Add("Product Charge");
+            
+            allFragmentsUnique = new DataTable();
+            allFragmentsUnique.Columns.Add("Molecule List Name");
+            allFragmentsUnique.Columns.Add("Precursor Name");
+            allFragmentsUnique.Columns.Add("Precursor Ion Formula");
+            allFragmentsUnique.Columns.Add("Precursor Adduct");
+            allFragmentsUnique.Columns.Add("Precursor m/z");
+            allFragmentsUnique.Columns.Add("Precursor Charge");
+            allFragmentsUnique.Columns.Add("Product Name");
+            allFragmentsUnique.Columns.Add("Product Ion Formula");
+            allFragmentsUnique.Columns.Add("Product m/z");
+            allFragmentsUnique.Columns.Add("Product Charge");
+            HashSet<String> replicates = new HashSet<String>();
+            
+            foreach (PrecursorData precursorData in this.precursorDataList)
+            {
+                Lipid.computeFragmentData(allFragments, allFragmentsUnique, precursorData, replicates);
+            }
+            
             InitializeComponent();
             currentView = this.allFragments;
             dataGridViewTransitions.DataSource = currentView;

@@ -11,3 +11,6 @@ zip:
 
 clean:
 	rm LipidCreator.exe && rm -r obj/
+
+run:
+	mono LipidCreator.exe &

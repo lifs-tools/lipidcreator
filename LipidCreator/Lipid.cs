@@ -34,6 +34,30 @@ using System.Data.SQLite;
 
 namespace LipidCreator
 {
+    public enum LipidCategory {GlyceroLipid, PhosphoLipid, SphingoLipid, Cholesterol};
+    
+    [Serializable]
+    public class PrecursorData
+    {
+        public LipidCategory lipidCategory;
+        public string moleculeListName;
+        public string precursorName;
+        public string precursorIonFormula;
+        public string precursorAdduct;
+        public double precursorM_Z;
+        public int precursorCharge;
+        public string adduct;
+        public DataTable atomsCount;
+        public FattyAcid fa1;
+        public FattyAcid fa2;
+        public FattyAcid fa3;
+        public FattyAcid fa4;
+        public FattyAcid lcb;
+        public string chemFormComplete;
+        public ArrayList MS2Fragments;
+    }
+    
+    
     [Serializable]
     public class Lipid
     {
@@ -43,7 +67,8 @@ namespace LipidCreator
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
     
-        public Lipid(){
+        public Lipid()
+        {
             adducts = new Dictionary<String, bool>();
             adducts.Add("+H", false);
             adducts.Add("+2H", false);
@@ -63,6 +88,89 @@ namespace LipidCreator
         
         public virtual void addLipids(DataTable dt, DataTable allLipidsUnique, Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, HashSet<String> replicates)
         {
+        }
+        
+        /*
+        public virtual void computePrecursorData(DataTable dt, DataTable allLipidsUnique, Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, HashSet<String> replicates)
+        {
+        }*/
+        
+        
+        
+        public static void computeFragmentData(DataTable allLipids, DataTable allLipidsUnique, PrecursorData precursorData, HashSet<String> replicates)
+        {
+            foreach (MS2Fragment fragment in precursorData.MS2Fragments)
+            {
+                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                {
+                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                    foreach (string fbase in fragment.fragmentBase)
+                    {
+                        switch(fbase)
+                        {
+                            case "LCB":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                                break;
+                            case "FA":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                break;
+                            case "FA1":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                break;
+                            case "FA2":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                                break;
+                            case "FA3":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                break;
+                            case "PRE":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    // some exceptional if conditions
+                    if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                    {
+                        Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
+                    }
+                    
+                    String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                    double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
+                    
+                    DataRow lipidRow = allLipids.NewRow();
+                    lipidRow["Molecule List Name"] = precursorData.moleculeListName;
+                    lipidRow["Precursor Name"] = precursorData.precursorName;
+                    lipidRow["Precursor Ion Formula"] = precursorData.precursorIonFormula;
+                    lipidRow["Precursor Adduct"] = precursorData.precursorAdduct;
+                    lipidRow["Precursor m/z"] = precursorData.precursorM_Z;
+                    lipidRow["Precursor Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                    lipidRow["Product Name"] = fragment.fragmentName;
+                    lipidRow["Product Ion Formula"] = chemFormFragment;
+                    lipidRow["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                    lipidRow["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                    allLipids.Rows.Add(lipidRow);
+                                        
+                    String replicatesKey = precursorData.chemFormComplete + "/" + chemFormFragment;
+                    if (!replicates.Contains(replicatesKey))
+                    {
+                        replicates.Add(replicatesKey);
+                        DataRow lipidRowUnique = allLipidsUnique.NewRow();
+                        lipidRowUnique["Molecule List Name"] = precursorData.moleculeListName;
+                        lipidRowUnique["Precursor Name"] = precursorData.precursorName;
+                        lipidRowUnique["Precursor Ion Formula"] = precursorData.precursorIonFormula;
+                        lipidRowUnique["Precursor Adduct"] = precursorData.precursorAdduct;
+                        lipidRowUnique["Precursor m/z"] = precursorData.precursorM_Z;
+                        lipidRowUnique["Precursor Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                        lipidRowUnique["Product Name"] = fragment.fragmentName;
+                        lipidRowUnique["Product Ion Formula"] = chemFormFragment;
+                        lipidRowUnique["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                        lipidRowUnique["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                        allLipidsUnique.Rows.Add(lipidRowUnique);
+                    }
+                }
+            }
         }
         
         public virtual string serialize()
@@ -117,7 +225,7 @@ namespace LipidCreator
         
         
         
-        public void subtractAdduct(DataTable atomsCount, String adduct)
+        public static void subtractAdduct(DataTable atomsCount, String adduct)
         {
             switch (adduct)
             {

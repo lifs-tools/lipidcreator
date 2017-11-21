@@ -297,10 +297,28 @@ namespace LipidCreator
             allLipidsUnique.Clear();
             HashSet<String> usedKeys = new HashSet<String>();
             HashSet<String> replicates = new HashSet<String>();
+            ArrayList precursorDataList = new ArrayList();
+            
+            foreach (Lipid currentLipid in registeredLipids)
+            {
+                if (currentLipid is GLLipid)
+                {
+                    ((GLLipid)currentLipid).computePrecursorData(headgroups, headgroupAdductRestrictions, usedKeys, precursorDataList);
+                }
+            }
+            
+            foreach (PrecursorData precursorData in precursorDataList)
+            {
+                Lipid.computeFragmentData(allLipids, allLipidsUnique, precursorData, replicates);
+            }
+            
+            
+            /*
             foreach (Lipid currentLipid in registeredLipids)
             {
                 currentLipid.addLipids(allLipids, allLipidsUnique, headgroups, headgroupAdductRestrictions, usedKeys, replicates);
             }
+            */
         }
 
         public static String computeChemicalFormula(DataTable elements)

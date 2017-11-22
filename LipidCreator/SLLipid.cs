@@ -60,6 +60,7 @@ namespace LipidCreator
             MS2Fragments.Add("GM4Cer", new ArrayList());
             MS2Fragments.Add("HexCer", new ArrayList());
             MS2Fragments.Add("HexCerS", new ArrayList());
+            MS2Fragments.Add("HexSph", new ArrayList());
             MS2Fragments.Add("LacCer", new ArrayList());
             MS2Fragments.Add("MIPCer", new ArrayList());
             MS2Fragments.Add("MIP2Cer", new ArrayList());

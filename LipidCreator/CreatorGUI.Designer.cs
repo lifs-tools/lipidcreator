@@ -449,8 +449,8 @@ namespace LipidCreator
             plHgListbox = new ListBox();
             slHgListbox = new ListBox();
             glHgListbox.Items.AddRange(new String[]{"MGDG", "DGDG", "SQDG"});
-            plHgListbox.Items.AddRange(new String[]{"CDP-DAG", "PA", "PC", "PE", "PEt", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
-            slHgListbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"});
+            plHgListbox.Items.AddRange(new String[]{"BMP", "CDP-DAG", "PA", "PC", "PE", "PEt", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
+            slHgListbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "HexSph", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"});
             
             cardioBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_backbones.png");
             cardioBackboneImageFA1e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe1.png");
@@ -1339,7 +1339,7 @@ namespace LipidCreator
             phospholipidsTab.Controls.Add(plFA1Checkbox1);
             //phospholipidsTab.Controls.Add(plFA2Checkbox3);
             //phospholipidsTab.Controls.Add(plFA2Checkbox2);
-            //phospholipidsTab.Controls.Add(plFA2Checkbox1);
+            phospholipidsTab.Controls.Add(plFA2Checkbox1);
             phospholipidsTab.Controls.Add(plIsCL);
             phospholipidsTab.Controls.Add(plPictureBox);
             phospholipidsTab.Controls.Add(plFA1Textbox);
@@ -1366,7 +1366,6 @@ namespace LipidCreator
             phospholipidsTab.AutoSize = true;
             phospholipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             phospholipidsTab.BackColor = Color.White;
-
 
             plFA1Combobox.BringToFront();
             plFA1Textbox.BringToFront();
@@ -1461,7 +1460,7 @@ namespace LipidCreator
 
             
             plHgListbox.Location = new Point(25, 50);
-            plHgListbox.Size = new Size(70, 180);
+            plHgListbox.Size = new Size(70, 190);
             plHgListbox.BringToFront();
             plHgListbox.BorderStyle = BorderStyle.Fixed3D;
             plHgListbox.SelectionMode = SelectionMode.MultiSimple;
@@ -1619,7 +1618,7 @@ namespace LipidCreator
 
             slHGLabel.BringToFront();
             slHgListbox.Location = new Point(54, 105);
-            slHgListbox.Size = new Size(80, 250);
+            slHgListbox.Size = new Size(80, 260);
             slHgListbox.BringToFront();
             slHgListbox.BorderStyle = BorderStyle.Fixed3D;
             slHgListbox.SelectionMode = SelectionMode.MultiSimple;

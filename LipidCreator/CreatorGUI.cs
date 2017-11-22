@@ -2385,7 +2385,7 @@ namespace LipidCreator
                         return;                    
                     }
                     
-                    if (((PLLipid)currentLipid).fag1.faTypes["FAx"])
+                    if (((PLLipid)currentLipid).fag1.faTypes["FAx"] && ((PLLipid)currentLipid).fag2.faTypes["FAx"])
                     {
                         MessageBox.Show("Please select at least the top fatty acid!", "Not registrable");
                         return;

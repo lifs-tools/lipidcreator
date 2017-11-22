@@ -452,11 +452,11 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             
             
-            /*
             sql = "CREATE TABLE Annotations (RefSpectraID INTEGER, fragmentMZ REAL, sumComposition VARCHAR(100), shortName VARCHAR(50), chargedFragmentName VARCHAR(256), neutralFragmentName VARCHAR(256))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
+            /*
             sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, ionMobilityValue REAL, ionMobilityType INTEGER, ionMobilityHighEnergyDriftTimeOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
@@ -480,8 +480,8 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             command.CommandText = "CREATE INDEX idxMoleculeName ON RefSpectra (moleculeName, precursorAdduct)";
             command.ExecuteNonQuery();
-            //command.CommandText = "CREATE INDEX idxRefIdAnnotations ON Annotations (RefSpectraID)";
-            //command.ExecuteNonQuery();
+            command.CommandText = "CREATE INDEX idxRefIdAnnotations ON Annotations (RefSpectraID)";
+            command.ExecuteNonQuery();
             
             
             foreach (PrecursorData precursorData in this.precursorDataList)

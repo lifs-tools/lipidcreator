@@ -210,7 +210,7 @@ namespace LipidCreator
                     {
                         Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
                     }
-                    //String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                    String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
                     //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                     
@@ -218,14 +218,12 @@ namespace LipidCreator
                     valuesIntensity.Add(fragment.intensity);
                     
                     // add Annotation
-                    /*
                     sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                     SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
                     parameterName.Value = fragment.fragmentName;
                     command.CommandText = sql;
                     command.Parameters.Add(parameterName);
                     command.ExecuteNonQuery();
-                    */
                     
                 }
             }

@@ -40,33 +40,32 @@ namespace LipidCreator
     {
         public bool containsEster;
         public FattyAcidGroup fag;
-        public List<String> headGroupNames = new List<String>{"Ch", "ChE"};
     
     
-        public Cholesterol(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
+        public Cholesterol(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             fag = new FattyAcidGroup();
             containsEster = false;
-            MS2Fragments.Add("Ch", new ArrayList());
-            MS2Fragments.Add("ChE", new ArrayList());
-            adducts["+NH4"] = true;
-            adducts["-H"] = false;
             
-            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["Cholesterol"])
             {
-                if (allPaths.ContainsKey(kvp.Key)) pathsToFullImage.Add(kvp.Key, allPaths[kvp.Key]);
-                if (allFragments != null && allFragments.ContainsKey(kvp.Key))
+                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                headGroupNames.Add(PLFragments.Key);
+                MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                foreach (MS2Fragment fragment in PLFragments.Value)
                 {
-                    foreach (MS2Fragment fragment in allFragments[kvp.Key])
-                    {
-                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
-                    }
+                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
                 }
             }
+            headGroupNames.Sort();
+            
+            adducts["+NH4"] = true;
+            adducts["-H"] = false;
         }
     
         public Cholesterol(Cholesterol copy) : base((Lipid)copy) 
         {
+            headGroupNames = new List<String>();
             fag = new FattyAcidGroup(copy.fag);
             containsEster = copy.containsEster;
             

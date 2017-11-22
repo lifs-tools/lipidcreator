@@ -41,37 +41,27 @@ namespace LipidCreator
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;
         public bool containsSugar;
-        public List<int> hgValues;
-        public List<String> headGroupNames = new List<String>{"MGDG", "DGDG", "SQDG"};
     
     
-        public GLLipid(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
+        public GLLipid(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
             fag3 = new FattyAcidGroup();
             containsSugar = false;
-            hgValues = new List<int>();
-            MS2Fragments.Add("MG", new ArrayList());
-            MS2Fragments.Add("DG", new ArrayList());
-            MS2Fragments.Add("MGDG", new ArrayList());
-            MS2Fragments.Add("DGDG", new ArrayList());
-            MS2Fragments.Add("SQDG", new ArrayList());
-            MS2Fragments.Add("TG", new ArrayList());
-            adducts["+NH4"] = true;
-            adducts["-H"] = false;
             
-            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["GL"])
             {
-                if (allPaths.ContainsKey(kvp.Key)) pathsToFullImage.Add(kvp.Key, allPaths[kvp.Key]);
-                if (allFragments != null && allFragments.ContainsKey(kvp.Key))
+                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                foreach (MS2Fragment fragment in PLFragments.Value)
                 {
-                    foreach (MS2Fragment fragment in allFragments[kvp.Key])
-                    {
-                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
-                    }
+                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
                 }
             }
+            headGroupNames.Sort();
+            adducts["+NH4"] = true;
+            adducts["-H"] = false;
         }
     
         public GLLipid(GLLipid copy) : base((Lipid)copy) 
@@ -80,10 +70,9 @@ namespace LipidCreator
             fag2 = new FattyAcidGroup(copy.fag2);
             fag3 = new FattyAcidGroup(copy.fag3);
             containsSugar = copy.containsSugar;
-            hgValues = new List<int>();
-            foreach (int hgValue in copy.hgValues)
+            foreach (string headgroup in copy.headGroupNames)
             {
-                hgValues.Add(hgValue);
+                headGroupNames.Add(headgroup);
             }
             
         }
@@ -96,9 +85,9 @@ namespace LipidCreator
             xml += fag2.serialize();
             xml += fag3.serialize();
             xml += "<containsSugar>" + (containsSugar ? 1 : 0) + "</containsSugar>\n";
-            foreach (int hgValue in hgValues)
+            foreach (string headgroup in headGroupNames)
             {
-                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+                xml += "<headGroup>" + headgroup + "</headGroup>\n";
             }
             xml += base.serialize();
             xml += "</lipid>\n";
@@ -109,7 +98,7 @@ namespace LipidCreator
         public override void import(XElement node)
         {
             int fattyAcidCounter = 0;
-            hgValues.Clear();
+            headGroupNames.Clear();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -136,7 +125,7 @@ namespace LipidCreator
                         break;
                         
                     case "headGroup":
-                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
+                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                     case "containsSugar":
@@ -206,9 +195,8 @@ namespace LipidCreator
                                                         sortedAcids.Sort();
                                                         
                                                         
-                                                        foreach (int hgValue in hgValues)
+                                                        foreach (string headgroup in headGroupNames)
                                                         {
-                                                            String headgroup = headGroupNames[hgValue];
                                                             String key = headgroup + " ";
                                                             int i = 0;
                                                             foreach (FattyAcid fa in sortedAcids)

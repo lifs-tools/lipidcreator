@@ -66,6 +66,7 @@ namespace LipidCreator
         public Dictionary<String, String> pathsToFullImage;
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
+        public List<String> headGroupNames;
     
         public Lipid()
         {
@@ -80,6 +81,7 @@ namespace LipidCreator
             MS2Fragments = new Dictionary<String, ArrayList>();
             pathsToFullImage = new Dictionary<String, String>();
             representativeFA = false;
+            headGroupNames = new List<String>();
         }
         
         public virtual void computePrecursorData(Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, ArrayList precursorDataList)

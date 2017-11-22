@@ -47,7 +47,7 @@ namespace LipidCreator
         public ArrayList lipidTabList;
         public ArrayList registeredLipids;
         public CreatorGUI creatorGUI;
-        public Dictionary<String, ArrayList> allFragments;
+        public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
         public Dictionary<String, String> allPathsToPrecursorImages;
         public Dictionary<String, DataTable> headgroups;
         public Dictionary<String, int> buildingBlockTypes;
@@ -63,7 +63,7 @@ namespace LipidCreator
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registeredLipids = new ArrayList();
             allPathsToPrecursorImages = new Dictionary<String, String>();
-            allFragments = new Dictionary<String, ArrayList>();
+            allFragments = new Dictionary<String, Dictionary<String, ArrayList>>();
             headgroups = new Dictionary<String, DataTable>();
             buildingBlockTypes = new Dictionary<String, int>();
             headgroupAdductRestrictions = new Dictionary<String, Dictionary<String, bool>>();
@@ -85,9 +85,16 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             String[] tokens = line.Split(new char[] {','});
-                            if (!allFragments.ContainsKey(tokens[1]))
+                            if (!allFragments.ContainsKey(tokens[0]))
                             {
-                                allFragments.Add(tokens[1], new ArrayList());
+                                allFragments.Add(tokens[0], new Dictionary<String, ArrayList>());
+                            }
+                            
+                            
+                            
+                            if (!allFragments[tokens[0]].ContainsKey(tokens[1]))
+                            {
+                                allFragments[tokens[0]].Add(tokens[1], new ArrayList());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                             atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[6]);
@@ -105,11 +112,11 @@ namespace LipidCreator
                             
                             if (tokens[14].Length > 0)
                             {
-                                allFragments[tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
+                                allFragments[tokens[0]][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
                             }
                             else 
                             {
-                                allFragments[tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
+                                allFragments[tokens[0]][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
                             }
                         }
                     }
@@ -187,6 +194,12 @@ namespace LipidCreator
                                                       new SLLipid(allPathsToPrecursorImages, allFragments),
                                                       new Cholesterol(allPathsToPrecursorImages, allFragments)
                                                       });
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
                                                       
                                                       
             creatorGUI = new CreatorGUI(this);

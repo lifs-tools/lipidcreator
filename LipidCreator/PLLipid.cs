@@ -50,75 +50,38 @@ namespace LipidCreator
         public FattyAcidGroup fag3;
         public FattyAcidGroup fag4;
         public bool isCL;
-        public List<int> hgValues;
-        
-        public List<String> headGroupNames = new List<String>{"BMP", "CDP-DAG", "PA", "PC", "PE", "PEt", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS", "LPA", "LPC", "LPE", "LPG", "LPI", "LPS"};
     
-        public PLLipid(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
+        public PLLipid(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
             fag3 = new FattyAcidGroup();
             fag4 = new FattyAcidGroup();
-            hgValues = new List<int>();
             isCL = false;
-            MS2Fragments.Add("BMP", new ArrayList());
-            MS2Fragments.Add("CDP-DAG", new ArrayList());
-            MS2Fragments.Add("CL", new ArrayList());
-            MS2Fragments.Add("MLCL", new ArrayList());
-            MS2Fragments.Add("PA", new ArrayList());
-            MS2Fragments.Add("PC", new ArrayList());
-            MS2Fragments.Add("ePC", new ArrayList());
-            MS2Fragments.Add("pPC", new ArrayList());
-            //MS2Fragments.Add("ppPC", new ArrayList());
-            MS2Fragments.Add("PE", new ArrayList());
-            MS2Fragments.Add("PEt", new ArrayList());
-            MS2Fragments.Add("ePE", new ArrayList());
-            MS2Fragments.Add("pPE", new ArrayList());
-            //MS2Fragments.Add("ppPE", new ArrayList());
-            MS2Fragments.Add("DMPE", new ArrayList());
-            MS2Fragments.Add("MMPE", new ArrayList());
-            MS2Fragments.Add("PG", new ArrayList());
-            MS2Fragments.Add("PI", new ArrayList());
-            MS2Fragments.Add("PIP", new ArrayList());
-            MS2Fragments.Add("PIP2", new ArrayList());
-            MS2Fragments.Add("PIP3", new ArrayList());
-            MS2Fragments.Add("PS", new ArrayList());
-            MS2Fragments.Add("LPA", new ArrayList());
-            MS2Fragments.Add("LPC", new ArrayList());
-            MS2Fragments.Add("eLPC", new ArrayList());
-            MS2Fragments.Add("pLPC", new ArrayList());
-            MS2Fragments.Add("LPE", new ArrayList());
-            MS2Fragments.Add("eLPE", new ArrayList());
-            MS2Fragments.Add("pLPE", new ArrayList());
-            MS2Fragments.Add("LPG", new ArrayList());
-            MS2Fragments.Add("LPI", new ArrayList());
-            MS2Fragments.Add("LPS", new ArrayList());
             
-            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["PL"])
             {
-                if (allPaths.ContainsKey(kvp.Key)) pathsToFullImage.Add(kvp.Key, allPaths[kvp.Key]);
-                if (allFragments != null && allFragments.ContainsKey(kvp.Key))
+                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                foreach (MS2Fragment fragment in PLFragments.Value)
                 {
-                    foreach (MS2Fragment fragment in allFragments[kvp.Key])
-                    {
-                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
-                    }
+                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
                 }
             }
+            headGroupNames.Sort();
         }
     
         public PLLipid(PLLipid copy) : base((Lipid)copy)
         {
+            headGroupNames = new List<String>();
             fag1 = new FattyAcidGroup(copy.fag1);
             fag2 = new FattyAcidGroup(copy.fag2);
             fag3 = new FattyAcidGroup(copy.fag3);
             fag4 = new FattyAcidGroup(copy.fag4);
-            hgValues = new List<int>();
             isCL = copy.isCL;
-            foreach (int hgValue in copy.hgValues)
+            foreach (string headgroup in copy.headGroupNames)
             {
-                hgValues.Add(hgValue);
+                headGroupNames.Add(headgroup);
             }
         }
         
@@ -129,9 +92,9 @@ namespace LipidCreator
             xml += fag2.serialize();
             xml += fag3.serialize();
             xml += fag4.serialize();
-            foreach (int hgValue in hgValues)
+            foreach (string headgroup in headGroupNames)
             {
-                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+                xml += "<headGroup>" + headgroup + "</headGroup>\n";
             }
             xml += base.serialize();
             xml += "</lipid>\n";
@@ -141,7 +104,7 @@ namespace LipidCreator
         public override void import(XElement node)
         {
             int fattyAcidCounter = 0;
-            hgValues.Clear();
+            headGroupNames.Clear();
             isCL = node.Attribute("type").Value == "True";
             foreach (XElement child in node.Elements())
             {
@@ -173,7 +136,7 @@ namespace LipidCreator
                         break;
                         
                     case "headGroup":
-                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
+                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                         
@@ -359,7 +322,7 @@ namespace LipidCreator
             else
             {
 
-                if (hgValues.Count == 0) return;
+                if (headGroupNames.Count == 0) return;
                 bool isPlamalogen = false;
                 bool isFAe = false;
                 bool isLyso = false;
@@ -408,11 +371,9 @@ namespace LipidCreator
                                                         sortedAcids.Sort();
                                                         
                                                         
-                                                        foreach(int hgValue in hgValues)
-                                                        {
-                                                        
-                                                            String headgroup = headGroupNames[hgValue];
-                                                            
+                                                        foreach(string headgroupIter in headGroupNames)
+                                                        {   
+                                                            string headgroup = headgroupIter;
                                                             if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                                             {
                                                                 if (isLyso) headgroup = "L" + headgroup;

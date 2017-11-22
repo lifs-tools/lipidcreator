@@ -37,66 +37,43 @@ namespace LipidCreator
     [Serializable]
     public class SLLipid : Lipid
     {
-        public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"};
-        public List<int> hgValues;
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
         public int longChainBaseHydroxyl;
         public int fattyAcidHydroxyl;
     
-        public SLLipid(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
+        public SLLipid(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             lcb = new FattyAcidGroup();
             fag = new FattyAcidGroup();
-            hgValues = new List<int>();
             longChainBaseHydroxyl = 2;
             fattyAcidHydroxyl = 0;
-            MS2Fragments.Add("Cer", new ArrayList());
-            MS2Fragments.Add("CerP", new ArrayList());
-            MS2Fragments.Add("GB3Cer", new ArrayList());
-            MS2Fragments.Add("GB4Cer", new ArrayList());
-            MS2Fragments.Add("GD3Cer", new ArrayList());
-            MS2Fragments.Add("GM3Cer", new ArrayList());
-            MS2Fragments.Add("GM4Cer", new ArrayList());
-            MS2Fragments.Add("HexCer", new ArrayList());
-            MS2Fragments.Add("HexCerS", new ArrayList());
-            MS2Fragments.Add("HexSph", new ArrayList());
-            MS2Fragments.Add("LacCer", new ArrayList());
-            MS2Fragments.Add("MIPCer", new ArrayList());
-            MS2Fragments.Add("MIP2Cer", new ArrayList());
-            MS2Fragments.Add("PECer", new ArrayList());
-            MS2Fragments.Add("PICer", new ArrayList());
-            MS2Fragments.Add("SM", new ArrayList());
-            MS2Fragments.Add("SPC", new ArrayList());
-            MS2Fragments.Add("SPH", new ArrayList());
-            MS2Fragments.Add("SPH-P", new ArrayList());
-            adducts["+H"] = true;
-            adducts["-H"] = false;
             
             
-            foreach(KeyValuePair<String, ArrayList> kvp in MS2Fragments)
+            
+            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["SL"])
             {
-                if (allPaths.ContainsKey(kvp.Key)) pathsToFullImage.Add(kvp.Key, allPaths[kvp.Key]);
-                if (allFragments != null && allFragments.ContainsKey(kvp.Key))
+                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                foreach (MS2Fragment fragment in PLFragments.Value)
                 {
-                    foreach (MS2Fragment fragment in allFragments[kvp.Key])
-                    {
-                        MS2Fragments[kvp.Key].Add(new MS2Fragment(fragment));
-                    }
+                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
                 }
             }
+            adducts["+H"] = true;
+            adducts["-H"] = false;
         }
     
         public SLLipid(SLLipid copy) : base((Lipid)copy)
         {
+            headGroupNames = new List<String>();
             lcb = new FattyAcidGroup(copy.lcb);
             fag = new FattyAcidGroup(copy.fag);
             longChainBaseHydroxyl = copy.longChainBaseHydroxyl;
             fattyAcidHydroxyl = copy.fattyAcidHydroxyl;
-            hgValues = new List<int>();
-            foreach (int hgValue in copy.hgValues)
+            foreach (string headgroup in copy.headGroupNames)
             {
-                hgValues.Add(hgValue);
+                headGroupNames.Add(headgroup);
             }
         }
         
@@ -108,9 +85,9 @@ namespace LipidCreator
             xml += fag.serialize();
             xml += "<lcbHydroxyValue>" + longChainBaseHydroxyl + "</lcbHydroxyValue>\n";
             xml += "<faHydroxyValue>" + fattyAcidHydroxyl + "</faHydroxyValue>\n";
-            foreach (int hgValue in hgValues)
+            foreach (string headgroup in headGroupNames)
             {
-                xml += "<headGroup>" + hgValue + "</headGroup>\n";
+                xml += "<headGroup>" + headgroup + "</headGroup>\n";
             }
             xml += base.serialize();
             xml += "</lipid>\n";
@@ -120,7 +97,7 @@ namespace LipidCreator
         public override void import(XElement node)
         {
             int fattyAcidCounter = 0;
-            hgValues.Clear();
+            headGroupNames.Clear();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -151,7 +128,7 @@ namespace LipidCreator
                         break;
                         
                     case "headGroup":
-                        hgValues.Add(Convert.ToInt32(child.Value.ToString()));
+                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                         
@@ -172,9 +149,8 @@ namespace LipidCreator
                 {
                     if (maxDoubleBond1 < longChainBaseDoubleBond && longChainBaseLength >= longChainBaseHydroxyl) continue;
                     FattyAcid lcbType = new FattyAcid(longChainBaseLength, longChainBaseDoubleBond, longChainBaseHydroxyl, true);
-                    foreach (int hgValue in hgValues)
+                    foreach (string headgroup in headGroupNames)
                     {
-                        String headgroup = headGroupNames[hgValue];
                         if (headgroup != "SPH" && headgroup != "SPH-P" && headgroup != "SPC" && headgroup != "HexSph") // sphingolipids without fatty acid
                         {
                             foreach (int fattyAcidLength in fag.carbonCounts)

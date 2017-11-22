@@ -448,9 +448,37 @@ namespace LipidCreator
             glHgListbox = new ListBox();
             plHgListbox = new ListBox();
             slHgListbox = new ListBox();
-            glHgListbox.Items.AddRange(new String[]{"MGDG", "DGDG", "SQDG"});
-            plHgListbox.Items.AddRange(new String[]{"BMP", "CDP-DAG", "PA", "PC", "PE", "PEt", "DMPE", "MMPE", "PG", "PI", "PIP", "PIP2", "PIP3", "PS"});
-            slHgListbox.Items.AddRange(new String[]{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "HexSph", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"});
+            
+            List<String> glHgList = new List<String>();
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["GL"])
+            {
+                String headgroup = fragmentList.Key;
+                if (headgroup.Length > 2) glHgList.Add(headgroup);
+            }
+            glHgList.Sort();
+            
+            List<String> plHgList = new List<String>();
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["PL"])
+            {
+                String headgroup = fragmentList.Key;
+                if (headgroup[0] != 'e' && headgroup[0] != 'p' && headgroup[0] != 'L' && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+            }
+            plHgList.Sort();
+            
+            List<String> slHgList = new List<String>();
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["SL"])
+            {
+                String headgroup = fragmentList.Key;
+                slHgList.Add(headgroup);
+            }
+            slHgList.Sort();
+            
+            
+            
+            
+            glHgListbox.Items.AddRange(glHgList.ToArray());
+            plHgListbox.Items.AddRange(plHgList.ToArray());
+            slHgListbox.Items.AddRange(slHgList.ToArray());
             
             cardioBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_backbones.png");
             cardioBackboneImageFA1e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe1.png");

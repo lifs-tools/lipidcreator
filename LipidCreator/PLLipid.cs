@@ -208,7 +208,7 @@ namespace LipidCreator
                         {
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair1 in fag1.faTypes)
                             {
-                                if (fattyAcidKeyValuePair1.Value && maxDoubleBond1 >= fattyAcidDoubleBond1)
+                                if (fattyAcidKeyValuePair1.Value && maxDoubleBond1 >= fattyAcidDoubleBond1 && fattyAcidLength1 >= fattyAcidHydroxyl1)
                                 {
                                     FattyAcid fa1 = new FattyAcid(fattyAcidLength1, fattyAcidDoubleBond1, fattyAcidHydroxyl1, fattyAcidKeyValuePair1.Key);
                                     containsMonoLyso &= ~1;
@@ -222,11 +222,11 @@ namespace LipidCreator
                                         int maxDoubleBond2 = (fattyAcidLength2 - 1) >> 1;
                                         foreach (int fattyAcidDoubleBond2 in fag2.doubleBondCounts)
                                         {
-                                            foreach (int fattyAcidHydroxyl2 in fag1.hydroxylCounts)
+                                            foreach (int fattyAcidHydroxyl2 in fag2.hydroxylCounts)
                                             {
                                                 foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair2 in fag2.faTypes)
                                                 {
-                                                    if (fattyAcidKeyValuePair2.Value && maxDoubleBond2 >= fattyAcidDoubleBond2)
+                                                    if (fattyAcidKeyValuePair2.Value && maxDoubleBond2 >= fattyAcidDoubleBond2 && fattyAcidLength2 >= fattyAcidHydroxyl2)
                                                     {
                                                         FattyAcid fa2 = new FattyAcid(fattyAcidLength2, fattyAcidDoubleBond2, fattyAcidHydroxyl2, fattyAcidKeyValuePair2.Key);
                                                         containsMonoLyso &= ~2;
@@ -240,11 +240,11 @@ namespace LipidCreator
                                                             int maxDoubleBond3 = (fattyAcidLength3 - 1) >> 1;
                                                             foreach (int fattyAcidDoubleBond3 in fag3.doubleBondCounts)
                                                             {
-                                                                foreach (int fattyAcidHydroxyl3 in fag1.hydroxylCounts)
+                                                                foreach (int fattyAcidHydroxyl3 in fag3.hydroxylCounts)
                                                                 {
                                                                     foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair3 in fag3.faTypes)
                                                                     {
-                                                                        if (fattyAcidKeyValuePair3.Value && maxDoubleBond3 >= fattyAcidDoubleBond3)
+                                                                        if (fattyAcidKeyValuePair3.Value && maxDoubleBond3 >= fattyAcidDoubleBond3 && fattyAcidLength3 >= fattyAcidHydroxyl3)
                                                                         {
                                                                             FattyAcid fa3 = new FattyAcid(fattyAcidLength3, fattyAcidDoubleBond3, fattyAcidHydroxyl3, fattyAcidKeyValuePair3.Key);
                                                                             containsMonoLyso &= ~4;
@@ -258,11 +258,11 @@ namespace LipidCreator
                                                                                 int maxDoubleBond4 = (fattyAcidLength4 - 1) >> 1;
                                                                                 foreach (int fattyAcidDoubleBond4 in fag4.doubleBondCounts)
                                                                                 {
-                                                                                    foreach (int fattyAcidHydroxyl4 in fag1.hydroxylCounts)
+                                                                                    foreach (int fattyAcidHydroxyl4 in fag4.hydroxylCounts)
                                                                                     {
                                                                                         foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair4 in fag4.faTypes)
                                                                                         {
-                                                                                            if (fattyAcidKeyValuePair4.Value && maxDoubleBond4 >= fattyAcidDoubleBond4)
+                                                                                            if (fattyAcidKeyValuePair4.Value && maxDoubleBond4 >= fattyAcidDoubleBond4 && fattyAcidLength4 >= fattyAcidHydroxyl4)
                                                                                             {
                                                                                                 FattyAcid fa4 = new FattyAcid(fattyAcidLength4, fattyAcidDoubleBond4, fattyAcidHydroxyl4, fattyAcidKeyValuePair4.Key);
                                                                                                 containsMonoLyso &= ~8;
@@ -271,8 +271,6 @@ namespace LipidCreator
                                                                                                     fa4 = new FattyAcid(0, 0, 0, "FA");
                                                                                                     containsMonoLyso |= 8;
                                                                                                 }
-                                                                                                
-                                                                                                
                                                                                                 
                                                                                                 
                                                                                                 List<FattyAcid> sortedAcids = new List<FattyAcid>();
@@ -375,7 +373,7 @@ namespace LipidCreator
                         {
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair1 in fag1.faTypes)
                             {
-                                if (fattyAcidKeyValuePair1.Value && maxDoubleBond1 >= fattyAcidDoubleBond1)
+                                if (fattyAcidKeyValuePair1.Value && maxDoubleBond1 >= fattyAcidDoubleBond1 && fattyAcidLength1 >= fattyAcidHydroxyl1)
                                 {
                                     FattyAcid fa1 = new FattyAcid(fattyAcidLength1, fattyAcidDoubleBond1, fattyAcidHydroxyl1, fattyAcidKeyValuePair1.Key);
                                     switch (fattyAcidKeyValuePair1.Key)
@@ -394,7 +392,7 @@ namespace LipidCreator
                                             {
                                                 foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair2 in fag2.faTypes)
                                                 {
-                                                    if (fattyAcidKeyValuePair2.Value && maxDoubleBond2 >= fattyAcidDoubleBond2)
+                                                    if (fattyAcidKeyValuePair2.Value && maxDoubleBond2 >= fattyAcidDoubleBond2 && fattyAcidLength2 >= fattyAcidHydroxyl2)
                                                     {
                                                         FattyAcid fa2 = new FattyAcid(fattyAcidLength2, fattyAcidDoubleBond2, fattyAcidHydroxyl2, fattyAcidKeyValuePair2.Key);
                                                         switch (fattyAcidKeyValuePair2.Key)

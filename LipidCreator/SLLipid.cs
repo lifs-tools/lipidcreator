@@ -40,8 +40,8 @@ namespace LipidCreator
         public List<string> headGroupNames = new List<string>{"Cer", "CerP", "GB3Cer", "GB4Cer", "GD3Cer", "GM3Cer", "GM4Cer", "HexCer", "HexCerS", "LacCer", "MIPCer", "MIP2Cer", "PECer", "PICer", "SM", "SPC", "SPH", "SPH-P"};
         public List<int> hgValues;
         public FattyAcidGroup fag;
-        public FattyAcidGroup lcb;       
-        public int longChainBaseHydroxyl;        
+        public FattyAcidGroup lcb;
+        public int longChainBaseHydroxyl;
         public int fattyAcidHydroxyl;
     
         public SLLipid(Dictionary<String, String> allPaths, Dictionary<String, ArrayList> allFragments)
@@ -170,7 +170,7 @@ namespace LipidCreator
                 int maxDoubleBond1 = (longChainBaseLength - 1) >> 1;
                 foreach (int longChainBaseDoubleBond in lcb.doubleBondCounts)
                 {
-                    if (maxDoubleBond1 < longChainBaseDoubleBond) continue;
+                    if (maxDoubleBond1 < longChainBaseDoubleBond && longChainBaseLength >= longChainBaseHydroxyl) continue;
                     FattyAcid lcbType = new FattyAcid(longChainBaseLength, longChainBaseDoubleBond, longChainBaseHydroxyl, true);
                     foreach (int hgValue in hgValues)
                     {
@@ -183,7 +183,7 @@ namespace LipidCreator
                                 int maxDoubleBond2 = (fattyAcidLength - 1) >> 1;
                                 foreach (int fattyAcidDoubleBond2 in fag.doubleBondCounts)
                                 {
-                                    if (maxDoubleBond2 < fattyAcidDoubleBond2) continue;
+                                    if (maxDoubleBond2 < fattyAcidDoubleBond2 && fattyAcidLength >= fattyAcidHydroxyl) continue;
                                     FattyAcid fa = new FattyAcid(fattyAcidLength, fattyAcidDoubleBond2, fattyAcidHydroxyl, "FA");
                         
                         

@@ -85,31 +85,31 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             String[] tokens = line.Split(new char[] {','});
-                            if (!allFragments.ContainsKey(tokens[0]))
+                            if (!allFragments.ContainsKey(tokens[1]))
                             {
-                                allFragments.Add(tokens[0], new ArrayList());
+                                allFragments.Add(tokens[1], new ArrayList());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                            atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[5]);
-                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[6]);
-                            atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[7]);
-                            atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[8]);
-                            atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[9]);
-                            atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[10]);
-                            atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[11]);
-                            string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[2];
+                            atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[6]);
+                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[7]);
+                            atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[8]);
+                            atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[9]);
+                            atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[10]);
+                            atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[11]);
+                            atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[12]);
+                            string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[3];
                             if (!File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
-                            if (tokens[13].Length > 0)
+                            if (tokens[14].Length > 0)
                             {
-                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
+                                allFragments[tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12]));
+                                allFragments[tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
                             }
                         }
                     }

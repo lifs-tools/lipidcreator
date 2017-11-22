@@ -3,6 +3,8 @@ HG,C,H,O,N,P,S,Na,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks
 BMP,6,13,8,0,1,0,0,images/MS2/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
 Cer,0,1,0,0,0,0,0,images/MS2/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4
 CerP,0,2,3,0,1,0,0,images/MS2/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4
+CerPE,2,7,3,1,1,0,0,images/MS2/Precursors/CerPE_pos_pre.png,Yes,No,No,No,No,No,No,4
+CerPI,6,12,8,0,1,0,0,images/MS2/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,4
 Ch,27,46,1,0,0,0,0,images/MS2/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,8
 ChE,27,45,1,0,0,0,0,images/MS2/Precursors/ChE_pos_pre.png,No,No,Yes,No,No,No,No,3
 CL,9,18,13,0,2,0,0,images/MS2/Precursors/CL_neg_pre.png,Yes,Yes,No,Yes,Yes,No,No,0
@@ -43,10 +45,8 @@ pPC,8,18,6,1,1,0,0,images/MS2/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Ye
 PE,5,12,6,1,1,0,0,images/MS2/Precursors/PE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
 pPE,5,12,6,1,1,0,0,images/MS2/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
 #ppPE,5,12,6,1,1,0,0,images/MS2/Precursors/ppPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6
-PECer,2,7,3,1,1,0,0,images/MS2/Precursors/CerPE_pos_pre.png,Yes,No,No,No,No,No,No,4
 PG,6,13,8,0,1,0,0,images/MS2/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
 PI,9,17,11,0,1,0,0,images/MS2/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
-PICer,6,12,8,0,1,0,0,images/MS2/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,4
 PIP,9,18,14,0,2,0,0,images/MS2/Precursors/PIP_neg_pre.png,No,No,No,Yes,No,No,No,6
 PIP2,9,19,17,0,3,0,0,images/MS2/Precursors/PIP2_neg_pre.png,No,No,No,Yes,No,No,No,6
 PIP3,9,20,20,0,4,0,0,images/MS2/Precursors/PIP3_neg_pre.png,No,No,No,Yes,No,No,No,6

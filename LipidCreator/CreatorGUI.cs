@@ -140,160 +140,23 @@ namespace LipidCreator
         public void changeTab(int index, bool forced)
         {
             currentLipid = (Lipid)lipidCreatorForm.lipidTabList[index];
-            if (index == 1) // Glycerolipid
+            switch((LipidCategory)index)
             {
-                GLLipid currentGLLipid = (GLLipid)currentLipid;
-                settingListbox = true;
-                for (int i = 0; i < glHgListbox.Items.Count; ++i)
-                {
-                    glHgListbox.SetSelected(i, false);
-                }
-                foreach (string headgroup in currentGLLipid.headGroupNames)
-                {
-                    var i = 0;
-                    foreach (var item in glHgListbox.Items)
-                    {
-                        if (item.ToString().Equals(headgroup)) 
-                        {
-                            glHgListbox.SetSelected(i, true);
-                            break;
-                        }
-                        ++i;
-                    }
-                }
-                settingListbox = false;
-                
-                
-                glFA1Textbox.Text = currentGLLipid.fag1.lengthInfo;
-                glDB1Textbox.Text = currentGLLipid.fag1.dbInfo;
-                glHydroxyl1Textbox.Text = currentGLLipid.fag1.hydroxylInfo;
-                glFA1Combobox.SelectedIndex = currentGLLipid.fag1.chainType;
-                glFA1Checkbox1.Checked = currentGLLipid.fag1.faTypes["FA"];
-                glFA1Checkbox2.Checked = currentGLLipid.fag1.faTypes["FAp"];
-                glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAe"];
-                
-                glFA2Textbox.Text = currentGLLipid.fag2.lengthInfo;
-                glDB2Textbox.Text = currentGLLipid.fag2.dbInfo;
-                glHydroxyl2Textbox.Text = currentGLLipid.fag2.hydroxylInfo;
-                glFA2Combobox.SelectedIndex = currentGLLipid.fag2.chainType;
-                glFA2Checkbox1.Checked = currentGLLipid.fag2.faTypes["FA"];
-                glFA2Checkbox2.Checked = currentGLLipid.fag2.faTypes["FAp"];
-                glFA2Checkbox3.Checked = currentGLLipid.fag2.faTypes["FAe"];
-                
-                glFA3Textbox.Text = currentGLLipid.fag3.lengthInfo;
-                glDB3Textbox.Text = currentGLLipid.fag3.dbInfo;
-                glHydroxyl3Textbox.Text = currentGLLipid.fag3.hydroxylInfo;
-                glFA3Combobox.SelectedIndex = currentGLLipid.fag3.chainType;
-                glFA3Checkbox1.Checked = currentGLLipid.fag3.faTypes["FA"];
-                glFA3Checkbox2.Checked = currentGLLipid.fag3.faTypes["FAp"];
-                glFA3Checkbox3.Checked = currentGLLipid.fag3.faTypes["FAe"];
-                
-                glPosAdductCheckbox1.Checked = currentGLLipid.adducts["+H"];
-                glPosAdductCheckbox2.Checked = currentGLLipid.adducts["+2H"];
-                glPosAdductCheckbox3.Checked = currentGLLipid.adducts["+NH4"];
-                glNegAdductCheckbox1.Checked = currentGLLipid.adducts["-H"];
-                glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
-                glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
-                glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
-                glModifyLipidButton.Enabled = lipidModifications[1] > -1;
-                
-                glContainsSugar.Checked = currentGLLipid.containsSugar;
-                
-                
-                updateRanges(currentGLLipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
-                updateRanges(currentGLLipid.fag1, glDB1Textbox, 3);
-                updateRanges(currentGLLipid.fag1, glHydroxyl1Textbox, 4);
-                updateRanges(currentGLLipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
-                updateRanges(currentGLLipid.fag2, glDB2Textbox, 3);
-                updateRanges(currentGLLipid.fag2, glHydroxyl2Textbox, 4);
-                updateRanges(currentGLLipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-                updateRanges(currentGLLipid.fag3, glDB3Textbox, 3);
-                updateRanges(currentGLLipid.fag3, glHydroxyl3Textbox, 4);
-                
-                glRepresentativeFA.Checked = currentGLLipid.representativeFA;
-                glPictureBox.SendToBack();
-            }
-            else if (index == 2) // Cardiolipin or Phospholipid
-            {
-                PLLipid currentPLLipid = (PLLipid)currentLipid;
-                if (currentPLLipid.isCL) // Cardiolipin
-                {
-                    clFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
-                    clDB1Textbox.Text = currentPLLipid.fag1.dbInfo;
-                    clHydroxyl1Textbox.Text = currentPLLipid.fag1.hydroxylInfo;
-                    clFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
-                    clFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
-                    clFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
-                    clFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
-                    
-                    clFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
-                    clDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
-                    clHydroxyl2Textbox.Text = currentPLLipid.fag2.hydroxylInfo;
-                    clFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
-                    clFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
-                    clFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
-                    clFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
-                    
-                    clFA3Textbox.Text = currentPLLipid.fag3.lengthInfo;
-                    clDB3Textbox.Text = currentPLLipid.fag3.dbInfo;
-                    clHydroxyl3Textbox.Text = currentPLLipid.fag3.hydroxylInfo;
-                    clFA3Combobox.SelectedIndex = currentPLLipid.fag3.chainType;
-                    clFA3Checkbox1.Checked = currentPLLipid.fag3.faTypes["FA"];
-                    clFA3Checkbox2.Checked = currentPLLipid.fag3.faTypes["FAp"];
-                    clFA3Checkbox3.Checked = currentPLLipid.fag3.faTypes["FAe"];
-                    
-                    clFA4Textbox.Text = currentPLLipid.fag4.lengthInfo;
-                    clDB4Textbox.Text = currentPLLipid.fag4.dbInfo;
-                    clHydroxyl4Textbox.Text = currentPLLipid.fag4.hydroxylInfo;
-                    clFA4Combobox.SelectedIndex = currentPLLipid.fag4.chainType;
-                    clFA4Checkbox1.Checked = currentPLLipid.fag4.faTypes["FA"];
-                    clFA4Checkbox2.Checked = currentPLLipid.fag4.faTypes["FAp"];
-                    clFA4Checkbox3.Checked = currentPLLipid.fag4.faTypes["FAe"];
-                    
-                    clPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
-                    clPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
-                    clPosAdductCheckbox3.Checked = currentPLLipid.adducts["+NH4"];
-                    clNegAdductCheckbox1.Checked = currentPLLipid.adducts["-H"];
-                    clNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
-                    clNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
-                    clNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                    clModifyLipidButton.Enabled = lipidModifications[2] > -1;
-                    
-                    plIsCL.Checked = true;
-                    
-                    updateRanges(currentPLLipid.fag1, clFA1Textbox, clFA1Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag1, clDB1Textbox, 3);
-                    updateRanges(currentPLLipid.fag1, clHydroxyl1Textbox, 4);
-                    updateRanges(currentPLLipid.fag2, clFA2Textbox, clFA2Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag2, clDB2Textbox, 3);
-                    updateRanges(currentPLLipid.fag2, clHydroxyl2Textbox, 4);
-                    updateRanges(currentPLLipid.fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag3, clDB3Textbox, 3);
-                    updateRanges(currentPLLipid.fag3, clHydroxyl3Textbox, 4);
-                    updateRanges(currentPLLipid.fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag4, clDB4Textbox, 3);
-                    updateRanges(currentPLLipid.fag4, clHydroxyl4Textbox, 4);
-                    
-                    clRepresentativeFA.Checked = currentPLLipid.representativeFA;
-                    clPictureBox.SendToBack();
-                }
-                
-                else // Phospholipid
-                {
-                
+                case LipidCategory.GlyceroLipid:
+                    GLLipid currentGLLipid = (GLLipid)currentLipid;
                     settingListbox = true;
-                    for (int i = 0; i < plHgListbox.Items.Count; ++i)
+                    for (int i = 0; i < glHgListbox.Items.Count; ++i)
                     {
-                        plHgListbox.SetSelected(i, false);
+                        glHgListbox.SetSelected(i, false);
                     }
-                    foreach (string headgroup in currentPLLipid.headGroupNames)
+                    foreach (string headgroup in currentGLLipid.headGroupNames)
                     {
                         var i = 0;
-                        foreach (var item in plHgListbox.Items)
+                        foreach (var item in glHgListbox.Items)
                         {
                             if (item.ToString().Equals(headgroup)) 
                             {
-                                plHgListbox.SetSelected(i, true);
+                                glHgListbox.SetSelected(i, true);
                                 break;
                             }
                             ++i;
@@ -301,155 +164,301 @@ namespace LipidCreator
                     }
                     settingListbox = false;
                     
-                    plFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
-                    plDB1Textbox.Text = currentPLLipid.fag1.dbInfo;
-                    plHydroxyl1Textbox.Text = currentPLLipid.fag1.hydroxylInfo;
-                    plFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
-                    plFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
-                    plFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
-                    plFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
                     
-                    plFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
-                    plDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
-                    plHydroxyl2Textbox.Text = currentPLLipid.fag2.hydroxylInfo;
-                    plFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
-                    plFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
-                    plFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
-                    plFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
-                
+                    glFA1Textbox.Text = currentGLLipid.fag1.lengthInfo;
+                    glDB1Textbox.Text = currentGLLipid.fag1.dbInfo;
+                    glHydroxyl1Textbox.Text = currentGLLipid.fag1.hydroxylInfo;
+                    glFA1Combobox.SelectedIndex = currentGLLipid.fag1.chainType;
+                    glFA1Checkbox1.Checked = currentGLLipid.fag1.faTypes["FA"];
+                    glFA1Checkbox2.Checked = currentGLLipid.fag1.faTypes["FAp"];
+                    glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAe"];
                     
-                    plPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
-                    plPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
-                    plPosAdductCheckbox3.Checked = currentPLLipid.adducts["+NH4"];
-                    plNegAdductCheckbox1.Checked = currentPLLipid.adducts["-H"];
-                    plNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
-                    plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
-                    plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                    plModifyLipidButton.Enabled = lipidModifications[2] > -1;
-                    plIsCL.Checked = false;
+                    glFA2Textbox.Text = currentGLLipid.fag2.lengthInfo;
+                    glDB2Textbox.Text = currentGLLipid.fag2.dbInfo;
+                    glHydroxyl2Textbox.Text = currentGLLipid.fag2.hydroxylInfo;
+                    glFA2Combobox.SelectedIndex = currentGLLipid.fag2.chainType;
+                    glFA2Checkbox1.Checked = currentGLLipid.fag2.faTypes["FA"];
+                    glFA2Checkbox2.Checked = currentGLLipid.fag2.faTypes["FAp"];
+                    glFA2Checkbox3.Checked = currentGLLipid.fag2.faTypes["FAe"];
+                    
+                    glFA3Textbox.Text = currentGLLipid.fag3.lengthInfo;
+                    glDB3Textbox.Text = currentGLLipid.fag3.dbInfo;
+                    glHydroxyl3Textbox.Text = currentGLLipid.fag3.hydroxylInfo;
+                    glFA3Combobox.SelectedIndex = currentGLLipid.fag3.chainType;
+                    glFA3Checkbox1.Checked = currentGLLipid.fag3.faTypes["FA"];
+                    glFA3Checkbox2.Checked = currentGLLipid.fag3.faTypes["FAp"];
+                    glFA3Checkbox3.Checked = currentGLLipid.fag3.faTypes["FAe"];
+                    
+                    glPosAdductCheckbox1.Checked = currentGLLipid.adducts["+H"];
+                    glPosAdductCheckbox2.Checked = currentGLLipid.adducts["+2H"];
+                    glPosAdductCheckbox3.Checked = currentGLLipid.adducts["+NH4"];
+                    glNegAdductCheckbox1.Checked = currentGLLipid.adducts["-H"];
+                    glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
+                    glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
+                    glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
+                    glModifyLipidButton.Enabled = lipidModifications[1] > -1;
+                    
+                    glContainsSugar.Checked = currentGLLipid.containsSugar;
                     
                     
-                    updateRanges(currentPLLipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag1, plDB1Textbox, 3);
-                    updateRanges(currentPLLipid.fag1, plHydroxyl1Textbox, 4);
-                    updateRanges(currentPLLipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-                    updateRanges(currentPLLipid.fag2, plDB2Textbox, 3);
-                    updateRanges(currentPLLipid.fag2, plHydroxyl2Textbox, 4);
+                    updateRanges(currentGLLipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
+                    updateRanges(currentGLLipid.fag1, glDB1Textbox, 3);
+                    updateRanges(currentGLLipid.fag1, glHydroxyl1Textbox, 4);
+                    updateRanges(currentGLLipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
+                    updateRanges(currentGLLipid.fag2, glDB2Textbox, 3);
+                    updateRanges(currentGLLipid.fag2, glHydroxyl2Textbox, 4);
+                    updateRanges(currentGLLipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
+                    updateRanges(currentGLLipid.fag3, glDB3Textbox, 3);
+                    updateRanges(currentGLLipid.fag3, glHydroxyl3Textbox, 4);
                     
-                    plRepresentativeFA.Checked = currentPLLipid.representativeFA;
-                    plPictureBox.SendToBack();
-                }
-            }
-            else if (index == 3) // Sphingolipid
-            {
-                SLLipid currentSLLipid = (SLLipid)currentLipid;
-                settingListbox = true;
-                for (int i = 0; i < slHgListbox.Items.Count; ++i)
-                {
-                    slHgListbox.SetSelected(i, false);
-                }
-                foreach (string headgroup in currentSLLipid.headGroupNames)
-                {
-                    var i = 0;
-                    foreach (var item in slHgListbox.Items)
+                    glRepresentativeFA.Checked = currentGLLipid.representativeFA;
+                    glPictureBox.SendToBack();
+                    break;
+                    
+                case LipidCategory.PhosphoLipid:
+                    PLLipid currentPLLipid = (PLLipid)currentLipid;
+                    if (currentPLLipid.isCL) // Cardiolipin
                     {
-                        if (item.ToString().Equals(headgroup)) 
-                        {
-                            slHgListbox.SetSelected(i, true);
-                            break;
-                        }
-                        ++i;
+                        clFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
+                        clDB1Textbox.Text = currentPLLipid.fag1.dbInfo;
+                        clHydroxyl1Textbox.Text = currentPLLipid.fag1.hydroxylInfo;
+                        clFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
+                        clFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
+                        clFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
+                        clFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
+                        
+                        clFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
+                        clDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
+                        clHydroxyl2Textbox.Text = currentPLLipid.fag2.hydroxylInfo;
+                        clFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
+                        clFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
+                        clFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
+                        clFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
+                        
+                        clFA3Textbox.Text = currentPLLipid.fag3.lengthInfo;
+                        clDB3Textbox.Text = currentPLLipid.fag3.dbInfo;
+                        clHydroxyl3Textbox.Text = currentPLLipid.fag3.hydroxylInfo;
+                        clFA3Combobox.SelectedIndex = currentPLLipid.fag3.chainType;
+                        clFA3Checkbox1.Checked = currentPLLipid.fag3.faTypes["FA"];
+                        clFA3Checkbox2.Checked = currentPLLipid.fag3.faTypes["FAp"];
+                        clFA3Checkbox3.Checked = currentPLLipid.fag3.faTypes["FAe"];
+                        
+                        clFA4Textbox.Text = currentPLLipid.fag4.lengthInfo;
+                        clDB4Textbox.Text = currentPLLipid.fag4.dbInfo;
+                        clHydroxyl4Textbox.Text = currentPLLipid.fag4.hydroxylInfo;
+                        clFA4Combobox.SelectedIndex = currentPLLipid.fag4.chainType;
+                        clFA4Checkbox1.Checked = currentPLLipid.fag4.faTypes["FA"];
+                        clFA4Checkbox2.Checked = currentPLLipid.fag4.faTypes["FAp"];
+                        clFA4Checkbox3.Checked = currentPLLipid.fag4.faTypes["FAe"];
+                        
+                        clPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
+                        clPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
+                        clPosAdductCheckbox3.Checked = currentPLLipid.adducts["+NH4"];
+                        clNegAdductCheckbox1.Checked = currentPLLipid.adducts["-H"];
+                        clNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
+                        clNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
+                        clNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
+                        clModifyLipidButton.Enabled = lipidModifications[2] > -1;
+                        
+                        plIsCL.Checked = true;
+                        
+                        updateRanges(currentPLLipid.fag1, clFA1Textbox, clFA1Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag1, clDB1Textbox, 3);
+                        updateRanges(currentPLLipid.fag1, clHydroxyl1Textbox, 4);
+                        updateRanges(currentPLLipid.fag2, clFA2Textbox, clFA2Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag2, clDB2Textbox, 3);
+                        updateRanges(currentPLLipid.fag2, clHydroxyl2Textbox, 4);
+                        updateRanges(currentPLLipid.fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag3, clDB3Textbox, 3);
+                        updateRanges(currentPLLipid.fag3, clHydroxyl3Textbox, 4);
+                        updateRanges(currentPLLipid.fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag4, clDB4Textbox, 3);
+                        updateRanges(currentPLLipid.fag4, clHydroxyl4Textbox, 4);
+                        
+                        clRepresentativeFA.Checked = currentPLLipid.representativeFA;
+                        clPictureBox.SendToBack();
                     }
-                }
-                settingListbox = false;
+                    
+                    else // Phospholipid
+                    {
+                    
+                        settingListbox = true;
+                        for (int i = 0; i < plHgListbox.Items.Count; ++i)
+                        {
+                            plHgListbox.SetSelected(i, false);
+                        }
+                        foreach (string headgroup in currentPLLipid.headGroupNames)
+                        {
+                            var i = 0;
+                            foreach (var item in plHgListbox.Items)
+                            {
+                                if (item.ToString().Equals(headgroup)) 
+                                {
+                                    plHgListbox.SetSelected(i, true);
+                                    break;
+                                }
+                                ++i;
+                            }
+                        }
+                        settingListbox = false;
+                        
+                        plFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
+                        plDB1Textbox.Text = currentPLLipid.fag1.dbInfo;
+                        plHydroxyl1Textbox.Text = currentPLLipid.fag1.hydroxylInfo;
+                        plFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
+                        plFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
+                        plFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
+                        plFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
+                        
+                        plFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
+                        plDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
+                        plHydroxyl2Textbox.Text = currentPLLipid.fag2.hydroxylInfo;
+                        plFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
+                        plFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
+                        plFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
+                        plFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
+                    
+                        
+                        plPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
+                        plPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
+                        plPosAdductCheckbox3.Checked = currentPLLipid.adducts["+NH4"];
+                        plNegAdductCheckbox1.Checked = currentPLLipid.adducts["-H"];
+                        plNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
+                        plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
+                        plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
+                        plModifyLipidButton.Enabled = lipidModifications[2] > -1;
+                        plIsCL.Checked = false;
+                        
+                        
+                        updateRanges(currentPLLipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag1, plDB1Textbox, 3);
+                        updateRanges(currentPLLipid.fag1, plHydroxyl1Textbox, 4);
+                        updateRanges(currentPLLipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
+                        updateRanges(currentPLLipid.fag2, plDB2Textbox, 3);
+                        updateRanges(currentPLLipid.fag2, plHydroxyl2Textbox, 4);
+                        
+                        plRepresentativeFA.Checked = currentPLLipid.representativeFA;
+                        plPictureBox.SendToBack();
+                    }
+                    break;
+                    
+                case LipidCategory.SphingoLipid:
+                    SLLipid currentSLLipid = (SLLipid)currentLipid;
+                    settingListbox = true;
+                    for (int i = 0; i < slHgListbox.Items.Count; ++i)
+                    {
+                        slHgListbox.SetSelected(i, false);
+                    }
+                    foreach (string headgroup in currentSLLipid.headGroupNames)
+                    {
+                        var i = 0;
+                        foreach (var item in slHgListbox.Items)
+                        {
+                            if (item.ToString().Equals(headgroup)) 
+                            {
+                                slHgListbox.SetSelected(i, true);
+                                break;
+                            }
+                            ++i;
+                        }
+                    }
+                    settingListbox = false;
+                    
+                    
+                    slLCBTextbox.Text = currentSLLipid.lcb.lengthInfo;
+                    slDB2Textbox.Text = currentSLLipid.lcb.dbInfo;
+                    slLCBCombobox.SelectedIndex = currentSLLipid.lcb.chainType;
+                    slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.lcb.hydroxylCounts.First() - 2;
+                    slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
+                    
+                    slFATextbox.Text = currentSLLipid.fag.lengthInfo;
+                    slDB1Textbox.Text = currentSLLipid.fag.dbInfo;
+                    slFACombobox.SelectedIndex = currentSLLipid.fag.chainType;
                 
-                
-                slLCBTextbox.Text = currentSLLipid.lcb.lengthInfo;
-                slDB2Textbox.Text = currentSLLipid.lcb.dbInfo;
-                slLCBCombobox.SelectedIndex = currentSLLipid.lcb.chainType;
-                slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.lcb.hydroxylCounts.First() - 2;
-                slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
-                
-                slFATextbox.Text = currentSLLipid.fag.lengthInfo;
-                slDB1Textbox.Text = currentSLLipid.fag.dbInfo;
-                slFACombobox.SelectedIndex = currentSLLipid.fag.chainType;
-            
-                
-                slPosAdductCheckbox1.Checked = currentSLLipid.adducts["+H"];
-                slPosAdductCheckbox2.Checked = currentSLLipid.adducts["+2H"];
-                slPosAdductCheckbox3.Checked = currentSLLipid.adducts["+NH4"];
-                slNegAdductCheckbox1.Checked = currentSLLipid.adducts["-H"];
-                slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
-                slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
-                slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
-                slModifyLipidButton.Enabled = lipidModifications[3] > -1;
-                
-                
-                updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
-                updateRanges(currentSLLipid.lcb, slDB2Textbox, 3);
-                updateRanges(currentSLLipid.fag, slFATextbox, slFACombobox.SelectedIndex);
-                updateRanges(currentSLLipid.fag, slDB1Textbox, 3);
-                slPictureBox.SendToBack();
-            }
-            
-            else if (index == 4) // Cholesterol
-            {
-                Cholesterol currentCHLipid = (Cholesterol)currentLipid;
-                chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
-                chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
-                chPosAdductCheckbox3.Checked = currentCHLipid.adducts["+NH4"];
-                chNegAdductCheckbox1.Checked = currentCHLipid.adducts["-H"];
-                chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
-                chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
-                chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
-                chModifyLipidButton.Enabled = lipidModifications[4] > -1;
-                chContainsEster.Checked = currentCHLipid.containsEster;
-                
-                chFATextbox.Text = currentCHLipid.fag.lengthInfo;
-                chDBTextbox.Text = currentCHLipid.fag.dbInfo;
-                chHydroxylTextbox.Text = currentCHLipid.fag.hydroxylInfo;
-                chFACombobox.SelectedIndex = currentCHLipid.fag.chainType;
-                updateRanges(currentCHLipid.fag, chFATextbox, chFACombobox.SelectedIndex);
-                updateRanges(currentCHLipid.fag, chDBTextbox, 3);
-                updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
+                    
+                    slPosAdductCheckbox1.Checked = currentSLLipid.adducts["+H"];
+                    slPosAdductCheckbox2.Checked = currentSLLipid.adducts["+2H"];
+                    slPosAdductCheckbox3.Checked = currentSLLipid.adducts["+NH4"];
+                    slNegAdductCheckbox1.Checked = currentSLLipid.adducts["-H"];
+                    slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
+                    slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
+                    slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
+                    slModifyLipidButton.Enabled = lipidModifications[3] > -1;
+                    
+                    
+                    updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
+                    updateRanges(currentSLLipid.lcb, slDB2Textbox, 3);
+                    updateRanges(currentSLLipid.fag, slFATextbox, slFACombobox.SelectedIndex);
+                    updateRanges(currentSLLipid.fag, slDB1Textbox, 3);
+                    slPictureBox.SendToBack();
+                    break;
+                    
+                case LipidCategory.Cholesterol:
+                    Cholesterol currentCHLipid = (Cholesterol)currentLipid;
+                    chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
+                    chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
+                    chPosAdductCheckbox3.Checked = currentCHLipid.adducts["+NH4"];
+                    chNegAdductCheckbox1.Checked = currentCHLipid.adducts["-H"];
+                    chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
+                    chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
+                    chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
+                    chModifyLipidButton.Enabled = lipidModifications[4] > -1;
+                    chContainsEster.Checked = currentCHLipid.containsEster;
+                    
+                    chFATextbox.Text = currentCHLipid.fag.lengthInfo;
+                    chDBTextbox.Text = currentCHLipid.fag.dbInfo;
+                    chHydroxylTextbox.Text = currentCHLipid.fag.hydroxylInfo;
+                    chFACombobox.SelectedIndex = currentCHLipid.fag.chainType;
+                    updateRanges(currentCHLipid.fag, chFATextbox, chFACombobox.SelectedIndex);
+                    updateRanges(currentCHLipid.fag, chDBTextbox, 3);
+                    updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
+                    break;
+                    
+                default:
+                    break;
             }
         }
         
         
         public void resetCLLipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[2] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            ((PLLipid)lipidCreatorForm.lipidTabList[2]).isCL = true;
-            lipidModifications[2] = -1;
-            changeTab(2);
+            int index = (int)LipidCategory.PhosphoLipid;
+            lipidCreatorForm.lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            ((PLLipid)lipidCreatorForm.lipidTabList[index]).isCL = true;
+            lipidModifications[index] = -1;
+            changeTab(index);
         }
         
         public void resetGLLipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[1] = new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            lipidModifications[1] = -1;
-            changeTab(1);
+            int index = (int)LipidCategory.GlyceroLipid;
+            lipidCreatorForm.lipidTabList[index] = new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[index] = -1;
+            changeTab(index);
         }
         
         public void resetPLLipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[2] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            lipidModifications[2] = -1;
-            changeTab(2);
+            int index = (int)LipidCategory.PhosphoLipid;
+            lipidCreatorForm.lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[index] = -1;
+            changeTab(index);
         }
         
         public void resetSLLipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[3] = new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            lipidModifications[3] = -1;
-            changeTab(3);
+            int index = (int)LipidCategory.SphingoLipid;
+            lipidCreatorForm.lipidTabList[index] = new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[index] = -1;
+            changeTab(index);
         }
         
         public void resetCHLipid(Object sender, EventArgs e)
         {
-            lipidCreatorForm.lipidTabList[4] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            lipidModifications[4] = -1;
-            changeTab(4);
+            int index = (int)LipidCategory.Cholesterol;
+            lipidCreatorForm.lipidTabList[index] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[index] = -1;
+            changeTab(index);
         }
         
         
@@ -1607,7 +1616,7 @@ namespace LipidCreator
                 plRepresentativeFA.Visible = true;
                 plPictureBox.SendToBack();
             }
-            changeTab(2);
+            changeTab((int)LipidCategory.PhosphoLipid);
             plIsCL.BringToFront();
         }
         
@@ -1962,7 +1971,7 @@ namespace LipidCreator
         ////////////////////// Remaining parts ////////////////////////////////
         
         
-        public int checkPropertiesValid()
+        public LipidCategory checkPropertiesValid()
         {
             int cntActiveAdducts = 0;
             foreach (KeyValuePair<String, bool> adduct in currentLipid.adducts)
@@ -1972,7 +1981,7 @@ namespace LipidCreator
             if (cntActiveAdducts < 1)
             {
                 MessageBox.Show("No adduct selected!", "Not registrable");
-                return -1;
+                return  LipidCategory.NoLipid;
             }
             
             if (currentLipid is GLLipid)
@@ -1980,55 +1989,55 @@ namespace LipidCreator
                 if (((GLLipid)currentLipid).fag1.faTypes["FAx"])
                 {
                     MessageBox.Show("Please always select the top fatty acid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 else if (((GLLipid)currentLipid).fag2.faTypes["FAx"] && !((GLLipid)currentLipid).fag3.faTypes["FAx"])
                 {
                     MessageBox.Show("Please select the middle fatty acid for DG!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 
                 if (glFA1Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (glFA2Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (glDB1Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("First double bond content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (glDB2Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Second double bond content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (glHydroxyl1Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (glHydroxyl2Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
-                    return -1;
+                    return  LipidCategory.NoLipid;
                 }
                 if (((GLLipid)currentLipid).containsSugar)
                 {
                     if (currentLipid.headGroupNames.Count == 0)
                     {
                         MessageBox.Show("No head group selected!", "Not registrable");
-                        return -1;                    
+                        return  LipidCategory.NoLipid;                    
                     }
                     if (((GLLipid)currentLipid).fag1.faTypes["FAx"] || ((GLLipid)currentLipid).fag2.faTypes["FAx"])
                     {
                         MessageBox.Show("Both fatty acids must be selected!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                 }
                 else
@@ -2036,25 +2045,25 @@ namespace LipidCreator
                     if (((GLLipid)currentLipid).fag1.faTypes["FAx"] && ((GLLipid)currentLipid).fag2.faTypes["FAx"] && ((GLLipid)currentLipid).fag3.faTypes["FAx"])
                     {
                         MessageBox.Show("No fatty acid selected!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (glFA3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (glDB3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (glHydroxyl3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                 }
-                return 1;
+                return LipidCategory.GlyceroLipid;
             }
             
             
@@ -2065,68 +2074,68 @@ namespace LipidCreator
                     if (((PLLipid)currentLipid).fag1.faTypes["FAx"] || ((PLLipid)currentLipid).fag2.faTypes["FAx"] || ((PLLipid)currentLipid).fag3.faTypes["FAx"])
                     {
                         MessageBox.Show("At least the top three fatty acids must be selected!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                 
                     if (clFA1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clFA2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clFA3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clFA4Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Fourth fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clDB1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clDB2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clDB3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clDB4Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Fourth double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clHydroxyl1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clHydroxyl2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clHydroxyl3Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Third hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (clHydroxyl4Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Fourth hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                 }
                 else
@@ -2134,48 +2143,47 @@ namespace LipidCreator
                     if (currentLipid.headGroupNames.Count == 0)
                     {
                         MessageBox.Show("No head group selected!", "Not registrable");
-                        return -1;                    
+                        return  LipidCategory.NoLipid;                    
                     }
                     
                     if (((PLLipid)currentLipid).fag1.faTypes["FAx"])
                     {
                         MessageBox.Show("Please select at least the top fatty acid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     
                     if (plFA1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (plFA2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (plDB1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (plDB2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second double bond content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (plHydroxyl1Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                     if (plHydroxyl2Textbox.BackColor == alertColor)
                     {
                         MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
-                        return -1;
+                        return  LipidCategory.NoLipid;
                     }
                 }
-                
-                return 2;
+                return LipidCategory.PhosphoLipid;
             }
             
             
@@ -2184,31 +2192,30 @@ namespace LipidCreator
                 if (currentLipid.headGroupNames.Count == 0)
                 {
                     MessageBox.Show("No head group selected!", "Not registrable");
-                    return -1;                    
+                    return LipidCategory.NoLipid;                   
                 }
                 
                 if (slLCBTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Long chain base length content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
                 if (slFATextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
                 if (slDB1Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("FA double bond content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
                 if (slDB2Textbox.BackColor == alertColor)
                 {
                     MessageBox.Show("LCB double bond content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
-                
-                return 3;
+                return LipidCategory.SphingoLipid;
             }
             
             
@@ -2217,44 +2224,46 @@ namespace LipidCreator
                 if (chContainsEster.Checked && chFATextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
                 if (chContainsEster.Checked && chDBTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("FA double bond content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
                 if (chContainsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
-                    return -1;
+                    return LipidCategory.NoLipid;
                 }
-                return 4;
+                return LipidCategory.Cholesterol;
             }
-            return -1;
+            return LipidCategory.NoLipid;
         }
         
         
         public void modifyLipid(Object sender, EventArgs e)
         {
-            int result = checkPropertiesValid();
+            LipidCategory result = checkPropertiesValid();
             switch (result)
             {
-                case 1:
-                    lipidCreatorForm.registeredLipids[lipidModifications[result]] = new GLLipid((GLLipid)currentLipid);
+                case LipidCategory.GlyceroLipid:
+                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new GLLipid((GLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
-                case 2:
-                    lipidCreatorForm.registeredLipids[lipidModifications[result]] = new PLLipid((PLLipid)currentLipid);
+                case LipidCategory.PhosphoLipid:
+                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new PLLipid((PLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
-                case 3:
-                    lipidCreatorForm.registeredLipids[lipidModifications[result]] = new SLLipid((SLLipid)currentLipid);
+                case LipidCategory.SphingoLipid:
+                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new SLLipid((SLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
-                case 4:
-                    lipidCreatorForm.registeredLipids[lipidModifications[result]] = new Cholesterol((Cholesterol)currentLipid);
+                case LipidCategory.Cholesterol:
+                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new Cholesterol((Cholesterol)currentLipid);
                     refreshRegisteredLipidsTable();
+                    break;
+                default:
                     break;
             }
         }
@@ -2263,22 +2272,22 @@ namespace LipidCreator
         
         public void registerLipid(Object sender, EventArgs e)
         {
-        
-            switch (checkPropertiesValid())
+            LipidCategory result = checkPropertiesValid();
+            switch (result)
             {
-                case 1:
+                case LipidCategory.GlyceroLipid:
                     lipidCreatorForm.registeredLipids.Add(new GLLipid((GLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
-                case 2:
+                case LipidCategory.PhosphoLipid:
                     lipidCreatorForm.registeredLipids.Add(new PLLipid((PLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
-                case 3:
+                case LipidCategory.SphingoLipid:
                     lipidCreatorForm.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
-                case 4:
+                case LipidCategory.Cholesterol:
                     lipidCreatorForm.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
@@ -2398,22 +2407,22 @@ namespace LipidCreator
                 int tabIndex = 0;
                 if (currentRegisteredLipid is GLLipid)
                 {
-                    tabIndex = 1;
+                    tabIndex = (int)LipidCategory.GlyceroLipid;
                     lipidCreatorForm.lipidTabList[tabIndex] = new GLLipid((GLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is PLLipid)
                 {
-                    tabIndex = 2;
+                    tabIndex = (int)LipidCategory.PhosphoLipid;
                     lipidCreatorForm.lipidTabList[tabIndex] = new PLLipid((PLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is SLLipid)
                 {
-                    tabIndex = 3;
+                    tabIndex = (int)LipidCategory.SphingoLipid;
                     lipidCreatorForm.lipidTabList[tabIndex] = new SLLipid((SLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Cholesterol)
                 {
-                    tabIndex = 4;
+                    tabIndex = (int)LipidCategory.Cholesterol;
                     lipidCreatorForm.lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
                 }
                 currentLipid = currentRegisteredLipid;
@@ -2428,15 +2437,19 @@ namespace LipidCreator
                 int tabIndex = 0;
                 if (currentRegisteredLipid is GLLipid)
                 {
-                    tabIndex = 1;
+                    tabIndex = (int)LipidCategory.GlyceroLipid;
                 }
                 else if (currentRegisteredLipid is PLLipid)
                 {
-                    tabIndex = 2;
+                    tabIndex = (int)LipidCategory.PhosphoLipid;
                 }
                 else if (currentRegisteredLipid is SLLipid)
                 {
-                    tabIndex = 3;
+                    tabIndex = (int)LipidCategory.SphingoLipid;
+                }
+                else if (currentRegisteredLipid is Cholesterol)
+                {
+                    tabIndex = (int)LipidCategory.Cholesterol;
                 }
                 lipidCreatorForm.registeredLipids.RemoveAt(rowIndex);
                 refreshRegisteredLipidsTable();

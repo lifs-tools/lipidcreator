@@ -66,6 +66,7 @@ namespace LipidCreator
     
         public GLLipid(GLLipid copy) : base((Lipid)copy) 
         {
+            headGroupNames = new List<String>();
             fag1 = new FattyAcidGroup(copy.fag1);
             fag2 = new FattyAcidGroup(copy.fag2);
             fag3 = new FattyAcidGroup(copy.fag3);

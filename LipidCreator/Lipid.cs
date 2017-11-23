@@ -34,7 +34,7 @@ using System.Data.SQLite;
 
 namespace LipidCreator
 {
-    public enum LipidCategory {GlyceroLipid, PhosphoLipid, SphingoLipid, Cholesterol};
+    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5};
     
     [Serializable]
     public class PrecursorData

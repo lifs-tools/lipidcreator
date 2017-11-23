@@ -290,11 +290,14 @@ namespace LipidCreator
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;
-                            if (headgroup.Equals("PC") || headgroup.Equals("PE"))
+                            if (headgroup.Equals("PA") || headgroup.Equals("PC") || headgroup.Equals("PE") || headgroup.Equals("PG") || headgroup.Equals("PI") || headgroup.Equals("PS"))
                             {
                                 if (isLyso) headgroup = "L" + headgroup;
-                                if (isPlamalogen) headgroup = "p" + headgroup;
-                                else if (isFAe) headgroup = "e" + headgroup;
+                                if (headgroup.Equals("PC") || headgroup.Equals("PE"))
+                                {
+                                    if (isPlamalogen) headgroup = "p" + headgroup;
+                                    else if (isFAe) headgroup = "e" + headgroup;
+                                }
                             }
                             
                             String key = headgroup + " ";

@@ -161,5 +161,38 @@ namespace LipidCreator
         {
             return faTypes["FA"] || faTypes["FAp"] || faTypes["FAe"];
         }
+        
+        // generator function for providing all possible carbon length / double bond /
+        // hydroxyl / (ether / ester) bonding combinations for a fatty acid
+        public System.Collections.Generic.IEnumerable<FattyAcid> getFattyAcids()
+        {
+            if (!faTypes["FAx"])
+            {
+                // iterate for all carbon lengths
+                foreach (int fattyAcidLength in carbonCounts)
+                {
+                    int maxDoubleBond = (fattyAcidLength - 1) >> 1;
+                    // iterate for all double bonds
+                    foreach (int fattyAcidDoubleBond in doubleBondCounts)
+                    {
+                        // iterate for all hydroxyls
+                        if (maxDoubleBond < fattyAcidDoubleBond) continue;
+                        foreach (int fattyAcidHydroxyl in hydroxylCounts)
+                        {
+                            // iterate for all bondings
+                            if (fattyAcidLength < fattyAcidHydroxyl) continue;
+                            foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
+                            {
+                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                yield return new FattyAcid(0, 0, 0, "FAx");
+            }
+        }
     }
 }

@@ -367,8 +367,8 @@ namespace LipidCreator
                 slLCBTextbox.Text = currentSLLipid.lcb.lengthInfo;
                 slDB2Textbox.Text = currentSLLipid.lcb.dbInfo;
                 slLCBCombobox.SelectedIndex = currentSLLipid.lcb.chainType;
-                slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.longChainBaseHydroxyl - 2;
-                slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fattyAcidHydroxyl;
+                slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.lcb.hydroxylCounts.First() - 2;
+                slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
                 
                 slFATextbox.Text = currentSLLipid.fag.lengthInfo;
                 slDB1Textbox.Text = currentSLLipid.fag.dbInfo;
@@ -1816,12 +1816,14 @@ namespace LipidCreator
         
         public void slLCBHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).longChainBaseHydroxyl = ((ComboBox)sender).SelectedIndex + 2;
+            ((SLLipid)currentLipid).lcb.hydroxylCounts.Clear();
+            ((SLLipid)currentLipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
         }
         
         public void slFAHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).fattyAcidHydroxyl = ((ComboBox)sender).SelectedIndex;
+            ((SLLipid)currentLipid).fag.hydroxylCounts.Clear();
+            ((SLLipid)currentLipid).fag.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex);
         }
         
         private void slHGListboxSelectedValueChanged(object sender, System.EventArgs e)

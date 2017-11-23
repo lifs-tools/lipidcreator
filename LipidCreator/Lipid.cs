@@ -90,11 +90,11 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable allLipids, DataTable allLipidsUnique, PrecursorData precursorData, HashSet<String> replicates)
+        public static void computeFragmentData(DataTable allLipids, PrecursorData precursorData)
         {
             foreach (MS2Fragment fragment in precursorData.MS2Fragments)
             {
-                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0 && precursorData.precursorCharge <= fragment.fragmentCharge) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0 && precursorData.precursorCharge >= fragment.fragmentCharge)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
                 {
                     DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                     foreach (string fbase in fragment.fragmentBase)
@@ -145,24 +145,6 @@ namespace LipidCreator
                     lipidRow["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                     lipidRow["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                     allLipids.Rows.Add(lipidRow);
-                                        
-                    String replicatesKey = precursorData.chemFormComplete + "/" + chemFormFragment;
-                    if (!replicates.Contains(replicatesKey))
-                    {
-                        replicates.Add(replicatesKey);
-                        DataRow lipidRowUnique = allLipidsUnique.NewRow();
-                        lipidRowUnique["Molecule List Name"] = precursorData.moleculeListName;
-                        lipidRowUnique["Precursor Name"] = precursorData.precursorName;
-                        lipidRowUnique["Precursor Ion Formula"] = precursorData.precursorIonFormula;
-                        lipidRowUnique["Precursor Adduct"] = precursorData.precursorAdduct;
-                        lipidRowUnique["Precursor m/z"] = precursorData.precursorM_Z;
-                        lipidRowUnique["Precursor Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                        lipidRowUnique["Product Name"] = fragment.fragmentName;
-                        lipidRowUnique["Product Ion Formula"] = chemFormFragment;
-                        lipidRowUnique["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                        lipidRowUnique["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
-                        allLipidsUnique.Rows.Add(lipidRowUnique);
-                    }
                 }
             }
         }

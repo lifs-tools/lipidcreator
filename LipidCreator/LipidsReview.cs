@@ -60,23 +60,11 @@ namespace LipidCreator
             allFragments.Columns.Add("Product Ion Formula");
             allFragments.Columns.Add("Product m/z");
             allFragments.Columns.Add("Product Charge");
-            
-            allFragmentsUnique = new DataTable();
-            allFragmentsUnique.Columns.Add("Molecule List Name");
-            allFragmentsUnique.Columns.Add("Precursor Name");
-            allFragmentsUnique.Columns.Add("Precursor Ion Formula");
-            allFragmentsUnique.Columns.Add("Precursor Adduct");
-            allFragmentsUnique.Columns.Add("Precursor m/z");
-            allFragmentsUnique.Columns.Add("Precursor Charge");
-            allFragmentsUnique.Columns.Add("Product Name");
-            allFragmentsUnique.Columns.Add("Product Ion Formula");
-            allFragmentsUnique.Columns.Add("Product m/z");
-            allFragmentsUnique.Columns.Add("Product Charge");
-            HashSet<String> replicates = new HashSet<String>();
+            allFragmentsUnique = null;
             
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.computeFragmentData(allFragments, allFragmentsUnique, precursorData, replicates);
+                Lipid.computeFragmentData(allFragments, precursorData);
             }
             
             InitializeComponent();
@@ -124,6 +112,33 @@ namespace LipidCreator
         {
             if (((CheckBox)sender).Checked)
             {
+                if (allFragmentsUnique == null)
+                {
+                    allFragmentsUnique = new DataTable();
+                    allFragmentsUnique.Columns.Add("Molecule List Name");
+                    allFragmentsUnique.Columns.Add("Precursor Name");
+                    allFragmentsUnique.Columns.Add("Precursor Ion Formula");
+                    allFragmentsUnique.Columns.Add("Precursor Adduct");
+                    allFragmentsUnique.Columns.Add("Precursor m/z");
+                    allFragmentsUnique.Columns.Add("Precursor Charge");
+                    allFragmentsUnique.Columns.Add("Product Name");
+                    allFragmentsUnique.Columns.Add("Product Ion Formula");
+                    allFragmentsUnique.Columns.Add("Product m/z");
+                    allFragmentsUnique.Columns.Add("Product Charge");
+                    HashSet<String> replicates = new HashSet<String>();
+                    
+                    foreach (DataRow row in currentView.Rows)
+                    {
+                        string replicateKey = (String)row["Precursor Ion Formula"] + "/" + (String)row["Product Ion Formula"];
+                        if (!replicates.Contains(replicateKey))
+                        {
+                            replicates.Add(replicateKey);
+                            allFragmentsUnique.ImportRow(row);
+                        }
+                    }
+                    
+                }
+            
                 currentView = this.allFragmentsUnique;
             }
             else

@@ -446,6 +446,7 @@ namespace LipidCreator
             plPictureBox = new PictureBox();
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
+            medPictureBox = new PictureBox();
             glArrow = new PictureBox();
             
             String dbText = "No. DB";
@@ -1863,6 +1864,7 @@ namespace LipidCreator
             mediatorlipidsTab.Controls.Add(medMS2fragmentsLipidButton);
             mediatorlipidsTab.Controls.Add(medNegativeAdduct);
             mediatorlipidsTab.Controls.Add(medHgListbox);
+            mediatorlipidsTab.Controls.Add(medPictureBox);
             
             mediatorlipidsTab.Text = "Mediators";
             mediatorlipidsTab.Location = new Point(0, 0);
@@ -1895,14 +1897,19 @@ namespace LipidCreator
             medNegAdductCheckbox4.Text = "+CH3COO⁻";
             medNegAdductCheckbox4.Enabled = false;
             
-            medHgListbox.Location = new Point(54, 105);
+            medHgListbox.Location = new Point(34, 105);
             medHgListbox.Size = new Size(140, 260);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectionMode = SelectionMode.MultiSimple;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
-            //medHgListbox.MouseLeave += new System.EventHandler(slHGListboxMouseLeave);
-            //medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(slHGListboxMouseHover);
+            medHgListbox.MouseLeave += new System.EventHandler(medHGListboxMouseLeave);
+            medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
+            
+            if (medHgListbox.Items.Count > 0) medPictureBox.Image = Image.FromFile(lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
+            medPictureBox.Location = new Point(210, 100);
+            medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            medPictureBox.SendToBack();
             
             
             

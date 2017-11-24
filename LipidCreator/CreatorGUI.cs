@@ -2023,6 +2023,25 @@ namespace LipidCreator
             }
         }
         
+        void medHGListboxMouseHover(object sender, EventArgs e)
+        {
+            Point point = medHgListbox.PointToClient(Cursor.Position);
+            int hoveredIndex = medHgListbox.IndexFromPoint(point);
+
+            if (hoveredIndex != -1)
+            {
+                string mediatorFile = lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[hoveredIndex].ToString()];
+                medPictureBox.Image = Image.FromFile(mediatorFile);
+                medPictureBox.SendToBack();
+            }
+        }
+        
+        void medHGListboxMouseLeave(object sender, EventArgs e)
+        {
+            //medPictureBox.Image = null;
+            //medPictureBox.SendToBack();
+        }
+        
         
         
         

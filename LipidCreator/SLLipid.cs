@@ -64,13 +64,8 @@ namespace LipidCreator
     
         public SLLipid(SLLipid copy) : base((Lipid)copy)
         {
-            headGroupNames = new List<String>();
             lcb = new FattyAcidGroup(copy.lcb);
             fag = new FattyAcidGroup(copy.fag);
-            foreach (string headgroup in copy.headGroupNames)
-            {
-                headGroupNames.Add(headgroup);
-            }
         }
         
         
@@ -141,7 +136,7 @@ namespace LipidCreator
                     
                             String key = headgroup + " ";
                             key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
-                            key += "/";                            
+                            key += Lipid.IdSeparatorSpecific;;                            
                             key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                             if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                             

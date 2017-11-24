@@ -2337,7 +2337,7 @@ namespace LipidCreator
                     else
                     {
                         String headgroups = "";
-                        foreach (string headgroup in currentLipid.headGroupNames)
+                        foreach (string headgroup in currentPLLipid.headGroupNames)
                         {
                             if (headgroups != "") headgroups += ", ";
                             headgroups += headgroup;
@@ -2506,7 +2506,8 @@ namespace LipidCreator
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+                MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
+                Console.WriteLine(ex.StackTrace);
             }
         }
         
@@ -2533,7 +2534,8 @@ namespace LipidCreator
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Could not read file", "Error while reading", MessageBoxButtons.OK);
+                    MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
+                    Console.WriteLine(ex.StackTrace);
                 }
             }
         }

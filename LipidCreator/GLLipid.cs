@@ -66,16 +66,10 @@ namespace LipidCreator
     
         public GLLipid(GLLipid copy) : base((Lipid)copy) 
         {
-            headGroupNames = new List<String>();
             fag1 = new FattyAcidGroup(copy.fag1);
             fag2 = new FattyAcidGroup(copy.fag2);
             fag3 = new FattyAcidGroup(copy.fag3);
             containsSugar = copy.containsSugar;
-            foreach (string headgroup in copy.headGroupNames)
-            {
-                headGroupNames.Add(headgroup);
-            }
-            
         }
         
         
@@ -180,7 +174,7 @@ namespace LipidCreator
                             {
                                 if (fa.length > 0 && fa.suffix != "x")
                                 {
-                                    if (i++ > 0) key += "_";
+                                    if (i++ > 0) key += Lipid.IdSeparatorUnspecific;
                                     key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                                     if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                                     key += fa.suffix;
@@ -265,7 +259,7 @@ namespace LipidCreator
                             foreach (FattyAcid fa in sortedAcids)
                             {
                                 if (fa.length > 0 && fa.suffix != "x"){
-                                    if (i++ > 0) key += "_";
+                                    if (i++ > 0) key += Lipid.IdSeparatorUnspecific;
                                     key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                                     if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                                     key += fa.suffix;

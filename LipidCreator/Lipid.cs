@@ -36,6 +36,7 @@ namespace LipidCreator
 {
     public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5};
     
+    
     [Serializable]
     public class PrecursorData
     {
@@ -67,6 +68,8 @@ namespace LipidCreator
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
         public List<String> headGroupNames;
+        public static string IdSeparatorUnspecific = "_";
+        public static string IdSeparatorSpecific = "/";
     
         public Lipid()
         {
@@ -94,7 +97,8 @@ namespace LipidCreator
         {
             foreach (MS2Fragment fragment in precursorData.MS2Fragments)
             {
-                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0 && precursorData.precursorCharge <= fragment.fragmentCharge) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0 && precursorData.precursorCharge >= fragment.fragmentCharge)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                //if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0 && precursorData.precursorCharge <= fragment.fragmentCharge) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0 && precursorData.precursorCharge >= fragment.fragmentCharge)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
                 {
                     DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                     foreach (string fbase in fragment.fragmentBase)
@@ -275,6 +279,7 @@ namespace LipidCreator
             className = copy.className;
             representativeFA = copy.representativeFA;
             MS2Fragments = new Dictionary<String, ArrayList>();
+            headGroupNames = new List<String>();
             pathsToFullImage = new Dictionary<String, String>();
             foreach (KeyValuePair<String, String> item in copy.pathsToFullImage)
             {
@@ -288,6 +293,10 @@ namespace LipidCreator
                 {
                     MS2Fragments[item.Key].Add(new MS2Fragment(fragment));
                 }
+            }
+            foreach (string headgroup in copy.headGroupNames)
+            {
+                headGroupNames.Add(headgroup);
             }
         }
         
@@ -387,7 +396,7 @@ namespace LipidCreator
                     
                 default:
                     Console.WriteLine("Error: " + node.Name.ToString());
-                    throw new Exception();
+                    throw new Exception("Error: " + node.Name.ToString());
             }
         }
     }

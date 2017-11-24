@@ -377,7 +377,6 @@ namespace LipidCreator
         
         public void import(XDocument doc)
         {
-        
             var lipids = doc.Descendants("lipid");
             foreach ( var lipid in lipids )
             {
@@ -385,32 +384,32 @@ namespace LipidCreator
                 switch (lipidType)
                 {
                     case "GL":
-                        GLLipid gll = new GLLipid(allPathsToPrecursorImages, null);
+                        GLLipid gll = new GLLipid(allPathsToPrecursorImages, allFragments);
                         gll.import(lipid);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(allPathsToPrecursorImages, null);
+                        PLLipid pll = new PLLipid(allPathsToPrecursorImages, allFragments);
                         pll.import(lipid);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(allPathsToPrecursorImages, null);
+                        SLLipid sll = new SLLipid(allPathsToPrecursorImages, allFragments);
                         sll.import(lipid);
                         registeredLipids.Add(sll);
                         break;
                         
                     case "Cholesterol":
-                        Cholesterol chl = new Cholesterol(allPathsToPrecursorImages, null);
+                        Cholesterol chl = new Cholesterol(allPathsToPrecursorImages, allFragments);
                         chl.import(lipid);
                         registeredLipids.Add(chl);
                         break;
                         
                     default:
                         Console.WriteLine("Error global import");
-                        throw new Exception();
+                        throw new Exception("Error global import");
                 }
             }
         }

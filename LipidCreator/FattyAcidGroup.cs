@@ -120,7 +120,7 @@ namespace LipidCreator
                         break;
                         
                     default:
-                        throw new Exception();
+                        throw new Exception("Error for fatty acid group import");
                 }
             }
         }

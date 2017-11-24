@@ -65,10 +65,8 @@ namespace LipidCreator
     
         public Cholesterol(Cholesterol copy) : base((Lipid)copy) 
         {
-            headGroupNames = new List<String>();
             fag = new FattyAcidGroup(copy.fag);
             containsEster = copy.containsEster;
-            
         }
         
         

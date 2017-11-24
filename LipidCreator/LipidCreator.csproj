@@ -130,6 +130,7 @@
     <Compile Include="LipidsReview.Designer.cs">
       <DependentUpon>LipidsReview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mediator.cs" />
     <Compile Include="MS2Form.cs">
       <SubType>Form</SubType>
     </Compile>

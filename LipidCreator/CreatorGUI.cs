@@ -2032,6 +2032,7 @@ namespace LipidCreator
             {
                 string mediatorFile = lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[hoveredIndex].ToString()];
                 medPictureBox.Image = Image.FromFile(mediatorFile);
+                medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
                 medPictureBox.SendToBack();
             }
         }

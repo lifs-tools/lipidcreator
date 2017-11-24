@@ -1906,8 +1906,12 @@ namespace LipidCreator
             medHgListbox.MouseLeave += new System.EventHandler(medHGListboxMouseLeave);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             
-            if (medHgListbox.Items.Count > 0) medPictureBox.Image = Image.FromFile(lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
             medPictureBox.Location = new Point(210, 100);
+            if (medHgListbox.Items.Count > 0)
+            {
+                medPictureBox.Image = Image.FromFile(lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
+                medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
+            }
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             medPictureBox.SendToBack();
             

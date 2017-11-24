@@ -95,7 +95,8 @@ namespace LipidCreator
         
         
         public static void computeFragmentData(DataTable allLipids, PrecursorData precursorData)
-        {
+        {                    
+            int reportedFragments = 0;
             foreach (MS2Fragment fragment in precursorData.MS2Fragments)
             {
                 if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
@@ -159,7 +160,25 @@ namespace LipidCreator
                     lipidRow["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                     lipidRow["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                     allLipids.Rows.Add(lipidRow);
+                    
+                    ++reportedFragments;
                 }
+            }
+            
+            if(reportedFragments > 0)
+            {
+                DataRow lipidRowPrecursor = allLipids.NewRow();
+                lipidRowPrecursor["Molecule List Name"] = precursorData.moleculeListName;
+                lipidRowPrecursor["Precursor Name"] = precursorData.precursorName;
+                lipidRowPrecursor["Precursor Ion Formula"] = precursorData.precursorIonFormula;
+                lipidRowPrecursor["Precursor Adduct"] = precursorData.precursorAdduct;
+                lipidRowPrecursor["Precursor m/z"] = precursorData.precursorM_Z;
+                lipidRowPrecursor["Precursor Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                lipidRowPrecursor["Product Name"] = "Pre";
+                lipidRowPrecursor["Product Ion Formula"] = precursorData.precursorIonFormula;
+                lipidRowPrecursor["Product m/z"] = precursorData.precursorM_Z;
+                lipidRowPrecursor["Product Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                allLipids.Rows.Add(lipidRowPrecursor);
             }
         }
         
@@ -171,93 +190,115 @@ namespace LipidCreator
             ArrayList valuesIntensity = new ArrayList();
             String sql;
             
+            bool reportFragments = false;
             foreach (MS2Fragment fragment in precursorData.MS2Fragments)
             {
-                if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
                 {
-                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                    foreach (string fbase in fragment.fragmentBase)
-                    {
-                        switch(fbase)
-                        {
-                            case "LCB":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
-                                break;
-                            case "FA":
-                            case "FA1":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                                break;
-                            case "FA2":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
-                                break;
-                            case "FA3":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
-                                break;
-                            case "FA4":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
-                                break;
-                            case "PRE":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    // some exceptional if conditions
-                    if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
-                    {
-                        Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
-                    }
-                    String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
-                    //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
-                    double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
-                    string fragName = fragment.fragmentName;
-                    
-                    if (precursorData.lipidCategory == LipidCategory.Mediator)
-                    {
-                        massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
-                        fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
-                    }
-                    
-                    valuesMZ.Add(massFragment);
-                    valuesIntensity.Add(fragment.intensity);
-                    
-                    // add Annotation
-                    sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
-                    SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
-                    parameterName.Value = fragName;
-                    command.CommandText = sql;
-                    command.Parameters.Add(parameterName);
-                    command.ExecuteNonQuery();
-                    
+                    reportFragments = true;
+                    break;
                 }
             }
             
-            
-            int numFragments = valuesMZ.Count;
-            double[] valuesMZArray = new double[numFragments];
-            float[] valuesIntens = new float[numFragments];
-            for(int i = 0; i < numFragments; ++i)
+            if (reportFragments)
             {
-                valuesMZArray[i] = (double)valuesMZ[i];
-                valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
+                foreach (MS2Fragment fragment in precursorData.MS2Fragments)
+                {
+                    if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                    {
+                        DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                        foreach (string fbase in fragment.fragmentBase)
+                        {
+                            switch(fbase)
+                            {
+                                case "LCB":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                                    break;
+                                case "FA":
+                                case "FA1":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                    break;
+                                case "FA2":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                                    break;
+                                case "FA3":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                    break;
+                                case "FA4":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
+                                    break;
+                                case "PRE":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        // some exceptional if conditions
+                        if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                        {
+                            Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
+                        }
+                        String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
+                        //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
+                        double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                        string fragName = fragment.fragmentName;
+                        
+                        if (precursorData.lipidCategory == LipidCategory.Mediator)
+                        {
+                            massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                            fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                        }
+                        
+                        valuesMZ.Add(massFragment);
+                        valuesIntensity.Add(fragment.intensity);
+                        
+                        // add Annotation
+                        sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
+                        SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                        parameterName.Value = fragName;
+                        command.CommandText = sql;
+                        command.Parameters.Add(parameterName);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                
+                // add Annotation for precursor
+                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + precursorData.precursorM_Z + ", '" + precursorData.precursorIonFormula + "', @fragmentName)";
+                SQLiteParameter parameterNamePre = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
+                parameterNamePre.Value = precursorData.precursorName;
+                command.CommandText = sql;
+                command.Parameters.Add(parameterNamePre);
+                command.ExecuteNonQuery();
+                valuesMZ.Add(precursorData.precursorM_Z);
+                valuesIntensity.Add(100);
+                
+                
+                int numFragments = valuesMZ.Count;
+                double[] valuesMZArray = new double[numFragments];
+                float[] valuesIntens = new float[numFragments];
+                for(int i = 0; i < numFragments; ++i)
+                {
+                    valuesMZArray[i] = (double)valuesMZ[i];
+                    valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
+                }
+                
+                
+                // add MS1 information
+                sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge + ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                
+                // add spectrum
+                command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+                SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+                SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+                parameterMZ.Value = Compressing.Compress(valuesMZArray);
+                parameterIntens.Value = Compressing.Compress(valuesIntens);
+                command.Parameters.Add(parameterMZ);
+                command.Parameters.Add(parameterIntens);
+                command.ExecuteNonQuery();
             }
-            
-            
-            // add MS1 information
-            sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge + ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
-            command.CommandText = sql;
-            command.ExecuteNonQuery();
-            
-            // add spectrum
-            command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
-            SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
-            SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
-            parameterMZ.Value = Compressing.Compress(valuesMZArray);
-            parameterIntens.Value = Compressing.Compress(valuesIntens);
-            command.Parameters.Add(parameterMZ);
-            command.Parameters.Add(parameterIntens);
-            command.ExecuteNonQuery();
         }
         
         

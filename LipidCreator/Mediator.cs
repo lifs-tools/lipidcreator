@@ -37,7 +37,7 @@ namespace LipidCreator
 {   
     [Serializable]
     public class Mediator : Lipid
-    {
+    { 
         public Mediator(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             if (allFragments.ContainsKey("Mediator"))
@@ -46,9 +46,12 @@ namespace LipidCreator
                 {
                     if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                    bool containsDeuterium = PLFragments.Key.IndexOf("/") > -1;
                     foreach (MS2Fragment fragment in PLFragments.Value)
                     {
-                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                        MS2Fragment tmp = new MS2Fragment(fragment);
+                        MS2Fragments[PLFragments.Key].Add(tmp);
+                        if (containsDeuterium) tmp.fragmentSelected = false;
                     }
                 }
             }
@@ -93,6 +96,19 @@ namespace LipidCreator
         
         public override void computePrecursorData(Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
+            Dictionary<string, ArrayList> isotopeDict = new Dictionary<string, ArrayList>();
+            foreach (KeyValuePair<string, ArrayList> ms2fragment in MS2Fragments)
+            {
+                if (ms2fragment.Key.IndexOf("/") > -1)
+                {
+                    string monoName = ms2fragment.Key.Split(new char[]{'/'})[0];
+                    string deuterium = ms2fragment.Key.Split(new char[]{'/'})[1];
+                    
+                    if (!isotopeDict.ContainsKey(monoName)) isotopeDict.Add(monoName, new ArrayList());
+                    isotopeDict[monoName].Add(deuterium);
+                }
+            }
+            
             
             foreach(string headgroupIter in headGroupNames)
             {   
@@ -134,6 +150,46 @@ namespace LipidCreator
                             precursorData.MS2Fragments = MS2Fragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
+                            
+                            if (isotopeDict.ContainsKey(headgroup))
+                            {
+                                foreach (string deuterium in isotopeDict[headgroup])
+                                {
+                                    string derivativeHeadgroup = headgroup + "/" + deuterium;
+                                    if (headgroupAdductRestrictions.ContainsKey(derivativeHeadgroup) && headgroupAdductRestrictions[headgroup][adduct.Key])
+                                    {
+                                        usedKeys.Add(key);
+                            
+                                        DataTable atomsCountDeuterium = MS2Fragment.createEmptyElementTable();
+                                        MS2Fragment.addCounts(atomsCountDeuterium, headGroupsTable[derivativeHeadgroup]);
+                                        String chemFormDeuterium = LipidCreatorForm.computeChemicalFormula(atomsCountDeuterium);
+                                        int chargeDeuterium = getChargeAndAddAdduct(atomsCountDeuterium, adduct.Key);
+                                        String chemFormCompleteDeuterium = LipidCreatorForm.computeChemicalFormula(atomsCountDeuterium);
+                                        double massDeuterium = LipidCreatorForm.computeMass(atomsCountDeuterium, chargeDeuterium);
+                                                                            
+
+                                        PrecursorData precursorDataDeuterium = new PrecursorData();
+                                        precursorDataDeuterium.lipidCategory = LipidCategory.Mediator;
+                                        precursorDataDeuterium.moleculeListName = derivativeHeadgroup;
+                                        precursorDataDeuterium.precursorName = derivativeHeadgroup;
+                                        precursorDataDeuterium.precursorIonFormula = chemFormDeuterium;
+                                        precursorDataDeuterium.precursorAdduct = "[M" + adduct.Key + "]";
+                                        precursorDataDeuterium.precursorM_Z = massDeuterium / (double)(Math.Abs(chargeDeuterium));
+                                        precursorDataDeuterium.precursorCharge = chargeDeuterium;
+                                        precursorDataDeuterium.adduct = adduct.Key;
+                                        precursorDataDeuterium.atomsCount = atomsCountDeuterium;
+                                        precursorDataDeuterium.fa1 = null;
+                                        precursorDataDeuterium.fa2 = null;
+                                        precursorDataDeuterium.fa3 = null;
+                                        precursorDataDeuterium.fa4 = null;
+                                        precursorDataDeuterium.lcb = null;
+                                        precursorDataDeuterium.chemFormComplete = chemFormCompleteDeuterium;
+                                        precursorDataDeuterium.MS2Fragments = MS2Fragments[derivativeHeadgroup];
+                                        
+                                        precursorDataList.Add(precursorDataDeuterium);
+                                    }
+                                }
+                            }
                         }
                     }
                 }

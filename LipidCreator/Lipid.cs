@@ -31,6 +31,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Data.SQLite;
+using System.Globalization;
 
 namespace LipidCreator
 {
@@ -136,6 +137,15 @@ namespace LipidCreator
                     
                     String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge);
+                    string fragName = fragment.fragmentName;
+                    
+                    // Exceptions for mediators
+                    if (precursorData.lipidCategory == LipidCategory.Mediator)
+                    {
+                        massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                        fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                    }
+                    
                     
                     DataRow lipidRow = allLipids.NewRow();
                     lipidRow["Molecule List Name"] = precursorData.moleculeListName;
@@ -144,7 +154,7 @@ namespace LipidCreator
                     lipidRow["Precursor Adduct"] = precursorData.precursorAdduct;
                     lipidRow["Precursor m/z"] = precursorData.precursorM_Z;
                     lipidRow["Precursor Charge"] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                    lipidRow["Product Name"] = fragment.fragmentName;
+                    lipidRow["Product Name"] = fragName;
                     lipidRow["Product Ion Formula"] = chemFormFragment;
                     lipidRow["Product m/z"] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                     lipidRow["Product Charge"] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
@@ -201,6 +211,13 @@ namespace LipidCreator
                     String chemFormFragment = LipidCreatorForm.computeChemicalFormula(atomsCountFragment);
                     //int chargeFragment = getChargeAndAddAdduct(atomsCountFragment, adduct.Key);
                     double massFragment = LipidCreatorForm.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                    string fragName = fragment.fragmentName;
+                    
+                    if (precursorData.lipidCategory == LipidCategory.Mediator)
+                    {
+                        massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                        fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                    }
                     
                     valuesMZ.Add(massFragment);
                     valuesIntensity.Add(fragment.intensity);
@@ -208,7 +225,7 @@ namespace LipidCreator
                     // add Annotation
                     sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
                     SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
-                    parameterName.Value = fragment.fragmentName;
+                    parameterName.Value = fragName;
                     command.CommandText = sql;
                     command.Parameters.Add(parameterName);
                     command.ExecuteNonQuery();

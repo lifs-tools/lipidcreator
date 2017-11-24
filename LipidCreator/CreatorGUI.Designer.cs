@@ -495,7 +495,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["Mediator"])
             {
                 String headgroup = fragmentList.Key;
-                medHgList.Add(headgroup);
+                if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);
             }
             medHgList.Sort();
             
@@ -1896,7 +1896,7 @@ namespace LipidCreator
             medNegAdductCheckbox4.Enabled = false;
             
             medHgListbox.Location = new Point(54, 105);
-            medHgListbox.Size = new Size(80, 260);
+            medHgListbox.Size = new Size(140, 260);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectionMode = SelectionMode.MultiSimple;

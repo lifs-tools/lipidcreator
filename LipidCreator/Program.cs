@@ -84,7 +84,8 @@ namespace LipidCreator
                             lineCounter++;
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
-                            String[] tokens = line.Split(new char[] {','});
+                            
+                            string[] tokens = parseLine(line);
                             if (!allFragments.ContainsKey(tokens[0]))
                             {
                                 allFragments.Add(tokens[0], new Dictionary<String, ArrayList>());
@@ -149,7 +150,9 @@ namespace LipidCreator
                             lineCounter++;
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
-                            String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
+                            
+                            string[] tokens = parseLine(line);
+                            //String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
                             if (tokens.Length != 18) throw new Exception("invalid line in file");
                             headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
                             headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
@@ -197,6 +200,32 @@ namespace LipidCreator
                                                       new Mediator(allPathsToPrecursorImages, allFragments)
                                                       });
             creatorGUI = new CreatorGUI(this);
+        }
+        
+        public string[] parseLine(string line)
+        {
+            List<string> listTokens = new List<string>();
+            bool inQuotes = false;
+            string token = "";
+            for (int i = 0; i < line.Length; ++i)
+            {
+                if (line[i] == '\"') inQuotes = !inQuotes;
+                else if (line[i] == ',')
+                {
+                    if (inQuotes) token += line[i];
+                    else
+                    {
+                        listTokens.Add(token);
+                        token = "";
+                    }
+                }
+                else token += line[i];
+            }
+            listTokens.Add(token);
+            if (inQuotes) throw new Exception("invalid line in file");
+            
+            
+            return listTokens.ToArray();
         }
 
 

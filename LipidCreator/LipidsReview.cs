@@ -129,7 +129,7 @@ namespace LipidCreator
                     
                     foreach (DataRow row in currentView.Rows)
                     {
-                        string replicateKey = (String)row["Precursor Ion Formula"] + "/" + (String)row["Product Ion Formula"];
+                        string replicateKey = (String)row["Precursor Ion Formula"] + "/" + (((String)row["Product Ion Formula"]) != "" ? (String)row["Product Ion Formula"] : (String)row["Product Name"]);
                         if (!replicates.Contains(replicateKey))
                         {
                             replicates.Add(replicateKey);

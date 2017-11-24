@@ -64,7 +64,7 @@ namespace LipidCreator
             registeredLipidsDatatable.Columns.Add(new DataColumn("Building Block 4"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Adducts"));
             InitializeComponent();
-            lipidModifications = new int[]{-1, -1, -1, -1, -1};
+            lipidModifications = Enumerable.Repeat(-1, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
             if(Directory.Exists("predefined")) 
             {
@@ -196,7 +196,7 @@ namespace LipidCreator
                     glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
                     glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
                     glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
-                    glModifyLipidButton.Enabled = lipidModifications[1] > -1;
+                    glModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.GlyceroLipid] > -1;
                     
                     glContainsSugar.Checked = currentGLLipid.containsSugar;
                     
@@ -258,7 +258,7 @@ namespace LipidCreator
                         clNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                         clNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                         clNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                        clModifyLipidButton.Enabled = lipidModifications[2] > -1;
+                        clModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.PhosphoLipid] > -1;
                         
                         plIsCL.Checked = true;
                         
@@ -326,7 +326,7 @@ namespace LipidCreator
                         plNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                         plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                         plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
-                        plModifyLipidButton.Enabled = lipidModifications[2] > -1;
+                        plModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.PhosphoLipid] > -1;
                         plIsCL.Checked = false;
                         
                         
@@ -383,7 +383,7 @@ namespace LipidCreator
                     slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
                     slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
                     slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
-                    slModifyLipidButton.Enabled = lipidModifications[3] > -1;
+                    slModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.SphingoLipid] > -1;
                     
                     
                     updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
@@ -402,7 +402,7 @@ namespace LipidCreator
                     chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
                     chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
                     chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
-                    chModifyLipidButton.Enabled = lipidModifications[4] > -1;
+                    chModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.Cholesterol] > -1;
                     chContainsEster.Checked = currentCHLipid.containsEster;
                     
                     chFATextbox.Text = currentCHLipid.fag.lengthInfo;
@@ -412,6 +412,34 @@ namespace LipidCreator
                     updateRanges(currentCHLipid.fag, chFATextbox, chFACombobox.SelectedIndex);
                     updateRanges(currentCHLipid.fag, chDBTextbox, 3);
                     updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
+                    break;
+                    
+                case LipidCategory.Mediator:
+                    Mediator currentMedLipid = (Mediator)currentLipid;
+                    settingListbox = true;
+                    for (int i = 0; i < medHgListbox.Items.Count; ++i)
+                    {
+                        medHgListbox.SetSelected(i, false);
+                    }
+                    foreach (string headgroup in currentMedLipid.headGroupNames)
+                    {
+                        var i = 0;
+                        foreach (var item in medHgListbox.Items)
+                        {
+                            if (item.ToString().Equals(headgroup)) 
+                            {
+                                medHgListbox.SetSelected(i, true);
+                                break;
+                            }
+                            ++i;
+                        }
+                    }
+                    settingListbox = false;
+                    medNegAdductCheckbox1.Checked = currentMedLipid.adducts["-H"];
+                    medNegAdductCheckbox2.Checked = currentMedLipid.adducts["-2H"];
+                    medNegAdductCheckbox3.Checked = currentMedLipid.adducts["+HCOO"];
+                    medNegAdductCheckbox4.Checked = currentMedLipid.adducts["+CH3COO"];
+                    medModifyLipidButton.Enabled = lipidModifications[(int)LipidCategory.Mediator] > -1;
                     break;
                     
                 default:
@@ -457,6 +485,14 @@ namespace LipidCreator
         {
             int index = (int)LipidCategory.Cholesterol;
             lipidCreatorForm.lipidTabList[index] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidModifications[index] = -1;
+            changeTab(index);
+        }
+        
+        public void resetMedLipid(Object sender, EventArgs e)
+        {
+            int index = (int)LipidCategory.Mediator;
+            lipidCreatorForm.lipidTabList[index] = new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -1968,6 +2004,28 @@ namespace LipidCreator
         }
         
         
+        
+        
+        ////////////////////// Mediators ////////////////////////////////
+        
+        public void medNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
+        {
+            ((Mediator)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
+        }
+        
+        private void medHGListboxSelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (settingListbox) return;
+            currentLipid.headGroupNames.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                currentLipid.headGroupNames.Add(itemChecked.ToString());
+            }
+        }
+        
+        
+        
+        
         ////////////////////// Remaining parts ////////////////////////////////
         
         
@@ -2238,6 +2296,16 @@ namespace LipidCreator
                 }
                 return LipidCategory.Cholesterol;
             }
+            
+            else if (currentLipid is Mediator)
+            {
+                if (currentLipid.headGroupNames.Count == 0)
+                {
+                    MessageBox.Show("No mediator selected!", "Not registrable");
+                    return  LipidCategory.NoLipid;                    
+                }
+                return LipidCategory.Mediator;
+            }
             return LipidCategory.NoLipid;
         }
         
@@ -2261,6 +2329,10 @@ namespace LipidCreator
                     break;
                 case LipidCategory.Cholesterol:
                     lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new Cholesterol((Cholesterol)currentLipid);
+                    refreshRegisteredLipidsTable();
+                    break;
+                case LipidCategory.Mediator:
+                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new Mediator((Mediator)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 default:
@@ -2289,6 +2361,10 @@ namespace LipidCreator
                     break;
                 case LipidCategory.Cholesterol:
                     lipidCreatorForm.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
+                    refreshRegisteredLipidsTable();
+                    break;
+                case LipidCategory.Mediator:
+                    lipidCreatorForm.registeredLipids.Add(new Mediator((Mediator)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 default:
@@ -2350,7 +2426,13 @@ namespace LipidCreator
                     Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                     row["Category"] = "Cholesterol";
                     if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
-                    
+                }
+                
+                else if (currentRegisteredLipid is Mediator)
+                {
+                    Mediator currentMedLipid = (Mediator)currentRegisteredLipid;
+                    row["Building Block 1"] = "HG: " + String.Join(", ", currentMedLipid.headGroupNames);
+                    row["Category"] = "Mediator";
                 }
                 
                 
@@ -2407,6 +2489,11 @@ namespace LipidCreator
                     tabIndex = (int)LipidCategory.Cholesterol;
                     lipidCreatorForm.lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
                 }
+                else if (currentRegisteredLipid is Mediator)
+                {
+                    tabIndex = (int)LipidCategory.Mediator;
+                    lipidCreatorForm.lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
+                }
                 currentLipid = currentRegisteredLipid;
                 lipidModifications[tabIndex] = rowIndex;
                 tabControl.SelectedIndex = tabIndex;
@@ -2432,6 +2519,10 @@ namespace LipidCreator
                 else if (currentRegisteredLipid is Cholesterol)
                 {
                     tabIndex = (int)LipidCategory.Cholesterol;
+                }
+                else if (currentRegisteredLipid is Mediator)
+                {
+                    tabIndex = (int)LipidCategory.Mediator;
                 }
                 lipidCreatorForm.registeredLipids.RemoveAt(rowIndex);
                 refreshRegisteredLipidsTable();

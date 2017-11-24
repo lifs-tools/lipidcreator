@@ -47,15 +47,16 @@ namespace LipidCreator
             lcb.hydroxylCounts.Add(2);
             fag.hydroxylCounts.Add(0);
             
-            
-            
-            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["SL"])
+            if (allFragments.ContainsKey("SL"))
             {
-                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
-                MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                foreach (MS2Fragment fragment in PLFragments.Value)
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["SL"])
                 {
-                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    {
+                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    }
                 }
             }
             adducts["+H"] = true;

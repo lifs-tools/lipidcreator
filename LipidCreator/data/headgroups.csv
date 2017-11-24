@@ -1,6 +1,6 @@
 HG,C,H,O,N,P,S,Na,d,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks
 #Lc3Cer,20,34,15,1,0,0,0,0,,,,,,,,,
-10-HDoHE,22,32,3,0,0,0,0,0,images/Precursors/BMP_pos_pre.png,No,No,No,Yes,No,No,No,8
+10-HDoHE,22,32,3,0,0,0,0,0,images/Precursors/10-HDoHE.png,No,No,No,Yes,No,No,No,8
 BMP,6,13,8,0,1,0,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6
 Cer,0,1,0,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4
 CerP,0,2,3,0,1,0,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4

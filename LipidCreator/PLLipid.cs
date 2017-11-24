@@ -59,16 +59,18 @@ namespace LipidCreator
             fag4 = new FattyAcidGroup();
             isCL = false;
             
-            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["PL"])
+            if (allFragments.ContainsKey("PL"))
             {
-                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
-                MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                foreach (MS2Fragment fragment in PLFragments.Value)
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["PL"])
                 {
-                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    {
+                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    }
                 }
             }
-            headGroupNames.Sort();
         }
     
         public PLLipid(PLLipid copy) : base((Lipid)copy)

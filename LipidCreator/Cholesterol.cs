@@ -47,17 +47,18 @@ namespace LipidCreator
             fag = new FattyAcidGroup();
             containsEster = false;
             
-            foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["Cholesterol"])
+            if (allFragments.ContainsKey("Cholesterol"))
             {
-                if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
-                headGroupNames.Add(PLFragments.Key);
-                MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                foreach (MS2Fragment fragment in PLFragments.Value)
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["Cholesterol"])
                 {
-                    MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
+                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    {
+                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                    }
                 }
             }
-            headGroupNames.Sort();
             
             adducts["+NH4"] = true;
             adducts["-H"] = false;

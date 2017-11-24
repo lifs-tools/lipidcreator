@@ -105,7 +105,7 @@ namespace LipidCreator
                             atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[11]);
                             atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[12]);
                             string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[3];
-                            if (!File.Exists(fragmentFile))
+                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
@@ -150,7 +150,7 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                            if (tokens.Length != 17) throw new Exception("invalid line in file");
+                            if (tokens.Length != 18) throw new Exception("invalid line in file");
                             headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
                             headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
                             headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
@@ -159,21 +159,22 @@ namespace LipidCreator
                             headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
                             headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
                             headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
-                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[8];
+                            headgroups[tokens[0]].Rows[7]["Count"] = Convert.ToInt32(tokens[8]);
+                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[9];
                             if (!File.Exists(precursorFile))
                             {
                                 Console.WriteLine("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
                             }
                             allPathsToPrecursorImages.Add(tokens[0], precursorFile);
                             headgroupAdductRestrictions.Add(tokens[0], new Dictionary<String, bool>());
-                            headgroupAdductRestrictions[tokens[0]].Add("+H", tokens[9].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+2H", tokens[10].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+NH4", tokens[11].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("-H", tokens[12].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("-2H", tokens[13].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+HCOO", tokens[14].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+CH3COO", tokens[15].Equals("Yes"));
-                            buildingBlockTypes.Add(tokens[0], Convert.ToInt32(tokens[16]));
+                            headgroupAdductRestrictions[tokens[0]].Add("+H", tokens[10].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("+2H", tokens[11].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("+NH4", tokens[12].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("-H", tokens[13].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("-2H", tokens[14].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("+HCOO", tokens[15].Equals("Yes"));
+                            headgroupAdductRestrictions[tokens[0]].Add("+CH3COO", tokens[16].Equals("Yes"));
+                            buildingBlockTypes.Add(tokens[0], Convert.ToInt32(tokens[17]));
                         }
                     }
                 }
@@ -192,16 +193,9 @@ namespace LipidCreator
                                                       new GLLipid(allPathsToPrecursorImages, allFragments),
                                                       new PLLipid(allPathsToPrecursorImages, allFragments),
                                                       new SLLipid(allPathsToPrecursorImages, allFragments),
-                                                      new Cholesterol(allPathsToPrecursorImages, allFragments)
+                                                      new Cholesterol(allPathsToPrecursorImages, allFragments),
+                                                      new Mediator(allPathsToPrecursorImages, allFragments)
                                                       });
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
             creatorGUI = new CreatorGUI(this);
         }
 
@@ -275,7 +269,6 @@ namespace LipidCreator
                     }
                 }
                 else return null;
-                
             }
             return carbonCounts;
         }

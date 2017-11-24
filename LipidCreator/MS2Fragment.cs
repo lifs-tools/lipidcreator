@@ -78,7 +78,8 @@ namespace LipidCreator
                 {"N", 3},
                 {"P", 4},
                 {"S", 5},
-                {"Na", 6}
+                {"Na", 6},
+                {"d", 7}
             };
         
             restrictions.Clear();
@@ -123,6 +124,7 @@ namespace LipidCreator
             dt1.Rows[4][count] = (int)dt1.Rows[4][count] + (int)dt2.Rows[4][count];  // phosphor
             dt1.Rows[5][count] = (int)dt1.Rows[5][count] + (int)dt2.Rows[5][count];  // sulfur
             dt1.Rows[6][count] = (int)dt1.Rows[6][count] + (int)dt2.Rows[6][count];  // sodium
+            dt1.Rows[7][count] = (int)dt1.Rows[7][count] + (int)dt2.Rows[7][count];  // deuterium
         }
         
         public static DataTable createEmptyElementTable()
@@ -191,6 +193,13 @@ namespace LipidCreator
             sodium[element] = "sodium";
             sodium[monoMass] = 22.9897677;
             elements.Rows.Add(sodium);
+
+            DataRow deuterium = elements.NewRow();
+            deuterium[count] = "0";
+            deuterium[shortcut] = "d";
+            deuterium[element] = "deuterium";
+            deuterium[monoMass] = 1.007825035 * 2;
+            elements.Rows.Add(deuterium);
             return elements;
         }
         
@@ -260,6 +269,14 @@ namespace LipidCreator
             sodium[element] = "sodium";
             sodium[monoMass] = 22.9897677;
             elements.Rows.Add(sodium);
+
+            DataRow deuterium = elements.NewRow();
+            deuterium[count] = copy.Rows[7][count];
+            deuterium[shortcut] = "d";
+            deuterium[element] = "deuterium";
+            deuterium[monoMass] = 1.007825035 * 2;
+            elements.Rows.Add(deuterium);
+            
             return elements;
         }
     

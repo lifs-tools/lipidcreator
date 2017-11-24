@@ -2310,13 +2310,7 @@ namespace LipidCreator
                     row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
                     if (currentGLLipid.containsSugar)
                     {
-                        String headgroups = "";
-                        foreach (string headgroup in currentGLLipid.headGroupNames)
-                        {
-                            if (headgroups != "") headgroups += ", ";
-                            headgroups += headgroup;
-                        }
-                        row["Building Block 3"] = "HG: " + headgroups;
+                        row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
                     }
                     else
                     {
@@ -2336,14 +2330,8 @@ namespace LipidCreator
                     }
                     else
                     {
-                        String headgroups = "";
-                        foreach (string headgroup in currentPLLipid.headGroupNames)
-                        {
-                            if (headgroups != "") headgroups += ", ";
-                            headgroups += headgroup;
-                        }
                         row["Category"] = "Phospholipid";
-                        row["Building Block 1"] = "HG: " + headgroups;
+                        row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
                         row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
                         row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
                     }
@@ -2351,14 +2339,8 @@ namespace LipidCreator
                 else if (currentRegisteredLipid is SLLipid)
                 {
                     SLLipid currentSLLipid = (SLLipid)currentRegisteredLipid;
-                    String headgroups = "";
-                    foreach (string headgroup in currentSLLipid.headGroupNames)
-                    {
-                        if (headgroups != "") headgroups += ", ";
-                        headgroups += headgroup;
-                    }
                     row["Category"] = "Sphingolipid";
-                    row["Building Block 1"] = "HG: " + headgroups;
+                    row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
                     row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
                 }

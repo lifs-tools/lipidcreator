@@ -403,8 +403,8 @@ namespace LipidCreator
             this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuHelp } );
             
             tabControl = new TabControl();
-            this.Size = new System.Drawing.Size(1060, 800);
-            this.MinimumSize = new System.Drawing.Size(1060, 800);
+            this.Size = new System.Drawing.Size(1060, 700);
+            this.MinimumSize = new System.Drawing.Size(1060, 700);
             homeTab = new TabPage();
             glycerolipidsTab = new TabPage();
             phospholipidsTab = new TabPage();
@@ -455,8 +455,8 @@ namespace LipidCreator
             int sep = 15;
             int sepText = 20;
             int faLength = 150;
-            int topLowButtons = 420;
-            int leftGroupboxes = 850;
+            int topLowButtons = 390;
+            int leftGroupboxes = 1000;
 
             
             deleteImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/delete-small.png");
@@ -931,8 +931,8 @@ namespace LipidCreator
             clFA1Checkbox1.Checked = true;
             clFA1Checkbox1.CheckedChanged += new EventHandler(clFA1Checkbox1CheckedChanged);
 
-            clPositiveAdduct.Location = new Point(leftGroupboxes, 60);
             clPositiveAdduct.Width = 120;
+            clPositiveAdduct.Location = new Point(leftGroupboxes - clPositiveAdduct.Width, 60);
             clPositiveAdduct.Height = 120;
             clPositiveAdduct.Text = "Positive adducts";
             clPosAdductCheckbox1.Parent = clPositiveAdduct;
@@ -949,8 +949,8 @@ namespace LipidCreator
             clPosAdductCheckbox3.Text = "+NH4⁺";
             clPosAdductCheckbox3.Enabled = false;
             clPosAdductCheckbox3.CheckedChanged += new EventHandler(clPosAdductCheckbox3CheckedChanged);
-            clNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             clNegativeAdduct.Width = 120;
+            clNegativeAdduct.Location = new Point(leftGroupboxes - clNegativeAdduct.Width, 200);
             clNegativeAdduct.Height = 120;
             clNegativeAdduct.Text = "Negative adducts";
             clNegAdductCheckbox1.Parent = clNegativeAdduct;
@@ -1316,8 +1316,8 @@ namespace LipidCreator
             glHGLabel.Visible = false;
             
 
-            glPositiveAdduct.Location = new Point(leftGroupboxes, 60);
             glPositiveAdduct.Width = 120;
+            glPositiveAdduct.Location = new Point(leftGroupboxes - glPositiveAdduct.Width, 60);
             glPositiveAdduct.Height = 120;
             glPositiveAdduct.Text = "Positive adducts";
             glPositiveAdduct.DoubleClick += new EventHandler(triggerEasteregg);
@@ -1336,8 +1336,8 @@ namespace LipidCreator
             glPosAdductCheckbox3.Text = "+NH4⁺";
             glPosAdductCheckbox3.Checked = true;
             glPosAdductCheckbox3.CheckedChanged += new EventHandler(glPosAdductCheckbox3CheckedChanged);
-            glNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             glNegativeAdduct.Width = 120;
+            glNegativeAdduct.Location = new Point(leftGroupboxes - glNegativeAdduct.Width, 200);
             glNegativeAdduct.Height = 120;
             glNegativeAdduct.Text = "Negative adducts";
             glNegAdductCheckbox1.Parent = glNegativeAdduct;
@@ -1532,8 +1532,8 @@ namespace LipidCreator
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";
 
-            plPositiveAdduct.Location = new Point(leftGroupboxes, 60);
             plPositiveAdduct.Width = 120;
+            plPositiveAdduct.Location = new Point(leftGroupboxes - plPositiveAdduct.Width, 60);
             plPositiveAdduct.Height = 120;
             plPositiveAdduct.Text = "Positive adducts";
             plPosAdductCheckbox1.Parent = plPositiveAdduct;
@@ -1550,8 +1550,8 @@ namespace LipidCreator
             plPosAdductCheckbox3.Location = new Point(10, 55);
             plPosAdductCheckbox3.Text = "+NH4⁺";
             plPosAdductCheckbox3.CheckedChanged += new EventHandler(plPosAdductCheckbox3CheckedChanged);
-            plNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             plNegativeAdduct.Width = 120;
+            plNegativeAdduct.Location = new Point(leftGroupboxes - plNegativeAdduct.Width, 200);
             plNegativeAdduct.Height = 120;
             plNegativeAdduct.Text = "Negative adducts";
             plNegAdductCheckbox1.Parent = plNegativeAdduct;
@@ -1690,8 +1690,8 @@ namespace LipidCreator
             slHGLabel.Text = "Head group";
             
 
-            slPositiveAdduct.Location = new Point(leftGroupboxes, 60);
             slPositiveAdduct.Width = 120;
+            slPositiveAdduct.Location = new Point(leftGroupboxes - slPositiveAdduct.Width, 60);
             slPositiveAdduct.Height = 120;
             slPositiveAdduct.Text = "Positive adducts";
             slPosAdductCheckbox1.Parent = slPositiveAdduct;
@@ -1708,8 +1708,8 @@ namespace LipidCreator
             slPosAdductCheckbox3.Location = new Point(10, 55);
             slPosAdductCheckbox3.Text = "+NH4⁺";
             slPosAdductCheckbox3.CheckedChanged += new EventHandler(slPosAdductCheckbox3CheckedChanged);
-            slNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             slNegativeAdduct.Width = 120;
+            slNegativeAdduct.Location = new Point(leftGroupboxes - slNegativeAdduct.Width, 200);
             slNegativeAdduct.Height = 120;
             slNegativeAdduct.Text = "Negative adducts";
             slNegAdductCheckbox1.Parent = slNegativeAdduct;
@@ -1763,8 +1763,8 @@ namespace LipidCreator
             Font cholFont = new Font(cholesterollipidsTab.Font.FontFamily, 8.25F);
             cholesterollipidsTab.Font = cholFont;
             
-            chPositiveAdduct.Location = new Point(leftGroupboxes, 60);
             chPositiveAdduct.Width = 120;
+            chPositiveAdduct.Location = new Point(leftGroupboxes - chPositiveAdduct.Width, 60);
             chPositiveAdduct.Height = 120;
             chPositiveAdduct.Text = "Positive adducts";
             chPosAdductCheckbox1.Parent = chPositiveAdduct;
@@ -1782,8 +1782,8 @@ namespace LipidCreator
             chPosAdductCheckbox3.Text = "+NH4⁺";
             chPosAdductCheckbox3.Checked = true;
             chPosAdductCheckbox3.CheckedChanged += new EventHandler(chPosAdductCheckbox3CheckedChanged);
-            chNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             chNegativeAdduct.Width = 120;
+            chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, 200);
             chNegativeAdduct.Height = 120;
             chNegativeAdduct.Text = "Negative adducts";
             chNegAdductCheckbox1.Parent = chNegativeAdduct;
@@ -1875,8 +1875,8 @@ namespace LipidCreator
             Font medFont = new Font(mediatorlipidsTab.Font.FontFamily, 8.25F);
             mediatorlipidsTab.Font = medFont;
             
-            medNegativeAdduct.Location = new Point(leftGroupboxes, 200);
             medNegativeAdduct.Width = 120;
+            medNegativeAdduct.Location = new Point(leftGroupboxes - medNegativeAdduct.Width, 200);
             medNegativeAdduct.Height = 120;
             medNegativeAdduct.Text = "Negative adducts";
             
@@ -1933,7 +1933,7 @@ namespace LipidCreator
             clAddLipidButton.Height = 26;
             clAddLipidButton.Image = addImage;
             clAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            clAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            clAddLipidButton.Location = new Point(leftGroupboxes - clAddLipidButton.Width, topLowButtons);
             clAddLipidButton.BackColor = SystemColors.Control;
             clAddLipidButton.Click += registerLipid;
 
@@ -1947,7 +1947,7 @@ namespace LipidCreator
             clModifyLipidButton.Text = "Modify lipid";
             clModifyLipidButton.Width = 130;
             clModifyLipidButton.Height = 26;
-            clModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            clModifyLipidButton.Location = new Point(leftGroupboxes - clAddLipidButton.Width - clModifyLipidButton.Width - 10, topLowButtons);
             clModifyLipidButton.BackColor = SystemColors.Control;
             clModifyLipidButton.Click += modifyLipid;
 
@@ -1969,7 +1969,7 @@ namespace LipidCreator
             glAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             glAddLipidButton.Width = 146;
             glAddLipidButton.Height = 26;
-            glAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            glAddLipidButton.Location = new Point(leftGroupboxes - glAddLipidButton.Width, topLowButtons);
             glAddLipidButton.BackColor = SystemColors.Control;
             glAddLipidButton.Click += registerLipid;
 
@@ -1983,7 +1983,7 @@ namespace LipidCreator
             glModifyLipidButton.Text = "Modify lipid";
             glModifyLipidButton.Width = 130;
             glModifyLipidButton.Height = 26;
-            glModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            glModifyLipidButton.Location = new Point(leftGroupboxes - glAddLipidButton.Width - glModifyLipidButton.Width - 10, topLowButtons);
             glModifyLipidButton.BackColor = SystemColors.Control;
             glModifyLipidButton.Click += modifyLipid;
 
@@ -2005,7 +2005,7 @@ namespace LipidCreator
             plAddLipidButton.Image = addImage;
             plAddLipidButton.Width = 146;
             plAddLipidButton.Height = 26;
-            plAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            plAddLipidButton.Location = new Point(leftGroupboxes - plAddLipidButton.Width, topLowButtons);
             plAddLipidButton.BackColor = SystemColors.Control;
             plAddLipidButton.Click += registerLipid;
 
@@ -2019,7 +2019,7 @@ namespace LipidCreator
             plModifyLipidButton.Text = "Modify lipid";
             plModifyLipidButton.Width = 130;
             plModifyLipidButton.Height = 26;
-            plModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            plModifyLipidButton.Location = new Point(leftGroupboxes - plAddLipidButton.Width - plModifyLipidButton.Width - 10, topLowButtons);
             plModifyLipidButton.BackColor = SystemColors.Control;
             plModifyLipidButton.Click += modifyLipid;
 
@@ -2039,7 +2039,7 @@ namespace LipidCreator
             slAddLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             slAddLipidButton.Height = 26;
             slAddLipidButton.Width = 146;
-            slAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            slAddLipidButton.Location = new Point(leftGroupboxes - slAddLipidButton.Width, topLowButtons);
             slAddLipidButton.BackColor = SystemColors.Control;
             slAddLipidButton.Click += registerLipid;
             slAddLipidButton.Image = addImage;
@@ -2055,7 +2055,7 @@ namespace LipidCreator
             slModifyLipidButton.Text = "Modify lipid";
             slModifyLipidButton.Width = 130;
             slModifyLipidButton.Height = 26;
-            slModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            slModifyLipidButton.Location = new Point(leftGroupboxes - slAddLipidButton.Width - slModifyLipidButton.Width - 10, topLowButtons);
             slModifyLipidButton.BackColor = SystemColors.Control;
             slModifyLipidButton.Click += modifyLipid;
 
@@ -2077,7 +2077,7 @@ namespace LipidCreator
             chAddLipidButton.Height = 26;
             chAddLipidButton.Image = addImage;
             chAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            chAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            chAddLipidButton.Location = new Point(leftGroupboxes - chAddLipidButton.Width, topLowButtons);
             chAddLipidButton.BackColor = SystemColors.Control;
             chAddLipidButton.Click += registerLipid;
 
@@ -2091,7 +2091,7 @@ namespace LipidCreator
             chModifyLipidButton.Text = "Modify lipid";
             chModifyLipidButton.Width = 130;
             chModifyLipidButton.Height = 26;
-            chModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            chModifyLipidButton.Location = new Point(leftGroupboxes - chAddLipidButton.Width - chModifyLipidButton.Width - 10, topLowButtons);
             chModifyLipidButton.BackColor = SystemColors.Control;
             chModifyLipidButton.Click += modifyLipid;
 
@@ -2113,7 +2113,7 @@ namespace LipidCreator
             medAddLipidButton.Height = 26;
             medAddLipidButton.Image = addImage;
             medAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            medAddLipidButton.Location = new Point(leftGroupboxes, topLowButtons);
+            medAddLipidButton.Location = new Point(leftGroupboxes - medAddLipidButton.Width, topLowButtons);
             medAddLipidButton.BackColor = SystemColors.Control;
             medAddLipidButton.Click += registerLipid;
 
@@ -2127,7 +2127,7 @@ namespace LipidCreator
             medModifyLipidButton.Text = "Modify lipid";
             medModifyLipidButton.Width = 130;
             medModifyLipidButton.Height = 26;
-            medModifyLipidButton.Location = new Point(leftGroupboxes - 140, topLowButtons);
+            medModifyLipidButton.Location = new Point(leftGroupboxes - medAddLipidButton.Width - medModifyLipidButton.Width - 10, topLowButtons);
             medModifyLipidButton.BackColor = SystemColors.Control;
             medModifyLipidButton.Click += modifyLipid;
 

@@ -131,6 +131,12 @@
       <DependentUpon>LipidsReview.cs</DependentUpon>
     </Compile>
     <Compile Include="Mediator.cs" />
+    <Compile Include="MediatorMS2Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MediatorMS2Form.Designer.cs">
+      <DependentUpon>MediatorMS2Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="MS2Form.cs">
       <SubType>Form</SubType>
     </Compile>

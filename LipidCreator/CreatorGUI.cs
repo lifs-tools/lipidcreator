@@ -2043,7 +2043,14 @@ namespace LipidCreator
             //medPictureBox.SendToBack();
         }
         
-        
+        void openMediatorMS2Form(object sender, EventArgs e)
+        {
+            MediatorMS2Form mediatorMS2fragments = new MediatorMS2Form(this, (Mediator)currentLipid);
+            mediatorMS2fragments.Owner = this;
+            mediatorMS2fragments.ShowInTaskbar = false;
+            mediatorMS2fragments.ShowDialog();
+            mediatorMS2fragments.Dispose();
+        }
         
         
         ////////////////////// Remaining parts ////////////////////////////////

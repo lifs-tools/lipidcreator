@@ -2136,7 +2136,7 @@ namespace LipidCreator
             medMS2fragmentsLipidButton.Height = 26;
             medMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             medMS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            //chMS2fragmentsLipidButton.Click += openMS2Form;
+            medMS2fragmentsLipidButton.Click += openMediatorMS2Form;
 
 
             lipidsGridview.AutoSize = true;

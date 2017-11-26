@@ -200,6 +200,7 @@ namespace LipidCreator
                                                       new Mediator(allPathsToPrecursorImages, allFragments)
                                                       });
             creatorGUI = new CreatorGUI(this);
+            creatorGUI.changeTab(5);
         }
         
         public string[] parseLine(string line)

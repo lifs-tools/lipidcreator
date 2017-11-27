@@ -45,211 +45,194 @@ namespace LipidCreator
         public DataTable allFragmentsUnique;
         public DataTable currentView;
         public LipidCreatorForm lipidCreatorForm;
-        public LipidsReview(LipidCreatorForm lipidCreatorForm, ArrayList precursorDataList)
+        public const string MOLECULE_LIST_NAME = "Molecule List Name";
+        public const string PRECURSOR_NAME = "Precursor Name";
+        public const string PRECURSOR_ION_FORMULA = "Precursor Ion Formula";
+        public const string PRECURSOR_ADDUCT = "Precursor Adduct";
+        public const string PRECURSOR_MZ = "Precursor m/z";
+        public const string PRECURSOR_CHARGE = "Precursor Charge";
+        public const string PRODUCT_NAME = "Product Name";
+        public const string PRODUCT_ION_FORMULA = "Product Ion Formula";
+        public const string PRODUCT_MZ = "Product m/z";
+        public const string PRODUCT_CHARGE = "Product Charge";
+        public readonly static string[] DATA_COLUMN_KEYS = {
+            MOLECULE_LIST_NAME,
+            PRECURSOR_NAME,
+            PRECURSOR_ION_FORMULA,
+            PRECURSOR_ADDUCT,
+            PRECURSOR_MZ,
+            PRECURSOR_CHARGE,
+            PRODUCT_NAME,
+            PRODUCT_ION_FORMULA,
+            PRODUCT_MZ,
+            PRODUCT_CHARGE
+        };
+        public string[] dataColumns = { };
+
+        public LipidsReview (LipidCreatorForm lipidCreatorForm, ArrayList precursorDataList)
         {
             this.precursorDataList = precursorDataList;
             this.lipidCreatorForm = lipidCreatorForm;
-            allFragments = new DataTable();
-            allFragments.Columns.Add("Molecule List Name");
-            allFragments.Columns.Add("Precursor Name");
-            allFragments.Columns.Add("Precursor Ion Formula");
-            allFragments.Columns.Add("Precursor Adduct");
-            allFragments.Columns.Add("Precursor m/z");
-            allFragments.Columns.Add("Precursor Charge");
-            allFragments.Columns.Add("Product Name");
-            allFragments.Columns.Add("Product Ion Formula");
-            allFragments.Columns.Add("Product m/z");
-            allFragments.Columns.Add("Product Charge");
+            allFragments = addDataColumns (new DataTable ());
             allFragmentsUnique = null;
             
-            foreach (PrecursorData precursorData in this.precursorDataList)
-            {
-                Lipid.computeFragmentData(allFragments, precursorData);
+            foreach (PrecursorData precursorData in this.precursorDataList) {
+                Lipid.computeFragmentData (allFragments, precursorData);
             }
             
-            InitializeComponent();
+            InitializeComponent ();
             currentView = this.allFragments;
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = lipidCreatorForm.openedAsExternal;
             checkBoxCreateSpectralLibrary.Enabled = lipidCreatorForm.openedAsExternal;
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
-            foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns)
-            {
+            foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns) {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
-            dataGridViewTransitions.Update();
-            dataGridViewTransitions.Refresh();
+            dataGridViewTransitions.Update ();
+            dataGridViewTransitions.Refresh ();
         }
-    
-        public void buttonSendToSkylineClick(Object sender, EventArgs e)
+
+        public void buttonSendToSkylineClick (Object sender, EventArgs e)
         {
             this.Enabled = false;
             
-            if (checkBoxCreateSpectralLibrary.Checked)
-            {
-                String[] specName = new String[]{""};
-                SpectralName spectralName = new SpectralName(specName);
+            if (checkBoxCreateSpectralLibrary.Checked) {
+                String[] specName = new String[]{ "" };
+                SpectralName spectralName = new SpectralName (specName);
                 spectralName.Owner = this;
                 spectralName.ShowInTaskbar = false;
-                spectralName.ShowDialog();
-                spectralName.Dispose();
-                if (specName[0].Length > 0)
-                {
-                    string blibPath = Application.StartupPath + "\\" + specName[0] + ".blib";
-                    lipidCreatorForm.createBlib(blibPath);
-                    lipidCreatorForm.sendToSkyline(allFragments, specName[0], blibPath);
-                    MessageBox.Show("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
+                spectralName.ShowDialog ();
+                spectralName.Dispose ();
+                if (specName [0].Length > 0) {
+                    string blibPath = Application.StartupPath + "\\" + specName [0] + ".blib";
+                    lipidCreatorForm.createBlib (blibPath);
+                    lipidCreatorForm.sendToSkyline (allFragments, specName [0], blibPath);
+                    MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
-            }
-            else {
-                lipidCreatorForm.sendToSkyline(allFragments, "", "");
-                MessageBox.Show("Sending transition list to Skyline is complete.", "Sending complete");
+            } else {
+                lipidCreatorForm.sendToSkyline (allFragments, "", "");
+                MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
             }
             this.Enabled = true;
         }
 
-        private void checkBoxCheckedChanged(object sender, EventArgs e)
+        private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked)
-            {
-                if (allFragmentsUnique == null)
-                {
-                    allFragmentsUnique = new DataTable();
-                    allFragmentsUnique.Columns.Add("Molecule List Name");
-                    allFragmentsUnique.Columns.Add("Precursor Name");
-                    allFragmentsUnique.Columns.Add("Precursor Ion Formula");
-                    allFragmentsUnique.Columns.Add("Precursor Adduct");
-                    allFragmentsUnique.Columns.Add("Precursor m/z");
-                    allFragmentsUnique.Columns.Add("Precursor Charge");
-                    allFragmentsUnique.Columns.Add("Product Name");
-                    allFragmentsUnique.Columns.Add("Product Ion Formula");
-                    allFragmentsUnique.Columns.Add("Product m/z");
-                    allFragmentsUnique.Columns.Add("Product Charge");
-                    HashSet<String> replicates = new HashSet<String>();
+            if (((CheckBox)sender).Checked) {
+                if (allFragmentsUnique == null) {
+                    allFragmentsUnique = addDataColumns (new DataTable ());
+                    HashSet<String> replicates = new HashSet<String> ();
                     
-                    foreach (DataRow row in currentView.Rows)
-                    {
-                        string replicateKey = (String)row["Precursor Ion Formula"] + "/" + (((String)row["Product Ion Formula"]) != "" ? (String)row["Product Ion Formula"] : (String)row["Product Name"]);
-                        if (!replicates.Contains(replicateKey))
-                        {
-                            replicates.Add(replicateKey);
-                            allFragmentsUnique.ImportRow(row);
+                    foreach (DataRow row in currentView.Rows) {
+                        string replicateKey = (String)row [PRECURSOR_ION_FORMULA] + "/" + (((String)row [PRODUCT_ION_FORMULA]) != "" ? (String)row [PRODUCT_ION_FORMULA] : (String)row [PRODUCT_NAME]);
+                        if (!replicates.Contains (replicateKey)) {
+                            replicates.Add (replicateKey);
+                            allFragmentsUnique.ImportRow (row);
                         }
                     }
                     
                 }
             
                 currentView = this.allFragmentsUnique;
-            }
-            else
-            {
+            } else {
                 currentView = this.allFragments;
             }
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
             dataGridViewTransitions.DataSource = currentView;
-            dataGridViewTransitions.Update();
-            dataGridViewTransitions.Refresh();
+            dataGridViewTransitions.Update ();
+            dataGridViewTransitions.Refresh ();
         }
 
-        private void buttonStoreTransitionListClick(object sender, EventArgs e)
+        private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
             
             saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 0;
             saveFileDialog1.RestoreDirectory = true;
 
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                DialogResult mbr = MessageBox.Show("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
+            if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                DialogResult mbr = MessageBox.Show ("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
                 
-                if (mbr == DialogResult.Yes)
-                {
+                if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
-                    using (StreamWriter outputFile = new StreamWriter(Path.GetFullPath(saveFileDialog1.FileName).Replace(".csv", "_positive.csv"))) {
-                        foreach (DataRow row in currentView.Rows)
-                        {
-                            if (((String)row["Precursor Charge"]) == "+1" || ((String)row["Precursor Charge"]) == "+2")
-                            {
-                                outputFile.WriteLine((String)row["Molecule List Name"] + "," +
-                                (String)row["Precursor Name"] + "," +
-                                (String)row["Precursor Ion Formula"] + "," +
-                                (String)row["Precursor Adduct"] + "," +
-                                ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
-                                (String)row["Precursor Charge"] + "," +
-                                (String)row["Product Name"] + "," +
-                                (String)row["Product Ion Formula"] + "," +
-                                ((String)row["Product m/z"]).Replace(",", ".") + "," +
-                                (String)row["Product Charge"]);
+                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_positive.csv"))) {
+                        outputFile.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        foreach (DataRow row in currentView.Rows) {
+                            if (((String)row [PRECURSOR_CHARGE]) == "+1" || ((String)row [PRECURSOR_CHARGE]) == "+2") {
+                                outputFile.WriteLine (toLine (row, DATA_COLUMN_KEYS));
                             }
                         }
+                        outputFile.Dispose ();
+                        outputFile.Close ();
                     }
-                    using (StreamWriter outputFile = new StreamWriter(Path.GetFullPath(saveFileDialog1.FileName).Replace(".csv", "_negative.csv"))) {
-                        foreach (DataRow row in currentView.Rows)
-                        {
-                            if (((String)row["Precursor Charge"]) == "-1" || ((String)row["Precursor Charge"]) == "-2")
-                            {
-                                outputFile.WriteLine((String)row["Molecule List Name"] + "," +
-                                (String)row["Precursor Name"] + "," +
-                                (String)row["Precursor Ion Formula"] + "," +
-                                (String)row["Precursor Adduct"] + "," +
-                                ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
-                                (String)row["Precursor Charge"] + "," +
-                                (String)row["Product Name"] + "," +
-                                (String)row["Product Ion Formula"] + "," +
-                                ((String)row["Product m/z"]).Replace(",", ".") + "," +
-                                (String)row["Product Charge"]);
+                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_negative.csv"))) {
+                        outputFile.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        foreach (DataRow row in currentView.Rows) {
+                            if (((String)row [PRECURSOR_CHARGE]) == "-1" || ((String)row [PRECURSOR_CHARGE]) == "-2") {
+                                outputFile.WriteLine (toLine (row, DATA_COLUMN_KEYS));
                             }
                         }
+                        outputFile.Dispose ();
+                        outputFile.Close ();
                     }
-                    MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
                     this.Enabled = true;
-                }
-                else
-                {
+                } else {
                     this.Enabled = false;
                     StreamWriter writer;
-                    if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
-                    {
-                        foreach (DataRow row in currentView.Rows)
-                        {
-                            writer.WriteLine((String)row["Molecule List Name"] + "," +
-                            (String)row["Precursor Name"] + "," +
-                            (String)row["Precursor Ion Formula"] + "," +
-                            (String)row["Precursor Adduct"] + "," +
-                            ((String)row["Precursor m/z"]).Replace(",", ".") + "," +
-                            (String)row["Precursor Charge"] + "," +
-                            (String)row["Product Name"] + "," +
-                            (String)row["Product Ion Formula"] + "," +
-                            ((String)row["Product m/z"]).Replace(",", ".") + "," +
-                            (String)row["Product Charge"]);
+                    if ((writer = new StreamWriter (saveFileDialog1.OpenFile ())) != null) {
+                        writer.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        foreach (DataRow row in currentView.Rows) {
+                            writer.WriteLine (toLine (row, DATA_COLUMN_KEYS));
                         }
-                        writer.Dispose();
-                        writer.Close();
+                        writer.Dispose ();
+                        writer.Close ();
                     }
-                    MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
                     this.Enabled = true;
                 }
             }
         }
 
-        private void buttonStoreSpectralLibraryClick(object sender, EventArgs e)
+        private string toLine (DataRow row, string[] columnKeys)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            List<string> line = new List<string> ();
+            foreach (String columnKey in DATA_COLUMN_KEYS) {
+                if (columnKey == PRODUCT_MZ || columnKey == PRECURSOR_MZ) {
+                    line.Add (((String)row [columnKey]).Replace (",", "."));
+                } else {
+                    line.Add (((String)row [columnKey]));
+                }
+            }
+            return String.Join (",", line.ToArray ());
+        }
+
+        private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
             
             saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "blib files (*.blib)|*.blib|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 0;
             saveFileDialog1.RestoreDirectory = true;
 
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
+            if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
                 this.Enabled = false;
-                lipidCreatorForm.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
-                MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
+                lipidCreatorForm.createBlib (Path.GetFullPath (saveFileDialog1.FileName));
+                MessageBox.Show ("Storing of spectral library is complete.", "Storing complete");
                 this.Enabled = true;
             }
+        }
+
+        private DataTable addDataColumns (DataTable dataTable)
+        {
+            foreach (string columnKey in DATA_COLUMN_KEYS) {
+                dataTable.Columns.Add (columnKey);
+            }
+            return dataTable;
         }
     }
 }

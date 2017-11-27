@@ -41,6 +41,9 @@ namespace LipidCreator
         public Label labelMediators;
         public Label labelMonoIsotopicFragments;
         public Label labelDeuteratedFragments;
+        public Button buttonCancel;
+        public Button buttonOK;
+        public Button buttonAddFragment;
         
         public Label labelFragmentDescriptionBlack;
         public Label labelFragmentDescriptionRed;
@@ -51,9 +54,6 @@ namespace LipidCreator
         public Label labelNegativeDeselectAll;
         public Label labelSlashPositive;
         public Label labelSlashNegative;
-        public Button buttonCancel;
-        public Button buttonOK;
-        public Button buttonAddFragment;
         public TabControl tabControlFragments;
         public ArrayList tabPages;
         public ToolTip toolTip1;
@@ -69,15 +69,16 @@ namespace LipidCreator
             labelMediators = new System.Windows.Forms.Label();
             labelMonoIsotopicFragments = new System.Windows.Forms.Label();
             labelDeuteratedFragments = new System.Windows.Forms.Label();
+            pictureBoxFragments = new System.Windows.Forms.PictureBox();
+            buttonCancel = new System.Windows.Forms.Button();
+            buttonOK = new System.Windows.Forms.Button();
+            buttonAddFragment = new System.Windows.Forms.Button();
             
             medHgListbox.Location = new System.Drawing.Point(12, 22);
             medHgListbox.Size = new System.Drawing.Size(150, 294);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
-            //medHgListbox.SelectionMode = SelectionMode.SingleSimple;
-            //medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
-            //medHgListbox.MouseLeave += new System.EventHandler(medHGListboxMouseLeave);
-            //medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
+            medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
             this.Controls.Add(medHgListbox);
         
             /*
@@ -103,19 +104,19 @@ namespace LipidCreator
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).BeginInit();
             this.tabControlFragments.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBoxFragments.Location = new System.Drawing.Point(340, 2);
-            this.pictureBoxFragments.Name = "pictureBox1";
-            this.pictureBoxFragments.Size = new System.Drawing.Size(736, 358);
-            this.pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBoxFragments.TabIndex = 1;
-            this.pictureBoxFragments.TabStop = false;
             */
-            // 
+            
+            /*
+            // pictureBox1
+            pictureBoxFragments.Location = new System.Drawing.Point(340, 2);
+            pictureBoxFragments.Name = "pictureBox1";
+            pictureBoxFragments.Size = new System.Drawing.Size(736, 358);
+            pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            pictureBoxFragments.TabStop = false;
+            Controls.Add(pictureBoxFragments);
+            */
+            
             // checkedListBox1 - monoisotopic fragments
-            // 
             checkedListBoxMonoIsotopicFragments.CheckOnClick = true;
             checkedListBoxMonoIsotopicFragments.FormattingEnabled = true;
             checkedListBoxMonoIsotopicFragments.Location = new System.Drawing.Point(200, 22);
@@ -128,9 +129,9 @@ namespace LipidCreator
             //checkedListBoxMonoIsotopicFragments.MouseLeave += new System.EventHandler(checkedListBoxMonoIsotopicFragments.checkedListBoxMouseLeave);
             //checkedListBoxPositiveFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxPositiveMouseHover);
             this.Controls.Add(checkedListBoxMonoIsotopicFragments);
-            // 
+            
+            
             // checkedListBox2 - monoisotopic fragments
-            // 
             checkedListBoxDeuteratedFragments.CheckOnClick = true;
             checkedListBoxDeuteratedFragments.FormattingEnabled = true;
             checkedListBoxDeuteratedFragments.Location = new System.Drawing.Point(360, 22);
@@ -145,30 +146,30 @@ namespace LipidCreator
             this.Controls.Add(checkedListBoxDeuteratedFragments);
             
             
-            // 
             // label1
-            // 
             labelMediators.AutoSize = true;
             labelMediators.Location = new System.Drawing.Point(12, 6);
             labelMediators.Name = "label1";
             labelMediators.Text = "Mediator";
             Controls.Add(labelMediators);
-            // 
+            
+            
             // label2
-            // 
             labelMonoIsotopicFragments.AutoSize = true;
             labelMonoIsotopicFragments.Location = new System.Drawing.Point(200, 6);
             labelMonoIsotopicFragments.Name = "label2";
             labelMonoIsotopicFragments.Text = "Monoisotopic Fragments";
             Controls.Add(labelMonoIsotopicFragments);
-            // 
+            
+            
             // label3
-            // 
             labelDeuteratedFragments.AutoSize = true;
             labelDeuteratedFragments.Location = new System.Drawing.Point(360, 6);
             labelDeuteratedFragments.Name = "label3";
             labelDeuteratedFragments.Text = "Deuterated Fragments";
             this.Controls.Add(labelDeuteratedFragments);
+            
+            
             /*
             // 
             // label4
@@ -259,46 +260,40 @@ namespace LipidCreator
             this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
             this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
             this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
-            // 
-            // button2
-            // 
-            this.buttonCancel.Location = new System.Drawing.Point(1058, 374);
-            this.buttonCancel.Name = "button2";
-            this.buttonCancel.Size = new System.Drawing.Size(98, 30);
-            this.buttonCancel.TabIndex = 7;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.cancelClick);
-            // 
-            // button3
-            // 
-            this.buttonOK.Location = new System.Drawing.Point(954, 374);
-            this.buttonOK.Name = "button3";
-            this.buttonOK.Size = new System.Drawing.Size(98, 30);
-            this.buttonOK.TabIndex = 8;
-            this.buttonOK.Text = "OK";
-            this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.okClick);
-            // 
-            // button4
-            // 
-            this.buttonAddFragment.Location = new System.Drawing.Point(12, 374);
-            this.buttonAddFragment.Name = "button4";
-            this.buttonAddFragment.Size = new System.Drawing.Size(98, 30);
-            this.buttonAddFragment.TabIndex = 9;
-            this.buttonAddFragment.Text = "Add fragment";
-            this.buttonAddFragment.UseVisualStyleBackColor = true;
-            this.buttonAddFragment.Click += new System.EventHandler(this.addFragmentClick);
-            // 
-            // tabControl1
-            // 
-            this.tabControlFragments.Location = new System.Drawing.Point(12, 6);
-            this.tabControlFragments.Name = "tabControl1";
-            this.tabControlFragments.SelectedIndex = 0;
-            this.tabControlFragments.Size = new System.Drawing.Size(1144, 360);
-            this.tabControlFragments.TabIndex = 11;
-            this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
             */
+            
+            
+            // button2
+            buttonCancel.Location = new System.Drawing.Point(1058, 374);
+            buttonCancel.Name = "button2";
+            buttonCancel.Size = new System.Drawing.Size(98, 30);
+            buttonCancel.TabIndex = 7;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
+            //buttonCancel.Click += new System.EventHandler(cancelClick);
+            this.Controls.Add(buttonCancel);
+            
+            
+            // button3
+            buttonOK.Location = new System.Drawing.Point(954, 374);
+            buttonOK.Name = "button3";
+            buttonOK.Size = new System.Drawing.Size(98, 30);
+            buttonOK.TabIndex = 8;
+            buttonOK.Text = "OK";
+            buttonOK.UseVisualStyleBackColor = true;
+            //buttonOK.Click += new System.EventHandler(okClick);
+            this.Controls.Add(buttonOK);
+           
+           
+            // button4
+            buttonAddFragment.Location = new System.Drawing.Point(12, 374);
+            buttonAddFragment.Name = "button4";
+            buttonAddFragment.Size = new System.Drawing.Size(98, 30);
+            buttonAddFragment.TabIndex = 9;
+            buttonAddFragment.Text = "Add fragment";
+            buttonAddFragment.UseVisualStyleBackColor = true;
+            //buttonAddFragment.Click += new System.EventHandler(this.addFragmentClick);
+            this.Controls.Add(buttonAddFragment);
             
             // 
             // MediatorMS2Form
@@ -311,28 +306,12 @@ namespace LipidCreator
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonAddFragment);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            
-            /*
-            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
-            {
-                TabPage tp = new TabPage();
-                tp.Location = new System.Drawing.Point(4, 22);
-                tp.Name = item.Key;
-                tp.Padding = new System.Windows.Forms.Padding(3);
-                tp.Size = new System.Drawing.Size(766, 372);
-                tp.TabIndex = 0;
-                tp.Text = item.Key;
-                tp.UseVisualStyleBackColor = true;
-                this.tabControlFragments.Controls.Add(tp);
-                this.tabPages.Add(tp);
-
-            }*/
 
             this.Name = "MediatorMS2Form";
             this.Text = "Mediator MS2 Fragments";
+            
             /*
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
-            this.tabControlFragments.ResumeLayout(false);
             */
         }
     }

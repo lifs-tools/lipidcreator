@@ -76,6 +76,18 @@ namespace LipidCreator
             if (medHgList.Count > 0) medHgListbox.SetSelected(0, true);
             
         }
+        
+        void medHGListboxSelectedValueChanged(object sender, EventArgs e)
+        {
+            string headgroup = ((ListBox)sender).SelectedItem.ToString();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                currentLipid.headGroupNames.Add(itemChecked.ToString());
+                
+                    checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.fragmentName);
+            }
+        }
+        
     
         /*
         void checkedListBoxMouseLeave(object sender, EventArgs e)

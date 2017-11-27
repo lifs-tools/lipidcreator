@@ -132,7 +132,7 @@ namespace LipidCreator
                     if (headgroup != "SPH" && headgroup != "SPH-P" && headgroup != "SPC" && headgroup != "HexSph") // sphingolipids without fatty acid
                     {
                     
-                        foreach (FattyAcid fa in lcb.getFattyAcids())
+                        foreach (FattyAcid fa in fag.getFattyAcids())
                         {
                     
                             String key = headgroup + " ";

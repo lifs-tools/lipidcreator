@@ -41,6 +41,8 @@ namespace LipidCreator
         public Label labelMediators;
         public Label labelMonoIsotopicFragments;
         public Label labelDeuteratedFragments;
+        public Label labelSlashMonoisotope;
+        public Label labelSlashDeuterated;
         public Button buttonCancel;
         public Button buttonOK;
         public Button buttonAddFragment;
@@ -48,10 +50,10 @@ namespace LipidCreator
         public Label labelFragmentDescriptionBlack;
         public Label labelFragmentDescriptionRed;
         public Label labelFragmentDescriptionBlue;
-        public Label labelPositiveSelectAll;
-        public Label labelPositiveDeselectAll;
-        public Label labelNegativeSelectAll;
-        public Label labelNegativeDeselectAll;
+        public Label labelMonoisotopeSelectAll;
+        public Label labelMonoisotopeDeselectAll;
+        public Label labelDeuteratedSelectAll;
+        public Label labelDeuteratedDeselectAll;
         public Label labelSlashPositive;
         public Label labelSlashNegative;
         public TabControl tabControlFragments;
@@ -70,6 +72,12 @@ namespace LipidCreator
             labelMediators = new System.Windows.Forms.Label();
             labelMonoIsotopicFragments = new System.Windows.Forms.Label();
             labelDeuteratedFragments = new System.Windows.Forms.Label();
+            labelMonoisotopeSelectAll = new System.Windows.Forms.Label();
+            labelMonoisotopeDeselectAll = new System.Windows.Forms.Label();
+            labelDeuteratedSelectAll = new System.Windows.Forms.Label();
+            labelDeuteratedDeselectAll = new System.Windows.Forms.Label();
+            labelSlashMonoisotope = new System.Windows.Forms.Label();
+            labelSlashDeuterated = new System.Windows.Forms.Label();
             pictureBoxFragments = new System.Windows.Forms.PictureBox();
             buttonCancel = new System.Windows.Forms.Button();
             buttonOK = new System.Windows.Forms.Button();
@@ -157,97 +165,64 @@ namespace LipidCreator
             this.Controls.Add(labelDeuteratedFragments);
             
             
-            /*
-            // 
-            // label4
-            // 
-            this.labelFragmentDescriptionRed.Size = new Size(200, 13);
-            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 295);
-            this.labelFragmentDescriptionRed.Name = "label4";
-            this.labelFragmentDescriptionRed.TabIndex = 5;
-            this.labelFragmentDescriptionRed.Text = "red: specific for lipid category";
-            this.labelFragmentDescriptionRed.ForeColor = Color.FromArgb(227, 5, 19);
-            this.labelFragmentDescriptionRed.TextAlign = ContentAlignment.TopRight;
-            // 
-            // label5
-            // 
-            this.labelFragmentDescriptionBlue.Size = new Size(200, 13);
-            this.labelFragmentDescriptionBlue.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlue.Width, 310);
-            this.labelFragmentDescriptionBlue.Name = "label5";
-            this.labelFragmentDescriptionBlue.TabIndex = 5;
-            this.labelFragmentDescriptionBlue.Text = "blue: specific for lipid class";
-            this.labelFragmentDescriptionBlue.ForeColor = Color.FromArgb(48, 38, 131);
-            this.labelFragmentDescriptionBlue.TextAlign = ContentAlignment.TopRight;
-            // 
             // label6 - positive fragments
-            // 
-            this.labelPositiveSelectAll.AutoSize = true;
-            this.labelPositiveSelectAll.Location = new System.Drawing.Point(12, 316);
-            this.labelPositiveSelectAll.Name = "label6";
-            this.labelPositiveSelectAll.TabIndex = 6;
-            this.labelPositiveSelectAll.Text = "select all";
-            this.labelPositiveSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
-            this.labelPositiveSelectAll.Click += new System.EventHandler(checkedListBoxPositiveSelectAll);
-            // 
-            // label7 - positive fragments
-            // 
-            this.labelPositiveDeselectAll.AutoSize = true;
-            this.labelPositiveDeselectAll.Location = new System.Drawing.Point(74, 316);
-            this.labelPositiveDeselectAll.Name = "label7";
-            this.labelPositiveDeselectAll.TabIndex = 6;
-            this.labelPositiveDeselectAll.Text = "deselect all";
-            this.labelPositiveDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
-            this.labelPositiveDeselectAll.Click += new System.EventHandler(checkedListBoxPositiveDeselectAll);
-            // 
-            // label8 - positive fragments
-            // 
-            this.labelNegativeSelectAll.AutoSize = true;
-            this.labelNegativeSelectAll.Location = new System.Drawing.Point(170, 316);
-            this.labelNegativeSelectAll.Name = "label8";
-            this.labelNegativeSelectAll.TabIndex = 6;
-            this.labelNegativeSelectAll.Text = "select all";
-            this.labelNegativeSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
-            this.labelNegativeSelectAll.Click += new System.EventHandler(checkedListBoxNegativeSelectAll);
-            // 
-            // label9 - positive fragments
-            // 
-            this.labelNegativeDeselectAll.AutoSize = true;
-            this.labelNegativeDeselectAll.Location = new System.Drawing.Point(232, 316);
-            this.labelNegativeDeselectAll.Name = "label9";
-            this.labelNegativeDeselectAll.TabIndex = 6;
-            this.labelNegativeDeselectAll.Text = "deselect all";
-            this.labelNegativeDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
-            this.labelNegativeDeselectAll.Click += new System.EventHandler(checkedListBoxNegativeDeselectAll);
-            // 
-            // label10
-            // 
-            this.labelSlashPositive.AutoSize = true;
-            this.labelSlashPositive.Location = new System.Drawing.Point(67, 316);
-            this.labelSlashPositive.Name = "label10";
-            this.labelSlashPositive.Text = "/";
-            // 
-            // label11
-            // 
-            this.labelSlashNegative.AutoSize = true;
-            this.labelSlashNegative.Location = new System.Drawing.Point(225, 316);
-            this.labelSlashNegative.Name = "label11";
-            this.labelSlashNegative.Text = "/";
+            labelMonoisotopeSelectAll.AutoSize = true;
+            labelMonoisotopeSelectAll.Location = new System.Drawing.Point(200, 316);
+            labelMonoisotopeSelectAll.Name = "label6";
+            labelMonoisotopeSelectAll.TabIndex = 6;
+            labelMonoisotopeSelectAll.Text = "select all";
+            labelMonoisotopeSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            labelMonoisotopeSelectAll.Click += new System.EventHandler(checkedListBoxMonoisotopicSelectAll);
+            this.Controls.Add(labelMonoisotopeSelectAll);
             
-            // 
-            // checkedListBox2 - negative fragments
-            // 
-            this.checkedListBoxNegativeFragments.CheckOnClick = true;
-            this.checkedListBoxNegativeFragments.FormattingEnabled = true;
-            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(170, 22);
-            this.checkedListBoxNegativeFragments.Name = "checkedListBox2";
-            this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
-            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(150, 294);
-            this.checkedListBoxNegativeFragments.TabIndex = 5;
-            this.checkedListBoxNegativeFragments.ThreeDCheckBoxes = true;
-            this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
-            this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
-            this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
-            */
+            
+            // label7 - positive fragments
+            labelMonoisotopeDeselectAll.AutoSize = true;
+            labelMonoisotopeDeselectAll.Location = new System.Drawing.Point(262, 316);
+            labelMonoisotopeDeselectAll.Name = "label7";
+            labelMonoisotopeDeselectAll.TabIndex = 6;
+            labelMonoisotopeDeselectAll.Text = "deselect all";
+            labelMonoisotopeDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            labelMonoisotopeDeselectAll.Click += new System.EventHandler(checkedListBoxMonoisotopicDeselectAll);
+            this.Controls.Add(labelMonoisotopeDeselectAll);
+            
+            
+            // label8 - positive fragments
+            labelDeuteratedSelectAll.AutoSize = true;
+            labelDeuteratedSelectAll.Location = new System.Drawing.Point(360, 316);
+            labelDeuteratedSelectAll.Name = "label8";
+            labelDeuteratedSelectAll.TabIndex = 6;
+            labelDeuteratedSelectAll.Text = "select all";
+            labelDeuteratedSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            labelDeuteratedSelectAll.Click += new System.EventHandler(checkedListBoxDeuteratedSelectAll);
+            this.Controls.Add(labelDeuteratedSelectAll);
+            
+            
+            // label9 - positive fragments
+            labelDeuteratedDeselectAll.AutoSize = true;
+            labelDeuteratedDeselectAll.Location = new System.Drawing.Point(422, 316);
+            labelDeuteratedDeselectAll.Name = "label9";
+            labelDeuteratedDeselectAll.TabIndex = 6;
+            labelDeuteratedDeselectAll.Text = "deselect all";
+            labelDeuteratedDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            labelDeuteratedDeselectAll.Click += new System.EventHandler(checkedListBoxDeuteratedDeselectAll);
+            this.Controls.Add(labelDeuteratedDeselectAll);
+            
+            
+            // label10
+            labelSlashMonoisotope.AutoSize = true;
+            labelSlashMonoisotope.Location = new System.Drawing.Point(255, 316);
+            labelSlashMonoisotope.Name = "label10";
+            labelSlashMonoisotope.Text = "/";
+            this.Controls.Add(labelSlashMonoisotope);
+            
+            
+            // label11
+            labelSlashDeuterated.AutoSize = true;
+            labelSlashDeuterated.Location = new System.Drawing.Point(415, 316);
+            labelSlashDeuterated.Name = "label11";
+            labelSlashDeuterated.Text = "/";
+            this.Controls.Add(labelSlashDeuterated);
             
             
             // button2
@@ -257,7 +232,7 @@ namespace LipidCreator
             buttonCancel.TabIndex = 7;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
-            //buttonCancel.Click += new System.EventHandler(cancelClick);
+            buttonCancel.Click += new System.EventHandler(cancelClick);
             this.Controls.Add(buttonCancel);
             
             
@@ -268,7 +243,7 @@ namespace LipidCreator
             buttonOK.TabIndex = 8;
             buttonOK.Text = "OK";
             buttonOK.UseVisualStyleBackColor = true;
-            //buttonOK.Click += new System.EventHandler(okClick);
+            buttonOK.Click += new System.EventHandler(okClick);
             this.Controls.Add(buttonOK);
            
            
@@ -297,9 +272,7 @@ namespace LipidCreator
             this.Name = "MediatorMS2Form";
             this.Text = "Mediator MS2 Fragments";
             
-            /*
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
-            */
         }
     }
 }

@@ -168,6 +168,90 @@ namespace LipidCreator
             }
         }
         
+        
+        void checkedListBoxMonoisotopicSelectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            string headgroup = medHgListbox.SelectedItem.ToString();
+            ArrayList currentFragments = currentLipid.MS2Fragments[headgroup];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                ((MS2Fragment)currentFragments[i]).fragmentSelected = true;  
+            }
+            for (int i = 0; i < checkedListBoxMonoIsotopicFragments.Items.Count; ++i)
+            {
+                checkedListBoxMonoIsotopicFragments.SetItemChecked(i, true);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        void checkedListBoxMonoisotopicDeselectAll(object sender, EventArgs e)
+        {
+            if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
+            senderInterupt = true;
+            string headgroup = medHgListbox.SelectedItem.ToString();
+            ArrayList currentFragments = currentLipid.MS2Fragments[headgroup];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                ((MS2Fragment)currentFragments[i]).fragmentSelected = false;  
+            }
+            for (int i = 0; i < checkedListBoxMonoIsotopicFragments.Items.Count; ++i)
+            {
+                checkedListBoxMonoIsotopicFragments.SetItemChecked(i, false);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        void checkedListBoxDeuteratedSelectAll(object sender, EventArgs e)
+        {
+            if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
+            senderInterupt = true;
+            string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
+            ArrayList currentFragments = currentLipid.MS2Fragments[headgroup];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                ((MS2Fragment)currentFragments[i]).fragmentSelected = true;  
+            }
+            for (int i = 0; i < checkedListBoxDeuteratedFragments.Items.Count; ++i)
+            {
+                checkedListBoxDeuteratedFragments.SetItemChecked(i, true);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        void checkedListBoxDeuteratedDeselectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
+            ArrayList currentFragments = currentLipid.MS2Fragments[headgroup];
+            for (int i = 0; i < currentFragments.Count; ++i)
+            {
+                ((MS2Fragment)currentFragments[i]).fragmentSelected = false;  
+            }
+            for (int i = 0; i < checkedListBoxDeuteratedFragments.Items.Count; ++i)
+            {
+                checkedListBoxDeuteratedFragments.SetItemChecked(i, false);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        private void cancelClick(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        
+        
+        private void okClick(object sender, EventArgs e)
+        {
+            creatorGUI.lipidCreatorForm.lipidTabList[(int)LipidCategory.Mediator] = new Mediator((Mediator)currentLipid);
+            creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[(int)LipidCategory.Mediator];            
+            this.Close();
+        }
+        
     
         /*
         void checkedListBoxMouseLeave(object sender, EventArgs e)
@@ -435,32 +519,6 @@ namespace LipidCreator
         
         private void cancelClick(object sender, EventArgs e)
         {
-            this.Close();
-        }
-        
-        private void okClick(object sender, EventArgs e)
-        {
-            if (currentLipid is GLLipid)
-            {
-                creatorGUI.lipidCreatorForm.lipidTabList[1] = new GLLipid((GLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[1];
-            }
-            else if (currentLipid is PLLipid)
-            {
-                creatorGUI.lipidCreatorForm.lipidTabList[2] = new PLLipid((PLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[2];
-            }
-            else if (currentLipid is SLLipid)
-            {
-                creatorGUI.lipidCreatorForm.lipidTabList[3] = new SLLipid((SLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[3];
-            }
-            else if (currentLipid is Cholesterol)
-            {
-                creatorGUI.lipidCreatorForm.lipidTabList[4] = new Cholesterol((Cholesterol)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[4];
-            }
-            
             this.Close();
         }
         

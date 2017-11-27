@@ -80,8 +80,8 @@ namespace LipidCreator
         void medHGListboxSelectedValueChanged(object sender, EventArgs e)
         {
             string headgroup = ((ListBox)sender).SelectedItem.ToString();
-            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
-            {
+            
+            for ()
                 currentLipid.headGroupNames.Add(itemChecked.ToString());
                 
                     checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.fragmentName);

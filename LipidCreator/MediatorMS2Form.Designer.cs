@@ -58,6 +58,7 @@ namespace LipidCreator
         public ArrayList tabPages;
         public ToolTip toolTip1;
         public ListBox medHgListbox;
+        public ComboBox deuteratedMediatorHeadgroups;
         
         private void InitializeComponent()
         {
@@ -73,6 +74,9 @@ namespace LipidCreator
             buttonCancel = new System.Windows.Forms.Button();
             buttonOK = new System.Windows.Forms.Button();
             buttonAddFragment = new System.Windows.Forms.Button();
+            deuteratedMediatorHeadgroups = new System.Windows.Forms.ComboBox();
+            this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
+            this.SuspendLayout();
             
             medHgListbox.Location = new System.Drawing.Point(12, 22);
             medHgListbox.Size = new System.Drawing.Size(150, 294);
@@ -82,39 +86,16 @@ namespace LipidCreator
             this.Controls.Add(medHgListbox);
         
             /*
-            this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
-            this.labelPositiveFragments = new System.Windows.Forms.Label();
-            this.labelNegativeFragments = new System.Windows.Forms.Label();
-            this.labelFragmentDescriptionBlack = new System.Windows.Forms.Label();
-            this.labelFragmentDescriptionRed = new System.Windows.Forms.Label();
-            this.labelFragmentDescriptionBlue = new System.Windows.Forms.Label();
-            this.labelPositiveSelectAll = new System.Windows.Forms.Label();
-            this.labelPositiveDeselectAll = new System.Windows.Forms.Label();
-            this.labelNegativeSelectAll = new System.Windows.Forms.Label();
-            this.labelNegativeDeselectAll = new System.Windows.Forms.Label();
-            this.labelSlashPositive = new System.Windows.Forms.Label();
-            this.labelSlashNegative = new System.Windows.Forms.Label();
-            this.checkedListBoxNegativeFragments = new System.Windows.Forms.CheckedListBox();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.buttonAddFragment = new System.Windows.Forms.Button();
-            this.tabControlFragments = new System.Windows.Forms.TabControl();
             toolTip1 = new System.Windows.Forms.ToolTip();
-            this.tabPages = new ArrayList();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).BeginInit();
-            this.tabControlFragments.SuspendLayout();
-            this.SuspendLayout();
             */
             
-            /*
             // pictureBox1
-            pictureBoxFragments.Location = new System.Drawing.Point(340, 2);
+            pictureBoxFragments.Location = new System.Drawing.Point(520, 2);
             pictureBoxFragments.Name = "pictureBox1";
-            pictureBoxFragments.Size = new System.Drawing.Size(736, 358);
+            pictureBoxFragments.Size = new System.Drawing.Size(620, 358);
             pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             pictureBoxFragments.TabStop = false;
-            Controls.Add(pictureBoxFragments);
-            */
+            this.Controls.Add(pictureBoxFragments);
             
             // checkedListBox1 - monoisotopic fragments
             checkedListBoxMonoIsotopicFragments.CheckOnClick = true;
@@ -125,24 +106,30 @@ namespace LipidCreator
             checkedListBoxMonoIsotopicFragments.Size = new System.Drawing.Size(150, 294);
             checkedListBoxMonoIsotopicFragments.TabIndex = 2;
             checkedListBoxMonoIsotopicFragments.ThreeDCheckBoxes = true;
-            //checkedListBoxMonoIsotopicFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
-            //checkedListBoxMonoIsotopicFragments.MouseLeave += new System.EventHandler(checkedListBoxMonoIsotopicFragments.checkedListBoxMouseLeave);
-            //checkedListBoxPositiveFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxPositiveMouseHover);
+            checkedListBoxMonoIsotopicFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxMonoIsotopicValueChanged);
+            checkedListBoxMonoIsotopicFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(checkedListBoxMonoIsotopicMouseHover);
             this.Controls.Add(checkedListBoxMonoIsotopicFragments);
             
             
-            // checkedListBox2 - monoisotopic fragments
+            deuteratedMediatorHeadgroups.Location = new System.Drawing.Point(360, 22);
+            deuteratedMediatorHeadgroups.Width = 150;
+            deuteratedMediatorHeadgroups.DropDownStyle = ComboBoxStyle.DropDownList;
+            deuteratedMediatorHeadgroups.SelectedIndexChanged += new EventHandler(deuteratedCheckBoxValueChanged);
+            this.Controls.Add(deuteratedMediatorHeadgroups);
+            
+            
+            
+            // checkedListBox2 - deuterated fragments
             checkedListBoxDeuteratedFragments.CheckOnClick = true;
             checkedListBoxDeuteratedFragments.FormattingEnabled = true;
-            checkedListBoxDeuteratedFragments.Location = new System.Drawing.Point(360, 22);
+            checkedListBoxDeuteratedFragments.Location = new System.Drawing.Point(360, 47);
             checkedListBoxDeuteratedFragments.Name = "checkedListBox2";
             checkedListBoxDeuteratedFragments.ScrollAlwaysVisible = true;
-            checkedListBoxDeuteratedFragments.Size = new System.Drawing.Size(150, 294);
+            checkedListBoxDeuteratedFragments.Size = new System.Drawing.Size(150, 269);
             checkedListBoxDeuteratedFragments.TabIndex = 3;
             checkedListBoxDeuteratedFragments.ThreeDCheckBoxes = true;
-            //checkedListBoxMonoIsotopicFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
-            //checkedListBoxMonoIsotopicFragments.MouseLeave += new System.EventHandler(checkedListBoxMonoIsotopicFragments.checkedListBoxMouseLeave);
-            //checkedListBoxPositiveFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxPositiveMouseHover);
+            checkedListBoxDeuteratedFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxDeuteratedValueChanged);
+            checkedListBoxDeuteratedFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(checkedListBoxDeuteratedeMouseHover);
             this.Controls.Add(checkedListBoxDeuteratedFragments);
             
             

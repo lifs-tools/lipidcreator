@@ -45,24 +45,28 @@ namespace LipidCreator
         public ArrayList negativeIDs;
         public CreatorGUI creatorGUI;
         public bool senderInterupt;
+        Dictionary<string, ArrayList> isotopeDict;
         
         public MediatorMS2Form(CreatorGUI creatorGUI, Mediator currentLipid)
         {
             this.currentLipid = currentLipid;
             this.creatorGUI = creatorGUI;
-            /*
-            positiveIDs = new ArrayList();
-            negativeIDs = new ArrayList();
-            senderInterupt = false;
             
-            
-            if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
-            else if (currentLipid is PLLipid ) this.currentLipid = new PLLipid((PLLipid)currentLipid);
-            else if (currentLipid is SLLipid ) this.currentLipid = new SLLipid((SLLipid)currentLipid);
-            else if (currentLipid is Cholesterol ) this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
-            
-            */
+            isotopeDict = new Dictionary<string, ArrayList>();
+            foreach (KeyValuePair<string, ArrayList> ms2fragment in this.currentLipid.MS2Fragments)
+            {
+                if (ms2fragment.Key.IndexOf("/") > -1)
+                {
+                    string monoName = ms2fragment.Key.Split(new char[]{'/'})[0];
+                    string deuterium = ms2fragment.Key.Split(new char[]{'/'})[1];
+                    
+                    if (!isotopeDict.ContainsKey(monoName)) isotopeDict.Add(monoName, new ArrayList());
+                    isotopeDict[monoName].Add(deuterium);
+                }
+            }
+            senderInterupt = true;
             InitializeComponent();
+            senderInterupt = false;
             
             
             List<String> medHgList = new List<String>();
@@ -79,12 +83,88 @@ namespace LipidCreator
         
         void medHGListboxSelectedValueChanged(object sender, EventArgs e)
         {
+            senderInterupt = true;
             string headgroup = ((ListBox)sender).SelectedItem.ToString();
+            checkedListBoxMonoIsotopicFragments.Items.Clear();
+            foreach (MS2Fragment currentFragment in currentLipid.MS2Fragments[headgroup])
+            {
+                checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.fragmentName);
+                checkedListBoxMonoIsotopicFragments.SetItemChecked(checkedListBoxMonoIsotopicFragments.Items.Count - 1, currentFragment.fragmentSelected);
+            }
             
-            for ()
-                currentLipid.headGroupNames.Add(itemChecked.ToString());
-                
-                    checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.fragmentName);
+            deuteratedMediatorHeadgroups.Items.Clear();
+            checkedListBoxDeuteratedFragments.Items.Clear();
+            if (isotopeDict.ContainsKey(headgroup))
+            {
+                foreach (string deuterated in isotopeDict[headgroup])
+                {
+                    deuteratedMediatorHeadgroups.Items.Add(headgroup + "/" + deuterated);
+                }
+                if (isotopeDict[headgroup].Count > 0) deuteratedMediatorHeadgroups.SelectedIndex = 0;
+            }
+            
+            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            {
+                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                pictureBoxFragments.Image = Image.FromFile(mediatorFile);
+                pictureBoxFragments.SendToBack();
+                senderInterupt = false;
+            }
+        }
+        
+        
+        void deuteratedCheckBoxValueChanged(object sender, EventArgs e)
+        {
+            string headgroup = deuteratedMediatorHeadgroups.Items[((ComboBox)sender).SelectedIndex].ToString();
+            foreach (MS2Fragment currentFragment in currentLipid.MS2Fragments[headgroup])
+            {
+                checkedListBoxDeuteratedFragments.Items.Add(currentFragment.fragmentName);
+                checkedListBoxDeuteratedFragments.SetItemChecked(checkedListBoxDeuteratedFragments.Items.Count - 1, currentFragment.fragmentSelected);
+            }
+        }
+        
+        
+        void checkedListBoxMonoIsotopicValueChanged(Object sender, ItemCheckEventArgs e)
+        {
+            if (senderInterupt) return;
+            string headgroup = medHgListbox.SelectedItem.ToString();
+            ((MS2Fragment)currentLipid.MS2Fragments[headgroup][e.Index]).fragmentSelected = (e.NewValue == CheckState.Checked);
+        }
+        
+        
+        void checkedListBoxDeuteratedValueChanged(Object sender, ItemCheckEventArgs e)
+        {
+            if (senderInterupt) return;
+            if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
+            string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
+            ((MS2Fragment)currentLipid.MS2Fragments[headgroup][e.Index]).fragmentSelected = (e.NewValue == CheckState.Checked);
+        }
+        
+        
+        private void checkedListBoxMonoIsotopicMouseHover(object sender, MouseEventArgs e)
+        {
+            string headgroup = medHgListbox.SelectedItem.ToString();
+            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            {
+                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                pictureBoxFragments.Image = Image.FromFile(mediatorFile);
+                pictureBoxFragments.SendToBack();
+                senderInterupt = false;
+            }
+        }
+        
+        
+        private void checkedListBoxDeuteratedeMouseHover(object sender, MouseEventArgs e)
+        {
+            if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
+            string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
+            
+            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            {
+                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                pictureBoxFragments.Image = Image.FromFile(mediatorFile);
+                pictureBoxFragments.SendToBack();
+                senderInterupt = false;
             }
         }
         

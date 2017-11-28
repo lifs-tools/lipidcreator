@@ -70,7 +70,7 @@ namespace LipidCreator
             this.cancelButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.labelMass = new System.Windows.Forms.Label();
-            this.numericUpDownCharge = new LipidCreator.MyNumericUpDown();
+            this.numericUpDownCharge = new MyNumericUpDown();
             this.textBoxFragmentName = new System.Windows.Forms.TextBox();
             this.labelCharge = new System.Windows.Forms.Label();
             this.labelFragmentName = new System.Windows.Forms.Label();

@@ -155,10 +155,9 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
                                         // do not change the order, chem formula must be computed before adding the adduct
-                                        string chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                                        string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                         int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                                        string chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
-                                        double mass = LipidCreatorForm.computeMass(atomsCount, charge);
+                                        double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                                         PrecursorData precursorData = new PrecursorData();
                                         precursorData.lipidCategory = LipidCategory.SphingoLipid;
@@ -175,7 +174,6 @@ namespace LipidCreator
                                         precursorData.fa3 = null;
                                         precursorData.fa4 = null;
                                         precursorData.lcb = lcbType;
-                                        precursorData.chemFormComplete = chemFormComplete;
                                         precursorData.MS2Fragments = MS2Fragments[headgroup];
                                         
                                         precursorDataList.Add(precursorData);
@@ -201,10 +199,9 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
                                     MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
                                     // do not change the order, chem formula must be computed before adding the adduct
-                                    String chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                                    String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                     int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                                    String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
-                                    double mass = LipidCreatorForm.computeMass(atomsCount, charge);
+                                    double mass = LipidCreator.computeMass(atomsCount, charge);
                                             
                                         
                                     PrecursorData precursorData = new PrecursorData();
@@ -222,7 +219,6 @@ namespace LipidCreator
                                     precursorData.fa3 = null;
                                     precursorData.fa4 = null;
                                     precursorData.lcb = lcbType;
-                                    precursorData.chemFormComplete = chemFormComplete;
                                     precursorData.MS2Fragments = MS2Fragments[headgroup];
                                     
                                     precursorDataList.Add(precursorData);

@@ -43,10 +43,10 @@ namespace LipidCreator
         public DataTable transitionList;
         public DataTable transitionListUnique;
         public DataTable currentView;
-        public LipidCreatorForm lipidCreatorForm;
+        public LipidCreator lipidCreatorForm;
         public string[] dataColumns = { };
 
-        public LipidsReview (LipidCreatorForm lipidCreatorForm)
+        public LipidsReview (LipidCreator lipidCreatorForm)
         {
             this.lipidCreatorForm = lipidCreatorForm;
             transitionList = lipidCreatorForm.transitionList;
@@ -97,7 +97,7 @@ namespace LipidCreator
                     HashSet<String> replicates = new HashSet<String> ();
                     
                     foreach (DataRow row in currentView.Rows) {
-                        string replicateKey = (String)row [LipidCreatorForm.PRECURSOR_ION_FORMULA] + "/" + (((String)row [LipidCreatorForm.PRODUCT_ION_FORMULA]) != "" ? (String)row [LipidCreatorForm.PRODUCT_ION_FORMULA] : (String)row [LipidCreatorForm.PRODUCT_NAME]);
+                        string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
                         if (!replicates.Contains (replicateKey)) {
                             replicates.Add (replicateKey);
                             transitionListUnique.ImportRow (row);
@@ -131,20 +131,20 @@ namespace LipidCreator
                 if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_positive.csv"))) {
-                        outputFile.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            if (((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "+2") {
-                                outputFile.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2") {
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
                             }
                         }
                         outputFile.Dispose ();
                         outputFile.Close ();
                     }
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_negative.csv"))) {
-                        outputFile.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            if (((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "-2") {
-                                outputFile.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2") {
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
                             }
                         }
                         outputFile.Dispose ();
@@ -156,9 +156,9 @@ namespace LipidCreator
                     this.Enabled = false;
                     StreamWriter writer;
                     if ((writer = new StreamWriter (saveFileDialog1.OpenFile ())) != null) {
-                        writer.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
+                        writer.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            writer.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
+                            writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
                         }
                         writer.Dispose ();
                         writer.Close ();
@@ -172,8 +172,8 @@ namespace LipidCreator
         private string toLine (DataRow row, string[] columnKeys)
         {
             List<string> line = new List<string> ();
-            foreach (String columnKey in LipidCreatorForm.DATA_COLUMN_KEYS) {
-                if (columnKey == LipidCreatorForm.PRODUCT_MZ || columnKey == LipidCreatorForm.PRECURSOR_MZ) {
+            foreach (String columnKey in LipidCreator.DATA_COLUMN_KEYS) {
+                if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
                     line.Add (((String)row [columnKey]).Replace (",", "."));
                 } else {
                     line.Add (((String)row [columnKey]));

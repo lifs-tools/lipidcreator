@@ -195,10 +195,9 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
-                                        String chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                                        String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                         int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                                        String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
-                                        double mass = LipidCreatorForm.computeMass(atomsCount, charge);
+                                        double mass = LipidCreator.computeMass(atomsCount, charge);
                                                                                                                             
                                         
                                         PrecursorData precursorData = new PrecursorData();
@@ -216,7 +215,6 @@ namespace LipidCreator
                                         precursorData.fa3 = null;
                                         precursorData.fa4 = null;
                                         precursorData.lcb = null;
-                                        precursorData.chemFormComplete = chemFormComplete;
                                         precursorData.MS2Fragments = MS2Fragments[headgroup];
                                         
                                         precursorDataList.Add(precursorData);
@@ -281,10 +279,9 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
-                                        String chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                                        String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                         int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                                        String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
-                                        double mass = LipidCreatorForm.computeMass(atomsCount, charge);
+                                        double mass = LipidCreator.computeMass(atomsCount, charge);
                                                                                                                             
                                         
                                         PrecursorData precursorData = new PrecursorData();
@@ -302,7 +299,6 @@ namespace LipidCreator
                                         precursorData.fa3 = sortedAcids[2];
                                         precursorData.fa4 = null;
                                         precursorData.lcb = null;
-                                        precursorData.chemFormComplete = chemFormComplete;
                                         precursorData.MS2Fragments = MS2Fragments[headgroup];
                                         
                                         precursorDataList.Add(precursorData);

@@ -125,10 +125,9 @@ namespace LipidCreator
                             
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                             MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
-                            String chemForm = LipidCreatorForm.computeChemicalFormula(atomsCount);
+                            String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                             int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                            String chemFormComplete = LipidCreatorForm.computeChemicalFormula(atomsCount);
-                            double mass = LipidCreatorForm.computeMass(atomsCount, charge);
+                            double mass = LipidCreator.computeMass(atomsCount, charge);
                                                                 
 
                             PrecursorData precursorData = new PrecursorData();
@@ -146,7 +145,6 @@ namespace LipidCreator
                             precursorData.fa3 = null;
                             precursorData.fa4 = null;
                             precursorData.lcb = null;
-                            precursorData.chemFormComplete = chemFormComplete;
                             precursorData.MS2Fragments = MS2Fragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
@@ -162,10 +160,9 @@ namespace LipidCreator
                             
                                         DataTable atomsCountDeuterium = MS2Fragment.createEmptyElementTable();
                                         MS2Fragment.addCounts(atomsCountDeuterium, headGroupsTable[derivativeHeadgroup]);
-                                        String chemFormDeuterium = LipidCreatorForm.computeChemicalFormula(atomsCountDeuterium);
+                                        String chemFormDeuterium = LipidCreator.computeChemicalFormula(atomsCountDeuterium);
                                         int chargeDeuterium = getChargeAndAddAdduct(atomsCountDeuterium, adduct.Key);
-                                        String chemFormCompleteDeuterium = LipidCreatorForm.computeChemicalFormula(atomsCountDeuterium);
-                                        double massDeuterium = LipidCreatorForm.computeMass(atomsCountDeuterium, chargeDeuterium);
+                                        double massDeuterium = LipidCreator.computeMass(atomsCountDeuterium, chargeDeuterium);
                                                                             
 
                                         PrecursorData precursorDataDeuterium = new PrecursorData();
@@ -183,7 +180,6 @@ namespace LipidCreator
                                         precursorDataDeuterium.fa3 = null;
                                         precursorDataDeuterium.fa4 = null;
                                         precursorDataDeuterium.lcb = null;
-                                        precursorDataDeuterium.chemFormComplete = chemFormCompleteDeuterium;
                                         precursorDataDeuterium.MS2Fragments = MS2Fragments[derivativeHeadgroup];
                                         
                                         precursorDataList.Add(precursorDataDeuterium);

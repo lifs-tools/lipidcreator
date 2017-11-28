@@ -42,7 +42,7 @@ using SkylineTool;
 namespace LipidCreator
 {   
     [Serializable]
-    public class LipidCreatorForm
+    public class LipidCreator
     {
         public ArrayList registeredLipids;
         public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
@@ -57,23 +57,23 @@ namespace LipidCreator
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
-        public const string PRECURSOR_ION_FORMULA = "Precursor Ion Formula";
+        public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Ion Formula";
         public const string PRECURSOR_ADDUCT = "Precursor Adduct";
         public const string PRECURSOR_MZ = "Precursor m/z";
         public const string PRECURSOR_CHARGE = "Precursor Charge";
         public const string PRODUCT_NAME = "Product Name";
-        public const string PRODUCT_ION_FORMULA = "Product Ion Formula";
+        public const string PRODUCT_NEUTRAL_FORMULA = "Product Ion Formula";
         public const string PRODUCT_MZ = "Product m/z";
         public const string PRODUCT_CHARGE = "Product Charge";
         public readonly static string[] DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
-            PRECURSOR_ION_FORMULA,
+            PRODUCT_NEUTRAL_FORMULA,
             PRECURSOR_ADDUCT,
             PRECURSOR_MZ,
             PRECURSOR_CHARGE,
             PRODUCT_NAME,
-            PRODUCT_ION_FORMULA,
+            PRECURSOR_NEUTRAL_FORMULA,
             PRODUCT_MZ,
             PRODUCT_CHARGE
         };
@@ -110,7 +110,7 @@ namespace LipidCreator
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                             atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[6]);
-                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[7]);
+                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[7]) - Convert.ToInt32(tokens[4]);
                             atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[8]);
                             atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[9]);
                             atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[10]);
@@ -210,7 +210,7 @@ namespace LipidCreator
         
         
         
-        public LipidCreatorForm(String pipe)
+        public LipidCreator(String pipe)
         {
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;

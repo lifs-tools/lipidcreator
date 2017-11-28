@@ -70,7 +70,7 @@ namespace LipidCreator
             
             
             List<String> medHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in creatorGUI.lipidCreatorForm.allFragments["Mediator"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in creatorGUI.lipidCreator.allFragments["Mediator"])
             {
                 String headgroup = fragmentList.Key;
                 if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);
@@ -103,9 +103,9 @@ namespace LipidCreator
                 if (isotopeDict[headgroup].Count > 0) deuteratedMediatorHeadgroups.SelectedIndex = 0;
             }
             
-            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;
@@ -144,9 +144,9 @@ namespace LipidCreator
         private void checkedListBoxMonoIsotopicMouseHover(object sender, MouseEventArgs e)
         {
             string headgroup = medHgListbox.SelectedItem.ToString();
-            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;
@@ -159,9 +159,9 @@ namespace LipidCreator
             if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
             string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
             
-            if (creatorGUI.lipidCreatorForm.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreatorForm.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;

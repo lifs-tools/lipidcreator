@@ -64,7 +64,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-            LipidCreatorForm lcf = new LipidCreatorForm(null);
+            LipidCreator lcf = new LipidCreator(null);
             
             try {
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
@@ -90,20 +90,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("HG(PC)"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("LPC"), "1st LPC category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("LPC 18:0"), "1st LPC precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C26H54O7NP"), "1st LPC precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st LPC precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 524.3710668, "1st LPC precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), 1, "1st LPC precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "1st LPC category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "1st LPC precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "1st LPC precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st LPC precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 524.3710668, "1st LPC precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st LPC precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("HG(PC)"), "1st LPC product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C5H15O4NP"), "1st LPC product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 184.0733215, "1st LPC product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), 1, "1st LPC product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"), "1st LPC product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C5H14O4NP"), "1st LPC product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 184.0733215, "1st LPC product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st LPC product charge");
                     }
                 }
                 
@@ -128,20 +128,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("LPC"), "2nd LPC category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("LPC 18:0"), "2nd LPC precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C26H54O7NP"), "2nd LPC precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+HCOO]"), "2nd LPC precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 568.3619932, "2nd LPC precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "2nd LPC precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "2nd LPC category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "2nd LPC precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "2nd LPC precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+HCOO]"), "2nd LPC precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 568.3619932, "2nd LPC precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd LPC precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA"), "2nd LPC product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C18H35O2"), "2nd LPC product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 283.2642541, "2nd LPC product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "2nd LPC product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA"), "2nd LPC product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C18H36O2"), "2nd LPC product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 283.2642541, "2nd LPC product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd LPC product charge");
                     }
                 }
                 
@@ -162,20 +162,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("LPC"), "3nd LPC category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("LPC 18:0"), "3nd LPC precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C26H54O7NP"), "3nd LPC precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+CH3COO]"), "3nd LPC precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 582.3776432, "3nd LPC precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "3nd LPC precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "3nd LPC category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "3nd LPC precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "3nd LPC precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+CH3COO]"), "3nd LPC precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 582.3776432, "3nd LPC precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "3nd LPC precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA"), "3nd LPC product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C18H35O2"), "3nd LPC product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 283.2642541, "3nd LPC product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "3nd LPC product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA"), "3nd LPC product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C18H36O2"), "3nd LPC product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 283.2642541, "3nd LPC product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "3nd LPC product charge");
                     }
                 }
                 
@@ -222,68 +222,68 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("P"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("P"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("PA"), "1st PA category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "1st PA precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C37H73O8P"), "1st PA precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st PA precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 675.4970301, "1st PA precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "1st PA precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "1st PA category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "1st PA precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "1st PA precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st PA precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "1st PA precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "1st PA precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("P"), "1st PA product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("O3P"), "1st PA product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 78.95905447, "1st PA product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "1st PA product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("P"), "1st PA product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("HO3P"), "1st PA product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 78.95905447, "1st PA product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "1st PA product charge");
                     }
                     
-                    else if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA1"))
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("FA1"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("PA"), "2nd PA category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "2nd PA precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C37H73O8P"), "2nd PA precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd PA precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 675.4970301, "2nd PA precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "2nd PA precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "2nd PA category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "2nd PA precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "2nd PA precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd PA precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "2nd PA precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd PA precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA1"), "2nd PA product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C16H31O2"), "2nd PA product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 255.2329539, "2nd PA product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "2nd PA product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA1"), "2nd PA product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C16H32O2"), "2nd PA product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 255.2329539, "2nd PA product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd PA product charge");
                     }
                     
-                    else if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"))
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("FA2"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("PA"), "3rd PA category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "3rd PA precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C37H73O8P"), "3rd PA precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "3rd PA precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 675.4970301, "3rd PA precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "3rd PA precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "3rd PA category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "3rd PA precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "3rd PA precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "3rd PA precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "3rd PA precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "3rd PA precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"), "3rd PA product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C18H35O2"), "3rd PA product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 283.2642541, "3rd PA product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "3rd PA product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2"), "3rd PA product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C18H36O2"), "3rd PA product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 283.2642541, "3rd PA product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "3rd PA product charge");
                     }
                     
-                    else if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2' + O"))
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("FA2' + O"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("PA"), "4th PA category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "4th PA precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C37H73O8P"), "4th PA precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "4th PA precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 675.4970301, "4th PA precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "4th PA precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "4th PA category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "4th PA precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "4th PA precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "4th PA precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "4th PA precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "4th PA precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2' + O"), "4th PA product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C19H38O7P"), "4th PA product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 409.2360643, "4th PA product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "4th PA product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2' + O"), "4th PA product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C19H39O7P"), "4th PA product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 409.2360643, "4th PA product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "4th PA product charge");
                     }
                 }    
                 
@@ -333,36 +333,36 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA2"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("TG"), "1st TG category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "1st TG precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C51H98O6"), "1st TG precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "1st TG precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 824.7701668, "1st TG precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), 1, "1st TG precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("TG"), "1st TG category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "1st TG precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C51H98O6"), "1st TG precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "1st TG precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 824.7701668, "1st TG precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st TG precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"), "1st TG product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C16H31O"), "1st TG product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 239.2369421, "1st TG product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), 1, "1st TG product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2"), "1st TG product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C16H30O"), "1st TG product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 239.2369421, "1st TG product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st TG product charge");
                     }
                     
-                    else if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2'"))
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("FA2'"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("TG"), "2nd TG category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "2nd TG precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C51H98O6"), "2nd TG precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "2nd TG precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 824.7701668, "2nd TG precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), 1, "2nd TG precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("TG"), "2nd TG category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "2nd TG precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C51H98O6"), "2nd TG precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "2nd TG precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 824.7701668, "2nd TG precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd TG precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2'"), "2nd TG product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C35H67O4"), "2nd TG product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 551.5033873, "2nd TG product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), 1, "2nd TG product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2'"), "2nd TG product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C35H66O4"), "2nd TG product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 551.5033873, "2nd TG product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "2nd TG product charge");
                     }
                 }    
                 
@@ -407,20 +407,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA2"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("CL"), "1st CL category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "1st CL precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C77H150O17P2"), "1st CL precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st CL precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 1408.027552, "1st CL precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "1st CL precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("CL"), "1st CL category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "1st CL precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C77H150O17P2"), "1st CL precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st CL precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 1408.027552, "1st CL precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "1st CL precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"), "1st CL product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C16H31O2"), "1st CL product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 255.2329539, "1st CL product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "1st CL product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2"), "1st CL product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C16H32O2"), "1st CL product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 255.2329539, "1st CL product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "1st CL product charge");
                     }
                 }
                 
@@ -439,20 +439,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA2"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("CL"), "2nd CL category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "2nd CL precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C77H150O17P2"), "2nd CL precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-2H]"), "2nd CL precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 703.5101375, "2nd CL precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -2, "2nd CL precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("CL"), "2nd CL category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "2nd CL precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C77H150O17P2"), "2nd CL precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-2H]"), "2nd CL precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 703.5101375, "2nd CL precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -2, "2nd CL precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("FA2"), "2nd CL product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C16H31O2"), "2nd CL product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 255.2329539, "2nd CL product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "2nd CL product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2"), "2nd CL product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C16H32O2"), "2nd CL product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 255.2329539, "2nd CL product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd CL product charge");
                     }
                 }    
                 
@@ -486,20 +486,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("W''"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("W''"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("Cer"), "1st Cer category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "1st Cer precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C30H59O3N"), "1st Cer precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st Cer precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 482.4568, "1st Cer precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), 1, "1st Cer precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("Cer"), "1st Cer category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "1st Cer precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C30H59O3N"), "1st Cer precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st Cer precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 482.4568, "1st Cer precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st Cer precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("W''"), "1st Cer product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C18H34N"), "1st Cer product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 264.2686, "1st Cer product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), 1, "1st Cer product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("W''"), "1st Cer product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C18H33N"), "1st Cer product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 264.2686, "1st Cer product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st Cer product charge");
                     }
                 }
                 
@@ -524,20 +524,20 @@ namespace LipidCreator
                 
                 foreach (DataRow row in lcf.transitionList.Rows)
                 {
-                    if (row[LipidCreatorForm.PRODUCT_NAME].Equals("S"))
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("S"))
                     {
                         // precursor
-                        Assert(row[LipidCreatorForm.MOLECULE_LIST_NAME].Equals("Cer"), "2nd Cer category");
-                        Assert(row[LipidCreatorForm.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "2nd Cer precursor name");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ION_FORMULA].Equals("C30H59O3N"), "2nd Cer precursor formula");
-                        Assert(row[LipidCreatorForm.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd Cer precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRECURSOR_MZ]), 480.4422, "2nd Cer precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRECURSOR_CHARGE]), -1, "2nd Cer precursor charge");
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("Cer"), "2nd Cer category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "2nd Cer precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C30H59O3N"), "2nd Cer precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd Cer precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 480.4422, "2nd Cer precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd Cer precursor charge");
                         // product
-                        Assert(row[LipidCreatorForm.PRODUCT_NAME].Equals("S"), "2nd Cer product name");
-                        Assert(row[LipidCreatorForm.PRODUCT_ION_FORMULA].Equals("C14H26ON"), "2nd Cer product formula");
-                        Assert(Convert.ToDouble(row[LipidCreatorForm.PRODUCT_MZ]), 224.2019881, "2nd Cer product mass");
-                        Assert(Convert.ToInt32(row[LipidCreatorForm.PRODUCT_CHARGE]), -1, "2nd Cer product charge");
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("S"), "2nd Cer product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C14H27ON"), "2nd Cer product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 224.2019881, "2nd Cer product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd Cer product charge");
                     }
                 }
                 

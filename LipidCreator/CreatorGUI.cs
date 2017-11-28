@@ -44,7 +44,7 @@ namespace LipidCreator
         public bool changingTabForced;
         public ArrayList lipidTabList;
         public int currentTabIndex = 1;
-        public LipidCreatorForm lipidCreatorForm;
+        public LipidCreator lipidCreator;
         public AboutDialog aboutDialog;
         public Lipid currentLipid;
         public DataTable registeredLipidsDatatable;
@@ -53,15 +53,15 @@ namespace LipidCreator
         public bool settingListbox = false;
         public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
         
-        public CreatorGUI(LipidCreatorForm lipidCreatorForm)
+        public CreatorGUI(LipidCreator lipidCreator)
         {
-            this.lipidCreatorForm = lipidCreatorForm;
+            this.lipidCreator = lipidCreator;
             lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
-                                                      new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
-                                                      new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
-                                                      new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
-                                                      new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments)
+                                                      new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
+                                                      new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
+                                                      new SLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
+                                                      new Cholesterol(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
+                                                      new Mediator(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments)
                                                       });
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -459,7 +459,7 @@ namespace LipidCreator
         public void resetCLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.PhosphoLipid;
-            lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             ((PLLipid)lipidTabList[index]).isCL = true;
             lipidModifications[index] = -1;
             changeTab(index);
@@ -468,7 +468,7 @@ namespace LipidCreator
         public void resetGLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.GlyceroLipid;
-            lipidTabList[index] = new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -476,7 +476,7 @@ namespace LipidCreator
         public void resetPLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.PhosphoLipid;
-            lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -484,7 +484,7 @@ namespace LipidCreator
         public void resetSLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.SphingoLipid;
-            lipidTabList[index] = new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new SLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -492,7 +492,7 @@ namespace LipidCreator
         public void resetCHLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.Cholesterol;
-            lipidTabList[index] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new Cholesterol(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -500,7 +500,7 @@ namespace LipidCreator
         public void resetMedLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.Mediator;
-            lipidTabList[index] = new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new Mediator(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -552,7 +552,7 @@ namespace LipidCreator
             if (objectType == 3) maxRange = 6;
             else if (objectType == 4) maxRange = 29;
             if (isLCB) minRange = 8;
-            HashSet<int> lengths = lipidCreatorForm.parseRange(tb.Text, minRange,  maxRange, objectType);
+            HashSet<int> lengths = lipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
             if (objectType <= 2)
             {
                 fag.carbonCounts = lengths; 
@@ -1776,25 +1776,25 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+H"]) plPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+H"]) plPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+2H"]) plPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+2H"]) plPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+NH4"]) plPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+NH4"]) plPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-H"]) plNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-H"]) plNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-2H"]) plNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-2H"]) plNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+HCOO"]) plNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+HCOO"]) plNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+CH3COO"]) plNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+CH3COO"]) plNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
             }
         }
@@ -1907,25 +1907,25 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+H"]) slPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+H"]) slPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+2H"]) slPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+2H"]) slPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+NH4"]) slPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+NH4"]) slPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-H"]) slNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-H"]) slNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-2H"]) slNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-2H"]) slNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+HCOO"]) slNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+HCOO"]) slNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreatorForm.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+CH3COO"]) slNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+CH3COO"]) slNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
             }
         }
@@ -2038,7 +2038,7 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                string mediatorFile = lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[hoveredIndex].ToString()];
+                string mediatorFile = lipidCreator.allPathsToPrecursorImages[medHgListbox.Items[hoveredIndex].ToString()];
                 medPictureBox.Image = Image.FromFile(mediatorFile);
                 medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
                 medPictureBox.SendToBack();
@@ -2351,23 +2351,23 @@ namespace LipidCreator
             switch (result)
             {
                 case LipidCategory.GlyceroLipid:
-                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new GLLipid((GLLipid)currentLipid);
+                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new GLLipid((GLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.PhosphoLipid:
-                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new PLLipid((PLLipid)currentLipid);
+                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new PLLipid((PLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.SphingoLipid:
-                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new SLLipid((SLLipid)currentLipid);
+                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new SLLipid((SLLipid)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.Cholesterol:
-                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new Cholesterol((Cholesterol)currentLipid);
+                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new Cholesterol((Cholesterol)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.Mediator:
-                    lipidCreatorForm.registeredLipids[lipidModifications[(int)result]] = new Mediator((Mediator)currentLipid);
+                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new Mediator((Mediator)currentLipid);
                     refreshRegisteredLipidsTable();
                     break;
                 default:
@@ -2383,23 +2383,23 @@ namespace LipidCreator
             switch (result)
             {
                 case LipidCategory.GlyceroLipid:
-                    lipidCreatorForm.registeredLipids.Add(new GLLipid((GLLipid)currentLipid));
+                    lipidCreator.registeredLipids.Add(new GLLipid((GLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.PhosphoLipid:
-                    lipidCreatorForm.registeredLipids.Add(new PLLipid((PLLipid)currentLipid));
+                    lipidCreator.registeredLipids.Add(new PLLipid((PLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.SphingoLipid:
-                    lipidCreatorForm.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
+                    lipidCreator.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.Cholesterol:
-                    lipidCreatorForm.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
+                    lipidCreator.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 case LipidCategory.Mediator:
-                    lipidCreatorForm.registeredLipids.Add(new Mediator((Mediator)currentLipid));
+                    lipidCreator.registeredLipids.Add(new Mediator((Mediator)currentLipid));
                     refreshRegisteredLipidsTable();
                     break;
                 default:
@@ -2410,7 +2410,7 @@ namespace LipidCreator
         public void refreshRegisteredLipidsTable()
         {
             registeredLipidsDatatable.Clear();
-            foreach (Lipid currentRegisteredLipid in lipidCreatorForm.registeredLipids)
+            foreach (Lipid currentRegisteredLipid in lipidCreator.registeredLipids)
             {
                 DataRow row = registeredLipidsDatatable.NewRow();
                 if (currentRegisteredLipid is GLLipid)
@@ -2502,7 +2502,7 @@ namespace LipidCreator
             if (((DataGridView)sender).Columns[colIndex].Name == "Edit")
             {
             
-                Lipid currentRegisteredLipid = (Lipid)lipidCreatorForm.registeredLipids[rowIndex];
+                Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
                 int tabIndex = 0;
                 if (currentRegisteredLipid is GLLipid)
                 {
@@ -2537,7 +2537,7 @@ namespace LipidCreator
             }
             else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
             {
-                Lipid currentRegisteredLipid = (Lipid)lipidCreatorForm.registeredLipids[rowIndex];
+                Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
                 int tabIndex = 0;
                 if (currentRegisteredLipid is GLLipid)
                 {
@@ -2559,7 +2559,7 @@ namespace LipidCreator
                 {
                     tabIndex = (int)LipidCategory.Mediator;
                 }
-                lipidCreatorForm.registeredLipids.RemoveAt(rowIndex);
+                lipidCreator.registeredLipids.RemoveAt(rowIndex);
                 refreshRegisteredLipidsTable();
                 lipidModifications[tabIndex] = -1;
                 if (tabIndex == currentTabIndex)
@@ -2572,9 +2572,9 @@ namespace LipidCreator
         
         public void lipidsGridviewKeydown(Object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete && lipidCreatorForm.registeredLipids.Count > 0 && ((DataGridView)sender).SelectedRows.Count > 0)
+            if (e.KeyCode == Keys.Delete && lipidCreator.registeredLipids.Count > 0 && ((DataGridView)sender).SelectedRows.Count > 0)
             {   
-                lipidCreatorForm.registeredLipids.RemoveAt(((DataGridView)sender).SelectedRows[0].Index);
+                lipidCreator.registeredLipids.RemoveAt(((DataGridView)sender).SelectedRows[0].Index);
                 refreshRegisteredLipidsTable();
                 e.Handled = true;
             }
@@ -2593,8 +2593,8 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreatorForm.assembleLipids();
-            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm);
+            lipidCreator.assembleLipids();
+            LipidsReview lipidsReview = new LipidsReview(lipidCreator);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();
@@ -2609,7 +2609,7 @@ namespace LipidCreator
             try 
             {
                 doc = XDocument.Load(filePath);
-                lipidCreatorForm.import(doc);
+                lipidCreator.import(doc);
                 refreshRegisteredLipidsTable();
             }
             catch (Exception ex)
@@ -2637,7 +2637,7 @@ namespace LipidCreator
                 try 
                 {
                     doc = XDocument.Load(openFileDialog1.FileName);
-                    lipidCreatorForm.import(doc);
+                    lipidCreator.import(doc);
                     refreshRegisteredLipidsTable();
                 }
                 catch (Exception ex)
@@ -2662,7 +2662,7 @@ namespace LipidCreator
                 StreamWriter writer;
                 if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
                 {
-                    writer.Write(lipidCreatorForm.serialize());
+                    writer.Write(lipidCreator.serialize());
                     writer.Dispose();
                     writer.Close();
                 }
@@ -2687,8 +2687,8 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-            LipidCreatorForm lcf = new LipidCreatorForm((args.Length > 0) ? args[0] : null);
-            CreatorGUI creatorGUI = new CreatorGUI(lcf);
+            LipidCreator lc = new LipidCreator((args.Length > 0) ? args[0] : null);
+            CreatorGUI creatorGUI = new CreatorGUI(lc);
             Application.Run(creatorGUI);
         }
     }

@@ -459,9 +459,9 @@ namespace LipidCreator
             int leftGroupboxes = 1000;
 
             
-            deleteImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/delete-small.png");
-            editImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/edit-small.png");
-            addImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/add-small.png");
+            deleteImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/delete-small.png");
+            editImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/edit-small.png");
+            addImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/add-small.png");
             
             glHgListbox = new ListBox();
             plHgListbox = new ListBox();
@@ -469,7 +469,7 @@ namespace LipidCreator
             medHgListbox = new ListBox();
             
             List<String> glHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["GL"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["GL"])
             {
                 String headgroup = fragmentList.Key;
                 if (headgroup.Length > 2) glHgList.Add(headgroup);
@@ -477,7 +477,7 @@ namespace LipidCreator
             glHgList.Sort();
             
             List<String> plHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["PL"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["PL"])
             {
                 String headgroup = fragmentList.Key;
                 if (headgroup[0] != 'e' && headgroup[0] != 'p' && headgroup[0] != 'L' && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
@@ -485,7 +485,7 @@ namespace LipidCreator
             plHgList.Sort();
             
             List<String> slHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["SL"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["SL"])
             {
                 String headgroup = fragmentList.Key;
                 slHgList.Add(headgroup);
@@ -493,7 +493,7 @@ namespace LipidCreator
             slHgList.Sort();
             
             List<String> medHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreatorForm.allFragments["Mediator"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["Mediator"])
             {
                 String headgroup = fragmentList.Key;
                 if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);
@@ -508,36 +508,36 @@ namespace LipidCreator
             slHgListbox.Items.AddRange(slHgList.ToArray());
             medHgListbox.Items.AddRange(medHgList.ToArray());
             
-            cardioBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_backbones.png");
-            cardioBackboneImageFA1e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe1.png");
-            cardioBackboneImageFA2e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe2.png");
-            cardioBackboneImageFA3e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe3.png");
-            cardioBackboneImageFA4e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAe4.png");
-            cardioBackboneImageFA1p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAp1.png");
-            cardioBackboneImageFA2p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAp2.png");
-            cardioBackboneImageFA3p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAp3.png");
-            cardioBackboneImageFA4p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/CL_FAp4.png");
-            glyceroBackboneImageOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_backbones.png");
-            glyceroBackboneImageFA1eOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAe1.png");
-            glyceroBackboneImageFA2eOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAe2.png");
-            glyceroBackboneImageFA3eOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAe3.png");
-            glyceroBackboneImageFA1pOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAp1.png");
-            glyceroBackboneImageFA2pOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAp2.png");
-            glyceroBackboneImageFA3pOrig = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_FAp3.png");
-            glyceroBackboneImagePlant = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_backbones_plant.png");
-            glyceroBackboneImageFA1ePlant = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_plant_FAe1.png");
-            glyceroBackboneImageFA2ePlant = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_plant_FAe2.png");
-            glyceroBackboneImageFA1pPlant = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_plant_FAp1.png");
-            glyceroBackboneImageFA2pPlant = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/GL_plant_FAp2.png");
-            phosphoBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/PL_backbones.png");
-            phosphoBackboneImageFA1e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/PL_FAe1.png");
-            phosphoBackboneImageFA2e = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/PL_FAe2.png");
-            phosphoBackboneImageFA1p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/PL_FAp1.png");
-            phosphoBackboneImageFA2p = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/PL_FAp2.png");
-            sphingoBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/SL_backbones.png");
-            cholesterolBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/Ch.png");
-            cholesterolEsterBackboneImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/backbones/ChE.png");
-            glArrowImage = Image.FromFile((lipidCreatorForm.openedAsExternal ? lipidCreatorForm.prefixPath : "") + "images/arrow.png");
+            cardioBackboneImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_backbones.png");
+            cardioBackboneImageFA1e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAe1.png");
+            cardioBackboneImageFA2e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAe2.png");
+            cardioBackboneImageFA3e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAe3.png");
+            cardioBackboneImageFA4e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAe4.png");
+            cardioBackboneImageFA1p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAp1.png");
+            cardioBackboneImageFA2p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAp2.png");
+            cardioBackboneImageFA3p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAp3.png");
+            cardioBackboneImageFA4p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/CL_FAp4.png");
+            glyceroBackboneImageOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_backbones.png");
+            glyceroBackboneImageFA1eOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAe1.png");
+            glyceroBackboneImageFA2eOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAe2.png");
+            glyceroBackboneImageFA3eOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAe3.png");
+            glyceroBackboneImageFA1pOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAp1.png");
+            glyceroBackboneImageFA2pOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAp2.png");
+            glyceroBackboneImageFA3pOrig = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_FAp3.png");
+            glyceroBackboneImagePlant = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_backbones_plant.png");
+            glyceroBackboneImageFA1ePlant = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_plant_FAe1.png");
+            glyceroBackboneImageFA2ePlant = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_plant_FAe2.png");
+            glyceroBackboneImageFA1pPlant = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_plant_FAp1.png");
+            glyceroBackboneImageFA2pPlant = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/GL_plant_FAp2.png");
+            phosphoBackboneImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/PL_backbones.png");
+            phosphoBackboneImageFA1e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/PL_FAe1.png");
+            phosphoBackboneImageFA2e = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/PL_FAe2.png");
+            phosphoBackboneImageFA1p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/PL_FAp1.png");
+            phosphoBackboneImageFA2p = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/PL_FAp2.png");
+            sphingoBackboneImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/SL_backbones.png");
+            cholesterolBackboneImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/Ch.png");
+            cholesterolEsterBackboneImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/backbones/ChE.png");
+            glArrowImage = Image.FromFile((lipidCreator.openedAsExternal ? lipidCreator.prefixPath : "") + "images/arrow.png");
 
             
             glyceroBackboneImage = glyceroBackboneImageOrig;
@@ -1909,7 +1909,7 @@ namespace LipidCreator
             medPictureBox.Location = new Point(210, 100);
             if (medHgListbox.Items.Count > 0)
             {
-                medPictureBox.Image = Image.FromFile(lipidCreatorForm.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
+                medPictureBox.Image = Image.FromFile(lipidCreator.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
                 medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
             }
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;

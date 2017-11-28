@@ -151,7 +151,7 @@
       <DependentUpon>NewFragment.cs</DependentUpon>
     </Compile>
     <Compile Include="PLLipid.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="LipidCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SLLipid.cs" />
     <Compile Include="SpectralName.cs">

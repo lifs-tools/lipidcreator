@@ -39,13 +39,15 @@ namespace LipidCreator
         public String lengthInfo;
         public String dbInfo;
         public String hydroxylInfo;
+        public bool isLCB;
         public Dictionary<String, bool> faTypes;
         public HashSet<int> carbonCounts;
         public HashSet<int> doubleBondCounts;
         public HashSet<int> hydroxylCounts;
     
-        public FattyAcidGroup()
+        public FattyAcidGroup(bool isLCB = false)
         {
+            this.isLCB = isLCB;
             chainType = 0;
             lengthInfo = "12-15";
             dbInfo = "0";
@@ -94,6 +96,7 @@ namespace LipidCreator
             lengthInfo = node.Attribute("lengthInfo").Value;
             dbInfo = node.Attribute("dbInfo").Value;
             hydroxylInfo = node.Attribute("hydroxylInfo").Value;
+            isLCB = node.Attribute("isLCB").Value == "True";
             
             carbonCounts.Clear();
             doubleBondCounts.Clear();
@@ -129,6 +132,7 @@ namespace LipidCreator
         {
             string xml = "<FattyAcidGroup";
             xml += " chainType=\"" + chainType + "\"";
+            xml += " isLCB=\"" + isLCB + "\"";
             xml += " lengthInfo=\"" + lengthInfo + "\"";
             xml += " dbInfo=\"" + dbInfo + "\"";
             xml += " hydroxylInfo=\"" + hydroxylInfo + "\">\n";
@@ -183,7 +187,7 @@ namespace LipidCreator
                             if (fattyAcidLength < fattyAcidHydroxyl) continue;
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
                             {
-                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key);
+                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, isLCB);
                             }
                         }
                     }

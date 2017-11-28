@@ -42,7 +42,7 @@ namespace LipidCreator
     
         public SLLipid(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
-            lcb = new FattyAcidGroup();
+            lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
             lcb.hydroxylCounts.Add(2);
             fag.hydroxylCounts.Add(0);

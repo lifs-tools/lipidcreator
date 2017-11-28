@@ -335,25 +335,24 @@ namespace LipidCreator
         {
             if (currentLipid is GLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[1] = new GLLipid((GLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[1];
+                creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid] = new GLLipid((GLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid];
             }
             else if (currentLipid is PLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[2] = new PLLipid((PLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[2];
+                creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid] = new PLLipid((PLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid];
             }
             else if (currentLipid is SLLipid)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[3] = new SLLipid((SLLipid)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[3];
+                creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid] = new SLLipid((SLLipid)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid];
             }
             else if (currentLipid is Cholesterol)
             {
-                creatorGUI.lipidCreatorForm.lipidTabList[4] = new Cholesterol((Cholesterol)currentLipid);
-                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[4];
+                creatorGUI.lipidTabList[(int)LipidCategory.Cholesterol] = new Cholesterol((Cholesterol)currentLipid);
+                creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.Cholesterol];
             }
-            
             this.Close();
         }
         

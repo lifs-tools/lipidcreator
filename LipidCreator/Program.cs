@@ -44,11 +44,10 @@ namespace LipidCreator
     [Serializable]
     public class LipidCreatorForm
     {
-        public ArrayList lipidTabList;
         public ArrayList registeredLipids;
-        public CreatorGUI creatorGUI;
         public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
         public Dictionary<String, String> allPathsToPrecursorImages;
+        public DataTable transitionList;
         public Dictionary<String, DataTable> headgroups;
         public Dictionary<String, int> buildingBlockTypes;
         public Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions;
@@ -56,20 +55,32 @@ namespace LipidCreator
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
         public string prefixPath = "Tools/LipidCreator/";
+        public const string MOLECULE_LIST_NAME = "Molecule List Name";
+        public const string PRECURSOR_NAME = "Precursor Name";
+        public const string PRECURSOR_ION_FORMULA = "Precursor Ion Formula";
+        public const string PRECURSOR_ADDUCT = "Precursor Adduct";
+        public const string PRECURSOR_MZ = "Precursor m/z";
+        public const string PRECURSOR_CHARGE = "Precursor Charge";
+        public const string PRODUCT_NAME = "Product Name";
+        public const string PRODUCT_ION_FORMULA = "Product Ion Formula";
+        public const string PRODUCT_MZ = "Product m/z";
+        public const string PRODUCT_CHARGE = "Product Charge";
+        public readonly static string[] DATA_COLUMN_KEYS = {
+            MOLECULE_LIST_NAME,
+            PRECURSOR_NAME,
+            PRECURSOR_ION_FORMULA,
+            PRECURSOR_ADDUCT,
+            PRECURSOR_MZ,
+            PRECURSOR_CHARGE,
+            PRODUCT_NAME,
+            PRODUCT_ION_FORMULA,
+            PRODUCT_MZ,
+            PRODUCT_CHARGE
+        };
         
-        public LipidCreatorForm(String pipe)
+        
+        public void readInputFiles()
         {
-            openedAsExternal = (pipe != null);
-            skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
-            registeredLipids = new ArrayList();
-            allPathsToPrecursorImages = new Dictionary<String, String>();
-            allFragments = new Dictionary<String, Dictionary<String, ArrayList>>();
-            headgroups = new Dictionary<String, DataTable>();
-            buildingBlockTypes = new Dictionary<String, int>();
-            headgroupAdductRestrictions = new Dictionary<String, Dictionary<String, bool>>();
-            precursorDataList = new ArrayList();
-            
-
             int lineCounter = 1;
             string ms2FragmentsFile = (openedAsExternal ? prefixPath : "") + "data/ms2fragments.csv";
             if (File.Exists(ms2FragmentsFile))
@@ -191,16 +202,28 @@ namespace LipidCreator
             {
                 Console.WriteLine("Error: file " + headgroupsFile + " does not exist or can not be opened.");
             }
+        }
+        
+        
+        
+        
+        
+        
+        
+        public LipidCreatorForm(String pipe)
+        {
+            openedAsExternal = (pipe != null);
+            skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
+            registeredLipids = new ArrayList();
+            allPathsToPrecursorImages = new Dictionary<String, String>();
+            allFragments = new Dictionary<String, Dictionary<String, ArrayList>>();
+            transitionList = addDataColumns(new DataTable ());
+            headgroups = new Dictionary<String, DataTable>();
+            buildingBlockTypes = new Dictionary<String, int>();
+            headgroupAdductRestrictions = new Dictionary<String, Dictionary<String, bool>>();
+            precursorDataList = new ArrayList();
             
-            lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(allPathsToPrecursorImages, allFragments),
-                                                      new PLLipid(allPathsToPrecursorImages, allFragments),
-                                                      new SLLipid(allPathsToPrecursorImages, allFragments),
-                                                      new Cholesterol(allPathsToPrecursorImages, allFragments),
-                                                      new Mediator(allPathsToPrecursorImages, allFragments)
-                                                      });
-            creatorGUI = new CreatorGUI(this);
-            creatorGUI.changeTab(5);
+            readInputFiles();
         }
         
         public string[] parseLine(string line)
@@ -230,13 +253,8 @@ namespace LipidCreator
         }
 
 
-        public HashSet<int> parseRange(String text, int lower, int upper)
-        {
-            return parseRange(text, lower, upper, 0);
-        }
-        
         // obType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public HashSet<int> parseRange(String text, int lower, int upper, int obType)
+        public HashSet<int> parseRange(String text, int lower, int upper, int obType = 0)
         {
             int oddEven = (obType <= 2) ? obType : 0;
             if (text.Length == 0) return null;
@@ -308,10 +326,18 @@ namespace LipidCreator
         {
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
+            transitionList.Clear();
             
+            // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
                 currentLipid.computePrecursorData(headgroups, headgroupAdductRestrictions, usedKeys, precursorDataList);
+            }
+            
+            // create fragment list            
+            foreach (PrecursorData precursorData in this.precursorDataList)
+            {
+                Lipid.computeFragmentData (transitionList, precursorData);
             }
         }
 
@@ -531,15 +557,13 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             
         }
-        
-        
-        
 
-        [STAThread]
-        public static void Main(string[] args)
+        public DataTable addDataColumns (DataTable dataTable)
         {
-            LipidCreatorForm lcf = new LipidCreatorForm((args.Length > 0) ? args[0] : null);
-            Application.Run(lcf.creatorGUI);
+            foreach (string columnKey in DATA_COLUMN_KEYS) {
+                dataTable.Columns.Add (columnKey);
+            }
+            return dataTable;
         }
     }
     
@@ -588,9 +612,8 @@ namespace LipidCreator
                 return uncompressed;
 
             return result;
-        }    
+        }
     }
-
 }
 
 

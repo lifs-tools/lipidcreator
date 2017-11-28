@@ -42,6 +42,7 @@ namespace LipidCreator
     public partial class CreatorGUI : Form
     {
         public bool changingTabForced;
+        public ArrayList lipidTabList;
         public int currentTabIndex = 1;
         public LipidCreatorForm lipidCreatorForm;
         public AboutDialog aboutDialog;
@@ -55,6 +56,13 @@ namespace LipidCreator
         public CreatorGUI(LipidCreatorForm lipidCreatorForm)
         {
             this.lipidCreatorForm = lipidCreatorForm;
+            lipidTabList = new ArrayList(new Lipid[] {null,
+                                                      new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
+                                                      new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
+                                                      new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
+                                                      new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments),
+                                                      new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments)
+                                                      });
             
             registeredLipidsDatatable = new DataTable("Daten");
             registeredLipidsDatatable.Columns.Add(new DataColumn("Category"));
@@ -139,7 +147,7 @@ namespace LipidCreator
 
         public void changeTab(int index, bool forced)
         {
-            currentLipid = (Lipid)lipidCreatorForm.lipidTabList[index];
+            currentLipid = (Lipid)lipidTabList[index];
             switch((LipidCategory)index)
             {
                 case LipidCategory.GlyceroLipid:
@@ -451,8 +459,8 @@ namespace LipidCreator
         public void resetCLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.PhosphoLipid;
-            lipidCreatorForm.lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
-            ((PLLipid)lipidCreatorForm.lipidTabList[index]).isCL = true;
+            lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            ((PLLipid)lipidTabList[index]).isCL = true;
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -460,7 +468,7 @@ namespace LipidCreator
         public void resetGLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.GlyceroLipid;
-            lipidCreatorForm.lipidTabList[index] = new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new GLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -468,7 +476,7 @@ namespace LipidCreator
         public void resetPLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.PhosphoLipid;
-            lipidCreatorForm.lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new PLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -476,7 +484,7 @@ namespace LipidCreator
         public void resetSLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.SphingoLipid;
-            lipidCreatorForm.lipidTabList[index] = new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new SLLipid(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -484,7 +492,7 @@ namespace LipidCreator
         public void resetCHLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.Cholesterol;
-            lipidCreatorForm.lipidTabList[index] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new Cholesterol(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -492,7 +500,7 @@ namespace LipidCreator
         public void resetMedLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.Mediator;
-            lipidCreatorForm.lipidTabList[index] = new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
+            lipidTabList[index] = new Mediator(lipidCreatorForm.allPathsToPrecursorImages, lipidCreatorForm.allFragments);
             lipidModifications[index] = -1;
             changeTab(index);
         }
@@ -2499,27 +2507,27 @@ namespace LipidCreator
                 if (currentRegisteredLipid is GLLipid)
                 {
                     tabIndex = (int)LipidCategory.GlyceroLipid;
-                    lipidCreatorForm.lipidTabList[tabIndex] = new GLLipid((GLLipid)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new GLLipid((GLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is PLLipid)
                 {
                     tabIndex = (int)LipidCategory.PhosphoLipid;
-                    lipidCreatorForm.lipidTabList[tabIndex] = new PLLipid((PLLipid)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new PLLipid((PLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is SLLipid)
                 {
                     tabIndex = (int)LipidCategory.SphingoLipid;
-                    lipidCreatorForm.lipidTabList[tabIndex] = new SLLipid((SLLipid)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new SLLipid((SLLipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Cholesterol)
                 {
                     tabIndex = (int)LipidCategory.Cholesterol;
-                    lipidCreatorForm.lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Mediator)
                 {
                     tabIndex = (int)LipidCategory.Mediator;
-                    lipidCreatorForm.lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
                 }
                 currentLipid = currentRegisteredLipid;
                 lipidModifications[tabIndex] = rowIndex;
@@ -2586,7 +2594,7 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreatorForm.assembleLipids();
-            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm, lipidCreatorForm.precursorDataList);
+            LipidsReview lipidsReview = new LipidsReview(lipidCreatorForm);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             lipidsReview.ShowDialog();
@@ -2673,6 +2681,15 @@ namespace LipidCreator
             aboutDialog.ShowInTaskbar = false;
             aboutDialog.ShowDialog ();
             aboutDialog.Dispose ();
+        }
+    
+    
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            LipidCreatorForm lcf = new LipidCreatorForm((args.Length > 0) ? args[0] : null);
+            CreatorGUI creatorGUI = new CreatorGUI(lcf);
+            Application.Run(creatorGUI);
         }
     }
 }

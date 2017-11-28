@@ -40,48 +40,20 @@ namespace LipidCreator
     [Serializable]
     public partial class LipidsReview : Form
     {
-        public ArrayList precursorDataList;
-        public DataTable allFragments;
-        public DataTable allFragmentsUnique;
+        public DataTable transitionList;
+        public DataTable transitionListUnique;
         public DataTable currentView;
         public LipidCreatorForm lipidCreatorForm;
-        public const string MOLECULE_LIST_NAME = "Molecule List Name";
-        public const string PRECURSOR_NAME = "Precursor Name";
-        public const string PRECURSOR_ION_FORMULA = "Precursor Ion Formula";
-        public const string PRECURSOR_ADDUCT = "Precursor Adduct";
-        public const string PRECURSOR_MZ = "Precursor m/z";
-        public const string PRECURSOR_CHARGE = "Precursor Charge";
-        public const string PRODUCT_NAME = "Product Name";
-        public const string PRODUCT_ION_FORMULA = "Product Ion Formula";
-        public const string PRODUCT_MZ = "Product m/z";
-        public const string PRODUCT_CHARGE = "Product Charge";
-        public readonly static string[] DATA_COLUMN_KEYS = {
-            MOLECULE_LIST_NAME,
-            PRECURSOR_NAME,
-            PRECURSOR_ION_FORMULA,
-            PRECURSOR_ADDUCT,
-            PRECURSOR_MZ,
-            PRECURSOR_CHARGE,
-            PRODUCT_NAME,
-            PRODUCT_ION_FORMULA,
-            PRODUCT_MZ,
-            PRODUCT_CHARGE
-        };
         public string[] dataColumns = { };
 
-        public LipidsReview (LipidCreatorForm lipidCreatorForm, ArrayList precursorDataList)
+        public LipidsReview (LipidCreatorForm lipidCreatorForm)
         {
-            this.precursorDataList = precursorDataList;
             this.lipidCreatorForm = lipidCreatorForm;
-            allFragments = addDataColumns (new DataTable ());
-            allFragmentsUnique = null;
-            
-            foreach (PrecursorData precursorData in this.precursorDataList) {
-                Lipid.computeFragmentData (allFragments, precursorData);
-            }
+            transitionList = lipidCreatorForm.transitionList;
+            transitionListUnique = null;
             
             InitializeComponent ();
-            currentView = this.allFragments;
+            currentView = this.transitionList;
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = lipidCreatorForm.openedAsExternal;
             checkBoxCreateSpectralLibrary.Enabled = lipidCreatorForm.openedAsExternal;
@@ -107,11 +79,11 @@ namespace LipidCreator
                 if (specName [0].Length > 0) {
                     string blibPath = Application.StartupPath + "\\" + specName [0] + ".blib";
                     lipidCreatorForm.createBlib (blibPath);
-                    lipidCreatorForm.sendToSkyline (allFragments, specName [0], blibPath);
+                    lipidCreatorForm.sendToSkyline (transitionList, specName [0], blibPath);
                     MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
             } else {
-                lipidCreatorForm.sendToSkyline (allFragments, "", "");
+                lipidCreatorForm.sendToSkyline (transitionList, "", "");
                 MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
             }
             this.Enabled = true;
@@ -120,23 +92,23 @@ namespace LipidCreator
         private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked) {
-                if (allFragmentsUnique == null) {
-                    allFragmentsUnique = addDataColumns (new DataTable ());
+                if (transitionListUnique == null) {
+                    transitionListUnique = lipidCreatorForm.addDataColumns (new DataTable ());
                     HashSet<String> replicates = new HashSet<String> ();
                     
                     foreach (DataRow row in currentView.Rows) {
-                        string replicateKey = (String)row [PRECURSOR_ION_FORMULA] + "/" + (((String)row [PRODUCT_ION_FORMULA]) != "" ? (String)row [PRODUCT_ION_FORMULA] : (String)row [PRODUCT_NAME]);
+                        string replicateKey = (String)row [LipidCreatorForm.PRECURSOR_ION_FORMULA] + "/" + (((String)row [LipidCreatorForm.PRODUCT_ION_FORMULA]) != "" ? (String)row [LipidCreatorForm.PRODUCT_ION_FORMULA] : (String)row [LipidCreatorForm.PRODUCT_NAME]);
                         if (!replicates.Contains (replicateKey)) {
                             replicates.Add (replicateKey);
-                            allFragmentsUnique.ImportRow (row);
+                            transitionListUnique.ImportRow (row);
                         }
                     }
                     
                 }
             
-                currentView = this.allFragmentsUnique;
+                currentView = this.transitionList;
             } else {
-                currentView = this.allFragments;
+                currentView = this.transitionList;
             }
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
             dataGridViewTransitions.DataSource = currentView;
@@ -159,20 +131,20 @@ namespace LipidCreator
                 if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_positive.csv"))) {
-                        outputFile.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            if (((String)row [PRECURSOR_CHARGE]) == "+1" || ((String)row [PRECURSOR_CHARGE]) == "+2") {
-                                outputFile.WriteLine (toLine (row, DATA_COLUMN_KEYS));
+                            if (((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "+2") {
+                                outputFile.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
                             }
                         }
                         outputFile.Dispose ();
                         outputFile.Close ();
                     }
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_negative.csv"))) {
-                        outputFile.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            if (((String)row [PRECURSOR_CHARGE]) == "-1" || ((String)row [PRECURSOR_CHARGE]) == "-2") {
-                                outputFile.WriteLine (toLine (row, DATA_COLUMN_KEYS));
+                            if (((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreatorForm.PRECURSOR_CHARGE]) == "-2") {
+                                outputFile.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
                             }
                         }
                         outputFile.Dispose ();
@@ -184,9 +156,9 @@ namespace LipidCreator
                     this.Enabled = false;
                     StreamWriter writer;
                     if ((writer = new StreamWriter (saveFileDialog1.OpenFile ())) != null) {
-                        writer.WriteLine (String.Join (",", DATA_COLUMN_KEYS));
+                        writer.WriteLine (String.Join (",", LipidCreatorForm.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            writer.WriteLine (toLine (row, DATA_COLUMN_KEYS));
+                            writer.WriteLine (toLine (row, LipidCreatorForm.DATA_COLUMN_KEYS));
                         }
                         writer.Dispose ();
                         writer.Close ();
@@ -200,8 +172,8 @@ namespace LipidCreator
         private string toLine (DataRow row, string[] columnKeys)
         {
             List<string> line = new List<string> ();
-            foreach (String columnKey in DATA_COLUMN_KEYS) {
-                if (columnKey == PRODUCT_MZ || columnKey == PRECURSOR_MZ) {
+            foreach (String columnKey in LipidCreatorForm.DATA_COLUMN_KEYS) {
+                if (columnKey == LipidCreatorForm.PRODUCT_MZ || columnKey == LipidCreatorForm.PRECURSOR_MZ) {
                     line.Add (((String)row [columnKey]).Replace (",", "."));
                 } else {
                     line.Add (((String)row [columnKey]));
@@ -225,14 +197,6 @@ namespace LipidCreator
                 MessageBox.Show ("Storing of spectral library is complete.", "Storing complete");
                 this.Enabled = true;
             }
-        }
-
-        private DataTable addDataColumns (DataTable dataTable)
-        {
-            foreach (string columnKey in DATA_COLUMN_KEYS) {
-                dataTable.Columns.Add (columnKey);
-            }
-            return dataTable;
         }
     }
 }

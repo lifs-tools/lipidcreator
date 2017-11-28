@@ -219,8 +219,8 @@ namespace LipidCreator
         
         private void okClick(object sender, EventArgs e)
         {
-            creatorGUI.lipidCreatorForm.lipidTabList[(int)LipidCategory.Mediator] = new Mediator((Mediator)currentLipid);
-            creatorGUI.currentLipid = (Lipid)creatorGUI.lipidCreatorForm.lipidTabList[(int)LipidCategory.Mediator];            
+            creatorGUI.lipidTabList[(int)LipidCategory.Mediator] = new Mediator((Mediator)currentLipid);
+            creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.Mediator];            
             this.Close();
         }
         

@@ -67,6 +67,7 @@ namespace LipidCreator
             chainType = copy.chainType;
             lengthInfo = copy.lengthInfo;
             dbInfo = copy.dbInfo;
+            isLCB = copy.isLCB;
             hydroxylInfo = copy.hydroxylInfo;
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", copy.faTypes["FA"]);
@@ -187,7 +188,7 @@ namespace LipidCreator
                             if (fattyAcidLength < fattyAcidHydroxyl) continue;
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
                             {
-                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, isLCB);
+                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
                             }
                         }
                     }

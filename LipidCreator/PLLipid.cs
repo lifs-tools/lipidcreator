@@ -234,10 +234,10 @@ namespace LipidCreator
                                             precursorData.precursorCharge = charge;
                                             precursorData.adduct = adduct.Key;
                                             precursorData.atomsCount = atomsCount;
-                                            precursorData.fa1 = fa1;
-                                            precursorData.fa2 = fa2;
-                                            precursorData.fa3 = fa3;
-                                            precursorData.fa4 = fa4;
+                                            precursorData.fa1 = sortedAcids[0];
+                                            precursorData.fa2 = sortedAcids[1];
+                                            precursorData.fa3 = sortedAcids[2];
+                                            precursorData.fa4 = sortedAcids[3];
                                             precursorData.lcb = null;
                                             precursorData.chemFormComplete = chemFormComplete;
                                             precursorData.MS2Fragments = MS2Fragments[headgroup];
@@ -337,8 +337,8 @@ namespace LipidCreator
                                         precursorData.precursorCharge = charge;
                                         precursorData.adduct = adduct.Key;
                                         precursorData.atomsCount = atomsCount;
-                                        precursorData.fa1 = fa1;
-                                        precursorData.fa2 = fa2;
+                                        precursorData.fa1 = sortedAcids[0];
+                                        precursorData.fa2 = sortedAcids[1];
                                         precursorData.fa3 = null;
                                         precursorData.fa4 = null;
                                         precursorData.lcb = null;

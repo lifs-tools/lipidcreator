@@ -434,7 +434,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["GL"])
             {
                 String headgroup = fragmentList.Key;
-                if (headgroup.Length > 2) glHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && headgroup.Length > 2) glHgList.Add(headgroup);
             }
             glHgList.Sort();
             
@@ -442,7 +442,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["PL"])
             {
                 String headgroup = fragmentList.Key;
-                if (headgroup[0] != 'e' && headgroup[0] != 'p' && headgroup[0] != 'L' && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
             }
             plHgList.Sort();
             
@@ -450,7 +450,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["SL"])
             {
                 String headgroup = fragmentList.Key;
-                slHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) slHgList.Add(headgroup);
             }
             slHgList.Sort();
             
@@ -458,7 +458,7 @@ namespace LipidCreator
             foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments["Mediator"])
             {
                 String headgroup = fragmentList.Key;
-                if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) medHgList.Add(headgroup);
             }
             medHgList.Sort();
             
@@ -1843,7 +1843,7 @@ namespace LipidCreator
             medPictureBox.Location = new Point(210, 100);
             if (medHgListbox.Items.Count > 0)
             {
-                medPictureBox.Image = Image.FromFile(lipidCreator.allPathsToPrecursorImages[medHgListbox.Items[0].ToString()]);
+                medPictureBox.Image = Image.FromFile(lipidCreator.headgroups[medHgListbox.Items[0].ToString()].pathToImage);
                 medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
             }
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;

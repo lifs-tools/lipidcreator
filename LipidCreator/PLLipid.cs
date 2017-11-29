@@ -51,7 +51,7 @@ namespace LipidCreator
         public FattyAcidGroup fag4;
         public bool isCL;
     
-        public PLLipid(Dictionary<String, String> allPaths, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
+        public PLLipid(Dictionary<String, Precursor> headgroups, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -63,7 +63,7 @@ namespace LipidCreator
             {
                 foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["PL"])
                 {
-                    if (allPaths.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, allPaths[PLFragments.Key]);
+                    if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());
                     foreach (MS2Fragment fragment in PLFragments.Value)
                     {
@@ -145,7 +145,7 @@ namespace LipidCreator
         }
         
         
-        public override void computePrecursorData(Dictionary<String, DataTable> headGroupsTable, Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions, HashSet<String> usedKeys, ArrayList precursorDataList)
+        public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
             if (isCL)
             {
@@ -208,7 +208,7 @@ namespace LipidCreator
                                 {
                                     foreach (KeyValuePair<string, bool> adduct in adducts)
                                     {
-                                        if (adduct.Value && headgroupAdductRestrictions[headgroup][adduct.Key])
+                                        if (adduct.Value && headgroups[headgroup].adductRestrictions[adduct.Key])
                                         {
                                             usedKeys.Add(key);
                                             
@@ -217,7 +217,7 @@ namespace LipidCreator
                                             MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                             MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
                                             MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
-                                            MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
+                                            MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                             String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                             int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                                             double mass = LipidCreator.computeMass(atomsCount, charge);
@@ -311,14 +311,14 @@ namespace LipidCreator
                             {
                                 foreach (KeyValuePair<string, bool> adduct in adducts)
                                 {
-                                    if (adduct.Value && headgroupAdductRestrictions[headgroup][adduct.Key])
+                                    if (adduct.Value && headgroups[headgroup].adductRestrictions[adduct.Key])
                                     {
                                         usedKeys.Add(key);
                                         
                                         DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                                         MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                        MS2Fragment.addCounts(atomsCount, headGroupsTable[headgroup]);
+                                        MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                         String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                                         int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                                         double mass = LipidCreator.computeMass(atomsCount, charge);

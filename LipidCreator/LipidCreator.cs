@@ -47,11 +47,8 @@ namespace LipidCreator
         public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
         public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
-        public Dictionary<String, String> allPathsToPrecursorImages;
+        public Dictionary<String, Precursor> headgroups;
         public DataTable transitionList;
-        public Dictionary<String, DataTable> headgroups;
-        public Dictionary<String, int> buildingBlockTypes;
-        public Dictionary<String, Dictionary<String, bool>> headgroupAdductRestrictions;
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
@@ -165,31 +162,71 @@ namespace LipidCreator
                             
                             string[] tokens = parseLine(line);
                             //String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                            if (tokens.Length != 18) throw new Exception("invalid line in file");
-                            headgroups.Add(tokens[0], MS2Fragment.createEmptyElementTable());
-                            headgroups[tokens[0]].Rows[0]["Count"] = Convert.ToInt32(tokens[1]);
-                            headgroups[tokens[0]].Rows[1]["Count"] = Convert.ToInt32(tokens[2]);
-                            headgroups[tokens[0]].Rows[2]["Count"] = Convert.ToInt32(tokens[3]);
-                            headgroups[tokens[0]].Rows[3]["Count"] = Convert.ToInt32(tokens[4]);
-                            headgroups[tokens[0]].Rows[4]["Count"] = Convert.ToInt32(tokens[5]);
-                            headgroups[tokens[0]].Rows[5]["Count"] = Convert.ToInt32(tokens[6]);
-                            headgroups[tokens[0]].Rows[6]["Count"] = Convert.ToInt32(tokens[7]);
-                            headgroups[tokens[0]].Rows[7]["Count"] = Convert.ToInt32(tokens[8]);
-                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[9];
+                            if (tokens.Length != 21) throw new Exception("invalid line in file");
+                            
+                            Precursor headgroup = new Precursor();
+                            //headgroup.catogory
+                            switch(tokens[0])
+                            {
+                                case "GL":
+                                    headgroup.category = LipidCategory.GlyceroLipid;
+                                    break;
+                                case "PL":
+                                    headgroup.category = LipidCategory.PhosphoLipid;
+                                    break;
+                                case "SL":
+                                    headgroup.category = LipidCategory.SphingoLipid;
+                                    break;
+                                case "Mediator":
+                                    headgroup.category = LipidCategory.Mediator;
+                                    break;
+                                case "Cholesterol":
+                                    headgroup.category = LipidCategory.Cholesterol;
+                                    break;
+                                default:
+                                    throw new Exception("invalid lipid category");
+                                    break;
+                            }
+                            headgroup.name = tokens[1];
+                            headgroup.elements.Rows[0]["Count"] = Convert.ToInt32(tokens[2]);
+                            headgroup.elements.Rows[1]["Count"] = Convert.ToInt32(tokens[3]);
+                            headgroup.elements.Rows[2]["Count"] = Convert.ToInt32(tokens[4]);
+                            headgroup.elements.Rows[3]["Count"] = Convert.ToInt32(tokens[5]);
+                            headgroup.elements.Rows[4]["Count"] = Convert.ToInt32(tokens[6]);
+                            headgroup.elements.Rows[5]["Count"] = Convert.ToInt32(tokens[7]);
+                            headgroup.elements.Rows[6]["Count"] = Convert.ToInt32(tokens[8]);
+                            headgroup.elements.Rows[7]["Count"] = Convert.ToInt32(tokens[9]);
+                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[10];
                             if (!File.Exists(precursorFile))
                             {
-                                Console.WriteLine("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
+                                throw new Exception("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
                             }
-                            allPathsToPrecursorImages.Add(tokens[0], precursorFile);
-                            headgroupAdductRestrictions.Add(tokens[0], new Dictionary<String, bool>());
-                            headgroupAdductRestrictions[tokens[0]].Add("+H", tokens[10].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+2H", tokens[11].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+NH4", tokens[12].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("-H", tokens[13].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("-2H", tokens[14].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+HCOO", tokens[15].Equals("Yes"));
-                            headgroupAdductRestrictions[tokens[0]].Add("+CH3COO", tokens[16].Equals("Yes"));
-                            buildingBlockTypes.Add(tokens[0], Convert.ToInt32(tokens[17]));
+                            headgroup.pathToImage = precursorFile;
+                            headgroup.adductRestrictions.Add("+H", tokens[11].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+2H", tokens[12].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+NH4", tokens[13].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-H", tokens[14].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-2H", tokens[15].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+HCOO", tokens[16].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+CH3COO", tokens[17].Equals("Yes"));
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[18]);
+                            headgroup.derivative = tokens[19].Equals("Yes");
+                            headgroup.heavyLabeled = tokens[20].Equals("Yes");
+                            
+                            if (headgroup.heavyLabeled)
+                            {
+                                string monoName = headgroup.name.Split(new char[]{'/'})[0];
+                                if (headgroups.ContainsKey(monoName))
+                                {
+                                    headgroups[monoName].heavyLabeledPrecursors.Add(headgroup);
+                                }
+                                else
+                                {
+                                    throw new Exception("cannot find monoisotopic class");
+                                }
+                            }
+                            
+                            headgroups.Add(headgroup.name, headgroup);
                         }
                     }
                 }
@@ -216,12 +253,9 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registeredLipids = new ArrayList();
-            allPathsToPrecursorImages = new Dictionary<String, String>();
             allFragments = new Dictionary<String, Dictionary<String, ArrayList>>();
             transitionList = addDataColumns(new DataTable ());
-            headgroups = new Dictionary<String, DataTable>();
-            buildingBlockTypes = new Dictionary<String, int>();
-            headgroupAdductRestrictions = new Dictionary<String, Dictionary<String, bool>>();
+            headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
             
             readInputFiles();
@@ -332,7 +366,7 @@ namespace LipidCreator
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
-                currentLipid.computePrecursorData(headgroups, headgroupAdductRestrictions, usedKeys, precursorDataList);
+                currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
             
             // create fragment list            
@@ -435,31 +469,31 @@ namespace LipidCreator
                 switch (lipidType)
                 {
                     case "GL":
-                        GLLipid gll = new GLLipid(allPathsToPrecursorImages, allFragments);
+                        GLLipid gll = new GLLipid(headgroups, allFragments);
                         gll.import(lipid, importVersion);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(allPathsToPrecursorImages, allFragments);
+                        PLLipid pll = new PLLipid(headgroups, allFragments);
                         pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(allPathsToPrecursorImages, allFragments);
+                        SLLipid sll = new SLLipid(headgroups, allFragments);
                         sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;
                         
                     case "Cholesterol":
-                        Cholesterol chl = new Cholesterol(allPathsToPrecursorImages, allFragments);
+                        Cholesterol chl = new Cholesterol(headgroups, allFragments);
                         chl.import(lipid, importVersion);
                         registeredLipids.Add(chl);
                         break;
                         
                     case "Mediator":
-                        Mediator med = new Mediator(allPathsToPrecursorImages, allFragments);
+                        Mediator med = new Mediator(headgroups, allFragments);
                         med.import(lipid, importVersion);
                         registeredLipids.Add(med);
                         break;

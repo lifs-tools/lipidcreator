@@ -60,11 +60,11 @@ namespace LipidCreator
             this.lipidCreator = lipidCreator;
             currentIndex = LipidCategory.NoLipid;
             lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
-                                                      new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
-                                                      new SLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
-                                                      new Cholesterol(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
-                                                      new Mediator(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments)
+                                                      new GLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
+                                                      new PLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
+                                                      new SLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
+                                                      new Cholesterol(lipidCreator.headgroups, lipidCreator.allFragments),
+                                                      new Mediator(lipidCreator.headgroups, lipidCreator.allFragments)
                                                       });
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -109,6 +109,7 @@ namespace LipidCreator
                                                         cholesterollipidsTab,
                                                         mediatorlipidsTab
                                                        });
+            changeTab(2);
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -484,24 +485,24 @@ namespace LipidCreator
             switch (index)
             {
                 case (int)LipidCategory.GlyceroLipid:
-                    newLipid = new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    newLipid = new GLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
                     break;
                     
                 case (int)LipidCategory.PhosphoLipid:
-                    newLipid = new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    newLipid = new PLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
                     ((PLLipid)newLipid).isCL = plIsCL.Checked;
                     break;
                     
                 case (int)LipidCategory.SphingoLipid:
-                    newLipid = new SLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    newLipid = new SLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
                     break;
                     
                 case (int)LipidCategory.Cholesterol:
-                    newLipid = new Cholesterol(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    newLipid = new Cholesterol(lipidCreator.headgroups, lipidCreator.allFragments);
                     break;
                     
                 case (int)LipidCategory.Mediator:
-                    newLipid = new Mediator(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    newLipid = new Mediator(lipidCreator.headgroups, lipidCreator.allFragments);
                     break;
                     
                 default:
@@ -1767,25 +1768,25 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+H"]) plPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+H"]) plPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+2H"]) plPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+2H"]) plPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+NH4"]) plPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+NH4"]) plPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else plPosAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-H"]) plNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["-H"]) plNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["-2H"]) plNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["-2H"]) plNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+HCOO"]) plNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+HCOO"]) plNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)plHgListbox.Items[hoveredIndex]]["+CH3COO"]) plNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+CH3COO"]) plNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
             }
         }
@@ -1898,25 +1899,25 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+H"]) slPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+H"]) slPosAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+2H"]) slPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+2H"]) slPosAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+NH4"]) slPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+NH4"]) slPosAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else slPosAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-H"]) slNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["-H"]) slNegAdductCheckbox1.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox1.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["-2H"]) slNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["-2H"]) slNegAdductCheckbox2.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox2.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+HCOO"]) slNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+HCOO"]) slNegAdductCheckbox3.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox3.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
                 
-                if (lipidCreator.headgroupAdductRestrictions[(string)slHgListbox.Items[hoveredIndex]]["+CH3COO"]) slNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
+                if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+CH3COO"]) slNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
             }
         }
@@ -2029,7 +2030,7 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                string mediatorFile = lipidCreator.allPathsToPrecursorImages[medHgListbox.Items[hoveredIndex].ToString()];
+                string mediatorFile = lipidCreator.headgroups[medHgListbox.Items[hoveredIndex].ToString()].pathToImage;
                 medPictureBox.Image = Image.FromFile(mediatorFile);
                 medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
                 medPictureBox.SendToBack();

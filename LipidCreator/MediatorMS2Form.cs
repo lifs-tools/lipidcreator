@@ -103,9 +103,9 @@ namespace LipidCreator
                 if (isotopeDict[headgroup].Count > 0) deuteratedMediatorHeadgroups.SelectedIndex = 0;
             }
             
-            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.headgroups[headgroup].pathToImage;
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;
@@ -144,9 +144,9 @@ namespace LipidCreator
         private void checkedListBoxMonoIsotopicMouseHover(object sender, MouseEventArgs e)
         {
             string headgroup = medHgListbox.SelectedItem.ToString();
-            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.headgroups[headgroup].pathToImage;
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;
@@ -159,9 +159,9 @@ namespace LipidCreator
             if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
             string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
             
-            if (creatorGUI.lipidCreator.allPathsToPrecursorImages.ContainsKey(headgroup))
+            if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
             {
-                string mediatorFile = creatorGUI.lipidCreator.allPathsToPrecursorImages[headgroup];
+                string mediatorFile = creatorGUI.lipidCreator.headgroups[headgroup].pathToImage;
                 pictureBoxFragments.Image = Image.FromFile(mediatorFile);
                 pictureBoxFragments.SendToBack();
                 senderInterupt = false;

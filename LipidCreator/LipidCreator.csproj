@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="PLLipid.cs" />
     <Compile Include="LipidCreator.cs" />
+    <Compile Include="Precursor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SLLipid.cs" />
     <Compile Include="SpectralName.cs">

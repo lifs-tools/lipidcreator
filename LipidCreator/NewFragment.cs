@@ -136,7 +136,7 @@ namespace LipidCreator
             // 7 -> fixed, FA1, HG, PRE
             // 8 -> fixed, PRE
             String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
-            int bbType = ms2form.creatorGUI.lipidCreator.buildingBlockTypes[lipidClass];
+            int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
             
             selectBaseCombobox.Items.Add("fixed");
             switch(bbType)

@@ -65,11 +65,11 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             LipidCreator lcf = new LipidCreator(null);
-            
+                        
             try {
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
                 Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1");
-                PLLipid lpc = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                PLLipid lpc = new PLLipid(lcf.headgroups, lcf.allFragments);
                 lpc.headGroupNames.Add("LPC"); // set PC
                 lpc.adducts["+H"] = true;   // set adduct
                 
@@ -84,6 +84,7 @@ namespace LipidCreator
                 {
                     ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("HG(PC)");
                 }
+            
                 
                 lcf.registeredLipids.Add(lpc);
                 lcf.assembleLipids();
@@ -193,7 +194,7 @@ namespace LipidCreator
                 Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1");
                 Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1");
                 lcf.registeredLipids.Clear();
-                PLLipid pa = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                PLLipid pa = new PLLipid(lcf.headgroups, lcf.allFragments);
                 pa.headGroupNames.Add("PA"); // set class
                 pa.adducts["-H"] = true;   // set adduct
                 
@@ -310,7 +311,7 @@ namespace LipidCreator
                 //CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1
                 Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1");
                 lcf.registeredLipids.Clear();
-                PLLipid cl = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                PLLipid cl = new PLLipid(lcf.headgroups, lcf.allFragments);
                 cl.isCL = true;
                 cl.headGroupNames.Add("CL"); // set class
                 cl.adducts["-H"] = true;   // set adduct
@@ -400,7 +401,7 @@ namespace LipidCreator
                 //Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1
                 Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1");
                 lcf.registeredLipids.Clear();
-                SLLipid sl = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                SLLipid sl = new SLLipid(lcf.headgroups, lcf.allFragments);
                 sl.headGroupNames.Add("Cer"); // set slass
                 sl.adducts["+H"] = true;   // set adduct
                 
@@ -489,7 +490,7 @@ namespace LipidCreator
                 Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1");
                 Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	W''	C18H33N	        264.2686	1");
                 lcf.registeredLipids.Clear();
-                SLLipid sm = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                SLLipid sm = new SLLipid(lcf.headgroups, lcf.allFragments);
                 sm.headGroupNames.Add("SM"); // set class
                 sm.adducts["+H"] = true;   // set adduct
                 
@@ -565,7 +566,7 @@ namespace LipidCreator
                 Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1");
                 Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	W''	C17H31N	        250.2529	1");
                 lcf.registeredLipids.Clear();
-                SLLipid spc = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                SLLipid spc = new SLLipid(lcf.headgroups, lcf.allFragments);
                 spc.headGroupNames.Add("SPC"); // set class
                 spc.adducts["+H"] = true;   // set adduct
                 
@@ -640,7 +641,7 @@ namespace LipidCreator
                 //SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1
                 Console.WriteLine("checking SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1");
                 lcf.registeredLipids.Clear();
-                SLLipid sph = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                SLLipid sph = new SLLipid(lcf.headgroups, lcf.allFragments);
                 sph.headGroupNames.Add("SPH"); // set class
                 sph.adducts["+H"] = true;   // set adduct
                 

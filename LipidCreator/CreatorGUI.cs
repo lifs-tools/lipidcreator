@@ -468,6 +468,7 @@ namespace LipidCreator
             if (currentLipid != null)
             {
                 ((TabPage)tabList[index]).Controls.Add(resetLipidButton);
+                ((TabPage)tabList[index]).Controls.Add(MS2fragmentsLipidButton);
             }
         }
         
@@ -1559,7 +1560,6 @@ namespace LipidCreator
                 plAddLipidButton.Visible = false;
                 plAddHeavyIsotopeButton.Visible = false;
                 plModifyLipidButton.Visible = false;
-                plMS2fragmentsLipidButton.Visible = false;
                 plFA1Checkbox3.Visible = false;
                 plFA1Checkbox2.Visible = false;
                 plFA1Checkbox1.Visible = false;
@@ -1602,7 +1602,6 @@ namespace LipidCreator
                 clAddLipidButton.Visible = true;
                 clAddHeavyIsotopeButton.Visible = true;
                 clModifyLipidButton.Visible = true;
-                clMS2fragmentsLipidButton.Visible = true;
                 clPictureBox.Visible = true;
                 clFA1Textbox.Visible = true;
                 clFA2Textbox.Visible = true;
@@ -1653,7 +1652,6 @@ namespace LipidCreator
                 clAddLipidButton.Visible = false;
                 clAddHeavyIsotopeButton.Visible = false;
                 clModifyLipidButton.Visible = false;
-                clMS2fragmentsLipidButton.Visible = false;
                 clPictureBox.Visible = false;
                 clFA1Textbox.Visible = false;
                 clFA2Textbox.Visible = false;
@@ -1686,7 +1684,6 @@ namespace LipidCreator
                 plAddLipidButton.Visible = true;
                 plAddHeavyIsotopeButton.Visible = true;
                 plModifyLipidButton.Visible = true;
-                plMS2fragmentsLipidButton.Visible = true;
                 plFA1Checkbox3.Visible = true;
                 plFA1Checkbox2.Visible = true;
                 plFA1Checkbox1.Visible = true;
@@ -2636,11 +2633,11 @@ namespace LipidCreator
         
         public void openMS2Form(Object sender, EventArgs e)
         {
-            MS2Form ms2fragments = new MS2Form(this, currentLipid);
-            ms2fragments.Owner = this;
-            ms2fragments.ShowInTaskbar = false;
-            ms2fragments.ShowDialog();
-            ms2fragments.Dispose();
+            Form openForm = (currentIndex == LipidCategory.Mediator) ? ((Form)new MediatorMS2Form(this, (Mediator)currentLipid)) : ((Form)new MS2Form(this, currentLipid));
+            openForm.Owner = this;
+            openForm.ShowInTaskbar = false;
+            openForm.ShowDialog();
+            openForm.Dispose();
         }
         
         

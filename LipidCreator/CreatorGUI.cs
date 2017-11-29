@@ -215,6 +215,7 @@ namespace LipidCreator
                     glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
                     glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
                     glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
+                    addLipidButton.Text = "Add glycerolipids";
                     
                     glContainsSugar.Checked = currentGLLipid.containsSugar;
                     
@@ -276,6 +277,7 @@ namespace LipidCreator
                         clNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                         clNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                         clNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
+                        addLipidButton.Text = "Add cardiolipins";
                         
                         plIsCL.Checked = true;
                         
@@ -343,6 +345,7 @@ namespace LipidCreator
                         plNegAdductCheckbox2.Checked = currentPLLipid.adducts["-2H"];
                         plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                         plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
+                        addLipidButton.Text = "Add phospholipids";
                         plIsCL.Checked = false;
                         
                         
@@ -399,6 +402,7 @@ namespace LipidCreator
                     slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
                     slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
                     slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
+                    addLipidButton.Text = "Add sphingolipids";
                     
                     
                     updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
@@ -417,6 +421,7 @@ namespace LipidCreator
                     chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
                     chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
                     chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
+                    addLipidButton.Text = "Add cholesterol";
                     chContainsEster.Checked = currentCHLipid.containsEster;
                     
                     chFATextbox.Text = currentCHLipid.fag.lengthInfo;
@@ -453,6 +458,7 @@ namespace LipidCreator
                     medNegAdductCheckbox2.Checked = currentMedLipid.adducts["-2H"];
                     medNegAdductCheckbox3.Checked = currentMedLipid.adducts["+HCOO"];
                     medNegAdductCheckbox4.Checked = currentMedLipid.adducts["+CH3COO"];
+                    addLipidButton.Text = "Add mediator";
                     break;
                     
                 default:
@@ -466,6 +472,7 @@ namespace LipidCreator
                 ((TabPage)tabList[index]).Controls.Add(addHeavyIsotopeButton);
                 ((TabPage)tabList[index]).Controls.Add(modifyLipidButton);
                 modifyLipidButton.Enabled = lipidModifications[(int)currentIndex] > -1;
+                ((TabPage)tabList[index]).Controls.Add(addLipidButton);
             }
         }
         
@@ -1503,7 +1510,6 @@ namespace LipidCreator
                 plPictureBox.Location = new Point(5, 5);
                 plHgListbox.Visible = false;
                 plHGLabel.Visible = false;
-                plAddLipidButton.Visible = false;
                 plFA1Checkbox3.Visible = false;
                 plFA1Checkbox2.Visible = false;
                 plFA1Checkbox1.Visible = false;
@@ -1543,7 +1549,6 @@ namespace LipidCreator
                 clFA4Checkbox1.Visible = true;
                 clPositiveAdduct.Visible = true;
                 clNegativeAdduct.Visible = true;
-                clAddLipidButton.Visible = true;
                 clPictureBox.Visible = true;
                 clFA1Textbox.Visible = true;
                 clFA2Textbox.Visible = true;
@@ -1591,7 +1596,6 @@ namespace LipidCreator
                 clFA4Checkbox1.Visible = false;
                 clPositiveAdduct.Visible = false;
                 clNegativeAdduct.Visible = false;
-                clAddLipidButton.Visible = false;
                 clPictureBox.Visible = false;
                 clFA1Textbox.Visible = false;
                 clFA2Textbox.Visible = false;
@@ -1621,7 +1625,6 @@ namespace LipidCreator
                 
                 plHgListbox.Visible = true;
                 plHGLabel.Visible = true;
-                plAddLipidButton.Visible = true;
                 plFA1Checkbox3.Visible = true;
                 plFA1Checkbox2.Visible = true;
                 plFA1Checkbox1.Visible = true;
@@ -2362,8 +2365,6 @@ namespace LipidCreator
                     break;
             }
         }
-        
-        
         
         public void registerLipid(Object sender, EventArgs e)
         {

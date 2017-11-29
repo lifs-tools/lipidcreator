@@ -91,7 +91,7 @@ namespace LipidCreator
             }
         }
         
-        public void import(XElement node)
+        public void import(XElement node, string importVersion)
         {
             chainType = Convert.ToInt32(node.Attribute("chainType").Value);
             lengthInfo = node.Attribute("lengthInfo").Value;

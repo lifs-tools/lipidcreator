@@ -70,12 +70,13 @@ namespace LipidCreator
             {
                 xml += "<headGroup>" + headgroup + "</headGroup>\n";
             }
+            xml += base.serialize();
             xml += "</lipid>\n";
             return xml;
         }
         
         
-        public override void import(XElement node)
+        public override void import(XElement node, string importVersion)
         {
             foreach (XElement child in node.Elements())
             {
@@ -87,7 +88,7 @@ namespace LipidCreator
                         break;                     
                         
                     default:
-                        base.import(child);
+                        base.import(child, importVersion);
                         break;
                 }
             }

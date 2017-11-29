@@ -92,7 +92,7 @@ namespace LipidCreator
         }
         
         
-        public override void import(XElement node)
+        public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
@@ -103,15 +103,15 @@ namespace LipidCreator
                     case "FattyAcidGroup":
                         if (fattyAcidCounter == 0)
                         {
-                            fag1.import(child);
+                            fag1.import(child, importVersion);
                         }
                         else if (fattyAcidCounter == 1)
                         {
-                            fag2.import(child);
+                            fag2.import(child, importVersion);
                         }
                         else if (fattyAcidCounter == 2)
                         {
-                            fag3.import(child);
+                            fag3.import(child, importVersion);
                         }
                         else
                         {   
@@ -131,7 +131,7 @@ namespace LipidCreator
                         
                         
                     default:
-                        base.import(child);
+                        base.import(child, importVersion);
                         break;
                 }
             }

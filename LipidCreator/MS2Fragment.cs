@@ -69,7 +69,7 @@ namespace LipidCreator
             return xml;
         }
         
-        public void import(XElement node)
+        public void import(XElement node, string importVersion)
         {
             Dictionary<String, int> ElementPositions = new Dictionary<String, int>(){
                 {"C", 0},
@@ -205,6 +205,19 @@ namespace LipidCreator
         
         public static DataTable createEmptyElementTable(DataTable copy)
         {
+            DataTable elements = createEmptyElementTable();
+            for (int i = 0; i < elements.Rows.Count; ++i)
+            {
+                if (elements.Rows[i]["Shortcut"].Equals(copy.Rows[i]["Shortcut"]))
+                {
+                    elements.Rows[i]["Count"] = copy.Rows[i]["Count"];
+                }
+                else
+                {
+                    throw new Exception("Copying element table failed");
+                }
+            }
+            /*
             DataTable elements = new DataTable();
             elements.Clear();
             String count = "Count";
@@ -276,7 +289,7 @@ namespace LipidCreator
             deuterium[element] = "deuterium";
             deuterium[monoMass] = 1.007825035 * 2;
             elements.Rows.Add(deuterium);
-            
+            */
             return elements;
         }
     

@@ -84,7 +84,7 @@ namespace LipidCreator
             return xml;
         }
         
-        public override void import(XElement node)
+        public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
@@ -95,11 +95,11 @@ namespace LipidCreator
                     case "FattyAcidGroup":
                         if (fattyAcidCounter == 0)
                         {
-                            lcb.import(child);
+                            lcb.import(child, importVersion);
                         }
                         else if (fattyAcidCounter == 1)
                         {
-                            fag.import(child);
+                            fag.import(child, importVersion);
                         }
                         else
                         {   
@@ -115,7 +115,7 @@ namespace LipidCreator
                         
                         
                     default:
-                        base.import(child);
+                        base.import(child, importVersion);
                         break;
                 }
             }
@@ -184,7 +184,7 @@ namespace LipidCreator
                         }
                     }
                     else
-                    {                           
+                    {                
                         String key = headgroup + " ";
                         key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
                         if (!usedKeys.Contains(key))

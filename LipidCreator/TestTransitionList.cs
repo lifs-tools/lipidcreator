@@ -68,6 +68,7 @@ namespace LipidCreator
             
             try {
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1");
                 PLLipid lpc = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
                 lpc.headGroupNames.Add("LPC"); // set PC
                 lpc.adducts["+H"] = true;   // set adduct
@@ -112,6 +113,7 @@ namespace LipidCreator
                 
                 
                 //LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1");
                 // unset all fragments except FA
                 foreach (MS2Fragment ms2fragment in lpc.MS2Fragments["LPC"])
                 {
@@ -150,6 +152,7 @@ namespace LipidCreator
                 
                 
                 //LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]	582.3776432	-1	FA	C18H35O2	283.2642541	-1
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]	582.3776432	-1	FA	C18H35O2	283.2642541	-1");
                 // unset all fragments except HG(PC)
                 lpc.adducts["+HCOO"] = false;   // unset adduct
                 lpc.adducts["+CH3COO"] = true;   // set adduct
@@ -185,6 +188,10 @@ namespace LipidCreator
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	P              O3P         78.95905447	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1");
                 lcf.registeredLipids.Clear();
                 PLLipid pa = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
                 pa.headGroupNames.Add("PA"); // set class
@@ -293,78 +300,7 @@ namespace LipidCreator
                 
                 
                 //TG	TG 14:0_16:0_18:0	C51H98O6	[M+NH4]	824.7701668	1	FA2	C16H31O      239.2369421	1
-                //TG	TG 14:0_16:0_18:0	C51H98O6	[M+NH4]	824.7701668	1	FA2'	C35H67O4     551.5033873	1
-                lcf.registeredLipids.Clear();
-                GLLipid tg = new GLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
-                tg.headGroupNames.Add("TG"); // set class
-                tg.adducts["+NH4"] = true;   // set adduct
-                
-                tg.fag1.carbonCounts.Add(16); // set first fatty acid parameters
-                tg.fag1.doubleBondCounts.Add(0);
-                tg.fag1.hydroxylCounts.Add(0);
-                tg.fag1.faTypes["FA"] = true;
-                tg.fag2.carbonCounts.Add(14); // set second fatty acid parameters
-                tg.fag2.doubleBondCounts.Add(0);
-                tg.fag2.hydroxylCounts.Add(0);
-                tg.fag2.faTypes["FA"] = true;
-                tg.fag3.carbonCounts.Add(18); // set third fatty acid parameters
-                tg.fag3.doubleBondCounts.Add(0);
-                tg.fag3.hydroxylCounts.Add(0);
-                tg.fag3.faTypes["FA"] = true;
-                
-                // unset all fragments except
-                foreach (MS2Fragment ms2fragment in tg.MS2Fragments["TG"])
-                {
-                    switch(ms2fragment.fragmentName)
-                    {
-                        case "FA2":
-                        case "FA2'":
-                            ms2fragment.fragmentSelected = true;
-                            break;
-                        default:
-                            ms2fragment.fragmentSelected = false;
-                            break;
-                    }
-                }
-                
-                lcf.registeredLipids.Add(tg);
-                lcf.assembleLipids();
-                Assert(lcf.transitionList.Rows.Count == 3, "TG transition length");
-                
-                foreach (DataRow row in lcf.transitionList.Rows)
-                {
-                    if (row[LipidCreator.PRODUCT_NAME].Equals("FA2"))
-                    {
-                        // precursor
-                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("TG"), "1st TG category");
-                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "1st TG precursor name");
-                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C51H98O6"), "1st TG precursor formula");
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "1st TG precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 824.7701668, "1st TG precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st TG precursor charge");
-                        // product
-                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2"), "1st TG product name");
-                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C16H30O"), "1st TG product formula");
-                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 239.2369421, "1st TG product mass");
-                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st TG product charge");
-                    }
-                    
-                    else if (row[LipidCreator.PRODUCT_NAME].Equals("FA2'"))
-                    {
-                        // precursor
-                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("TG"), "2nd TG category");
-                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("TG 14:0_16:0_18:0"), "2nd TG precursor name");
-                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C51H98O6"), "2nd TG precursor formula");
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+NH4]"), "2nd TG precursor adduct");
-                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 824.7701668, "2nd TG precursor mass");
-                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd TG precursor charge");
-                        // product
-                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("FA2'"), "2nd TG product name");
-                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C35H66O4"), "2nd TG product formula");
-                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 551.5033873, "2nd TG product mass");
-                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "2nd TG product charge");
-                    }
-                }    
+                //TG	TG 14:0_16:0_18:0	C51H98O6	[M+NH4]	824.7701668	1	FA2'	C35H67O4     551.5033873	1c
                 
                 
                 
@@ -372,6 +308,7 @@ namespace LipidCreator
                 
                 
                 //CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1
+                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1");
                 lcf.registeredLipids.Clear();
                 PLLipid cl = new PLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
                 cl.isCL = true;
@@ -429,6 +366,7 @@ namespace LipidCreator
                 
                 
                 //CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-2H]	703.5101375	-2	FA2	C16H31O2	255.2329539	-1
+                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-2H]	703.5101375	-2	FA2	C16H31O2	255.2329539	-1");
                 lcf.registeredLipids.Clear();
                 cl.adducts["-H"] = false;   // unset adduct
                 cl.adducts["-2H"] = true;   // set adduct
@@ -460,6 +398,7 @@ namespace LipidCreator
                 
                 
                 //Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1
+                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1");
                 lcf.registeredLipids.Clear();
                 SLLipid sl = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
                 sl.headGroupNames.Add("Cer"); // set slass
@@ -507,7 +446,8 @@ namespace LipidCreator
                 
                 
                 
-                //Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]	480.4422	-1	S	C14H26ON	224.2019881	-1
+                //Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]	480.4422	-1	S	C14H27ON	224.2019881	-1
+                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]	480.4422	-1	S	C14H27ON	224.2019881	-1");
                 lcf.registeredLipids.Clear();
                 sl.adducts["+H"] = true;   // unset adduct
                 sl.adducts["-H"] = true;   // set adduct
@@ -540,6 +480,206 @@ namespace LipidCreator
                         Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd Cer product charge");
                     }
                 }
+                
+                
+                
+                
+                //SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1
+                //SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	W''	C18H33N	        264.2686	1
+                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1");
+                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	W''	C18H33N	        264.2686	1");
+                lcf.registeredLipids.Clear();
+                SLLipid sm = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                sm.headGroupNames.Add("SM"); // set class
+                sm.adducts["+H"] = true;   // set adduct
+                
+                sm.lcb.carbonCounts.Add(18); // set long chain base parameters
+                sm.lcb.doubleBondCounts.Add(1);
+                sm.lcb.hydroxylCounts.Add(2);
+                sm.lcb.faTypes["FA"] = true;
+                sm.fag.carbonCounts.Add(12); // set fatty acid parameters
+                sm.fag.doubleBondCounts.Add(0);
+                sm.fag.hydroxylCounts.Add(0);
+                sm.fag.faTypes["FA"] = true;
+                
+                // unset all fragments except
+                foreach (MS2Fragment ms2fragment in sm.MS2Fragments["SM"])
+                {
+                    switch(ms2fragment.fragmentName)
+                    {
+                        case "HG(PC)":
+                        case "W''":
+                            ms2fragment.fragmentSelected = true;
+                            break;
+                        default:
+                            ms2fragment.fragmentSelected = false;
+                            break;
+                    }
+                }
+                
+                lcf.registeredLipids.Add(sm);
+                lcf.assembleLipids();
+                Assert(lcf.transitionList.Rows.Count == 3, "SM transition length");
+                
+                foreach (DataRow row in lcf.transitionList.Rows)
+                {
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"))
+                    {
+                        // precursor
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SM"), "1st SM category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SM 18:1;2/12:0"), "1st SM precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C35H71O6N2P"), "1st SM precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st SM precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 647.51225172, "1st SM precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st SM precursor charge");
+                        // product
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"), "1st SM product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C5H14O4NP"), "1st SM product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 184.0733215, "1st SM product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st SM product charge");
+                    }
+                    
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("W''"))
+                    {
+                        // precursor
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SM"), "2nd SM category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SM 18:1;2/12:0"), "2nd SM precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C35H71O6N2P"), "2nd SM precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "2nd SM precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 647.51225172, "2nd SM precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd SM precursor charge");
+                        // product
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("W''"), "2nd SM product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C18H33N"), "2nd SM product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 264.2686, "2nd SM product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "2nd SM product charge");
+                    }
+                }    
+
+                
+                
+                
+                
+                //SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1
+                //SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	W''	C17H31N	        250.2529	1
+                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1");
+                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	W''	C17H31N	        250.2529	1");
+                lcf.registeredLipids.Clear();
+                SLLipid spc = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                spc.headGroupNames.Add("SPC"); // set class
+                spc.adducts["+H"] = true;   // set adduct
+                
+                spc.lcb.carbonCounts.Add(17); // set long chain base parameters
+                spc.lcb.doubleBondCounts.Add(1);
+                spc.lcb.hydroxylCounts.Add(2);
+                spc.lcb.faTypes["FA"] = true;
+                spc.fag.carbonCounts.Add(12); // set fatty acid parameters
+                spc.fag.doubleBondCounts.Add(0);
+                spc.fag.hydroxylCounts.Add(0);
+                spc.fag.faTypes["FA"] = false;
+                spc.fag.faTypes["FAx"] = true;
+                
+                // unset all fragments except
+                foreach (MS2Fragment ms2fragment in spc.MS2Fragments["SPC"])
+                {
+                    switch(ms2fragment.fragmentName)
+                    {
+                        case "HG(PC)":
+                        case "W''":
+                            ms2fragment.fragmentSelected = true;
+                            break;
+                        default:
+                            ms2fragment.fragmentSelected = false;
+                            break;
+                    }
+                }
+                
+                lcf.registeredLipids.Add(spc);
+                lcf.assembleLipids();
+                Assert(lcf.transitionList.Rows.Count == 3, "SPC transition length");
+                
+                foreach (DataRow row in lcf.transitionList.Rows)
+                {
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"))
+                    {
+                        // precursor
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPC"), "1st SPC category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPC 17:1;2"), "1st SPC precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C22H47O5N2P"), "1st SPC precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st SPC precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 451.3295, "1st SPC precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st SPC precursor charge");
+                        // product
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("HG(PC)"), "1st SPC product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C5H14O4NP"), "1st SPC product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 184.0733215, "1st SPC product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "1st SPC product charge");
+                    }
+                    
+                    else if (row[LipidCreator.PRODUCT_NAME].Equals("W''"))
+                    {
+                        // precursor
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPC"), "2nd SPC category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPC 17:1;2"), "2nd SPC precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C22H47O5N2P"), "2nd SPC precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "2nd SPC precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 451.3295, "2nd SPC precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd SPC precursor charge");
+                        // product
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("W''"), "2nd SPC product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C17H31N"), "2nd SPC product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 250.2529, "2nd SPC product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "2nd SPC product charge");
+                    }
+                }
+
+                
+                
+                
+                
+                //SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1
+                Console.WriteLine("checking SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1");
+                lcf.registeredLipids.Clear();
+                SLLipid sph = new SLLipid(lcf.allPathsToPrecursorImages, lcf.allFragments);
+                sph.headGroupNames.Add("SPH"); // set class
+                sph.adducts["+H"] = true;   // set adduct
+                
+                sph.lcb.carbonCounts.Add(17); // set long chain base parameters
+                sph.lcb.doubleBondCounts.Add(1);
+                sph.lcb.hydroxylCounts.Add(2);
+                sph.lcb.faTypes["FA"] = true;
+                sph.fag.faTypes["FA"] = false;
+                sph.fag.faTypes["FAx"] = true;
+                
+                // unset all fragments except
+                foreach (MS2Fragment ms2fragment in sph.MS2Fragments["SPH"])
+                {
+                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("W''");
+                }
+                
+                lcf.registeredLipids.Add(sph);
+                lcf.assembleLipids();
+                Assert(lcf.transitionList.Rows.Count == 2, "SPH transition length");
+                
+                foreach (DataRow row in lcf.transitionList.Rows)
+                {
+                    if (row[LipidCreator.PRODUCT_NAME].Equals("W''"))
+                    {
+                        // precursor
+                        Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPH"), "SPH category");
+                        Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPH 17:1;2"), "SPH precursor name");
+                        Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C17H35O2N"), "SPH precursor formula");
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "SPH precursor adduct");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 286.2741, "SPH precursor mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "SPH precursor charge");
+                        // product
+                        Assert(row[LipidCreator.PRODUCT_NAME].Equals("W''"), "SPH product name");
+                        Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals("C17H31N"), "SPH product formula");
+                        Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), 250.2529, "SPH product mass");
+                        Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "SPH product charge");
+                    }
+                }
+
                 
                 Console.WriteLine("Test passed, no errors found");
             }

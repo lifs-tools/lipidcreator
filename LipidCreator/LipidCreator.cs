@@ -43,7 +43,8 @@ namespace LipidCreator
 {   
     [Serializable]
     public class LipidCreator
-    {
+    {   
+        public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
         public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
         public Dictionary<String, String> allPathsToPrecursorImages;
@@ -57,23 +58,23 @@ namespace LipidCreator
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
-        public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Ion Formula";
+        public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Molecule Formula";
         public const string PRECURSOR_ADDUCT = "Precursor Adduct";
-        public const string PRECURSOR_MZ = "Precursor m/z";
+        public const string PRECURSOR_MZ = "Precursor Ion m/z";
         public const string PRECURSOR_CHARGE = "Precursor Charge";
         public const string PRODUCT_NAME = "Product Name";
-        public const string PRODUCT_NEUTRAL_FORMULA = "Product Ion Formula";
-        public const string PRODUCT_MZ = "Product m/z";
+        public const string PRODUCT_NEUTRAL_FORMULA = "Product Molecule Formula";
+        public const string PRODUCT_MZ = "Product Ion m/z";
         public const string PRODUCT_CHARGE = "Product Charge";
         public readonly static string[] DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
-            PRODUCT_NEUTRAL_FORMULA,
+            PRECURSOR_NEUTRAL_FORMULA,
             PRECURSOR_ADDUCT,
             PRECURSOR_MZ,
             PRECURSOR_CHARGE,
             PRODUCT_NAME,
-            PRECURSOR_NEUTRAL_FORMULA,
+            PRODUCT_NEUTRAL_FORMULA,
             PRODUCT_MZ,
             PRODUCT_CHARGE
         };
@@ -369,7 +370,7 @@ namespace LipidCreator
             if (skylineToolClient == null) return;
             
             var header = string.Join(",", new string[]
-            {
+            { // Skyline specific column names, please do not touch
                 "MoleculeGroup",
                 "PrecursorName",
                 "PrecursorFormula",
@@ -387,17 +388,17 @@ namespace LipidCreator
             foreach (DataRow entry in dt.Rows)
             {
                 // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                pipeString += entry["Molecule List Name"] + ","; // listname
-                pipeString += entry["Precursor Name"] + ","; // preName
-                pipeString += entry["Precursor Ion Formula"] + ","; // PreFormula
-                pipeString += entry["Precursor Adduct"] + ","; // preAdduct
-                pipeString += entry["Precursor m/z"] + ","; // preMz
-                maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry["Precursor m/z"]));
-                pipeString += entry["Precursor Charge"] + ","; // preCharge
-                pipeString += entry["Product Name"] + ","; // prodName
-                pipeString += entry["Product Ion Formula"] + ","; // ProdFormula, no prodAdduct
-                pipeString += entry["Product m/z"] + ","; // prodMz
-                pipeString += entry["Product Charge"]; // prodCharge
+                pipeString += entry[LipidCreator.MOLECULE_LIST_NAME] + ","; // listname
+                pipeString += entry[LipidCreator.PRECURSOR_NAME] + ","; // preName
+                pipeString += entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + ","; // PreFormula
+                pipeString += entry[LipidCreator.PRECURSOR_ADDUCT] + ","; // preAdduct
+                pipeString += entry[LipidCreator.PRECURSOR_MZ] + ","; // preMz
+                maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
+                pipeString += entry[LipidCreator.PRECURSOR_CHARGE] + ","; // preCharge
+                pipeString += entry[LipidCreator.PRODUCT_NAME] + ","; // prodName
+                pipeString += entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + ","; // ProdFormula, no prodAdduct
+                pipeString += entry[LipidCreator.PRODUCT_MZ] + ","; // prodMz
+                pipeString += entry[LipidCreator.PRODUCT_CHARGE]; // prodCharge
                 pipeString += "\n";
             }
             try
@@ -415,7 +416,7 @@ namespace LipidCreator
         
         public string serialize()
         {
-            string xml = "<LipidCreator>\n";
+            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\">\n";
             foreach (Lipid currentLipid in registeredLipids)
             {
                 xml += currentLipid.serialize();
@@ -426,6 +427,7 @@ namespace LipidCreator
         
         public void import(XDocument doc)
         {
+            string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
             var lipids = doc.Descendants("lipid");
             foreach ( var lipid in lipids )
             {
@@ -434,26 +436,32 @@ namespace LipidCreator
                 {
                     case "GL":
                         GLLipid gll = new GLLipid(allPathsToPrecursorImages, allFragments);
-                        gll.import(lipid);
+                        gll.import(lipid, importVersion);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
                         PLLipid pll = new PLLipid(allPathsToPrecursorImages, allFragments);
-                        pll.import(lipid);
+                        pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
                         SLLipid sll = new SLLipid(allPathsToPrecursorImages, allFragments);
-                        sll.import(lipid);
+                        sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;
                         
                     case "Cholesterol":
                         Cholesterol chl = new Cholesterol(allPathsToPrecursorImages, allFragments);
-                        chl.import(lipid);
+                        chl.import(lipid, importVersion);
                         registeredLipids.Add(chl);
+                        break;
+                        
+                    case "Mediator":
+                        Mediator med = new Mediator(allPathsToPrecursorImages, allFragments);
+                        med.import(lipid, importVersion);
+                        registeredLipids.Add(med);
                         break;
                         
                     default:

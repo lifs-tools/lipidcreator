@@ -81,7 +81,7 @@ namespace LipidCreator
         }
         
         
-        public override void import(XElement node)
+        public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;
             containsEster = node.Attribute("containsEster").Value == "True";
@@ -92,7 +92,7 @@ namespace LipidCreator
                     case "FattyAcidGroup":
                         if (fattyAcidCounter == 0)
                         {
-                            fag.import(child);
+                            fag.import(child, importVersion);
                         }
                         else
                         {   
@@ -103,7 +103,7 @@ namespace LipidCreator
                         break;                        
                         
                     default:
-                        base.import(child);
+                        base.import(child, importVersion);
                         break;
                 }
             }

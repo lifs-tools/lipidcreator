@@ -1504,6 +1504,7 @@ namespace LipidCreator
                 plHgListbox.Visible = false;
                 plHGLabel.Visible = false;
                 plAddLipidButton.Visible = false;
+                plAddHeavyIsotopeButton.Visible = false;
                 plResetLipidButton.Visible = false;
                 plModifyLipidButton.Visible = false;
                 plMS2fragmentsLipidButton.Visible = false;
@@ -1547,6 +1548,7 @@ namespace LipidCreator
                 clPositiveAdduct.Visible = true;
                 clNegativeAdduct.Visible = true;
                 clAddLipidButton.Visible = true;
+                clAddHeavyIsotopeButton.Visible = true;
                 clResetLipidButton.Visible = true;
                 clModifyLipidButton.Visible = true;
                 clMS2fragmentsLipidButton.Visible = true;
@@ -1598,6 +1600,7 @@ namespace LipidCreator
                 clPositiveAdduct.Visible = false;
                 clNegativeAdduct.Visible = false;
                 clAddLipidButton.Visible = false;
+                clAddHeavyIsotopeButton.Visible = false;
                 clResetLipidButton.Visible = false;
                 clModifyLipidButton.Visible = false;
                 clMS2fragmentsLipidButton.Visible = false;
@@ -1631,6 +1634,7 @@ namespace LipidCreator
                 plHgListbox.Visible = true;
                 plHGLabel.Visible = true;
                 plAddLipidButton.Visible = true;
+                plAddHeavyIsotopeButton.Visible = true;
                 plResetLipidButton.Visible = true;
                 plModifyLipidButton.Visible = true;
                 plMS2fragmentsLipidButton.Visible = true;
@@ -2588,6 +2592,16 @@ namespace LipidCreator
             ms2fragments.ShowInTaskbar = false;
             ms2fragments.ShowDialog();
             ms2fragments.Dispose();
+        }
+        
+        
+        public void openHeavyIsotopeForm(Object sender, EventArgs e)
+        {
+            AddHeavyPrecursor addHeavyPrecursor = new AddHeavyPrecursor(this, currentLipid);
+            addHeavyPrecursor.Owner = this;
+            addHeavyPrecursor.ShowInTaskbar = false;
+            addHeavyPrecursor.ShowDialog();
+            addHeavyPrecursor.Dispose();
         }
         
         

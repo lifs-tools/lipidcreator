@@ -106,6 +106,12 @@ namespace LipidCreator
         private Button slMS2fragmentsLipidButton;
         private Button chMS2fragmentsLipidButton;
         private Button medMS2fragmentsLipidButton;
+        private Button clAddHeavyIsotopeButton;
+        private Button glAddHeavyIsotopeButton;
+        private Button plAddHeavyIsotopeButton;
+        private Button slAddHeavyIsotopeButton;
+        private Button chAddHeavyIsotopeButton;
+        private Button medAddHeavyIsotopeButton;
 
         Image cardioBackboneImage;
         Image cardioBackboneImageFA1e;
@@ -418,6 +424,12 @@ namespace LipidCreator
             slAddLipidButton = new Button();
             chAddLipidButton = new Button();
             medAddLipidButton = new Button();
+            clAddHeavyIsotopeButton = new Button();
+            glAddHeavyIsotopeButton = new Button();
+            plAddHeavyIsotopeButton = new Button();
+            slAddHeavyIsotopeButton = new Button();
+            chAddHeavyIsotopeButton = new Button();
+            medAddHeavyIsotopeButton = new Button();
             clResetLipidButton = new Button();
             glResetLipidButton = new Button();
             plResetLipidButton = new Button();
@@ -803,6 +815,7 @@ namespace LipidCreator
             phospholipidsTab.Controls.Add(clPositiveAdduct);
             phospholipidsTab.Controls.Add(clNegativeAdduct);
             phospholipidsTab.Controls.Add(clAddLipidButton);
+            phospholipidsTab.Controls.Add(clAddHeavyIsotopeButton);
             phospholipidsTab.Controls.Add(clResetLipidButton);
             phospholipidsTab.Controls.Add(clModifyLipidButton);
             phospholipidsTab.Controls.Add(clMS2fragmentsLipidButton);
@@ -852,6 +865,7 @@ namespace LipidCreator
             clPositiveAdduct.Visible = false;
             clNegativeAdduct.Visible = false;
             clAddLipidButton.Visible = false;
+            clAddHeavyIsotopeButton.Visible = false;
             clResetLipidButton.Visible = false;
             clModifyLipidButton.Visible = false;
             clMS2fragmentsLipidButton.Visible = false;
@@ -1113,6 +1127,7 @@ namespace LipidCreator
 
             // tab for glycerolipids
             glycerolipidsTab.Controls.Add(glAddLipidButton);
+            glycerolipidsTab.Controls.Add(glAddHeavyIsotopeButton);
             glycerolipidsTab.Controls.Add(glResetLipidButton);
             glycerolipidsTab.Controls.Add(glModifyLipidButton);
             glycerolipidsTab.Controls.Add(glMS2fragmentsLipidButton);
@@ -1392,6 +1407,7 @@ namespace LipidCreator
 
             // tab for phospholipids
             phospholipidsTab.Controls.Add(plAddLipidButton);
+            phospholipidsTab.Controls.Add(plAddHeavyIsotopeButton);
             phospholipidsTab.Controls.Add(plResetLipidButton);
             phospholipidsTab.Controls.Add(plModifyLipidButton);
             phospholipidsTab.Controls.Add(plMS2fragmentsLipidButton);
@@ -1588,6 +1604,7 @@ namespace LipidCreator
 
             // tab for sphingolipids
             sphingolipidsTab.Controls.Add(slAddLipidButton);
+            sphingolipidsTab.Controls.Add(slAddHeavyIsotopeButton);
             sphingolipidsTab.Controls.Add(slResetLipidButton);
             sphingolipidsTab.Controls.Add(slModifyLipidButton);
             sphingolipidsTab.Controls.Add(slMS2fragmentsLipidButton);
@@ -1740,6 +1757,7 @@ namespace LipidCreator
             
             // tab for cholesterols
             cholesterollipidsTab.Controls.Add(chAddLipidButton);
+            cholesterollipidsTab.Controls.Add(chAddHeavyIsotopeButton);
             cholesterollipidsTab.Controls.Add(chResetLipidButton);
             cholesterollipidsTab.Controls.Add(chModifyLipidButton);
             cholesterollipidsTab.Controls.Add(chMS2fragmentsLipidButton);
@@ -1859,6 +1877,7 @@ namespace LipidCreator
             
             // tab for mediators
             mediatorlipidsTab.Controls.Add(medAddLipidButton);
+            mediatorlipidsTab.Controls.Add(medAddHeavyIsotopeButton);
             mediatorlipidsTab.Controls.Add(medResetLipidButton);
             mediatorlipidsTab.Controls.Add(medModifyLipidButton);
             mediatorlipidsTab.Controls.Add(medMS2fragmentsLipidButton);
@@ -1958,6 +1977,13 @@ namespace LipidCreator
             clMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             clMS2fragmentsLipidButton.Click += openMS2Form;
 
+            clAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            clAddHeavyIsotopeButton.Width = 150;
+            clAddHeavyIsotopeButton.Height = 26;
+            clAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            clAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            clAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
+
             
             
             
@@ -1993,6 +2019,13 @@ namespace LipidCreator
             glMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             glMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             glMS2fragmentsLipidButton.Click += openMS2Form;
+
+            glAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            glAddHeavyIsotopeButton.Width = 150;
+            glAddHeavyIsotopeButton.Height = 26;
+            glAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            glAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            glAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 
             
             
@@ -2030,6 +2063,13 @@ namespace LipidCreator
             plMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             plMS2fragmentsLipidButton.Click += openMS2Form;
 
+            plAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            plAddHeavyIsotopeButton.Width = 150;
+            plAddHeavyIsotopeButton.Height = 26;
+            plAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            plAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            plAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
+
             
             
             
@@ -2065,6 +2105,13 @@ namespace LipidCreator
             slMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             slMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             slMS2fragmentsLipidButton.Click += openMS2Form;
+
+            slAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            slAddHeavyIsotopeButton.Width = 150;
+            slAddHeavyIsotopeButton.Height = 26;
+            slAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            slAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            slAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 
             
             
@@ -2102,6 +2149,13 @@ namespace LipidCreator
             chMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             chMS2fragmentsLipidButton.Click += openMS2Form;
 
+            chAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            chAddHeavyIsotopeButton.Width = 150;
+            chAddHeavyIsotopeButton.Height = 26;
+            chAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            chAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            chAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
+
             
             
             
@@ -2137,6 +2191,13 @@ namespace LipidCreator
             medMS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
             medMS2fragmentsLipidButton.BackColor = SystemColors.Control;
             medMS2fragmentsLipidButton.Click += openMediatorMS2Form;
+
+            medAddHeavyIsotopeButton.Text = "Add heavy isotope";
+            medAddHeavyIsotopeButton.Width = 150;
+            medAddHeavyIsotopeButton.Height = 26;
+            medAddHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            medAddHeavyIsotopeButton.BackColor = SystemColors.Control;
+            medAddHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 
 
             lipidsGridview.AutoSize = true;

@@ -52,10 +52,13 @@ namespace LipidCreator
         public Color alertColor = Color.FromArgb(255, 180, 180);
         public bool settingListbox = false;
         public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
+        public ArrayList tabList;
+        public LipidCategory currentIndex;
         
         public CreatorGUI(LipidCreator lipidCreator)
         {
             this.lipidCreator = lipidCreator;
+            currentIndex = LipidCategory.NoLipid;
             lipidTabList = new ArrayList(new Lipid[] {null,
                                                       new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
                                                       new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments),
@@ -99,6 +102,13 @@ namespace LipidCreator
                     }
                 }
             }
+            tabList = new ArrayList(new TabPage[] {null,
+                                                        glycerolipidsTab,
+                                                        phospholipidsTab,
+                                                        sphingolipidsTab,
+                                                        cholesterollipidsTab,
+                                                        mediatorlipidsTab
+                                                       });
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -148,6 +158,7 @@ namespace LipidCreator
         public void changeTab(int index, bool forced)
         {
             currentLipid = (Lipid)lipidTabList[index];
+            currentIndex = (LipidCategory)index;
             switch((LipidCategory)index)
             {
                 case LipidCategory.GlyceroLipid:
@@ -453,9 +464,50 @@ namespace LipidCreator
                 default:
                     break;
             }
+            
+            if (currentLipid != null)
+            {
+                ((TabPage)tabList[index]).Controls.Add(resetLipidButton);
+            }
         }
         
         
+        public void resetLipid(Object sender, EventArgs e)
+        {
+            Lipid newLipid = null;
+            int index = (int)currentIndex;
+            switch (index)
+            {
+                case (int)LipidCategory.GlyceroLipid:
+                    newLipid = new GLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    break;
+                    
+                case (int)LipidCategory.PhosphoLipid:
+                    newLipid = new PLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    ((PLLipid)newLipid).isCL = plIsCL.Checked;
+                    break;
+                    
+                case (int)LipidCategory.SphingoLipid:
+                    newLipid = new SLLipid(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    break;
+                    
+                case (int)LipidCategory.Cholesterol:
+                    newLipid = new Cholesterol(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    break;
+                    
+                case (int)LipidCategory.Mediator:
+                    newLipid = new Mediator(lipidCreator.allPathsToPrecursorImages, lipidCreator.allFragments);
+                    break;
+                    
+                default:
+                    break;                
+            }
+            lipidTabList[index] = newLipid;
+            lipidModifications[index] = -1;
+            changeTab(index);
+        }
+        
+        /*
         public void resetCLLipid(Object sender, EventArgs e)
         {
             int index = (int)LipidCategory.PhosphoLipid;
@@ -504,6 +556,7 @@ namespace LipidCreator
             lipidModifications[index] = -1;
             changeTab(index);
         }
+        */
         
         
         /////////////////////// CL //////////////////////////////
@@ -1505,7 +1558,6 @@ namespace LipidCreator
                 plHGLabel.Visible = false;
                 plAddLipidButton.Visible = false;
                 plAddHeavyIsotopeButton.Visible = false;
-                plResetLipidButton.Visible = false;
                 plModifyLipidButton.Visible = false;
                 plMS2fragmentsLipidButton.Visible = false;
                 plFA1Checkbox3.Visible = false;
@@ -1549,7 +1601,6 @@ namespace LipidCreator
                 clNegativeAdduct.Visible = true;
                 clAddLipidButton.Visible = true;
                 clAddHeavyIsotopeButton.Visible = true;
-                clResetLipidButton.Visible = true;
                 clModifyLipidButton.Visible = true;
                 clMS2fragmentsLipidButton.Visible = true;
                 clPictureBox.Visible = true;
@@ -1601,7 +1652,6 @@ namespace LipidCreator
                 clNegativeAdduct.Visible = false;
                 clAddLipidButton.Visible = false;
                 clAddHeavyIsotopeButton.Visible = false;
-                clResetLipidButton.Visible = false;
                 clModifyLipidButton.Visible = false;
                 clMS2fragmentsLipidButton.Visible = false;
                 clPictureBox.Visible = false;
@@ -1635,7 +1685,6 @@ namespace LipidCreator
                 plHGLabel.Visible = true;
                 plAddLipidButton.Visible = true;
                 plAddHeavyIsotopeButton.Visible = true;
-                plResetLipidButton.Visible = true;
                 plModifyLipidButton.Visible = true;
                 plMS2fragmentsLipidButton.Visible = true;
                 plFA1Checkbox3.Visible = true;

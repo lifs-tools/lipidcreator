@@ -88,12 +88,7 @@ namespace LipidCreator
         private Button slAddLipidButton;
         private Button chAddLipidButton;
         private Button medAddLipidButton;
-        private Button clResetLipidButton;
-        private Button glResetLipidButton;
-        private Button plResetLipidButton;
-        private Button slResetLipidButton;
-        private Button chResetLipidButton;
-        private Button medResetLipidButton;
+        private Button resetLipidButton;
         private Button clModifyLipidButton;
         private Button glModifyLipidButton;
         private Button plModifyLipidButton;
@@ -430,12 +425,7 @@ namespace LipidCreator
             slAddHeavyIsotopeButton = new Button();
             chAddHeavyIsotopeButton = new Button();
             medAddHeavyIsotopeButton = new Button();
-            clResetLipidButton = new Button();
-            glResetLipidButton = new Button();
-            plResetLipidButton = new Button();
-            slResetLipidButton = new Button();
-            chResetLipidButton = new Button();
-            medResetLipidButton = new Button();
+            resetLipidButton = new Button();
             clModifyLipidButton = new Button();
             glModifyLipidButton = new Button();
             plModifyLipidButton = new Button();
@@ -816,7 +806,6 @@ namespace LipidCreator
             phospholipidsTab.Controls.Add(clNegativeAdduct);
             phospholipidsTab.Controls.Add(clAddLipidButton);
             phospholipidsTab.Controls.Add(clAddHeavyIsotopeButton);
-            phospholipidsTab.Controls.Add(clResetLipidButton);
             phospholipidsTab.Controls.Add(clModifyLipidButton);
             phospholipidsTab.Controls.Add(clMS2fragmentsLipidButton);
             phospholipidsTab.Controls.Add(clPictureBox);
@@ -866,7 +855,6 @@ namespace LipidCreator
             clNegativeAdduct.Visible = false;
             clAddLipidButton.Visible = false;
             clAddHeavyIsotopeButton.Visible = false;
-            clResetLipidButton.Visible = false;
             clModifyLipidButton.Visible = false;
             clMS2fragmentsLipidButton.Visible = false;
             clPictureBox.Visible = false;
@@ -1128,7 +1116,6 @@ namespace LipidCreator
             // tab for glycerolipids
             glycerolipidsTab.Controls.Add(glAddLipidButton);
             glycerolipidsTab.Controls.Add(glAddHeavyIsotopeButton);
-            glycerolipidsTab.Controls.Add(glResetLipidButton);
             glycerolipidsTab.Controls.Add(glModifyLipidButton);
             glycerolipidsTab.Controls.Add(glMS2fragmentsLipidButton);
             glycerolipidsTab.Controls.Add(glFA1Checkbox3);
@@ -1408,7 +1395,6 @@ namespace LipidCreator
             // tab for phospholipids
             phospholipidsTab.Controls.Add(plAddLipidButton);
             phospholipidsTab.Controls.Add(plAddHeavyIsotopeButton);
-            phospholipidsTab.Controls.Add(plResetLipidButton);
             phospholipidsTab.Controls.Add(plModifyLipidButton);
             phospholipidsTab.Controls.Add(plMS2fragmentsLipidButton);
             phospholipidsTab.Controls.Add(plFA1Checkbox3);
@@ -1605,7 +1591,6 @@ namespace LipidCreator
             // tab for sphingolipids
             sphingolipidsTab.Controls.Add(slAddLipidButton);
             sphingolipidsTab.Controls.Add(slAddHeavyIsotopeButton);
-            sphingolipidsTab.Controls.Add(slResetLipidButton);
             sphingolipidsTab.Controls.Add(slModifyLipidButton);
             sphingolipidsTab.Controls.Add(slMS2fragmentsLipidButton);
             sphingolipidsTab.Controls.Add(slPictureBox);
@@ -1758,7 +1743,6 @@ namespace LipidCreator
             // tab for cholesterols
             cholesterollipidsTab.Controls.Add(chAddLipidButton);
             cholesterollipidsTab.Controls.Add(chAddHeavyIsotopeButton);
-            cholesterollipidsTab.Controls.Add(chResetLipidButton);
             cholesterollipidsTab.Controls.Add(chModifyLipidButton);
             cholesterollipidsTab.Controls.Add(chMS2fragmentsLipidButton);
             cholesterollipidsTab.Controls.Add(chPictureBox);
@@ -1878,7 +1862,6 @@ namespace LipidCreator
             // tab for mediators
             mediatorlipidsTab.Controls.Add(medAddLipidButton);
             mediatorlipidsTab.Controls.Add(medAddHeavyIsotopeButton);
-            mediatorlipidsTab.Controls.Add(medResetLipidButton);
             mediatorlipidsTab.Controls.Add(medModifyLipidButton);
             mediatorlipidsTab.Controls.Add(medMS2fragmentsLipidButton);
             mediatorlipidsTab.Controls.Add(medNegativeAdduct);
@@ -1956,12 +1939,12 @@ namespace LipidCreator
             clAddLipidButton.BackColor = SystemColors.Control;
             clAddLipidButton.Click += registerLipid;
 
-            clResetLipidButton.Text = "Reset lipid";
-            clResetLipidButton.Width = 130;
-            clResetLipidButton.Height = 26;
-            clResetLipidButton.Location = new Point(20, topLowButtons);
-            clResetLipidButton.BackColor = SystemColors.Control;
-            clResetLipidButton.Click += resetCLLipid;
+            resetLipidButton.Text = "Reset lipid";
+            resetLipidButton.Width = 130;
+            resetLipidButton.Height = 26;
+            resetLipidButton.Location = new Point(20, topLowButtons);
+            resetLipidButton.BackColor = SystemColors.Control;
+            resetLipidButton.Click += resetLipid;
 
             clModifyLipidButton.Text = "Modify lipid";
             clModifyLipidButton.Width = 130;
@@ -1999,13 +1982,6 @@ namespace LipidCreator
             glAddLipidButton.BackColor = SystemColors.Control;
             glAddLipidButton.Click += registerLipid;
 
-            glResetLipidButton.Text = "Reset lipid";
-            glResetLipidButton.Width = 130;
-            glResetLipidButton.Height = 26;
-            glResetLipidButton.Location = new Point(20, topLowButtons);
-            glResetLipidButton.BackColor = SystemColors.Control;
-            glResetLipidButton.Click += resetGLLipid;
-
             glModifyLipidButton.Text = "Modify lipid";
             glModifyLipidButton.Width = 130;
             glModifyLipidButton.Height = 26;
@@ -2041,13 +2017,6 @@ namespace LipidCreator
             plAddLipidButton.Location = new Point(leftGroupboxes - plAddLipidButton.Width, topLowButtons);
             plAddLipidButton.BackColor = SystemColors.Control;
             plAddLipidButton.Click += registerLipid;
-
-            plResetLipidButton.Text = "Reset lipid";
-            plResetLipidButton.Width = 130;
-            plResetLipidButton.Height = 26;
-            plResetLipidButton.Location = new Point(20, topLowButtons);
-            plResetLipidButton.BackColor = SystemColors.Control;
-            plResetLipidButton.Click += resetPLLipid;
 
             plModifyLipidButton.Text = "Modify lipid";
             plModifyLipidButton.Width = 130;
@@ -2085,13 +2054,6 @@ namespace LipidCreator
             slAddLipidButton.Image = addImage;
             slAddLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
-            slResetLipidButton.Text = "Reset lipid";
-            slResetLipidButton.Width = 130;
-            slResetLipidButton.Height = 26;
-            slResetLipidButton.Location = new Point(20, topLowButtons);
-            slResetLipidButton.BackColor = SystemColors.Control;
-            slResetLipidButton.Click += resetSLLipid;
-
             slModifyLipidButton.Text = "Modify lipid";
             slModifyLipidButton.Width = 130;
             slModifyLipidButton.Height = 26;
@@ -2128,13 +2090,6 @@ namespace LipidCreator
             chAddLipidButton.BackColor = SystemColors.Control;
             chAddLipidButton.Click += registerLipid;
 
-            chResetLipidButton.Text = "Reset lipid";
-            chResetLipidButton.Width = 130;
-            chResetLipidButton.Height = 26;
-            chResetLipidButton.Location = new Point(20, topLowButtons);
-            chResetLipidButton.BackColor = SystemColors.Control;
-            chResetLipidButton.Click += resetCHLipid;
-
             chModifyLipidButton.Text = "Modify lipid";
             chModifyLipidButton.Width = 130;
             chModifyLipidButton.Height = 26;
@@ -2170,13 +2125,6 @@ namespace LipidCreator
             medAddLipidButton.Location = new Point(leftGroupboxes - medAddLipidButton.Width, topLowButtons);
             medAddLipidButton.BackColor = SystemColors.Control;
             medAddLipidButton.Click += registerLipid;
-
-            medResetLipidButton.Text = "Reset lipid";
-            medResetLipidButton.Width = 130;
-            medResetLipidButton.Height = 26;
-            medResetLipidButton.Location = new Point(20, topLowButtons);
-            medResetLipidButton.BackColor = SystemColors.Control;
-            medResetLipidButton.Click += resetMedLipid;
 
             medModifyLipidButton.Text = "Modify lipid";
             medModifyLipidButton.Width = 130;

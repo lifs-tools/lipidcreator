@@ -149,7 +149,6 @@ namespace LipidCreator
                         fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                     }
                     
-                    
                     DataRow lipidRow = transitionList.NewRow();
                     lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                     lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;

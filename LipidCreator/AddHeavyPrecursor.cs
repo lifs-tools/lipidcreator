@@ -178,16 +178,25 @@ namespace LipidCreator
             if (!dataGridView1.Rows[e.RowIndex].ReadOnly && dataGridView1.Columns[e.ColumnIndex].Name == "Count")
             {   
                 updating = true;
-                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
-                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
-                
-                int orig = Convert.ToInt32(precursor.elements.Rows[e.RowIndex - 1][0]);
-                int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                if (n < 0) n = 0;
-                if (comboBox2.SelectedIndex == 0 && n > orig) n = orig;
-                dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
-                //if (comboBox2.SelectedIndex == 0)
-                dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = orig - n;
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+                    Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                    
+                    int orig = Convert.ToInt32(precursor.elements.Rows[e.RowIndex - 1][0]);
+                    int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                    if (n < 0) n = 0;
+                    if (n > orig) n = orig;
+                    dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
+                    dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = orig - n;
+                }
+                else
+                {
+                    int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                    if (n < 0) n = 0;
+                    dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
+                    dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = -n;
+                }
                 updating = false;
             }
         }

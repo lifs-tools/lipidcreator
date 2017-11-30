@@ -226,6 +226,9 @@ namespace LipidCreator
                                             
                                             if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                             {
+                                                string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                                                string heavyKey = key + "/" + suffix;
+                                                
                                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
                                                 FattyAcid heavyFA2 = new FattyAcid(fa2);
                                                 heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);
@@ -236,8 +239,8 @@ namespace LipidCreator
                                                 heavySortedAcids.Sort();
                                     
                                                 DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
-                                                MS2Fragment.addCounts(heavyAtomsCount, fa1.atomsCount);
-                                                MS2Fragment.addCounts(heavyAtomsCount, fa2.atomsCount);
+                                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
+                                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
                                                 MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                                 String heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
                                                 int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
@@ -245,9 +248,9 @@ namespace LipidCreator
                                                                                     
 
                                                 PrecursorData heavyPrecursorData = new PrecursorData();
-                                                heavyPrecursorData.lipidCategory = LipidCategory.Mediator;
-                                                heavyPrecursorData.moleculeListName = heavyHeadgroup;
-                                                heavyPrecursorData.precursorName = heavyHeadgroup;
+                                                heavyPrecursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                                heavyPrecursorData.moleculeListName = headgroup;
+                                                heavyPrecursorData.precursorName = heavyKey;
                                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                                 heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
                                                 heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
@@ -357,12 +360,15 @@ namespace LipidCreator
                                             
                                             if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                             {
+                                                string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                                                string heavyKey = key + "/" + suffix;
+                                                    
                                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
                                                 FattyAcid heavyFA2 = new FattyAcid(fa2);
                                                 FattyAcid heavyFA3 = new FattyAcid(fa3);
                                                 heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);
-                                                heavyFA2.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[1]);
-                                                heavyFA3.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[2]);
+                                                if (headgroup.Equals("DG") || headgroup.Equals("TG")) heavyFA2.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[1]);
+                                                if (headgroup.Equals("TG")) heavyFA3.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[2]);
                                                 List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                                 heavySortedAcids.Add(heavyFA1);
                                                 heavySortedAcids.Add(heavyFA2);
@@ -370,9 +376,9 @@ namespace LipidCreator
                                                 heavySortedAcids.Sort();
                                     
                                                 DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
-                                                MS2Fragment.addCounts(heavyAtomsCount, fa1.atomsCount);
-                                                MS2Fragment.addCounts(heavyAtomsCount, fa2.atomsCount);
-                                                MS2Fragment.addCounts(heavyAtomsCount, fa3.atomsCount);
+                                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
+                                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
+                                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA3.atomsCount);
                                                 MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                                 String heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
                                                 int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
@@ -380,9 +386,9 @@ namespace LipidCreator
                                                                                     
 
                                                 PrecursorData heavyPrecursorData = new PrecursorData();
-                                                heavyPrecursorData.lipidCategory = LipidCategory.Mediator;
-                                                heavyPrecursorData.moleculeListName = heavyHeadgroup;
-                                                heavyPrecursorData.precursorName = heavyHeadgroup;
+                                                heavyPrecursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                                heavyPrecursorData.moleculeListName = headgroup;
+                                                heavyPrecursorData.precursorName = heavyKey;
                                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                                 heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
                                                 heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));

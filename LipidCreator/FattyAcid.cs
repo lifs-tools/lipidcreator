@@ -38,6 +38,7 @@ namespace LipidCreator
         public int hydroxyl;
         public string suffix;
         public DataTable atomsCount;
+        
         public FattyAcid(int l, int db, int hydro){
         
         }
@@ -90,6 +91,22 @@ namespace LipidCreator
             suffix = copy.suffix;
             atomsCount = MS2Fragment.createEmptyElementTable(copy.atomsCount);
         }
+        
+        
+        public void updateForHeavyLabeled(DataTable heavyAtomsCount)
+        {
+            for (int i = 0; i < atomsCount.Rows.Count; ++i)
+            {   
+                int c = (int)atomsCount.Rows[i]["Count"] + (int)heavyAtomsCount.Rows[i]["Count"];
+                if (c < 0)
+                {
+                    atomsCount.Rows[i + 1]["Count"] = (int)atomsCount.Rows[i + 1]["Count"] + c;
+                    c = 0;
+                }
+                atomsCount.Rows[i]["Count"] = c;
+            }
+        }
+        
 
         public int CompareTo(FattyAcid other)
         {

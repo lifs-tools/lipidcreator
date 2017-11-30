@@ -186,7 +186,8 @@ namespace LipidCreator
                 if (n < 0) n = 0;
                 if (comboBox2.SelectedIndex == 0 && n > orig) n = orig;
                 dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
-                if (comboBox2.SelectedIndex == 0) dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = orig - n;
+                //if (comboBox2.SelectedIndex == 0)
+                dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = orig - n;
                 updating = false;
             }
         }
@@ -200,18 +201,28 @@ namespace LipidCreator
         
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length > 0)
+            string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+            string name = headgroup + "/" + textBox1.Text;
+            
+            if (textBox1.Text.Length == 0)
+            {
+                MessageBox.Show("Please set a suffix!", "Not registrable");
+            }
+            else if(creatorGUI.lipidCreator.headgroups.ContainsKey(name))
+            {
+                MessageBox.Show("The lipid class '" + headgroup + "' with heavy label suffix '" + textBox1.Text + "' is already registered!", "Not registrable");
+            }   
+            else
             {
                 // create and set precursor properties
-                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 
+                
                 Precursor heavyPrecursor = new Precursor();
-                string name = headgroup + "/" + textBox1.Text;
                 heavyPrecursor.elements = MS2Fragment.createEmptyElementTable((DataTable)buildingBlockDataTables[0]);
                 heavyPrecursor.name = name;
                 heavyPrecursor.category = precursor.category;
-                heavyPrecursor.pathToImage = "";
+                heavyPrecursor.pathToImage = precursor.pathToImage;
                 heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
                 foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions)
                 {
@@ -229,13 +240,13 @@ namespace LipidCreator
                 precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
                 
                 // copy all MS2Fragments
-                
+                creatorGUI.lipidCreator.allFragments[(int)heavyPrecursor.category].Add(name, new ArrayList());
+                foreach (MS2Fragment ms2Fragment in creatorGUI.lipidCreator.allFragments[(int)precursor.category][precursor.name])
+                {
+                    creatorGUI.lipidCreator.allFragments[(int)heavyPrecursor.category][name].Add(new MS2Fragment(ms2Fragment));
+                }
                 
                 this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Please set a suffix!", "Not registrable");
             }
         }
     }

@@ -97,21 +97,17 @@ namespace LipidCreator
         
         public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
-            Dictionary<string, ArrayList> isotopeDict = new Dictionary<string, ArrayList>();
-            foreach (KeyValuePair<string, ArrayList> ms2fragment in MS2Fragments)
+            ArrayList allHeadgroups = new ArrayList();
+            foreach(string headgroup in headGroupNames)
             {
-                if (ms2fragment.Key.IndexOf("/") > -1)
+                allHeadgroups.Add(headgroup);
+                foreach(Precursor precursor in headgroups[headgroup].heavyLabeledPrecursors)
                 {
-                    string monoName = ms2fragment.Key.Split(new char[]{'/'})[0];
-                    string deuterium = ms2fragment.Key.Split(new char[]{'/'})[1];
-                    
-                    if (!isotopeDict.ContainsKey(monoName)) isotopeDict.Add(monoName, new ArrayList());
-                    isotopeDict[monoName].Add(deuterium);
+                    allHeadgroups.Add(precursor.name);
                 }
             }
             
-            
-            foreach(string headgroupIter in headGroupNames)
+            foreach(string headgroupIter in allHeadgroups)
             {   
                 string headgroup = headgroupIter;                
                 String key = headgroup;
@@ -149,7 +145,7 @@ namespace LipidCreator
                             precursorData.MS2Fragments = MS2Fragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
-                            
+                            /*
                             foreach (Precursor heavyHeadgroup  in headgroups[headgroup].heavyLabeledPrecursors)
                             {
                                 string derivativeHeadgroup = heavyHeadgroup.name;
@@ -184,44 +180,7 @@ namespace LipidCreator
                                     precursorDataList.Add(precursorDataDeuterium);
                                 }
                             }
-                            /*
-                            if (isotopeDict.ContainsKey(headgroup))
-                            {
-                                foreach (string deuterium in isotopeDict[headgroup])
-                                {
-                                    string derivativeHeadgroup = headgroup + "/" + deuterium;
-                                    if (headgroups[derivativeHeadgroup].adductRestrictions.ContainsKey(derivativeHeadgroup) && headgroups[derivativeHeadgroup].adductRestrictions[adduct.Key])
-                                    {
-                                        usedKeys.Add(key);
-                            
-                                        DataTable atomsCountDeuterium = MS2Fragment.createEmptyElementTable();
-                                        MS2Fragment.addCounts(atomsCountDeuterium, headgroups[derivativeHeadgroup].elements);
-                                        String chemFormDeuterium = LipidCreator.computeChemicalFormula(atomsCountDeuterium);
-                                        int chargeDeuterium = getChargeAndAddAdduct(atomsCountDeuterium, adduct.Key);
-                                        double massDeuterium = LipidCreator.computeMass(atomsCountDeuterium, chargeDeuterium);
-                                                                            
-
-                                        PrecursorData precursorDataDeuterium = new PrecursorData();
-                                        precursorDataDeuterium.lipidCategory = LipidCategory.Mediator;
-                                        precursorDataDeuterium.moleculeListName = derivativeHeadgroup;
-                                        precursorDataDeuterium.precursorName = derivativeHeadgroup;
-                                        precursorDataDeuterium.precursorIonFormula = chemFormDeuterium;
-                                        precursorDataDeuterium.precursorAdduct = "[M" + adduct.Key + "]";
-                                        precursorDataDeuterium.precursorM_Z = massDeuterium / (double)(Math.Abs(chargeDeuterium));
-                                        precursorDataDeuterium.precursorCharge = chargeDeuterium;
-                                        precursorDataDeuterium.adduct = adduct.Key;
-                                        precursorDataDeuterium.atomsCount = atomsCountDeuterium;
-                                        precursorDataDeuterium.fa1 = null;
-                                        precursorDataDeuterium.fa2 = null;
-                                        precursorDataDeuterium.fa3 = null;
-                                        precursorDataDeuterium.fa4 = null;
-                                        precursorDataDeuterium.lcb = null;
-                                        precursorDataDeuterium.MS2Fragments = MS2Fragments[derivativeHeadgroup];
-                                        
-                                        precursorDataList.Add(precursorDataDeuterium);
-                                    }
-                                }
-                            }*/
+                            */
                         }
                     }
                 }

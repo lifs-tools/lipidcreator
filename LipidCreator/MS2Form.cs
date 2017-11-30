@@ -51,15 +51,48 @@ namespace LipidCreator
             this.creatorGUI = creatorGUI;
             positiveIDs = new ArrayList();
             negativeIDs = new ArrayList();
+            Dictionary<string, ArrayList> MS2Fragments = null;
             senderInterupt = false;
             
             
-            if (currentLipid is GLLipid ) this.currentLipid = new GLLipid((GLLipid)currentLipid);
-            else if (currentLipid is PLLipid ) this.currentLipid = new PLLipid((PLLipid)currentLipid);
-            else if (currentLipid is SLLipid ) this.currentLipid = new SLLipid((SLLipid)currentLipid);
-            else if (currentLipid is Cholesterol ) this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
+            if (currentLipid is GLLipid){
+                this.currentLipid = new GLLipid((GLLipid)currentLipid);
+                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.GlyceroLipid];
+            }
+            else if (currentLipid is PLLipid)
+            {
+                this.currentLipid = new PLLipid((PLLipid)currentLipid);
+                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.PhosphoLipid];
+            }
+            else if (currentLipid is SLLipid)
+            {
+                this.currentLipid = new SLLipid((SLLipid)currentLipid);
+                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.SphingoLipid];
+            }
+            else if (currentLipid is Cholesterol)
+            {
+                this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
+                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Cholesterol];
+            }
             
-            InitializeComponent(currentLipid.MS2Fragments);            
+            InitializeComponent();
+            
+            
+            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
+            {
+                TabPage tp = new TabPage();
+                tp.Location = new System.Drawing.Point(4, 22);
+                tp.Name = item.Key;
+                tp.Padding = new System.Windows.Forms.Padding(3);
+                tp.Size = new System.Drawing.Size(766, 372);
+                tp.TabIndex = 0;
+                tp.Text = item.Key;
+                tp.UseVisualStyleBackColor = true;
+                this.tabControlFragments.Controls.Add(tp);
+                this.tabPages.Add(tp);
+
+            }
+            
             tabChange(0);
         }
 
@@ -289,9 +322,9 @@ namespace LipidCreator
                 }
             }
             
-            if (currentLipid.pathsToFullImage.ContainsKey(lipidClass))
+            if (creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) && creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage.Length > 0)
             {
-                fragmentComplete = Image.FromFile((String)currentLipid.pathsToFullImage[lipidClass]);
+                fragmentComplete = Image.FromFile(creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage);
                 pictureBoxFragments.Image = fragmentComplete;
             }
             else

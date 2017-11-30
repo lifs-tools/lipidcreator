@@ -109,12 +109,11 @@ namespace LipidCreator
                                                         cholesterollipidsTab,
                                                         mediatorlipidsTab
                                                        });
-            changeTab(2);
+            changeTab(1);
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            
             if (initialCall){
                 int numCols = registeredLipidsDatatable.Columns.Count;
                 DataGridViewImageColumn editColumn = new DataGridViewImageColumn();  
@@ -146,7 +145,6 @@ namespace LipidCreator
             tabControl.SelectedIndex = currentTabIndex > 0 ? currentTabIndex : 2;
             changeTab(currentTabIndex, true);
             changingTabForced = false;
-            
         }
         
         public void tabIndexChanged(Object sender,  EventArgs e)
@@ -2588,6 +2586,7 @@ namespace LipidCreator
             addHeavyPrecursor.ShowInTaskbar = false;
             addHeavyPrecursor.ShowDialog();
             addHeavyPrecursor.Dispose();
+            resetLipid(null, null);
         }
         
         

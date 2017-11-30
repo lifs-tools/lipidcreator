@@ -59,7 +59,7 @@ namespace LipidCreator
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent(Dictionary<String, ArrayList> MS2Fragments)
+        private void InitializeComponent()
         {
             this.Size = new System.Drawing.Size(1168, 447);
         
@@ -273,21 +273,6 @@ namespace LipidCreator
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonAddFragment);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            
-            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
-            {
-                TabPage tp = new TabPage();
-                tp.Location = new System.Drawing.Point(4, 22);
-                tp.Name = item.Key;
-                tp.Padding = new System.Windows.Forms.Padding(3);
-                tp.Size = new System.Drawing.Size(766, 372);
-                tp.TabIndex = 0;
-                tp.Text = item.Key;
-                tp.UseVisualStyleBackColor = true;
-                this.tabControlFragments.Controls.Add(tp);
-                this.tabPages.Add(tp);
-
-            }
 
             this.Name = "MS2Form";
             this.Text = "MS2 Fragments";

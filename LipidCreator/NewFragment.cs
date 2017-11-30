@@ -47,70 +47,7 @@ namespace LipidCreator
         public NewFragment(MS2Form ms2form)
         {
             this.ms2form = ms2form;
-            elements = new DataTable();
-            elements.Clear();
-            String count = "Count";
-            String shortcut = "Shortcut";
-            String element = "Element";
-            String monoMass = "mass";
-
-            DataColumn columnCount = elements.Columns.Add(count);
-            DataColumn columnShortcut = elements.Columns.Add(shortcut);
-            DataColumn columnElement = elements.Columns.Add(element);
-            elements.Columns.Add(monoMass);
-
-            columnCount.DataType = System.Type.GetType("System.Int32");
-            columnShortcut.ReadOnly = true;
-            columnElement.ReadOnly = true;
-
-            DataRow carbon = elements.NewRow();
-            carbon[count] = "0";
-            carbon[shortcut] = "C";
-            carbon[element] = "carbon";
-            carbon[monoMass] = 12;
-            elements.Rows.Add(carbon);
-
-            DataRow hydrogen = elements.NewRow();
-            hydrogen[count] = "0";
-            hydrogen[shortcut] = "H";
-            hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007825035;
-            elements.Rows.Add(hydrogen);
-
-            DataRow oxygen = elements.NewRow();
-            oxygen[count] = "0";
-            oxygen[shortcut] = "O";
-            oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.99491463;
-            elements.Rows.Add(oxygen);
-
-            DataRow nitrogen = elements.NewRow();
-            nitrogen[count] = "0";
-            nitrogen[shortcut] = "N";
-            nitrogen[element] = "nitrogen";
-            nitrogen[monoMass] = 14.003074;
-            elements.Rows.Add(nitrogen);
-
-            DataRow phosphor = elements.NewRow();
-            phosphor[count] = "0";
-            phosphor[shortcut] = "P";
-            phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973762;
-            elements.Rows.Add(phosphor);
-
-            DataRow sulfur = elements.NewRow();
-            sulfur[count] = "0";
-            sulfur[shortcut] = "S";
-            sulfur[element] = "sulfur";
-            sulfur[monoMass] =  31.9720707;
-            elements.Rows.Add(sulfur);
-
-            DataRow sodium = elements.NewRow();
-            sodium[count] = "0";
-            sodium[shortcut] = "Na";
-            sodium[element] = "sodium";
-            sodium[monoMass] = 22.9897677;
-            elements.Rows.Add(sodium);
+            elements = MS2Fragment.createEmptyElementTable();
 
 
             InitializeComponent();

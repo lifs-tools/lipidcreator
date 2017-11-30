@@ -369,18 +369,18 @@ namespace LipidCreator
             {
                              
                 case "+NH4":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 3;
-                    atomsCount.Rows[3]["Count"] = (int)atomsCount.Rows[3]["Count"] - 1;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 3;
+                    atomsCount.Rows[(int)Molecules.N]["Count"] = (int)atomsCount.Rows[(int)Molecules.N]["Count"] - 1;
                     break;
                 case "+HCOO":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 2;
-                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] - 1;
-                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] - 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 2;
+                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] - 1;
+                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] - 2;
                     break;
                 case "+CH3COO":
-                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] - 2;
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 4;
-                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] - 2;
+                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] - 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 4;
+                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] - 2;
                     break;
             }
         }
@@ -392,36 +392,36 @@ namespace LipidCreator
             {
                                                                                                 
                 case "+H":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 1;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 1;
                     charge = 1;
                     break;
                 case "+2H":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 2;
                     charge = 2;
                     break;
                 case "+NH4":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 4;
-                    atomsCount.Rows[3]["Count"] = (int)atomsCount.Rows[3]["Count"] + 1;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 4;
+                    atomsCount.Rows[(int)Molecules.N]["Count"] = (int)atomsCount.Rows[(int)Molecules.N]["Count"] + 1;
                     charge = 1;
                     break;
                 case "-H":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 1;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 1;
                     charge = -1;
                     break;
                 case "-2H":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] - 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 2;
                     charge = -2;
                     break;
                 case "+HCOO":
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 1;
-                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] + 1;
-                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] + 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 1;
+                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] + 1;
+                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] + 2;
                     charge = -1;
                     break;
                 case "+CH3COO":
-                    atomsCount.Rows[0]["Count"] = (int)atomsCount.Rows[0]["Count"] + 2;
-                    atomsCount.Rows[1]["Count"] = (int)atomsCount.Rows[1]["Count"] + 3;
-                    atomsCount.Rows[2]["Count"] = (int)atomsCount.Rows[2]["Count"] + 2;
+                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] + 2;
+                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 3;
+                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] + 2;
                     charge = -1;
                     break;
             }

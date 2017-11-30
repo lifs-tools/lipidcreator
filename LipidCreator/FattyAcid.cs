@@ -51,21 +51,22 @@ namespace LipidCreator
             if (!isLCB)
             {
                 this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
-                if (length > 0 || db > 0){
-                    atomsCount.Rows[0]["Count"] = length; // C
+                if (length > 0 || db > 0)
+                {
+                    atomsCount.Rows[(int)Molecules.C]["Count"] = length; // C
                     switch(this.suffix)
                     {
                         case "":
-                            atomsCount.Rows[1]["Count"] = 2 * length - 1 - 2 * db; // H
-                            atomsCount.Rows[2]["Count"] = 1 + hydroxyl; // O
+                            atomsCount.Rows[(int)Molecules.H]["Count"] = 2 * length - 1 - 2 * db; // H
+                            atomsCount.Rows[(int)Molecules.O]["Count"] = 1 + hydroxyl; // O
                             break;
                         case "p":
-                            atomsCount.Rows[1]["Count"] = 2 * length - 1 - 2 * db + 2; // H
-                            atomsCount.Rows[2]["Count"] = hydroxyl; // O
+                            atomsCount.Rows[(int)Molecules.H]["Count"] = 2 * length - 1 - 2 * db + 2; // H
+                            atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
                             break;
                         case "e":
-                            atomsCount.Rows[1]["Count"] = (length + 1) * 2 - 1 - 2 * db; // H
-                            atomsCount.Rows[2]["Count"] = hydroxyl; // O
+                            atomsCount.Rows[(int)Molecules.H]["Count"] = (length + 1) * 2 - 1 - 2 * db; // H
+                            atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
                             break;
                     }
                 }
@@ -74,10 +75,10 @@ namespace LipidCreator
             {
                 // long chain base
                 this.suffix = "";
-                atomsCount.Rows[0]["Count"] = length; // C
-                atomsCount.Rows[1]["Count"] = (2 * (length - db) + 1); // H
-                atomsCount.Rows[2]["Count"] = hydroxyl; // O
-                atomsCount.Rows[3]["Count"] = 1; // N
+                atomsCount.Rows[(int)Molecules.C]["Count"] = length; // C
+                atomsCount.Rows[(int)Molecules.H]["Count"] = (2 * (length - db) + 1); // H
+                atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
+                atomsCount.Rows[(int)Molecules.N]["Count"] = 1; // N
             }
         }
         
@@ -113,6 +114,7 @@ namespace LipidCreator
             return 0;
         }
     }
+    
     
     [Serializable]
     public class FattyAcidComparer : EqualityComparer<FattyAcid>

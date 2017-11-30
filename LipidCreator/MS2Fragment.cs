@@ -30,9 +30,16 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace LipidCreator
 {
+
+
+
+    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, N = 6, N15 = 7, P = 8, S = 9, Na = 10};
+    
     [Serializable]
     public class MS2Fragment
     {
@@ -72,14 +79,17 @@ namespace LipidCreator
         public void import(XElement node, string importVersion)
         {
             Dictionary<String, int> ElementPositions = new Dictionary<String, int>(){
-                {"C", 0},
-                {"H", 1},
-                {"O", 2},
-                {"N", 3},
-                {"P", 4},
-                {"S", 5},
-                {"Na", 6},
-                {"d", 7}
+                {"C", (int)Molecules.C},
+                {"H", (int)Molecules.H},
+                {"O", (int)Molecules.O},
+                {"N", (int)Molecules.N},
+                {"P", (int)Molecules.P},
+                {"S", (int)Molecules.S},
+                {"Na", (int)Molecules.Na},
+                {"H'", (int)Molecules.H2},
+                {"C'", (int)Molecules.C13},
+                {"N'", (int)Molecules.N15},
+                {"O'", (int)Molecules.O17}
             };
         
             restrictions.Clear();
@@ -117,14 +127,7 @@ namespace LipidCreator
         public static void addCounts(DataTable dt1, DataTable dt2)
         {
             String count = "Count";
-            dt1.Rows[0][count] = (int)dt1.Rows[0][count] + (int)dt2.Rows[0][count];  // carbon
-            dt1.Rows[1][count] = (int)dt1.Rows[1][count] + (int)dt2.Rows[1][count];  // hydrogen
-            dt1.Rows[2][count] = (int)dt1.Rows[2][count] + (int)dt2.Rows[2][count];  // oxygen
-            dt1.Rows[3][count] = (int)dt1.Rows[3][count] + (int)dt2.Rows[3][count];  // nitrogen
-            dt1.Rows[4][count] = (int)dt1.Rows[4][count] + (int)dt2.Rows[4][count];  // phosphor
-            dt1.Rows[5][count] = (int)dt1.Rows[5][count] + (int)dt2.Rows[5][count];  // sulfur
-            dt1.Rows[6][count] = (int)dt1.Rows[6][count] + (int)dt2.Rows[6][count];  // sodium
-            dt1.Rows[7][count] = (int)dt1.Rows[7][count] + (int)dt2.Rows[7][count];  // deuterium
+            for (int i = 0; i < dt1.Rows.Count; ++i) dt1.Rows[i][count] = (int)dt1.Rows[i][count] + (int)dt2.Rows[i][count];
         }
         
         public static DataTable createEmptyElementTable()
@@ -142,64 +145,76 @@ namespace LipidCreator
             elements.Columns.Add(monoMass);
 
             columnCount.DataType = System.Type.GetType("System.Int32");
+            
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+            elements.Rows.Add(elements.NewRow());
+
+            elements.Rows[(int)Molecules.C][count] = "0";
+            elements.Rows[(int)Molecules.C][shortcut] = "C";
+            elements.Rows[(int)Molecules.C][element] = "carbon";
+            elements.Rows[(int)Molecules.C][monoMass] = 12;
+            
+            elements.Rows[(int)Molecules.C13][count] = "0";
+            elements.Rows[(int)Molecules.C13][shortcut] = "C'";
+            elements.Rows[(int)Molecules.C13][element] = "carbon 13";
+            elements.Rows[(int)Molecules.C13][monoMass] = 13.0033548378;
+
+            elements.Rows[(int)Molecules.H][count] = "0";
+            elements.Rows[(int)Molecules.H][shortcut] = "H";
+            elements.Rows[(int)Molecules.H][element] = "hydrogen";
+            elements.Rows[(int)Molecules.H][monoMass] = 1.007825035;
+
+            elements.Rows[(int)Molecules.H2][count] = "0";
+            elements.Rows[(int)Molecules.H2][shortcut] = "H'";
+            elements.Rows[(int)Molecules.H2][element] = "deuterium";
+            elements.Rows[(int)Molecules.H2][monoMass] = 2.014101779;
+
+            elements.Rows[(int)Molecules.O][count] = "0";
+            elements.Rows[(int)Molecules.O][shortcut] = "O";
+            elements.Rows[(int)Molecules.O][element] = "oxygen";
+            elements.Rows[(int)Molecules.O][monoMass] = 15.99491463;
+
+            elements.Rows[(int)Molecules.O17][count] = "0";
+            elements.Rows[(int)Molecules.O17][shortcut] = "O'";
+            elements.Rows[(int)Molecules.O17][element] = "oxygen 17";
+            elements.Rows[(int)Molecules.O17][monoMass] = 16.9991315;
+
+            elements.Rows[(int)Molecules.N][count] = "0";
+            elements.Rows[(int)Molecules.N][shortcut] = "N";
+            elements.Rows[(int)Molecules.N][element] = "nitrogen";
+            elements.Rows[(int)Molecules.N][monoMass] = 14.003074;
+
+            elements.Rows[(int)Molecules.N15][count] = "0";
+            elements.Rows[(int)Molecules.N15][shortcut] = "N'";
+            elements.Rows[(int)Molecules.N15][element] = "nitrogen 15";
+            elements.Rows[(int)Molecules.N15][monoMass] = 15.0001088984;
+
+            elements.Rows[(int)Molecules.P][count] = "0";
+            elements.Rows[(int)Molecules.P][shortcut] = "P";
+            elements.Rows[(int)Molecules.P][element] = "phosphor";
+            elements.Rows[(int)Molecules.P][monoMass] = 30.973762;
+
+            elements.Rows[(int)Molecules.S][count] = "0";
+            elements.Rows[(int)Molecules.S][shortcut] = "S";
+            elements.Rows[(int)Molecules.S][element] = "sulfur";
+            elements.Rows[(int)Molecules.S][monoMass] = 31.9720707;
+
+            elements.Rows[(int)Molecules.Na][count] = "0";
+            elements.Rows[(int)Molecules.Na][shortcut] = "Na";
+            elements.Rows[(int)Molecules.Na][element] = "sodium";
+            elements.Rows[(int)Molecules.Na][monoMass] = 22.9897677;
+            
             columnShortcut.ReadOnly = true;
             columnElement.ReadOnly = true;
-
-            DataRow carbon = elements.NewRow();
-            carbon[count] = "0";
-            carbon[shortcut] = "C";
-            carbon[element] = "carbon";
-            carbon[monoMass] = 12;
-            elements.Rows.Add(carbon);
-
-            DataRow hydrogen = elements.NewRow();
-            hydrogen[count] = "0";
-            hydrogen[shortcut] = "H";
-            hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007825035;
-            elements.Rows.Add(hydrogen);
-
-            DataRow oxygen = elements.NewRow();
-            oxygen[count] = "0";
-            oxygen[shortcut] = "O";
-            oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.99491463;
-            elements.Rows.Add(oxygen);
-
-            DataRow nitrogen = elements.NewRow();
-            nitrogen[count] = "0";
-            nitrogen[shortcut] = "N";
-            nitrogen[element] = "nitrogen";
-            nitrogen[monoMass] = 14.003074;
-            elements.Rows.Add(nitrogen);
-
-            DataRow phosphor = elements.NewRow();
-            phosphor[count] = "0";
-            phosphor[shortcut] = "P";
-            phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973762;
-            elements.Rows.Add(phosphor);
-
-            DataRow sulfur = elements.NewRow();
-            sulfur[count] = "0";
-            sulfur[shortcut] = "S";
-            sulfur[element] = "sulfur";
-            sulfur[monoMass] = 31.9720707;
-            elements.Rows.Add(sulfur);
-
-            DataRow sodium = elements.NewRow();
-            sodium[count] = "0";
-            sodium[shortcut] = "Na";
-            sodium[element] = "sodium";
-            sodium[monoMass] = 22.9897677;
-            elements.Rows.Add(sodium);
-
-            DataRow deuterium = elements.NewRow();
-            deuterium[count] = "0";
-            deuterium[shortcut] = "d";
-            deuterium[element] = "deuterium";
-            deuterium[monoMass] = 1.007825035 * 2;
-            elements.Rows.Add(deuterium);
             return elements;
         }
         
@@ -217,79 +232,6 @@ namespace LipidCreator
                     throw new Exception("Copying element table failed");
                 }
             }
-            /*
-            DataTable elements = new DataTable();
-            elements.Clear();
-            String count = "Count";
-            String shortcut = "Shortcut";
-            String element = "Element";
-            String monoMass = "mass";
-
-            DataColumn columnCount = elements.Columns.Add(count);
-            DataColumn columnShortcut = elements.Columns.Add(shortcut);
-            DataColumn columnElement = elements.Columns.Add(element);
-            elements.Columns.Add(monoMass);
-
-            columnCount.DataType = System.Type.GetType("System.Int32");
-            columnShortcut.ReadOnly = true;
-            columnElement.ReadOnly = true;
-
-            DataRow carbon = elements.NewRow();
-            carbon[count] = copy.Rows[0][count];
-            carbon[shortcut] = "C";
-            carbon[element] = "carbon";
-            carbon[monoMass] = 12;
-            elements.Rows.Add(carbon);
-
-            DataRow hydrogen = elements.NewRow();
-            hydrogen[count] = copy.Rows[1][count];
-            hydrogen[shortcut] = "H";
-            hydrogen[element] = "hydrogen";
-            hydrogen[monoMass] = 1.007825035;
-            elements.Rows.Add(hydrogen);
-
-            DataRow oxygen = elements.NewRow();
-            oxygen[count] = copy.Rows[2][count];
-            oxygen[shortcut] = "O";
-            oxygen[element] = "oxygen";
-            oxygen[monoMass] = 15.99491463;
-            elements.Rows.Add(oxygen);
-
-            DataRow nitrogen = elements.NewRow();
-            nitrogen[count] = copy.Rows[3][count];
-            nitrogen[shortcut] = "N";
-            nitrogen[element] = "nitrogen";
-            nitrogen[monoMass] = 14.003074;
-            elements.Rows.Add(nitrogen);
-
-            DataRow phosphor = elements.NewRow();
-            phosphor[count] = copy.Rows[4][count];
-            phosphor[shortcut] = "P";
-            phosphor[element] = "phosphor";
-            phosphor[monoMass] = 30.973762;
-            elements.Rows.Add(phosphor);
-
-            DataRow sulfur = elements.NewRow();
-            sulfur[count] = copy.Rows[5][count];
-            sulfur[shortcut] = "S";
-            sulfur[element] = "sulfur";
-            sulfur[monoMass] =  31.9720707;
-            elements.Rows.Add(sulfur);
-
-            DataRow sodium = elements.NewRow();
-            sodium[count] = copy.Rows[6][count];
-            sodium[shortcut] = "Na";
-            sodium[element] = "sodium";
-            sodium[monoMass] = 22.9897677;
-            elements.Rows.Add(sodium);
-
-            DataRow deuterium = elements.NewRow();
-            deuterium[count] = copy.Rows[7][count];
-            deuterium[shortcut] = "d";
-            deuterium[element] = "deuterium";
-            deuterium[monoMass] = 1.007825035 * 2;
-            elements.Rows.Add(deuterium);
-            */
             return elements;
         }
     

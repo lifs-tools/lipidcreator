@@ -107,13 +107,13 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(tokens[1], new ArrayList());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                            atomsCount.Rows[0]["Count"] = Convert.ToInt32(tokens[6]);
-                            atomsCount.Rows[1]["Count"] = Convert.ToInt32(tokens[7]) - Convert.ToInt32(tokens[4]);
-                            atomsCount.Rows[2]["Count"] = Convert.ToInt32(tokens[8]);
-                            atomsCount.Rows[3]["Count"] = Convert.ToInt32(tokens[9]);
-                            atomsCount.Rows[4]["Count"] = Convert.ToInt32(tokens[10]);
-                            atomsCount.Rows[5]["Count"] = Convert.ToInt32(tokens[11]);
-                            atomsCount.Rows[6]["Count"] = Convert.ToInt32(tokens[12]);
+                            atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[6]);
+                            atomsCount.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[7]) - Convert.ToInt32(tokens[4]);
+                            atomsCount.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[8]);
+                            atomsCount.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[9]);
+                            atomsCount.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[10]);
+                            atomsCount.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[11]);
+                            atomsCount.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[12]);
                             string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[3];
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
@@ -185,17 +185,16 @@ namespace LipidCreator
                                     break;
                                 default:
                                     throw new Exception("invalid lipid category");
-                                    break;
                             }
                             headgroup.name = tokens[1];
-                            headgroup.elements.Rows[0]["Count"] = Convert.ToInt32(tokens[2]);
-                            headgroup.elements.Rows[1]["Count"] = Convert.ToInt32(tokens[3]);
-                            headgroup.elements.Rows[2]["Count"] = Convert.ToInt32(tokens[4]);
-                            headgroup.elements.Rows[3]["Count"] = Convert.ToInt32(tokens[5]);
-                            headgroup.elements.Rows[4]["Count"] = Convert.ToInt32(tokens[6]);
-                            headgroup.elements.Rows[5]["Count"] = Convert.ToInt32(tokens[7]);
-                            headgroup.elements.Rows[6]["Count"] = Convert.ToInt32(tokens[8]);
-                            headgroup.elements.Rows[7]["Count"] = Convert.ToInt32(tokens[9]);
+                            headgroup.elements.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[2]); // carbon
+                            headgroup.elements.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[3]); // hydrogen
+                            headgroup.elements.Rows[(int)Molecules.H2]["Count"] = Convert.ToInt32(tokens[9]); // hydrogen 2
+                            headgroup.elements.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[4]); // oxygen
+                            headgroup.elements.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[5]); // nytrogen
+                            headgroup.elements.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[6]); // phosphor
+                            headgroup.elements.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[7]); // sulfor
+                            headgroup.elements.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[8]); // sodium
                             string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[10];
                             if (!File.Exists(precursorFile))
                             {

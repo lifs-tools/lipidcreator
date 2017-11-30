@@ -70,7 +70,7 @@ namespace LipidCreator
             
             
             List<String> medHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in creatorGUI.lipidCreator.allFragments["Mediator"])
+            foreach(KeyValuePair<String, ArrayList> fragmentList in creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Mediator])
             {
                 String headgroup = fragmentList.Key;
                 if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);

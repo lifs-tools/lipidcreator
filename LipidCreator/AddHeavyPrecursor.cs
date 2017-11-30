@@ -54,8 +54,7 @@ namespace LipidCreator
             
             foreach (KeyValuePair<String, ArrayList> item in currentLipid.MS2Fragments)
             {
-                if ((!(currentLipid is PLLipid) || !(item.Key[0] == 'e' || item.Key[0] == 'p' || item.Key[0] == 'L')) && (!(currentLipid is Mediator) || !(item.Key.IndexOf("/") != -1)))
-                comboBox1.Items.Add(item.Key);
+                if (!creatorGUI.lipidCreator.headgroups[item.Key].heavyLabeled) comboBox1.Items.Add(item.Key);
             }
             if (comboBox1.Items.Count > 0)
             {
@@ -201,7 +200,43 @@ namespace LipidCreator
         
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (textBox1.Text.Length > 0)
+            {
+                // create and set precursor properties
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                
+                Precursor heavyPrecursor = new Precursor();
+                string name = headgroup + "/" + textBox1.Text;
+                heavyPrecursor.elements = MS2Fragment.createEmptyElementTable((DataTable)buildingBlockDataTables[0]);
+                heavyPrecursor.name = name;
+                heavyPrecursor.category = precursor.category;
+                heavyPrecursor.pathToImage = "";
+                heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
+                foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions)
+                {
+                    heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
+                }
+                heavyPrecursor.derivative = precursor.derivative;
+                heavyPrecursor.heavyLabeled = true;
+                heavyPrecursor.userDefined = true;
+                heavyPrecursor.userDefinedFattyAcids = new ArrayList();
+                for (int i = 1; i < buildingBlockDataTables.Count; ++i)
+                {
+                    heavyPrecursor.userDefinedFattyAcids.Add(buildingBlockDataTables[i]);
+                }
+                creatorGUI.lipidCreator.headgroups.Add(name, heavyPrecursor);
+                precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
+                
+                // copy all MS2Fragments
+                
+                
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Please set a suffix!", "Not registrable");
+            }
         }
     }
 }

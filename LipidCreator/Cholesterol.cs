@@ -42,14 +42,14 @@ namespace LipidCreator
         public FattyAcidGroup fag;
     
     
-        public Cholesterol(Dictionary<String, Precursor> headgroups, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
+        public Cholesterol(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
         {
             fag = new FattyAcidGroup();
             containsEster = false;
             
-            if (allFragments.ContainsKey("Cholesterol"))
+            if (allFragments.ContainsKey((int)LipidCategory.Cholesterol))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["Cholesterol"])
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.Cholesterol])
                 {
                     if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());

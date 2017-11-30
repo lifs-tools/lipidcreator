@@ -48,12 +48,17 @@ namespace LipidCreator
         public bool derivative;
         public bool heavyLabeled;
         public ArrayList heavyLabeledPrecursors;
+        public bool userDefined;
+        public ArrayList userDefinedFattyAcids;
+        
         
         public Precursor()
         {
             adductRestrictions = new Dictionary<string, bool>();
             elements = MS2Fragment.createEmptyElementTable();
             heavyLabeledPrecursors = new ArrayList();
+            userDefined = false;
+            userDefinedFattyAcids = null;
         }
     }
 }

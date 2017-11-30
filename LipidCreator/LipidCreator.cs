@@ -46,7 +46,7 @@ namespace LipidCreator
     {   
         public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
-        public Dictionary<String, Dictionary<String, ArrayList>> allFragments;
+        public Dictionary<int, Dictionary<String, ArrayList>> allFragments;
         public Dictionary<String, Precursor> headgroups;
         public DataTable transitionList;
         public ArrayList precursorDataList;
@@ -95,16 +95,39 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (!allFragments.ContainsKey(tokens[0]))
+                            
+                            int category = (int)LipidCategory.NoLipid;
+                            switch(tokens[0])
                             {
-                                allFragments.Add(tokens[0], new Dictionary<String, ArrayList>());
+                                case "GL":
+                                    category = (int)LipidCategory.GlyceroLipid;
+                                    break;
+                                case "PL":
+                                    category = (int)LipidCategory.PhosphoLipid;
+                                    break;
+                                case "SL":
+                                    category = (int)LipidCategory.SphingoLipid;
+                                    break;
+                                case "Mediator":
+                                    category = (int)LipidCategory.Mediator;
+                                    break;
+                                case "Cholesterol":
+                                    category = (int)LipidCategory.Cholesterol;
+                                    break;
+                                default:
+                                    throw new Exception("invalid lipid category");
+                            }
+                            
+                            if (!allFragments.ContainsKey(category))
+                            {
+                                allFragments.Add(category, new Dictionary<String, ArrayList>());
                             }
                             
                             
                             
-                            if (!allFragments[tokens[0]].ContainsKey(tokens[1]))
+                            if (!allFragments[category].ContainsKey(tokens[1]))
                             {
-                                allFragments[tokens[0]].Add(tokens[1], new ArrayList());
+                                allFragments[category].Add(tokens[1], new ArrayList());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                             atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[6]);
@@ -122,11 +145,11 @@ namespace LipidCreator
                             
                             if (tokens[14].Length > 0)
                             {
-                                allFragments[tokens[0]][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
+                                allFragments[category][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
+                                allFragments[category][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
                             }
                         }
                     }
@@ -252,7 +275,7 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registeredLipids = new ArrayList();
-            allFragments = new Dictionary<String, Dictionary<String, ArrayList>>();
+            allFragments = new Dictionary<int, Dictionary<String, ArrayList>>();
             transitionList = addDataColumns(new DataTable ());
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();

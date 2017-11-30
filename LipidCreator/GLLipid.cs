@@ -44,16 +44,16 @@ namespace LipidCreator
         
     
     
-        public GLLipid(Dictionary<String, Precursor> headgroups, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
+        public GLLipid(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
             fag3 = new FattyAcidGroup();
             containsSugar = false;
             
-            if (allFragments.ContainsKey("GL"))
+            if (allFragments.ContainsKey((int)LipidCategory.GlyceroLipid))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["GL"])
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.GlyceroLipid])
                 {
                     if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());

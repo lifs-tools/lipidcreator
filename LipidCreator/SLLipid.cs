@@ -40,16 +40,16 @@ namespace LipidCreator
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
     
-        public SLLipid(Dictionary<String, Precursor> headgroups, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
+        public SLLipid(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
         {
             lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
             lcb.hydroxylCounts.Add(2);
             fag.hydroxylCounts.Add(0);
             
-            if (allFragments.ContainsKey("SL"))
+            if (allFragments.ContainsKey((int)LipidCategory.SphingoLipid))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["SL"])
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.SphingoLipid])
                 {
                     if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());

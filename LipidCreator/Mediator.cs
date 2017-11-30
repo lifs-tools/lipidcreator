@@ -38,11 +38,11 @@ namespace LipidCreator
     [Serializable]
     public class Mediator : Lipid
     { 
-        public Mediator(Dictionary<String, Precursor> headgroups, Dictionary<String, Dictionary<String, ArrayList>> allFragments)
+        public Mediator(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
         {
-            if (allFragments.ContainsKey("Mediator"))
+            if (allFragments.ContainsKey((int)LipidCategory.Mediator))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments["Mediator"])
+                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.Mediator])
                 {
                     if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
                     MS2Fragments.Add(PLFragments.Key, new ArrayList());

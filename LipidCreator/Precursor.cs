@@ -60,5 +60,82 @@ namespace LipidCreator
             userDefined = false;
             userDefinedFattyAcids = null;
         }
+        
+        public string serialize()
+        {
+            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\">\n";
+            foreach (KeyValuePair<string, bool> adductRestriction in adductRestrictions)
+            {
+                xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
+            }
+            
+            foreach (DataRow dr in elements.Rows)
+            {
+                xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+            }
+            
+            if (userDefined)
+            {
+                xml += "<userDefinedFattyAcids>\n";
+                foreach (DataTable table in userDefinedFattyAcids)
+                {
+                    xml += "<DataTable>\n";
+                    foreach (DataRow dr in table.Rows)
+                    {
+                        xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+                    }
+                    xml += "</DataTable>\n";
+                }
+                xml += "</userDefinedFattyAcids>\n";
+            }
+            xml += "</Precursor>\n";
+            return xml;
+        }
+        
+        public void import(XElement node, string importVersion)
+        {
+            name = node.Attribute("name").Value;
+            category = (LipidCategory)Convert.ToInt32(node.Attribute("category").Value);
+            pathToImage = node.Attribute("pathToImage").Value;
+            buildingBlockType = Convert.ToInt32(node.Attribute("buildingBlockType").Value);
+            derivative = false;
+            heavyLabeled = true;
+            userDefined = true;            
+            
+            foreach(XElement child in node.Elements())
+            {
+                switch (child.Name.ToString())
+                {
+                    case "AdductRestriction":
+                        adductRestrictions.Add(child.Attribute("key").Value.ToString(), child.Attribute("value").Value.Equals("True"));
+                        
+                        break;
+                        
+                    case "Element":
+                        elements.Rows[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
+                        break;
+                        
+                    case "userDefinedFattyAcids":
+                        userDefinedFattyAcids = new ArrayList();
+                        var dataTables = child.Descendants("DataTable");
+                        foreach ( var dataTable in dataTables)
+                        {
+                            DataTable elements = MS2Fragment.createEmptyElementTable();
+                            foreach(XElement row in dataTable.Elements())
+                            {
+                                if (row.Name.ToString().Equals("Elements"))
+                                {
+                                    elements.Rows[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]]["Count"] = row.Value.ToString();
+                                }
+                            }
+                            userDefinedFattyAcids.Add(elements);
+                        }
+                        break;
+                        
+                    default:
+                        throw new Exception();
+                }
+            }
+        }
     }
 }

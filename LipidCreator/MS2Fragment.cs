@@ -51,6 +51,19 @@ namespace LipidCreator
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
         public double intensity;
+        public static Dictionary<String, int> ELEMENT_POSITIONS = new Dictionary<String, int>(){
+                {"C", (int)Molecules.C},
+                {"H", (int)Molecules.H},
+                {"O", (int)Molecules.O},
+                {"N", (int)Molecules.N},
+                {"P", (int)Molecules.P},
+                {"S", (int)Molecules.S},
+                {"Na", (int)Molecules.Na},
+                {"H'", (int)Molecules.H2},
+                {"C'", (int)Molecules.C13},
+                {"N'", (int)Molecules.N15},
+                {"O'", (int)Molecules.O17}
+            };
     
         public string serialize()
         {
@@ -78,19 +91,7 @@ namespace LipidCreator
         
         public void import(XElement node, string importVersion)
         {
-            Dictionary<String, int> ElementPositions = new Dictionary<String, int>(){
-                {"C", (int)Molecules.C},
-                {"H", (int)Molecules.H},
-                {"O", (int)Molecules.O},
-                {"N", (int)Molecules.N},
-                {"P", (int)Molecules.P},
-                {"S", (int)Molecules.S},
-                {"Na", (int)Molecules.Na},
-                {"H'", (int)Molecules.H2},
-                {"C'", (int)Molecules.C13},
-                {"N'", (int)Molecules.N15},
-                {"O'", (int)Molecules.O17}
-            };
+            
         
             restrictions.Clear();
             fragmentBase.Clear();
@@ -115,7 +116,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        fragmentElements.Rows[ElementPositions[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
+                        fragmentElements.Rows[ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
                         break;
                         
                     default:

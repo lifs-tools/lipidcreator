@@ -59,13 +59,7 @@ namespace LipidCreator
         {
             this.lipidCreator = lipidCreator;
             currentIndex = LipidCategory.NoLipid;
-            lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(lipidCreator),
-                                                      new PLLipid(lipidCreator),
-                                                      new SLLipid(lipidCreator),
-                                                      new Cholesterol(lipidCreator),
-                                                      new Mediator(lipidCreator)
-                                                      });
+            resetAllLipids();
             
             registeredLipidsDatatable = new DataTable("Daten");
             registeredLipidsDatatable.Columns.Add(new DataColumn("Category"));
@@ -110,6 +104,17 @@ namespace LipidCreator
                                                         mediatorlipidsTab
                                                        });
             changeTab(5);
+        }
+        
+        public void resetAllLipids()
+        {
+            lipidTabList = new ArrayList(new Lipid[] {null,
+                                                      new GLLipid(lipidCreator),
+                                                      new PLLipid(lipidCreator),
+                                                      new SLLipid(lipidCreator),
+                                                      new Cholesterol(lipidCreator),
+                                                      new Mediator(lipidCreator)
+                                                      });
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -2609,6 +2614,8 @@ namespace LipidCreator
             {
                 doc = XDocument.Load(filePath);
                 lipidCreator.import(doc);
+                
+                
                 refreshRegisteredLipidsTable();
             }
             catch (Exception ex)
@@ -2637,6 +2644,8 @@ namespace LipidCreator
                 {
                     doc = XDocument.Load(openFileDialog1.FileName);
                     lipidCreator.import(doc);
+                    resetAllLipids();
+                    changeTab((int)currentIndex);
                     refreshRegisteredLipidsTable();
                 }
                 catch (Exception ex)

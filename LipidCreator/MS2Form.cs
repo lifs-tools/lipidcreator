@@ -85,16 +85,15 @@ namespace LipidCreator
             
             InitializeComponent();
             
-            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)creatorGUI.currentIndex])
-            //foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
+            foreach (KeyValuePair<String, ArrayList> item in this.currentLipid.MS2Fragments)
             {
                 TabPage tp = new TabPage();
                 tp.Location = new System.Drawing.Point(4, 22);
-                tp.Name = lipidClass;
+                tp.Name = item.Key;
                 tp.Padding = new System.Windows.Forms.Padding(3);
                 tp.Size = new System.Drawing.Size(766, 372);
                 tp.TabIndex = 0;
-                tp.Text = lipidClass;
+                tp.Text = item.Key;
                 tp.UseVisualStyleBackColor = true;
                 this.tabControlFragments.Controls.Add(tp);
                 this.tabPages.Add(tp);

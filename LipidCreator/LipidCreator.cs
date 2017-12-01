@@ -31,6 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Linq;
 using System.Data.SQLite;
 using Ionic.Zlib;
 
@@ -449,7 +450,27 @@ namespace LipidCreator
         
         public string serialize()
         {
+            ArrayList userDefined = new ArrayList();
+        
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\">\n";
+            foreach (KeyValuePair<string, Precursor> precursor in headgroups)
+            {
+                if (precursor.Value.userDefined)
+                {
+                    userDefined.Add(precursor.Key);
+                    xml += precursor.Value.serialize();
+                }
+            }
+            foreach (string headgroup in userDefined)
+            {
+                xml += "<userDefinedFragment headgroup=\"" + headgroup + "\">\n";
+                foreach(MS2Fragment ms2fragment in allFragments[headgroup])
+                {
+                    xml += ms2fragment.serialize();
+                }
+                xml += "</userDefinedFragment>\n";
+            }
+            
             foreach (Lipid currentLipid in registeredLipids)
             {
                 xml += currentLipid.serialize();
@@ -461,6 +482,34 @@ namespace LipidCreator
         public void import(XDocument doc)
         {
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
+            
+            var precursors = doc.Descendants("Precursor");
+            foreach ( var precursorXML in precursors )
+            {
+                Precursor precursor = new Precursor();
+                precursor.import(precursorXML, importVersion);
+                string monoisotopic = precursor.name.Split(new Char[]{'/'})[0];
+                if (categoryToClass.ContainsKey((int)precursor.category) && !headgroups.ContainsKey(precursor.name) && headgroups.ContainsKey(monoisotopic))
+                {
+                    categoryToClass[(int)precursor.category].Add(precursor.name);
+                    headgroups.Add(precursor.name, precursor);
+                    headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
+                }
+            }
+            
+            var userDefinedFragments = doc.Descendants("userDefinedFragment");
+            foreach ( var userDefinedFragment in userDefinedFragments )
+            {
+                string headgroup = userDefinedFragment.Attribute("headgroup").Value;
+                if (!allFragments.ContainsKey(headgroup)) allFragments.Add(headgroup, new ArrayList());
+                foreach (var ms2fragmentXML in userDefinedFragment.Descendants("MS2Fragment"))
+                {
+                    MS2Fragment ms2fragment = new MS2Fragment();
+                    ms2fragment.import(ms2fragmentXML, importVersion);
+                    allFragments[headgroup].Add(ms2fragment);
+                }
+            }
+            
             var lipids = doc.Descendants("lipid");
             foreach ( var lipid in lipids )
             {

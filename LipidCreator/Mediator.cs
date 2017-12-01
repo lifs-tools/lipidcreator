@@ -129,7 +129,7 @@ namespace LipidCreator
 
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Mediator;
-                            precursorData.moleculeListName = headgroup;
+                            precursorData.moleculeListName = headgroup.Replace("/", HEAVY_LABEL_SEPARATOR);
                             precursorData.precursorName = key;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -145,42 +145,6 @@ namespace LipidCreator
                             precursorData.MS2Fragments = MS2Fragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
-                            /*
-                            foreach (Precursor heavyHeadgroup  in headgroups[headgroup].heavyLabeledPrecursors)
-                            {
-                                string derivativeHeadgroup = heavyHeadgroup.name;
-                                if (headgroups[derivativeHeadgroup].adductRestrictions[adduct.Key])
-                                {
-                                    usedKeys.Add(key);
-                        
-                                    DataTable atomsCountDeuterium = MS2Fragment.createEmptyElementTable();
-                                    MS2Fragment.addCounts(atomsCountDeuterium, headgroups[derivativeHeadgroup].elements);
-                                    String chemFormDeuterium = LipidCreator.computeChemicalFormula(atomsCountDeuterium);
-                                    int chargeDeuterium = getChargeAndAddAdduct(atomsCountDeuterium, adduct.Key);
-                                    double massDeuterium = LipidCreator.computeMass(atomsCountDeuterium, chargeDeuterium);
-                                                                        
-
-                                    PrecursorData precursorDataDeuterium = new PrecursorData();
-                                    precursorDataDeuterium.lipidCategory = LipidCategory.Mediator;
-                                    precursorDataDeuterium.moleculeListName = derivativeHeadgroup;
-                                    precursorDataDeuterium.precursorName = derivativeHeadgroup;
-                                    precursorDataDeuterium.precursorIonFormula = chemFormDeuterium;
-                                    precursorDataDeuterium.precursorAdduct = "[M" + adduct.Key + "]";
-                                    precursorDataDeuterium.precursorM_Z = massDeuterium / (double)(Math.Abs(chargeDeuterium));
-                                    precursorDataDeuterium.precursorCharge = chargeDeuterium;
-                                    precursorDataDeuterium.adduct = adduct.Key;
-                                    precursorDataDeuterium.atomsCount = atomsCountDeuterium;
-                                    precursorDataDeuterium.fa1 = null;
-                                    precursorDataDeuterium.fa2 = null;
-                                    precursorDataDeuterium.fa3 = null;
-                                    precursorDataDeuterium.fa4 = null;
-                                    precursorDataDeuterium.lcb = null;
-                                    precursorDataDeuterium.MS2Fragments = MS2Fragments[derivativeHeadgroup];
-                                    
-                                    precursorDataList.Add(precursorDataDeuterium);
-                                }
-                            }
-                            */
                         }
                     }
                 }

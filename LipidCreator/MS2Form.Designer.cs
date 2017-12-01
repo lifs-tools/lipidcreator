@@ -77,6 +77,7 @@ namespace LipidCreator
             this.labelSlashPositive = new System.Windows.Forms.Label();
             this.labelSlashNegative = new System.Windows.Forms.Label();
             this.checkedListBoxNegativeFragments = new System.Windows.Forms.CheckedListBox();
+            this.isotopeList = new System.Windows.Forms.ComboBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonAddFragment = new System.Windows.Forms.Button();
@@ -95,15 +96,22 @@ namespace LipidCreator
             this.pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBoxFragments.TabIndex = 1;
             this.pictureBoxFragments.TabStop = false;
+            //
+            // checkBox1 - isotope list
+            //
+            isotopeList.Location = new System.Drawing.Point(12, 12);
+            isotopeList.Width = 150;
+            isotopeList.DropDownStyle = ComboBoxStyle.DropDownList;
+            isotopeList.SelectedIndexChanged += new EventHandler(isotopeListComboBoxValueChanged);
             // 
             // checkedListBox1 - positive fragments
             // 
             this.checkedListBoxPositiveFragments.CheckOnClick = true;
             this.checkedListBoxPositiveFragments.FormattingEnabled = true;
-            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 22);
+            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 62);
             this.checkedListBoxPositiveFragments.Name = "checkedListBox1";
             this.checkedListBoxPositiveFragments.ScrollAlwaysVisible = true;
-            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(150, 294);
+            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(150, 254);
             this.checkedListBoxPositiveFragments.TabIndex = 2;
             this.checkedListBoxPositiveFragments.ThreeDCheckBoxes = true;
             this.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
@@ -113,7 +121,7 @@ namespace LipidCreator
             // label1
             // 
             this.labelPositiveFragments.AutoSize = true;
-            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 2);
+            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 42);
             this.labelPositiveFragments.Name = "label1";
             this.labelPositiveFragments.TabIndex = 3;
             this.labelPositiveFragments.Text = "Positive Fragments";
@@ -121,7 +129,7 @@ namespace LipidCreator
             // label2
             // 
             this.labelNegativeFragments.AutoSize = true;
-            this.labelNegativeFragments.Location = new System.Drawing.Point(170, 2);
+            this.labelNegativeFragments.Location = new System.Drawing.Point(170, 42);
             this.labelNegativeFragments.Name = "label2";
             this.labelNegativeFragments.TabIndex = 4;
             this.labelNegativeFragments.Text = "Negative Fragments";
@@ -214,10 +222,10 @@ namespace LipidCreator
             // 
             this.checkedListBoxNegativeFragments.CheckOnClick = true;
             this.checkedListBoxNegativeFragments.FormattingEnabled = true;
-            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(170, 22);
+            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(170, 62);
             this.checkedListBoxNegativeFragments.Name = "checkedListBox2";
             this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
-            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(150, 294);
+            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(150, 254);
             this.checkedListBoxNegativeFragments.TabIndex = 5;
             this.checkedListBoxNegativeFragments.ThreeDCheckBoxes = true;
             this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
@@ -302,5 +310,6 @@ namespace LipidCreator
         public TabControl tabControlFragments;
         public ArrayList tabPages;
         public ToolTip toolTip1;
+        public ComboBox isotopeList;
     }
 }

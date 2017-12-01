@@ -165,7 +165,7 @@ namespace LipidCreator
                                     if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                     {
                                         string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                        string heavyKey = key + "/" + suffix;
+                                        string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                         
                                         FattyAcid heavyFA1 = new FattyAcid(fa);
                                         heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);

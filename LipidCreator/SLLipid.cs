@@ -139,7 +139,7 @@ namespace LipidCreator
                     
                             String key = headgroup + " ";
                             key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
-                            key += Lipid.IdSeparatorSpecific;;                            
+                            key += ID_SEPARATOR_SPECIFIC;                            
                             key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                             if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                             
@@ -187,7 +187,7 @@ namespace LipidCreator
                                             if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                             {
                                                 string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                                string heavyKey = key + "/" + suffix;
+                                                string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                             
                                                 FattyAcid heavyFA = new FattyAcid(fa);
                                                 FattyAcid heavyLCB = new FattyAcid(lcbType);
@@ -275,7 +275,7 @@ namespace LipidCreator
                                         if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                         {
                                             string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                            string heavyKey = key + "/" + suffix;
+                                            string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                         
                                             FattyAcid heavyLCB = new FattyAcid(lcbType);
                                             heavyLCB.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);

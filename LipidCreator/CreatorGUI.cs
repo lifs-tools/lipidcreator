@@ -103,7 +103,7 @@ namespace LipidCreator
                                                         cholesterollipidsTab,
                                                         mediatorlipidsTab
                                                        });
-            changeTab(5);
+            changeTab(1);
         }
         
         public void resetAllLipids()

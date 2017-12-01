@@ -200,7 +200,7 @@ namespace LipidCreator
                                 foreach (FattyAcid fa in sortedAcids)
                                 {
                                     if (fa.length > 0 && fa.suffix != "x"){
-                                        if (i++ > 0) key += Lipid.IdSeparatorUnspecific;
+                                        if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
                                         key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                                         if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                                         key += fa.suffix;
@@ -251,7 +251,7 @@ namespace LipidCreator
                                                 if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                                 {
                                                     string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                                    string heavyKey = key + "/" + suffix;
+                                                    string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                                 
                                                     FattyAcid heavyFA1 = new FattyAcid(fa1);
                                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
@@ -358,7 +358,7 @@ namespace LipidCreator
                             foreach (FattyAcid fa in sortedAcids)
                             {
                                 if (fa.length > 0 && fa.suffix != "x"){
-                                    if (i++ > 0) key += Lipid.IdSeparatorUnspecific;
+                                    if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
                                     key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                                     if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                                     key += fa.suffix;
@@ -408,7 +408,7 @@ namespace LipidCreator
                                             if (headgroups[heavyHeadgroup].adductRestrictions[adduct.Key])
                                             {
                                                 string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                                string heavyKey = key + "/" + suffix;
+                                                string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                             
                                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
                                                 FattyAcid heavyFA2 = new FattyAcid(fa2);

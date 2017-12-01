@@ -45,62 +45,59 @@ namespace LipidCreator
         public ArrayList negativeIDs;
         public CreatorGUI creatorGUI;
         public bool senderInterupt;
+        public bool loading;
         
         public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
         {
             this.creatorGUI = creatorGUI;
             positiveIDs = new ArrayList();
             negativeIDs = new ArrayList();
-            //Dictionary<string, ArrayList> MS2Fragments = creatorGUI.lipidCreator.allFragments;
             senderInterupt = false;
+            loading = false;
             
             
             if (currentLipid is GLLipid){
                 this.currentLipid = new GLLipid((GLLipid)currentLipid);
-                /*
-                foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
-                {
-                    MS2Fragments.Add()
-                }
-                
-                
-                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.GlyceroLipid];
-                */
             }
             else if (currentLipid is PLLipid)
             {
                 this.currentLipid = new PLLipid((PLLipid)currentLipid);
-                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.PhosphoLipid];
             }
             else if (currentLipid is SLLipid)
             {
                 this.currentLipid = new SLLipid((SLLipid)currentLipid);
-                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.SphingoLipid];
             }
             else if (currentLipid is Cholesterol)
             {
                 this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
-                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Cholesterol];
             }
             
             InitializeComponent();
             
             foreach (KeyValuePair<String, ArrayList> item in this.currentLipid.MS2Fragments)
             {
-                TabPage tp = new TabPage();
-                tp.Location = new System.Drawing.Point(4, 22);
-                tp.Name = item.Key;
-                tp.Padding = new System.Windows.Forms.Padding(3);
-                tp.Size = new System.Drawing.Size(766, 372);
-                tp.TabIndex = 0;
-                tp.Text = item.Key;
-                tp.UseVisualStyleBackColor = true;
-                this.tabControlFragments.Controls.Add(tp);
-                this.tabPages.Add(tp);
-
+                if (!creatorGUI.lipidCreator.headgroups[item.Key].heavyLabeled)
+                {
+                    TabPage tp = new TabPage();
+                    tp.Location = new System.Drawing.Point(4, 22);
+                    tp.Name = item.Key;
+                    tp.Padding = new System.Windows.Forms.Padding(3);
+                    tp.Size = new System.Drawing.Size(766, 372);
+                    tp.TabIndex = 0;
+                    tp.Text = item.Key;
+                    tp.UseVisualStyleBackColor = true;
+                    this.tabControlFragments.Controls.Add(tp);
+                    this.tabPages.Add(tp);
+                }
             }
             
             tabChange(0);
+        }
+        
+        public string getHeadgroup()
+        {
+            if (isotopeList.SelectedIndex == 0) return ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
+            return ((string)isotopeList.Items[isotopeList.SelectedIndex]).Replace(Lipid.HEAVY_LABEL_SEPARATOR, "/");
         }
 
         void checkedListBoxMouseLeave(object sender, EventArgs e)
@@ -111,7 +108,7 @@ namespace LipidCreator
         void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
@@ -127,7 +124,7 @@ namespace LipidCreator
         void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
@@ -143,7 +140,7 @@ namespace LipidCreator
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
@@ -159,7 +156,7 @@ namespace LipidCreator
         void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
@@ -183,7 +180,7 @@ namespace LipidCreator
             if (hoveredIndex != -1)
             {
                 int fragmentIndex = (int)positiveIDs[hoveredIndex];
-                String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+                String lipidClass = getHeadgroup();
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
                 if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
                 
@@ -239,7 +236,7 @@ namespace LipidCreator
             if (hoveredIndex != -1)
             {
                 int fragmentIndex = (int)negativeIDs[hoveredIndex];
-                String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+                String lipidClass = getHeadgroup();
                 String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
                 if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
                 
@@ -288,29 +285,18 @@ namespace LipidCreator
         {
             tabChange(((TabControl)sender).SelectedIndex);
         }
-
-        public void tabChange(int index)
+        
+        
+        public void isotopeListComboBoxValueChanged(object sender, EventArgs e)
         {
-            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxNegativeFragments);
-            ((TabPage)tabPages[index]).Controls.Add(labelPositiveFragments);
-            ((TabPage)tabPages[index]).Controls.Add(labelNegativeFragments);
-            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlack);
-            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionRed);
-            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlue);
-            ((TabPage)tabPages[index]).Controls.Add(labelPositiveSelectAll);
-            ((TabPage)tabPages[index]).Controls.Add(labelPositiveDeselectAll);
-            ((TabPage)tabPages[index]).Controls.Add(labelNegativeSelectAll);
-            ((TabPage)tabPages[index]).Controls.Add(labelNegativeDeselectAll);
-            ((TabPage)tabPages[index]).Controls.Add(labelSlashPositive);
-            ((TabPage)tabPages[index]).Controls.Add(labelSlashNegative);
-            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
-            ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
+            if (loading) return;
+            String lipidClass = getHeadgroup();
             negativeIDs.Clear();
             positiveIDs.Clear();
+            
             checkedListBoxPositiveFragments.Items.Clear();
             checkedListBoxNegativeFragments.Items.Clear();
             
-            String lipidClass = ((TabPage)tabPages[index]).Text;
             ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
             for (int i = 0; i < currentFragments.Count; ++i)
             {
@@ -347,6 +333,38 @@ namespace LipidCreator
                     pictureBoxFragments.Image = null;
                 }
             }
+            
+        }
+
+        public void tabChange(int index)
+        {
+            loading = true;
+            isotopeList.Items.Clear();
+            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxNegativeFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeFragments);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlack);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionRed);
+            ((TabPage)tabPages[index]).Controls.Add(labelFragmentDescriptionBlue);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveSelectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelPositiveDeselectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeSelectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelNegativeDeselectAll);
+            ((TabPage)tabPages[index]).Controls.Add(labelSlashPositive);
+            ((TabPage)tabPages[index]).Controls.Add(labelSlashNegative);
+            ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
+            ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
+            ((TabPage)tabPages[index]).Controls.Add(isotopeList);
+            
+            isotopeList.Items.Add("Monoisotopic");
+            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
+            foreach(Precursor heavyPrecursor in creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeledPrecursors)
+            {
+                isotopeList.Items.Add(heavyPrecursor.name.Replace("/", Lipid.HEAVY_LABEL_SEPARATOR));
+            }
+            
+            loading = false;
+            isotopeList.SelectedIndex = 0;
         }
 
 
@@ -354,7 +372,7 @@ namespace LipidCreator
         {
             if (senderInterupt) return;
             int fragmentIndex = (int)positiveIDs[e.Index];
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
         }
         
@@ -362,7 +380,7 @@ namespace LipidCreator
         {
             if (senderInterupt) return;
             int fragmentIndex = (int)negativeIDs[e.Index];
-            String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Text;
+            String lipidClass = getHeadgroup();
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
         }
         

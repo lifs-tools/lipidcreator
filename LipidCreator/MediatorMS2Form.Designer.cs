@@ -108,10 +108,10 @@ namespace LipidCreator
             // checkedListBox1 - monoisotopic fragments
             checkedListBoxMonoIsotopicFragments.CheckOnClick = true;
             checkedListBoxMonoIsotopicFragments.FormattingEnabled = true;
-            checkedListBoxMonoIsotopicFragments.Location = new System.Drawing.Point(200, 22);
+            checkedListBoxMonoIsotopicFragments.Location = new System.Drawing.Point(200, 47);
             checkedListBoxMonoIsotopicFragments.Name = "checkedListBox1";
             checkedListBoxMonoIsotopicFragments.ScrollAlwaysVisible = true;
-            checkedListBoxMonoIsotopicFragments.Size = new System.Drawing.Size(150, 294);
+            checkedListBoxMonoIsotopicFragments.Size = new System.Drawing.Size(150, 269);
             checkedListBoxMonoIsotopicFragments.TabIndex = 2;
             checkedListBoxMonoIsotopicFragments.ThreeDCheckBoxes = true;
             checkedListBoxMonoIsotopicFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxMonoIsotopicValueChanged);

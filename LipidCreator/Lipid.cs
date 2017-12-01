@@ -68,8 +68,9 @@ namespace LipidCreator
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
         public List<String> headGroupNames;
-        public static string IdSeparatorUnspecific = "_";
-        public static string IdSeparatorSpecific = "/";
+        public static string ID_SEPARATOR_UNSPECIFIC = "_";
+        public static string ID_SEPARATOR_SPECIFIC = "/";
+        public static string HEAVY_LABEL_SEPARATOR = "-";
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
     
         public Lipid()

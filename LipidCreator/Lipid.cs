@@ -32,6 +32,10 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Data.SQLite;
 using System.Globalization;
+using System.Linq;
+
+// For the benefit of Skyline developer systems configured to not allow nonlocalized strings
+// ReSharper disable NonLocalizedString
 
 namespace LipidCreator
 {
@@ -184,13 +188,136 @@ namespace LipidCreator
             }
         }
         
+        protected class PeakAnnotation
+        {
+            public string Name { get; private set; }
+            public int Charge { get; private set; }
+            public string Adduct { get; private set; } // can be left blank for molecular ions, mostly useful for precursor ions or describing neutral losses
+            public string Formula { get; private set; }
+            public string Comment { get; private set; }
+            public PeakAnnotation(string name, int z, string adduct, string formula, string comment)
+            {
+                Name = name.Replace("'", "''"); // escape single quotes for sqlite insertion
+                Charge = z;
+                Adduct = adduct;
+                Formula = formula.Replace("'", "''"); // escape single quotes for sqlite insertion;
+                Comment = comment.Replace("'", "''"); // escape single quotes for sqlite insertion;
+            }
+
+            public override string ToString()
+            {
+                return (Name ?? string.Empty) + " z=" + Charge + " " + (Formula ?? String.Empty) + " " + (Adduct ?? String.Empty) + " " + (Comment ?? String.Empty);
+            }
+        }
+
+        protected class Peak
+        {
+            public double Mz { get; private set; }
+            public double Intensity { get; private set; }
+            public PeakAnnotation Annotation { get; private set; }
+
+            public Peak(double mz, double intensity, PeakAnnotation annotation)
+            {
+                Mz = mz;
+                Intensity = intensity;
+                Annotation = annotation;
+            }
+
+            public override string ToString()
+            {
+                return Mz + " " + Intensity + " " + Annotation;
+            }
+        }
+
+        protected static void SavePeaks(SQLiteCommand command, PrecursorData precursorData, IEnumerable<Peak> peaksList)
+        {
+            string sql;
+            var peaks = peaksList.OrderBy(o => o.Mz).ToArray(); // .blib expects  ascending mz
+            int numFragments = peaks.Length;
+            if (numFragments == 0)
+            {
+                return; // How does this happen?
+            }
+
+            var valuesMZArray = new List<double>();
+            var valuesIntens = new List<float>();
+            var annotations = new List<List<PeakAnnotation>>(); // We anticipate more than one possible annotation per peak
+
+            // Deal with mz conflicts by combining annotations
+            for (int j = 0; j < numFragments; ++j)
+            {
+                if (j == 0 || (peaks[j].Mz != peaks[j - 1].Mz))
+                {
+                    valuesMZArray.Add(peaks[j].Mz);
+                    valuesIntens.Add(100 * (float)peaks[j].Intensity);
+                    annotations.Add(new List<PeakAnnotation>());
+                }
+                annotations.Last().Add(peaks[j].Annotation);
+            }
+            numFragments = valuesMZArray.Count;
+
+            // add MS1 information - always claim FileId=1 (SpectrumSourceFiles has an entry for this, saying that these are generated spectra)
+            sql =
+                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" +
+                precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
+                ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments +
+                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+
+            // add spectrum
+            command.CommandText =
+                "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+            SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
+            SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
+            parameterMZ.Value = Compressing.Compress(valuesMZArray.ToArray());
+            parameterIntens.Value = Compressing.Compress(valuesIntens.ToArray());
+            command.Parameters.Add(parameterMZ);
+            command.Parameters.Add(parameterIntens);
+            command.ExecuteNonQuery();
         
+            // add annotations
+            // TODO: what about precursor peaks?
+            for (int i = 0; i < annotations.Count; i++)
+            {
+                foreach (var ann in annotations[i]) // Each peak may have multiple annotations
+                {
+                    var adduct = ann.Adduct;
+                    if (string.IsNullOrEmpty(adduct))
+                    {
+                        switch (ann.Charge)
+                        {
+                            case 1:
+                                adduct = "[M+]";
+                                break;
+                            case -1:
+                                adduct = "[M-]";
+                                break;
+                            default:
+                                adduct = "[M" + ann.Charge.ToString("+#;-#;0") + "]";
+                                break;
+                        }
+                    }
+                    else if (!adduct.StartsWith("[M"))
+                    {
+                        // Consistent adduct declaration style
+                        if (adduct.StartsWith("M"))
+                            adduct = "[" + adduct + "]";
+                        else
+                            adduct = "[M" + adduct + "]";
+                    }
+                    command.CommandText =
+                        "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
+                        "peakIndex , name , formula, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
+                        i + ", '" + ann.Name + "', '" + ann.Formula + "', " + ann.Charge + ", '" + adduct + "', '" + ann.Comment + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+                
         
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData)
         {
-            ArrayList valuesMZ = new ArrayList();
-            ArrayList valuesIntensity = new ArrayList();
-            String sql;
             
             bool reportFragments = false;
             foreach (MS2Fragment fragment in precursorData.MS2Fragments)
@@ -204,6 +331,7 @@ namespace LipidCreator
             
             if (reportFragments)
             {
+                var peaks = new List<Peak>();
                 foreach (MS2Fragment fragment in precursorData.MS2Fragments)
                 {
                     if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
@@ -253,54 +381,28 @@ namespace LipidCreator
                             fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                         }
                         
-                        valuesMZ.Add(massFragment);
-                        valuesIntensity.Add(fragment.intensity);
-                        
-                        // add Annotation
-                        sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + massFragment + ", '" + chemFormFragment + "', @fragmentName)";
-                        SQLiteParameter parameterName = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
-                        parameterName.Value = fragName;
-                        command.CommandText = sql;
-                        command.Parameters.Add(parameterName);
-                        command.ExecuteNonQuery();
-                    }
+                        peaks.Add(new Peak(massFragment,
+                            fragment.intensity,
+                            new PeakAnnotation(fragName,
+                                fragment.fragmentCharge,
+                                Lipid.chargeToAdduct[fragment.fragmentCharge],
+                                chemFormFragment,
+                                fragment.CommentForSpectralLibrary)));
+                }
                 }
                 
-                // add Annotation for precursor
-                sql = "INSERT INTO Annotations(RefSpectraID, fragmentMZ, sumComposition, shortName) VALUES ((SELECT COUNT(*) FROM RefSpectra) + 1, " + precursorData.precursorM_Z + ", '" + precursorData.precursorIonFormula + "', @fragmentName)";
-                SQLiteParameter parameterNamePre = new SQLiteParameter("@fragmentName", System.Data.DbType.String);
-                parameterNamePre.Value = precursorData.precursorName;
-                command.CommandText = sql;
-                command.Parameters.Add(parameterNamePre);
-                command.ExecuteNonQuery();
-                valuesMZ.Add(precursorData.precursorM_Z);
-                valuesIntensity.Add(100);
+                // add precursor
+                peaks.Add(new Peak(precursorData.precursorM_Z,
+                    MS2Fragment.DEFAULT_INTENSITY,
+                    new PeakAnnotation(precursorData.precursorName,
+                        precursorData.precursorCharge,
+                        precursorData.precursorAdduct,
+                        precursorData.precursorIonFormula,
+                        "precursor")));
                 
+                // Commit to .blib
+                SavePeaks(command, precursorData, peaks);
                 
-                int numFragments = valuesMZ.Count;
-                double[] valuesMZArray = new double[numFragments];
-                float[] valuesIntens = new float[numFragments];
-                for(int i = 0; i < numFragments; ++i)
-                {
-                    valuesMZArray[i] = (double)valuesMZ[i];
-                    valuesIntens[i] = 100 * (float)((double)valuesIntensity[i]);
-                }
-                
-                
-                // add MS1 information
-                sql = "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, driftTimeMsec, collisionalCrossSectionSqA, driftTimeHighEnergyOffsetMsec, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" + precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge + ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments + ", 0, 0, 0, 0, '0', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
-                command.CommandText = sql;
-                command.ExecuteNonQuery();
-                
-                // add spectrum
-                command.CommandText = "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
-                SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
-                SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
-                parameterMZ.Value = Compressing.Compress(valuesMZArray);
-                parameterIntens.Value = Compressing.Compress(valuesIntens);
-                command.Parameters.Add(parameterMZ);
-                command.Parameters.Add(parameterIntens);
-                command.ExecuteNonQuery();
             }
         }
         

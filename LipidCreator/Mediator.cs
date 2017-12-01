@@ -38,20 +38,20 @@ namespace LipidCreator
     [Serializable]
     public class Mediator : Lipid
     { 
-        public Mediator(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
+        public Mediator(LipidCreator lipidCreator)
         {
-            if (allFragments.ContainsKey((int)LipidCategory.Mediator))
+            
+            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
+            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
+            
+            if (categoryToClass.ContainsKey((int)LipidCategory.Mediator))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.Mediator])
+                foreach (String lipidClass in categoryToClass[(int)LipidCategory.Mediator])
                 {
-                    if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
-                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                    bool containsDeuterium = PLFragments.Key.IndexOf("/") > -1;
-                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    MS2Fragments.Add(lipidClass, new ArrayList());
+                    foreach (MS2Fragment fragment in allFragments[lipidClass])
                     {
-                        MS2Fragment tmp = new MS2Fragment(fragment);
-                        MS2Fragments[PLFragments.Key].Add(tmp);
-                        if (containsDeuterium) tmp.fragmentSelected = false;
+                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
                     }
                 }
             }

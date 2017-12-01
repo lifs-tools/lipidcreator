@@ -431,33 +431,29 @@ namespace LipidCreator
             medHgListbox = new ListBox();
             
             List<String> glHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments[(int)LipidCategory.GlyceroLipid])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
             {
-                String headgroup = fragmentList.Key;
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && headgroup.Length > 2) glHgList.Add(headgroup);
             }
             glHgList.Sort();
             
             List<String> plHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments[(int)LipidCategory.PhosphoLipid])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
             {
-                String headgroup = fragmentList.Key;
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
             }
             plHgList.Sort();
             
             List<String> slHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments[(int)LipidCategory.SphingoLipid])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
             {
-                String headgroup = fragmentList.Key;
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) slHgList.Add(headgroup);
             }
             slHgList.Sort();
             
             List<String> medHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in lipidCreator.allFragments[(int)LipidCategory.Mediator])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                String headgroup = fragmentList.Key;
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) medHgList.Add(headgroup);
             }
             medHgList.Sort();

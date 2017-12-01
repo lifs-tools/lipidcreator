@@ -60,11 +60,11 @@ namespace LipidCreator
             this.lipidCreator = lipidCreator;
             currentIndex = LipidCategory.NoLipid;
             lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
-                                                      new PLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
-                                                      new SLLipid(lipidCreator.headgroups, lipidCreator.allFragments),
-                                                      new Cholesterol(lipidCreator.headgroups, lipidCreator.allFragments),
-                                                      new Mediator(lipidCreator.headgroups, lipidCreator.allFragments)
+                                                      new GLLipid(lipidCreator),
+                                                      new PLLipid(lipidCreator),
+                                                      new SLLipid(lipidCreator),
+                                                      new Cholesterol(lipidCreator),
+                                                      new Mediator(lipidCreator)
                                                       });
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -109,7 +109,7 @@ namespace LipidCreator
                                                         cholesterollipidsTab,
                                                         mediatorlipidsTab
                                                        });
-            changeTab(1);
+            changeTab(5);
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -483,24 +483,24 @@ namespace LipidCreator
             switch (index)
             {
                 case (int)LipidCategory.GlyceroLipid:
-                    newLipid = new GLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
+                    newLipid = new GLLipid(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.PhosphoLipid:
-                    newLipid = new PLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
+                    newLipid = new PLLipid(lipidCreator);
                     ((PLLipid)newLipid).isCL = plIsCL.Checked;
                     break;
                     
                 case (int)LipidCategory.SphingoLipid:
-                    newLipid = new SLLipid(lipidCreator.headgroups, lipidCreator.allFragments);
+                    newLipid = new SLLipid(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.Cholesterol:
-                    newLipid = new Cholesterol(lipidCreator.headgroups, lipidCreator.allFragments);
+                    newLipid = new Cholesterol(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.Mediator:
-                    newLipid = new Mediator(lipidCreator.headgroups, lipidCreator.allFragments);
+                    newLipid = new Mediator(lipidCreator);
                     break;
                     
                 default:
@@ -2581,7 +2581,7 @@ namespace LipidCreator
         
         public void openHeavyIsotopeForm(Object sender, EventArgs e)
         {
-            AddHeavyPrecursor addHeavyPrecursor = new AddHeavyPrecursor(this, currentLipid);
+            AddHeavyPrecursor addHeavyPrecursor = new AddHeavyPrecursor(this, currentIndex);
             addHeavyPrecursor.Owner = this;
             addHeavyPrecursor.ShowInTaskbar = false;
             addHeavyPrecursor.ShowDialog();

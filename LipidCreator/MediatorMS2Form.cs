@@ -52,13 +52,14 @@ namespace LipidCreator
             this.currentLipid = currentLipid;
             this.creatorGUI = creatorGUI;
             
+            
             isotopeDict = new Dictionary<string, ArrayList>();
-            foreach (KeyValuePair<string, ArrayList> ms2fragment in this.currentLipid.MS2Fragments)
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                if (ms2fragment.Key.IndexOf("/") > -1)
+                if (creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled)
                 {
-                    string monoName = ms2fragment.Key.Split(new char[]{'/'})[0];
-                    string deuterium = ms2fragment.Key.Split(new char[]{'/'})[1];
+                    string monoName = lipidClass.Split(new char[]{'/'})[0];
+                    string deuterium = lipidClass.Split(new char[]{'/'})[1];
                     
                     if (!isotopeDict.ContainsKey(monoName)) isotopeDict.Add(monoName, new ArrayList());
                     isotopeDict[monoName].Add(deuterium);
@@ -70,10 +71,9 @@ namespace LipidCreator
             
             
             List<String> medHgList = new List<String>();
-            foreach(KeyValuePair<String, ArrayList> fragmentList in creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Mediator])
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                String headgroup = fragmentList.Key;
-                if (headgroup.IndexOf("/") == -1) medHgList.Add(headgroup);
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) medHgList.Add(lipidClass);
             }
             medHgList.Sort();
             medHgListbox.Items.AddRange(medHgList.ToArray());

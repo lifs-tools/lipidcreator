@@ -51,42 +51,50 @@ namespace LipidCreator
             this.creatorGUI = creatorGUI;
             positiveIDs = new ArrayList();
             negativeIDs = new ArrayList();
-            Dictionary<string, ArrayList> MS2Fragments = null;
+            //Dictionary<string, ArrayList> MS2Fragments = creatorGUI.lipidCreator.allFragments;
             senderInterupt = false;
             
             
             if (currentLipid is GLLipid){
                 this.currentLipid = new GLLipid((GLLipid)currentLipid);
+                /*
+                foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
+                {
+                    MS2Fragments.Add()
+                }
+                
+                
                 MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.GlyceroLipid];
+                */
             }
             else if (currentLipid is PLLipid)
             {
                 this.currentLipid = new PLLipid((PLLipid)currentLipid);
-                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.PhosphoLipid];
+                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.PhosphoLipid];
             }
             else if (currentLipid is SLLipid)
             {
                 this.currentLipid = new SLLipid((SLLipid)currentLipid);
-                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.SphingoLipid];
+                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.SphingoLipid];
             }
             else if (currentLipid is Cholesterol)
             {
                 this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
-                MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Cholesterol];
+                //MS2Fragments = creatorGUI.lipidCreator.allFragments[(int)LipidCategory.Cholesterol];
             }
             
             InitializeComponent();
             
-            
-            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)creatorGUI.currentIndex])
+            //foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
             {
                 TabPage tp = new TabPage();
                 tp.Location = new System.Drawing.Point(4, 22);
-                tp.Name = item.Key;
+                tp.Name = lipidClass;
                 tp.Padding = new System.Windows.Forms.Padding(3);
                 tp.Size = new System.Drawing.Size(766, 372);
                 tp.TabIndex = 0;
-                tp.Text = item.Key;
+                tp.Text = lipidClass;
                 tp.UseVisualStyleBackColor = true;
                 this.tabControlFragments.Controls.Add(tp);
                 this.tabPages.Add(tp);

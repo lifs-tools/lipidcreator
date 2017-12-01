@@ -51,7 +51,7 @@ namespace LipidCreator
         public FattyAcidGroup fag4;
         public bool isCL;
     
-        public PLLipid(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
+        public PLLipid(LipidCreator lipidCreator)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -59,15 +59,17 @@ namespace LipidCreator
             fag4 = new FattyAcidGroup();
             isCL = false;
             
-            if (allFragments.ContainsKey((int)LipidCategory.PhosphoLipid))
+            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
+            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
+            
+            if (categoryToClass.ContainsKey((int)LipidCategory.PhosphoLipid))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.PhosphoLipid])
+                foreach (String lipidClass in categoryToClass[(int)LipidCategory.PhosphoLipid])
                 {
-                    if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
-                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    MS2Fragments.Add(lipidClass, new ArrayList());
+                    foreach (MS2Fragment fragment in allFragments[lipidClass])
                     {
-                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
                     }
                 }
             }

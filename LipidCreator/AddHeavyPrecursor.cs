@@ -39,22 +39,21 @@ namespace LipidCreator
     public partial class AddHeavyPrecursor : Form
     {
         public CreatorGUI creatorGUI;
-        public Lipid currentLipid;
         ArrayList buildingBlockDataTables;
         public bool updating;
         
-        public AddHeavyPrecursor(CreatorGUI creatorGUI, Lipid currentLipid)
+        public AddHeavyPrecursor(CreatorGUI creatorGUI, LipidCategory category)
         {
             this.creatorGUI = creatorGUI;
-            this.currentLipid = currentLipid;
             buildingBlockDataTables = new ArrayList();
             updating = false;
         
             InitializeComponent();
             
-            foreach (KeyValuePair<String, ArrayList> item in currentLipid.MS2Fragments)
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)category])
             {
-                if (!creatorGUI.lipidCreator.headgroups[item.Key].heavyLabeled) comboBox1.Items.Add(item.Key);
+                if (!creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass)) Console.WriteLine(lipidClass);
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) comboBox1.Items.Add(lipidClass);
             }
             if (comboBox1.Items.Count > 0)
             {
@@ -78,6 +77,7 @@ namespace LipidCreator
             Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
             comboBox2.Items.Clear();
             buildingBlockDataTables.Clear();
+            
             
             comboBox2.Items.Add("Head group");
             buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable(precursor.elements));
@@ -248,11 +248,13 @@ namespace LipidCreator
                 creatorGUI.lipidCreator.headgroups.Add(name, heavyPrecursor);
                 precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
                 
+                creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
+                
                 // copy all MS2Fragments
-                creatorGUI.lipidCreator.allFragments[(int)heavyPrecursor.category].Add(name, new ArrayList());
-                foreach (MS2Fragment ms2Fragment in creatorGUI.lipidCreator.allFragments[(int)precursor.category][precursor.name])
+                creatorGUI.lipidCreator.allFragments.Add(name, new ArrayList());
+                foreach (MS2Fragment ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name])
                 {
-                    creatorGUI.lipidCreator.allFragments[(int)heavyPrecursor.category][name].Add(new MS2Fragment(ms2Fragment));
+                    creatorGUI.lipidCreator.allFragments[name].Add(new MS2Fragment(ms2Fragment));
                 }
                 
                 this.Close();

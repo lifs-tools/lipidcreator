@@ -44,22 +44,24 @@ namespace LipidCreator
         
     
     
-        public GLLipid(Dictionary<String, Precursor> headgroups, Dictionary<int, Dictionary<String, ArrayList>> allFragments)
+        public GLLipid(LipidCreator lipidCreator)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
             fag3 = new FattyAcidGroup();
             containsSugar = false;
             
-            if (allFragments.ContainsKey((int)LipidCategory.GlyceroLipid))
+            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
+            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
+            
+            if (categoryToClass.ContainsKey((int)LipidCategory.GlyceroLipid))
             {
-                foreach (KeyValuePair<String, ArrayList> PLFragments in allFragments[(int)LipidCategory.GlyceroLipid])
+                foreach (String lipidClass in categoryToClass[(int)LipidCategory.GlyceroLipid])
                 {
-                    if (headgroups.ContainsKey(PLFragments.Key)) pathsToFullImage.Add(PLFragments.Key, headgroups[PLFragments.Key].pathToImage);
-                    MS2Fragments.Add(PLFragments.Key, new ArrayList());
-                    foreach (MS2Fragment fragment in PLFragments.Value)
+                    MS2Fragments.Add(lipidClass, new ArrayList());
+                    foreach (MS2Fragment fragment in allFragments[lipidClass])
                     {
-                        MS2Fragments[PLFragments.Key].Add(new MS2Fragment(fragment));
+                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
                     }
                 }
             }

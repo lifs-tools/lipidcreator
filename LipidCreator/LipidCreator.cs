@@ -46,7 +46,8 @@ namespace LipidCreator
     {   
         public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
-        public Dictionary<int, Dictionary<String, ArrayList>> allFragments;
+        public Dictionary<String, ArrayList> allFragments;
+        public Dictionary<int, ArrayList> categoryToClass;
         public Dictionary<String, Precursor> headgroups;
         public DataTable transitionList;
         public ArrayList precursorDataList;
@@ -96,60 +97,31 @@ namespace LipidCreator
                             
                             string[] tokens = parseLine(line);
                             
-                            int category = (int)LipidCategory.NoLipid;
-                            switch(tokens[0])
+                            if (!allFragments.ContainsKey(tokens[0]))
                             {
-                                case "GL":
-                                    category = (int)LipidCategory.GlyceroLipid;
-                                    break;
-                                case "PL":
-                                    category = (int)LipidCategory.PhosphoLipid;
-                                    break;
-                                case "SL":
-                                    category = (int)LipidCategory.SphingoLipid;
-                                    break;
-                                case "Mediator":
-                                    category = (int)LipidCategory.Mediator;
-                                    break;
-                                case "Cholesterol":
-                                    category = (int)LipidCategory.Cholesterol;
-                                    break;
-                                default:
-                                    throw new Exception("invalid lipid category");
-                            }
-                            
-                            if (!allFragments.ContainsKey(category))
-                            {
-                                allFragments.Add(category, new Dictionary<String, ArrayList>());
-                            }
-                            
-                            
-                            
-                            if (!allFragments[category].ContainsKey(tokens[1]))
-                            {
-                                allFragments[category].Add(tokens[1], new ArrayList());
+                                allFragments.Add(tokens[0], new ArrayList());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                            atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[6]);
-                            atomsCount.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[7]) - Convert.ToInt32(tokens[4]);
-                            atomsCount.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[8]);
-                            atomsCount.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[9]);
-                            atomsCount.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[10]);
-                            atomsCount.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[11]);
-                            atomsCount.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[12]);
-                            string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[3];
-                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
+                            atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[5]);
+                            atomsCount.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[6]) - Convert.ToInt32(tokens[3]);
+                            atomsCount.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[7]);
+                            atomsCount.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[8]);
+                            atomsCount.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[9]);
+                            atomsCount.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[10]);
+                            atomsCount.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[11]);
+                            string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[2];
+                            if (tokens[2] != "%" && !File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
                             if (tokens[14].Length > 0)
                             {
-                                allFragments[category][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13], Convert.ToDouble(tokens[14])));
+                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
                             }
                             else 
                             {
-                                allFragments[category][tokens[1]].Add(new MS2Fragment(tokens[2], Convert.ToInt32(tokens[4]), fragmentFile, true, atomsCount, tokens[5], tokens[13]));
+                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12]));
                             }
                         }
                     }
@@ -209,6 +181,10 @@ namespace LipidCreator
                                 default:
                                     throw new Exception("invalid lipid category");
                             }
+                            if (!categoryToClass.ContainsKey((int)headgroup.category)) categoryToClass.Add((int)headgroup.category, new ArrayList());
+                            categoryToClass[(int)headgroup.category].Add(tokens[1]);
+                            
+                            
                             headgroup.name = tokens[1];
                             headgroup.elements.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[2]); // carbon
                             headgroup.elements.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[3]); // hydrogen
@@ -275,7 +251,8 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registeredLipids = new ArrayList();
-            allFragments = new Dictionary<int, Dictionary<String, ArrayList>>();
+            categoryToClass = new Dictionary<int, ArrayList>();
+            allFragments = new Dictionary<String, ArrayList>();
             transitionList = addDataColumns(new DataTable ());
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
@@ -491,31 +468,31 @@ namespace LipidCreator
                 switch (lipidType)
                 {
                     case "GL":
-                        GLLipid gll = new GLLipid(headgroups, allFragments);
+                        GLLipid gll = new GLLipid(this);
                         gll.import(lipid, importVersion);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(headgroups, allFragments);
+                        PLLipid pll = new PLLipid(this);
                         pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(headgroups, allFragments);
+                        SLLipid sll = new SLLipid(this);
                         sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;
                         
                     case "Cholesterol":
-                        Cholesterol chl = new Cholesterol(headgroups, allFragments);
+                        Cholesterol chl = new Cholesterol(this);
                         chl.import(lipid, importVersion);
                         registeredLipids.Add(chl);
                         break;
                         
                     case "Mediator":
-                        Mediator med = new Mediator(headgroups, allFragments);
+                        Mediator med = new Mediator(this);
                         med.import(lipid, importVersion);
                         registeredLipids.Add(med);
                         break;

@@ -51,19 +51,20 @@ namespace LipidCreator
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
         public double intensity;
+        public bool userDefined;
         public static Dictionary<String, int> ELEMENT_POSITIONS = new Dictionary<String, int>(){
-                {"C", (int)Molecules.C},
-                {"H", (int)Molecules.H},
-                {"O", (int)Molecules.O},
-                {"N", (int)Molecules.N},
-                {"P", (int)Molecules.P},
-                {"S", (int)Molecules.S},
-                {"Na", (int)Molecules.Na},
-                {"H'", (int)Molecules.H2},
-                {"C'", (int)Molecules.C13},
-                {"N'", (int)Molecules.N15},
-                {"O'", (int)Molecules.O17}
-            };
+            {"C", (int)Molecules.C},
+            {"H", (int)Molecules.H},
+            {"O", (int)Molecules.O},
+            {"N", (int)Molecules.N},
+            {"P", (int)Molecules.P},
+            {"S", (int)Molecules.S},
+            {"Na", (int)Molecules.Na},
+            {"H'", (int)Molecules.H2},
+            {"C'", (int)Molecules.C13},
+            {"N'", (int)Molecules.N15},
+            {"O'", (int)Molecules.O17}
+        };
     
         public string serialize()
         {
@@ -72,6 +73,7 @@ namespace LipidCreator
             xml += " fragmentCharge=\"" + fragmentCharge + "\"";
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
+            xml += " userDefined=\"" + userDefined + "\"";
             xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
             foreach (string restriction in restrictions)
             {
@@ -100,6 +102,7 @@ namespace LipidCreator
             fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
+            userDefined = node.Attribute("userDefined").Value.Equals("True");
             fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
             
             
@@ -245,6 +248,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            userDefined = false;
             intensity = 100;
         }
 
@@ -257,6 +261,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            userDefined = false;
             intensity = 100;
         }
 
@@ -270,6 +275,7 @@ namespace LipidCreator
             fragmentElements = createEmptyElementTable();
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
+            userDefined = false;
             intensity = 100;
         }
         
@@ -282,6 +288,7 @@ namespace LipidCreator
             fragmentElements = dataElements;
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            userDefined = false;
             intensity = 100;
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
@@ -295,6 +302,7 @@ namespace LipidCreator
             fragmentElements = dataElements;
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            userDefined = false;
             intensity = Math.Min(100, Math.Max(0, intens));
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
@@ -307,6 +315,7 @@ namespace LipidCreator
             fragmentSelected = copy.fragmentSelected;
             fragmentElements = createEmptyElementTable(copy.fragmentElements);
             fragmentBase = new ArrayList();
+            userDefined = copy.userDefined;
             restrictions = new HashSet<string>();
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
             foreach (string restriction in copy.restrictions) restrictions.Add(restriction);

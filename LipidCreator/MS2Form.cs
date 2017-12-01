@@ -82,13 +82,18 @@ namespace LipidCreator
                     tp.Location = new System.Drawing.Point(4, 22);
                     tp.Name = item.Key;
                     tp.Padding = new System.Windows.Forms.Padding(3);
-                    tp.Size = new System.Drawing.Size(766, 372);
+                    tp.Size = new System.Drawing.Size(766, 392);
                     tp.TabIndex = 0;
                     tp.Text = item.Key;
                     tp.UseVisualStyleBackColor = true;
                     this.tabControlFragments.Controls.Add(tp);
                     this.tabPages.Add(tp);
                 }
+            }
+            if (tabPages.Count > 16) {
+                tabControlFragments.Multiline = true;
+                tabControlFragments.ItemSize = new Size((tabControlFragments.Width - 3) / 16, 20);
+                tabControlFragments.SizeMode = TabSizeMode.Fixed;
             }
             
             tabChange(0);
@@ -382,6 +387,21 @@ namespace LipidCreator
             int fragmentIndex = (int)negativeIDs[e.Index];
             String lipidClass = getHeadgroup();
             ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
+        }
+        
+        
+        private void List_RightClick(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = checkedListBoxNegativeFragments.IndexFromPoint(e.Location);
+                if (index != ListBox.NoMatches)
+                {
+                    Console.WriteLine(index);
+                }
+            }
+
         }
         
         private void cancelClick(object sender, EventArgs e)

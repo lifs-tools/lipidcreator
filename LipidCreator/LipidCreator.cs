@@ -54,6 +54,8 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
+        public bool storePrecursorsOnExport;
+        public bool storeFragmentsOnExport;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -257,7 +259,8 @@ namespace LipidCreator
             transitionList = addDataColumns(new DataTable ());
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
-            
+            storePrecursorsOnExport = false;
+            storeFragmentsOnExport = false;
             readInputFiles();
         }
         
@@ -453,6 +456,7 @@ namespace LipidCreator
             ArrayList userDefined = new ArrayList();
         
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\">\n";
+            
             foreach (KeyValuePair<string, Precursor> precursor in headgroups)
             {
                 if (precursor.Value.userDefined)
@@ -461,6 +465,7 @@ namespace LipidCreator
                     xml += precursor.Value.serialize();
                 }
             }
+            
             foreach (string headgroup in userDefined)
             {
                 xml += "<userDefinedFragment headgroup=\"" + headgroup + "\">\n";
@@ -494,6 +499,7 @@ namespace LipidCreator
                     categoryToClass[(int)precursor.category].Add(precursor.name);
                     headgroups.Add(precursor.name, precursor);
                     headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
+                    storePrecursorsOnExport = true;
                 }
             }
             
@@ -507,6 +513,7 @@ namespace LipidCreator
                     MS2Fragment ms2fragment = new MS2Fragment();
                     ms2fragment.import(ms2fragmentXML, importVersion);
                     allFragments[headgroup].Add(ms2fragment);
+                    storeFragmentsOnExport = true;
                 }
             }
             

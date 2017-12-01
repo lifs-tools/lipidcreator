@@ -61,7 +61,7 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.Size = new System.Drawing.Size(1168, 447);
+            this.Size = new System.Drawing.Size(1168, 467);
         
             this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
             this.checkedListBoxPositiveFragments = new System.Windows.Forms.CheckedListBox();
@@ -231,10 +231,11 @@ namespace LipidCreator
             this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
             this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
             this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
+            this.checkedListBoxNegativeFragments.MouseUp += new System.Windows.Forms.MouseEventHandler(this.List_RightClick);
             // 
             // button2
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(1058, 374);
+            this.buttonCancel.Location = new System.Drawing.Point(1058, 394);
             this.buttonCancel.Name = "button2";
             this.buttonCancel.Size = new System.Drawing.Size(98, 30);
             this.buttonCancel.TabIndex = 7;
@@ -244,7 +245,7 @@ namespace LipidCreator
             // 
             // button3
             // 
-            this.buttonOK.Location = new System.Drawing.Point(954, 374);
+            this.buttonOK.Location = new System.Drawing.Point(954, 394);
             this.buttonOK.Name = "button3";
             this.buttonOK.Size = new System.Drawing.Size(98, 30);
             this.buttonOK.TabIndex = 8;
@@ -254,7 +255,7 @@ namespace LipidCreator
             // 
             // button4
             // 
-            this.buttonAddFragment.Location = new System.Drawing.Point(12, 374);
+            this.buttonAddFragment.Location = new System.Drawing.Point(12, 394);
             this.buttonAddFragment.Name = "button4";
             this.buttonAddFragment.Size = new System.Drawing.Size(98, 30);
             this.buttonAddFragment.TabIndex = 9;
@@ -267,7 +268,7 @@ namespace LipidCreator
             this.tabControlFragments.Location = new System.Drawing.Point(12, 6);
             this.tabControlFragments.Name = "tabControl1";
             this.tabControlFragments.SelectedIndex = 0;
-            this.tabControlFragments.Size = new System.Drawing.Size(1144, 360);
+            this.tabControlFragments.Size = new System.Drawing.Size(1144, 380);
             this.tabControlFragments.TabIndex = 11;
             this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
             // 
@@ -275,7 +276,7 @@ namespace LipidCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1168, 420);
+            this.ClientSize = new System.Drawing.Size(1168, 440);
             this.Controls.Add(this.tabControlFragments);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);

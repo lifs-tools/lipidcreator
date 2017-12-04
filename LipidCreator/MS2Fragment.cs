@@ -52,6 +52,8 @@ namespace LipidCreator
         public HashSet<string> restrictions;
         public double intensity;
         public bool userDefined;
+        public const double DEFAULT_INTENSITY = 100.0;
+        public string CommentForSpectralLibrary { get { return fragmentFile; } }
         public static Dictionary<String, int> ELEMENT_POSITIONS = new Dictionary<String, int>(){
             {"C", (int)Molecules.C},
             {"H", (int)Molecules.H},
@@ -249,7 +251,7 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            intensity = 100;
+            intensity = DEFAULT_INTENSITY;
         }
 
         public MS2Fragment(String name, String fileName)
@@ -262,7 +264,7 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            intensity = 100;
+            intensity = DEFAULT_INTENSITY;
         }
 
 
@@ -276,7 +278,7 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            intensity = 100;
+            intensity = DEFAULT_INTENSITY;
         }
         
         public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions)
@@ -289,7 +291,7 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            intensity = 100;
+            intensity = DEFAULT_INTENSITY;
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
         
@@ -303,7 +305,7 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            intensity = Math.Min(100, Math.Max(0, intens));
+            intensity = Math.Min(DEFAULT_INTENSITY, Math.Max(0, intens));
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
 

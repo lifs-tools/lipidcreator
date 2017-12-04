@@ -47,9 +47,9 @@ namespace LipidCreator
     {   
         public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
-        public Dictionary<String, ArrayList> allFragments;
+        public Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public Dictionary<int, ArrayList> categoryToClass;
-        public Dictionary<String, Precursor> headgroups;
+        public Dictionary<string, Precursor> headgroups;
         public DataTable transitionList;
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
@@ -102,7 +102,9 @@ namespace LipidCreator
                             
                             if (!allFragments.ContainsKey(tokens[0]))
                             {
-                                allFragments.Add(tokens[0], new ArrayList());
+                                allFragments.Add(tokens[0], new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                                allFragments[tokens[0]].Add(false, new Dictionary<string, MS2Fragment>());
+                                allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
                             DataTable atomsCount = MS2Fragment.createEmptyElementTable();
                             atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[5]);
@@ -118,13 +120,14 @@ namespace LipidCreator
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
+                            int charge = Convert.ToInt32(tokens[3]);
                             if (tokens[14].Length > 0)
                             {
-                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]].Add(new MS2Fragment(tokens[1], Convert.ToInt32(tokens[3]), fragmentFile, true, atomsCount, tokens[4], tokens[12]));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[12]));
                             }
                         }
                     }
@@ -255,7 +258,7 @@ namespace LipidCreator
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
-            allFragments = new Dictionary<String, ArrayList>();
+            allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
             transitionList = addDataColumns(new DataTable ());
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
@@ -375,7 +378,7 @@ namespace LipidCreator
             // create fragment list            
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.computeFragmentData (transitionList, precursorData);
+                Lipid.computeFragmentData (transitionList, precursorData, allFragments);
             }
         }
 
@@ -469,9 +472,13 @@ namespace LipidCreator
             foreach (string headgroup in userDefined)
             {
                 xml += "<userDefinedFragment headgroup=\"" + headgroup + "\">\n";
-                foreach(MS2Fragment ms2fragment in allFragments[headgroup])
+                foreach(KeyValuePair<string, MS2Fragment> ms2fragment in allFragments[headgroup][true])
                 {
-                    xml += ms2fragment.serialize();
+                    xml += ms2fragment.Value.serialize();
+                }
+                foreach(KeyValuePair<string, MS2Fragment> ms2fragment in allFragments[headgroup][false])
+                {
+                    xml += ms2fragment.Value.serialize();
                 }
                 xml += "</userDefinedFragment>\n";
             }
@@ -507,12 +514,17 @@ namespace LipidCreator
             foreach ( var userDefinedFragment in userDefinedFragments )
             {
                 string headgroup = userDefinedFragment.Attribute("headgroup").Value;
-                if (!allFragments.ContainsKey(headgroup)) allFragments.Add(headgroup, new ArrayList());
+                if (!allFragments.ContainsKey(headgroup))
+                {
+                    allFragments.Add(headgroup, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                    allFragments[headgroup].Add(true, new Dictionary<string, MS2Fragment>());
+                    allFragments[headgroup].Add(false, new Dictionary<string, MS2Fragment>());
+                }
                 foreach (var ms2fragmentXML in userDefinedFragment.Descendants("MS2Fragment"))
                 {
                     MS2Fragment ms2fragment = new MS2Fragment();
                     ms2fragment.import(ms2fragmentXML, importVersion);
-                    allFragments[headgroup].Add(ms2fragment);
+                    allFragments[headgroup][ms2fragment.fragmentCharge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
                     storeFragmentsOnExport = true;
                 }
             }

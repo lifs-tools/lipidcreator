@@ -41,8 +41,6 @@ namespace LipidCreator
         
         public Image fragmentComplete = null;
         public Lipid currentLipid;
-        public ArrayList positiveIDs;
-        public ArrayList negativeIDs;
         public CreatorGUI creatorGUI;
         public bool senderInterupt;
         public bool loading;
@@ -50,8 +48,6 @@ namespace LipidCreator
         public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
         {
             this.creatorGUI = creatorGUI;
-            positiveIDs = new ArrayList();
-            negativeIDs = new ArrayList();
             senderInterupt = false;
             loading = false;
             
@@ -74,17 +70,17 @@ namespace LipidCreator
             
             InitializeComponent();
             
-            foreach (KeyValuePair<String, ArrayList> item in this.currentLipid.MS2Fragments)
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)creatorGUI.currentIndex])
             {
-                if (!creatorGUI.lipidCreator.headgroups[item.Key].heavyLabeled)
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled)
                 {
                     TabPage tp = new TabPage();
                     tp.Location = new System.Drawing.Point(4, 22);
-                    tp.Name = item.Key;
+                    tp.Name = lipidClass;
                     tp.Padding = new System.Windows.Forms.Padding(3);
                     tp.Size = new System.Drawing.Size(766, 392);
                     tp.TabIndex = 0;
-                    tp.Text = item.Key;
+                    tp.Text = lipidClass;
                     tp.UseVisualStyleBackColor = true;
                     this.tabControlFragments.Controls.Add(tp);
                     this.tabPages.Add(tp);
@@ -113,14 +109,10 @@ namespace LipidCreator
         void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = getHeadgroup();
-            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
-            for (int i = 0; i < currentFragments.Count; ++i)
-            {
-                if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
-            }
+            currentLipid.positiveFragments.Clear();
             for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
             {
+                currentLipid.positiveFragments[getHeadgroup()].Add((string)checkedListBoxPositiveFragments.Items[i]);
                 checkedListBoxPositiveFragments.SetItemChecked(i, true);
             }
             senderInterupt = false;
@@ -129,12 +121,7 @@ namespace LipidCreator
         void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = getHeadgroup();
-            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
-            for (int i = 0; i < currentFragments.Count; ++i)
-            {
-                if (((MS2Fragment)currentFragments[i]).fragmentCharge > 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false;  
-            }
+            currentLipid.positiveFragments[getHeadgroup()].Clear();
             for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
             {
                 checkedListBoxPositiveFragments.SetItemChecked(i, false);
@@ -145,14 +132,10 @@ namespace LipidCreator
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = getHeadgroup();
-            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
-            for (int i = 0; i < currentFragments.Count; ++i)
-            {
-                if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = true; 
-            }
+            currentLipid.negativeFragments[getHeadgroup()].Clear();
             for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
             {
+                currentLipid.negativeFragments[getHeadgroup()].Add((string)checkedListBoxNegativeFragments.Items[i]);
                 checkedListBoxNegativeFragments.SetItemChecked(i, true);
             }
             senderInterupt = false;
@@ -161,12 +144,7 @@ namespace LipidCreator
         void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            String lipidClass = getHeadgroup();
-            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
-            for (int i = 0; i < currentFragments.Count; ++i)
-            {
-                if (((MS2Fragment)currentFragments[i]).fragmentCharge < 0) ((MS2Fragment)currentFragments[i]).fragmentSelected = false; 
-            }
+            currentLipid.negativeFragments[getHeadgroup()].Clear();
             for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
             {
                 checkedListBoxNegativeFragments.SetItemChecked(i, false);
@@ -184,13 +162,12 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                int fragmentIndex = (int)positiveIDs[hoveredIndex];
-                String lipidClass = getHeadgroup();
-                String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
-                if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
+                string lipidClass = getHeadgroup();
+                string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
+                MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
+                if (fragment.fragmentFile != null) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
-                // create tool tip
-                MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
+                // create tool tip           
                 string chemForm = "";
                 string baseName = "";
                 string connector = "";
@@ -240,13 +217,12 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                int fragmentIndex = (int)negativeIDs[hoveredIndex];
                 String lipidClass = getHeadgroup();
-                String filePath = ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentFile;
-                if (filePath != null) pictureBoxFragments.Image = Image.FromFile(filePath);
+                string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
+                MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
+                if (fragment.fragmentFile != null) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
-                // create tool tip
-                MS2Fragment fragment = (MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex];                
+                // create tool tip              
                 string chemForm = "";
                 string baseName = "";
                 string connector = "";
@@ -296,27 +272,21 @@ namespace LipidCreator
         {
             if (loading) return;
             String lipidClass = getHeadgroup();
-            negativeIDs.Clear();
-            positiveIDs.Clear();
             
             checkedListBoxPositiveFragments.Items.Clear();
             checkedListBoxNegativeFragments.Items.Clear();
             
-            ArrayList currentFragments = currentLipid.MS2Fragments[lipidClass];
-            for (int i = 0; i < currentFragments.Count; ++i)
+            foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[lipidClass][false])
             {
-                MS2Fragment currentFragment = (MS2Fragment)currentFragments[i];
-                if (currentFragment.fragmentCharge > 0)
+                if (currentFragment.Value.fragmentCharge > 0)
                 {
-                    checkedListBoxPositiveFragments.Items.Add(currentFragment.fragmentName);
-                    positiveIDs.Add(i);
-                    checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, currentFragment.fragmentSelected);
+                    checkedListBoxPositiveFragments.Items.Add(currentFragment.Value.fragmentName);
+                    checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, currentLipid.positiveFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
                 }
                 else 
                 {
-                    checkedListBoxNegativeFragments.Items.Add(currentFragment.fragmentName);
-                    negativeIDs.Add(i);
-                    checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, currentFragment.fragmentSelected);
+                    checkedListBoxNegativeFragments.Items.Add(currentFragment.Value.fragmentName);
+                    checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, currentLipid.negativeFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
                 }
             }
             
@@ -373,20 +343,31 @@ namespace LipidCreator
         }
 
 
-        void CheckedListBoxPositiveItemCheck(Object sender, ItemCheckEventArgs e)
+        public void CheckedListBoxPositiveItemCheck(Object sender, ItemCheckEventArgs e)
         {
             if (senderInterupt) return;
-            int fragmentIndex = (int)positiveIDs[e.Index];
-            String lipidClass = getHeadgroup();
-            ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
+            if (e.NewValue == CheckState.Checked)
+            {
+                currentLipid.positiveFragments[getHeadgroup()].Add((string)checkedListBoxPositiveFragments.Items[e.Index]);
+            }
+            else
+            {
+                currentLipid.positiveFragments[getHeadgroup()].Remove((string)checkedListBoxPositiveFragments.Items[e.Index]);
+            }
         }
         
-        void CheckedListBoxNegativeItemCheck(Object sender, ItemCheckEventArgs e)
+        
+        public void CheckedListBoxNegativeItemCheck(Object sender, ItemCheckEventArgs e)
         {
             if (senderInterupt) return;
-            int fragmentIndex = (int)negativeIDs[e.Index];
-            String lipidClass = getHeadgroup();
-            ((MS2Fragment)currentLipid.MS2Fragments[lipidClass][fragmentIndex]).fragmentSelected = (e.NewValue == CheckState.Checked);
+            if (e.NewValue == CheckState.Checked)
+            {
+                currentLipid.negativeFragments[getHeadgroup()].Add((string)checkedListBoxNegativeFragments.Items[e.Index]);
+            }
+            else
+            {
+                currentLipid.negativeFragments[getHeadgroup()].Remove((string)checkedListBoxNegativeFragments.Items[e.Index]);
+            }
         }
         
         

@@ -251,10 +251,16 @@ namespace LipidCreator
                 creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
                 
                 // copy all MS2Fragments
-                creatorGUI.lipidCreator.allFragments.Add(name, new ArrayList());
-                foreach (MS2Fragment ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name])
+                creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                creatorGUI.lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
+                creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
+                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
                 {
-                    creatorGUI.lipidCreator.allFragments[name].Add(new MS2Fragment(ms2Fragment));
+                    creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                }
+                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
+                {
+                    creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
                 }
                 
                 this.Close();

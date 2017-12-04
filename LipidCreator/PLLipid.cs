@@ -51,28 +51,13 @@ namespace LipidCreator
         public FattyAcidGroup fag4;
         public bool isCL;
     
-        public PLLipid(LipidCreator lipidCreator)
+        public PLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.PhosphoLipid)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
             fag3 = new FattyAcidGroup();
             fag4 = new FattyAcidGroup();
             isCL = false;
-            
-            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
-            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
-            
-            if (categoryToClass.ContainsKey((int)LipidCategory.PhosphoLipid))
-            {
-                foreach (String lipidClass in categoryToClass[(int)LipidCategory.PhosphoLipid])
-                {
-                    MS2Fragments.Add(lipidClass, new ArrayList());
-                    foreach (MS2Fragment fragment in allFragments[lipidClass])
-                    {
-                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
-                    }
-                }
-            }
         }
     
         public PLLipid(PLLipid copy) : base((Lipid)copy)
@@ -228,6 +213,7 @@ namespace LipidCreator
                                             PrecursorData precursorData = new PrecursorData();
                                             precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                             precursorData.moleculeListName = headgroup;
+                                            precursorData.lipidClass = headgroup;
                                             precursorData.precursorName = key;
                                             precursorData.precursorIonFormula = chemForm;
                                             precursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -240,11 +226,11 @@ namespace LipidCreator
                                             precursorData.fa3 = sortedAcids[2];
                                             precursorData.fa4 = sortedAcids[3];
                                             precursorData.lcb = null;
-                                            precursorData.MS2Fragments = MS2Fragments[headgroup];
+                                            precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
                                             
                                             precursorDataList.Add(precursorData);
                                         
-                                            foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
+                                            foreach (Precursor heavyPrecursor in headgroups[headgroup].heavyLabeledPrecursors)
                                             {
                                                 string heavyHeadgroup = heavyPrecursor.name;
                                                 
@@ -282,6 +268,7 @@ namespace LipidCreator
                                                     PrecursorData heavyPrecursorData = new PrecursorData();
                                                     heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                                     heavyPrecursorData.moleculeListName = headgroup;
+                                                    heavyPrecursorData.lipidClass = heavyHeadgroup;
                                                     heavyPrecursorData.precursorName = heavyKey;
                                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                                     heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -294,7 +281,7 @@ namespace LipidCreator
                                                     heavyPrecursorData.fa3 = heavySortedAcids[2];
                                                     heavyPrecursorData.fa4 = heavySortedAcids[3];
                                                     heavyPrecursorData.lcb = null;
-                                                    heavyPrecursorData.MS2Fragments = MS2Fragments[heavyHeadgroup];
+                                                    heavyPrecursorData.fragmentNames = (heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup];
                                                     
                                                     precursorDataList.Add(heavyPrecursorData);
                                                 }
@@ -385,6 +372,7 @@ namespace LipidCreator
                                         PrecursorData precursorData = new PrecursorData();
                                         precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                         precursorData.moleculeListName = headgroup;
+                                        precursorData.lipidClass = headgroup;
                                         precursorData.precursorName = key;
                                         precursorData.precursorIonFormula = chemForm;
                                         precursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -397,7 +385,7 @@ namespace LipidCreator
                                         precursorData.fa3 = null;
                                         precursorData.fa4 = null;
                                         precursorData.lcb = null;
-                                        precursorData.MS2Fragments = MS2Fragments[headgroup];
+                                        precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
                                         
                                         precursorDataList.Add(precursorData);
                                         
@@ -431,6 +419,7 @@ namespace LipidCreator
                                                 PrecursorData heavyPrecursorData = new PrecursorData();
                                                 heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                                 heavyPrecursorData.moleculeListName = headgroup;
+                                                heavyPrecursorData.lipidClass = heavyHeadgroup;
                                                 heavyPrecursorData.precursorName = heavyKey;
                                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                                 heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -443,7 +432,7 @@ namespace LipidCreator
                                                 heavyPrecursorData.fa3 = null;
                                                 heavyPrecursorData.fa4 = null;
                                                 heavyPrecursorData.lcb = null;
-                                                heavyPrecursorData.MS2Fragments = MS2Fragments[heavyHeadgroup];
+                                                heavyPrecursorData.fragmentNames = (heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup];
                                                 
                                                 precursorDataList.Add(heavyPrecursorData);
                                             }

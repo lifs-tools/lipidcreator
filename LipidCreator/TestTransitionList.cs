@@ -81,10 +81,9 @@ namespace LipidCreator
                 lpc.fag2.faTypes["FAx"] = true;
                 
                 // unset all fragments except HG(PC)
-                foreach (MS2Fragment ms2fragment in lpc.MS2Fragments["LPC"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("HG(PC)");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.negativeFragments) fragments.Value.Clear();
+                lpc.positiveFragments["LPC"].Add("HG(PC)");
             
                 
                 lcf.registeredLipids.Add(lpc);
@@ -117,10 +116,9 @@ namespace LipidCreator
                 //LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1
                 Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1");
                 // unset all fragments except FA
-                foreach (MS2Fragment ms2fragment in lpc.MS2Fragments["LPC"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("FA");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.negativeFragments) fragments.Value.Clear();
+                lpc.negativeFragments["LPC"].Add("FA");
                 lpc.adducts["+H"] = false;   // unset adduct
                 lpc.adducts["+HCOO"] = true;   // set adduct
                 
@@ -148,9 +146,6 @@ namespace LipidCreator
                         Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), -1, "2nd LPC product charge: " + row[LipidCreator.PRODUCT_CHARGE]);
                     }
                 }
-                
-                
-                
                 
                 
                 //LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]	582.3776432	-1	FA	C18H35O2	283.2642541	-1
@@ -209,21 +204,12 @@ namespace LipidCreator
                 pa.fag2.faTypes["FA"] = true;
                 
                 // unset all fragments except
-                foreach (MS2Fragment ms2fragment in pa.MS2Fragments["PA"])
-                {
-                    switch(ms2fragment.fragmentName)
-                    {
-                        case "P":
-                        case "FA1":
-                        case "FA2":
-                        case "FA2' + O":
-                            ms2fragment.fragmentSelected = true;
-                            break;
-                        default:
-                            ms2fragment.fragmentSelected = false;
-                            break;
-                    }
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in pa.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in pa.negativeFragments) fragments.Value.Clear();
+                pa.negativeFragments["PA"].Add("P");
+                pa.negativeFragments["PA"].Add("FA1");
+                pa.negativeFragments["PA"].Add("FA2");
+                pa.negativeFragments["PA"].Add("FA2' + O");
                 
                 lcf.registeredLipids.Add(pa);
                 lcf.assembleLipids();
@@ -335,10 +321,9 @@ namespace LipidCreator
                 cl.fag4.faTypes["FA"] = true;
                 
                 // unset all fragments except
-                foreach (MS2Fragment ms2fragment in cl.MS2Fragments["CL"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("FA2");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in cl.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in cl.negativeFragments) fragments.Value.Clear();
+                cl.negativeFragments["CL"].Add("FA2");
                 
                 lcf.registeredLipids.Add(cl);
                 lcf.assembleLipids();
@@ -416,10 +401,9 @@ namespace LipidCreator
                 sl.fag.faTypes["FA"] = true;
                 
                 // unset all fragments except
-                foreach (MS2Fragment ms2fragment in sl.MS2Fragments["Cer"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("W''");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sl.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sl.negativeFragments) fragments.Value.Clear();
+                sl.positiveFragments["Cer"].Add("W''");
                 
                 lcf.registeredLipids.Add(sl);
                 lcf.assembleLipids();
@@ -454,11 +438,9 @@ namespace LipidCreator
                 sl.adducts["+H"] = true;   // unset adduct
                 sl.adducts["-H"] = true;   // set adduct
                 
-                // unset all fragments except
-                foreach (MS2Fragment ms2fragment in sl.MS2Fragments["Cer"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("S");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sl.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sl.negativeFragments) fragments.Value.Clear();
+                sl.negativeFragments["Cer"].Add("S");
                 
                 lcf.registeredLipids.Add(sl);
                 lcf.assembleLipids();
@@ -504,20 +486,10 @@ namespace LipidCreator
                 sm.fag.hydroxylCounts.Add(0);
                 sm.fag.faTypes["FA"] = true;
                 
-                // unset all fragments except
-                foreach (MS2Fragment ms2fragment in sm.MS2Fragments["SM"])
-                {
-                    switch(ms2fragment.fragmentName)
-                    {
-                        case "HG(PC)":
-                        case "W''":
-                            ms2fragment.fragmentSelected = true;
-                            break;
-                        default:
-                            ms2fragment.fragmentSelected = false;
-                            break;
-                    }
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sm.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sm.negativeFragments) fragments.Value.Clear();
+                sm.positiveFragments["SM"].Add("HG(PC)");
+                sm.positiveFragments["SM"].Add("W''");
                 
                 lcf.registeredLipids.Add(sm);
                 lcf.assembleLipids();
@@ -582,19 +554,10 @@ namespace LipidCreator
                 spc.fag.faTypes["FAx"] = true;
                 
                 // unset all fragments except
-                foreach (MS2Fragment ms2fragment in spc.MS2Fragments["SPC"])
-                {
-                    switch(ms2fragment.fragmentName)
-                    {
-                        case "HG(PC)":
-                        case "W''":
-                            ms2fragment.fragmentSelected = true;
-                            break;
-                        default:
-                            ms2fragment.fragmentSelected = false;
-                            break;
-                    }
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in spc.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in spc.negativeFragments) fragments.Value.Clear();
+                spc.positiveFragments["SPC"].Add("HG(PC)");
+                spc.positiveFragments["SPC"].Add("W''");
                 
                 lcf.registeredLipids.Add(spc);
                 lcf.assembleLipids();
@@ -654,10 +617,9 @@ namespace LipidCreator
                 sph.fag.faTypes["FAx"] = true;
                 
                 // unset all fragments except
-                foreach (MS2Fragment ms2fragment in sph.MS2Fragments["SPH"])
-                {
-                    ms2fragment.fragmentSelected = ms2fragment.fragmentName.Equals("W''");
-                }
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sph.positiveFragments) fragments.Value.Clear();
+                foreach (KeyValuePair<string, HashSet<string>> fragments in sph.negativeFragments) fragments.Value.Clear();
+                sph.positiveFragments["SPH"].Add("W''");
                 
                 lcf.registeredLipids.Add(sph);
                 lcf.assembleLipids();
@@ -681,7 +643,6 @@ namespace LipidCreator
                         Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "SPH product charge: " + row[LipidCreator.PRODUCT_CHARGE]);
                     }
                 }
-
                 
                 Console.WriteLine("Test passed, no errors found");
             }

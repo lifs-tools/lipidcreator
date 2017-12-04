@@ -43,6 +43,7 @@ namespace LipidCreator
     {
         public LipidCategory lipidCategory;
         public string moleculeListName;
+        public string lipidClass;
         public string precursorName;
         public string precursorIonFormula;
         public string precursorAdduct;
@@ -55,7 +56,7 @@ namespace LipidCreator
         public FattyAcid fa3;
         public FattyAcid fa4;
         public FattyAcid lcb;
-        public ArrayList MS2Fragments;
+        public HashSet<string> fragmentNames;
     }
     
     
@@ -63,8 +64,8 @@ namespace LipidCreator
     public class Lipid
     {
         public string className;
-        public Dictionary<String, ArrayList> MS2Fragments;
-        public Dictionary<String, String> pathsToFullImage;
+        public Dictionary<string, HashSet<string>> positiveFragments;
+        public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
         public List<String> headGroupNames;
@@ -73,7 +74,7 @@ namespace LipidCreator
         public static string HEAVY_LABEL_SEPARATOR = "-";
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
     
-        public Lipid()
+        public Lipid(LipidCreator lipidCreator, LipidCategory lipidCategory)
         {
             adducts = new Dictionary<String, bool>();
             adducts.Add("+H", false);
@@ -83,10 +84,29 @@ namespace LipidCreator
             adducts.Add("-2H", false);
             adducts.Add("+HCOO", false);
             adducts.Add("+CH3COO", false);
-            MS2Fragments = new Dictionary<String, ArrayList>();
-            pathsToFullImage = new Dictionary<String, String>();
+            positiveFragments = new Dictionary<string, HashSet<string>>();
+            negativeFragments = new Dictionary<string, HashSet<string>>();
             representativeFA = false;
             headGroupNames = new List<String>();
+            
+            if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
+            {
+                foreach (String lipidClass in lipidCreator.categoryToClass[(int)lipidCategory])
+                {
+                    if (!positiveFragments.ContainsKey(lipidClass)) positiveFragments.Add(lipidClass, new HashSet<string>());
+                    if (!negativeFragments.ContainsKey(lipidClass)) negativeFragments.Add(lipidClass, new HashSet<string>());
+                    
+                    foreach (KeyValuePair<string, MS2Fragment> fragment in lipidCreator.allFragments[lipidClass][true])
+                    {
+                        positiveFragments[lipidClass].Add(fragment.Value.fragmentName);
+                    }
+                    
+                    foreach (KeyValuePair<string, MS2Fragment> fragment in lipidCreator.allFragments[lipidClass][false])
+                    {
+                        negativeFragments[lipidClass].Add(fragment.Value.fragmentName);
+                    }
+                }
+            }
         }
         
         public virtual void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
@@ -95,14 +115,14 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
         {                    
             int reportedFragments = 0;
-            foreach (MS2Fragment fragment in precursorData.MS2Fragments)
+            foreach (string fragmentName in precursorData.fragmentNames)
             {
-            //Console.WriteLine(precursorData.precursorName);
-                if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
-                //if (fragment.fragmentSelected && ((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0 && precursorData.precursorCharge <= fragment.fragmentCharge) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0 && precursorData.precursorCharge >= fragment.fragmentCharge)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
+                //if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
+                if (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct))
                 {
                     DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
                     foreach (string fbase in fragment.fragmentBase)
@@ -188,6 +208,7 @@ namespace LipidCreator
         
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData)
         {
+            /*
             ArrayList valuesMZ = new ArrayList();
             ArrayList valuesIntensity = new ArrayList();
             String sql;
@@ -302,6 +323,7 @@ namespace LipidCreator
                 command.Parameters.Add(parameterIntens);
                 command.ExecuteNonQuery();
             }
+            */
         }
         
         
@@ -315,14 +337,24 @@ namespace LipidCreator
                 xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
             }
             
-            foreach (KeyValuePair<String, ArrayList> item in MS2Fragments)
+            foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
             {
-                xml += "<MS2FragmentGroup name=\"" + item.Key + "\">\n";
-                foreach (MS2Fragment fragment in item.Value)
+                xml += "<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n";
+                foreach (string fragment in positiveFragment.Value)
                 {
-                    xml += fragment.serialize();
+                    xml += "<fragment>" + fragment + "</fragment>\n";
                 }
-                xml += "</MS2FragmentGroup>\n";
+                xml += "</positiveFragment>\n";
+            }
+            
+            foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)
+            {
+                xml += "<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n";
+                foreach (string fragment in negativeFragment.Value)
+                {
+                    xml += "<fragment>" + fragment + "</fragment>\n";
+                }
+                xml += "</negativeFragments>\n";
             }
             return xml;
         }
@@ -339,21 +371,19 @@ namespace LipidCreator
             adducts.Add("+CH3COO", copy.adducts["+CH3COO"]);
             className = copy.className;
             representativeFA = copy.representativeFA;
-            MS2Fragments = new Dictionary<String, ArrayList>();
             headGroupNames = new List<String>();
-            pathsToFullImage = new Dictionary<String, String>();
-            foreach (KeyValuePair<String, String> item in copy.pathsToFullImage)
+        
+            positiveFragments = new Dictionary<string, HashSet<string>>();
+            negativeFragments = new Dictionary<string, HashSet<string>>();
+            foreach (KeyValuePair<string, HashSet<string>> positiveFragment in copy.positiveFragments)
             {
-                pathsToFullImage.Add(item.Key, item.Value);
+                positiveFragments.Add(positiveFragment.Key, new HashSet<string>());
+                foreach(string fragment in positiveFragment.Value) positiveFragments[positiveFragment.Key].Add(fragment);
             }
-            
-            foreach (KeyValuePair<String, ArrayList> item in copy.MS2Fragments)
+            foreach (KeyValuePair<string, HashSet<string>> negativeFragment in copy.negativeFragments)
             {
-                MS2Fragments.Add(item.Key, new ArrayList());
-                foreach (MS2Fragment fragment in item.Value)
-                {
-                    MS2Fragments[item.Key].Add(new MS2Fragment(fragment));
-                }
+                negativeFragments.Add(negativeFragment.Key, new HashSet<string>());
+                foreach(string fragment in negativeFragment.Value) negativeFragments[negativeFragment.Key].Add(fragment);
             }
             foreach (string headgroup in copy.headGroupNames)
             {
@@ -366,8 +396,7 @@ namespace LipidCreator
         public static void subtractAdduct(DataTable atomsCount, String adduct)
         {
             switch (adduct)
-            {
-                             
+            {            
                 case "+NH4":
                     atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 3;
                     atomsCount.Rows[(int)Molecules.N]["Count"] = (int)atomsCount.Rows[(int)Molecules.N]["Count"] - 1;
@@ -446,12 +475,23 @@ namespace LipidCreator
                     adducts[adductKey] = node.Value == "1";
                     break;
                     
-                case "MS2FragmentGroup":
-                    string fragmentKey = node.Attribute("name").Value.ToString();
-                    foreach (XElement fragment in node.Elements()){
-                        MS2Fragment ms2Fragment = new MS2Fragment();
-                        ms2Fragment.import(fragment, importVersion);
-                        MS2Fragments[fragmentKey].Add(ms2Fragment);
+                case "positiveFragments":
+                    string posLipidClass = node.Attribute("lipidClass").Value.ToString();
+                    if (!positiveFragments.ContainsKey(posLipidClass)) positiveFragments.Add(posLipidClass, new HashSet<string>());
+                    var posFragments = node.Descendants("fragments");
+                    foreach (var fragment in posFragments)
+                    {
+                        positiveFragments[posLipidClass].Add(fragment.Value.ToString());
+                    }
+                    break;
+                    
+                case "negativeFragments":
+                    string negLipidClass = node.Attribute("lipidClass").Value.ToString();
+                    if (!negativeFragments.ContainsKey(negLipidClass)) negativeFragments.Add(negLipidClass, new HashSet<string>());
+                    var negFragments = node.Descendants("fragments");
+                    foreach (var fragment in negFragments)
+                    {
+                        negativeFragments[negLipidClass].Add(fragment.Value.ToString());
                     }
                     break;
                     

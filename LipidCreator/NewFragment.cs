@@ -199,8 +199,17 @@ namespace LipidCreator
                 }
             }
             
-            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
-            ((ArrayList)ms2form.currentLipid.MS2Fragments[lipidClass]).Add(new MS2Fragment(textBoxFragmentName.Text, Convert.ToInt32(numericUpDownCharge.Value), null, true, elements, buildingBlocks[selectBaseCombobox.SelectedIndex], ""));
+            string lipidClass = ms2form.getHeadgroup();
+            int charge = Convert.ToInt32(numericUpDownCharge.Value);
+            ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, new MS2Fragment(textBoxFragmentName.Text, charge, null, true, elements, buildingBlocks[selectBaseCombobox.SelectedIndex], ""));
+            if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
+            {
+                ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);
+            }
+            else
+            {
+                ms2form.checkedListBoxNegativeFragments.Items.Add(textBoxFragmentName.Text);
+            }
             this.Close();
         }
         

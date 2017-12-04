@@ -38,23 +38,8 @@ namespace LipidCreator
     [Serializable]
     public class Mediator : Lipid
     { 
-        public Mediator(LipidCreator lipidCreator)
+        public Mediator(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Mediator)
         {
-            
-            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
-            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
-            
-            if (categoryToClass.ContainsKey((int)LipidCategory.Mediator))
-            {
-                foreach (String lipidClass in categoryToClass[(int)LipidCategory.Mediator])
-                {
-                    MS2Fragments.Add(lipidClass, new ArrayList());
-                    foreach (MS2Fragment fragment in allFragments[lipidClass])
-                    {
-                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
-                    }
-                }
-            }
         }
     
         public Mediator(Mediator copy) : base((Lipid)copy) 
@@ -129,8 +114,9 @@ namespace LipidCreator
 
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Mediator;
-                            precursorData.moleculeListName = headgroup.Replace("/", HEAVY_LABEL_SEPARATOR);
-                            precursorData.precursorName = key;
+                            precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
+                            precursorData.lipidClass = headgroup;
+                            precursorData.precursorName = key.Replace("/", HEAVY_LABEL_SEPARATOR);
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = "[M" + adduct.Key + "]";
                             precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
@@ -142,7 +128,7 @@ namespace LipidCreator
                             precursorData.fa3 = null;
                             precursorData.fa4 = null;
                             precursorData.lcb = null;
-                            precursorData.MS2Fragments = MS2Fragments[headgroup];
+                            precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
                         }

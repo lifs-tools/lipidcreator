@@ -42,26 +42,10 @@ namespace LipidCreator
         public FattyAcidGroup fag;
     
     
-        public Cholesterol(LipidCreator lipidCreator)
+        public Cholesterol(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Cholesterol)
         {
             fag = new FattyAcidGroup();
             containsEster = false;
-            
-            Dictionary<String, ArrayList> allFragments = lipidCreator.allFragments;
-            Dictionary<int, ArrayList> categoryToClass = lipidCreator.categoryToClass;
-            
-            if (categoryToClass.ContainsKey((int)LipidCategory.Cholesterol))
-            {
-                foreach (String lipidClass in categoryToClass[(int)LipidCategory.Cholesterol])
-                {
-                    MS2Fragments.Add(lipidClass, new ArrayList());
-                    foreach (MS2Fragment fragment in allFragments[lipidClass])
-                    {
-                        MS2Fragments[lipidClass].Add(new MS2Fragment(fragment));
-                    }
-                }
-            }
-            
             adducts["+NH4"] = true;
             adducts["-H"] = false;
         }
@@ -142,6 +126,7 @@ namespace LipidCreator
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Cholesterol;
                                 precursorData.moleculeListName = headgroup;
+                                precursorData.lipidClass = headgroup;
                                 precursorData.precursorName = key;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -154,7 +139,7 @@ namespace LipidCreator
                                 precursorData.fa3 = null;
                                 precursorData.fa4 = null;
                                 precursorData.lcb = null;
-                                precursorData.MS2Fragments = MS2Fragments[headgroup];
+                                precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
                                 
                                 precursorDataList.Add(precursorData);
                                         
@@ -181,6 +166,7 @@ namespace LipidCreator
                                         PrecursorData heavyPrecursorData = new PrecursorData();
                                         heavyPrecursorData.lipidCategory = LipidCategory.Cholesterol;
                                         heavyPrecursorData.moleculeListName = headgroup;
+                                        heavyPrecursorData.lipidClass = heavyHeadgroup;
                                         heavyPrecursorData.precursorName = heavyKey;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                         heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -193,7 +179,7 @@ namespace LipidCreator
                                         heavyPrecursorData.fa3 = null;
                                         heavyPrecursorData.fa4 = null;
                                         heavyPrecursorData.lcb = null;
-                                        heavyPrecursorData.MS2Fragments = MS2Fragments[heavyHeadgroup];
+                                        heavyPrecursorData.fragmentNames = (heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup];
                                         
                                         precursorDataList.Add(heavyPrecursorData);
                                     }
@@ -225,6 +211,7 @@ namespace LipidCreator
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Cholesterol;
                             precursorData.moleculeListName = headgroup;
+                            precursorData.lipidClass = headgroup;
                             precursorData.precursorName = key;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -237,7 +224,7 @@ namespace LipidCreator
                             precursorData.fa3 = null;
                             precursorData.fa4 = null;
                             precursorData.lcb = null;
-                            precursorData.MS2Fragments = MS2Fragments[headgroup];
+                            precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
                             
                             precursorDataList.Add(precursorData);
                                         
@@ -260,6 +247,7 @@ namespace LipidCreator
                                     PrecursorData heavyPrecursorData = new PrecursorData();
                                     heavyPrecursorData.lipidCategory = LipidCategory.Cholesterol;
                                     heavyPrecursorData.moleculeListName = headgroup;
+                                    heavyPrecursorData.lipidClass = heavyHeadgroup;
                                     heavyPrecursorData.precursorName = heavyKey;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
@@ -272,7 +260,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fa3 = null;
                                     heavyPrecursorData.fa4 = null;
                                     heavyPrecursorData.lcb = null;
-                                    heavyPrecursorData.MS2Fragments = MS2Fragments[heavyHeadgroup];
+                                    heavyPrecursorData.fragmentNames = (heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup];
                                     
                                     precursorDataList.Add(heavyPrecursorData);
                                 }

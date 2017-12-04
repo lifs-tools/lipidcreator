@@ -86,10 +86,10 @@ namespace LipidCreator
             senderInterupt = true;
             string headgroup = ((ListBox)sender).SelectedItem.ToString();
             checkedListBoxMonoIsotopicFragments.Items.Clear();
-            foreach (MS2Fragment currentFragment in currentLipid.MS2Fragments[headgroup])
+            foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[headgroup][false])
             {
-                checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.fragmentName);
-                checkedListBoxMonoIsotopicFragments.SetItemChecked(checkedListBoxMonoIsotopicFragments.Items.Count - 1, currentFragment.fragmentSelected);
+                checkedListBoxMonoIsotopicFragments.Items.Add(currentFragment.Key);
+                checkedListBoxMonoIsotopicFragments.SetItemChecked(checkedListBoxMonoIsotopicFragments.Items.Count - 1, currentLipid.negativeFragments[headgroup].Contains(currentFragment.Key));
             }
             
             deuteratedMediatorHeadgroups.Items.Clear();
@@ -116,10 +116,10 @@ namespace LipidCreator
         void deuteratedCheckBoxValueChanged(object sender, EventArgs e)
         {
             string headgroup = deuteratedMediatorHeadgroups.Items[((ComboBox)sender).SelectedIndex].ToString();
-            foreach (MS2Fragment currentFragment in currentLipid.MS2Fragments[headgroup])
+            foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[headgroup][false])
             {
-                checkedListBoxDeuteratedFragments.Items.Add(currentFragment.fragmentName);
-                checkedListBoxDeuteratedFragments.SetItemChecked(checkedListBoxDeuteratedFragments.Items.Count - 1, currentFragment.fragmentSelected);
+                checkedListBoxDeuteratedFragments.Items.Add(currentFragment.Key);
+                checkedListBoxDeuteratedFragments.SetItemChecked(checkedListBoxDeuteratedFragments.Items.Count - 1, currentLipid.negativeFragments[headgroup].Contains(currentFragment.Key));
             }
         }
         
@@ -128,7 +128,15 @@ namespace LipidCreator
         {
             if (senderInterupt) return;
             string headgroup = medHgListbox.SelectedItem.ToString();
-            ((MS2Fragment)currentLipid.MS2Fragments[headgroup][e.Index]).fragmentSelected = (e.NewValue == CheckState.Checked);
+            string fragmentName = (string)checkedListBoxMonoIsotopicFragments.Items[e.Index];
+            if (e.NewValue == CheckState.Checked)
+            {
+                currentLipid.negativeFragments[headgroup].Add(fragmentName);
+            }
+            else
+            {
+                currentLipid.negativeFragments[headgroup].Remove(fragmentName);
+            }
         }
         
         
@@ -137,7 +145,15 @@ namespace LipidCreator
             if (senderInterupt) return;
             if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
             string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
-            ((MS2Fragment)currentLipid.MS2Fragments[headgroup][e.Index]).fragmentSelected = (e.NewValue == CheckState.Checked);
+            string fragmentName = (string)checkedListBoxDeuteratedFragments.Items[e.Index];
+            if (e.NewValue == CheckState.Checked)
+            {
+                currentLipid.negativeFragments[headgroup].Add(fragmentName);
+            }
+            else
+            {
+                currentLipid.negativeFragments[headgroup].Remove(fragmentName);
+            }
         }
         
         
@@ -198,10 +214,13 @@ namespace LipidCreator
         void selectUnselect(CheckedListBox clb, string headgroup, bool select)
         {
             senderInterupt = true;
-            ArrayList currentFragments = currentLipid.MS2Fragments[headgroup];
-            for (int i = 0; i < currentFragments.Count; ++i)
+            currentLipid.negativeFragments[headgroup].Clear();
+            if (select)
             {
-                ((MS2Fragment)currentFragments[i]).fragmentSelected = select;  
+                foreach (KeyValuePair<string, MS2Fragment> ms2fragment in creatorGUI.lipidCreator.allFragments[headgroup][false])
+                {
+                    currentLipid.negativeFragments[headgroup].Add(ms2fragment.Key);
+                }
             }
             for (int i = 0; i < clb.Items.Count; ++i)
             {

@@ -344,7 +344,7 @@ namespace LipidCreator
                 {
                     xml += "<fragment>" + fragment + "</fragment>\n";
                 }
-                xml += "</positiveFragment>\n";
+                xml += "</positiveFragments>\n";
             }
             
             foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)

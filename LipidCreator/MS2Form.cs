@@ -276,18 +276,15 @@ namespace LipidCreator
             checkedListBoxPositiveFragments.Items.Clear();
             checkedListBoxNegativeFragments.Items.Clear();
             
+            foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[lipidClass][true])
+            {
+                checkedListBoxPositiveFragments.Items.Add(currentFragment.Value.fragmentName);
+                checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, currentLipid.positiveFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
+            }
             foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[lipidClass][false])
             {
-                if (currentFragment.Value.fragmentCharge > 0)
-                {
-                    checkedListBoxPositiveFragments.Items.Add(currentFragment.Value.fragmentName);
-                    checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, currentLipid.positiveFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
-                }
-                else 
-                {
-                    checkedListBoxNegativeFragments.Items.Add(currentFragment.Value.fragmentName);
-                    checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, currentLipid.negativeFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
-                }
+                checkedListBoxNegativeFragments.Items.Add(currentFragment.Value.fragmentName);
+                checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, currentLipid.negativeFragments[lipidClass].Contains(currentFragment.Value.fragmentName));
             }
             
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) && creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage.Length > 0)
@@ -310,6 +307,7 @@ namespace LipidCreator
             }
             
         }
+        
 
         public void tabChange(int index)
         {

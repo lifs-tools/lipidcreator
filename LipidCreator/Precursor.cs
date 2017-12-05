@@ -120,15 +120,15 @@ namespace LipidCreator
                         var dataTables = child.Descendants("DataTable");
                         foreach ( var dataTable in dataTables)
                         {
-                            DataTable elements = MS2Fragment.createEmptyElementTable();
+                            DataTable fattyElements = MS2Fragment.createEmptyElementTable();
                             foreach(XElement row in dataTable.Elements())
                             {
                                 if (row.Name.ToString().Equals("Elements"))
                                 {
-                                    elements.Rows[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]]["Count"] = row.Value.ToString();
+                                    fattyElements.Rows[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]]["Count"] = row.Value.ToString();
                                 }
                             }
-                            userDefinedFattyAcids.Add(elements);
+                            userDefinedFattyAcids.Add(fattyElements);
                         }
                         break;
                         

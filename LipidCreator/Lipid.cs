@@ -424,27 +424,33 @@ namespace LipidCreator
             xml += "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
             foreach (KeyValuePair<String, bool> item in adducts)
             {
-                xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
+                if (item.Value) xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
             }
             
             foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
             {
-                xml += "<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n";
-                foreach (string fragment in positiveFragment.Value)
+                if (positiveFragment.Value.Count > 0)
                 {
-                    xml += "<fragment>" + fragment + "</fragment>\n";
+                    xml += "<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n";
+                    foreach (string fragment in positiveFragment.Value)
+                    {
+                        xml += "<fragment>" + fragment + "</fragment>\n";
+                    }
+                    xml += "</positiveFragments>\n";
                 }
-                xml += "</positiveFragments>\n";
             }
             
             foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)
             {
-                xml += "<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n";
-                foreach (string fragment in negativeFragment.Value)
+                if (negativeFragment.Value.Count > 0)
                 {
-                    xml += "<fragment>" + fragment + "</fragment>\n";
+                    xml += "<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n";
+                    foreach (string fragment in negativeFragment.Value)
+                    {
+                        xml += "<fragment>" + fragment + "</fragment>\n";
+                    }
+                    xml += "</negativeFragments>\n";
                 }
-                xml += "</negativeFragments>\n";
             }
             return xml;
         }
@@ -550,6 +556,8 @@ namespace LipidCreator
         
         public virtual void import(XElement node, string importVersion)
         {
+            foreach (KeyValuePair<string, bool> adduct in adducts) adducts[adduct.Key] = false;
+            
             switch (node.Name.ToString())
             {
                 case "className":

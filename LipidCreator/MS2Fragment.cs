@@ -118,6 +118,14 @@ namespace LipidCreator
             {(int)Molecules.N, (int)Molecules.N15},
         };
         
+        public static Dictionary<int, int> LIGHT_ORIGIN = new Dictionary<int, int>()
+        {
+            {(int)Molecules.C13, (int)Molecules.C},
+            {(int)Molecules.H2, (int)Molecules.H},
+            {(int)Molecules.O17, (int)Molecules.O},
+            {(int)Molecules.N15, (int)Molecules.N},
+        };
+        
         
         public static Dictionary<int, int> createEmptyElementDict()
         {
@@ -214,7 +222,7 @@ namespace LipidCreator
     
         public static void addCounts(Dictionary<int, int> counts1, Dictionary<int, int> counts2)
         {
-            foreach (KeyValuePair<int, int> kvp in counts1) counts1[kvp.Key] += kvp.Value;
+            foreach (KeyValuePair<int, int> kvp in counts2) counts1[kvp.Key] += kvp.Value;
         }
         
         
@@ -304,7 +312,7 @@ namespace LipidCreator
         
         
         
-        public DataTable createFilledElementTable()
+        public static DataTable createFilledElementTable(Dictionary<int, int> fragmentElements)
         {
             DataTable elements = createEmptyElementTable();
             foreach(KeyValuePair<int, int> kvp in fragmentElements)

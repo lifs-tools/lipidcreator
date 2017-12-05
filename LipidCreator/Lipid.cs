@@ -148,7 +148,6 @@ namespace LipidCreator
                     {
                         string fragName = fragment.fragmentName;
                         Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
-                        /*
                         foreach (string fbase in fragment.fragmentBase)
                         {
                             switch(fbase)
@@ -184,13 +183,12 @@ namespace LipidCreator
                         
                         string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                         getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
-                        */
                         double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                         
                         
                         
                         //double massFragment = 10;
-                        string chemFormFragment = "foo"; 
+                        //string chemFormFragment = "foo"; 
                         
                         
                         // Exceptions for mediators

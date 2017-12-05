@@ -80,7 +80,7 @@ namespace LipidCreator
             
             
             comboBox2.Items.Add("Head group");
-            buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable(precursor.elements));
+            buildingBlockDataTables.Add(MS2Fragment.createFilledElementTable(precursor.elements));
                     
             switch(precursor.buildingBlockType)
             {
@@ -182,7 +182,7 @@ namespace LipidCreator
                     string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                     Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                     
-                    int orig = Convert.ToInt32(precursor.elements.Rows[e.RowIndex - 1][0]);
+                    int orig = precursor.elements[MS2Fragment.LIGHT_ORIGIN[e.RowIndex]];
                     int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
                     if (n < 0) n = 0;
                     if (n > orig) n = orig;
@@ -227,7 +227,7 @@ namespace LipidCreator
                 
                 
                 Precursor heavyPrecursor = new Precursor();
-                heavyPrecursor.elements = MS2Fragment.createEmptyElementTable((DataTable)buildingBlockDataTables[0]);
+                heavyPrecursor.elements = MS2Fragment.createFilledElementDict((DataTable)buildingBlockDataTables[0]);
                 heavyPrecursor.name = name;
                 heavyPrecursor.category = precursor.category;
                 heavyPrecursor.pathToImage = precursor.pathToImage;
@@ -242,7 +242,7 @@ namespace LipidCreator
                 heavyPrecursor.userDefinedFattyAcids = new ArrayList();
                 for (int i = 1; i < buildingBlockDataTables.Count; ++i)
                 {
-                    heavyPrecursor.userDefinedFattyAcids.Add(buildingBlockDataTables[i]);
+                    heavyPrecursor.userDefinedFattyAcids.Add(MS2Fragment.createFilledElementDict((DataTable)buildingBlockDataTables[i]));
                 }
                 creatorGUI.lipidCreator.headgroups.Add(name, heavyPrecursor);
                 precursor.heavyLabeledPrecursors.Add(heavyPrecursor);

@@ -199,7 +199,7 @@ namespace LipidCreator
                                         {
                                             usedKeys.Add(key);
                                             
-                                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                            Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                             MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                             MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                             MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
@@ -243,10 +243,10 @@ namespace LipidCreator
                                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
                                                     FattyAcid heavyFA3 = new FattyAcid(fa3);
                                                     FattyAcid heavyFA4 = new FattyAcid(fa4);
-                                                    heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);
-                                                    heavyFA2.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[1]);
-                                                    heavyFA3.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[2]);
-                                                    if (headgroup.Equals("CL")) heavyFA4.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[3]);
+                                                    heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
+                                                    heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
+                                                    heavyFA3.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[2]);
+                                                    if (headgroup.Equals("CL")) heavyFA4.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[3]);
                                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                                     heavySortedAcids.Add(heavyFA1);
                                                     heavySortedAcids.Add(heavyFA2);
@@ -254,7 +254,7 @@ namespace LipidCreator
                                                     heavySortedAcids.Add(heavyFA4);
                                                     heavySortedAcids.Sort();
                                         
-                                                    DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
+                                                    Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
                                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA3.atomsCount);
@@ -360,7 +360,7 @@ namespace LipidCreator
                                     {
                                         usedKeys.Add(key);
                                         
-                                        DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                        Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                         MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                         MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
@@ -400,14 +400,14 @@ namespace LipidCreator
                                             
                                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
                                                 FattyAcid heavyFA2 = new FattyAcid(fa2);
-                                                heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);
-                                                heavyFA2.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[1]);
+                                                heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
+                                                heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
                                                 List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                                 heavySortedAcids.Add(heavyFA1);
                                                 heavySortedAcids.Add(heavyFA2);
                                                 heavySortedAcids.Sort();
                                     
-                                                DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
+                                                Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                                 MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                                                 MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
                                                 MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);

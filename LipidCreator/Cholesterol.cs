@@ -116,7 +116,7 @@ namespace LipidCreator
                             {
                                 usedKeys.Add(key);
                                 
-                                DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                                Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                 String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
@@ -153,9 +153,9 @@ namespace LipidCreator
                                         string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                         
                                         FattyAcid heavyFA1 = new FattyAcid(fa);
-                                        heavyFA1.updateForHeavyLabeled((DataTable)heavyPrecursor.userDefinedFattyAcids[0]);
+                                        heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
                             
-                                        DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
+                                        Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                         MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                         String heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
@@ -202,7 +202,7 @@ namespace LipidCreator
                         {
                             usedKeys.Add(key);
                             
-                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                            Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                             String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                             int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
@@ -237,7 +237,7 @@ namespace LipidCreator
                                     string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
                                     string heavyKey = key + "/" + suffix;
                         
-                                    DataTable heavyAtomsCount = MS2Fragment.createEmptyElementTable();
+                                    Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                     MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                     String heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
                                     int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);

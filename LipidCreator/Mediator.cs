@@ -105,7 +105,7 @@ namespace LipidCreator
                         {
                             usedKeys.Add(key);
                             
-                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
+                            Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                             String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                             int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);

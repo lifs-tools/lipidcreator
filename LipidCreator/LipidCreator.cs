@@ -35,8 +35,6 @@ using System.Linq;
 using System.Data.SQLite;
 using Ionic.Zlib;
 
-using System.Diagnostics;
-
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -146,8 +144,6 @@ namespace LipidCreator
             {
                 Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
-            
-            
             
             
             string headgroupsFile = (openedAsExternal ? prefixPath : "") + "data/headgroups.csv";
@@ -378,22 +374,17 @@ namespace LipidCreator
             precursorDataList.Clear();
             transitionList.Clear();
             
-            Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>> fragmentCache = new Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>>();
-            
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
             
-            Stopwatch stopwatch = Stopwatch.StartNew(); //creates and start the instance of Stopwatch
             // create fragment list            
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.computeFragmentData (transitionList, precursorData, allFragments, fragmentCache);
+                Lipid.computeFragmentData (transitionList, precursorData, allFragments);
             }
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
 
         

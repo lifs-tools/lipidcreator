@@ -119,7 +119,7 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>> fragmentCache)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
         {                    
             int reportedFragments = 0;
             foreach (string fragmentName in precursorData.fragmentNames)
@@ -134,92 +134,71 @@ namespace LipidCreator
                     lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
                     lipidRow[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
                     lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                    //check if fragment already in cache
-                    if (fragment.independent && fragmentCache.ContainsKey(precursorData.lipidClass) && fragmentCache[precursorData.lipidClass].ContainsKey(precursorData.precursorCharge >= 0) && fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0].ContainsKey(fragmentName))
+                    
+                    
+                    string fragName = fragment.fragmentName;
+                    Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
+                    foreach (string fbase in fragment.fragmentBase)
                     {
-                        FragmentCacheElement fce = fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
-                        lipidRow[LipidCreator.PRODUCT_NAME] = fragmentName;
-                        lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = fce.productNeutralFormula;
-                        lipidRow[LipidCreator.PRODUCT_ADDUCT] = fce.productAdduct;
-                        lipidRow[LipidCreator.PRODUCT_MZ] = fce.productMZ;
-                        lipidRow[LipidCreator.PRODUCT_CHARGE] = fce.productCharge;
-                    }
-                    else
-                    {
-                        string fragName = fragment.fragmentName;
-                        Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
-                        foreach (string fbase in fragment.fragmentBase)
+                        switch(fbase)
                         {
-                            switch(fbase)
-                            {
-                                case "LCB":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
-                                    break;
-                                case "FA":
-                                case "FA1":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                                    break;
-                                case "FA2":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
-                                    break;
-                                case "FA3":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
-                                    break;
-                                case "FA4":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
-                                    break;
-                                case "PRE":
-                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        // some exceptional if conditions
-                        if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
-                        {
-                            Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
-                        }
-                        
-                        string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                        getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
-                        double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
-                        
-                        
-                        
-                        //double massFragment = 10;
-                        //string chemFormFragment = "foo"; 
-                        
-                        
-                        // Exceptions for mediators
-                        if (precursorData.lipidCategory == LipidCategory.Mediator)
-                        {
-                            massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
-                            chemFormFragment = "";
-                            fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
-                        }
-                        
-                        
-                        string fragAdduct = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";
-                        double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                        string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
-                        
-                        lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
-                        lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
-                        lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
-                        lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
-                        lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
-                        
-                        // adding results into cache
-                        if (fragment.independent)
-                        {
-                            FragmentCacheElement fce = new FragmentCacheElement(chemFormFragment, fragAdduct, fragMZ, fragCharge);
-                            //FragmentCacheElement fce = new FragmentCacheElement("foo", "bar", 42, "+2");
-                            if (!fragmentCache.ContainsKey(precursorData.lipidClass)) fragmentCache.Add(precursorData.lipidClass, new Dictionary<bool, Dictionary<string, FragmentCacheElement>>());
-                            if (!fragmentCache[precursorData.lipidClass].ContainsKey(precursorData.precursorCharge >= 0)) fragmentCache[precursorData.lipidClass].Add(precursorData.precursorCharge >= 0, new Dictionary<string, FragmentCacheElement>());
-                            fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0].Add(fragName, fce);
+                            case "LCB":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                                break;
+                            case "FA":
+                            case "FA1":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                break;
+                            case "FA2":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                                break;
+                            case "FA3":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                break;
+                            case "FA4":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
+                                break;
+                            case "HG":
+                                MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                                break;
+                            default:
+                                break;
                         }
                     }
+                    // some exceptional if conditions
+                    if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                    {
+                        Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
+                    }
+                    
+                    string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                    getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
+                    double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                    
+                    
+                    
+                    
+                    // Exceptions for mediators
+                    if (precursorData.lipidCategory == LipidCategory.Mediator)
+                    {
+                        massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                        chemFormFragment = "";
+                        fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                    }
+                    if (fragName.IndexOf("[adduct]") > -1)
+                    {
+                        fragName = fragName.Replace("[adduct]", precursorData.precursorIonFormula.Replace("[M", "").Replace("]", ""));
+                    }
+                    
+                    string fragAdduct = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";
+                    double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                    string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                    
+                    lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
+                    lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
+                    lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
+                    lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
+                    lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                     
                     transitionList.Rows.Add(lipidRow);
                     ++reportedFragments;

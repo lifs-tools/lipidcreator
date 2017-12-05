@@ -122,7 +122,7 @@ namespace LipidCreator
                             precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                             precursorData.precursorCharge = charge;
                             precursorData.adduct = adduct.Key;
-                            precursorData.atomsCount = atomsCount;
+                            precursorData.atomsCount = headgroups[headgroup].elements;
                             precursorData.fa1 = null;
                             precursorData.fa2 = null;
                             precursorData.fa3 = null;

@@ -38,22 +38,6 @@ namespace LipidCreator
 {
     public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, N = 6, N15 = 7, P = 8, S = 9};
     
-    public class FragmentCacheElement
-    {
-        public string productNeutralFormula;
-        public string productAdduct;
-        public double productMZ;
-        public string productCharge;
-        
-        public FragmentCacheElement(string formula, string adduct, double MZ, string charge)
-        {
-            productNeutralFormula = formula;
-            productAdduct = adduct;
-            productMZ = MZ;
-            productCharge = charge;
-        }
-    }
-    
     [Serializable]
     public class MS2Fragment
     {

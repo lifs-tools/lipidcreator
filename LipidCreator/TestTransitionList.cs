@@ -68,7 +68,7 @@ namespace LipidCreator
                         
             try {
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
-                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1");
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H14O4NP	184.0733215	1");
                 PLLipid lpc = new PLLipid(lcf);
                 lpc.headGroupNames.Add("LPC"); // set PC
                 lpc.adducts["+H"] = true;   // set adduct
@@ -185,7 +185,7 @@ namespace LipidCreator
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1
-                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	P              O3P         78.95905447	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	P              HO3P         78.95905447	-1");
                 Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1");
                 Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1");
                 Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1");

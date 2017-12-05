@@ -32,13 +32,27 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Linq;
 
 namespace LipidCreator
 {
-
-
-
-    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, N = 6, N15 = 7, P = 8, S = 9, Na = 10};
+    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, N = 6, N15 = 7, P = 8, S = 9};
+    
+    public class FragmentCacheElement
+    {
+        public string productNeutralFormula;
+        public string productAdduct;
+        public double productMZ;
+        public string productCharge;
+        
+        public FragmentCacheElement(string formula, string adduct, double MZ, string charge)
+        {
+            productNeutralFormula = formula;
+            productAdduct = adduct;
+            productMZ = MZ;
+            productCharge = charge;
+        }
+    }
     
     [Serializable]
     public class MS2Fragment
@@ -47,26 +61,90 @@ namespace LipidCreator
         public int fragmentCharge;
         public String fragmentFile;
         public bool fragmentSelected;
-        public DataTable fragmentElements;
+        public Dictionary<int, int> fragmentElements;
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
         public double intensity;
         public bool userDefined;
+        public bool independent;
         public const double DEFAULT_INTENSITY = 100.0;
         public string CommentForSpectralLibrary { get { return fragmentFile; } }
-        public static Dictionary<String, int> ELEMENT_POSITIONS = new Dictionary<String, int>(){
+        public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
             {"C", (int)Molecules.C},
             {"H", (int)Molecules.H},
             {"O", (int)Molecules.O},
             {"N", (int)Molecules.N},
             {"P", (int)Molecules.P},
             {"S", (int)Molecules.S},
-            {"Na", (int)Molecules.Na},
             {"H'", (int)Molecules.H2},
             {"C'", (int)Molecules.C13},
             {"N'", (int)Molecules.N15},
             {"O'", (int)Molecules.O17}
         };
+        
+        
+        public static Dictionary<int, double> ELEMENT_MASSES = new Dictionary<int, double>(){
+            {(int)Molecules.C, 12.0},
+            {(int)Molecules.H, 1.007825035},
+            {(int)Molecules.O, 15.99491463},
+            {(int)Molecules.N, 14.003074},
+            {(int)Molecules.P, 30.973762},
+            {(int)Molecules.S, 31.9720707},
+            {(int)Molecules.H2, 2.014101779},
+            {(int)Molecules.C13, 13.0033548378},
+            {(int)Molecules.N15, 15.0001088984},
+            {(int)Molecules.O17, 16.9991315}
+        };
+        
+        
+        public static Dictionary<int, string> ELEMENT_SHORTCUTS = new Dictionary<int, string>(){
+            {(int)Molecules.C, "C"},
+            {(int)Molecules.H, "H"},
+            {(int)Molecules.O, "O"},
+            {(int)Molecules.N, "N"},
+            {(int)Molecules.P, "P"},
+            {(int)Molecules.S, "S"},
+            {(int)Molecules.H2, "H'"},
+            {(int)Molecules.C13, "C'"},
+            {(int)Molecules.N15, "N'"},
+            {(int)Molecules.O17, "O'"}
+        };
+        
+        public static Dictionary<int, int> HEAVY_DERIVATIVE = new Dictionary<int, int>()
+        {
+            {(int)Molecules.C, (int)Molecules.C13},
+            {(int)Molecules.H, (int)Molecules.H2},
+            {(int)Molecules.O, (int)Molecules.O17},
+            {(int)Molecules.N, (int)Molecules.N15},
+        };
+        
+        
+        public static Dictionary<int, int> createEmptyElementDict()
+        {
+            Dictionary<int, int> elements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, double> kvp in ELEMENT_MASSES) elements.Add(kvp.Key, 0);
+            return elements;
+        }
+        
+        
+        public static Dictionary<int, int> createFilledElementDict(DataTable dt)
+        {
+            Dictionary<int, int> elements = new Dictionary<int, int>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                elements.Add(ELEMENT_POSITIONS[(string)dr["Shortcut"]], Convert.ToInt32(dr["Count"]));
+            }
+            return elements;
+        }
+        
+        
+        public Dictionary<int, int> copyElementDict()
+        {
+            Dictionary<int, int> elements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, int> kvp in fragmentElements) elements.Add(kvp.Key, kvp.Value);
+            return elements;
+        }
+    
     
         public string serialize()
         {
@@ -76,6 +154,7 @@ namespace LipidCreator
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
             xml += " userDefined=\"" + userDefined + "\"";
+            xml += " independent=\"" + independent + "\"";
             xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
             foreach (string restriction in restrictions)
             {
@@ -85,9 +164,9 @@ namespace LipidCreator
             {
                 xml += "<fragmentBase>" + fbase + "</fragmentBase>\n";
             }
-            foreach (DataRow dr in fragmentElements.Rows)
+            foreach (KeyValuePair<int, int> kvp in fragmentElements)
             {
-                xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+                xml += "<Element type=\"" + ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
             }
             xml += "</MS2Fragment>\n";
             return xml;
@@ -105,6 +184,7 @@ namespace LipidCreator
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
             userDefined = node.Attribute("userDefined").Value.Equals("True");
+            independent = node.Attribute("independent").Value.Equals("True");
             fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
             
             
@@ -121,7 +201,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        fragmentElements.Rows[ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
+                        fragmentElements[ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     default:
@@ -129,12 +209,15 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
     
-        public static void addCounts(DataTable dt1, DataTable dt2)
+        public static void addCounts(Dictionary<int, int> counts1, Dictionary<int, int> counts2)
         {
-            String count = "Count";
-            for (int i = 0; i < dt1.Rows.Count; ++i) dt1.Rows[i][count] = (int)dt1.Rows[i][count] + (int)dt2.Rows[i][count];
+            foreach (KeyValuePair<int, int> kvp in counts1) counts1[kvp.Key] += kvp.Value;
         }
+        
+        
         
         public static DataTable createEmptyElementTable()
         {
@@ -152,17 +235,7 @@ namespace LipidCreator
 
             columnCount.DataType = System.Type.GetType("System.Int32");
             
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
-            elements.Rows.Add(elements.NewRow());
+            for (int i = 0; i < ELEMENT_POSITIONS.Count; ++i) elements.Rows.Add(elements.NewRow());
 
             elements.Rows[(int)Molecules.C][count] = "0";
             elements.Rows[(int)Molecules.C][shortcut] = "C";
@@ -213,16 +286,35 @@ namespace LipidCreator
             elements.Rows[(int)Molecules.S][shortcut] = "S";
             elements.Rows[(int)Molecules.S][element] = "sulfur";
             elements.Rows[(int)Molecules.S][monoMass] = 31.9720707;
-
-            elements.Rows[(int)Molecules.Na][count] = "0";
-            elements.Rows[(int)Molecules.Na][shortcut] = "Na";
-            elements.Rows[(int)Molecules.Na][element] = "sodium";
-            elements.Rows[(int)Molecules.Na][monoMass] = 22.9897677;
             
             columnShortcut.ReadOnly = true;
             columnElement.ReadOnly = true;
             return elements;
         }
+        
+        
+        
+        public void setElements(DataTable dt)
+        {
+            foreach (DataRow dr in dt.Rows)
+            {
+                fragmentElements[ELEMENT_POSITIONS[(string)dr["Shortcut"]]] = Convert.ToInt32(dr["Count"]);
+            }
+        }
+        
+        
+        
+        public DataTable createFilledElementTable()
+        {
+            DataTable elements = createEmptyElementTable();
+            foreach(KeyValuePair<int, int> kvp in fragmentElements)
+            {
+                elements.Rows[kvp.Key]["Count"] = kvp.Value;
+            }
+            return elements;
+        }
+        
+        
         
         public static DataTable createEmptyElementTable(DataTable copy)
         {
@@ -240,6 +332,8 @@ namespace LipidCreator
             }
             return elements;
         }
+        
+        
     
         public MS2Fragment()
         {
@@ -247,12 +341,16 @@ namespace LipidCreator
             fragmentCharge = -1;
             fragmentFile = "-";
             fragmentSelected = true;
-            fragmentElements = createEmptyElementTable();
+            fragmentElements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
+            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
+        
+        
 
         public MS2Fragment(String name, String fileName)
         {
@@ -260,10 +358,12 @@ namespace LipidCreator
             fragmentCharge = -1;
             fragmentFile = fileName;
             fragmentSelected = true;
-            fragmentElements = createEmptyElementTable();
+            fragmentElements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
+            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
 
@@ -274,14 +374,18 @@ namespace LipidCreator
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentSelected = true;
-            fragmentElements = createEmptyElementTable();
+            fragmentElements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
+            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
         
-        public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions)
+        
+        
+        public MS2Fragment(String name, int charge, String fileName, bool selected, Dictionary<int, int> dataElements, String baseForms, String restrictions)
         {
             fragmentName = name;
             fragmentCharge = charge;
@@ -291,11 +395,14 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
+            independent = false;
             intensity = DEFAULT_INTENSITY;
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
         
-        public MS2Fragment(String name, int charge, String fileName, bool selected, DataTable dataElements, String baseForms, String restrictions, double intens)
+        
+        
+        public MS2Fragment(String name, int charge, String fileName, bool selected, Dictionary<int, int> dataElements, String baseForms, String restrictions, double intens)
         {
             fragmentName = name;
             fragmentCharge = charge;
@@ -305,19 +412,24 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
+            independent = false;
             intensity = Math.Min(DEFAULT_INTENSITY, Math.Max(0, intens));
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
 
+        
+        
         public MS2Fragment(MS2Fragment copy)
         {
             fragmentName = copy.fragmentName;
             fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
             fragmentSelected = copy.fragmentSelected;
-            fragmentElements = createEmptyElementTable(copy.fragmentElements);
+            fragmentElements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
+            independent = copy.independent;
             restrictions = new HashSet<string>();
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
             foreach (string restriction in copy.restrictions) restrictions.Add(restriction);

@@ -37,7 +37,7 @@ namespace LipidCreator
         public int db;
         public int hydroxyl;
         public string suffix;
-        public DataTable atomsCount;
+        public Dictionary<int, int> atomsCount;
         
         public FattyAcid(int l, int db, int hydro){
         
@@ -48,26 +48,26 @@ namespace LipidCreator
             length = l;
             this.db = db;
             hydroxyl = hydro;
-            atomsCount = MS2Fragment.createEmptyElementTable();
+            atomsCount = MS2Fragment.createEmptyElementDict();
             if (!isLCB)
             {
                 this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
                 if (length > 0 || db > 0)
                 {
-                    atomsCount.Rows[(int)Molecules.C]["Count"] = length; // C
+                    atomsCount[(int)Molecules.C] = length; // C
                     switch(this.suffix)
                     {
                         case "":
-                            atomsCount.Rows[(int)Molecules.H]["Count"] = 2 * length - 1 - 2 * db; // H
-                            atomsCount.Rows[(int)Molecules.O]["Count"] = 1 + hydroxyl; // O
+                            atomsCount[(int)Molecules.H] = 2 * length - 1 - 2 * db; // H
+                            atomsCount[(int)Molecules.O] = 1 + hydroxyl; // O
                             break;
                         case "p":
-                            atomsCount.Rows[(int)Molecules.H]["Count"] = 2 * length - 1 - 2 * db + 2; // H
-                            atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
+                            atomsCount[(int)Molecules.H] = 2 * length - 1 - 2 * db + 2; // H
+                            atomsCount[(int)Molecules.O] = hydroxyl; // O
                             break;
                         case "e":
-                            atomsCount.Rows[(int)Molecules.H]["Count"] = (length + 1) * 2 - 1 - 2 * db; // H
-                            atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
+                            atomsCount[(int)Molecules.H] = (length + 1) * 2 - 1 - 2 * db; // H
+                            atomsCount[(int)Molecules.O] = hydroxyl; // O
                             break;
                     }
                 }
@@ -76,10 +76,10 @@ namespace LipidCreator
             {
                 // long chain base
                 this.suffix = "";
-                atomsCount.Rows[(int)Molecules.C]["Count"] = length; // C
-                atomsCount.Rows[(int)Molecules.H]["Count"] = (2 * (length - db) + 1); // H
-                atomsCount.Rows[(int)Molecules.O]["Count"] = hydroxyl; // O
-                atomsCount.Rows[(int)Molecules.N]["Count"] = 1; // N
+                atomsCount[(int)Molecules.C] = length; // C
+                atomsCount[(int)Molecules.H] = (2 * (length - db) + 1); // H
+                atomsCount[(int)Molecules.O] = hydroxyl; // O
+                atomsCount[(int)Molecules.N] = 1; // N
             }
         }
         
@@ -89,21 +89,22 @@ namespace LipidCreator
             db = copy.db;
             hydroxyl = copy.hydroxyl;
             suffix = copy.suffix;
-            atomsCount = MS2Fragment.createEmptyElementTable(copy.atomsCount);
+            atomsCount = MS2Fragment.createEmptyElementDict();
+            foreach (KeyValuePair<int, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
         }
         
         
-        public void updateForHeavyLabeled(DataTable heavyAtomsCount)
+        public void updateForHeavyLabeled(Dictionary<int, int> heavyAtomsCount)
         {
-            for (int i = 0; i < atomsCount.Rows.Count; ++i)
-            {   
-                int c = (int)atomsCount.Rows[i]["Count"] + (int)heavyAtomsCount.Rows[i]["Count"];
+            foreach (KeyValuePair<int, int> row in heavyAtomsCount)
+            {
+                int c = atomsCount[row.Key] + row.Value;
                 if (c < 0)
                 {
-                    atomsCount.Rows[i + 1]["Count"] = (int)atomsCount.Rows[i + 1]["Count"] + c;
+                    atomsCount[MS2Fragment.HEAVY_DERIVATIVE[row.Key]] += c;
                     c = 0;
                 }
-                atomsCount.Rows[i]["Count"] = c;
+                atomsCount[row.Key] = c;
             }
         }
         

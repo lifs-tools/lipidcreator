@@ -166,7 +166,6 @@ namespace LipidCreator
             dataGridView1.Rows[(int)Molecules.N].ReadOnly = true;
             dataGridView1.Rows[(int)Molecules.P].ReadOnly = true;
             dataGridView1.Rows[(int)Molecules.S].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.Na].ReadOnly = true;
             dataGridView1.Update();
             dataGridView1.Refresh();
         }

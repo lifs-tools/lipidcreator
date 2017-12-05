@@ -184,12 +184,12 @@ namespace LipidCreator
                     }
                 }
                 
-                foreach (DataRow row in fragment.fragmentElements.Rows)
+                foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (Convert.ToInt32(row["Count"]) != 0)
+                    if (row.Value != 0)
                     {
-                        chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
-                        chemAdding = Convert.ToInt32(row["Count"]) > 0;
+                        chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                        chemAdding = row.Value > 0;
                     }
                 }
                 if (baseName.Length > 0 && chemForm.Length > 0)
@@ -239,12 +239,12 @@ namespace LipidCreator
                     }
                 }
                 
-                foreach (DataRow row in fragment.fragmentElements.Rows)
+                foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (Convert.ToInt32(row["Count"]) != 0)
+                    if (row.Value != 0)
                     {
-                        chemForm += Convert.ToString(row["Shortcut"]) + Convert.ToString(Math.Abs(Convert.ToInt32(row["Count"])));
-                        chemAdding = Convert.ToInt32(row["Count"]) > 0;
+                        chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                        chemAdding = row.Value > 0;
                     }
                 }
                 if (baseName.Length > 0 && chemForm.Length > 0)

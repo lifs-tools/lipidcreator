@@ -35,6 +35,8 @@ using System.Linq;
 using System.Data.SQLite;
 using Ionic.Zlib;
 
+using System.Diagnostics;
+
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -108,14 +110,13 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(false, new Dictionary<string, MS2Fragment>());
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
-                            DataTable atomsCount = MS2Fragment.createEmptyElementTable();
-                            atomsCount.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[5]);
-                            atomsCount.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[6]) - Convert.ToInt32(tokens[3]);
-                            atomsCount.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[7]);
-                            atomsCount.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[8]);
-                            atomsCount.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[9]);
-                            atomsCount.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[10]);
-                            atomsCount.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[11]);
+                            Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                            atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[6]);
+                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[7]) - Convert.ToInt32(tokens[3]);
+                            atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[8]);
+                            atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[9]);
+                            atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[10]);
+                            atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[11]);
                             string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[2];
                             if (tokens[2] != "%" && !File.Exists(fragmentFile))
                             {
@@ -123,7 +124,7 @@ namespace LipidCreator
                             }
                             
                             int charge = Convert.ToInt32(tokens[3]);
-                            if (tokens[14].Length > 0)
+                            if (tokens[13].Length > 0)
                             {
                                 allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[12], Convert.ToDouble(tokens[13])));
                             }
@@ -131,6 +132,7 @@ namespace LipidCreator
                             {
                                 allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[12]));
                             }
+                            allFragments[tokens[0]][charge >= 0][tokens[1]].independent = tokens[5].Equals("Yes");
                         }
                     }
                 }
@@ -165,7 +167,7 @@ namespace LipidCreator
                             
                             string[] tokens = parseLine(line);
                             //String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
-                            if (tokens.Length != 21) throw new Exception("invalid line in file");
+                            if (tokens.Length != 20) throw new Exception("invalid line in file, number of columns in line != 20");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -194,30 +196,29 @@ namespace LipidCreator
                             
                             
                             headgroup.name = tokens[1];
-                            headgroup.elements.Rows[(int)Molecules.C]["Count"] = Convert.ToInt32(tokens[2]); // carbon
-                            headgroup.elements.Rows[(int)Molecules.H]["Count"] = Convert.ToInt32(tokens[3]); // hydrogen
-                            headgroup.elements.Rows[(int)Molecules.H2]["Count"] = Convert.ToInt32(tokens[9]); // hydrogen 2
-                            headgroup.elements.Rows[(int)Molecules.O]["Count"] = Convert.ToInt32(tokens[4]); // oxygen
-                            headgroup.elements.Rows[(int)Molecules.N]["Count"] = Convert.ToInt32(tokens[5]); // nytrogen
-                            headgroup.elements.Rows[(int)Molecules.P]["Count"] = Convert.ToInt32(tokens[6]); // phosphor
-                            headgroup.elements.Rows[(int)Molecules.S]["Count"] = Convert.ToInt32(tokens[7]); // sulfor
-                            headgroup.elements.Rows[(int)Molecules.Na]["Count"] = Convert.ToInt32(tokens[8]); // sodium
-                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[10];
+                            headgroup.elements[(int)Molecules.C] = Convert.ToInt32(tokens[2]); // carbon
+                            headgroup.elements[(int)Molecules.H] = Convert.ToInt32(tokens[3]); // hydrogen
+                            headgroup.elements[(int)Molecules.H2] = Convert.ToInt32(tokens[8]); // hydrogen 2
+                            headgroup.elements[(int)Molecules.O] = Convert.ToInt32(tokens[4]); // oxygen
+                            headgroup.elements[(int)Molecules.N] = Convert.ToInt32(tokens[5]); // nytrogen
+                            headgroup.elements[(int)Molecules.P] = Convert.ToInt32(tokens[6]); // phosphor
+                            headgroup.elements[(int)Molecules.S] = Convert.ToInt32(tokens[7]); // sulfor
+                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[9];
                             if (!File.Exists(precursorFile))
                             {
                                 throw new Exception("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
                             }
                             headgroup.pathToImage = precursorFile;
-                            headgroup.adductRestrictions.Add("+H", tokens[11].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+2H", tokens[12].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+NH4", tokens[13].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-H", tokens[14].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-2H", tokens[15].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+HCOO", tokens[16].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+CH3COO", tokens[17].Equals("Yes"));
-                            headgroup.buildingBlockType = Convert.ToInt32(tokens[18]);
-                            headgroup.derivative = tokens[19].Equals("Yes");
-                            headgroup.heavyLabeled = tokens[20].Equals("Yes");
+                            headgroup.adductRestrictions.Add("+H", tokens[10].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+2H", tokens[11].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+NH4", tokens[12].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-H", tokens[13].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-2H", tokens[14].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[17]);
+                            headgroup.derivative = tokens[18].Equals("Yes");
+                            headgroup.heavyLabeled = tokens[19].Equals("Yes");
                             
                             if (headgroup.heavyLabeled)
                             {
@@ -269,6 +270,8 @@ namespace LipidCreator
             readInputFiles();
         }
         
+        
+        
         public string[] parseLine(string line)
         {
             List<string> listTokens = new List<string>();
@@ -296,6 +299,8 @@ namespace LipidCreator
         }
 
 
+        
+        
         // obType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
         public HashSet<int> parseRange(String text, int lower, int upper, int obType = 0)
         {
@@ -365,11 +370,15 @@ namespace LipidCreator
         }
 
         
+        
+        
         public void assembleLipids()
         {
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
             transitionList.Clear();
+            
+            Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>> fragmentCache = new Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>>();
             
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
@@ -377,35 +386,48 @@ namespace LipidCreator
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
             
+            Stopwatch stopwatch = Stopwatch.StartNew(); //creates and start the instance of Stopwatch
             // create fragment list            
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                Lipid.computeFragmentData (transitionList, precursorData, allFragments, fragmentCache);
             }
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
 
-        public static String computeChemicalFormula(DataTable elements)
+        
+        
+        
+        public static String computeChemicalFormula(Dictionary<int, int> elements)
         {
             String chemForm = "";
-            foreach (DataRow row in elements.Rows)
+            foreach (KeyValuePair<int, int> row in elements)
             {
-                if (Convert.ToInt32(row["Count"]) > 0)
+                if (row.Value > 0)
                 {
-                    chemForm += Convert.ToString(row["Shortcut"]) + (((int)row["Count"] > 1) ? Convert.ToString(row["Count"]) : "");
+                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + ((row.Value > 1) ? Convert.ToString(row.Value) : "");
                 }
             }
             return chemForm;
         }
 
-        public static double computeMass(DataTable elements, double charge)
+        
+        
+        
+        public static double computeMass(Dictionary<int, int> elements, double charge)
         {
             double mass = 0;
-            foreach (DataRow row in elements.Rows)
+            foreach (KeyValuePair<int, int> row in elements)
             {
-                mass += Convert.ToDouble(row["Count"]) * Convert.ToDouble(row["mass"]);
+                mass += row.Value * MS2Fragment.ELEMENT_MASSES[row.Key];
             }
             return mass - charge * 0.00054857990946;
         }
+        
+        
+        
+        
         
         public void sendToSkyline(DataTable dt, string blibName, string blibFile)
         {
@@ -458,6 +480,7 @@ namespace LipidCreator
         }
         
         
+        
         public string serialize()
         {
             ArrayList userDefined = new ArrayList();
@@ -494,6 +517,8 @@ namespace LipidCreator
             xml += "</LipidCreator>\n";
             return xml;
         }
+        
+        
         
         public void import(XDocument doc)
         {

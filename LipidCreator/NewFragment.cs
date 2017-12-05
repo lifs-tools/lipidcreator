@@ -201,7 +201,7 @@ namespace LipidCreator
             
             string lipidClass = ms2form.getHeadgroup();
             int charge = Convert.ToInt32(numericUpDownCharge.Value);
-            ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, new MS2Fragment(textBoxFragmentName.Text, charge, null, true, elements, buildingBlocks[selectBaseCombobox.SelectedIndex], ""));
+            ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, new MS2Fragment(textBoxFragmentName.Text, charge, null, true, MS2Fragment.createFilledElementDict(elements), buildingBlocks[selectBaseCombobox.SelectedIndex], ""));
             if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
             {
                 ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);

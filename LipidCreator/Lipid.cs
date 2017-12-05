@@ -54,7 +54,7 @@ namespace LipidCreator
         public double precursorM_Z;
         public int precursorCharge;
         public string adduct;
-        public DataTable atomsCount;
+        public Dictionary<int, int> atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
         public FattyAcid fa3;
@@ -119,62 +119,14 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, Dictionary<string, Dictionary<bool, Dictionary<string, FragmentCacheElement>>> fragmentCache)
         {                    
             int reportedFragments = 0;
             foreach (string fragmentName in precursorData.fragmentNames)
             {
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
-                //if (((precursorData.precursorCharge < 0 && fragment.fragmentCharge < 0) || (precursorData.precursorCharge > 0 && fragment.fragmentCharge > 0)) && (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct)))
                 if (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct))
                 {
-                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
-                    foreach (string fbase in fragment.fragmentBase)
-                    {
-                        switch(fbase)
-                        {
-                            case "LCB":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
-                                break;
-                            case "FA":
-                            case "FA1":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                                break;
-                            case "FA2":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
-                                break;
-                            case "FA3":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
-                                break;
-                            case "FA4":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
-                                break;
-                            case "PRE":
-                                MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    // some exceptional if conditions
-                    if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
-                    {
-                        Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
-                    }
-                    
-                    String chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                    getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
-                    double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
-                    string fragName = fragment.fragmentName;
-                    
-                    // Exceptions for mediators
-                    if (precursorData.lipidCategory == LipidCategory.Mediator)
-                    {
-                        massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
-                        chemFormFragment = "";
-                        fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
-                    }
-                    
                     DataRow lipidRow = transitionList.NewRow();
                     lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                     lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
@@ -182,13 +134,96 @@ namespace LipidCreator
                     lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
                     lipidRow[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
                     lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                    lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
-                    lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
-                    lipidRow[LipidCreator.PRODUCT_ADDUCT] = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";
-                    lipidRow[LipidCreator.PRODUCT_MZ] = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                    lipidRow[LipidCreator.PRODUCT_CHARGE] = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
-                    transitionList.Rows.Add(lipidRow);
+                    //check if fragment already in cache
+                    if (fragment.independent && fragmentCache.ContainsKey(precursorData.lipidClass) && fragmentCache[precursorData.lipidClass].ContainsKey(precursorData.precursorCharge >= 0) && fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0].ContainsKey(fragmentName))
+                    {
+                        FragmentCacheElement fce = fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
+                        lipidRow[LipidCreator.PRODUCT_NAME] = fragmentName;
+                        lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = fce.productNeutralFormula;
+                        lipidRow[LipidCreator.PRODUCT_ADDUCT] = fce.productAdduct;
+                        lipidRow[LipidCreator.PRODUCT_MZ] = fce.productMZ;
+                        lipidRow[LipidCreator.PRODUCT_CHARGE] = fce.productCharge;
+                    }
+                    else
+                    {
+                        string fragName = fragment.fragmentName;
+                        Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
+                        /*
+                        foreach (string fbase in fragment.fragmentBase)
+                        {
+                            switch(fbase)
+                            {
+                                case "LCB":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                                    break;
+                                case "FA":
+                                case "FA1":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                                    break;
+                                case "FA2":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                                    break;
+                                case "FA3":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                                    break;
+                                case "FA4":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
+                                    break;
+                                case "PRE":
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        // some exceptional if conditions
+                        if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
+                        {
+                            Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
+                        }
+                        
+                        string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                        getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
+                        */
+                        double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                        
+                        
+                        
+                        //double massFragment = 10;
+                        string chemFormFragment = "foo"; 
+                        
+                        
+                        // Exceptions for mediators
+                        if (precursorData.lipidCategory == LipidCategory.Mediator)
+                        {
+                            massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                            chemFormFragment = "";
+                            fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                        }
+                        
+                        
+                        string fragAdduct = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";
+                        double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
+                        string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                        
+                        lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
+                        lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
+                        lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
+                        lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
+                        lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
+                        
+                        // adding results into cache
+                        if (fragment.independent)
+                        {
+                            FragmentCacheElement fce = new FragmentCacheElement(chemFormFragment, fragAdduct, fragMZ, fragCharge);
+                            //FragmentCacheElement fce = new FragmentCacheElement("foo", "bar", 42, "+2");
+                            if (!fragmentCache.ContainsKey(precursorData.lipidClass)) fragmentCache.Add(precursorData.lipidClass, new Dictionary<bool, Dictionary<string, FragmentCacheElement>>());
+                            if (!fragmentCache[precursorData.lipidClass].ContainsKey(precursorData.precursorCharge >= 0)) fragmentCache[precursorData.lipidClass].Add(precursorData.precursorCharge >= 0, new Dictionary<string, FragmentCacheElement>());
+                            fragmentCache[precursorData.lipidClass][precursorData.precursorCharge >= 0].Add(fragName, fce);
+                        }
+                    }
                     
+                    transitionList.Rows.Add(lipidRow);
                     ++reportedFragments;
                 }
             }
@@ -210,6 +245,8 @@ namespace LipidCreator
                 transitionList.Rows.Add(lipidRowPrecursor);
             }
         }
+        
+        
         
         protected class PeakAnnotation
         {
@@ -347,7 +384,7 @@ namespace LipidCreator
                 MS2Fragment fragment = fragmentPair.Value;
                 if (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct))
                 {
-                    DataTable atomsCountFragment = MS2Fragment.createEmptyElementTable(fragment.fragmentElements);
+                    Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
                     foreach (string fbase in fragment.fragmentBase)
                     {
                         switch(fbase)
@@ -489,64 +526,64 @@ namespace LipidCreator
         
         
         
-        public static void subtractAdduct(DataTable atomsCount, String adduct)
+        public static void subtractAdduct(Dictionary<int, int> atomsCount, String adduct)
         {
             switch (adduct)
             {            
                 case "+NH4":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 3;
-                    atomsCount.Rows[(int)Molecules.N]["Count"] = (int)atomsCount.Rows[(int)Molecules.N]["Count"] - 1;
+                    atomsCount[(int)Molecules.H] -= 3;
+                    atomsCount[(int)Molecules.N] -= 1;
                     break;
                 case "+HCOO":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 2;
-                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] - 1;
-                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] - 2;
+                    atomsCount[(int)Molecules.H] -= 2;
+                    atomsCount[(int)Molecules.C] -= 1;
+                    atomsCount[(int)Molecules.O] -= 2;
                     break;
                 case "+CH3COO":
-                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] - 2;
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 4;
-                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] - 2;
+                    atomsCount[(int)Molecules.C] -= 2;
+                    atomsCount[(int)Molecules.H] -= 4;
+                    atomsCount[(int)Molecules.O] -= 2;
                     break;
             }
         }
         
-        public static int getChargeAndAddAdduct(DataTable atomsCount, String adduct)
+        public static int getChargeAndAddAdduct(Dictionary<int, int> atomsCount, String adduct)
         {
             int charge = 0;
             switch (adduct)
             {
                                                                                                 
                 case "+H":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 1;
+                    atomsCount[(int)Molecules.H] += 1;
                     charge = 1;
                     break;
                 case "+2H":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 2;
+                    atomsCount[(int)Molecules.H] += 2;
                     charge = 2;
                     break;
                 case "+NH4":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 4;
-                    atomsCount.Rows[(int)Molecules.N]["Count"] = (int)atomsCount.Rows[(int)Molecules.N]["Count"] + 1;
+                    atomsCount[(int)Molecules.H] += 4;
+                    atomsCount[(int)Molecules.N] += 1;
                     charge = 1;
                     break;
                 case "-H":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 1;
+                    atomsCount[(int)Molecules.H] -= 1;
                     charge = -1;
                     break;
                 case "-2H":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] - 2;
+                    atomsCount[(int)Molecules.H] -= 2;
                     charge = -2;
                     break;
                 case "+HCOO":
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 1;
-                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] + 1;
-                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] + 2;
+                    atomsCount[(int)Molecules.H] += 1;
+                    atomsCount[(int)Molecules.C] += 1;
+                    atomsCount[(int)Molecules.O] += 2;
                     charge = -1;
                     break;
                 case "+CH3COO":
-                    atomsCount.Rows[(int)Molecules.C]["Count"] = (int)atomsCount.Rows[(int)Molecules.C]["Count"] + 2;
-                    atomsCount.Rows[(int)Molecules.H]["Count"] = (int)atomsCount.Rows[(int)Molecules.H]["Count"] + 3;
-                    atomsCount.Rows[(int)Molecules.O]["Count"] = (int)atomsCount.Rows[(int)Molecules.O]["Count"] + 2;
+                    atomsCount[(int)Molecules.C] += 2;
+                    atomsCount[(int)Molecules.H] += 3;
+                    atomsCount[(int)Molecules.O] += 2;
                     charge = -1;
                     break;
             }

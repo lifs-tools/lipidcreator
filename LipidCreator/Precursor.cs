@@ -41,7 +41,7 @@ namespace LipidCreator
     {
         public string name;
         public LipidCategory category;
-        public DataTable elements;
+        public Dictionary<int, int> elements;
         public string pathToImage;
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
@@ -55,7 +55,7 @@ namespace LipidCreator
         public Precursor()
         {
             adductRestrictions = new Dictionary<string, bool>();
-            elements = MS2Fragment.createEmptyElementTable();
+            elements = MS2Fragment.createEmptyElementDict();
             heavyLabeledPrecursors = new ArrayList();
             userDefined = false;
             userDefinedFattyAcids = null;
@@ -68,21 +68,20 @@ namespace LipidCreator
             {
                 xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
             }
-            
-            foreach (DataRow dr in elements.Rows)
+            foreach (KeyValuePair<int, int> kvp in elements)
             {
-                xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+                xml += "<Element type=\"" + MS2Fragment.ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
             }
             
             if (userDefined)
             {
                 xml += "<userDefinedFattyAcids>\n";
-                foreach (DataTable table in userDefinedFattyAcids)
+                foreach (Dictionary<int, int> table in userDefinedFattyAcids)
                 {
                     xml += "<DataTable>\n";
-                    foreach (DataRow dr in table.Rows)
+                    foreach (KeyValuePair<int, int> kvp in table)
                     {
-                        xml += "<Element type=\"" + dr["Shortcut"] + "\">" + dr["Count"] + "</Element>\n";
+                        xml += "<Element type=\"" + MS2Fragment.ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
                     }
                     xml += "</DataTable>\n";
                 }
@@ -112,7 +111,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        elements.Rows[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]]["Count"] = child.Value.ToString();
+                        elements[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     case "userDefinedFattyAcids":
@@ -120,12 +119,12 @@ namespace LipidCreator
                         var dataTables = child.Descendants("DataTable");
                         foreach ( var dataTable in dataTables)
                         {
-                            DataTable fattyElements = MS2Fragment.createEmptyElementTable();
+                            Dictionary<int, int> fattyElements = MS2Fragment.createEmptyElementDict();
                             foreach(XElement row in dataTable.Elements())
                             {
                                 if (row.Name.ToString().Equals("Elements"))
                                 {
-                                    fattyElements.Rows[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]]["Count"] = row.Value.ToString();
+                                    fattyElements[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
                                 }
                             }
                             userDefinedFattyAcids.Add(fattyElements);

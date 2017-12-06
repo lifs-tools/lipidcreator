@@ -188,7 +188,7 @@ namespace LipidCreator
                             if (fattyAcidLength < fattyAcidHydroxyl) continue;
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
                             {
-                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
+                                if (fattyAcidKeyValuePair.Value && !(fattyAcidKeyValuePair.Key.Equals("FAp") && fattyAcidDoubleBond == 0)) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
                             }
                         }
                     }

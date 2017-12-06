@@ -1733,8 +1733,8 @@ namespace LipidCreator
                 plHydroxyl2Textbox.Text = plHydroxyl1Textbox.Text;
                 plFA2Combobox.Text = plFA1Combobox.Text;
                 plFA2Checkbox1.Checked = plFA1Checkbox1.Checked;
-                plFA2Checkbox2.Checked = plFA1Checkbox2.Checked;
-                plFA2Checkbox3.Checked = plFA1Checkbox3.Checked;
+                //plFA2Checkbox2.Checked = plFA1Checkbox2.Checked;
+                //plFA2Checkbox3.Checked = plFA1Checkbox3.Checked;
                 
                 
             }

@@ -111,7 +111,7 @@ SL,GD3Cer,34,55,26,2,0,0,0,images/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No
 SL,GM3Cer,23,38,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
 SL,GM4Cer,17,28,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
 SL,HexCer,6,11,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
-SL,HexCerS,6,11,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
+SL,HexCerS,6,11,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,No,Yes,No,No,Yes,4,No,No
 SL,HexSph,6,12,5,0,0,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5,No,No
 SL,LacCer,12,21,10,0,0,0,0,images/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
 PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
@@ -142,7 +142,7 @@ PL,pLPC,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Y
 PL,pLPE,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
 PL,PS,6,12,8,1,1,0,0,images/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
 SL,SM,5,13,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
-SL,SPC,5,14,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,5,No,No
+SL,SPC,5,14,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
 SL,SPH,0,2,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
 SL,SPH-P,0,3,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
 GL,SQDG,9,16,10,0,0,1,0,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No

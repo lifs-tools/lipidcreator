@@ -42,18 +42,37 @@ namespace LipidCreator
     {
         public DataTable transitionList;
         public DataTable transitionListUnique;
+        public ArrayList replicates;
         public DataTable currentView;
         public LipidCreator lipidCreatorForm;
-        public string[] dataColumns = { };
+        public string[] dataColumns = {};
 
         public LipidsReview (LipidCreator lipidCreatorForm)
         {
             this.lipidCreatorForm = lipidCreatorForm;
             transitionList = lipidCreatorForm.transitionList;
-            transitionListUnique = null;
+            currentView = this.transitionList;
+            replicates = new ArrayList();
+            transitionListUnique = lipidCreatorForm.addDataColumns (new DataTable ());
+            HashSet<String> replicateKeys = new HashSet<String> ();
+            
+            int i = 0;
+            foreach (DataRow row in currentView.Rows)
+            {
+                string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
+                if (!replicateKeys.Contains (replicateKey)) {
+                    replicateKeys.Add (replicateKey);
+                    transitionListUnique.ImportRow (row);
+                }
+                else
+                {
+                    replicates.Add(i);
+                }
+                ++i;
+            }
+            
             
             InitializeComponent ();
-            currentView = this.transitionList;
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = lipidCreatorForm.openedAsExternal;
             checkBoxCreateSpectralLibrary.Enabled = lipidCreatorForm.openedAsExternal;
@@ -61,9 +80,22 @@ namespace LipidCreator
             foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns) {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+            
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
         }
+        
+        
+        private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (currentView == transitionList)
+            {
+                foreach (int i in replicates) dataGridViewTransitions.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
+            }
+            else dataGridViewTransitions.DefaultCellStyle.BackColor = Color.Empty;
+        }
+        
+        
 
         public void buttonSendToSkylineClick (Object sender, EventArgs e)
         {
@@ -106,14 +138,19 @@ namespace LipidCreator
                     
                 }
             
-                currentView = this.transitionList;
+                currentView = this.transitionListUnique;
             } else {
                 currentView = this.transitionList;
             }
+            
+
+
+
+            
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
             dataGridViewTransitions.DataSource = currentView;
-            dataGridViewTransitions.Update ();
-            dataGridViewTransitions.Refresh ();
+            dataGridViewTransitions.Update();
+            dataGridViewTransitions.Refresh();
         }
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)

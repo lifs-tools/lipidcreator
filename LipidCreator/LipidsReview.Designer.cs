@@ -86,6 +86,7 @@ namespace LipidCreator
             this.dataGridViewTransitions.RowTemplate.Height = 34;
             this.dataGridViewTransitions.Size = new System.Drawing.Size(955, 409);
             this.dataGridViewTransitions.TabIndex = 0;
+            this.dataGridViewTransitions.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(gridviewDataBindingComplete);
             // 
             // button1
             // 

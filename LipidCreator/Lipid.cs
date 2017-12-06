@@ -124,6 +124,9 @@ namespace LipidCreator
             int reportedFragments = 0;
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+                // introduce exception for SPH, only HG fragment occurs when LCB contains no double bond
+                if (precursorData.moleculeListName.Equals("SPH") && fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
+                
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
                 if (fragment.restrictions.Count == 0 || fragment.restrictions.Contains(precursorData.adduct))
                 {
@@ -145,6 +148,7 @@ namespace LipidCreator
                             case "LCB":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
                                 break;
+                            // introduce exception for FAp, pass only if FAp contains at least one double bond
                             case "FA":
                             case "FA1":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
@@ -165,7 +169,7 @@ namespace LipidCreator
                                 break;
                         }
                     }
-                    // some exceptional if conditions
+                    // some exceptional handling for sphingolipids
                     if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
                     {
                         Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);

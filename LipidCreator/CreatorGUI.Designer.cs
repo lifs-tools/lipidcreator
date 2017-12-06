@@ -724,6 +724,7 @@ namespace LipidCreator
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
+            string FApInformation = "Plasmenyl fatty acids need at least one double bond";
 
 
             tabControl.Controls.Add(homeTab);
@@ -873,6 +874,7 @@ namespace LipidCreator
             clFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA1Checkbox3MouseHover);
             clFA1Checkbox2.Location = new Point(clFA1Textbox.Left + 40, clFA1Textbox.Top + clFA1Textbox.Height);
             clFA1Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(clFA1Checkbox2, FApInformation);
             clFA1Checkbox2.CheckedChanged += new EventHandler(clFA1Checkbox2CheckedChanged);
             clFA1Checkbox2.MouseLeave += new System.EventHandler(clFA1Checkbox2MouseLeave);
             clFA1Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA1Checkbox2MouseHover);
@@ -956,6 +958,7 @@ namespace LipidCreator
             clFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA2Checkbox3MouseHover);
             clFA2Checkbox2.Location = new Point(clFA2Textbox.Left + 40, clFA2Textbox.Top + clFA2Textbox.Height);
             clFA2Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(clFA2Checkbox2, FApInformation);
             clFA2Checkbox2.CheckedChanged += new EventHandler(clFA2Checkbox2CheckedChanged);
             clFA2Checkbox2.MouseLeave += new System.EventHandler(clFA2Checkbox2MouseLeave);
             clFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA2Checkbox2MouseHover);
@@ -1001,6 +1004,7 @@ namespace LipidCreator
             clFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA3Checkbox3MouseHover);
             clFA3Checkbox2.Location = new Point(clFA3Textbox.Left + 40, clFA3Textbox.Top + clFA3Textbox.Height);
             clFA3Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(clFA3Checkbox2, FApInformation);
             clFA3Checkbox2.CheckedChanged += new EventHandler(clFA3Checkbox2CheckedChanged);
             clFA3Checkbox2.MouseLeave += new System.EventHandler(clFA3Checkbox2MouseLeave);
             clFA3Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA3Checkbox2MouseHover);
@@ -1051,6 +1055,7 @@ namespace LipidCreator
             clFA4Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA4Checkbox3MouseHover);
             clFA4Checkbox2.Location = new Point(clFA4Textbox.Left + 40, clFA4Textbox.Top + clFA4Textbox.Height);
             clFA4Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(clFA4Checkbox2, FApInformation);
             clFA4Checkbox2.CheckedChanged += new EventHandler(clFA4Checkbox2CheckedChanged);
             clFA4Checkbox2.MouseLeave += new System.EventHandler(clFA4Checkbox2MouseLeave);
             clFA4Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA4Checkbox2MouseHover);
@@ -1153,6 +1158,7 @@ namespace LipidCreator
             glFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA1Checkbox3MouseHover);
             glFA1Checkbox2.Location = new Point(glFA1Textbox.Left + 40, glFA1Textbox.Top + glFA1Textbox.Height);
             glFA1Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(glFA1Checkbox2, FApInformation);
             glFA1Checkbox2.CheckedChanged += new EventHandler(glFA1Checkbox2CheckedChanged);
             glFA1Checkbox2.MouseLeave += new System.EventHandler(glFA1Checkbox2MouseLeave);
             glFA1Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA1Checkbox2MouseHover);
@@ -1196,6 +1202,7 @@ namespace LipidCreator
             glFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA2Checkbox3MouseHover);
             glFA2Checkbox2.Location = new Point(glFA2Textbox.Left + 40, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(glFA2Checkbox2, FApInformation);
             glFA2Checkbox2.CheckedChanged += new EventHandler(glFA2Checkbox2CheckedChanged);
             glFA2Checkbox2.MouseLeave += new System.EventHandler(glFA2Checkbox2MouseLeave);
             glFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA2Checkbox2MouseHover);
@@ -1239,6 +1246,7 @@ namespace LipidCreator
             glFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA3Checkbox3MouseHover);
             glFA3Checkbox2.Location = new Point(glFA3Textbox.Left + 40, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(glFA3Checkbox2, FApInformation);
             glFA3Checkbox2.CheckedChanged += new EventHandler(glFA3Checkbox2CheckedChanged);
             glFA3Checkbox2.MouseLeave += new System.EventHandler(glFA3Checkbox2MouseLeave);
             glFA3Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA3Checkbox2MouseHover);
@@ -1405,6 +1413,7 @@ namespace LipidCreator
             plFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA1Checkbox3MouseHover);
             plFA1Checkbox2.Location = new Point(plFA1Textbox.Left + 40, plFA1Textbox.Top + plFA1Textbox.Height);
             plFA1Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(plFA1Checkbox2, FApInformation);
             plFA1Checkbox2.CheckedChanged += new EventHandler(plFA1Checkbox2CheckedChanged);
             plFA1Checkbox2.MouseLeave += new System.EventHandler(plFA1Checkbox2MouseLeave);
             plFA1Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA1Checkbox2MouseHover);
@@ -1448,6 +1457,7 @@ namespace LipidCreator
             plFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2Checkbox3MouseHover);
             plFA2Checkbox2.Location = new Point(plFA2Textbox.Left + 40, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox2.Text = "FAp";
+            toolTip.SetToolTip(plFA1Checkbox2, FApInformation);
             plFA2Checkbox2.CheckedChanged += new EventHandler(plFA2Checkbox2CheckedChanged);
             plFA2Checkbox2.MouseLeave += new System.EventHandler(plFA2Checkbox2MouseLeave);
             plFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2checkbox2MouseHover);

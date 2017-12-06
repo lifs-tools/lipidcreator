@@ -50,7 +50,6 @@ namespace LipidCreator
         public HashSet<string> restrictions;
         public double intensity;
         public bool userDefined;
-        public bool independent;
         public const double DEFAULT_INTENSITY = 100.0;
         public string CommentForSpectralLibrary { get { return fragmentFile; } }
         public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
@@ -146,7 +145,6 @@ namespace LipidCreator
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
             xml += " userDefined=\"" + userDefined + "\"";
-            xml += " independent=\"" + independent + "\"";
             xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
             foreach (string restriction in restrictions)
             {
@@ -176,7 +174,6 @@ namespace LipidCreator
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
             userDefined = node.Attribute("userDefined").Value.Equals("True");
-            independent = node.Attribute("independent").Value.Equals("True");
             fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
             
             
@@ -338,7 +335,6 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
         
@@ -355,7 +351,6 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
 
@@ -371,7 +366,6 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             restrictions = new HashSet<string>();
             userDefined = false;
-            independent = false;
             intensity = DEFAULT_INTENSITY;
         }
         
@@ -387,7 +381,6 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            independent = false;
             intensity = DEFAULT_INTENSITY;
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
@@ -404,7 +397,6 @@ namespace LipidCreator
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            independent = false;
             intensity = Math.Min(DEFAULT_INTENSITY, Math.Max(0, intens));
             if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
@@ -421,7 +413,6 @@ namespace LipidCreator
             foreach (KeyValuePair<int, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
-            independent = copy.independent;
             restrictions = new HashSet<string>();
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
             foreach (string restriction in copy.restrictions) restrictions.Add(restriction);

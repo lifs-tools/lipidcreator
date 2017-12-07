@@ -41,14 +41,50 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         ArrayList buildingBlockDataTables;
         public bool updating;
+        public Dictionary<string, object[]> currentDict = null;
+        
         
         public AddHeavyPrecursor(CreatorGUI creatorGUI, LipidCategory category)
         {
             this.creatorGUI = creatorGUI;
             buildingBlockDataTables = new ArrayList();
-            updating = false;
         
             InitializeComponent();
+            
+            updating = true;
+            dataGridView1.ColumnCount = 3;
+            dataGridView1.Columns[0].Name = "Element";
+            dataGridView1.Columns[1].Name = "Count";
+            dataGridView1.Columns[2].Name = "Isotope count";
+            DataGridViewComboBoxColumn combo1 = new DataGridViewComboBoxColumn();
+            dataGridView1.Columns.Add(combo1);
+            combo1.Name = "Isotope type";
+            
+            for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
+            
+            foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
+            {
+                int l = MS2Fragment.MONOISOTOPE_POSITIONS[row.Key];
+                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ELEMENT_SHORTCUTS[row.Key];
+                dataGridView1.Rows[l].Cells[1].Value = 0;
+                dataGridView1.Rows[l].Cells[2].Value = 0;
+                
+                DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)dataGridView1.Rows[l].Cells[3];
+                int j = 0;
+                foreach (int element in row.Value)
+                {
+                    if (j++ == 0) cell.Value = MS2Fragment.HEAVY_SHORTCUTS[element];
+                    cell.Items.Add(MS2Fragment.HEAVY_SHORTCUTS[element]);
+                }
+            }
+            dataGridView1.Columns[0].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[0].ReadOnly = true;
+            dataGridView1.Columns[1].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.AllowUserToAddRows = false;
+            updating = false;
             
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)category])
             {
@@ -59,7 +95,44 @@ namespace LipidCreator
             {
                 comboBox1.SelectedIndex = 0;
             }
+            
+            
         }
+        
+        
+        
+        
+        public void changeDataGridContent(Dictionary<string, object[]> data)
+        {
+            currentDict = data;
+            updating = true;
+            foreach (KeyValuePair<string, object[]> row in data)
+            {
+                int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
+                
+                dataGridView1.Rows[l].Cells[1].Value = row.Value[0];
+                dataGridView1.Rows[l].Cells[2].Value = row.Value[1];
+                dataGridView1.Rows[l].Cells[3].Value = row.Value[2];
+            }
+            updating = false;
+        }
+        
+        
+        
+        public Dictionary<string, object[]> createGridData(Dictionary<int, int> input)
+        {
+            Dictionary<string, object[]> data = new Dictionary<string, object[]>();
+            foreach (KeyValuePair<int, int> row in input)
+            {
+                if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
+                {
+                    data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, 0, MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][0]]});
+                }
+            }
+            return data;
+        }
+        
+        
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -80,7 +153,7 @@ namespace LipidCreator
             
             
             comboBox2.Items.Add("Head group");
-            buildingBlockDataTables.Add(MS2Fragment.createFilledElementTable(precursor.elements));
+            buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
                     
             switch(precursor.buildingBlockType)
             {
@@ -89,45 +162,45 @@ namespace LipidCreator
                     comboBox2.Items.Add("Fatty acid 2");
                     comboBox2.Items.Add("Fatty acid 3");
                     comboBox2.Items.Add("Fatty acid 4");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 1:
                     comboBox2.Items.Add("Fatty acid 1");
                     comboBox2.Items.Add("Fatty acid 2");
                     comboBox2.Items.Add("Fatty acid 3");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 2:
                 case 6:
                     comboBox2.Items.Add("Fatty acid 1");
                     comboBox2.Items.Add("Fatty acid 2");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 3:
                 case 7:
                     comboBox2.Items.Add("Fatty acid");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 4:
                     comboBox2.Items.Add("Long chain base");
                     comboBox2.Items.Add("Fatty acid");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 5:
                     comboBox2.Items.Add("Long chain base");
-                    buildingBlockDataTables.Add(MS2Fragment.createEmptyElementTable());
+                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                     break;
                     
                 case 8:
@@ -139,7 +212,7 @@ namespace LipidCreator
             if (comboBox2.Items.Count > 0)
             {
                 comboBox2.SelectedIndex = 0;
-                dataGridView1.DataSource = buildingBlockDataTables[0];
+                changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[0]);
             }
             
         }
@@ -149,55 +222,41 @@ namespace LipidCreator
         {
             if (comboBox2.Items.Count > 0)
             {
-                dataGridView1.DataSource = buildingBlockDataTables[comboBox2.SelectedIndex];
+                changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[comboBox2.SelectedIndex]);
             }
-        }
-        
-        
-        public void dataGridView1DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            dataGridView1.Columns[0].Width = (dataGridView1.Width - 2) / 3;
-            dataGridView1.Columns[1].Width = (dataGridView1.Width - 2) / 3;
-            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 3;
-            dataGridView1.Columns[3].Visible = false;
-            dataGridView1.Rows[(int)Molecules.C].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.H].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.O].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.N].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.P].ReadOnly = true;
-            dataGridView1.Rows[(int)Molecules.S].ReadOnly = true;
-            dataGridView1.Update();
-            dataGridView1.Refresh();
         }
         
         
         private void dataGridView1CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            if (currentDict == null) return;
+            string key = (string)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
+            currentDict[key][e.ColumnIndex - 1] = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            
             if(updating) return;
-            if (!dataGridView1.Rows[e.RowIndex].ReadOnly && dataGridView1.Columns[e.ColumnIndex].Name == "Count")
-            {   
-                updating = true;
-                if (comboBox2.SelectedIndex == 0)
-                {
-                    string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
-                    Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
-                    
-                    int orig = precursor.elements[MS2Fragment.LIGHT_ORIGIN[e.RowIndex]];
-                    int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                    if (n < 0) n = 0;
-                    if (n > orig) n = orig;
-                    dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
-                    dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = orig - n;
-                }
-                else
-                {
-                    int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                    if (n < 0) n = 0;
-                    dataGridView1.Rows[e.RowIndex].Cells[0].Value = n;
-                    dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value = -n;
-                }
-                updating = false;
+            
+            if (e.ColumnIndex != 2) return;
+            updating = true;
+            if (comboBox2.SelectedIndex == 0)
+            {
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                
+                int orig = precursor.elements[MS2Fragment.LIGHT_ORIGIN[MS2Fragment.HEAVY_POSITIONS[(string)dataGridView1.Rows[e.RowIndex].Cells[3].Value]]];
+                int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value);
+                if (n < 0) n = 0;
+                if (n > orig) n = orig;
+                dataGridView1.Rows[e.RowIndex].Cells[2].Value = n;
+                dataGridView1.Rows[e.RowIndex].Cells[1].Value = orig - n;
             }
+            else
+            {
+                int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value);
+                if (n < 0) n = 0;
+                dataGridView1.Rows[e.RowIndex].Cells[2].Value = n;
+                dataGridView1.Rows[e.RowIndex].Cells[1].Value = -n;
+            }
+            updating = false;
         }
         
 
@@ -211,6 +270,8 @@ namespace LipidCreator
         {
             string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
             string name = headgroup + "/" + textBox1.Text;
+            
+            Console.WriteLine(dataGridView1.Rows[0].Cells[0].Value);
             
             if (textBox1.Text.Length == 0)
             {

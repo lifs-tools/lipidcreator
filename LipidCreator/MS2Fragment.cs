@@ -36,7 +36,7 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, N = 6, N15 = 7, P = 8, S = 9};
+    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, O18 = 6, N = 7, N15 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
     
     [Serializable]
     public class MS2Fragment
@@ -58,11 +58,25 @@ namespace LipidCreator
             {"O", (int)Molecules.O},
             {"N", (int)Molecules.N},
             {"P", (int)Molecules.P},
+            {"P'", (int)Molecules.P32},
             {"S", (int)Molecules.S},
+            {"S'", (int)Molecules.S34},
+            {"S''", (int)Molecules.S33},
             {"H'", (int)Molecules.H2},
             {"C'", (int)Molecules.C13},
             {"N'", (int)Molecules.N15},
-            {"O'", (int)Molecules.O17}
+            {"O'", (int)Molecules.O17},
+            {"O''", (int)Molecules.O18}
+        };
+        
+        
+        public static Dictionary<int, int> MONOISOTOPE_POSITIONS = new Dictionary<int, int>(){
+            {(int)Molecules.C, 0},
+            {(int)Molecules.H, 1},
+            {(int)Molecules.O, 2},
+            {(int)Molecules.N, 3},
+            {(int)Molecules.P, 4},
+            {(int)Molecules.S, 5}
         };
         
         
@@ -76,7 +90,11 @@ namespace LipidCreator
             {(int)Molecules.H2, 2.014101779},
             {(int)Molecules.C13, 13.0033548378},
             {(int)Molecules.N15, 15.0001088984},
-            {(int)Molecules.O17, 16.9991315}
+            {(int)Molecules.O17, 16.9991315},
+            {(int)Molecules.O18, 17.9991604},
+            {(int)Molecules.P32, 31.973907274},
+            {(int)Molecules.S34, 33.96786690},
+            {(int)Molecules.S33, 32.97145876}
         };
         
         
@@ -90,15 +108,46 @@ namespace LipidCreator
             {(int)Molecules.H2, "H'"},
             {(int)Molecules.C13, "C'"},
             {(int)Molecules.N15, "N'"},
-            {(int)Molecules.O17, "O'"}
+            {(int)Molecules.O17, "O'"},
+            {(int)Molecules.O18, "O''"},
+            {(int)Molecules.P32, "P'"},
+            {(int)Molecules.S34, "S'"},
+            {(int)Molecules.S33, "S''"}
         };
         
-        public static Dictionary<int, int> HEAVY_DERIVATIVE = new Dictionary<int, int>()
+        
+        public static Dictionary<int, string> HEAVY_SHORTCUTS = new Dictionary<int, string>(){
+            {(int)Molecules.H2, "2H"},
+            {(int)Molecules.C13, "13C"},
+            {(int)Molecules.N15, "15N"},
+            {(int)Molecules.O17, "17O"},
+            {(int)Molecules.O18, "18O"},
+            {(int)Molecules.P32, "32P"},
+            {(int)Molecules.S34, "34S"},
+            {(int)Molecules.S33, "33S"}
+        };
+        
+        public static Dictionary<int, ArrayList> HEAVY_DERIVATIVE = new Dictionary<int, ArrayList>()
         {
-            {(int)Molecules.C, (int)Molecules.C13},
-            {(int)Molecules.H, (int)Molecules.H2},
-            {(int)Molecules.O, (int)Molecules.O17},
-            {(int)Molecules.N, (int)Molecules.N15},
+            {(int)Molecules.C, new ArrayList(){Molecules.C13}},
+            {(int)Molecules.H, new ArrayList(){Molecules.H2}},
+            {(int)Molecules.O, new ArrayList(){Molecules.O17, Molecules.O18}},
+            {(int)Molecules.N, new ArrayList(){Molecules.N15}},
+            {(int)Molecules.P, new ArrayList(){Molecules.P32}},
+            {(int)Molecules.S, new ArrayList(){Molecules.S33, Molecules.S34}}
+            
+        };
+        
+        
+        public static Dictionary<string, int> HEAVY_POSITIONS = new Dictionary<string, int>(){
+            {"2H", (int)Molecules.H2},
+            {"13C", (int)Molecules.C13},
+            {"15N", (int)Molecules.N15},
+            {"17O", (int)Molecules.O17},
+            {"18O", (int)Molecules.O18},
+            {"32P", (int)Molecules.P32},
+            {"34S", (int)Molecules.S34},
+            {"33S", (int)Molecules.S33}
         };
         
         public static Dictionary<int, int> LIGHT_ORIGIN = new Dictionary<int, int>()
@@ -107,6 +156,10 @@ namespace LipidCreator
             {(int)Molecules.H2, (int)Molecules.H},
             {(int)Molecules.O17, (int)Molecules.O},
             {(int)Molecules.N15, (int)Molecules.N},
+            {(int)Molecules.P32, (int)Molecules.P},
+            {(int)Molecules.O18, (int)Molecules.O},
+            {(int)Molecules.S34, (int)Molecules.S},
+            {(int)Molecules.S33, (int)Molecules.S}
         };
         
         
@@ -125,6 +178,14 @@ namespace LipidCreator
             {
                 elements.Add(ELEMENT_POSITIONS[(string)dr["Shortcut"]], Convert.ToInt32(dr["Count"]));
             }
+            return elements;
+        }
+        
+        
+        public static Dictionary<int, int> createFilledElementDict(Dictionary<int, int> copy)
+        {
+            Dictionary<int, int> elements = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, int> kvp in copy) elements.Add(kvp.Key, kvp.Value);
             return elements;
         }
         
@@ -227,54 +288,74 @@ namespace LipidCreator
             for (int i = 0; i < ELEMENT_POSITIONS.Count; ++i) elements.Rows.Add(elements.NewRow());
 
             elements.Rows[(int)Molecules.C][count] = "0";
-            elements.Rows[(int)Molecules.C][shortcut] = "C";
+            elements.Rows[(int)Molecules.C][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.C];
             elements.Rows[(int)Molecules.C][element] = "carbon";
-            elements.Rows[(int)Molecules.C][monoMass] = 12;
+            elements.Rows[(int)Molecules.C][monoMass] = ELEMENT_MASSES[(int)Molecules.C];
             
             elements.Rows[(int)Molecules.C13][count] = "0";
-            elements.Rows[(int)Molecules.C13][shortcut] = "C'";
+            elements.Rows[(int)Molecules.C13][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.C13];
             elements.Rows[(int)Molecules.C13][element] = "carbon 13";
-            elements.Rows[(int)Molecules.C13][monoMass] = 13.0033548378;
+            elements.Rows[(int)Molecules.C13][monoMass] = ELEMENT_MASSES[(int)Molecules.C13];
 
             elements.Rows[(int)Molecules.H][count] = "0";
-            elements.Rows[(int)Molecules.H][shortcut] = "H";
+            elements.Rows[(int)Molecules.H][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.H];
             elements.Rows[(int)Molecules.H][element] = "hydrogen";
-            elements.Rows[(int)Molecules.H][monoMass] = 1.007825035;
+            elements.Rows[(int)Molecules.H][monoMass] = ELEMENT_MASSES[(int)Molecules.H];
 
             elements.Rows[(int)Molecules.H2][count] = "0";
-            elements.Rows[(int)Molecules.H2][shortcut] = "H'";
+            elements.Rows[(int)Molecules.H2][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.H2];
             elements.Rows[(int)Molecules.H2][element] = "deuterium";
-            elements.Rows[(int)Molecules.H2][monoMass] = 2.014101779;
+            elements.Rows[(int)Molecules.H2][monoMass] = ELEMENT_MASSES[(int)Molecules.H2];
 
             elements.Rows[(int)Molecules.O][count] = "0";
-            elements.Rows[(int)Molecules.O][shortcut] = "O";
+            elements.Rows[(int)Molecules.O][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O];
             elements.Rows[(int)Molecules.O][element] = "oxygen";
-            elements.Rows[(int)Molecules.O][monoMass] = 15.99491463;
+            elements.Rows[(int)Molecules.O][monoMass] = ELEMENT_MASSES[(int)Molecules.O];
 
             elements.Rows[(int)Molecules.O17][count] = "0";
-            elements.Rows[(int)Molecules.O17][shortcut] = "O'";
+            elements.Rows[(int)Molecules.O17][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O17];
             elements.Rows[(int)Molecules.O17][element] = "oxygen 17";
-            elements.Rows[(int)Molecules.O17][monoMass] = 16.9991315;
+            elements.Rows[(int)Molecules.O17][monoMass] = ELEMENT_MASSES[(int)Molecules.O17];
+
+            elements.Rows[(int)Molecules.O18][count] = "0";
+            elements.Rows[(int)Molecules.O18][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O18];
+            elements.Rows[(int)Molecules.O18][element] = "oxygen 18";
+            elements.Rows[(int)Molecules.O18][monoMass] = ELEMENT_MASSES[(int)Molecules.O18];
 
             elements.Rows[(int)Molecules.N][count] = "0";
-            elements.Rows[(int)Molecules.N][shortcut] = "N";
+            elements.Rows[(int)Molecules.N][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.N];
             elements.Rows[(int)Molecules.N][element] = "nitrogen";
-            elements.Rows[(int)Molecules.N][monoMass] = 14.003074;
+            elements.Rows[(int)Molecules.N][monoMass] = ELEMENT_MASSES[(int)Molecules.N];
 
             elements.Rows[(int)Molecules.N15][count] = "0";
-            elements.Rows[(int)Molecules.N15][shortcut] = "N'";
+            elements.Rows[(int)Molecules.N15][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.N15];
             elements.Rows[(int)Molecules.N15][element] = "nitrogen 15";
-            elements.Rows[(int)Molecules.N15][monoMass] = 15.0001088984;
+            elements.Rows[(int)Molecules.N15][monoMass] = ELEMENT_MASSES[(int)Molecules.N15];
 
             elements.Rows[(int)Molecules.P][count] = "0";
-            elements.Rows[(int)Molecules.P][shortcut] = "P";
-            elements.Rows[(int)Molecules.P][element] = "phosphor";
-            elements.Rows[(int)Molecules.P][monoMass] = 30.973762;
+            elements.Rows[(int)Molecules.P][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.P];
+            elements.Rows[(int)Molecules.P][element] = "phosphorus";
+            elements.Rows[(int)Molecules.P][monoMass] = ELEMENT_MASSES[(int)Molecules.P];
+
+            elements.Rows[(int)Molecules.P32][count] = "0";
+            elements.Rows[(int)Molecules.P32][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.P32];
+            elements.Rows[(int)Molecules.P32][element] = "phosphorus 32";
+            elements.Rows[(int)Molecules.P32][monoMass] = ELEMENT_MASSES[(int)Molecules.P32];
 
             elements.Rows[(int)Molecules.S][count] = "0";
-            elements.Rows[(int)Molecules.S][shortcut] = "S";
+            elements.Rows[(int)Molecules.S][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S];
             elements.Rows[(int)Molecules.S][element] = "sulfur";
-            elements.Rows[(int)Molecules.S][monoMass] = 31.9720707;
+            elements.Rows[(int)Molecules.S][monoMass] = ELEMENT_MASSES[(int)Molecules.S];
+
+            elements.Rows[(int)Molecules.S33][count] = "0";
+            elements.Rows[(int)Molecules.S33][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S33];
+            elements.Rows[(int)Molecules.S33][element] = "sulfur 33";
+            elements.Rows[(int)Molecules.S33][monoMass] = ELEMENT_MASSES[(int)Molecules.S33];
+
+            elements.Rows[(int)Molecules.S34][count] = "0";
+            elements.Rows[(int)Molecules.S34][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S34];
+            elements.Rows[(int)Molecules.S34][element] = "sulfur 34";
+            elements.Rows[(int)Molecules.S34][monoMass] = ELEMENT_MASSES[(int)Molecules.S34];
             
             columnShortcut.ReadOnly = true;
             columnElement.ReadOnly = true;

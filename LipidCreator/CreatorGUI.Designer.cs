@@ -1898,7 +1898,7 @@ namespace LipidCreator
             MS2fragmentsLipidButton.BackColor = SystemColors.Control;
             MS2fragmentsLipidButton.Click += openMS2Form;
 
-            addHeavyIsotopeButton.Text = "Add heavy isotope";
+            addHeavyIsotopeButton.Text = "Manage heavy isotopes";
             addHeavyIsotopeButton.Width = 150;
             addHeavyIsotopeButton.Height = 26;
             addHeavyIsotopeButton.Location = new Point(300, topLowButtons);

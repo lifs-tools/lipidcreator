@@ -101,7 +101,20 @@ namespace LipidCreator
                 int c = atomsCount[row.Key] + row.Value;
                 if (c < 0)
                 {
-                    atomsCount[MS2Fragment.HEAVY_DERIVATIVE[row.Key]] += c;
+                    if (row.Key != (int)Molecules.S && row.Key != (int)Molecules.O) atomsCount[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][0]] += c;
+                    else
+                    {
+                        if (row.Key == (int)Molecules.S)
+                        {
+                            if(atomsCount[(int)Molecules.S33] != 0) atomsCount[(int)Molecules.S33] += c;
+                            else atomsCount[(int)Molecules.S34] += c;
+                        }
+                        else
+                        {
+                            if(atomsCount[(int)Molecules.O17] != 0) atomsCount[(int)Molecules.O17] += c;
+                            else atomsCount[(int)Molecules.O18] += c;
+                        }
+                    }
                     c = 0;
                 }
                 atomsCount[row.Key] = c;

@@ -42,26 +42,57 @@ namespace LipidCreator
         ArrayList buildingBlockDataTables;
         public bool updating;
         public Dictionary<string, object[]> currentDict = null;
+        public bool editing;
+        public bool inGridSet = false;
+        public bool userDefined = true;
         
         
         public AddHeavyPrecursor(CreatorGUI creatorGUI, LipidCategory category)
         {
             this.creatorGUI = creatorGUI;
             buildingBlockDataTables = new ArrayList();
+            editing = false;
+            
         
             InitializeComponent();
             
             updating = true;
             dataGridView1.ColumnCount = 3;
             dataGridView1.Columns[0].Name = "Element";
+            dataGridView1.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridView1.Columns[1].Name = "Count";
+            dataGridView1.Columns[1].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridView1.Columns[2].Name = "Isotope count";
             DataGridViewComboBoxColumn combo1 = new DataGridViewComboBoxColumn();
             dataGridView1.Columns.Add(combo1);
+            dataGridView1.Columns[0].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[0].ReadOnly = true;
+            dataGridView1.Columns[1].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[3].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.AllowUserToAddRows = false;
             combo1.Name = "Isotope type";
             
-            for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
+            updating = false;
             
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)category])
+            {
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) comboBox1.Items.Add(lipidClass);
+            }
+            if (comboBox1.Items.Count > 0)
+            {
+                comboBox1.SelectedIndex = 0;
+            }
+            
+        }
+        
+        
+        
+        public void fillGridContent()
+        {
+            updating = true;
+            for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
             foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
             {
                 int l = MS2Fragment.MONOISOTOPE_POSITIONS[row.Key];
@@ -77,34 +108,13 @@ namespace LipidCreator
                     cell.Items.Add(MS2Fragment.HEAVY_SHORTCUTS[element]);
                 }
             }
-            dataGridView1.Columns[0].Width = (dataGridView1.Width - 2) / 4;
-            dataGridView1.Columns[0].ReadOnly = true;
-            dataGridView1.Columns[1].Width = (dataGridView1.Width - 2) / 4;
-            dataGridView1.Columns[1].ReadOnly = true;
-            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
-            dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
-            dataGridView1.AllowUserToAddRows = false;
             updating = false;
-            
-            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)category])
-            {
-                if (!creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass)) Console.WriteLine(lipidClass);
-                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) comboBox1.Items.Add(lipidClass);
-            }
-            if (comboBox1.Items.Count > 0)
-            {
-                comboBox1.SelectedIndex = 0;
-            }
-            
-            
         }
-        
         
         
         
         public void changeDataGridContent(Dictionary<string, object[]> data)
         {
-            currentDict = data;
             updating = true;
             foreach (KeyValuePair<string, object[]> row in data)
             {
@@ -114,6 +124,7 @@ namespace LipidCreator
                 dataGridView1.Rows[l].Cells[2].Value = row.Value[1];
                 dataGridView1.Rows[l].Cells[3].Value = row.Value[2];
             }
+            currentDict = data;
             updating = false;
         }
         
@@ -122,19 +133,90 @@ namespace LipidCreator
         public Dictionary<string, object[]> createGridData(Dictionary<int, int> input)
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
+            
             foreach (KeyValuePair<int, int> row in input)
             {
                 if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
                 {
-                    data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, 0, MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][0]]});
+                    // check for heavy isotopes
+                    int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
+                    int heavyElementCount = 0;
+                    string heavyShortcut = "";
+                    for (; heavyElementIndex >= 0; --heavyElementIndex)
+                    {
+                        heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
+                        heavyShortcut = MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]];
+                        if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
+                        {
+                            break;
+                        }
+                    }
+            
+                    data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, heavyElementCount, heavyShortcut});
                 }
             }
             return data;
         }
         
         
+        public Dictionary<int, int> createElementData(Dictionary<string, object[]> input)
+        {
+            Dictionary<int, int> elements = MS2Fragment.createEmptyElementDict();
+            foreach (KeyValuePair<string, object[]> row in input)
+            {
+                int elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
+                int heavyIndex = MS2Fragment.HEAVY_POSITIONS[(string)row.Value[2]];
+                
+                elements[elementIndex] = (int)row.Value[0];
+                elements[heavyIndex] = (int)row.Value[1];
+                
+            }
+            return elements;
+        }
+        
+        
+        public void clearData()
+        {
+            currentDict = null;
+            buildingBlockDataTables.Clear();
+            dataGridView1.Rows.Clear();
+        
+        }
+        
+        
+        public void updateAvailableIsotopes()
+        {
+            clearData();
+            string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+            Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+            comboBox3.Items.Clear();
+            
+            foreach(Precursor heavyPrecursor in precursor.heavyLabeledPrecursors)
+            {
+                comboBox3.Items.Add(heavyPrecursor.name.Split(new Char[]{'/'})[1]);
+            }
+            if (comboBox3.Items.Count > 0)
+            {
+                comboBox3.SelectedIndex = 0;
+            }
+            
+        }
+        
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            setGrid();
+        }
+        
+        
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (editing) updateAvailableIsotopes();
+            setGrid();
+        }
+        
+        
+        public void setGrid()
         {
             // base types:
             // 0 -> fixed, FA1, FA2, FA3, FA4, FA1 + FA2, FA1 + FA3, FA1 + FA4, FA2 + FA3, FA2 + FA4, FA3 + FA4, FA1 + FA2 + FA3, FA1 + FA2 + FA4, FA1 + FA3 + FA4, PRE
@@ -146,75 +228,165 @@ namespace LipidCreator
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, PRE
             // 7 -> fixed, FA1, HG, PRE
             // 8 -> fixed, PRE
-            string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
-            Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+            clearData();
             comboBox2.Items.Clear();
-            buildingBlockDataTables.Clear();
+            inGridSet = true;
             
-            
-            comboBox2.Items.Add("Head group");
-            buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
-                    
-            switch(precursor.buildingBlockType)
+            if (!editing)
             {
-                case 0:
-                    comboBox2.Items.Add("Fatty acid 1");
-                    comboBox2.Items.Add("Fatty acid 2");
-                    comboBox2.Items.Add("Fatty acid 3");
-                    comboBox2.Items.Add("Fatty acid 4");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 1:
-                    comboBox2.Items.Add("Fatty acid 1");
-                    comboBox2.Items.Add("Fatty acid 2");
-                    comboBox2.Items.Add("Fatty acid 3");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 2:
-                case 6:
-                    comboBox2.Items.Add("Fatty acid 1");
-                    comboBox2.Items.Add("Fatty acid 2");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 3:
-                case 7:
-                    comboBox2.Items.Add("Fatty acid");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 4:
-                    comboBox2.Items.Add("Long chain base");
-                    comboBox2.Items.Add("Fatty acid");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 5:
-                    comboBox2.Items.Add("Long chain base");
-                    buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                    break;
-                    
-                case 8:
-                    break;
-                    
-                default:
-                    break;
+                fillGridContent();
+                comboBox2.Items.Add("Head group");
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
+                        
+                switch(precursor.buildingBlockType)
+                {
+                    case 0:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        comboBox2.Items.Add("Fatty acid 3");
+                        comboBox2.Items.Add("Fatty acid 4");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 1:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        comboBox2.Items.Add("Fatty acid 3");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 2:
+                    case 6:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 3:
+                    case 7:
+                        comboBox2.Items.Add("Fatty acid");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 4:
+                        comboBox2.Items.Add("Long chain base");
+                        comboBox2.Items.Add("Fatty acid");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 5:
+                        comboBox2.Items.Add("Long chain base");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        break;
+                        
+                    case 8:
+                        break;
+                        
+                    default:
+                        break;
+                }
+                if (comboBox2.Items.Count > 0)
+                {
+                    comboBox2.SelectedIndex = 0;
+                }
             }
-            if (comboBox2.Items.Count > 0)
+            else if(comboBox3.SelectedIndex == 0)
             {
-                comboBox2.SelectedIndex = 0;
-                changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[0]);
+                fillGridContent();
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                userDefined = precursor.userDefined;
+                comboBox2.Items.Add("Head group");
+                buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
+                switch(precursor.buildingBlockType)
+                {
+                    case 0:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        comboBox2.Items.Add("Fatty acid 3");
+                        comboBox2.Items.Add("Fatty acid 4");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[3])));
+                        break;
+                        
+                    case 1:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        comboBox2.Items.Add("Fatty acid 3");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
+                        break;
+                        
+                    case 2:
+                    case 6:
+                        comboBox2.Items.Add("Fatty acid 1");
+                        comboBox2.Items.Add("Fatty acid 2");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        break;
+                        
+                    case 3:
+                    case 7:
+                        comboBox2.Items.Add("Fatty acid");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        break;
+                        
+                    case 4:
+                        comboBox2.Items.Add("Long chain base");
+                        comboBox2.Items.Add("Fatty acid");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        break;
+                        
+                    case 5:
+                        comboBox2.Items.Add("Long chain base");
+                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        break;
+                        
+                    case 8:
+                        break;
+                        
+                    default:
+                        break;
+                }
+                if (comboBox2.Items.Count > 0)
+                {
+                    comboBox2.SelectedIndex = 0;
+                    changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[0]);
+                }
             }
-            
+            if (userDefined)
+            {
+                dataGridView1.Columns[2].DefaultCellStyle.BackColor = Color.Empty;
+                dataGridView1.Columns[2].ReadOnly = false;
+                dataGridView1.Columns[3].DefaultCellStyle.BackColor = Color.Empty;
+                dataGridView1.Columns[3].ReadOnly = false;
+                button3.Enabled = true;
+                button4.Enabled = true;
+            }
+            else
+            {
+                dataGridView1.Columns[2].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView1.Columns[2].ReadOnly = true;
+                dataGridView1.Columns[3].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView1.Columns[3].ReadOnly = true;
+                button3.Enabled = false;
+                button4.Enabled = false;
+                
+            }
+            inGridSet = false;
         }
         
 
@@ -223,6 +395,32 @@ namespace LipidCreator
             if (comboBox2.Items.Count > 0)
             {
                 changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[comboBox2.SelectedIndex]);
+            }
+        }
+        
+        private void radioButtons_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                this.textBox1.Visible = true;
+                this.textBox1.Text = "";
+                this.comboBox3.Visible = false;
+                this.button2.Visible = true;
+                this.button3.Visible = false;
+                this.button4.Visible = false;
+                editing = false;
+                userDefined = true;
+                setGrid();
+            }
+            else
+            {
+                this.textBox1.Visible = false;
+                this.comboBox3.Visible = true;
+                this.button2.Visible = false;
+                this.button3.Visible = true;
+                this.button4.Visible = true;
+                editing = true;
+                updateAvailableIsotopes();
             }
         }
         
@@ -260,18 +458,36 @@ namespace LipidCreator
         }
         
 
+        
+        // closing the window
         private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        
+        
+        
+        // editing isotope
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        
+        
+        
+        // deleting isotope
+        private void button4_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
         
+        
+        // adding isotope
         private void button2_Click(object sender, EventArgs e)
         {
             string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
             string name = headgroup + "/" + textBox1.Text;
-            
-            Console.WriteLine(dataGridView1.Rows[0].Cells[0].Value);
             
             if (textBox1.Text.Length == 0)
             {
@@ -283,47 +499,54 @@ namespace LipidCreator
             }   
             else
             {
+                int numHeavyElements = 0;
+            
                 // create and set precursor properties
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
-                
-                
                 Precursor heavyPrecursor = new Precursor();
-                heavyPrecursor.elements = MS2Fragment.createFilledElementDict((DataTable)buildingBlockDataTables[0]);
+                heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlockDataTables[0]);
+                foreach(KeyValuePair<int, int> row in heavyPrecursor.elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
                 heavyPrecursor.name = name;
                 heavyPrecursor.category = precursor.category;
                 heavyPrecursor.pathToImage = precursor.pathToImage;
                 heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
-                foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions)
-                {
-                    heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
-                }
+                foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions) heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
                 heavyPrecursor.derivative = precursor.derivative;
                 heavyPrecursor.heavyLabeled = true;
                 heavyPrecursor.userDefined = true;
                 heavyPrecursor.userDefinedFattyAcids = new ArrayList();
                 for (int i = 1; i < buildingBlockDataTables.Count; ++i)
                 {
-                    heavyPrecursor.userDefinedFattyAcids.Add(MS2Fragment.createFilledElementDict((DataTable)buildingBlockDataTables[i]));
+                    Dictionary<int, int> newElements = createElementData((Dictionary<string, object[]>)buildingBlockDataTables[i]);
+                    foreach(KeyValuePair<int, int> row in newElements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
+                    heavyPrecursor.userDefinedFattyAcids.Add(newElements);
                 }
-                creatorGUI.lipidCreator.headgroups.Add(name, heavyPrecursor);
-                precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
                 
-                creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
-                
-                // copy all MS2Fragments
-                creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
-                creatorGUI.lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
-                creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
-                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
+                if (numHeavyElements == 0)
                 {
-                    creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                    MessageBox.Show("No building block contains a heavy isotope!", "Not registrable");
                 }
-                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
+                else
                 {
-                    creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                    creatorGUI.lipidCreator.headgroups.Add(name, heavyPrecursor);
+                    precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
+                    
+                    creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
+                    
+                    // copy all MS2Fragments
+                    creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                    creatorGUI.lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
+                    creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
+                    foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
+                    {
+                        creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                    }
+                    foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
+                    {
+                        creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                    }
+                    MessageBox.Show("Heavy isotope was successfully added!", "Isotope added");
                 }
-                
-                this.Close();
             }
         }
     }

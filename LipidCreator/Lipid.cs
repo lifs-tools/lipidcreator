@@ -412,7 +412,7 @@ namespace LipidCreator
                     }
                     
                     peaks.Add(new Peak(massFragment,
-                        fragment.intensity,
+                        fragment.computeIntensity(),
                         new PeakAnnotation(fragName,
                             fragment.fragmentCharge,
                             Lipid.chargeToAdduct[fragment.fragmentCharge],

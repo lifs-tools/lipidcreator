@@ -44,7 +44,6 @@ namespace LipidCreator
         public String fragmentName;
         public int fragmentCharge;
         public String fragmentFile;
-        public bool fragmentSelected;
         public Dictionary<int, int> fragmentElements;
         public ArrayList fragmentBase;
         public HashSet<string> restrictions;
@@ -205,8 +204,7 @@ namespace LipidCreator
             xml += " fragmentCharge=\"" + fragmentCharge + "\"";
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
-            xml += " userDefined=\"" + userDefined + "\"";
-            xml += " fragmentSelected=\"" + (fragmentSelected ? 1 : 0) + "\">\n";
+            xml += " userDefined=\"" + userDefined + "\">";
             foreach (string restriction in restrictions)
             {
                 xml += "<restriction>" + restriction + "</restriction>\n";
@@ -226,7 +224,6 @@ namespace LipidCreator
         public void import(XElement node, string importVersion)
         {
             
-        
             restrictions.Clear();
             fragmentBase.Clear();
         
@@ -235,7 +232,6 @@ namespace LipidCreator
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
             userDefined = node.Attribute("userDefined").Value.Equals("True");
-            fragmentSelected = node.Attribute("fragmentSelected").Value.ToString() == "1";
             
             
             foreach(XElement child in node.Elements())
@@ -404,13 +400,21 @@ namespace LipidCreator
         }
         
         
+        // TODO: compute fragment intensity based on parameterized
+        // model depending on collision energy 
+        public double computeIntensity(double collisionEnergy = 0)
+        {
+        
+            return intensity;
+        }
+        
+        
     
         public MS2Fragment()
         {
             fragmentName = "-";
             fragmentCharge = -1;
             fragmentFile = "-";
-            fragmentSelected = true;
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
@@ -426,7 +430,6 @@ namespace LipidCreator
             fragmentName = name;
             fragmentCharge = -1;
             fragmentFile = fileName;
-            fragmentSelected = true;
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
@@ -441,7 +444,6 @@ namespace LipidCreator
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
-            fragmentSelected = true;
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
@@ -457,7 +459,6 @@ namespace LipidCreator
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
-            fragmentSelected = selected;
             fragmentElements = dataElements;
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
@@ -473,7 +474,6 @@ namespace LipidCreator
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
-            fragmentSelected = selected;
             fragmentElements = dataElements;
             this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
@@ -489,7 +489,6 @@ namespace LipidCreator
             fragmentName = copy.fragmentName;
             fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
-            fragmentSelected = copy.fragmentSelected;
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();

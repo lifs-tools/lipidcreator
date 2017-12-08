@@ -63,10 +63,19 @@ namespace LipidCreator
         private System.Windows.Forms.MainMenu mainMenuLipidCreator;
         private System.Windows.Forms.MenuItem menuFile;
         private System.Windows.Forms.MenuItem menuImport;
+        private System.Windows.Forms.MenuItem menuImportSettings;
         private System.Windows.Forms.MenuItem menuImportPredefined;
         private System.Windows.Forms.MenuItem menuExport;
+        private System.Windows.Forms.MenuItem menuExportSettings;
         private System.Windows.Forms.MenuItem menuDash;
+        private System.Windows.Forms.MenuItem menuDash2;
+        private System.Windows.Forms.MenuItem menuDash3;
         private System.Windows.Forms.MenuItem menuExit;
+        private System.Windows.Forms.MenuItem menuOptions;
+        private System.Windows.Forms.MenuItem menuMS2Fragments;
+        private System.Windows.Forms.MenuItem menuIsotopes;
+        private System.Windows.Forms.MenuItem menuResetCategory;
+        private System.Windows.Forms.MenuItem menuResetLipidCreator;
         private System.Windows.Forms.MenuItem menuHelp;
         private System.Windows.Forms.MenuItem menuAbout;
         
@@ -83,7 +92,6 @@ namespace LipidCreator
         private int DefaultCheckboxBGB;
 
         private Button addLipidButton;
-        private Button resetLipidButton;
         private Button modifyLipidButton;
         private Button MS2fragmentsLipidButton;
         private Button addHeavyIsotopeButton;
@@ -339,49 +347,80 @@ namespace LipidCreator
             this.Menu = this.mainMenuLipidCreator;
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
+            this.menuImportSettings = new System.Windows.Forms.MenuItem ();
             this.menuImportPredefined = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem ();
+            this.menuExportSettings = new System.Windows.Forms.MenuItem ();
             this.menuDash = new System.Windows.Forms.MenuItem ();
+            this.menuDash2 = new System.Windows.Forms.MenuItem ();
+            this.menuDash3 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
-            this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile } );
-            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuExit});
-            this.menuFile.Index = 0;
-            this.menuFile.Text = "&File";
+            this.menuResetCategory = new System.Windows.Forms.MenuItem ();
+            this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
+            this.menuOptions = new System.Windows.Forms.MenuItem ();
+            this.menuMS2Fragments = new System.Windows.Forms.MenuItem ();
+            this.menuIsotopes = new System.Windows.Forms.MenuItem ();
+            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuImportSettings, menuExportSettings, menuDash3, menuExit});
+            this.menuFile.Text = "File";
             
-            this.menuImport.Index = 0;
             this.menuImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.menuImport.Text = "&Import";
             this.menuImport.Click += new System.EventHandler (menuImportClick);
             
-            this.menuImportPredefined.Index = 1;
+            this.menuImportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
+            this.menuImportSettings.Text = "Import &Settings";
+            this.menuImportSettings.Click += new System.EventHandler (menuImportSettingsClick);
+            
             this.menuImportPredefined.Text = "Import Predefined";
             
-            this.menuExport.Index = 2;
             this.menuExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
             this.menuExport.Text = "&Export";
             this.menuExport.Click += new System.EventHandler (menuExportClick);
             
-            this.menuDash.Index = 3;
-            this.menuDash.Text = "-";
+            this.menuExportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
+            this.menuExportSettings.Text = "Expor&t Settings";
+            this.menuExportSettings.Click += new System.EventHandler (menuExportSettingsClick);
             
-            this.menuExit.Index = 4;
+            this.menuDash.Text = "-";
+            this.menuDash2.Text = "-";
+            this.menuDash3.Text = "-";
+            
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
             this.menuExit.Click += new System.EventHandler (menuExitClick);
+            
+            
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
+            this.menuOptions.Text = "Options";
+            
+            this.menuMS2Fragments.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
+            this.menuMS2Fragments.Text = "&MS2 fragments";
+            this.menuMS2Fragments.Click += new System.EventHandler (openMS2Form);
+            
+            this.menuIsotopes.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
+            this.menuIsotopes.Text = "Manage &heavy isotopes";
+            this.menuIsotopes.Click += new System.EventHandler (openHeavyIsotopeForm);
+            
+            this.menuResetCategory.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
+            this.menuResetCategory.Text = "Reset &lipid category";
+            this.menuResetCategory.Click += new System.EventHandler (resetLipid);
+            
+            this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.menuResetLipidCreator.Text = "Reset Lipid&Creator";
+            this.menuResetLipidCreator.Click += new System.EventHandler (resetLipidCreator);
 
             this.menuHelp = new System.Windows.Forms.MenuItem ();
-            this.menuHelp.Index = 1;
             this.menuHelp.Text = "&Help";
 
             this.menuAbout = new System.Windows.Forms.MenuItem ();
             this.menuHelp.MenuItems.AddRange(new MenuItem[]{ menuAbout });
 
-            this.menuAbout.Index = 0;
+            
             this.menuAbout.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.menuAbout.Text = "&About";
             this.menuAbout.Click += new System.EventHandler (menuAboutClick);
 
-            this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuHelp } );
+            this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuOptions, this.menuHelp } );
             
             tabControl = new TabControl();
             this.Size = new System.Drawing.Size(1060, 700);
@@ -395,7 +434,6 @@ namespace LipidCreator
             lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
-            resetLipidButton = new Button();
             modifyLipidButton = new Button();
             MS2fragmentsLipidButton = new Button();
 
@@ -1877,13 +1915,6 @@ namespace LipidCreator
             addLipidButton.BackColor = SystemColors.Control;
             addLipidButton.Click += registerLipid;
 
-            resetLipidButton.Text = "Reset lipid";
-            resetLipidButton.Width = 130;
-            resetLipidButton.Height = 26;
-            resetLipidButton.Location = new Point(20, topLowButtons);
-            resetLipidButton.BackColor = SystemColors.Control;
-            resetLipidButton.Click += resetLipid;
-
             modifyLipidButton.Text = "Modify lipid";
             modifyLipidButton.Width = 130;
             modifyLipidButton.Height = 26;
@@ -1894,14 +1925,14 @@ namespace LipidCreator
             MS2fragmentsLipidButton.Text = "MS2 fragments";
             MS2fragmentsLipidButton.Width = 130;
             MS2fragmentsLipidButton.Height = 26;
-            MS2fragmentsLipidButton.Location = new Point(160, topLowButtons);
+            MS2fragmentsLipidButton.Location = new Point(20, topLowButtons);
             MS2fragmentsLipidButton.BackColor = SystemColors.Control;
             MS2fragmentsLipidButton.Click += openMS2Form;
 
             addHeavyIsotopeButton.Text = "Manage heavy isotopes";
             addHeavyIsotopeButton.Width = 150;
             addHeavyIsotopeButton.Height = 26;
-            addHeavyIsotopeButton.Location = new Point(300, topLowButtons);
+            addHeavyIsotopeButton.Location = new Point(160, topLowButtons);
             addHeavyIsotopeButton.BackColor = SystemColors.Control;
             addHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 

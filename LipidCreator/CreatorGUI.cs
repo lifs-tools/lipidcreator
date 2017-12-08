@@ -54,10 +54,12 @@ namespace LipidCreator
         public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
         public ArrayList tabList;
         public LipidCategory currentIndex;
+        public string inputParameters;
         
-        public CreatorGUI(LipidCreator lipidCreator)
+        public CreatorGUI(string inputParameters)
         {
-            this.lipidCreator = lipidCreator;
+            this.inputParameters = inputParameters;
+            this.lipidCreator = new LipidCreator(this.inputParameters);
             currentIndex = LipidCategory.NoLipid;
             resetAllLipids();
             
@@ -104,6 +106,17 @@ namespace LipidCreator
                                                         mediatorlipidsTab
                                                        });
             changeTab(1);
+        }
+        
+        public void resetLipidCreator(Object sender, EventArgs e)
+        {
+            DialogResult mbr = MessageBox.Show ("Are you sure to reset complete LipidCreator? All information and settings will be discarded.", "Reset LipidCreator", MessageBoxButtons.YesNo);
+            if (mbr == DialogResult.Yes) {
+                lipidCreator = new LipidCreator(inputParameters);
+                resetAllLipids();
+                refreshRegisteredLipidsTable();
+                changeTab((int)currentIndex);
+            }
         }
         
         public void resetAllLipids()
@@ -469,9 +482,12 @@ namespace LipidCreator
                     break;
             }
             
+            menuResetCategory.Enabled = currentIndex != LipidCategory.NoLipid;
+            menuMS2Fragments.Enabled = currentIndex != LipidCategory.NoLipid;
+            menuIsotopes.Enabled = currentIndex != LipidCategory.NoLipid;
+            
             if (currentLipid != null)
             {
-                ((TabPage)tabList[index]).Controls.Add(resetLipidButton);
                 ((TabPage)tabList[index]).Controls.Add(MS2fragmentsLipidButton);
                 ((TabPage)tabList[index]).Controls.Add(addHeavyIsotopeButton);
                 ((TabPage)tabList[index]).Controls.Add(modifyLipidButton);
@@ -483,6 +499,8 @@ namespace LipidCreator
         
         public void resetLipid(Object sender, EventArgs e)
         {
+        
+            if (currentIndex == LipidCategory.NoLipid) return;
             Lipid newLipid = null;
             int index = (int)currentIndex;
             switch (index)
@@ -2576,6 +2594,7 @@ namespace LipidCreator
         
         public void openMS2Form(Object sender, EventArgs e)
         {
+            if (currentIndex == LipidCategory.NoLipid) return;
             Form openForm = (currentIndex == LipidCategory.Mediator) ? ((Form)new MediatorMS2Form(this, (Mediator)currentLipid)) : ((Form)new MS2Form(this, currentLipid));
             openForm.Owner = this;
             openForm.ShowInTaskbar = false;
@@ -2586,6 +2605,7 @@ namespace LipidCreator
         
         public void openHeavyIsotopeForm(Object sender, EventArgs e)
         {
+            if (currentIndex == LipidCategory.NoLipid) return;
             AddHeavyPrecursor addHeavyPrecursor = new AddHeavyPrecursor(this, currentIndex);
             addHeavyPrecursor.Owner = this;
             addHeavyPrecursor.ShowInTaskbar = false;
@@ -2656,6 +2676,37 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        protected void menuImportSettingsClick(object sender, System.EventArgs e)
+        {
+        
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                XDocument doc;
+                try 
+                {
+                    doc = XDocument.Load(openFileDialog1.FileName);
+                    lipidCreator.import(doc, true);
+                    resetAllLipids();
+                    changeTab((int)currentIndex);
+                    refreshRegisteredLipidsTable();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
+        }
+        
         protected void menuExportClick(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -2671,6 +2722,27 @@ namespace LipidCreator
                 if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
                 {
                     writer.Write(lipidCreator.serialize());
+                    writer.Dispose();
+                    writer.Close();
+                }
+            }
+        }
+        
+        protected void menuExportSettingsClick(object sender, System.EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            
+            saveFileDialog1.InitialDirectory = "c:\\";
+            saveFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 0;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter writer;
+                if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                {
+                    writer.Write(lipidCreator.serialize(true));
                     writer.Dispose();
                     writer.Close();
                 }
@@ -2695,8 +2767,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-            LipidCreator lc = new LipidCreator((args.Length > 0) ? args[0] : null);
-            CreatorGUI creatorGUI = new CreatorGUI(lc);
+            CreatorGUI creatorGUI = new CreatorGUI((args.Length > 0) ? args[0] : null);
             Application.Run(creatorGUI);
         }
     }

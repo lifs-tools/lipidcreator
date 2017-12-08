@@ -63,7 +63,7 @@ namespace LipidCreator
         
         public string serialize()
         {
-            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\">\n";
+            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\" derivative=\"" + derivative + "\" heavyLabeled=\"" + heavyLabeled + "\" userDefined=\"" + userDefined + "\">\n";
             foreach (KeyValuePair<string, bool> adductRestriction in adductRestrictions)
             {
                 xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
@@ -97,9 +97,9 @@ namespace LipidCreator
             category = (LipidCategory)Convert.ToInt32(node.Attribute("category").Value);
             pathToImage = node.Attribute("pathToImage").Value;
             buildingBlockType = Convert.ToInt32(node.Attribute("buildingBlockType").Value);
-            derivative = false;
-            heavyLabeled = true;
-            userDefined = true;            
+            derivative = node.Attribute("derivative").Value.Equals("True");
+            heavyLabeled = node.Attribute("heavyLabeled").Value.Equals("True");
+            userDefined = node.Attribute("userDefined").Value.Equals("True");
             
             foreach(XElement child in node.Elements())
             {

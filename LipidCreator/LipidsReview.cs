@@ -93,6 +93,7 @@ namespace LipidCreator
                 foreach (int i in replicates) dataGridViewTransitions.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
             }
             else dataGridViewTransitions.DefaultCellStyle.BackColor = Color.Empty;
+            foreach (DataGridViewColumn d in dataGridViewTransitions.Columns) d.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
         
         

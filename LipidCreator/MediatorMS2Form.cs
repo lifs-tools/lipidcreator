@@ -115,6 +115,7 @@ namespace LipidCreator
         
         void deuteratedCheckBoxValueChanged(object sender, EventArgs e)
         {
+            checkedListBoxDeuteratedFragments.Items.Clear();
             string headgroup = deuteratedMediatorHeadgroups.Items[((ComboBox)sender).SelectedIndex].ToString();
             foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[headgroup][false])
             {

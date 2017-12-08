@@ -54,8 +54,6 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
-        public bool storePrecursorsOnExport;
-        public bool storeFragmentsOnExport;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -257,11 +255,9 @@ namespace LipidCreator
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
-            transitionList = addDataColumns(new DataTable ());
             headgroups = new Dictionary<String, Precursor>();
+            transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
-            storePrecursorsOnExport = false;
-            storeFragmentsOnExport = false;
             readInputFiles();
         }
         
@@ -471,9 +467,8 @@ namespace LipidCreator
         
         
         
-        public string serialize()
+        public string serialize(bool onlySettings = false)
         {
-            ArrayList userDefined = new ArrayList();
         
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\">\n";
             
@@ -481,28 +476,37 @@ namespace LipidCreator
             {
                 if (precursor.Value.userDefined)
                 {
-                    userDefined.Add(precursor.Key);
                     xml += precursor.Value.serialize();
                 }
             }
             
-            foreach (string headgroup in userDefined)
+            foreach (KeyValuePair<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> headgroup in allFragments)
             {
-                xml += "<userDefinedFragment headgroup=\"" + headgroup + "\">\n";
-                foreach(KeyValuePair<string, MS2Fragment> ms2fragment in allFragments[headgroup][true])
+                foreach (KeyValuePair<string, MS2Fragment> fragment in allFragments[headgroup.Key][true])
                 {
-                    xml += ms2fragment.Value.serialize();
+                    if (fragment.Value.userDefined)
+                    {
+                        xml += "<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n";
+                        xml += fragment.Value.serialize();
+                        xml += "</userDefinedFragment>\n";
+                    }
                 }
-                foreach(KeyValuePair<string, MS2Fragment> ms2fragment in allFragments[headgroup][false])
+                foreach (KeyValuePair<string, MS2Fragment> fragment in allFragments[headgroup.Key][false])
                 {
-                    xml += ms2fragment.Value.serialize();
+                    if (fragment.Value.userDefined)
+                    {
+                        xml += "<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n";
+                        xml += fragment.Value.serialize();
+                        xml += "</userDefinedFragment>\n";
+                    }
                 }
-                xml += "</userDefinedFragment>\n";
             }
-            
-            foreach (Lipid currentLipid in registeredLipids)
+            if (!onlySettings)
             {
-                xml += currentLipid.serialize();
+                foreach (Lipid currentLipid in registeredLipids)
+                {
+                    xml += currentLipid.serialize();
+                }
             }
             xml += "</LipidCreator>\n";
             return xml;
@@ -510,7 +514,10 @@ namespace LipidCreator
         
         
         
-        public void import(XDocument doc)
+        
+        
+        
+        public void import(XDocument doc, bool onlySettings = false)
         {
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
             
@@ -525,8 +532,8 @@ namespace LipidCreator
                     categoryToClass[(int)precursor.category].Add(precursor.name);
                     headgroups.Add(precursor.name, precursor);
                     headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
-                    storePrecursorsOnExport = true;
                 }
+                Console.WriteLine(precursor.name + " " + precursor.userDefined);
             }
             
             var userDefinedFragments = doc.Descendants("userDefinedFragment");
@@ -544,9 +551,10 @@ namespace LipidCreator
                     MS2Fragment ms2fragment = new MS2Fragment();
                     ms2fragment.import(ms2fragmentXML, importVersion);
                     allFragments[headgroup][ms2fragment.fragmentCharge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
-                    storeFragmentsOnExport = true;
                 }
             }
+            
+            if (onlySettings) return;
             
             var lipids = doc.Descendants("lipid");
             foreach ( var lipid in lipids )

@@ -165,7 +165,7 @@ namespace LipidCreator
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
-                if (fragment.fragmentFile != null) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
                 // create tool tip           
                 string chemForm = "";
@@ -220,7 +220,7 @@ namespace LipidCreator
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
-                if (fragment.fragmentFile != null) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
                 // create tool tip              
                 string chemForm = "";

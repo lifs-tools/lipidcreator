@@ -67,10 +67,14 @@ namespace LipidCreator
             dataGridView1.Columns.Add(combo1);
             dataGridView1.Columns[0].Width = (dataGridView1.Width - 2) / 4;
             dataGridView1.Columns[0].ReadOnly = true;
+            dataGridView1.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns[1].Width = (dataGridView1.Width - 2) / 4;
             dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns[2].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.Columns[3].Width = (dataGridView1.Width - 2) / 4;
+            dataGridView1.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.AllowUserToAddRows = false;
             combo1.Name = "Isotope type";
             
@@ -198,8 +202,19 @@ namespace LipidCreator
             if (comboBox3.Items.Count > 0)
             {
                 comboBox3.SelectedIndex = 0;
-                button3.Enabled = true;
-                button4.Enabled = true;
+                
+                string heaveyHeadgroup = headgroup + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heaveyHeadgroup];
+                if (heavyPrecursor.userDefined)
+                {
+                    button3.Enabled = true;
+                    button4.Enabled = true;
+                }
+                else 
+                {
+                    button3.Enabled = false;
+                    button4.Enabled = false;
+                }
             }
             else
             {
@@ -594,13 +609,20 @@ namespace LipidCreator
                     creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
                     creatorGUI.lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
                     creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
-                    foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
+                    if (heavyPrecursor.category != LipidCategory.Mediator)
                     {
-                        creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
-                    }
-                    foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
-                    {
-                        creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, new MS2Fragment(ms2Fragment.Value));
+                        foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
+                        {
+                            MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
+                            fragment.userDefined = true;
+                            creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, fragment);
+                        }
+                        foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
+                        {
+                            MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
+                            fragment.userDefined = true;
+                            creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, fragment);
+                        }
                     }
                     MessageBox.Show("Heavy isotope was successfully added!", "Isotope added");
                 }

@@ -522,6 +522,7 @@ namespace LipidCreator
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
             
             var precursors = doc.Descendants("Precursor");
+            bool precursorImportIgnored = false;
             foreach ( var precursorXML in precursors )
             {
                 Precursor precursor = new Precursor();
@@ -533,10 +534,18 @@ namespace LipidCreator
                     headgroups.Add(precursor.name, precursor);
                     headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
                 }
-                Console.WriteLine(precursor.name + " " + precursor.userDefined);
+                else
+                {
+                    precursorImportIgnored = true;
+                }
+            }
+            if (precursorImportIgnored)
+            {
+                MessageBox.Show("Some precursors are already registered and thus ignored during import.", "Warning");
             }
             
             var userDefinedFragments = doc.Descendants("userDefinedFragment");
+            bool fragmentImportIgnored = false;
             foreach ( var userDefinedFragment in userDefinedFragments )
             {
                 string headgroup = userDefinedFragment.Attribute("headgroup").Value;
@@ -550,8 +559,13 @@ namespace LipidCreator
                 {
                     MS2Fragment ms2fragment = new MS2Fragment();
                     ms2fragment.import(ms2fragmentXML, importVersion);
-                    allFragments[headgroup][ms2fragment.fragmentCharge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
+                    if (!allFragments[headgroup][ms2fragment.fragmentCharge >= 0].ContainsKey(ms2fragment.fragmentName)) allFragments[headgroup][ms2fragment.fragmentCharge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
+                    else fragmentImportIgnored = true;
                 }
+            }
+            if (fragmentImportIgnored)
+            {
+                MessageBox.Show("Some fragments are already registered and thus ignored during import.", "Warning");
             }
             
             if (onlySettings) return;

@@ -299,7 +299,7 @@ namespace LipidCreator
                     comboBox2.SelectedIndex = 0;
                 }
             }
-            else if(comboBox3.SelectedIndex == 0)
+            else if(comboBox3.SelectedIndex >= 0)
             {
                 fillGridContent();
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
@@ -386,6 +386,8 @@ namespace LipidCreator
                 button4.Enabled = false;
                 
             }
+            dataGridView1.Update();
+            dataGridView1.Refresh();
             inGridSet = false;
         }
         

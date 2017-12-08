@@ -198,6 +198,13 @@ namespace LipidCreator
             if (comboBox3.Items.Count > 0)
             {
                 comboBox3.SelectedIndex = 0;
+                button3.Enabled = true;
+                button4.Enabled = true;
+            }
+            else
+            {
+                button3.Enabled = false;
+                button4.Enabled = false;
             }
             
         }
@@ -212,7 +219,7 @@ namespace LipidCreator
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (editing) updateAvailableIsotopes();
-            setGrid();
+            else setGrid();
         }
         
         
@@ -472,7 +479,33 @@ namespace LipidCreator
         // editing isotope
         private void button3_Click(object sender, EventArgs e)
         {
-            this.Close();
+            int numHeavyElements = 0;
+            
+            ArrayList tmp = new ArrayList();
+            foreach (Dictionary<string, object[]> bbdt in buildingBlockDataTables)
+            {
+                Dictionary<int, int> elements = createElementData(bbdt);
+                foreach(KeyValuePair<int, int> row in elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
+                tmp.Add(elements);
+                
+            }
+            
+            if (numHeavyElements == 0)
+                {
+                    MessageBox.Show("No building block contains a heavy isotope!", "Not editable");
+                }
+                else
+                {
+                    string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                    Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
+                    heavyPrecursor.elements = (Dictionary<int, int>)tmp[0];
+                    heavyPrecursor.userDefinedFattyAcids.Clear();
+                    for (int i = 1; i < tmp.Count; ++i)
+                    {
+                        heavyPrecursor.userDefinedFattyAcids.Add(tmp[i]);
+                    }
+                    MessageBox.Show ("Changes have been stored.", "Editing complete");
+            }
         }
         
         
@@ -480,7 +513,29 @@ namespace LipidCreator
         // deleting isotope
         private void button4_Click(object sender, EventArgs e)
         {
-            this.Close();
+            DialogResult mbr = MessageBox.Show ("Are you sure to delete this heavy isotope?", "Deleting isotope", MessageBoxButtons.YesNo);
+            
+            if (mbr == DialogResult.Yes) {
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
+                string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                Console.WriteLine(headgroup + " " + heavyHeadgroup);
+                Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
+                creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Remove(heavyHeadgroup);
+                creatorGUI.lipidCreator.allFragments.Remove(heavyHeadgroup);
+                creatorGUI.lipidCreator.headgroups.Remove(heavyHeadgroup);
+                
+                
+                Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
+                for (int i = 0; i < precursor.heavyLabeledPrecursors.Count; ++i)
+                {
+                    if (((Precursor)precursor.heavyLabeledPrecursors[i]).name.Equals(heavyHeadgroup))
+                    {
+                        precursor.heavyLabeledPrecursors.RemoveAt(i);
+                        break;
+                    }
+                }                
+                updateAvailableIsotopes();
+            }
         }
 
         

@@ -230,8 +230,15 @@ namespace LipidCreator
 
             if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
                 this.Enabled = false;
-                lipidCreatorForm.createBlib (Path.GetFullPath (saveFileDialog1.FileName));
-                MessageBox.Show ("Storing of spectral library is complete.", "Storing complete");
+                try
+                {
+                    lipidCreatorForm.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
+                    MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Problem storing spectral library: " + exception.Message, "Problem storing spectral library");
+                }
                 this.Enabled = true;
             }
         }

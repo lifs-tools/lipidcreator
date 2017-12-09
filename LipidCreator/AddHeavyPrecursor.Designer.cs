@@ -276,7 +276,7 @@ namespace LipidCreator
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
             this.Name = "AddHeavyPrecursor";
-            this.Text = "AddHeavyPrecursor";
+            this.Text = "Manage heavy isotopes";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

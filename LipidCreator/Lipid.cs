@@ -191,7 +191,7 @@ namespace LipidCreator
                     }
                     if (fragName.IndexOf("[adduct]") > -1)
                     {
-                        fragName = fragName.Replace("[adduct]", precursorData.precursorIonFormula.Replace("[M", "").Replace("]", ""));
+                        fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct.Replace("[M", "").Replace("]", ""));
                     }
                     
                     string fragAdduct = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";

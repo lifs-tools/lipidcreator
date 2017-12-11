@@ -34,6 +34,7 @@ using System.IO;
 using System.Linq;
 using System.Data.SQLite;
 using Ionic.Zlib;
+using System.Diagnostics;
 
 using System.Xml;
 using System.Xml.Linq;
@@ -84,7 +85,7 @@ namespace LipidCreator
         public void readInputFiles()
         {
             int lineCounter = 1;
-            string ms2FragmentsFile = (openedAsExternal ? prefixPath : "") + "data/ms2fragments.csv";
+            string ms2FragmentsFile = prefixPath + "data/ms2fragments.csv";
             if (File.Exists(ms2FragmentsFile))
             {
                 try
@@ -113,7 +114,7 @@ namespace LipidCreator
                             atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[8]);
                             atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[9]);
                             atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[10]);
-                            string fragmentFile = (openedAsExternal ? prefixPath : "") + tokens[2];
+                            string fragmentFile = prefixPath + tokens[2];
                             if (tokens[2] != "%" && !File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
@@ -142,8 +143,7 @@ namespace LipidCreator
                 Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
             
-            
-            string headgroupsFile = (openedAsExternal ? prefixPath : "") + "data/headgroups.csv";
+            string headgroupsFile = prefixPath + "data/headgroups.csv";
             if (File.Exists(headgroupsFile))
             {
                 lineCounter = 1;
@@ -196,7 +196,7 @@ namespace LipidCreator
                             headgroup.elements[(int)Molecules.N] = Convert.ToInt32(tokens[5]); // nytrogen
                             headgroup.elements[(int)Molecules.P] = Convert.ToInt32(tokens[6]); // phosphor
                             headgroup.elements[(int)Molecules.S] = Convert.ToInt32(tokens[7]); // sulfor
-                            string precursorFile = (openedAsExternal ? prefixPath : "") + tokens[9];
+                            string precursorFile = prefixPath + tokens[9];
                             if (!File.Exists(precursorFile))
                             {
                                 throw new Exception("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
@@ -242,49 +242,88 @@ namespace LipidCreator
             }
         }
         
-        
-        
-        
-        
-        
+
         
         public LipidCreator(String pipe)
         {
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
+            prefixPath = (openedAsExternal ? prefixPath : "");
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
+            Stopwatch stopwatch = Stopwatch.StartNew();
             readInputFiles();
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
         
         
-        
+        // parser for reading the csv lines with comma separation and "" quotation (if present)
+        // using an Moore automaton based approach
         public string[] parseLine(string line)
         {
             List<string> listTokens = new List<string>();
-            bool inQuotes = false;
-            string token = "";
+            int start = 0;
+            int length = 0;
+            int state = 1;
             for (int i = 0; i < line.Length; ++i)
             {
-                if (line[i] == '\"') inQuotes = !inQuotes;
-                else if (line[i] == ',')
-                {
-                    if (inQuotes) token += line[i];
-                    else
-                    {
-                        listTokens.Add(token);
-                        token = "";
-                    }
+                switch (state){
+                    case 0:
+                        switch (line[i])
+                        {
+                            case '"':
+                                throw new Exception("invalid line in file");
+                            case ',':
+                                listTokens.Add(line.Substring(start, length));
+                                state = 1;
+                                break;
+                            default:
+                                ++length;
+                                break;
+                        }
+                        break;
+                        
+                    case 1:
+                        switch (line[i])
+                        {
+                            case '"':
+                                length = 0;
+                                start = i + 1;
+                                state = 2;
+                                break;
+                            case ',':
+                                listTokens.Add("");
+                                break;
+                            default:
+                                length = 1;
+                                start = i;
+                                state = 0;
+                                break;
+                        }
+                        break;
+                        
+                    case 2:
+                        if (line[i] != '"') ++length;
+                        else state = 3;
+                        break;
+                        
+                    case 3:
+                        if (line[i] == ',')
+                        {
+                            listTokens.Add(line.Substring(start, length));
+                            state = 1;
+                        }    
+                        else throw new Exception("invalid line in file");
+                        break;
                 }
-                else token += line[i];
             }
-            listTokens.Add(token);
-            if (inQuotes) throw new Exception("invalid line in file");
-            
+            if (state != 2) listTokens.Add(line.Substring(start, length));
+            else throw new Exception("invalid line in file");
             
             return listTokens.ToArray();
         }

@@ -148,7 +148,6 @@ namespace LipidCreator
                             case "LCB":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
                                 break;
-                            // introduce exception for FAp, pass only if FAp contains at least one double bond
                             case "FA":
                             case "FA1":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);

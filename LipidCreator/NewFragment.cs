@@ -324,7 +324,7 @@ namespace LipidCreator
         
             
             Dictionary<int, int> newElements = createElementData(elements);
-            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex], "");
+            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
             ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, newFragment);
             if (Convert.ToInt32(numericUpDownCharge.Value) > 0)

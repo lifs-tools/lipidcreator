@@ -46,7 +46,6 @@ namespace LipidCreator
         public String fragmentFile;
         public Dictionary<int, int> fragmentElements;
         public ArrayList fragmentBase;
-        public HashSet<string> restrictions;
         public double intensity;
         public bool userDefined;
         public const double DEFAULT_INTENSITY = 100.0;
@@ -205,10 +204,6 @@ namespace LipidCreator
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
             xml += " userDefined=\"" + userDefined + "\">";
-            foreach (string restriction in restrictions)
-            {
-                xml += "<restriction>" + restriction + "</restriction>\n";
-            }
             foreach (string fbase in fragmentBase)
             {
                 xml += "<fragmentBase>" + fbase + "</fragmentBase>\n";
@@ -223,10 +218,7 @@ namespace LipidCreator
         
         public void import(XElement node, string importVersion)
         {
-            
-            restrictions.Clear();
             fragmentBase.Clear();
-        
             fragmentName = node.Attribute("fragmentName").Value.ToString();
             fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
@@ -237,11 +229,7 @@ namespace LipidCreator
             foreach(XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
-                {
-                    case "restriction":
-                        restrictions.Add(child.Value.ToString());
-                        break;
-                        
+                {       
                     case "fragmentBase":
                         fragmentBase.Add(child.Value.ToString());
                         break;
@@ -264,142 +252,6 @@ namespace LipidCreator
         }
         
         
-        
-        public static DataTable createEmptyElementTable()
-        {
-            DataTable elements = new DataTable();
-            elements.Clear();
-            String count = "Count";
-            String shortcut = "Shortcut";
-            String element = "Element";
-            String monoMass = "mass";
-
-            DataColumn columnCount = elements.Columns.Add(count);
-            DataColumn columnShortcut = elements.Columns.Add(shortcut);
-            DataColumn columnElement = elements.Columns.Add(element);
-            elements.Columns.Add(monoMass);
-
-            columnCount.DataType = System.Type.GetType("System.Int32");
-            
-            for (int i = 0; i < ELEMENT_POSITIONS.Count; ++i) elements.Rows.Add(elements.NewRow());
-
-            elements.Rows[(int)Molecules.C][count] = "0";
-            elements.Rows[(int)Molecules.C][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.C];
-            elements.Rows[(int)Molecules.C][element] = "carbon";
-            elements.Rows[(int)Molecules.C][monoMass] = ELEMENT_MASSES[(int)Molecules.C];
-            
-            elements.Rows[(int)Molecules.C13][count] = "0";
-            elements.Rows[(int)Molecules.C13][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.C13];
-            elements.Rows[(int)Molecules.C13][element] = "carbon 13";
-            elements.Rows[(int)Molecules.C13][monoMass] = ELEMENT_MASSES[(int)Molecules.C13];
-
-            elements.Rows[(int)Molecules.H][count] = "0";
-            elements.Rows[(int)Molecules.H][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.H];
-            elements.Rows[(int)Molecules.H][element] = "hydrogen";
-            elements.Rows[(int)Molecules.H][monoMass] = ELEMENT_MASSES[(int)Molecules.H];
-
-            elements.Rows[(int)Molecules.H2][count] = "0";
-            elements.Rows[(int)Molecules.H2][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.H2];
-            elements.Rows[(int)Molecules.H2][element] = "deuterium";
-            elements.Rows[(int)Molecules.H2][monoMass] = ELEMENT_MASSES[(int)Molecules.H2];
-
-            elements.Rows[(int)Molecules.O][count] = "0";
-            elements.Rows[(int)Molecules.O][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O];
-            elements.Rows[(int)Molecules.O][element] = "oxygen";
-            elements.Rows[(int)Molecules.O][monoMass] = ELEMENT_MASSES[(int)Molecules.O];
-
-            elements.Rows[(int)Molecules.O17][count] = "0";
-            elements.Rows[(int)Molecules.O17][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O17];
-            elements.Rows[(int)Molecules.O17][element] = "oxygen 17";
-            elements.Rows[(int)Molecules.O17][monoMass] = ELEMENT_MASSES[(int)Molecules.O17];
-
-            elements.Rows[(int)Molecules.O18][count] = "0";
-            elements.Rows[(int)Molecules.O18][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.O18];
-            elements.Rows[(int)Molecules.O18][element] = "oxygen 18";
-            elements.Rows[(int)Molecules.O18][monoMass] = ELEMENT_MASSES[(int)Molecules.O18];
-
-            elements.Rows[(int)Molecules.N][count] = "0";
-            elements.Rows[(int)Molecules.N][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.N];
-            elements.Rows[(int)Molecules.N][element] = "nitrogen";
-            elements.Rows[(int)Molecules.N][monoMass] = ELEMENT_MASSES[(int)Molecules.N];
-
-            elements.Rows[(int)Molecules.N15][count] = "0";
-            elements.Rows[(int)Molecules.N15][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.N15];
-            elements.Rows[(int)Molecules.N15][element] = "nitrogen 15";
-            elements.Rows[(int)Molecules.N15][monoMass] = ELEMENT_MASSES[(int)Molecules.N15];
-
-            elements.Rows[(int)Molecules.P][count] = "0";
-            elements.Rows[(int)Molecules.P][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.P];
-            elements.Rows[(int)Molecules.P][element] = "phosphorus";
-            elements.Rows[(int)Molecules.P][monoMass] = ELEMENT_MASSES[(int)Molecules.P];
-
-            elements.Rows[(int)Molecules.P32][count] = "0";
-            elements.Rows[(int)Molecules.P32][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.P32];
-            elements.Rows[(int)Molecules.P32][element] = "phosphorus 32";
-            elements.Rows[(int)Molecules.P32][monoMass] = ELEMENT_MASSES[(int)Molecules.P32];
-
-            elements.Rows[(int)Molecules.S][count] = "0";
-            elements.Rows[(int)Molecules.S][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S];
-            elements.Rows[(int)Molecules.S][element] = "sulfur";
-            elements.Rows[(int)Molecules.S][monoMass] = ELEMENT_MASSES[(int)Molecules.S];
-
-            elements.Rows[(int)Molecules.S33][count] = "0";
-            elements.Rows[(int)Molecules.S33][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S33];
-            elements.Rows[(int)Molecules.S33][element] = "sulfur 33";
-            elements.Rows[(int)Molecules.S33][monoMass] = ELEMENT_MASSES[(int)Molecules.S33];
-
-            elements.Rows[(int)Molecules.S34][count] = "0";
-            elements.Rows[(int)Molecules.S34][shortcut] = ELEMENT_SHORTCUTS[(int)Molecules.S34];
-            elements.Rows[(int)Molecules.S34][element] = "sulfur 34";
-            elements.Rows[(int)Molecules.S34][monoMass] = ELEMENT_MASSES[(int)Molecules.S34];
-            
-            columnShortcut.ReadOnly = true;
-            columnElement.ReadOnly = true;
-            return elements;
-        }
-        
-        
-        
-        public void setElements(DataTable dt)
-        {
-            foreach (DataRow dr in dt.Rows)
-            {
-                fragmentElements[ELEMENT_POSITIONS[(string)dr["Shortcut"]]] = Convert.ToInt32(dr["Count"]);
-            }
-        }
-        
-        
-        
-        public static DataTable createFilledElementTable(Dictionary<int, int> fragmentElements)
-        {
-            DataTable elements = createEmptyElementTable();
-            foreach(KeyValuePair<int, int> kvp in fragmentElements)
-            {
-                elements.Rows[kvp.Key]["Count"] = kvp.Value;
-            }
-            return elements;
-        }
-        
-        
-        
-        public static DataTable createEmptyElementTable(DataTable copy)
-        {
-            DataTable elements = createEmptyElementTable();
-            for (int i = 0; i < elements.Rows.Count; ++i)
-            {
-                if (elements.Rows[i]["Shortcut"].Equals(copy.Rows[i]["Shortcut"]))
-                {
-                    elements.Rows[i]["Count"] = copy.Rows[i]["Count"];
-                }
-                else
-                {
-                    throw new Exception("Copying element table failed");
-                }
-            }
-            return elements;
-        }
-        
-        
         // TODO: compute fragment intensity based on parameterized
         // model depending on collision energy 
         public double computeIntensity(double collisionEnergy = 0)
@@ -418,7 +270,6 @@ namespace LipidCreator
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
-            restrictions = new HashSet<string>();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
         }
@@ -433,7 +284,6 @@ namespace LipidCreator
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
-            restrictions = new HashSet<string>();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
         }
@@ -447,39 +297,34 @@ namespace LipidCreator
             fragmentElements = new Dictionary<int, int>();
             foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
             fragmentBase = new ArrayList();
-            restrictions = new HashSet<string>();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
         }
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, String restrictions)
+        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms)
         {
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = dataElements;
-            this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
-            if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, String restrictions, double intens)
+        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, double intens)
         {
             fragmentName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = dataElements;
-            this.restrictions = new HashSet<string>();
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
             intensity = Math.Min(DEFAULT_INTENSITY, Math.Max(0, intens));
-            if (restrictions.Length > 0) foreach (string restriction in restrictions.Split(new char[] {';'})) this.restrictions.Add(restriction);
         }
 
         
@@ -493,9 +338,7 @@ namespace LipidCreator
             foreach (KeyValuePair<int, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
-            restrictions = new HashSet<string>();
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
-            foreach (string restriction in copy.restrictions) restrictions.Add(restriction);
             intensity = copy.intensity;
         }
     }

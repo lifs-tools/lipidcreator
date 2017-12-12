@@ -454,7 +454,7 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, bool selected, Dictionary<int, int> dataElements, String baseForms, String restrictions)
+        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, String restrictions)
         {
             fragmentName = name;
             fragmentCharge = charge;
@@ -469,7 +469,7 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, bool selected, Dictionary<int, int> dataElements, String baseForms, String restrictions, double intens)
+        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, String restrictions, double intens)
         {
             fragmentName = name;
             fragmentCharge = charge;

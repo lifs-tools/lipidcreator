@@ -123,11 +123,11 @@ namespace LipidCreator
                             int charge = Convert.ToInt32(tokens[3]);
                             if (tokens[12].Length > 0)
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[11], Convert.ToDouble(tokens[12])));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4], tokens[11], Convert.ToDouble(tokens[12])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, true, atomsCount, tokens[4], tokens[11]));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4], tokens[11]));
                             }
                         }
                     }
@@ -255,10 +255,10 @@ namespace LipidCreator
             headgroups = new Dictionary<String, Precursor>();
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            //Stopwatch stopwatch = Stopwatch.StartNew(); // for time measuring
             readInputFiles();
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            //stopwatch.Stop();
+            //Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
         
         

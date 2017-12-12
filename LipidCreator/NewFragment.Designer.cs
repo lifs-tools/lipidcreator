@@ -165,7 +165,7 @@ namespace LipidCreator
             // label4
             // 
             this.labelSelectBase.AutoSize = true;
-            this.labelSelectBase.Location = new System.Drawing.Point(160, 8);
+            this.labelSelectBase.Location = new System.Drawing.Point(140, 8);
             this.labelSelectBase.Name = "label4";
             this.labelSelectBase.Size = new System.Drawing.Size(80, 10);
             this.labelSelectBase.TabIndex = 7;
@@ -173,7 +173,8 @@ namespace LipidCreator
             // 
             // selectBaseCombobox
             // 
-            this.selectBaseCombobox.Location = new System.Drawing.Point(160, 24);
+            this.selectBaseCombobox.Location = new System.Drawing.Point(140, 24);
+            this.selectBaseCombobox.Size = new System.Drawing.Size(130, 20);
             selectBaseCombobox.SelectedIndexChanged += new System.EventHandler(this.selectBaseComboboxValueChanged);
             //
             groupboxAddingSubtracting.Text = "... chemical formula";

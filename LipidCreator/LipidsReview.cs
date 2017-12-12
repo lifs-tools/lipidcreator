@@ -110,35 +110,23 @@ namespace LipidCreator
                 spectralName.ShowDialog ();
                 spectralName.Dispose ();
                 if (specName [0].Length > 0) {
-                    string blibPath = Application.StartupPath + "\\" + specName [0] + ".blib";
+                    string blibPath = Application.StartupPath + "\\..\\Temp\\" + specName[0] + ".blib";
                     lipidCreatorForm.createBlib (blibPath);
-                    lipidCreatorForm.sendToSkyline (transitionList, specName [0], blibPath);
+                    lipidCreatorForm.sendToSkyline (currentView, specName[0], blibPath);
                     MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
             } else {
-                lipidCreatorForm.sendToSkyline (transitionList, "", "");
+                lipidCreatorForm.sendToSkyline (currentView, "", "");
                 MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
             }
             this.Enabled = true;
         }
 
+        
+        
         private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked) {
-                if (transitionListUnique == null) {
-                    transitionListUnique = lipidCreatorForm.addDataColumns (new DataTable ());
-                    HashSet<String> replicates = new HashSet<String> ();
-                    
-                    foreach (DataRow row in currentView.Rows) {
-                        string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
-                        if (!replicates.Contains (replicateKey)) {
-                            replicates.Add (replicateKey);
-                            transitionListUnique.ImportRow (row);
-                        }
-                    }
-                    
-                }
-            
+            if (((CheckBox)sender).Checked) {            
                 currentView = this.transitionListUnique;
             } else {
                 currentView = this.transitionList;

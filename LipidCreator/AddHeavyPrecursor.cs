@@ -39,7 +39,7 @@ namespace LipidCreator
     public partial class AddHeavyPrecursor : Form
     {
         public CreatorGUI creatorGUI;
-        ArrayList buildingBlockDataTables;
+        ArrayList buildingBlockElementDicts;
         public bool updating;
         public Dictionary<string, object[]> currentDict = null;
         public bool editing;
@@ -50,7 +50,7 @@ namespace LipidCreator
         public AddHeavyPrecursor(CreatorGUI creatorGUI, LipidCategory category)
         {
             this.creatorGUI = creatorGUI;
-            buildingBlockDataTables = new ArrayList();
+            buildingBlockElementDicts = new ArrayList();
             editing = false;
             
         
@@ -182,7 +182,7 @@ namespace LipidCreator
         public void clearData()
         {
             currentDict = null;
-            buildingBlockDataTables.Clear();
+            buildingBlockElementDicts.Clear();
             dataGridView1.Rows.Clear();
         
         }
@@ -260,7 +260,7 @@ namespace LipidCreator
                 comboBox2.Items.Add("Head group");
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
-                buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
+                buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
                         
                 switch(precursor.buildingBlockType)
                 {
@@ -269,45 +269,45 @@ namespace LipidCreator
                         comboBox2.Items.Add("Fatty acid 2");
                         comboBox2.Items.Add("Fatty acid 3");
                         comboBox2.Items.Add("Fatty acid 4");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 1:
                         comboBox2.Items.Add("Fatty acid 1");
                         comboBox2.Items.Add("Fatty acid 2");
                         comboBox2.Items.Add("Fatty acid 3");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 2:
                     case 6:
                         comboBox2.Items.Add("Fatty acid 1");
                         comboBox2.Items.Add("Fatty acid 2");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 3:
                     case 7:
                         comboBox2.Items.Add("Fatty acid");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 4:
                         comboBox2.Items.Add("Long chain base");
                         comboBox2.Items.Add("Fatty acid");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 5:
                         comboBox2.Items.Add("Long chain base");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createEmptyElementDict()));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
                         
                     case 8:
@@ -328,7 +328,7 @@ namespace LipidCreator
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 userDefined = precursor.userDefined;
                 comboBox2.Items.Add("Head group");
-                buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
+                buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
                 switch(precursor.buildingBlockType)
                 {
                     case 0:
@@ -336,45 +336,45 @@ namespace LipidCreator
                         comboBox2.Items.Add("Fatty acid 2");
                         comboBox2.Items.Add("Fatty acid 3");
                         comboBox2.Items.Add("Fatty acid 4");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[3])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[3])));
                         break;
                         
                     case 1:
                         comboBox2.Items.Add("Fatty acid 1");
                         comboBox2.Items.Add("Fatty acid 2");
                         comboBox2.Items.Add("Fatty acid 3");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[2])));
                         break;
                         
                     case 2:
                     case 6:
                         comboBox2.Items.Add("Fatty acid 1");
                         comboBox2.Items.Add("Fatty acid 2");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
                         break;
                         
                     case 3:
                     case 7:
                         comboBox2.Items.Add("Fatty acid");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
                         break;
                         
                     case 4:
                         comboBox2.Items.Add("Long chain base");
                         comboBox2.Items.Add("Fatty acid");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[1])));
                         break;
                         
                     case 5:
                         comboBox2.Items.Add("Long chain base");
-                        buildingBlockDataTables.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
                         break;
                         
                     case 8:
@@ -386,7 +386,7 @@ namespace LipidCreator
                 if (comboBox2.Items.Count > 0)
                 {
                     comboBox2.SelectedIndex = 0;
-                    changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[0]);
+                    changeDataGridContent((Dictionary<string, object[]>)buildingBlockElementDicts[0]);
                 }
             }
             if (userDefined)
@@ -418,7 +418,7 @@ namespace LipidCreator
         {
             if (comboBox2.Items.Count > 0)
             {
-                changeDataGridContent((Dictionary<string, object[]>)buildingBlockDataTables[comboBox2.SelectedIndex]);
+                changeDataGridContent((Dictionary<string, object[]>)buildingBlockElementDicts[comboBox2.SelectedIndex]);
             }
         }
         
@@ -497,7 +497,7 @@ namespace LipidCreator
             int numHeavyElements = 0;
             
             ArrayList tmp = new ArrayList();
-            foreach (Dictionary<string, object[]> bbdt in buildingBlockDataTables)
+            foreach (Dictionary<string, object[]> bbdt in buildingBlockElementDicts)
             {
                 Dictionary<int, int> elements = createElementData(bbdt);
                 foreach(KeyValuePair<int, int> row in elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
@@ -576,7 +576,7 @@ namespace LipidCreator
                 // create and set precursor properties
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 Precursor heavyPrecursor = new Precursor();
-                heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlockDataTables[0]);
+                heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0]);
                 foreach(KeyValuePair<int, int> row in heavyPrecursor.elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
                 heavyPrecursor.name = name;
                 heavyPrecursor.category = precursor.category;
@@ -587,9 +587,9 @@ namespace LipidCreator
                 heavyPrecursor.heavyLabeled = true;
                 heavyPrecursor.userDefined = true;
                 heavyPrecursor.userDefinedFattyAcids = new ArrayList();
-                for (int i = 1; i < buildingBlockDataTables.Count; ++i)
+                for (int i = 1; i < buildingBlockElementDicts.Count; ++i)
                 {
-                    Dictionary<int, int> newElements = createElementData((Dictionary<string, object[]>)buildingBlockDataTables[i]);
+                    Dictionary<int, int> newElements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
                     foreach(KeyValuePair<int, int> row in newElements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
                     heavyPrecursor.userDefinedFattyAcids.Add(newElements);
                 }

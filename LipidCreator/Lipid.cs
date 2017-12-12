@@ -217,7 +217,7 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "Pre";
+                lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
                 lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
                 lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
@@ -385,7 +385,7 @@ namespace LipidCreator
                             case "FA4":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                                 break;
-                            case "PRE":
+                            case "HG":
                                 MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
                                 break;
                             default:

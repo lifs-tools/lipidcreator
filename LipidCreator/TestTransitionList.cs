@@ -68,7 +68,7 @@ namespace LipidCreator
                         
             try {
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
-                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H14O4NP	184.0733215	1");
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]1+	        524.3710668	1	HG(PC)	C5H14O4NP	184.0733215	1");
                 PLLipid lpc = new PLLipid(lcf);
                 lpc.headGroupNames.Add("LPC"); // set PC
                 lpc.adducts["+H"] = true;   // set adduct
@@ -98,7 +98,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "1st LPC category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "1st LPC precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "1st LPC precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "1st LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 524.3710668, "1st LPC precursor mass: " + row[LipidCreator.PRECURSOR_MZ]);
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st LPC precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -114,7 +114,7 @@ namespace LipidCreator
                 
                 
                 //LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1
-                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+HCOO]	568.3619932	-1	FA	C18H35O2	283.2642541	-1");
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+HCOO]1-	568.3619932	-1	FA	C18H35O2	283.2642541	-1");
                 // unset all fragments except FA
                 foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.positiveFragments) fragments.Value.Clear();
                 foreach (KeyValuePair<string, HashSet<string>> fragments in lpc.negativeFragments) fragments.Value.Clear();
@@ -136,7 +136,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "2nd LPC category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "2nd LPC precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "2nd LPC precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+HCOO]"), "2nd LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+HCOO]1-"), "2nd LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 568.3619932, "2nd LPC precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd LPC precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -149,7 +149,7 @@ namespace LipidCreator
                 
                 
                 //LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]	582.3776432	-1	FA	C18H35O2	283.2642541	-1
-                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]	582.3776432	-1	FA	C18H35O2	283.2642541	-1");
+                Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+CH3COO]1-	582.3776432	-1	FA	C18H35O2	283.2642541	-1");
                 // unset all fragments except HG(PC)
                 lpc.adducts["+HCOO"] = false;   // unset adduct
                 lpc.adducts["+CH3COO"] = true;   // set adduct
@@ -168,7 +168,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("LPC"), "3nd LPC category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("LPC 18:0"), "3nd LPC precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C26H54O7NP"), "3nd LPC precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+CH3COO]"), "3nd LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+CH3COO]1-"), "3nd LPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 582.3776432, "3nd LPC precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "3nd LPC precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -185,10 +185,10 @@ namespace LipidCreator
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1
                 //PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1
-                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	P              HO3P         78.95905447	-1");
-                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1");
-                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1");
-                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]1-	675.4970301	-1	P              HO3P         78.95905447	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]1-	675.4970301	-1	FA1	       C16H31O2    255.2329539	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]1-	675.4970301	-1	FA2	       C18H35O2    283.2642541	-1");
+                Console.WriteLine("checking PA	PA 16:0_18:0	C37H73O8P	[M-H]1-	675.4970301	-1	FA2' + O       C19H38O7P   409.2360643	-1");
                 lcf.registeredLipids.Clear();
                 PLLipid pa = new PLLipid(lcf);
                 pa.headGroupNames.Add("PA"); // set class
@@ -223,7 +223,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "1st PA category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "1st PA precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "1st PA precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "1st PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "1st PA precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "1st PA precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -239,7 +239,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "2nd PA category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "2nd PA precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "2nd PA precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "2nd PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "2nd PA precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd PA precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -255,7 +255,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "3rd PA category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "3rd PA precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "3rd PA precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "3rd PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "3rd PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "3rd PA precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "3rd PA precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -271,7 +271,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("PA"), "4th PA category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("PA 16:0_18:0"), "4th PA precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C37H73O8P"), "4th PA precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "4th PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "4th PA precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 675.4970301, "4th PA precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "4th PA precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -296,7 +296,7 @@ namespace LipidCreator
                 
                 
                 //CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1
-                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]	1408.027552	-1	FA2	C16H31O2	255.2329539	-1");
+                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-H]1-	1408.027552	-1	FA2	C16H31O2	255.2329539	-1");
                 lcf.registeredLipids.Clear();
                 PLLipid cl = new PLLipid(lcf);
                 cl.isCL = true;
@@ -337,7 +337,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("CL"), "1st CL category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "1st CL precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C77H150O17P2"), "1st CL precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "1st CL precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "1st CL precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 1408.027552, "1st CL precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "1st CL precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -353,7 +353,7 @@ namespace LipidCreator
                 
                 
                 //CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-2H]	703.5101375	-2	FA2	C16H31O2	255.2329539	-1
-                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-2H]	703.5101375	-2	FA2	C16H31O2	255.2329539	-1");
+                Console.WriteLine("checking CL	CL 14:0_16:0_18:0_20:0	C77H150O17P2	[M-2H]2-	703.5101375	-2	FA2	C16H31O2	255.2329539	-1");
                 lcf.registeredLipids.Clear();
                 cl.adducts["-H"] = false;   // unset adduct
                 cl.adducts["-2H"] = true;   // set adduct
@@ -370,7 +370,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("CL"), "2nd CL category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("CL 14:0_16:0_18:0_20:0"), "2nd CL precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C77H150O17P2"), "2nd CL precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-2H]"), "2nd CL precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-2H]2-"), "2nd CL precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 703.5101375, "2nd CL precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -2, "2nd CL precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -385,7 +385,7 @@ namespace LipidCreator
                 
                 
                 //Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1
-                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]	482.4568	1	W''	C18H34N	        264.2486	1");
+                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M+H]1+	482.4568	1	W''	C18H34N	        264.2486	1");
                 lcf.registeredLipids.Clear();
                 SLLipid sl = new SLLipid(lcf);
                 sl.headGroupNames.Add("Cer"); // set slass
@@ -417,7 +417,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("Cer"), "1st Cer category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "1st Cer precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C30H59O3N"), "1st Cer precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st Cer precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "1st Cer precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 482.4568, "1st Cer precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st Cer precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -433,7 +433,7 @@ namespace LipidCreator
                 
                 
                 //Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]	480.4422	-1	S	C14H27ON	224.2019881	-1
-                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]	480.4422	-1	S	C14H27ON	224.2019881	-1");
+                Console.WriteLine("checking Cer	Cer 18:1;2/12:0	C30H59NO3	[M-H]1-	480.4422	-1	S	C14H27ON	224.2019881	-1");
                 lcf.registeredLipids.Clear();
                 sl.adducts["+H"] = true;   // unset adduct
                 sl.adducts["-H"] = true;   // set adduct
@@ -454,7 +454,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("Cer"), "2nd Cer category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("Cer 18:1;2/12:0"), "2nd Cer precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C30H59O3N"), "2nd Cer precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]"), "2nd Cer precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M-H]1-"), "2nd Cer precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 480.4422, "2nd Cer precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), -1, "2nd Cer precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -470,8 +470,8 @@ namespace LipidCreator
                 
                 //SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1
                 //SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	W''	C18H33N	        264.2686	1
-                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1");
-                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]	647.4884423	1	W''	C18H33N	        264.2686	1");
+                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]1+	647.4884423	1	HG(PC)	C5H14O4NP	184.0733215	1");
+                Console.WriteLine("checking SM	SM 18:1;2/12:0	C35H71O6N2P	[M+H]1+	647.4884423	1	W''	C18H33N	        264.2686	1");
                 lcf.registeredLipids.Clear();
                 SLLipid sm = new SLLipid(lcf);
                 sm.headGroupNames.Add("SM"); // set class
@@ -503,7 +503,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SM"), "1st SM category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SM 18:1;2/12:0"), "1st SM precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C35H71O6N2P"), "1st SM precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st SM precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "1st SM precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 647.51225172, "1st SM precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st SM precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -519,7 +519,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SM"), "2nd SM category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SM 18:1;2/12:0"), "2nd SM precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C35H71O6N2P"), "2nd SM precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "2nd SM precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "2nd SM precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 647.51225172, "2nd SM precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd SM precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -536,8 +536,8 @@ namespace LipidCreator
                 
                 //SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1
                 //SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	W''	C17H31N	        250.2529	1
-                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1");
-                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]	451.3295	1	W''	C17H31N	        250.2529	1");
+                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]1+	451.3295	1	HG(PC)	C5H14O4NP	184.0733215	1");
+                Console.WriteLine("checking SPC	SPC 17:1;2	C22H47O5N2P	[M+H]1+	451.3295	1	W''	C17H31N	        250.2529	1");
                 lcf.registeredLipids.Clear();
                 SLLipid spc = new SLLipid(lcf);
                 spc.headGroupNames.Add("SPC"); // set class
@@ -571,7 +571,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPC"), "1st SPC category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPC 17:1;2"), "1st SPC precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C22H47O5N2P"), "1st SPC precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "1st SPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "1st SPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 451.3295, "1st SPC precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "1st SPC precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -587,7 +587,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPC"), "2nd SPC category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPC 17:1;2"), "2nd SPC precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C22H47O5N2P"), "2nd SPC precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "2nd SPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "2nd SPC precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 451.3295, "2nd SPC precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "2nd SPC precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product
@@ -603,7 +603,7 @@ namespace LipidCreator
                 
                 
                 //SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1
-                Console.WriteLine("checking SPH	SPH 17:1;2	C17H35O2N	[M+H]	286.2741	1	W''	C17H31N	250.2529	1");
+                Console.WriteLine("checking SPH	SPH 17:1;2	C17H35O2N	[M+H]1+	286.2741	1	W''	C17H31N	250.2529	1");
                 lcf.registeredLipids.Clear();
                 SLLipid sph = new SLLipid(lcf);
                 sph.headGroupNames.Add("SPH"); // set class
@@ -633,7 +633,7 @@ namespace LipidCreator
                         Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals("SPH"), "SPH category: " + row[LipidCreator.MOLECULE_LIST_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NAME].Equals("SPH 17:1;2"), "SPH precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
                         Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals("C17H35O2N"), "SPH precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
-                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]"), "SPH precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                        Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals("[M+H]1+"), "SPH precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
                         Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), 286.2741, "SPH precursor mass");
                         Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), 1, "SPH precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
                         // product

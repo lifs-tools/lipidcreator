@@ -119,6 +119,14 @@ namespace LipidCreator
         
         
         
+        
+        public static string getAdductAsString(int fragmentCharge, string adduct)
+        {
+            return "[M" + adduct + "]" + (Math.Abs(fragmentCharge)).ToString() + (fragmentCharge > 0 ? "+" : "-");
+        }
+        
+        
+        
         public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
         {                    
             int reportedFragments = 0;
@@ -196,7 +204,7 @@ namespace LipidCreator
                     fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct.Replace("[M", "").Replace("]", ""));
                 }
                 
-                string fragAdduct = "[M" + (fragment.fragmentCharge > 0 ? "+" : "-") + "H]";
+                string fragAdduct = getAdductAsString(fragment.fragmentCharge, (fragment.fragmentCharge > 0 ? "+" : "-") + "H");
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                 
@@ -414,7 +422,7 @@ namespace LipidCreator
                     fragment.computeIntensity(),
                     new PeakAnnotation(fragName,
                         fragment.fragmentCharge,
-                        Lipid.chargeToAdduct[fragment.fragmentCharge],
+                        getAdductAsString(fragment.fragmentCharge, (fragment.fragmentCharge > 0 ? "+" : "-") + "H"),
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));
             }

@@ -152,7 +152,7 @@ namespace LipidCreator
                                         precursorData.lipidClass = headgroup;
                                         precursorData.precursorName = key;
                                         precursorData.precursorIonFormula = chemForm;
-                                        precursorData.precursorAdduct = "[M" + adduct.Key + "]";
+                                        precursorData.precursorAdduct = Lipid.getAdductAsString(charge, adduct.Key);
                                         precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                         precursorData.precursorCharge = charge;
                                         precursorData.adduct = adduct.Key;
@@ -195,7 +195,7 @@ namespace LipidCreator
                                                 heavyPrecursorData.lipidClass = heavyHeadgroup;
                                                 heavyPrecursorData.precursorName = heavyKey;
                                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                                heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
+                                                heavyPrecursorData.precursorAdduct = Lipid.getAdductAsString(heavyCharge, adduct.Key);
                                                 heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
                                                 heavyPrecursorData.precursorCharge = heavyCharge;
                                                 heavyPrecursorData.adduct = adduct.Key;
@@ -242,7 +242,7 @@ namespace LipidCreator
                                     precursorData.lipidClass = headgroup;
                                     precursorData.precursorName = key;
                                     precursorData.precursorIonFormula = chemForm;
-                                    precursorData.precursorAdduct = "[M" + adduct.Key + "]";
+                                    precursorData.precursorAdduct = Lipid.getAdductAsString(charge, adduct.Key);
                                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                     precursorData.precursorCharge = charge;
                                     precursorData.adduct = adduct.Key;
@@ -282,7 +282,7 @@ namespace LipidCreator
                                             heavyPrecursorData.lipidClass = heavyHeadgroup;
                                             heavyPrecursorData.precursorName = heavyKey;
                                             heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                            heavyPrecursorData.precursorAdduct = "[M" + adduct.Key + "]";
+                                            heavyPrecursorData.precursorAdduct = Lipid.getAdductAsString(heavyCharge, adduct.Key);
                                             heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
                                             heavyPrecursorData.precursorCharge = heavyCharge;
                                             heavyPrecursorData.adduct = adduct.Key;

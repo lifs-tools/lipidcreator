@@ -55,6 +55,8 @@ namespace LipidCreator
         public ArrayList tabList;
         public LipidCategory currentIndex;
         public string inputParameters;
+        public Tutorial tutorial;
+        
         
         public CreatorGUI(string inputParameters)
         {
@@ -62,6 +64,8 @@ namespace LipidCreator
             this.lipidCreator = new LipidCreator(this.inputParameters);
             currentIndex = LipidCategory.NoLipid;
             resetAllLipids();
+            
+            tutorial = new Tutorial(this);
             
             registeredLipidsDatatable = new DataTable("Daten");
             registeredLipidsDatatable.Columns.Add(new DataColumn("Category"));

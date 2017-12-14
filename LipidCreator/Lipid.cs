@@ -481,14 +481,8 @@ namespace LipidCreator
         
         public Lipid(Lipid copy)
         {
-            adducts = new Dictionary<String, bool>();
-            adducts.Add("+H", copy.adducts["+H"]);
-            adducts.Add("+2H", copy.adducts["+2H"]);
-            adducts.Add("+NH4", copy.adducts["+NH4"]);
-            adducts.Add("-H", copy.adducts["-H"]);
-            adducts.Add("-2H", copy.adducts["-2H"]);
-            adducts.Add("+HCOO", copy.adducts["+HCOO"]);
-            adducts.Add("+CH3COO", copy.adducts["+CH3COO"]);
+            adducts = new Dictionary<string, bool>();
+            foreach (KeyValuePair<string, bool> adduct in copy.adducts) adducts.Add(adduct.Key, adduct.Value);
             className = copy.className;
             representativeFA = copy.representativeFA;
             headGroupNames = new List<String>();
@@ -538,8 +532,7 @@ namespace LipidCreator
         {
             int charge = 0;
             switch (adduct)
-            {
-                                                                                                
+            {                                                                              
                 case "+H":
                     atomsCount[(int)Molecules.H] += 1;
                     charge = 1;

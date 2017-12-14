@@ -97,42 +97,40 @@ namespace LipidCreator
                 string headgroup = headgroupIter;                
                 String key = headgroup;
                 
-                if (!usedKeys.Contains(key))
+                if (usedKeys.Contains(key)) continue;
+                
+                foreach (KeyValuePair<string, bool> adduct in adducts)
                 {
-                    foreach (KeyValuePair<string, bool> adduct in adducts)
-                    {
-                        if (adduct.Value && headgroups[headgroup].adductRestrictions[adduct.Key])
-                        {
-                            usedKeys.Add(key);
-                            
-                            Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
-                            MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
-                            String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                            int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
-                            double mass = LipidCreator.computeMass(atomsCount, charge);
-                                                                
+                    if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                    
+                    usedKeys.Add(key);
+                    
+                    Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                    MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
+                    String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                    int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
+                    double mass = LipidCreator.computeMass(atomsCount, charge);
+                                                        
 
-                            PrecursorData precursorData = new PrecursorData();
-                            precursorData.lipidCategory = LipidCategory.Mediator;
-                            precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
-                            precursorData.lipidClass = headgroup;
-                            precursorData.precursorName = key.Replace("/", HEAVY_LABEL_SEPARATOR);
-                            precursorData.precursorIonFormula = chemForm;
-                            precursorData.precursorAdduct = Lipid.getAdductAsString(charge, adduct.Key);
-                            precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
-                            precursorData.precursorCharge = charge;
-                            precursorData.adduct = adduct.Key;
-                            precursorData.atomsCount = headgroups[headgroup].elements;
-                            precursorData.fa1 = null;
-                            precursorData.fa2 = null;
-                            precursorData.fa3 = null;
-                            precursorData.fa4 = null;
-                            precursorData.lcb = null;
-                            precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
-                            
-                            precursorDataList.Add(precursorData);
-                        }
-                    }
+                    PrecursorData precursorData = new PrecursorData();
+                    precursorData.lipidCategory = LipidCategory.Mediator;
+                    precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
+                    precursorData.lipidClass = headgroup;
+                    precursorData.precursorName = key.Replace("/", HEAVY_LABEL_SEPARATOR);
+                    precursorData.precursorIonFormula = chemForm;
+                    precursorData.precursorAdduct = Lipid.getAdductAsString(charge, adduct.Key);
+                    precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
+                    precursorData.precursorCharge = charge;
+                    precursorData.adduct = adduct.Key;
+                    precursorData.atomsCount = headgroups[headgroup].elements;
+                    precursorData.fa1 = null;
+                    precursorData.fa2 = null;
+                    precursorData.fa3 = null;
+                    precursorData.fa4 = null;
+                    precursorData.lcb = null;
+                    precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
+                    
+                    precursorDataList.Add(precursorData);
                 }
             }
         }

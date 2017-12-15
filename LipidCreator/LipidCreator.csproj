@@ -167,6 +167,9 @@
     <Compile Include="SpectralName.Designer.cs">
       <DependentUpon>SpectralName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tutorial.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>

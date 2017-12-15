@@ -39,6 +39,8 @@ namespace LipidCreator
 {
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialMRM = 1, TutorialHeavyLabeled = 2};
+    
+    
 
     [Serializable]
     public class Tutorial
@@ -46,24 +48,41 @@ namespace LipidCreator
         public Tutorials tutorial;
         public int tutorialStep;
         public CreatorGUI creatorGUI;
+        public ArrayList elementsEnabledState;
+        public LipidCategory currentTab;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
             tutorial = Tutorials.NoTutorial;
             tutorialStep = -1;
             this.creatorGUI = creatorGUI;
+            currentTab = LipidCategory.NoLipid;
         }
         
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 0;
-            
+            elementsEnabledState = new ArrayList();
+            creatorGUI.tutorialArrow.Visible = true;
+            foreach (Object element in creatorGUI.controlElements)
+            {
+                if (element is MenuItem) 
+                {
+                    elementsEnabledState.Add(((MenuItem)element).Enabled);
+                    ((MenuItem)element).Enabled = false;
+                }
+                else
+                {
+                    elementsEnabledState.Add(((Control)element).Enabled);
+                    ((Control)element).Enabled = false;
+                }
+            }
+            nextTutorialStep(true);
         }
         
         public void nextTutorialStep(bool forward)
         {
-            tutorialStep = forward ? 1 : -1;
+            tutorialStep += forward ? 1 : -1;
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
             else if (tutorial == Tutorials.TutorialHeavyLabeled) TutorialHeavyLabeledStep();
@@ -74,6 +93,7 @@ namespace LipidCreator
         {
             tutorial = Tutorials.NoTutorial;
             tutorialStep = -1;
+            creatorGUI.tutorialArrow.Visible = false;
         }
         
         
@@ -82,7 +102,13 @@ namespace LipidCreator
             switch(tutorialStep)
             {   
                 case 0:
-                    creatorGUI.changeTab(1);
+                    currentTab = LipidCategory.PhosphoLipid;
+                    creatorGUI.changeTab((int)currentTab);
+                    creatorGUI.phospholipidsTab.Enabled = true;
+                    
+                    creatorGUI.overlayImage.Visible = true;
+                    creatorGUI.overlayImage.BringToFront();
+                    
                     break;
                     
                 case 1:

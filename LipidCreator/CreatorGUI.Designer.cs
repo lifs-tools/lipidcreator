@@ -33,6 +33,129 @@ using System.Collections.Generic;
 
 namespace LipidCreator
 {
+
+
+    public class Overlay : Control
+    {
+        public bool drag = false;
+        public bool enab = false;
+        private int m_opacity = 100;
+        Bitmap bmp;
+
+        private int alpha;
+        public Overlay(string filename)
+        {
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.Opaque, true);
+            this.BackColor = Color.Transparent;
+            bmp = new Bitmap(filename);
+        }
+
+        public int Opacity
+        {
+            get
+            {
+                if (m_opacity > 100)
+                {
+                    m_opacity = 100;
+                }
+                else if (m_opacity < 1)
+                {
+                    m_opacity = 1;
+                }
+                return this.m_opacity;
+            }
+            set
+            {
+                this.m_opacity = value;
+                if (this.Parent != null)
+                {
+                    Parent.Invalidate(this.Bounds, true);
+                }
+            }
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = cp.ExStyle | 0x20;
+                return cp;
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Rectangle bounds = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
+
+            Color frmColor = this.Parent.BackColor;
+            Brush bckColor = default(Brush);
+
+            alpha = (m_opacity * 255) / 100;
+
+            if (drag)
+            {
+                Color dragBckColor = default(Color);
+
+                if (BackColor != Color.Transparent)
+                {
+                    int Rb = BackColor.R * alpha / 255 + frmColor.R * (255 - alpha) / 255;
+                    int Gb = BackColor.G * alpha / 255 + frmColor.G * (255 - alpha) / 255;
+                    int Bb = BackColor.B * alpha / 255 + frmColor.B * (255 - alpha) / 255;
+                    dragBckColor = Color.FromArgb(Rb, Gb, Bb);
+                }
+                else
+                {
+                    dragBckColor = frmColor;
+                }
+
+                alpha = 255;
+                bckColor = new SolidBrush(Color.FromArgb(alpha, dragBckColor));
+            }
+            else
+            {
+                bckColor = new SolidBrush(Color.FromArgb(alpha, this.BackColor));
+            }
+
+            if (this.BackColor != Color.Transparent | drag)
+            {
+                g.FillRectangle(bckColor, bounds);
+            }
+
+            // Draw rectangle to screen.
+            g.DrawImage(bmp, 0, 0);
+
+            bckColor.Dispose();
+            g.Dispose();
+            base.OnPaint(e);
+        }
+
+        protected override void OnBackColorChanged(EventArgs e)
+        {
+            if (this.Parent != null)
+            {
+                Parent.Invalidate(this.Bounds, true);
+            }
+            base.OnBackColorChanged(e);
+        }
+
+        protected override void OnParentBackColorChanged(EventArgs e)
+        {
+            this.Invalidate();
+            base.OnParentBackColorChanged(e);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
     partial class CreatorGUI
     {
         /// <summary>
@@ -58,6 +181,7 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
+        public Overlay overlayImage;
         
         public System.Timers.Timer timerEasterEgg;
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
@@ -79,6 +203,7 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuHelp;
         public System.Windows.Forms.MenuItem menuAbout;
         
+        
         public TabControl tabControl = new TabControl();
         public TabPage homeTab;
         public TabPage glycerolipidsTab;
@@ -95,6 +220,9 @@ namespace LipidCreator
         public Button modifyLipidButton;
         public Button MS2fragmentsLipidButton;
         public Button addHeavyIsotopeButton;
+        public Button tutorialStart;
+        
+        
 
         Image cardioBackboneImage;
         Image cardioBackboneImageFA1e;
@@ -134,12 +262,13 @@ namespace LipidCreator
         Image cholesterolEsterBackboneImage;
         
 
-        PictureBox clPictureBox;
-        PictureBox glPictureBox;
-        PictureBox plPictureBox;
-        PictureBox slPictureBox;
-        PictureBox chPictureBox;
-        PictureBox medPictureBox;
+        public PictureBox clPictureBox;
+        public PictureBox glPictureBox;
+        public PictureBox plPictureBox;
+        public PictureBox slPictureBox;
+        public PictureBox chPictureBox;
+        public PictureBox medPictureBox;
+        public PictureBox tutorialArrow;
         
         public ListBox glHgListbox;
         public ListBox plHgListbox;
@@ -326,6 +455,10 @@ namespace LipidCreator
 
         DataGridView lipidsGridview;
         public Button openReviewFormButton;
+        
+        public ArrayList controlElements;
+        
+        
 
         
 
@@ -345,6 +478,9 @@ namespace LipidCreator
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
+            overlayImage = new Overlay("images/Tutorial/arrow-bottom-left.png");
+            overlayImage.Visible = false;
+            
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
             this.menuImportSettings = new System.Windows.Forms.MenuItem ();
@@ -440,6 +576,7 @@ namespace LipidCreator
             highlightedCheckboxColor = Color.FromArgb(156, 232, 189);
             lipidsGridview = new DataGridView();
             openReviewFormButton = new Button();
+            
 
             clPictureBox = new PictureBox();
             glPictureBox = new PictureBox();
@@ -447,6 +584,7 @@ namespace LipidCreator
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
             medPictureBox = new PictureBox();
+            tutorialArrow = new PictureBox();
             glArrow = new PictureBox();
             
             String dbText = "No. DB";
@@ -1894,10 +2032,6 @@ namespace LipidCreator
             medPictureBox.SendToBack();
             
             
-            
-            
-
-
 
             lipidsGroupbox.Controls.Add(lipidsGridview);
             lipidsGroupbox.Controls.Add(openReviewFormButton);
@@ -1973,6 +2107,23 @@ namespace LipidCreator
             DefaultCheckboxBGR = clPosAdductCheckbox1.BackColor.R;
             DefaultCheckboxBGG = clPosAdductCheckbox1.BackColor.G;
             DefaultCheckboxBGB = clPosAdductCheckbox1.BackColor.B;
+            
+            
+            tutorialStart = new Button();
+            homeTab.Controls.Add(tutorialStart);
+            tutorialStart.Text = "Start tutorial";
+            tutorialStart.Width = 150;
+            tutorialStart.Height = 26;
+            tutorialStart.Location = new Point(40, 40);
+            tutorialStart.BackColor = SystemColors.Control;
+            tutorialStart.Click += startTutorial1;
+            
+            overlayImage.Size = new Size(120, 160);
+            overlayImage.Location = new Point(552, 60);
+            this.Controls.Add(overlayImage);
+        
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton};
+            
         }
 
         #endregion

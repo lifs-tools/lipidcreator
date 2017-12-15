@@ -109,7 +109,7 @@ namespace LipidCreator
                                                         cholesterollipidsTab,
                                                         mediatorlipidsTab
                                                        });
-            changeTab(1);
+            changeTab(0);
         }
         
         public void resetLipidCreator(Object sender, EventArgs e)
@@ -164,8 +164,12 @@ namespace LipidCreator
         {
             changingTabForced = true;
             currentTabIndex = index;
-            tabControl.SelectedIndex = currentTabIndex > 0 ? currentTabIndex : 2;
-            changeTab(currentTabIndex, true);
+            if (tutorial.tutorial != Tutorials.NoTutorial)
+            {
+                currentTabIndex = (int)tutorial.currentTab;
+            }
+            tabControl.SelectedIndex = currentTabIndex;
+            changeTabElements(currentTabIndex);
             changingTabForced = false;
         }
         
@@ -173,10 +177,10 @@ namespace LipidCreator
         {
             if (changingTabForced) return;
             currentTabIndex = ((TabControl)sender).SelectedIndex;
-            changeTab(currentTabIndex, false);            
+            changeTab(currentTabIndex);            
         }
 
-        public void changeTab(int index, bool forced)
+        public void changeTabElements(int index)
         {
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
@@ -2604,6 +2608,12 @@ namespace LipidCreator
             openForm.ShowInTaskbar = false;
             openForm.ShowDialog();
             openForm.Dispose();
+        }
+        
+        
+        public void startTutorial1(Object sender, EventArgs e)
+        {
+            tutorial.startTutorial(Tutorials.TutorialPRM);
         }
         
         

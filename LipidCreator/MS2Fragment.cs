@@ -256,7 +256,6 @@ namespace LipidCreator
         // model depending on collision energy 
         public double computeIntensity(double collisionEnergy = 0)
         {
-        
             return intensity;
         }
         

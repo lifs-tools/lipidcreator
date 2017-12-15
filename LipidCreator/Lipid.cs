@@ -139,7 +139,7 @@ namespace LipidCreator
                 
                 // Exception for two lipid fragments
                 if (precursorData.moleculeListName.Equals("BMP") && fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]")) continue;
-                if (precursorData.moleculeListName.Equals("DG") && fragment.fragmentName.Equals("NL(H2O)") && !precursorData.precursorAdduct.Equals("[M+NH4]")) continue;
+                //if (precursorData.moleculeListName.Equals("DG") && fragment.fragmentName.Equals("NL(H2O)") && !precursorData.precursorAdduct.Equals("[M+NH4]")) continue;
             
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
@@ -180,10 +180,11 @@ namespace LipidCreator
                     }
                 }
                 // some exceptional handling for sphingolipids
+                /*
                 if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
                 {
                     Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
-                }
+                }*/
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
@@ -401,10 +402,12 @@ namespace LipidCreator
                     }
                 }
                 // some exceptional if conditions
+                /*
                 if (precursorData.lipidCategory == LipidCategory.SphingoLipid && precursorData.adduct != "-H" && precursorData.precursorCharge < 0 && (precursorData.moleculeListName == "HexCer" || precursorData.moleculeListName == "LacCer") && (fragment.fragmentName == "Y0" || fragment.fragmentName == "Y1" || fragment.fragmentName == "Z0" || fragment.fragmentName == "Z1"))
                 {
                     Lipid.subtractAdduct(atomsCountFragment, precursorData.adduct);
                 }
+                */
                 
                 String chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);

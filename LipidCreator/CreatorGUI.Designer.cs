@@ -30,6 +30,7 @@ using System.Data;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 
 namespace LipidCreator
 {
@@ -37,123 +38,109 @@ namespace LipidCreator
 
     public class Overlay : Control
     {
-        public bool drag = false;
-        public bool enab = false;
-        private int m_opacity = 100;
-        Bitmap bmp;
+        Image img;
 
-        private int alpha;
         public Overlay(string filename)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.Opaque, true);
             this.BackColor = Color.Transparent;
-            bmp = new Bitmap(filename);
+            loadImage(filename);
         }
-
-        public int Opacity
+        
+        public void loadImage(string filename)
         {
-            get
-            {
-                if (m_opacity > 100)
-                {
-                    m_opacity = 100;
-                }
-                else if (m_opacity < 1)
-                {
-                    m_opacity = 1;
-                }
-                return this.m_opacity;
-            }
-            set
-            {
-                this.m_opacity = value;
-                if (this.Parent != null)
-                {
-                    Parent.Invalidate(this.Bounds, true);
-                }
-            }
+            img = Image.FromFile(filename);
+            this.Size = img.Size;
         }
-
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle = cp.ExStyle | 0x20;
-                return cp;
-            }
-        }
-
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Rectangle bounds = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
-
-            Color frmColor = this.Parent.BackColor;
-            Brush bckColor = default(Brush);
-
-            alpha = (m_opacity * 255) / 100;
-
-            if (drag)
-            {
-                Color dragBckColor = default(Color);
-
-                if (BackColor != Color.Transparent)
-                {
-                    int Rb = BackColor.R * alpha / 255 + frmColor.R * (255 - alpha) / 255;
-                    int Gb = BackColor.G * alpha / 255 + frmColor.G * (255 - alpha) / 255;
-                    int Bb = BackColor.B * alpha / 255 + frmColor.B * (255 - alpha) / 255;
-                    dragBckColor = Color.FromArgb(Rb, Gb, Bb);
-                }
-                else
-                {
-                    dragBckColor = frmColor;
-                }
-
-                alpha = 255;
-                bckColor = new SolidBrush(Color.FromArgb(alpha, dragBckColor));
-            }
-            else
-            {
-                bckColor = new SolidBrush(Color.FromArgb(alpha, this.BackColor));
-            }
-
-            if (this.BackColor != Color.Transparent | drag)
-            {
-                g.FillRectangle(bckColor, bounds);
-            }
-
-            // Draw rectangle to screen.
-            g.DrawImage(bmp, 0, 0);
-
-            bckColor.Dispose();
+            g.DrawImage(img, 0, 0, img.Size.Width, img.Size.Height);
             g.Dispose();
             base.OnPaint(e);
-        }
-
-        protected override void OnBackColorChanged(EventArgs e)
-        {
-            if (this.Parent != null)
-            {
-                Parent.Invalidate(this.Bounds, true);
-            }
-            base.OnBackColorChanged(e);
-        }
-
-        protected override void OnParentBackColorChanged(EventArgs e)
-        {
-            this.Invalidate();
-            base.OnParentBackColorChanged(e);
         }
     }
     
     
     
+    public class TutorialWindow : Control
+    {
+        public CreatorGUI creatorGUI;
+        public PictureBox closeButton;
+        public PictureBox previous;
+        public PictureBox next;
+        public Label text;
+        public Label paging;
     
+        public TutorialWindow(CreatorGUI creatorGUI)
+        {
+            this.creatorGUI = creatorGUI;
+            this.BackColor = Color.White;
+            
+            closeButton = new PictureBox();
+            previous = new PictureBox();
+            next = new PictureBox();
+            text = new Label();
+            paging = new Label();
+            
+            closeButton.Image = Image.FromFile("images/Tutorial/close-x.png");
+            closeButton.Click += closeTutorialWindow;
+            closeButton.Size = closeButton.Image.Size;
+            this.Controls.Add(closeButton);
+            
+            previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
+            previous.Click += nextTutorialWindow;
+            previous.Size = previous.Image.Size;
+            this.Controls.Add(previous);
+            
+            next.Image = Image.FromFile("images/Tutorial/next-enabled.png");
+            next.Click += nextTutorialWindow;
+            next.Size = next.Image.Size;
+            this.Controls.Add(next);
+            
+            //this.Controls.Add(next);
+            
+            text.Font = new Font("Arial", 14);
+            this.Controls.Add(text);
+            
+            paging.Text = " 1 / 20";
+            paging.Font = new Font("Arial", 10);
+            paging.Size = new Size(40, 14);
+            this.Controls.Add(paging);
+        }
+        
+        public void closeTutorialWindow(Object sender, EventArgs e)
+        {
+            creatorGUI.tutorial.quitTutorial();
+        }
+        
+        public void nextTutorialWindow(Object sender, EventArgs e)
+        {
+            //creatorGUI.tutorial.quitTutorial();
+        }
     
-    
-    
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            // draw border
+            Graphics g = e.Graphics;
+            Pen blackPen = new Pen(Color.Black, 10);
+            g.DrawRectangle(blackPen, 0, 0, this.Size.Width, this.Size.Height);
+            g.Dispose();
+            
+            
+            text.Location = new Point(20, 20);
+            paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 12 - paging.Size.Height);
+        
+            closeButton.Location = new Point(this.Size.Width - 12 - closeButton.Size.Width, 12);
+            
+            previous.Location = new Point(paging.Location.X - previous.Size.Width - 4, this.Size.Height - 12 - previous.Size.Height);
+            next.Location = new Point(paging.Location.X + paging.Size.Width + 4, this.Size.Height - 12 - next.Size.Height);
+            
+            base.OnPaint(e);
+        }
+    }
     
 
     partial class CreatorGUI
@@ -181,7 +168,8 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        public Overlay overlayImage;
+        public Overlay tutorialArrow;
+        public TutorialWindow tutorialWindow;
         
         public System.Timers.Timer timerEasterEgg;
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
@@ -268,7 +256,6 @@ namespace LipidCreator
         public PictureBox slPictureBox;
         public PictureBox chPictureBox;
         public PictureBox medPictureBox;
-        public PictureBox tutorialArrow;
         
         public ListBox glHgListbox;
         public ListBox plHgListbox;
@@ -478,8 +465,10 @@ namespace LipidCreator
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            overlayImage = new Overlay("images/Tutorial/arrow-bottom-left.png");
-            overlayImage.Visible = false;
+            tutorialArrow = new Overlay("images/Tutorial/arrow-bottom-left.png");
+            tutorialArrow.Visible = false;
+            tutorialWindow = new TutorialWindow(this);
+            tutorialWindow.Visible = false;
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
@@ -584,7 +573,6 @@ namespace LipidCreator
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
             medPictureBox = new PictureBox();
-            tutorialArrow = new PictureBox();
             glArrow = new PictureBox();
             
             String dbText = "No. DB";
@@ -2118,9 +2106,13 @@ namespace LipidCreator
             tutorialStart.BackColor = SystemColors.Control;
             tutorialStart.Click += startTutorial1;
             
-            overlayImage.Size = new Size(120, 160);
-            overlayImage.Location = new Point(552, 60);
-            this.Controls.Add(overlayImage);
+            tutorialArrow.Size = new Size(120, 160);
+            tutorialArrow.Location = new Point(552, 60);
+            this.Controls.Add(tutorialArrow);
+            
+            tutorialWindow.Size = new Size(240, 160);
+            tutorialWindow.Location = new Point(40, 60);
+            this.Controls.Add(tutorialWindow);
         
             controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton};
             

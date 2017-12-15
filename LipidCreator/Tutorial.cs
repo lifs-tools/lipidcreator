@@ -63,7 +63,6 @@ namespace LipidCreator
         {
             tutorial = t;
             elementsEnabledState = new ArrayList();
-            creatorGUI.tutorialArrow.Visible = true;
             foreach (Object element in creatorGUI.controlElements)
             {
                 if (element is MenuItem) 
@@ -77,6 +76,9 @@ namespace LipidCreator
                     ((Control)element).Enabled = false;
                 }
             }
+            creatorGUI.tutorialWindow.Visible = true;
+            creatorGUI.tutorialWindow.text.Text = "Hello";
+            creatorGUI.tutorialWindow.BringToFront();
             nextTutorialStep(true);
         }
         
@@ -94,6 +96,20 @@ namespace LipidCreator
             tutorial = Tutorials.NoTutorial;
             tutorialStep = -1;
             creatorGUI.tutorialArrow.Visible = false;
+            creatorGUI.tutorialWindow.Visible = false;
+            
+            for (int i = 0; i < elementsEnabledState.Count; ++i)
+            {
+                Object element = creatorGUI.controlElements[i];
+                if (element is MenuItem) 
+                {
+                    ((MenuItem)element).Enabled = (bool)elementsEnabledState[i];
+                }
+                else
+                {
+                    ((Control)element).Enabled = (bool)elementsEnabledState[i];
+                }
+            }
         }
         
         
@@ -106,8 +122,8 @@ namespace LipidCreator
                     creatorGUI.changeTab((int)currentTab);
                     creatorGUI.phospholipidsTab.Enabled = true;
                     
-                    creatorGUI.overlayImage.Visible = true;
-                    creatorGUI.overlayImage.BringToFront();
+                    creatorGUI.tutorialArrow.Visible = true;
+                    creatorGUI.tutorialArrow.BringToFront();
                     
                     break;
                     

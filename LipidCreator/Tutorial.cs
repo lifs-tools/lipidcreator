@@ -50,6 +50,7 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public ArrayList elementsEnabledState;
         public LipidCategory currentTab;
+        public Dictionary<int, int> maxSteps;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -57,6 +58,12 @@ namespace LipidCreator
             tutorialStep = -1;
             this.creatorGUI = creatorGUI;
             currentTab = LipidCategory.NoLipid;
+            maxSteps = new Dictionary<int, int>(){
+                {(int)Tutorials.NoTutorial, 0},
+                {(int)Tutorials.TutorialPRM, 10},
+                {(int)Tutorials.TutorialMRM, 0},
+                {(int)Tutorials.TutorialHeavyLabeled, 0}
+            };
         }
         
         public void startTutorial(Tutorials t)
@@ -84,7 +91,7 @@ namespace LipidCreator
         
         public void nextTutorialStep(bool forward)
         {
-            tutorialStep += forward ? 1 : -1;
+            tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 0));
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
             else if (tutorial == Tutorials.TutorialHeavyLabeled) TutorialHeavyLabeledStep();
@@ -112,9 +119,26 @@ namespace LipidCreator
             }
         }
         
+        public void disableEverything()
+        {
+            foreach (Object element in creatorGUI.controlElements)
+            {
+                if (element is MenuItem) 
+                {
+                    ((MenuItem)element).Enabled = false;
+                }
+                else
+                {
+                    ((Control)element).Enabled = false;
+                }
+            }
+            creatorGUI.tutorialArrow.Visible = false;
+        }
+        
         
         public void TutorialPRMStep()
         {
+            disableEverything();
             switch(tutorialStep)
             {   
                 case 0:
@@ -134,6 +158,7 @@ namespace LipidCreator
                     break;
                     
                 case 3:
+                    quitTutorial();
                     break;
                     
                 case 4:

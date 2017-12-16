@@ -91,7 +91,7 @@ namespace LipidCreator
             this.Controls.Add(closeButton);
             
             previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
-            previous.Click += nextTutorialWindow;
+            previous.Click += previousTutorialWindow;
             previous.Size = previous.Image.Size;
             this.Controls.Add(previous);
             
@@ -116,9 +116,16 @@ namespace LipidCreator
             creatorGUI.tutorial.quitTutorial();
         }
         
+        public void previousTutorialWindow(Object sender, EventArgs e)
+        {
+            creatorGUI.tutorial.nextTutorialStep(false);
+            this.Refresh();
+        }
+        
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
-            //creatorGUI.tutorial.quitTutorial();
+            creatorGUI.tutorial.nextTutorialStep(true);
+            this.Refresh();
         }
     
         protected override void OnPaint(PaintEventArgs e)
@@ -129,8 +136,12 @@ namespace LipidCreator
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width, this.Size.Height);
             g.Dispose();
             
+            if (creatorGUI.tutorial.tutorialStep > 0) previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
+            else previous.Image = Image.FromFile("images/Tutorial/previous-disabled.png");
+            
             
             text.Location = new Point(20, 20);
+            paging.Text = (1 + creatorGUI.tutorial.tutorialStep).ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
             paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 12 - paging.Size.Height);
         
             closeButton.Location = new Point(this.Size.Width - 12 - closeButton.Size.Width, 12);

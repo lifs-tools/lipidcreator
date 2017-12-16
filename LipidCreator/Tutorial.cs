@@ -40,7 +40,6 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialMRM = 1, TutorialHeavyLabeled = 2};
     
-    
 
     [Serializable]
     public class Tutorial
@@ -51,11 +50,13 @@ namespace LipidCreator
         public ArrayList elementsEnabledState;
         public LipidCategory currentTab;
         public Dictionary<int, int> maxSteps;
+        public bool nextEnabled;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
             tutorial = Tutorials.NoTutorial;
             tutorialStep = -1;
+            nextEnabled = true;
             this.creatorGUI = creatorGUI;
             currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
@@ -69,6 +70,10 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
+            tutorialStep = -1;
+            nextEnabled = true;
+            currentTab = LipidCategory.NoLipid;
+            creatorGUI.tutorialArrow.BringToFront();
             elementsEnabledState = new ArrayList();
             foreach (Object element in creatorGUI.controlElements)
             {
@@ -84,7 +89,6 @@ namespace LipidCreator
                 }
             }
             creatorGUI.tutorialWindow.Visible = true;
-            creatorGUI.tutorialWindow.text.Text = "Hello";
             creatorGUI.tutorialWindow.BringToFront();
             nextTutorialStep(true);
         }
@@ -136,25 +140,40 @@ namespace LipidCreator
         }
         
         
+        public void changeTab(LipidCategory lip)
+        {
+            if (currentTab != lip)
+            {
+                currentTab = lip;
+                creatorGUI.changeTab((int)currentTab);
+                ((TabPage)creatorGUI.tabList[(int)currentTab]).Enabled = true;
+            }
+        }
+        
         public void TutorialPRMStep()
         {
             disableEverything();
+            creatorGUI.tutorialArrow.Visible = false;
             switch(tutorialStep)
             {   
                 case 0:
-                    currentTab = LipidCategory.PhosphoLipid;
-                    creatorGUI.changeTab((int)currentTab);
-                    creatorGUI.phospholipidsTab.Enabled = true;
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.tutorialWindow.text.Text = "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool.";
+                    nextEnabled = true;
                     
                     creatorGUI.tutorialArrow.Visible = true;
-                    creatorGUI.tutorialArrow.BringToFront();
                     
                     break;
                     
                 case 1:
+                    changeTab(LipidCategory.SphingoLipid);
+                    nextEnabled = true;
+                    
                     break;
                     
                 case 2:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    nextEnabled = false;
                     break;
                     
                 case 3:

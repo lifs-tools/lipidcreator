@@ -100,9 +100,8 @@ namespace LipidCreator
             next.Size = next.Image.Size;
             this.Controls.Add(next);
             
-            //this.Controls.Add(next);
-            
             text.Font = new Font("Arial", 14);
+            text.AutoSize = true;
             this.Controls.Add(text);
             
             paging.Text = " 1 / 20";
@@ -118,13 +117,13 @@ namespace LipidCreator
         
         public void previousTutorialWindow(Object sender, EventArgs e)
         {
-            creatorGUI.tutorial.nextTutorialStep(false);
+            if (creatorGUI.tutorial.tutorialStep > 0) creatorGUI.tutorial.nextTutorialStep(false);
             this.Refresh();
         }
         
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
-            creatorGUI.tutorial.nextTutorialStep(true);
+            if (creatorGUI.tutorial.nextEnabled) creatorGUI.tutorial.nextTutorialStep(true);
             this.Refresh();
         }
     
@@ -139,6 +138,8 @@ namespace LipidCreator
             if (creatorGUI.tutorial.tutorialStep > 0) previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
             else previous.Image = Image.FromFile("images/Tutorial/previous-disabled.png");
             
+            if (creatorGUI.tutorial.nextEnabled) next.Image = Image.FromFile("images/Tutorial/next-enabled.png");
+            else next.Image = Image.FromFile("images/Tutorial/next-disabled.png");
             
             text.Location = new Point(20, 20);
             paging.Text = (1 + creatorGUI.tutorial.tutorialStep).ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];

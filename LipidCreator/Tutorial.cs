@@ -67,6 +67,7 @@ namespace LipidCreator
             };
             creatorGUI.plHgListbox.SelectedValueChanged += new System.EventHandler(listBoxInteraction);
             creatorGUI.tabControl.SelectedIndexChanged += new System.EventHandler(tabInteraction);
+            creatorGUI.plFA1Textbox.TextChanged += new EventHandler(textBoxInteraction);
         }
         
         
@@ -74,7 +75,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 2;
+            tutorialStep = 3;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -177,11 +178,27 @@ namespace LipidCreator
         {
             if (creatorGUI.changingTabForced) return;
             if (tutorial == Tutorials.NoTutorial) return;
-            if (creatorGUI.currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2){
+            if (creatorGUI.currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
+            {
                 nextTutorialStep(true);
                 return;
             }
             creatorGUI.changeTab((int)currentTab);
+        }
+        
+        
+        
+        public void textBoxInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 4)
+            {
+                HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
+                HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
+                
+                nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
+            }
+            else nextEnabled = false;
+            creatorGUI.tutorialWindow.Refresh();
         }
         
         
@@ -195,10 +212,7 @@ namespace LipidCreator
                 case 1:
                     changeTab(LipidCategory.NoLipid);
                     
-                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
-                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
-                    creatorGUI.tutorialWindow.text.Text =
-                    "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.";
+                    creatorGUI.tutorialWindow.update(new Size(540, 160), new Point(140, 200), "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.");
                     nextEnabled = true;
                     
                     
@@ -206,14 +220,9 @@ namespace LipidCreator
                     
                 case 2:
                     changeTab(LipidCategory.NoLipid);
-                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
-                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
-                    creatorGUI.tutorialWindow.text.Text =
-                    "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.";
+                    creatorGUI.tutorialWindow.update(new Size(540, 160), new Point(140, 200), "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.");
                     
-                    creatorGUI.tutorialArrow.Visible = true;
-                    creatorGUI.tutorialArrow.direction = "lt";
-                    creatorGUI.tutorialArrow.Location = new Point(290, 40);
+                    creatorGUI.tutorialArrow.update(new Point(290, 40), "lt");
                     
                     nextEnabled = false;
                     
@@ -221,28 +230,31 @@ namespace LipidCreator
                     
                 case 3:
                     changeTab(LipidCategory.PhosphoLipid);
-                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
-                    creatorGUI.tutorialWindow.Location = new Point(340, 200);
-                    creatorGUI.tutorialWindow.text.Text =
-                    "Great, phospholipids have multiple headgroups. The user can multiply select them. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.";
+                    creatorGUI.tutorialWindow.update(new Size(540, 160), new Point(340, 200),                     "Great, phospholipids have multiple headgroups. The user can multiply select them. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.");
                     
                     
-                    creatorGUI.tutorialArrow.Visible = true;
-                    creatorGUI.tutorialArrow.direction = "tl";
-                    creatorGUI.tutorialArrow.Location = new Point(110, 186);
+                    creatorGUI.tutorialArrow.update(new Point(110, 186), "tl");
                     
                     creatorGUI.plHgListbox.Enabled = true;
                     nextEnabled = false;
                     break;
                     
                 case 4:
-                    quitTutorial();
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 200),                     "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
+                    
+                    creatorGUI.tutorialArrow.update(new Point(286, 88), "tr");
+                    
+                    creatorGUI.plFA1Textbox.Enabled = true;
+                    nextEnabled = false;
                     break;
                     
                 case 5:
+                    changeTab(LipidCategory.PhosphoLipid);
                     break;
                     
                 case 6:
+                    quitTutorial();
                     break;
             }
         

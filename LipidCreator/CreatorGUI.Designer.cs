@@ -58,6 +58,13 @@ namespace LipidCreator
             arrows.Add("rb", Image.FromFile(prefixPath + "images/Tutorial/arrow-right-bottom.png"));
         }
         
+        public void update(Point location, string dir)
+        {
+            this.Location = location;
+            direction = dir;
+            this.Visible = true;
+        }
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             this.Size = arrows[direction].Size;
@@ -118,6 +125,13 @@ namespace LipidCreator
             paging.Font = new Font("Arial", 10);
             paging.Size = new Size(40, 14);
             this.Controls.Add(paging);
+        }
+        
+        public void update(Size size, Point location, string txt)
+        {
+            creatorGUI.tutorialWindow.Size = size;
+            creatorGUI.tutorialWindow.Location = location;
+            creatorGUI.tutorialWindow.text.Text = txt;
         }
         
         public void closeTutorialWindow(Object sender, EventArgs e)

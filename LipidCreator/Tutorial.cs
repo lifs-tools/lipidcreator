@@ -51,14 +51,12 @@ namespace LipidCreator
         public LipidCategory currentTab;
         public Dictionary<int, int> maxSteps;
         public bool nextEnabled;
-        public bool forward;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
             tutorial = Tutorials.NoTutorial;
             tutorialStep = 0;
             nextEnabled = true;
-            forward = true;
             this.creatorGUI = creatorGUI;
             currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
@@ -68,6 +66,7 @@ namespace LipidCreator
                 {(int)Tutorials.TutorialHeavyLabeled, 0}
             };
             creatorGUI.plHgListbox.SelectedValueChanged += new System.EventHandler(listBoxInteraction);
+            creatorGUI.tabControl.SelectedIndexChanged += new System.EventHandler(tabInteraction);
         }
         
         
@@ -75,7 +74,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 0;
+            tutorialStep = 2;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -102,7 +101,6 @@ namespace LipidCreator
         
         public void nextTutorialStep(bool forward)
         {
-            this.forward = forward;
             tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 1));
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
@@ -175,6 +173,19 @@ namespace LipidCreator
         
         
         
+        public void tabInteraction(Object sender,  EventArgs e)
+        {
+            if (creatorGUI.changingTabForced) return;
+            if (tutorial == Tutorials.NoTutorial) return;
+            if (creatorGUI.currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2){
+                nextTutorialStep(true);
+                return;
+            }
+            creatorGUI.changeTab((int)currentTab);
+        }
+        
+        
+        
         public void TutorialPRMStep()
         {
             disableEverything();
@@ -211,9 +222,14 @@ namespace LipidCreator
                 case 3:
                     changeTab(LipidCategory.PhosphoLipid);
                     creatorGUI.tutorialWindow.Size = new Size(540, 160);
-                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
+                    creatorGUI.tutorialWindow.Location = new Point(340, 200);
                     creatorGUI.tutorialWindow.text.Text =
-                    "Great";
+                    "Great, phospholipids have multiple headgroups. The user can multiply select them. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.";
+                    
+                    
+                    creatorGUI.tutorialArrow.Visible = true;
+                    creatorGUI.tutorialArrow.direction = "tl";
+                    creatorGUI.tutorialArrow.Location = new Point(110, 186);
                     
                     creatorGUI.plHgListbox.Enabled = true;
                     nextEnabled = false;

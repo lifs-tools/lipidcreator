@@ -158,22 +158,8 @@ namespace LipidCreator
         {
             changingTabForced = true;
             currentTabIndex = index;
-            if (index == (int)LipidCategory.PhosphoLipid && tutorial.tutorial == Tutorials.TutorialPRM && tutorial.tutorialStep == 2 && tutorial.forward)
-            {
-                currentTabIndex = (int)tutorial.currentTab;
-                tutorial.nextTutorialStep(true);
-                tabControl.SelectedIndex = currentTabIndex;
-                changeTabElements(currentTabIndex);
-            }
-            else if (tutorial.tutorial != Tutorials.NoTutorial)
-            {
-                currentTabIndex = (int)tutorial.currentTab;
-                tabControl.SelectedIndex = currentTabIndex;
-            }
-            else {
-                tabControl.SelectedIndex = currentTabIndex;
-                changeTabElements(currentTabIndex);
-            }
+            tabControl.SelectedIndex = currentTabIndex;
+            changeTabElements(currentTabIndex);
             changingTabForced = false;
         }
         

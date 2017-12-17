@@ -38,26 +38,31 @@ namespace LipidCreator
 
     public class Overlay : Control
     {
-        Image img;
+        public Dictionary<string, Image> arrows;
+        public string direction;
 
-        public Overlay(string filename)
+        public Overlay(string prefixPath)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.Opaque, true);
             this.BackColor = Color.Transparent;
-            loadImage(filename);
-        }
-        
-        public void loadImage(string filename)
-        {
-            img = Image.FromFile(filename);
-            this.Size = img.Size;
+            direction = "tl";
+            arrows = new Dictionary<string, Image>();
+            arrows.Add("tl", Image.FromFile(prefixPath + "images/Tutorial/arrow-top-left.png"));
+            arrows.Add("tr", Image.FromFile(prefixPath + "images/Tutorial/arrow-top-right.png"));
+            arrows.Add("bl", Image.FromFile(prefixPath + "images/Tutorial/arrow-bottom-left.png"));
+            arrows.Add("br", Image.FromFile(prefixPath + "images/Tutorial/arrow-bottom-right.png"));
+            arrows.Add("lt", Image.FromFile(prefixPath + "images/Tutorial/arrow-left-top.png"));
+            arrows.Add("lb", Image.FromFile(prefixPath + "images/Tutorial/arrow-left-bottom.png"));
+            arrows.Add("rt", Image.FromFile(prefixPath + "images/Tutorial/arrow-right-top.png"));
+            arrows.Add("rb", Image.FromFile(prefixPath + "images/Tutorial/arrow-right-bottom.png"));
         }
         
         protected override void OnPaint(PaintEventArgs e)
         {
+            this.Size = arrows[direction].Size;
             Graphics g = e.Graphics;
-            g.DrawImage(img, 0, 0, img.Size.Width, img.Size.Height);
+            g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
             base.OnPaint(e);
         }
@@ -73,8 +78,12 @@ namespace LipidCreator
         public PictureBox next;
         public Label text;
         public Label paging;
+        public Image nextEnabledImage;
+        public Image nextDisabledImage;
+        public Image previousEnabledImage;
+        public Image previousDisabledImage;
     
-        public TutorialWindow(CreatorGUI creatorGUI)
+        public TutorialWindow(CreatorGUI creatorGUI, string prefixPath)
         {
             this.creatorGUI = creatorGUI;
             this.BackColor = Color.White;
@@ -85,24 +94,25 @@ namespace LipidCreator
             text = new Label();
             paging = new Label();
             
-            closeButton.Image = Image.FromFile("images/Tutorial/close-x.png");
+            closeButton.Image = Image.FromFile(prefixPath + "images/Tutorial/close-x.png");
             closeButton.Click += closeTutorialWindow;
             closeButton.Size = closeButton.Image.Size;
             this.Controls.Add(closeButton);
             
-            previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
+            nextEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-enabled.png");
+            nextDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-disabled.png");
+            previousEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-enabled.png");
+            previousDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-disabled.png");
+            
             previous.Click += previousTutorialWindow;
-            previous.Size = previous.Image.Size;
             this.Controls.Add(previous);
             
-            next.Image = Image.FromFile("images/Tutorial/next-enabled.png");
             next.Click += nextTutorialWindow;
-            next.Size = next.Image.Size;
             this.Controls.Add(next);
             
             text.Font = new Font("Arial", 14);
             text.AutoSize = true;
-            this.Controls.Add(text);
+            //this.Controls.Add(text);
             
             paging.Text = " 1 / 20";
             paging.Font = new Font("Arial", 10);
@@ -117,14 +127,12 @@ namespace LipidCreator
         
         public void previousTutorialWindow(Object sender, EventArgs e)
         {
-            if (creatorGUI.tutorial.tutorialStep > 0) creatorGUI.tutorial.nextTutorialStep(false);
-            this.Refresh();
+            if (creatorGUI.tutorial.tutorialStep > 1) creatorGUI.tutorial.nextTutorialStep(false);
         }
         
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
             if (creatorGUI.tutorial.nextEnabled) creatorGUI.tutorial.nextTutorialStep(true);
-            this.Refresh();
         }
     
         protected override void OnPaint(PaintEventArgs e)
@@ -133,16 +141,25 @@ namespace LipidCreator
             Graphics g = e.Graphics;
             Pen blackPen = new Pen(Color.Black, 10);
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width, this.Size.Height);
+            
+            
+            Font drawFont = new Font("Arial", 14);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            RectangleF drawRect = new RectangleF(20, 30, this.Size.Width - 40, this.Size.Height - 60);
+            g.DrawString(text.Text, drawFont, drawBrush, drawRect);
             g.Dispose();
             
-            if (creatorGUI.tutorial.tutorialStep > 0) previous.Image = Image.FromFile("images/Tutorial/previous-enabled.png");
-            else previous.Image = Image.FromFile("images/Tutorial/previous-disabled.png");
+            if (creatorGUI.tutorial.tutorialStep > 1) previous.Image = previousEnabledImage;
+            else previous.Image = previousDisabledImage;
             
-            if (creatorGUI.tutorial.nextEnabled) next.Image = Image.FromFile("images/Tutorial/next-enabled.png");
-            else next.Image = Image.FromFile("images/Tutorial/next-disabled.png");
+            if (creatorGUI.tutorial.nextEnabled) next.Image = nextEnabledImage;
+            else next.Image = nextDisabledImage;
             
-            text.Location = new Point(20, 20);
-            paging.Text = (1 + creatorGUI.tutorial.tutorialStep).ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
+            previous.Size = previous.Image.Size;
+            next.Size = next.Image.Size;
+            
+            
+            paging.Text = creatorGUI.tutorial.tutorialStep.ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
             paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 12 - paging.Size.Height);
         
             closeButton.Location = new Point(this.Size.Width - 12 - closeButton.Size.Width, 12);
@@ -477,9 +494,9 @@ namespace LipidCreator
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            tutorialArrow = new Overlay("images/Tutorial/arrow-bottom-left.png");
+            tutorialArrow = new Overlay(lipidCreator.prefixPath);
             tutorialArrow.Visible = false;
-            tutorialWindow = new TutorialWindow(this);
+            tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
             tutorialWindow.Visible = false;
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
@@ -2126,7 +2143,8 @@ namespace LipidCreator
             tutorialWindow.Location = new Point(40, 60);
             this.Controls.Add(tutorialWindow);
         
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
+            
             
         }
 

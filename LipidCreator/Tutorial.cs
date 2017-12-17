@@ -51,12 +51,14 @@ namespace LipidCreator
         public LipidCategory currentTab;
         public Dictionary<int, int> maxSteps;
         public bool nextEnabled;
+        public bool forward;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
             tutorial = Tutorials.NoTutorial;
-            tutorialStep = -1;
+            tutorialStep = 0;
             nextEnabled = true;
+            forward = true;
             this.creatorGUI = creatorGUI;
             currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
@@ -67,10 +69,12 @@ namespace LipidCreator
             };
         }
         
+        
+        
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = -1;
+            tutorialStep = 0;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -93,19 +97,24 @@ namespace LipidCreator
             nextTutorialStep(true);
         }
         
+        
+        
         public void nextTutorialStep(bool forward)
         {
-            tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 0));
+            this.forward = forward;
+            tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 1));
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
             else if (tutorial == Tutorials.TutorialHeavyLabeled) TutorialHeavyLabeledStep();
             else quitTutorial();
         }
         
+        
+        
         public void quitTutorial()
         {
             tutorial = Tutorials.NoTutorial;
-            tutorialStep = -1;
+            tutorialStep = 0;
             creatorGUI.tutorialArrow.Visible = false;
             creatorGUI.tutorialWindow.Visible = false;
             
@@ -121,7 +130,10 @@ namespace LipidCreator
                     ((Control)element).Enabled = (bool)elementsEnabledState[i];
                 }
             }
+            creatorGUI.changeTab((int)currentTab);
         }
+        
+        
         
         public void disableEverything()
         {
@@ -140,6 +152,7 @@ namespace LipidCreator
         }
         
         
+        
         public void changeTab(LipidCategory lip)
         {
             if (currentTab != lip)
@@ -150,37 +163,52 @@ namespace LipidCreator
             }
         }
         
+        
+        
         public void TutorialPRMStep()
         {
             disableEverything();
             creatorGUI.tutorialArrow.Visible = false;
             switch(tutorialStep)
             {   
-                case 0:
-                    changeTab(LipidCategory.PhosphoLipid);
-                    creatorGUI.tutorialWindow.text.Text = "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool.";
-                    nextEnabled = true;
-                    
-                    creatorGUI.tutorialArrow.Visible = true;
-                    
-                    break;
-                    
                 case 1:
-                    changeTab(LipidCategory.SphingoLipid);
+                    changeTab(LipidCategory.NoLipid);
+                    
+                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
+                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
+                    creatorGUI.tutorialWindow.text.Text =
+                    "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.";
                     nextEnabled = true;
+                    
                     
                     break;
                     
                 case 2:
-                    changeTab(LipidCategory.PhosphoLipid);
+                    changeTab(LipidCategory.NoLipid);
+                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
+                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
+                    creatorGUI.tutorialWindow.text.Text =
+                    "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.";
+                    
+                    creatorGUI.tutorialArrow.Visible = true;
+                    creatorGUI.tutorialArrow.direction = "lt";
+                    creatorGUI.tutorialArrow.Location = new Point(290, 40);
+                    
                     nextEnabled = false;
+                    
                     break;
                     
                 case 3:
-                    quitTutorial();
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.tutorialWindow.Size = new Size(540, 160);
+                    creatorGUI.tutorialWindow.Location = new Point(140, 200);
+                    creatorGUI.tutorialWindow.text.Text =
+                    "Great";
+                    nextEnabled = false;
                     break;
                     
                 case 4:
+                    quitTutorial();
                     break;
                     
                 case 5:
@@ -190,6 +218,7 @@ namespace LipidCreator
                     break;
             }
         
+            creatorGUI.tutorialWindow.Refresh();
         }
         
         

@@ -67,6 +67,7 @@ namespace LipidCreator
                 {(int)Tutorials.TutorialMRM, 0},
                 {(int)Tutorials.TutorialHeavyLabeled, 0}
             };
+            creatorGUI.plHgListbox.SelectedValueChanged += new System.EventHandler(listBoxInteraction);
         }
         
         
@@ -164,6 +165,15 @@ namespace LipidCreator
         }
         
         
+        public void listBoxInteraction(object sender, System.EventArgs e)
+        {
+            ListBox box = (ListBox)sender;
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 3 && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("PG")) nextEnabled = true;
+            else nextEnabled = false;
+            creatorGUI.tutorialWindow.Refresh();
+        }
+        
+        
         
         public void TutorialPRMStep()
         {
@@ -204,6 +214,8 @@ namespace LipidCreator
                     creatorGUI.tutorialWindow.Location = new Point(140, 200);
                     creatorGUI.tutorialWindow.text.Text =
                     "Great";
+                    
+                    creatorGUI.plHgListbox.Enabled = true;
                     nextEnabled = false;
                     break;
                     

@@ -39,6 +39,7 @@ namespace LipidCreator
     public class Overlay : Control
     {
         public Dictionary<string, Image> arrows;
+        public Dictionary<string, Point> fixPoints;
         public string direction;
 
         public Overlay(string prefixPath)
@@ -56,13 +57,23 @@ namespace LipidCreator
             arrows.Add("lb", Image.FromFile(prefixPath + "images/Tutorial/arrow-left-bottom.png"));
             arrows.Add("rt", Image.FromFile(prefixPath + "images/Tutorial/arrow-right-top.png"));
             arrows.Add("rb", Image.FromFile(prefixPath + "images/Tutorial/arrow-right-bottom.png"));
+            fixPoints = new Dictionary<string, Point>();
+            fixPoints.Add("tl", new Point(0, 26));
+            fixPoints.Add("tr", new Point(120, 26));
+            fixPoints.Add("bl", new Point(0, 134));
+            fixPoints.Add("br", new Point(120, 134));
+            fixPoints.Add("lt", new Point(26, 0));
+            fixPoints.Add("lb", new Point(26, 120));
+            fixPoints.Add("rt", new Point(134, 0));
+            fixPoints.Add("rb", new Point(134, 120));
         }
         
         public void update(Point location, string dir)
         {
-            this.Location = location;
             direction = dir;
+            this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             this.Visible = true;
+            Refresh();
         }
         
         protected override void OnPaint(PaintEventArgs e)
@@ -129,9 +140,11 @@ namespace LipidCreator
         
         public void update(Size size, Point location, string txt)
         {
-            creatorGUI.tutorialWindow.Size = size;
-            creatorGUI.tutorialWindow.Location = location;
-            creatorGUI.tutorialWindow.text.Text = txt;
+            Size = size;
+            Location = location;
+            text.Text = txt;
+            Visible = true;
+            Refresh();
         }
         
         public void closeTutorialWindow(Object sender, EventArgs e)
@@ -945,6 +958,8 @@ namespace LipidCreator
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
             tabControl.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
+            tabControl.ItemSize = new Size(160, 32);
+            tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
             
             

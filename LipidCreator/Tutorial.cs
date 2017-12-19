@@ -61,7 +61,7 @@ namespace LipidCreator
             currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
-                {(int)Tutorials.TutorialPRM, 10},
+                {(int)Tutorials.TutorialPRM, 20},
                 {(int)Tutorials.TutorialMRM, 0},
                 {(int)Tutorials.TutorialHeavyLabeled, 0}
             };
@@ -69,6 +69,11 @@ namespace LipidCreator
             creatorGUI.tabControl.SelectedIndexChanged += new System.EventHandler(tabInteraction);
             creatorGUI.plFA1Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plDB1Textbox.TextChanged += new EventHandler(textBoxInteraction);
+            creatorGUI.plFA2Textbox.TextChanged += new EventHandler(textBoxInteraction);
+            creatorGUI.plDB2Textbox.TextChanged += new EventHandler(textBoxInteraction);
+            creatorGUI.plPosAdductCheckbox1.CheckedChanged += new EventHandler(checkBoxInteraction);
+            creatorGUI.plPosAdductCheckbox3.CheckedChanged += new EventHandler(checkBoxInteraction);
+            creatorGUI.addLipidButton.Click += buttonInteraction;
         }
         
         
@@ -76,7 +81,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 0;
+            tutorialStep = 10;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -186,6 +191,11 @@ namespace LipidCreator
                 nextTutorialStep(true);
                 return;
             }
+            else if (creatorGUI.currentTabIndex == (int)LipidCategory.SphingoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 11)
+            {
+                nextTutorialStep(true);
+                return;
+            }
             creatorGUI.changeTab((int)currentTab);
         }
         
@@ -197,19 +207,48 @@ namespace LipidCreator
             {
                 HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
                 HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
-                
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 5)
             {
                 HashSet<int> expected = new HashSet<int>(){0, 1};
                 HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.doubleBondCounts;
-                
                 nextEnabled = doubleBondCounts != null && doubleBondCounts.Intersect(expected).Count() == 2;
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 8)
+            {
+                nextEnabled = true;
+                
+                HashSet<int> expectedFA = new HashSet<int>(){8, 9, 10};
+                HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.carbonCounts;
+                nextEnabled = carbonCounts != null && carbonCounts.Intersect(expectedFA).Count() == 3;
+                
+                HashSet<int> expectedDB = new HashSet<int>(){2};
+                HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
+                nextEnabled = nextEnabled && doubleBondCounts != null && doubleBondCounts.Intersect(expectedDB).Count() == 1;
             }
             creatorGUI.tutorialWindow.Refresh();
         }
         
+        
+        public void checkBoxInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 9)
+            {
+                nextEnabled = creatorGUI.plPosAdductCheckbox1.Checked && !creatorGUI.plPosAdductCheckbox3.Checked;
+            }
+            creatorGUI.tutorialWindow.Refresh();
+        }
+        
+        
+        
+        public void buttonInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 10)
+            {
+                nextTutorialStep(true);
+            }
+        }
         
         
         public void TutorialPRMStep()
@@ -231,7 +270,7 @@ namespace LipidCreator
                 case 2:
                     changeTab(LipidCategory.NoLipid);
                     TabPage p = (TabPage)creatorGUI.tabList[(int)LipidCategory.PhosphoLipid];
-                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 40), "lt");
+                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
                     
                     creatorGUI.tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.");
                     
@@ -287,11 +326,94 @@ namespace LipidCreator
                 case 6:
                     changeTab(LipidCategory.PhosphoLipid);
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
-                    creatorGUI.tutorialArrow.update(new Point(plHyd1.Location.X, plHyd1.Location.Y + (plHyd1.Size.Height >> 1)), "tr");
+                    creatorGUI.tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "rt");
                     
                     creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
                     
+                    break;
+                    
+                    
+                case 7:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
+                    creatorGUI.tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
+                    
+                    break;
+                    
+                    
+                case 8:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    TextBox plFA2 = creatorGUI.plFA2Textbox;
+                    creatorGUI.tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "For the second fatty acid, we are interested in carbon length 8-10 and exactly 2 double bonds. Please make the following adjustments.");
+                    
+                    plFA2.Text = "12 - 15";
+                    plFA2.Enabled = true;
+                    creatorGUI.plDB2Textbox.Text = "0";
+                    creatorGUI.plDB2Textbox.Enabled = true;
                     nextEnabled = false;
+                    break;
+                    
+                    
+                case 9:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    CheckBox adductP1 = creatorGUI.plPosAdductCheckbox1;
+                    GroupBox P1 = creatorGUI.plPositiveAdduct;
+                    creatorGUI.tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Several adducts are possible for selection. When hovering above the headgroups, the according adducts are highlighted. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    
+                    
+                    adductP1.Checked = false;
+                    P1.Enabled = true;
+                    adductP1.Enabled = true;
+                    break;
+                    
+                    
+                case 10:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    Button plAddLipid = creatorGUI.addLipidButton;
+                    creatorGUI.tutorialArrow.update(new Point(plAddLipid.Location.X + (plAddLipid.Size.Width >> 1), plAddLipid.Location.Y), "rb");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "LipidCreator has a basket system. Once a lipid assembly is set, one can put the assembly into the basket and proceed with other assemblies. Please add the lipid.");
+                    
+                    
+                    creatorGUI.plPosAdductCheckbox1.Checked = true; // TODO: remove
+                    creatorGUI.plHgListbox.SelectedIndices.Add(8); // TODO: remove
+                    creatorGUI.lipidCreator.registeredLipids.Clear();
+                    creatorGUI.refreshRegisteredLipidsTable();
+                    creatorGUI.addLipidButton.Enabled = true;
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 11:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    TabPage s = (TabPage)creatorGUI.tabList[(int)LipidCategory.SphingoLipid];
+                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 3.5), 0), "rt");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Ok, we continue with as second assembly. Let's take randomly sphingolipids. Please change the view to sphingolipids.");
+                    break;
+                    
+                    
+                case 12:
+                    changeTab(LipidCategory.SphingoLipid);
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "The structure of the sphingolipids is very similar to phopholipids. The only difference is that for the long chain base either two or three hydroxyl groups are selectable and the fatty acid is restricted to the ether bond. The headgroup (class) selection remains the same.");
+                    break;
+                    
+                    
+                case 13:
+                    changeTab(LipidCategory.SphingoLipid);
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "The structure of the sphingolipids is very similar to phopholipids. The only difference is that for the long chain base either two or three hydroxyl groups are selectable and the fatty acid is restricted to the ether bond. The headgroup (class) selection remains the same.");
+                    break;
+                    
+                default:
+                    quitTutorial();
                     break;
             }
         

@@ -93,11 +93,12 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public PictureBox closeButton;
         public PictureBox previous;
-        public PictureBox next;
-        public Label text;
+        public Button next;
+        string text;
+        string instruction;
         public Label paging;
-        public Image nextEnabledImage;
-        public Image nextDisabledImage;
+        //public Image nextEnabledImage;
+        //public Image nextDisabledImage;
         public Image previousEnabledImage;
         public Image previousDisabledImage;
     
@@ -108,8 +109,9 @@ namespace LipidCreator
             
             closeButton = new PictureBox();
             previous = new PictureBox();
-            next = new PictureBox();
-            text = new Label();
+            next = new Button();
+            text = "";
+            instruction = "";
             paging = new Label();
             
             closeButton.Image = Image.FromFile(prefixPath + "images/Tutorial/close-x.png");
@@ -117,8 +119,8 @@ namespace LipidCreator
             closeButton.Size = closeButton.Image.Size;
             this.Controls.Add(closeButton);
             
-            nextEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-enabled.png");
-            nextDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-disabled.png");
+            //nextEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-enabled.png");
+            //nextDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-disabled.png");
             previousEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-enabled.png");
             previousDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-disabled.png");
             
@@ -126,23 +128,26 @@ namespace LipidCreator
             this.Controls.Add(previous);
             
             next.Click += nextTutorialWindow;
+            next.Text = "Continue";
+            next.Width = 80;
+            next.Height = 26;
+            next.BackColor = SystemColors.Control;
             this.Controls.Add(next);
-            
-            text.Font = new Font("Arial", 14);
-            text.AutoSize = true;
-            //this.Controls.Add(text);
             
             paging.Text = " 1 / 20";
             paging.Font = new Font("Arial", 10);
             paging.Size = new Size(40, 14);
+            paging.AutoSize = false;    
+            paging.TextAlign = ContentAlignment.MiddleRight;
             this.Controls.Add(paging);
         }
         
-        public void update(Size size, Point location, string txt)
+        public void update(Size size, Point location, string instr, string txt)
         {
             Size = size;
             Location = location;
-            text.Text = txt;
+            instruction = instr;
+            text = txt;
             Visible = true;
             Refresh();
         }
@@ -168,31 +173,32 @@ namespace LipidCreator
             Graphics g = e.Graphics;
             Pen blackPen = new Pen(Color.Black, 10);
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width, this.Size.Height);
-            
-            
-            Font drawFont = new Font("Arial", 14);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            RectangleF drawRect = new RectangleF(20, 30, this.Size.Width - 40, this.Size.Height - 60);
-            g.DrawString(text.Text, drawFont, drawBrush, drawRect);
+            
+            Font instructionFont = new Font("Arial", 14, FontStyle.Bold);
+            RectangleF instructionRect = new RectangleF(20, 20, this.Size.Width - 40 - next.Size.Width, 40);
+            g.DrawString(instruction, instructionFont, drawBrush, instructionRect);
+            
+            
+            Font textFont = new Font("Arial", 13);
+            RectangleF textRect = new RectangleF(20, 80, this.Size.Width - 40, this.Size.Height - 100);
+            g.DrawString(text, textFont, drawBrush, textRect);
             g.Dispose();
+            
             
             if (creatorGUI.tutorial.tutorialStep > 1) previous.Image = previousEnabledImage;
             else previous.Image = previousDisabledImage;
             
-            if (creatorGUI.tutorial.nextEnabled) next.Image = nextEnabledImage;
-            else next.Image = nextDisabledImage;
-            
-            previous.Size = previous.Image.Size;
-            next.Size = next.Image.Size;
-            
+            next.Enabled = creatorGUI.tutorial.nextEnabled;
+            next.Location = new Point(this.Size.Width - next.Size.Width - 20, 40);
             
             paging.Text = creatorGUI.tutorial.tutorialStep.ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
-            paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 12 - paging.Size.Height);
+            paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 15 - paging.Size.Height);
         
-            closeButton.Location = new Point(this.Size.Width - 12 - closeButton.Size.Width, 12);
+            closeButton.Location = new Point(this.Size.Width - 5 - closeButton.Size.Width, 5);
             
-            previous.Location = new Point(paging.Location.X - previous.Size.Width - 4, this.Size.Height - 12 - previous.Size.Height);
-            next.Location = new Point(paging.Location.X + paging.Size.Width + 4, this.Size.Height - 12 - next.Size.Height);
+            previous.Location = new Point(paging.Location.X - previous.Size.Width - 4, this.Size.Height - 15 - previous.Size.Height);
+            previous.Size = previous.Image.Size;
             
             base.OnPaint(e);
         }

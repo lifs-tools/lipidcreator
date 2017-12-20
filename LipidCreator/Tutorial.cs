@@ -81,7 +81,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 10;
+            tutorialStep = 0;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -261,7 +261,7 @@ namespace LipidCreator
                 case 1:
                     changeTab(LipidCategory.NoLipid);
                     
-                    creatorGUI.tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.");
+                    creatorGUI.tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.");
                     
                     nextEnabled = true;
                     break;
@@ -270,9 +270,9 @@ namespace LipidCreator
                 case 2:
                     changeTab(LipidCategory.NoLipid);
                     TabPage p = (TabPage)creatorGUI.tabList[(int)LipidCategory.PhosphoLipid];
-                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
+                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 40), "lt");
                     
-                    creatorGUI.tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.");
+                    creatorGUI.tutorialWindow.update(new Size(540, 200), new Point(140, 200), "click on 'Phosholipids' tab", "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.");
                     
                     nextEnabled = false;
                     break;
@@ -286,7 +286,7 @@ namespace LipidCreator
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
                     creatorGUI.tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Great, phospholipids have multiple headgroups. The user can multiply select them. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.");
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -299,7 +299,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     creatorGUI.tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
                                       
                     
                     plFA1.Text = "12 - 15";
@@ -314,7 +314,7 @@ namespace LipidCreator
                     TextBox plDB1 = creatorGUI.plDB1Textbox;
                     creatorGUI.tutorialArrow.update(new Point(plDB1.Location.X + plDB1.Size.Width, plDB1.Location.Y + (plDB1.Size.Height >> 1)), "tl");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Here, one can specify the number of double bonds (DBs) for first FA. We are for example interested zero and one DBs. Please type in first FA double bond field '0-1' or '0,1'.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Set first double bond occurrences to '0-1'", "Here, one can specify the number of double bonds (DBs) for first FA. We are for example interested zero and one DBs. Please type in first FA double bond field '0-1' or '0,1'.");
                                       
                     
                     plDB1.Text = "0";
@@ -328,7 +328,7 @@ namespace LipidCreator
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
                     creatorGUI.tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "rt");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Continue", "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
                     
                     break;
                     
@@ -338,7 +338,7 @@ namespace LipidCreator
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     creatorGUI.tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Continue", "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
                     
                     break;
                     
@@ -348,7 +348,7 @@ namespace LipidCreator
                     TextBox plFA2 = creatorGUI.plFA2Textbox;
                     creatorGUI.tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "For the second fatty acid, we are interested in carbon length 8-10 and exactly 2 double bonds. Please make the following adjustments.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "Set second FA carbon lengths to '8-10' and DB to '2'", "For the second fatty acid, we are interested in carbon length 8-10 and exactly 2 double bonds. Please make the following adjustments.");
                     
                     plFA2.Text = "12 - 15";
                     plFA2.Enabled = true;
@@ -364,7 +364,7 @@ namespace LipidCreator
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
                     creatorGUI.tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Several adducts are possible for selection. When hovering above the headgroups, the according adducts are highlighted. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
                     
                     
                     adductP1.Checked = false;
@@ -378,7 +378,7 @@ namespace LipidCreator
                     Button plAddLipid = creatorGUI.addLipidButton;
                     creatorGUI.tutorialArrow.update(new Point(plAddLipid.Location.X + (plAddLipid.Size.Width >> 1), plAddLipid.Location.Y), "rb");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "LipidCreator has a basket system. Once a lipid assembly is set, one can put the assembly into the basket and proceed with other assemblies. Please add the lipid.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Add lipid", "LipidCreator has a basket system. Once a lipid assembly is set, one can put the assembly into the basket and proceed with other assemblies. Please add the lipid.");
                     
                     
                     creatorGUI.plPosAdductCheckbox1.Checked = true; // TODO: remove
@@ -389,13 +389,13 @@ namespace LipidCreator
                     nextEnabled = false;
                     break;
                     
-                    
+                /*    
                 case 11:
                     changeTab(LipidCategory.PhosphoLipid);
                     TabPage s = (TabPage)creatorGUI.tabList[(int)LipidCategory.SphingoLipid];
                     creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 3.5), 0), "rt");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Ok, we continue with as second assembly. Let's take randomly sphingolipids. Please change the view to sphingolipids.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Foo", "Ok, we continue with as second assembly. Let's take randomly sphingolipids. Please change the view to sphingolipids.");
                     break;
                     
                     
@@ -411,7 +411,7 @@ namespace LipidCreator
                     
                     creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 300), "The structure of the sphingolipids is very similar to phopholipids. The only difference is that for the long chain base either two or three hydroxyl groups are selectable and the fatty acid is restricted to the ether bond. The headgroup (class) selection remains the same.");
                     break;
-                    
+                */
                 default:
                     quitTutorial();
                     break;

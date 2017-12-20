@@ -73,6 +73,7 @@ namespace LipidCreator
             creatorGUI.plDB2Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plPosAdductCheckbox1.CheckedChanged += new EventHandler(checkBoxInteraction);
             creatorGUI.plPosAdductCheckbox3.CheckedChanged += new EventHandler(checkBoxInteraction);
+            creatorGUI.MS2fragmentsLipidButton.Click += buttonInteraction;
             creatorGUI.addLipidButton.Click += buttonInteraction;
         }
         
@@ -81,11 +82,12 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 0;
+            tutorialStep = 8;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
             elementsEnabledState = new ArrayList();
+            ((TabPage)creatorGUI.tabList[(int)LipidCategory.NoLipid]).Controls.Add(creatorGUI.tutorialArrow);
             foreach (Object element in creatorGUI.controlElements)
             {
                 if (element is MenuItem) 
@@ -364,7 +366,7 @@ namespace LipidCreator
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
                     creatorGUI.tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 400), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
                     
                     
                     adductP1.Checked = false;
@@ -374,6 +376,33 @@ namespace LipidCreator
                     
                     
                 case 10:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    Button ms2 = creatorGUI.MS2fragmentsLipidButton;
+                    creatorGUI.tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(460, 400), "Open MS2 fragments dialog", "As next, we will have a deeper look into all MS2 fragments of our selected lipids. Please open the MS2 fragments dialog.");
+                    
+                    ms2.Enabled = true;
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 11:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    Button ms2 = creatorGUI.MS2fragmentsLipidButton;
+                    creatorGUI.tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
+                    
+                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(20, 20), "Select 'PG' tab", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    
+                    ms2.Enabled = true;
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                    
+                case 20:
                     changeTab(LipidCategory.PhosphoLipid);
                     Button plAddLipid = creatorGUI.addLipidButton;
                     creatorGUI.tutorialArrow.update(new Point(plAddLipid.Location.X + (plAddLipid.Size.Width >> 1), plAddLipid.Location.Y), "rb");

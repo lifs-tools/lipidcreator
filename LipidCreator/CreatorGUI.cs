@@ -56,6 +56,7 @@ namespace LipidCreator
         public LipidCategory currentIndex;
         public string inputParameters;
         public Tutorial tutorial;
+        public Form openForm;
         
         
         public CreatorGUI(string inputParameters)
@@ -2593,11 +2594,19 @@ namespace LipidCreator
         public void openMS2Form(Object sender, EventArgs e)
         {
             if (currentIndex == LipidCategory.NoLipid) return;
-            Form openForm = (currentIndex == LipidCategory.Mediator) ? ((Form)new MediatorMS2Form(this, (Mediator)currentLipid)) : ((Form)new MS2Form(this, currentLipid));
+            openForm = (currentIndex == LipidCategory.Mediator) ? ((Form)new MediatorMS2Form(this, (Mediator)currentLipid)) : ((Form)new MS2Form(this, currentLipid));
             openForm.Owner = this;
             openForm.ShowInTaskbar = false;
-            openForm.ShowDialog();
-            openForm.Dispose();
+            
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                openForm.ShowDialog();
+                openForm.Dispose();
+            }
+            else
+            {
+                openForm.Show();
+            }
         }
         
         

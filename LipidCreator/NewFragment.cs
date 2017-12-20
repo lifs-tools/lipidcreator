@@ -40,12 +40,12 @@ namespace LipidCreator
     {
 
         Dictionary<string, object[]> elements;
-        MS2Form ms2form;
+        LipidMS2Form ms2form;
         string[] buildingBlocks;
         bool chemAdding = true;
         bool updating = false;
 
-        public NewFragment(MS2Form ms2form)
+        public NewFragment(LipidMS2Form ms2form)
         {
             this.ms2form = ms2form;
             elements = createGridData(MS2Fragment.createEmptyElementDict());

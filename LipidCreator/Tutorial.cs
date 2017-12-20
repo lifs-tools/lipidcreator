@@ -51,6 +51,8 @@ namespace LipidCreator
         public LipidCategory currentTab;
         public Dictionary<int, int> maxSteps;
         public bool nextEnabled;
+        public int pgIndex;
+        public int currentMS2TabIndex;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -82,7 +84,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 8;
+            tutorialStep = 9;
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             creatorGUI.tutorialArrow.BringToFront();
@@ -138,6 +140,8 @@ namespace LipidCreator
                     ((Control)element).Enabled = (bool)elementsEnabledState[i];
                 }
             }
+            if (creatorGUI.ms2fragmentsForm != null) creatorGUI.ms2fragmentsForm.Close();
+            creatorGUI.Enabled = true;
             creatorGUI.changeTab((int)currentTab);
         }
         
@@ -174,6 +178,17 @@ namespace LipidCreator
         }
         
         
+        
+        public void changeMS2Tab(int index)
+        {
+            if (currentMS2TabIndex != index)
+            {
+                currentMS2TabIndex = index;
+                ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments.SelectedIndex = index;
+            }
+        }
+        
+        
         public void listBoxInteraction(object sender, System.EventArgs e)
         {
             ListBox box = (ListBox)sender;
@@ -188,17 +203,19 @@ namespace LipidCreator
         {
             if (creatorGUI.changingTabForced) return;
             if (tutorial == Tutorials.NoTutorial) return;
+            
             if (creatorGUI.currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
             {
                 nextTutorialStep(true);
                 return;
             }
-            else if (creatorGUI.currentTabIndex == (int)LipidCategory.SphingoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 11)
+            else if (((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments.SelectedIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 12)
             {
                 nextTutorialStep(true);
                 return;
             }
             creatorGUI.changeTab((int)currentTab);
+            if (creatorGUI.ms2fragmentsForm != null) ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments.SelectedIndex = currentMS2TabIndex;
         }
         
         
@@ -252,12 +269,29 @@ namespace LipidCreator
             }
         }
         
+        private void closingInteraction(Object sender, FormClosingEventArgs e)
+        {
+            quitTutorial();
+        }
+        
         
         public void TutorialPRMStep()
         {
             disableEverything();
             creatorGUI.tutorialWindow.Visible = false;
             creatorGUI.tutorialArrow.Visible = false;
+            nextEnabled = true;
+            creatorGUI.Enabled = true;
+            creatorGUI.Refresh();
+            if (creatorGUI.ms2fragmentsForm != null)
+            {
+                creatorGUI.ms2fragmentsForm.tutorialArrow.Visible = false;
+                creatorGUI.ms2fragmentsForm.tutorialWindow.Visible = false;
+                creatorGUI.ms2fragmentsForm.Refresh();
+            }
+            
+            
+            
             switch(tutorialStep)
             {   
                 case 1:
@@ -377,6 +411,7 @@ namespace LipidCreator
                     
                 case 10:
                     changeTab(LipidCategory.PhosphoLipid);
+                    if (creatorGUI.ms2fragmentsForm != null) creatorGUI.ms2fragmentsForm.Close();
                     
                     Button ms2 = creatorGUI.MS2fragmentsLipidButton;
                     creatorGUI.tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
@@ -390,17 +425,50 @@ namespace LipidCreator
                     
                 case 11:
                     changeTab(LipidCategory.PhosphoLipid);
+                    currentMS2TabIndex = 0;
+                    changeMS2Tab(0);
+                    TabControl ms2tc = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments;
+                    pgIndex = 0;
+                    for (; pgIndex < ms2tc.TabPages.Count; ++pgIndex)
+                    {
+                        if (ms2tc.TabPages[pgIndex].Text.Equals("PG")) break;
+                    }                    
                     
-                    Button ms2 = creatorGUI.MS2fragmentsLipidButton;
-                    creatorGUI.tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
+                    creatorGUI.Enabled = false;
+                    creatorGUI.ms2fragmentsForm.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                    ms2tc.SelectedIndexChanged += new System.EventHandler(tabInteraction);
                     
-                    creatorGUI.tutorialWindow.update(new Size(500, 200), new Point(20, 20), "Select 'PG' tab", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.BringToFront();
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(300, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.");
                     
-                    ms2.Enabled = true;
+                    break;
+                    
+                     
+                case 12:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    changeMS2Tab(0);
+                    
+                    TabControl ms2tc2 = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments;
+                    creatorGUI.ms2fragmentsForm.tutorialArrow.BringToFront();
+                    creatorGUI.ms2fragmentsForm.tutorialArrow.update(new Point((int)(ms2tc2.ItemSize.Width * ((pgIndex % 16) + 0.5)) + ms2tc2.Location.X, 20 + ms2tc2.Location.Y), "lt");
+                    
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(200, 200), "Select 'PG' tab", "We want to manually select fragments for PG. Please select the 'PG' tab.");
+                    
                     nextEnabled = false;
                     break;
                     
+                     
+                case 13:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    changeMS2Tab(pgIndex);
                     
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(200, 200), "Continue", "Continue.");
+                    
+                    break;
+                    
+                    
+                    
+                /*   
                     
                 case 20:
                     changeTab(LipidCategory.PhosphoLipid);
@@ -417,8 +485,6 @@ namespace LipidCreator
                     creatorGUI.addLipidButton.Enabled = true;
                     nextEnabled = false;
                     break;
-                    
-                /*    
                 case 11:
                     changeTab(LipidCategory.PhosphoLipid);
                     TabPage s = (TabPage)creatorGUI.tabList[(int)LipidCategory.SphingoLipid];

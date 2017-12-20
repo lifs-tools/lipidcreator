@@ -36,18 +36,16 @@ using System.Windows.Forms;
 namespace LipidCreator
 {
     [Serializable]
-    public partial class MS2Form : Form
+    public partial class LipidMS2Form : MS2Form
     {
         
         public Image fragmentComplete = null;
         public Lipid currentLipid;
-        public CreatorGUI creatorGUI;
         public bool senderInterupt;
         public bool loading;
         
-        public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
+        public LipidMS2Form(CreatorGUI creatorGUI, Lipid currentLipid) : base (creatorGUI)
         {
-            this.creatorGUI = creatorGUI;
             senderInterupt = false;
             loading = false;
             
@@ -88,7 +86,7 @@ namespace LipidCreator
             }
             if (tabPages.Count > 16) {
                 tabControlFragments.Multiline = true;
-                tabControlFragments.ItemSize = new Size((tabControlFragments.Width - 3) / 16, 20);
+                tabControlFragments.ItemSize = new Size(tabControlFragments.Width / 16 + 1, 20);
                 tabControlFragments.SizeMode = TabSizeMode.Fixed;
             }
             

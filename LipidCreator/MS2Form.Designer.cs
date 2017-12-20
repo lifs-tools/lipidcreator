@@ -33,7 +33,28 @@ using System.IO;
 
 namespace LipidCreator
 {
-    partial class MS2Form
+
+    public class MS2Form : Form
+    {
+        public Overlay tutorialArrow;
+        public TutorialWindow tutorialWindow;
+        public CreatorGUI creatorGUI;
+        
+        public MS2Form(CreatorGUI creatorGUI)
+        {
+            this.creatorGUI = creatorGUI;
+            tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
+            tutorialArrow.Visible = false;
+            
+            tutorialWindow = new TutorialWindow(creatorGUI, creatorGUI.lipidCreator.prefixPath);
+            tutorialWindow.Visible = false;
+            
+            this.Controls.Add(tutorialArrow);
+            this.Controls.Add(tutorialWindow);
+        }
+    }
+
+    partial class LipidMS2Form
     {
         /// <summary>
         /// Required designer variable.
@@ -312,6 +333,5 @@ namespace LipidCreator
         public ArrayList tabPages;
         public ToolTip toolTip1;
         public ComboBox isotopeList;
-        public Overlay tutorialArrow;
     }
 }

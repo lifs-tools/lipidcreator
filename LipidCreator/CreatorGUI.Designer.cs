@@ -150,6 +150,7 @@ namespace LipidCreator
             text = txt;
             Visible = true;
             Refresh();
+            if (Parent != null) Parent.Refresh();
         }
         
         public void closeTutorialWindow(Object sender, EventArgs e)

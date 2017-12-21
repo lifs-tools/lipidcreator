@@ -161,6 +161,21 @@ namespace LipidCreator
                 }
             }
             creatorGUI.tutorialArrow.Visible = false;
+            creatorGUI.tutorialWindow.Visible = false;
+            creatorGUI.Refresh();
+            if (creatorGUI.ms2fragmentsForm != null)
+            {
+                if (creatorGUI.ms2fragmentsForm is LipidMS2Form)
+                {
+                    foreach (Control control in ((LipidMS2Form)creatorGUI.ms2fragmentsForm).controlElements)
+                    {
+                        control.Enabled = false;
+                    }
+                }
+                creatorGUI.ms2fragmentsForm.tutorialArrow.Visible = false;
+                creatorGUI.ms2fragmentsForm.tutorialWindow.Visible = false;
+                creatorGUI.ms2fragmentsForm.Refresh();
+            }
         }
         
         
@@ -278,10 +293,10 @@ namespace LipidCreator
         public void TutorialPRMStep()
         {
             disableEverything();
-            creatorGUI.tutorialWindow.Visible = false;
-            creatorGUI.tutorialArrow.Visible = false;
             nextEnabled = true;
             creatorGUI.Enabled = true;
+            creatorGUI.tutorialWindow.Visible = false;
+            creatorGUI.tutorialArrow.Visible = false;
             creatorGUI.Refresh();
             if (creatorGUI.ms2fragmentsForm != null)
             {

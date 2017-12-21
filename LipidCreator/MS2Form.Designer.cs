@@ -308,6 +308,8 @@ namespace LipidCreator
             this.Text = "MS2 Fragments";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
             this.tabControlFragments.ResumeLayout(false);
+            
+            controlElements = new ArrayList(){checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, buttonCancel, buttonOK, buttonAddFragment, isotopeList, labelPositiveDeselectAll, labelPositiveSelectAll, labelNegativeDeselectAll, labelNegativeSelectAll};
         }
 
         #endregion
@@ -333,5 +335,6 @@ namespace LipidCreator
         public ArrayList tabPages;
         public ToolTip toolTip1;
         public ComboBox isotopeList;
+        public ArrayList controlElements;
     }
 }

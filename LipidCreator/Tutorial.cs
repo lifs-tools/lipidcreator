@@ -231,6 +231,7 @@ namespace LipidCreator
             }
             creatorGUI.changeTab((int)currentTab);
             if (creatorGUI.ms2fragmentsForm != null) ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments.SelectedIndex = currentMS2TabIndex;
+            
         }
         
         
@@ -454,7 +455,7 @@ namespace LipidCreator
                     ms2tc.SelectedIndexChanged += new System.EventHandler(tabInteraction);
                     
                     creatorGUI.ms2fragmentsForm.tutorialWindow.BringToFront();
-                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(300, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.");
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.");
                     
                     break;
                     
@@ -465,9 +466,9 @@ namespace LipidCreator
                     
                     TabControl ms2tc2 = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).tabControlFragments;
                     creatorGUI.ms2fragmentsForm.tutorialArrow.BringToFront();
-                    creatorGUI.ms2fragmentsForm.tutorialArrow.update(new Point((int)(ms2tc2.ItemSize.Width * ((pgIndex % 16) + 0.5)) + ms2tc2.Location.X, 20 + ms2tc2.Location.Y), "lt");
+                    creatorGUI.ms2fragmentsForm.tutorialArrow.update(new Point((int)(ms2tc2.ItemSize.Width * ((pgIndex % 16) + 0.5)), 0), "lt");
                     
-                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(200, 200), "Select 'PG' tab", "We want to manually select fragments for PG. Please select the 'PG' tab.");
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select 'PG' tab", "We want to manually select fragments for PG. Please select the 'PG' tab.");
                     
                     nextEnabled = false;
                     break;
@@ -477,8 +478,19 @@ namespace LipidCreator
                     changeTab(LipidCategory.PhosphoLipid);
                     changeMS2Tab(pgIndex);
                     
-                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(400, 200), new Point(200, 200), "Continue", "Continue.");
+                    CheckedListBox negCLB = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxNegativeFragments;
                     
+                    
+                    creatorGUI.ms2fragmentsForm.tutorialArrow.update(new Point(negCLB.Location.X + negCLB.Size.Width, negCLB.Location.Y + (negCLB.Size.Height >> 1)), "tl");
+                    
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only NL(GP)+, FA1- and HG(PG) fragments", "A positive and negative list are indicating all predefined fragments for PG. Please select NL(GP) in positive mode and FA1, HG(PG) in negative mode.");
+                    
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelPositiveDeselectAll.Enabled = true;
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelPositiveSelectAll.Enabled = true;
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelNegativeDeselectAll.Enabled = true;
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelNegativeSelectAll.Enabled = true;
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxPositiveFragments.Enabled = true;
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxNegativeFragments.Enabled = true;
                     break;
                     
                     

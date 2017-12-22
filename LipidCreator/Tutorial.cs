@@ -285,10 +285,27 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        public void checkedListBoxInteraction(Object sender, ItemCheckEventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 13)
+            {
+                 HashSet<string> posFrag = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).currentLipid.positiveFragments["PG"];
+                 HashSet<string> negFrag = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).currentLipid.negativeFragments["PG"];
+                 
+                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("NL(GP)") && negFrag.Count == 2 && negFrag.Contains("FA1") && negFrag.Contains("HG(PG)"));
+            }
+            creatorGUI.ms2fragmentsForm.Refresh();
+        }
+        
+        
+        
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
             quitTutorial();
         }
+        
         
         
         public void TutorialPRMStep()
@@ -453,6 +470,8 @@ namespace LipidCreator
                     creatorGUI.Enabled = false;
                     creatorGUI.ms2fragmentsForm.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                     ms2tc.SelectedIndexChanged += new System.EventHandler(tabInteraction);
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
+                    ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
                     
                     creatorGUI.ms2fragmentsForm.tutorialWindow.BringToFront();
                     creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.");
@@ -483,7 +502,7 @@ namespace LipidCreator
                     
                     creatorGUI.ms2fragmentsForm.tutorialArrow.update(new Point(negCLB.Location.X + negCLB.Size.Width, negCLB.Location.Y + (negCLB.Size.Height >> 1)), "tl");
                     
-                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only NL(GP)+, FA1- and HG(PG) fragments", "A positive and negative list are indicating all predefined fragments for PG. Please select NL(GP) in positive mode and FA1, HG(PG) in negative mode.");
+                    creatorGUI.ms2fragmentsForm.tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Select only NL(GP)+, FA1- and HG(PG)- fragments", "A positive and negative list are indicating all predefined fragments for PG. Please select NL(GP) in positive mode and FA1, HG(PG) in negative mode. When hovering over the fragments, a structure of the fragment is displayed.");
                     
                     ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelPositiveDeselectAll.Enabled = true;
                     ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelPositiveSelectAll.Enabled = true;
@@ -491,6 +510,7 @@ namespace LipidCreator
                     ((LipidMS2Form)creatorGUI.ms2fragmentsForm).labelNegativeSelectAll.Enabled = true;
                     ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxPositiveFragments.Enabled = true;
                     ((LipidMS2Form)creatorGUI.ms2fragmentsForm).checkedListBoxNegativeFragments.Enabled = true;
+                    nextEnabled = false;
                     break;
                     
                     

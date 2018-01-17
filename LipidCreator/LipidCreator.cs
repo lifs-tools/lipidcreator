@@ -399,16 +399,210 @@ namespace LipidCreator
         }
         
         
+        public string getSeparator(string list)
+        {
+            if (list.IndexOf(Lipid.ID_SEPARATOR_SPECIFIC) >= 0 && list.IndexOf(Lipid.ID_SEPARATOR_UNSPECIFIC) == -1) return Lipid.ID_SEPARATOR_SPECIFIC;
+            else if (list.IndexOf(Lipid.ID_SEPARATOR_UNSPECIFIC) >= 0 && list.IndexOf(Lipid.ID_SEPARATOR_SPECIFIC) == -1) return Lipid.ID_SEPARATOR_UNSPECIFIC;
+            return "";
+        }
+        
+        
+        public FattyAcidGroup parseFattyAcidGroup(string acid, bool faX, bool isLCB = false)
+        {
+            FattyAcidGroup fag = new FattyAcidGroup(isLCB);
+            fag.faTypes["FA"] = false;
+            fag.faTypes["FAp"] = false;
+            fag.faTypes["FAa"] = false;
+            fag.faTypes["FAx"] = false;
+            if (faX)
+            {
+                fag.faTypes["FAx"] = true;
+                return fag;
+            }
+            
+            // determine if plasmanyl or plasmenyl or neither
+            if (acid[acid.Length - 1] == 'a' || acid[acid.Length - 1] == 'p')
+            {
+                fag.faTypes["FA" + acid[acid.Length - 1]] = true;
+                acid = acid.Substring(0, acid.Length - 1);
+            }
+            else fag.faTypes["FA"] = true;
+            
+            if (acid.IndexOf(":") == -1) return null;
+            if (acid.Split(':').Length != 2) return null;
+            string carbonCount = acid.Split(':')[0];
+            string cRest = acid.Split(':')[1];
+            string dbCount;
+            string hydroxylCount = "0";
+            if (cRest.Split(';').Length > 2) return null;
+            if (cRest.Split(';').Length == 2)
+            {
+                dbCount = cRest.Split(';')[0];
+                hydroxylCount = cRest.Split(';')[1];
+            }
+            else dbCount = cRest;
+            
+            try {
+                fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
+                fag.doubleBondCounts.Add(Convert.ToInt32(dbCount));
+                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
+            return fag;
+        }
+        
         
         public Lipid parseLipidSpecies(string speciesName)
         {
             if (speciesName.IndexOf("PC O") >= 0) speciesName.Replace("PC O", "PC-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
             else if (speciesName.IndexOf("PE O") >= 0) speciesName.Replace("PE O", "PE-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
             
+            
             string headgroup = speciesName.Split(new char[]{' '})[0];
+            string acids;
+            string[] faToken;
+            string tokenSeparator;
+            
             if (headgroups.ContainsKey(headgroup))
             {
-                Console.WriteLine("inside");
+                Precursor precursor = headgroups[headgroup];
+                int category = (int)precursor.category;
+                switch(category)
+                {
+                    case (int)LipidCategory.GlyceroLipid:
+                        GLLipid gllipid = new GLLipid(this);
+                        gllipid.headGroupNames.Add(headgroup);
+                        acids = speciesName.Split(new char[]{' '})[1];
+                        tokenSeparator = getSeparator(acids);
+                        if (tokenSeparator.Length == 0) return null;
+                        faToken = acids.Split(tokenSeparator.ToCharArray());
+                        if (headgroup.Equals("MAG") && faToken.Length != 1) return null;
+                        if (headgroup.Equals("DAG") && faToken.Length != 2) return null;
+                        if (headgroup.Equals("TAG") && faToken.Length != 3) return null;
+                        switch(headgroup)
+                        {
+                            case "MAG":
+                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                gllipid.fag2 = parseFattyAcidGroup("", true);
+                                gllipid.fag3 = parseFattyAcidGroup("", true);
+                                break;
+                                
+                            case "DAG":
+                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                gllipid.fag3 = parseFattyAcidGroup("", true);
+                                break;
+                                
+                            case "TAG":
+                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                gllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
+                                break;
+                        }
+                        if (gllipid.fag1 == null || gllipid.fag2 == null || gllipid.fag3 == null) return null;
+                        return gllipid;
+                        
+                        
+                        
+                    case (int)LipidCategory.PhosphoLipid:
+                        PLLipid pllipid = new PLLipid(this);
+                        pllipid.headGroupNames.Add(headgroup);
+                        acids = speciesName.Split(new char[]{' '})[1];
+                        tokenSeparator = getSeparator(acids);
+                        if (tokenSeparator.Length == 0) return null;
+                        faToken = acids.Split(tokenSeparator.ToCharArray());
+                        switch(headgroup)
+                        {
+                            case "CL":
+                                pllipid.isCL = true;
+                                if (faToken.Length != 4) return null;
+                                pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                pllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
+                                pllipid.fag4 = parseFattyAcidGroup(faToken[3], false);
+                                if (pllipid.fag1 == null || pllipid.fag2 == null || pllipid.fag3 == null || pllipid.fag4 == null) return null;
+                                break;
+                                
+                            case "MLCL":
+                                pllipid.isCL = true;
+                                if (faToken.Length != 3) return null;
+                                pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                pllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
+                                pllipid.fag4 = parseFattyAcidGroup("", true);
+                                if (pllipid.fag1 == null || pllipid.fag2 == null || pllipid.fag3 == null) return null;
+                                break;
+                                
+                            default:
+                                if (headgroup[0] == 'L')
+                                {
+                                    if (faToken.Length != 1) return null;
+                                    pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                    pllipid.fag2 = parseFattyAcidGroup("", true);
+                                }
+                                else
+                                {
+                                    if (faToken.Length != 2) return null;
+                                    pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                    pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                }
+                                if (pllipid.fag1 == null || pllipid.fag2 == null) return null;
+                                break;
+                        }
+                        return pllipid;
+                        
+                        
+                        
+                    case (int)LipidCategory.SphingoLipid:
+                        SLLipid sllipid = new SLLipid(this);
+                        sllipid.headGroupNames.Add(headgroup);
+                        acids = speciesName.Split(new char[]{' '})[1];
+                        tokenSeparator = getSeparator(acids);
+                        if (tokenSeparator.Length == 0) return null;
+                        faToken = acids.Split(tokenSeparator.ToCharArray());
+                        if (faToken.Length > 2 || faToken.Length == 0) return null;
+                        else if (faToken.Length == 1){
+                            if (headgroup != "LCB" && headgroup != "LCBP" && headgroup != "LSM" && headgroup != "LHexCer") return null;
+                            sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
+                            if (sllipid.lcb == null) return null;
+                        }
+                        else {
+                            sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
+                            sllipid.fag = parseFattyAcidGroup(faToken[1], false);
+                            if (sllipid.lcb == null || sllipid.fag == null) return null;
+                        }
+                        return sllipid;
+                        
+                        
+                        
+                    case (int)LipidCategory.Cholesterol:
+                        Cholesterol chlipid = new Cholesterol(this);
+                        chlipid.headGroupNames.Add(headgroup);
+                        if(precursor.name.Equals(headgroup)) return chlipid;
+                        
+                        acids = speciesName.Split(new char[]{' '})[1];
+                        tokenSeparator = getSeparator(acids);
+                        if (tokenSeparator.Length == 0) return null;
+                        faToken = acids.Split(tokenSeparator.ToCharArray());
+                        if (faToken.Length != 1) return null;
+                        chlipid.fag = parseFattyAcidGroup(faToken[0], false);
+                        if (chlipid.fag == null) return null;
+                        return chlipid;
+                        
+                        
+                        
+                    case (int)LipidCategory.Mediator:
+                        Mediator medlipid = new Mediator(this);
+                        medlipid.headGroupNames.Add(headgroup);
+                        return medlipid;
+                        
+                    default:
+                        return null;
+                }
             }            
             return null;
         }

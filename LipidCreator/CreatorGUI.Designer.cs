@@ -1097,7 +1097,7 @@ namespace LipidCreator
             
 
             clFA1Checkbox3.Location = new Point(clFA1Textbox.Left + 90, clFA1Textbox.Top + clFA1Textbox.Height);
-            clFA1Checkbox3.Text = "FAe";
+            clFA1Checkbox3.Text = "FAa";
             clFA1Checkbox3.CheckedChanged += new EventHandler(clFA1Checkbox3CheckedChanged);
             clFA1Checkbox3.MouseLeave += new System.EventHandler(clFA1Checkbox3MouseLeave);
             clFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA1Checkbox3MouseHover);
@@ -1181,7 +1181,7 @@ namespace LipidCreator
             clHydroxyl2Label.Text = hydroxylText;
 
             clFA2Checkbox3.Location = new Point(clFA2Textbox.Left + 90, clFA2Textbox.Top + clFA2Textbox.Height);
-            clFA2Checkbox3.Text = "FAe";
+            clFA2Checkbox3.Text = "FAa";
             clFA2Checkbox3.CheckedChanged += new EventHandler(clFA2Checkbox3CheckedChanged);
             clFA2Checkbox3.MouseLeave += new System.EventHandler(clFA2Checkbox3MouseLeave);
             clFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA2Checkbox3MouseHover);
@@ -1227,7 +1227,7 @@ namespace LipidCreator
             clHydroxyl3Label.Text = hydroxylText;
 
             clFA3Checkbox3.Location = new Point(clFA3Textbox.Left + 90, clFA3Textbox.Top + clFA3Textbox.Height);
-            clFA3Checkbox3.Text = "FAe";
+            clFA3Checkbox3.Text = "FAa";
             clFA3Checkbox3.CheckedChanged += new EventHandler(clFA3Checkbox3CheckedChanged);
             clFA3Checkbox3.MouseLeave += new System.EventHandler(clFA3Checkbox3MouseLeave);
             clFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA3Checkbox3MouseHover);
@@ -1278,7 +1278,7 @@ namespace LipidCreator
             clHydroxyl4Label.Text = hydroxylText;
 
             clFA4Checkbox3.Location = new Point(clFA4Textbox.Left + 90, clFA4Textbox.Top + clFA4Textbox.Height);
-            clFA4Checkbox3.Text = "FAe";
+            clFA4Checkbox3.Text = "FAa";
             clFA4Checkbox3.CheckedChanged += new EventHandler(clFA4Checkbox3CheckedChanged);
             clFA4Checkbox3.MouseLeave += new System.EventHandler(clFA4Checkbox3MouseLeave);
             clFA4Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA4Checkbox3MouseHover);
@@ -1381,7 +1381,7 @@ namespace LipidCreator
             glHydroxyl1Label.Text = hydroxylText;
 
             glFA1Checkbox3.Location = new Point(glFA1Textbox.Left + 90, glFA1Textbox.Top + glFA1Textbox.Height);
-            glFA1Checkbox3.Text = "FAe";
+            glFA1Checkbox3.Text = "FAa";
             glFA1Checkbox3.CheckedChanged += new EventHandler(glFA1Checkbox3CheckedChanged);
             glFA1Checkbox3.MouseLeave += new System.EventHandler(glFA1Checkbox3MouseLeave);
             glFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA1Checkbox3MouseHover);
@@ -1425,7 +1425,7 @@ namespace LipidCreator
             glHydroxyl2Label.Text = hydroxylText;
 
             glFA2Checkbox3.Location = new Point(glFA2Textbox.Left + 90, glFA2Textbox.Top + glFA2Textbox.Height);
-            glFA2Checkbox3.Text = "FAe";
+            glFA2Checkbox3.Text = "FAa";
             glFA2Checkbox3.CheckedChanged += new EventHandler(glFA2Checkbox3CheckedChanged);
             glFA2Checkbox3.MouseLeave += new System.EventHandler(glFA2Checkbox3MouseLeave);
             glFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA2Checkbox3MouseHover);
@@ -1469,7 +1469,7 @@ namespace LipidCreator
             glHydroxyl3Label.Text = hydroxylText;
 
             glFA3Checkbox3.Location = new Point(glFA3Textbox.Left + 90, glFA3Textbox.Top + glFA3Textbox.Height);
-            glFA3Checkbox3.Text = "FAe";
+            glFA3Checkbox3.Text = "FAa";
             glFA3Checkbox3.CheckedChanged += new EventHandler(glFA3Checkbox3CheckedChanged);
             glFA3Checkbox3.MouseLeave += new System.EventHandler(glFA3Checkbox3MouseLeave);
             glFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA3Checkbox3MouseHover);
@@ -1636,7 +1636,7 @@ namespace LipidCreator
             plHydroxyl1Label.Text = hydroxylText;
 
             plFA1Checkbox3.Location = new Point(plFA1Textbox.Left + 90, plFA1Textbox.Top + plFA1Textbox.Height);
-            plFA1Checkbox3.Text = "FAe";
+            plFA1Checkbox3.Text = "FAa";
             plFA1Checkbox3.CheckedChanged += new EventHandler(plFA1Checkbox3CheckedChanged);
             plFA1Checkbox3.MouseLeave += new System.EventHandler(plFA1Checkbox3MouseLeave);
             plFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA1Checkbox3MouseHover);
@@ -1680,7 +1680,7 @@ namespace LipidCreator
             plHydroxyl2Label.Text = hydroxylText;
 
             plFA2Checkbox3.Location = new Point(plFA2Textbox.Left + 90, plFA2Textbox.Top + plFA2Textbox.Height);
-            plFA2Checkbox3.Text = "FAe";
+            plFA2Checkbox3.Text = "FAa";
             plFA2Checkbox3.CheckedChanged += new EventHandler(plFA2Checkbox3CheckedChanged);
             plFA2Checkbox3.MouseLeave += new System.EventHandler(plFA2Checkbox3MouseLeave);
             plFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2Checkbox3MouseHover);

@@ -187,7 +187,6 @@ namespace LipidCreator
                             if (!categoryToClass.ContainsKey((int)headgroup.category)) categoryToClass.Add((int)headgroup.category, new ArrayList());
                             categoryToClass[(int)headgroup.category].Add(tokens[1]);
                             
-                            
                             headgroup.name = tokens[1];
                             headgroup.elements[(int)Molecules.C] = Convert.ToInt32(tokens[2]); // carbon
                             headgroup.elements[(int)Molecules.H] = Convert.ToInt32(tokens[3]); // hydrogen
@@ -413,6 +412,7 @@ namespace LipidCreator
             {
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
+            
             
             // create fragment list            
             foreach (PrecursorData precursorData in this.precursorDataList)

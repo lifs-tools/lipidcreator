@@ -276,17 +276,17 @@ namespace LipidCreator
                             switch(containsMonoLyso)
                             {
                                 case 0:
-                                    headgroup = "TG";
+                                    headgroup = "TAG";
                                     break;
                                 case 4:
                                 case 2:
                                 case 1:
-                                    headgroup = "DG";
+                                    headgroup = "DAG";
                                     break;
                                 case 6:
                                 case 5:
                                 case 3:
-                                    headgroup = "MG";
+                                    headgroup = "MAG";
                                     break;
                             }
                             String key = headgroup + " ";
@@ -353,8 +353,8 @@ namespace LipidCreator
                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
                                     FattyAcid heavyFA3 = new FattyAcid(fa3);
                                     heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
-                                    if (headgroup.Equals("DG") || headgroup.Equals("TG")) heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
-                                    if (headgroup.Equals("TG")) heavyFA3.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[2]);
+                                    if (headgroup.Equals("DAG") || headgroup.Equals("TAG")) heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
+                                    if (headgroup.Equals("TAG")) heavyFA3.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[2]);
                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                     heavySortedAcids.Add(heavyFA1);
                                     heavySortedAcids.Add(heavyFA2);

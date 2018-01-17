@@ -304,7 +304,7 @@ namespace LipidCreator
                     switch (fa1.suffix)
                     {
                         case "x": isLyso = true; break;
-                        case "e": isFAe = true; break;
+                        case "a": isFAe = true; break;
                         case "p": isPlamalogen = true; break;
                         default: break;
                     }
@@ -315,7 +315,7 @@ namespace LipidCreator
                         switch (fa2.suffix)
                         {
                             case "x": isLyso = true; break;
-                            case "e": isFAe = true; break;
+                            case "a": isFAe = true; break;
                             case "p": isPlamalogen = true; break;
                             default: break;
                         }        
@@ -324,18 +324,19 @@ namespace LipidCreator
                         sortedAcids.Add(fa2);
                         sortedAcids.Sort();
                         
+                        Console.WriteLine(isFAe + " " + isPlamalogen);
                         
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;
                             if (headgroup.Equals("PA") || headgroup.Equals("PC") || headgroup.Equals("PE") || headgroup.Equals("PG") || headgroup.Equals("PI") || headgroup.Equals("PS"))
                             {
-                                if (isLyso) headgroup = "L" + headgroup;
                                 if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                 {
-                                    if (isPlamalogen) headgroup = "p" + headgroup;
-                                    else if (isFAe) headgroup = "e" + headgroup;
+                                    if (isPlamalogen) headgroup = headgroup + " O-p";
+                                    else if (isFAe) headgroup = headgroup + " O-a";
                                 }
+                                if (isLyso) headgroup = "L" + headgroup;
                             }
                             
                             String key = headgroup + " ";

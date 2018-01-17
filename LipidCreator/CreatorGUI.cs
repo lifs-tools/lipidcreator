@@ -206,7 +206,7 @@ namespace LipidCreator
                     glFA1Combobox.SelectedIndex = currentGLLipid.fag1.chainType;
                     glFA1Checkbox1.Checked = currentGLLipid.fag1.faTypes["FA"];
                     glFA1Checkbox2.Checked = currentGLLipid.fag1.faTypes["FAp"];
-                    glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAe"];
+                    glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAa"];
                     
                     glFA2Textbox.Text = currentGLLipid.fag2.lengthInfo;
                     glDB2Textbox.Text = currentGLLipid.fag2.dbInfo;
@@ -214,7 +214,7 @@ namespace LipidCreator
                     glFA2Combobox.SelectedIndex = currentGLLipid.fag2.chainType;
                     glFA2Checkbox1.Checked = currentGLLipid.fag2.faTypes["FA"];
                     glFA2Checkbox2.Checked = currentGLLipid.fag2.faTypes["FAp"];
-                    glFA2Checkbox3.Checked = currentGLLipid.fag2.faTypes["FAe"];
+                    glFA2Checkbox3.Checked = currentGLLipid.fag2.faTypes["FAa"];
                     
                     glFA3Textbox.Text = currentGLLipid.fag3.lengthInfo;
                     glDB3Textbox.Text = currentGLLipid.fag3.dbInfo;
@@ -222,7 +222,7 @@ namespace LipidCreator
                     glFA3Combobox.SelectedIndex = currentGLLipid.fag3.chainType;
                     glFA3Checkbox1.Checked = currentGLLipid.fag3.faTypes["FA"];
                     glFA3Checkbox2.Checked = currentGLLipid.fag3.faTypes["FAp"];
-                    glFA3Checkbox3.Checked = currentGLLipid.fag3.faTypes["FAe"];
+                    glFA3Checkbox3.Checked = currentGLLipid.fag3.faTypes["FAa"];
                     
                     glPosAdductCheckbox1.Checked = currentGLLipid.adducts["+H"];
                     glPosAdductCheckbox2.Checked = currentGLLipid.adducts["+2H"];
@@ -260,7 +260,7 @@ namespace LipidCreator
                         clFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
                         clFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
                         clFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
-                        clFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
+                        clFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAa"];
                         
                         clFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
                         clDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
@@ -268,7 +268,7 @@ namespace LipidCreator
                         clFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
                         clFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
                         clFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
-                        clFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
+                        clFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAa"];
                         
                         clFA3Textbox.Text = currentPLLipid.fag3.lengthInfo;
                         clDB3Textbox.Text = currentPLLipid.fag3.dbInfo;
@@ -276,7 +276,7 @@ namespace LipidCreator
                         clFA3Combobox.SelectedIndex = currentPLLipid.fag3.chainType;
                         clFA3Checkbox1.Checked = currentPLLipid.fag3.faTypes["FA"];
                         clFA3Checkbox2.Checked = currentPLLipid.fag3.faTypes["FAp"];
-                        clFA3Checkbox3.Checked = currentPLLipid.fag3.faTypes["FAe"];
+                        clFA3Checkbox3.Checked = currentPLLipid.fag3.faTypes["FAa"];
                         
                         clFA4Textbox.Text = currentPLLipid.fag4.lengthInfo;
                         clDB4Textbox.Text = currentPLLipid.fag4.dbInfo;
@@ -284,7 +284,7 @@ namespace LipidCreator
                         clFA4Combobox.SelectedIndex = currentPLLipid.fag4.chainType;
                         clFA4Checkbox1.Checked = currentPLLipid.fag4.faTypes["FA"];
                         clFA4Checkbox2.Checked = currentPLLipid.fag4.faTypes["FAp"];
-                        clFA4Checkbox3.Checked = currentPLLipid.fag4.faTypes["FAe"];
+                        clFA4Checkbox3.Checked = currentPLLipid.fag4.faTypes["FAa"];
                         
                         clPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
                         clPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
@@ -343,7 +343,7 @@ namespace LipidCreator
                         plFA1Combobox.SelectedIndex = currentPLLipid.fag1.chainType;
                         plFA1Checkbox1.Checked = currentPLLipid.fag1.faTypes["FA"];
                         plFA1Checkbox2.Checked = currentPLLipid.fag1.faTypes["FAp"];
-                        plFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAe"];
+                        plFA1Checkbox3.Checked = currentPLLipid.fag1.faTypes["FAa"];
                         
                         plFA2Textbox.Text = currentPLLipid.fag2.lengthInfo;
                         plDB2Textbox.Text = currentPLLipid.fag2.dbInfo;
@@ -351,7 +351,7 @@ namespace LipidCreator
                         plFA2Combobox.SelectedIndex = currentPLLipid.fag2.chainType;
                         plFA2Checkbox1.Checked = currentPLLipid.fag2.faTypes["FA"];
                         plFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
-                        plFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAe"];
+                        plFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAa"];
                     
                         
                         plPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
@@ -704,7 +704,7 @@ namespace LipidCreator
         }
         public void clFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag1.faTypes["FAx"] = !((PLLipid)currentLipid).fag1.anyFAChecked();
             if (((PLLipid)currentLipid).representativeFA)
             {
@@ -726,7 +726,7 @@ namespace LipidCreator
         }
         public void clFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag2.faTypes["FAx"] = !((PLLipid)currentLipid).fag2.anyFAChecked();
         }
         
@@ -742,7 +742,7 @@ namespace LipidCreator
         }
         public void clFA3Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag3.faTypes["FAx"] = !((PLLipid)currentLipid).fag3.anyFAChecked();
         }
         
@@ -758,7 +758,7 @@ namespace LipidCreator
         }
         public void clFA4Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag4.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag4.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag4.faTypes["FAx"] = !((PLLipid)currentLipid).fag4.anyFAChecked();
         }
         
@@ -1084,7 +1084,7 @@ namespace LipidCreator
         }
         public void glFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((GLLipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
             if (((GLLipid)currentLipid).representativeFA)
             {
@@ -1105,7 +1105,7 @@ namespace LipidCreator
         }
         public void glFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((GLLipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((GLLipid)currentLipid).fag2.faTypes["FAx"] = !((GLLipid)currentLipid).fag2.anyFAChecked();
         }
         
@@ -1121,7 +1121,7 @@ namespace LipidCreator
         }
         public void glFA3Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((GLLipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((GLLipid)currentLipid).fag3.faTypes["FAx"] = !((GLLipid)currentLipid).fag3.anyFAChecked();
         }
         
@@ -1498,7 +1498,7 @@ namespace LipidCreator
         }
         public void plFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag1.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag1.faTypes["FAx"] = !((PLLipid)currentLipid).fag1.anyFAChecked();
             if (((PLLipid)currentLipid).representativeFA)
             {
@@ -1518,7 +1518,7 @@ namespace LipidCreator
         }
         public void plFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).fag2.faTypes["FAe"] = ((CheckBox)sender).Checked;
+            ((PLLipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
             ((PLLipid)currentLipid).fag2.faTypes["FAx"] = !((PLLipid)currentLipid).fag2.anyFAChecked();
         }
         

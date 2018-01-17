@@ -397,6 +397,21 @@ namespace LipidCreator
             }
             return carbonCounts;
         }
+        
+        
+        
+        public Lipid parseLipidSpecies(string speciesName)
+        {
+            if (speciesName.IndexOf("PC O") >= 0) speciesName.Replace("PC O", "PC-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+            else if (speciesName.IndexOf("PE O") >= 0) speciesName.Replace("PE O", "PE-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+            
+            string headgroup = speciesName.Split(new char[]{' '})[0];
+            if (headgroups.ContainsKey(headgroup))
+            {
+                Console.WriteLine("inside");
+            }            
+            return null;
+        }
 
         
         

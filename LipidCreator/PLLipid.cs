@@ -333,8 +333,8 @@ namespace LipidCreator
                             {
                                 if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                 {
-                                    if (isPlamalogen) headgroup = headgroup + " O-p";
-                                    else if (isFAe) headgroup = headgroup + " O-a";
+                                    if (isPlamalogen) headgroup = headgroup + "-O-p";
+                                    else if (isFAe) headgroup = headgroup + "-O-a";
                                 }
                                 if (isLyso) headgroup = "L" + headgroup;
                             }

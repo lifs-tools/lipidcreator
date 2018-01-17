@@ -67,6 +67,13 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
                         
             try {
+            
+            
+                Lipid a = lcf.parseLipidSpecies("LPC 18:0");
+                
+                if (true) return;
+            
+            
                 //LPC	LPC 18:0	C26H54O7NP	[M+H]	        524.3710668	1	HG(PC)	C5H15O4NP	184.0733215	1
                 Console.WriteLine("checking LPC	LPC 18:0	C26H54O7NP	[M+H]1+	        524.3710668	1	HG(PC)	C5H14O4NP	184.0733215	1");
                 PLLipid lpc = new PLLipid(lcf);

@@ -27,10 +27,12 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Data.SQLite;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Globalization;
 
 
 namespace LipidCreator
@@ -65,12 +67,87 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             LipidCreator lcf = new LipidCreator(null);
-                        
+            ArrayList unitTestData = new ArrayList();
+            
             try {
             
+                int lineCounter = 1;
+                string unitTestFile = "data/unit-test-transition-list.csv";
+                if (File.Exists(unitTestFile))
+                {
+                    try
+                    {
+                        using (StreamReader sr = new StreamReader(unitTestFile))
+                        {
+                            String line = sr.ReadLine(); // omit titles
+                            while((line = sr.ReadLine()) != null)
+                            {
+                                lineCounter++;
+                                if (line.Length < 2) continue;
+                                if (line[0] == '#') continue;
+                                
+                                string[] tokens = lcf.parseLine(line);
+                                unitTestData.Add(tokens);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("The file '" + unitTestFile + "' in line '" + lineCounter + "' could not be read:");
+                        Console.WriteLine(e.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error: file '" + unitTestFile + "' does not exist or can not be opened.");
+                }
             
-                Lipid a = lcf.parseLipidSpecies("LPC 18:0");
+                foreach (string[] unitTestRow in unitTestData)
+                {
+                    Console.WriteLine("Testing: " + String.Join(" / ", unitTestRow));
+                    
+                    Lipid lipid = lcf.parseLipidSpecies(unitTestRow[1]);
+                    if (lipid == null) throw new Exception("Error: '" + unitTestRow[1] + "' could not be parsed");
+                    
+                    bool positive = !(unitTestRow[5][0] == '-');
+                    string headgroup = unitTestRow[1];
+                    if (headgroup.IndexOf("PC O") >= 0) headgroup.Replace("PC O", "PC-O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    else if (headgroup.IndexOf("PE O") >= 0) headgroup.Replace("PE O", "PE-O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    headgroup = headgroup.Split(' ')[0];
+                    
+                    
+                    foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.positiveFragments) fragments.Value.Clear();
+                    foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.negativeFragments) fragments.Value.Clear();
+                    
+                    if (positive) lipid.positiveFragments[headgroup].Add(unitTestRow[6]);
+                    else lipid.positiveFragments[headgroup].Add(unitTestRow[6]);
+                    
+                    lcf.registeredLipids.Clear();
+                    lcf.registeredLipids.Add(lipid);
+                    lcf.assembleLipids();
+                    
+                    foreach (DataRow row in lcf.transitionList.Rows)
+                    {
+                        if (row[LipidCreator.PRODUCT_NAME].Equals(unitTestRow[6]))
+                        {
+                            // precursor
+                            Assert(row[LipidCreator.MOLECULE_LIST_NAME].Equals(unitTestRow[0]), "class: " + row[LipidCreator.MOLECULE_LIST_NAME]);
+                            Assert(row[LipidCreator.PRECURSOR_NAME].Equals(unitTestRow[1]), "precursor name: " + row[LipidCreator.PRECURSOR_NAME]);
+                            Assert(row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA].Equals(unitTestRow[2]), "precursor formula: " + row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]);
+                            Assert(row[LipidCreator.PRECURSOR_ADDUCT].Equals(unitTestRow[3]), "precursor adduct: " + row[LipidCreator.PRECURSOR_ADDUCT]);
+                            Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: " + row[LipidCreator.PRECURSOR_MZ]);
+                            Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), Convert.ToInt32(unitTestRow[5]), "precursor charge: " + row[LipidCreator.PRECURSOR_CHARGE]);
+                            // product
+                            Assert(row[LipidCreator.PRODUCT_NAME].Equals(unitTestRow[6]), "product name: " + row[LipidCreator.PRODUCT_NAME]);
+                            Assert(row[LipidCreator.PRODUCT_NEUTRAL_FORMULA].Equals(unitTestRow[7]), "product formula: " + row[LipidCreator.PRODUCT_NEUTRAL_FORMULA]);
+                            Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), Convert.ToDouble(unitTestRow[8], CultureInfo.InvariantCulture), "product mass: " + row[LipidCreator.PRODUCT_MZ]);
+                            Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), Convert.ToInt32(unitTestRow[9]), "product charge: " + row[LipidCreator.PRODUCT_CHARGE]);
+                        }
+                    }
+                }
                 
+                
+                /*
                 if (true) return;
             
             
@@ -650,7 +727,7 @@ namespace LipidCreator
                         Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), 1, "SPH product charge: " + row[LipidCreator.PRODUCT_CHARGE]);
                     }
                 }
-                
+                */
                 Console.WriteLine("Test passed, no errors found");
             }
             catch (Exception e)

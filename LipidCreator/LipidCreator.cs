@@ -513,7 +513,6 @@ namespace LipidCreator
                         pllipid.headGroupNames.Add(headgroup);
                         acids = speciesName.Split(new char[]{' '})[1];
                         tokenSeparator = getSeparator(acids);
-                        if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         switch(headgroup)
                         {

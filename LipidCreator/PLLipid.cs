@@ -324,8 +324,6 @@ namespace LipidCreator
                         sortedAcids.Add(fa2);
                         sortedAcids.Sort();
                         
-                        Console.WriteLine(isFAe + " " + isPlamalogen);
-                        
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;

@@ -78,6 +78,7 @@ namespace LipidCreator
         
         protected override void OnPaint(PaintEventArgs e)
         {
+            this.BringToFront();
             this.Size = arrows[direction].Size;
             Graphics g = e.Graphics;
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);

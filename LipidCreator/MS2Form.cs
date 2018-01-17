@@ -326,6 +326,7 @@ namespace LipidCreator
             ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
             ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
             ((TabPage)tabPages[index]).Controls.Add(isotopeList);
+            ((TabPage)tabPages[index]).Controls.Add(tutorialArrow);
             
             isotopeList.Items.Add("Monoisotopic");
             String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;

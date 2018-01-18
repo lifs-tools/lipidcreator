@@ -109,7 +109,7 @@ namespace LipidCreator
                             }
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[5]);
-                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[6]) - Convert.ToInt32(tokens[3]);
+                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[6]);
                             atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[7]);
                             atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[8]);
                             atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[9]);
@@ -635,11 +635,11 @@ namespace LipidCreator
         public static String computeChemicalFormula(Dictionary<int, int> elements)
         {
             String chemForm = "";
-            foreach (KeyValuePair<int, int> row in elements)
+            foreach (int molecule in Enum.GetValues(typeof(Molecules)))
             {
-                if (row.Value > 0)
+                if (elements[molecule] > 0)
                 {
-                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + ((row.Value > 1) ? Convert.ToString(row.Value) : "");
+                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[molecule] + ((elements[molecule] > 1) ? Convert.ToString(elements[molecule]) : "");
                 }
             }
             return chemForm;

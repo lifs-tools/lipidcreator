@@ -879,24 +879,24 @@ MMPE,FA1' - H2O,images/MS2/Phospholipids/MMPE/MMPE_pos_FA1'-H2O.png,1,FA2,6,14,5
 MMPE,FA2' - H2O,images/MS2/Phospholipids/MMPE/MMPE_pos_FA2'-H2O.png,1,FA1,6,14,5,1,1,0,100
 MMPE,FA1',images/MS2/Phospholipids/MMPE/MMPE_pos_FA1'.png,1,FA2,6,16,6,1,1,0,100
 MMPE,FA2',images/MS2/Phospholipids/MMPE/MMPE_pos_FA2'.png,1,FA1,6,16,6,1,1,0,100
-PA,P,images/MS2/Phospholipids/PA/PA_neg_P.png,-1,HG,-3,-7,-3,0,0,0,100
-PA,GP,images/MS2/Phospholipids/PA/PA_neg_GP.png,-1,HG,0,-1,-1,0,0,0,100
-PA,FA1,images/MS2/Phospholipids/PA/PA_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PA,FA2,images/MS2/Phospholipids/PA/PA_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PA,FA1',images/MS2/Phospholipids/PA/PA_neg_FA1'.png,-1,FA2,3,5,5,0,1,0,100
-PA,FA2',images/MS2/Phospholipids/PA/PA_neg_FA2'.png,-1,FA1,3,5,5,0,1,0,100
-PA,FA1' + O,images/MS2/Phospholipids/PA/PA_neg_FA1'+O.png,-1,FA2,3,7,6,0,1,0,100
-PA,FA2' + O,images/MS2/Phospholipids/PA/PA_neg_FA2'+O.png,-1,FA1,3,7,6,0,1,0,100
+PA,P,images/MS2/Phospholipids/PA/PA_neg_P.png,-1,HG,-3,-6,-3,0,0,0,100
+PA,GP,images/MS2/Phospholipids/PA/PA_neg_GP.png,-1,HG,0,0,-1,0,0,0,100
+PA,FA1,images/MS2/Phospholipids/PA/PA_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PA,FA2,images/MS2/Phospholipids/PA/PA_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PA,FA1',images/MS2/Phospholipids/PA/PA_neg_FA1'.png,-1,FA2,3,6,5,0,1,0,100
+PA,FA2',images/MS2/Phospholipids/PA/PA_neg_FA2'.png,-1,FA1,3,6,5,0,1,0,100
+PA,FA1' + O,images/MS2/Phospholipids/PA/PA_neg_FA1'+O.png,-1,FA2,3,8,6,0,1,0,100
+PA,FA2' + O,images/MS2/Phospholipids/PA/PA_neg_FA2'+O.png,-1,FA1,3,8,6,0,1,0,100
 Palmitic acid,237.2222,%,-1,,0,0,0,0,0,0,100
 Palmitic acid/d2,237.2222,%,-1,,0,0,0,0,0,0,100
-PC,NL(CH3 [adduct]),images/MS2/Phospholipids/PC/PC_neg_NL.png,-1,HG;FA1;FA2,-1,-3,0,0,0,0,100
-PC,FA1,images/MS2/Phospholipids/PC/PC_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PC,FA2,images/MS2/Phospholipids/PC/PC_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PC,FA1',images/MS2/Phospholipids/PC/PC_neg_FA1'.png,-1,FA2,7,14,5,1,1,0,100
-PC,FA2',images/MS2/Phospholipids/PC/PC_neg_FA2'.png,-1,FA1,7,14,5,1,1,0,100
-PC,FA1' + O,images/MS2/Phospholipids/PC/PC_neg_FA1'+O.png,-1,FA2,7,16,6,1,1,0,100
-PC,FA2' + O,images/MS2/Phospholipids/PC/PC_neg_FA2'+O.png,-1,FA1,7,16,6,1,1,0,100
-PC,HG(PC),images/MS2/Phospholipids/PC/PC_pos_HG.png,1,HG,-3,-3,-2,0,0,0,100
+PC,HG(PC),images/MS2/Phospholipids/PC/PC_pos_HG.png,1,HG,-3,-4,-2,0,0,0,100
+PC,NL(CH3 [adduct]),images/MS2/Phospholipids/PC/PC_neg_NL.png,-1,HG;FA1;FA2,-1,-2,0,0,0,0,100
+PC,FA1,images/MS2/Phospholipids/PC/PC_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PC,FA2,images/MS2/Phospholipids/PC/PC_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PC,FA1',images/MS2/Phospholipids/PC/PC_neg_FA1'.png,-1,FA2,7,15,5,1,1,0,100
+PC,FA2',images/MS2/Phospholipids/PC/PC_neg_FA2'.png,-1,FA1,7,15,5,1,1,0,100
+PC,FA1' + O,images/MS2/Phospholipids/PC/PC_neg_FA1'+O.png,-1,FA2,7,17,6,1,1,0,100
+PC,FA2' + O,images/MS2/Phospholipids/PC/PC_neg_FA2'+O.png,-1,FA1,7,17,6,1,1,0,100
 PC-O-a,HG(ePC),images/MS2/Phospholipids/ePC/ePC_neg_HG.png,-1,HG,-1,-3,-1,0,0,0,100
 PC-O-a,NL(CH3 [adduct]),images/MS2/Phospholipids/ePC/ePC_neg_NL.png,-1,HG;FA1;FA2,-1,-3,0,0,0,0,100
 PC-O-a,eFA1,images/MS2/Phospholipids/ePC/ePC_neg_eFA1.png,-1,FA1,0,0,1,0,0,0,100
@@ -913,14 +913,14 @@ PC-O-p,FA2' (pPC),images/MS2/Phospholipids/pPC/pPC_neg_FA2'.png,-1,FA1,7,14,5,1,
 PC-O-p,FA2' + O (pPC),images/MS2/Phospholipids/pPC/pPC_neg_FA2'+O.png,-1,FA1,7,16,6,1,1,0,100
 PC-O-p,FA2-CO (pPC),images/MS2/Phospholipids/pPC/pPC_neg_FA2-CO.png,-1,FA2,-1,0,-1,0,0,0,100
 PC-O-p,HG(pPC),images/MS2/Phospholipids/pPC/pPC_neg_HG.png,1,HG,-3,-3,-2,0,0,0,100
-PE,HG(PE),images/MS2/Phospholipids/PE/PE_neg_HG.png,-1,HG,0,-1,-1,0,0,0,100
-PE,GP,images/MS2/Phospholipids/PE/PE_neg_GP.png,-1,HG,-2,-6,-1,-1,0,0,100
-PE,FA1,images/MS2/Phospholipids/PE/PE_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PE,FA2,images/MS2/Phospholipids/PE/PE_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PE,FA1',images/MS2/Phospholipids/PE/PE_neg_FA1'.png,-1,FA2,5,10,5,1,1,0,100
-PE,FA2',images/MS2/Phospholipids/PE/PE_neg_FA2'.png,-1,FA1,5,10,5,1,1,0,100
-PE,FA1' + O,images/MS2/Phospholipids/PE/PE_neg_FA1'+O.png,-1,FA2,5,12,6,1,1,0,100
-PE,FA2' + O,images/MS2/Phospholipids/PE/PE_neg_FA2'+O.png,-1,FA1,5,12,6,1,1,0,100
+PE,HG(PE),images/MS2/Phospholipids/PE/PE_neg_HG.png,-1,HG,0,0,-1,0,0,0,100
+PE,GP,images/MS2/Phospholipids/PE/PE_neg_GP.png,-1,HG,-2,-5,-1,-1,0,0,100
+PE,FA1,images/MS2/Phospholipids/PE/PE_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PE,FA2,images/MS2/Phospholipids/PE/PE_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PE,FA1',images/MS2/Phospholipids/PE/PE_neg_FA1'.png,-1,FA2,5,11,5,1,1,0,100
+PE,FA2',images/MS2/Phospholipids/PE/PE_neg_FA2'.png,-1,FA1,5,11,5,1,1,0,100
+PE,FA1' + O,images/MS2/Phospholipids/PE/PE_neg_FA1'+O.png,-1,FA2,5,13,6,1,1,0,100
+PE,FA2' + O,images/MS2/Phospholipids/PE/PE_neg_FA2'+O.png,-1,FA1,5,13,6,1,1,0,100
 PE,NL(PE),images/MS2/Phospholipids/PE/PE_pos_NL.png,1,HG;FA1;FA2,-2,-8,-4,-1,-1,0,100
 PE-O-a,GP,images/MS2/Phospholipids/ePE/ePE_neg_GP.png,-1,HG,-2,-6,-1,-1,0,0,100
 PE-O-a,GP-H2O,images/MS2/Phospholipids/ePE/ePE_neg_GP-H2O.png,-1,HG,-2,-8,-2,-1,0,0,100
@@ -956,15 +956,15 @@ PEt,FA2 + G,images/MS2/Phospholipids/PEt/PEt_pos_FA2+G.png,1,FA2,3,6,2,0,0,0,100
 PEt,FA1 + G,images/MS2/Phospholipids/PEt/PEt_pos_FA1+G.png,1,FA1,3,6,2,0,0,0,100
 PEt,FA1' - O,images/MS2/Phospholipids/PEt/PEt_pos_FA1'-O.png,1,FA2,5,11,5,0,1,0,100
 PEt,FA2' - O,images/MS2/Phospholipids/PEt/PEt_pos_FA2'-O.png,1,FA1,5,11,5,0,1,0,100
-PG,FA1,images/MS2/Phospholipids/PG/PG_neg_FA1_complete.png,-1,FA1,0,0,1,0,0,0,100
-PG,FA1',images/MS2/Phospholipids/PG/PG_neg_FA1'.png,-1,FA2,6,11,7,0,1,0,100
-PG,FA1' + O,images/MS2/Phospholipids/PG/PG_neg_FA1'+O.png,-1,FA1,6,13,8,0,1,0,100
-PG,FA2,images/MS2/Phospholipids/PG/PG_neg_FA2_complete.png,-1,FA2,0,0,1,0,0,0,100
-PG,FA2',images/MS2/Phospholipids/PG/PG_neg_FA2'.png,-1,FA2,6,11,7,0,1,0,100
-PG,FA2' + O,images/MS2/Phospholipids/PG/PG_neg_FA2'+O.png,-1,FA2,6,13,8,0,1,0,100
-PG,GP,images/MS2/Phospholipids/PG/PG_neg_GP.png,-1,HG,0,-1,-1,0,0,0,100
-PG,HG(PG),images/MS2/Phospholipids/PG/PG_neg_HG.png,-1,HG,-3,-7,-3,0,0,0,100
-PG,NL(GP),images/MS2/Phospholipids/PG/PG_pos_NL.png,1,HG;FA1;FA2,-3,-9,-6,0,-1,0,100
+PG,FA1,images/MS2/Phospholipids/PG/PG_neg_FA1_complete.png,-1,FA1,0,1,1,0,0,0,100
+PG,FA1',images/MS2/Phospholipids/PG/PG_neg_FA1'.png,-1,FA2,6,12,7,0,1,0,100
+PG,NL(PG),images/MS2/Phospholipids/PG/PG_pos_NL.png,1,HG;FA1;FA2,-3,-9,-6,0,-1,0,100
+PG,FA1' + O,images/MS2/Phospholipids/PG/PG_neg_FA1'+O.png,-1,FA2,6,14,8,0,1,0,100
+PG,FA2,images/MS2/Phospholipids/PG/PG_neg_FA2_complete.png,-1,FA2,0,1,1,0,0,0,100
+PG,FA2',images/MS2/Phospholipids/PG/PG_neg_FA2'.png,-1,FA1,6,12,7,0,1,0,100
+PG,FA2' + O,images/MS2/Phospholipids/PG/PG_neg_FA2'+O.png,-1,FA1,6,14,8,0,1,0,100
+PG,GP,images/MS2/Phospholipids/PG/PG_neg_GP.png,-1,HG,-3,-6,-3,0,0,0,100
+PG,HG(PG),images/MS2/Phospholipids/PG/PG_neg_HG.png,-1,HG,0,0,-1,0,0,0,100
 PGB2,315.1966,%,-1,,0,0,0,0,0,0,100
 PGB2,271.2068,%,-1,,0,0,0,0,0,0,100
 PGB2,235.1341,%,-1,,0,0,0,0,0,0,100
@@ -1040,89 +1040,89 @@ PGI2,187.1494,%,-1,,0,0,0,0,0,0,100
 PGI2,189.1286,%,-1,,0,0,0,0,0,0,100
 PGI2,105.0711,%,-1,,0,0,0,0,0,0,100
 PGI2,83.0503,%,-1,,0,0,0,0,0,0,100
-PI,FA1' + O,images/MS2/Phospholipids/PI/PI_neg_FA1'+O.png,-1,FA1,9,17,11,0,1,0,100
-PI,FA1,images/MS2/Phospholipids/PI/PI_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PI,FA1',images/MS2/Phospholipids/PI/PI_neg_FA1'.png,-1,FA1,9,15,10,0,1,0,100
-PI,FA2' + O,images/MS2/Phospholipids/PI/PI_neg_FA2'+O.png,-1,FA2,9,17,11,0,1,0,100
-PI,FA2,images/MS2/Phospholipids/PI/PI_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PI,FA2',images/MS2/Phospholipids/PI/PI_neg_FA2'.png,-1,FA2,9,15,10,0,1,0,100
-PI,GP,images/MS2/Phospholipids/PI/PI_neg_GP.png,-1,HG,-6,-11,-6,0,0,0,100
-PI,HG(PI),images/MS2/Phospholipids/PI/PI_neg_HG.png,-1,HG,-3,-7,-3,0,0,0,100
-PI,P,images/MS2/Phospholipids/PI/PI_neg_P.png,-1,HG,-9,-17,-8,0,0,0,100
+PI,FA1' + O,images/MS2/Phospholipids/PI/PI_neg_FA1'+O.png,-1,FA2,9,18,11,0,1,0,100
+PI,FA1,images/MS2/Phospholipids/PI/PI_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PI,FA1',images/MS2/Phospholipids/PI/PI_neg_FA1'.png,-1,FA2,9,16,10,0,1,0,100
+PI,FA2' + O,images/MS2/Phospholipids/PI/PI_neg_FA2'+O.png,-1,FA1,9,18,11,0,1,0,100
+PI,FA2,images/MS2/Phospholipids/PI/PI_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PI,FA2',images/MS2/Phospholipids/PI/PI_neg_FA2'.png,-1,FA1,9,16,10,0,1,0,100
+PI,GP,images/MS2/Phospholipids/PI/PI_neg_GP.png,-1,HG,-6,-10,-6,0,0,0,100
+PI,HG(PI),images/MS2/Phospholipids/PI/PI_neg_HG.png,-1,HG,-3,-6,-3,0,0,0,100
+PI,P,images/MS2/Phospholipids/PI/PI_neg_P.png,-1,HG,-9,-16,-8,0,0,0,100
 PI,NL(PI),images/MS2/Phospholipids/PI/PI_pos_NL.png,1,HG;FA1;FA2,-6,-13,-9,0,-1,0,100
-PIP,P,images/MS2/Phospholipids/PIP/PIP_neg_P.png,-1,HG,-9,-18,-11,0,-1,0,100
-PIP,PO,images/MS2/Phospholipids/PIP/PIP_neg_PO.png,-1,HG,-9,-16,-10,0,-1,0,100
-PIP,HG(PIP),images/MS2/Phospholipids/PIP/PIP_neg_HG(PIP).png,-1,HG,-3,-7,-3,0,0,0,100
-PIP,HG(PIP - H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(PIP-H2O).png,-1,HG,-3,-9,-4,0,0,0,100
-PIP,HG(IP),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP).png,-1,HG,-3,-8,-6,0,-1,0,100
-PIP,HG(IP - H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O).png,-1,HG,-3,-10,-7,0,-1,0,100
-PIP,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O_2).png,-1,HG,-3,-12,-8,0,-1,0,100
-PIP,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O_3).png,-1,HG,-3,-14,-9,0,-1,0,100
+PIP,P,images/MS2/Phospholipids/PIP/PIP_neg_P.png,-1,HG,-9,-17,-11,0,-1,0,100
+PIP,PO,images/MS2/Phospholipids/PIP/PIP_neg_PO.png,-1,HG,-9,-15,-10,0,-1,0,100
+PIP,HG(PIP),images/MS2/Phospholipids/PIP/PIP_neg_HG(PIP).png,-1,HG,-3,-6,-3,0,0,0,100
+PIP,HG(PIP - H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(PIP-H2O).png,-1,HG,-3,-8,-4,0,0,0,100
+PIP,HG(IP),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP).png,-1,HG,-3,-7,-6,0,-1,0,100
+PIP,HG(IP - H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O).png,-1,HG,-3,-9,-7,0,-1,0,100
+PIP,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O_2).png,-1,HG,-3,-11,-8,0,-1,0,100
+PIP,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP/PIP_neg_HG(IP-H2O_3).png,-1,HG,-3,-13,-9,0,-1,0,100
 PIP,NL(H2O),images/MS2/Phospholipids/PIP/PIP_neg_NL(H2O).png,-1,HG;FA1;FA2,0,-2,-1,0,0,0,100
 PIP,NL(HPO3),images/MS2/Phospholipids/PIP/PIP_neg_NL(HPO3).png,-1,HG;FA1;FA2,0,-1,-3,0,-1,0,100
 PIP,NL(H3PO4),images/MS2/Phospholipids/PIP/PIP_neg_NL(H3PO4).png,-1,HG;FA1;FA2,0,-3,-4,0,-1,0,100
 PIP,NL(IP),images/MS2/Phospholipids/PIP/PIP_neg_NL(IP).png,-1,HG;FA1;FA2,-6,-11,-8,0,-1,0,100
-PIP,FA1,images/MS2/Phospholipids/PIP/PIP_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PIP,FA2,images/MS2/Phospholipids/PIP/PIP_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PIP,FA1',images/MS2/Phospholipids/PIP/PIP_neg_FA1'.png,-1,FA2,9,16,13,0,2,0,100
-PIP,FA2',images/MS2/Phospholipids/PIP/PIP_neg_FA2'.png,-1,FA1,9,16,13,0,2,0,100
-PIP,FA1' + O,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O.png,-1,FA2,9,18,14,0,2,0,100
-PIP,FA2' + O,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O.png,-1,FA1,9,18,14,0,2,0,100
-PIP,FA1' + O - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O-IP.png,-1,FA2,3,7,6,0,1,0,100
-PIP,FA2' + O - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O-IP.png,-1,FA1,3,7,6,0,1,0,100
-PIP,FA1' - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA1'-IP.png,-1,FA2,3,5,5,0,1,0,100
-PIP,FA2' - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA2'-IP.png,-1,FA1,3,5,5,0,1,0,100
-PIP,FA1' - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA1'-HPO3.png,-1,FA2,9,15,10,0,1,0,100
-PIP,FA2' - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA2'-HPO3.png,-1,FA1,9,15,10,0,1,0,100
-PIP,FA1' + O - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O-HPO3.png,-1,FA2,9,17,11,0,1,0,100
-PIP,FA2' + O - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O-HPO3.png,-1,FA1,9,17,11,0,1,0,100
-PIP2,P,images/MS2/Phospholipids/PIP2/PIP2_neg_P.png,-1,HG,-9,-19,-14,0,-2,0,100
-PIP2,PO,images/MS2/Phospholipids/PIP2/PIP2_neg_PO.png,-1,HG,-9,-17,-13,0,-2,0,100
-PIP2,HG(PIP2),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(PIP2).png,-1,HG,-3,-7,-3,0,0,0,100
-PIP2,HG(PIP2 - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(PIP2-H2O).png,-1,HG,-3,-9,-4,0,0,0,100
-PIP2,HG(IP2),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2).png,-1,HG,-3,-8,-6,0,-1,0,100
-PIP2,HG(IP2 - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2-H2O).png,-1,HG,-3,-10,-7,0,-1,0,100
-PIP2,HG(IP),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP).png,-1,HG,-3,-9,-9,0,-2,0,100
-PIP2,HG(IP - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP-H2O).png,-1,HG,-3,-11,-10,0,-2,0,100
-PIP2,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2-H2O).png,-1,HG,-3,-13,-11,0,-2,0,100
-PIP2,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP-3H2O).png,-1,HG,-3,-15,-12,0,-2,0,100
+PIP,FA1,images/MS2/Phospholipids/PIP/PIP_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PIP,FA2,images/MS2/Phospholipids/PIP/PIP_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PIP,FA1',images/MS2/Phospholipids/PIP/PIP_neg_FA1'.png,-1,FA2,9,17,13,0,2,0,100
+PIP,FA2',images/MS2/Phospholipids/PIP/PIP_neg_FA2'.png,-1,FA1,9,17,13,0,2,0,100
+PIP,FA1' + O,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O.png,-1,FA2,9,19,14,0,2,0,100
+PIP,FA2' + O,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O.png,-1,FA1,9,19,14,0,2,0,100
+PIP,FA1' + O - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O-IP.png,-1,FA2,3,8,6,0,1,0,100
+PIP,FA2' + O - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O-IP.png,-1,FA1,3,8,6,0,1,0,100
+PIP,FA1' - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA1'-IP.png,-1,FA2,3,6,5,0,1,0,100
+PIP,FA2' - IP,images/MS2/Phospholipids/PIP/PIP_neg_FA2'-IP.png,-1,FA1,3,6,5,0,1,0,100
+PIP,FA1' - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA1'-HPO3.png,-1,FA2,9,16,10,0,1,0,100
+PIP,FA2' - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA2'-HPO3.png,-1,FA1,9,16,10,0,1,0,100
+PIP,FA1' + O - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA1'+O-HPO3.png,-1,FA2,9,18,11,0,1,0,100
+PIP,FA2' + O - HPO3,images/MS2/Phospholipids/PIP/PIP_neg_FA2'+O-HPO3.png,-1,FA1,9,18,11,0,1,0,100
+PIP2,P,images/MS2/Phospholipids/PIP2/PIP2_neg_P.png,-1,HG,-9,-18,-14,0,-2,0,100
+PIP2,PO,images/MS2/Phospholipids/PIP2/PIP2_neg_PO.png,-1,HG,-9,-16,-13,0,-2,0,100
+PIP2,HG(PIP2),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(PIP2).png,-1,HG,-3,-6,-3,0,0,0,100
+PIP2,HG(PIP2 - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(PIP2-H2O).png,-1,HG,-3,-8,-4,0,0,0,100
+PIP2,HG(IP2),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2).png,-1,HG,-3,-7,-6,0,-1,0,100
+PIP2,HG(IP2 - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2-H2O).png,-1,HG,-3,-9,-7,0,-1,0,100
+PIP2,HG(IP),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP).png,-1,HG,-3,-8,-9,0,-2,0,100
+PIP2,HG(IP - H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP-H2O).png,-1,HG,-3,-10,-10,0,-2,0,100
+PIP2,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP2-H2O).png,-1,HG,-3,-12,-11,0,-2,0,100
+PIP2,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_HG(IP-3H2O).png,-1,HG,-3,-14,-12,0,-2,0,100
 PIP2,NL(HPO3),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(HPO3).png,-1,HG;FA1;FA2,0,-1,-3,0,-1,0,100
 PIP2,NL(H3PO4),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(H3PO4).png,-1,HG;FA1;FA2,0,-3,-4,0,-1,0,100
 PIP2,NL(H3PO4 + H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(H3PO4+H2O).png,-1,HG;FA1;FA2,0,-5,-5,0,-1,0,100
 PIP2,NL(2 * H3PO4 + H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(2H3PO4+H2O).png,-1,HG;FA1;FA2,0,-6,-8,0,-2,0,100
 PIP2,NL(2 * H3PO4 + 2 * H2O),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(2H3PO4+2H2O).png,-1,HG;FA1;FA2,0,-8,-9,0,-2,0,100
 PIP2,NL(IP2),images/MS2/Phospholipids/PIP2/PIP2_neg_NL(IP2).png,-1,HG;FA1;FA2,-6,-12,-11,0,-2,0,100
-PIP2,FA1,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PIP2,FA2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PIP2,FA1',images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'.png,-1,FA2,9,17,16,0,3,0,100
-PIP2,FA2',images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'.png,-1,FA1,9,17,16,0,3,0,100
-PIP2,FA1' + O,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O.png,-1,FA2,9,19,15,0,3,0,100
-PIP2,FA2' + O,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O.png,-1,FA1,9,19,15,0,3,0,100
-PIP2,FA1' + O - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-IP2.png,-1,FA2,3,7,6,0,1,0,100
-PIP2,FA2' + O - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-IP2.png,-1,FA1,3,7,6,0,1,0,100
-PIP2,FA1' - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-IP2.png,-1,FA2,3,5,5,0,1,0,100
-PIP2,FA2' - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-IP2.png,-1,FA1,3,5,5,0,1,0,100
-PIP2,FA1' - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-HPO3.png,-1,FA2,9,16,13,0,2,0,100
-PIP2,FA2' - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-HPO3.png,-1,FA1,9,16,13,0,2,0,100
-PIP2,FA1' + O - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-HPO3.png,-1,FA2,9,18,14,0,2,0,100
-PIP2,FA2' + O - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-HPO3.png,-1,FA1,9,18,14,0,2,0,100
-PIP2,FA1' - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-2HPO3.png,-1,FA2,9,15,10,0,1,0,100
-PIP2,FA2' - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-2HPO3.png,-1,FA1,9,15,10,0,1,0,100
-PIP2,FA1' + O - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-2HPO3.png,-1,FA2,9,17,11,0,1,0,100
-PIP2,FA2' + O - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-2HPO3.png,-1,FA1,9,17,11,0,1,0,100
-PIP3,P,images/MS2/Phospholipids/PIP3/PIP3_neg_P.png,-1,HG,-9,-20,-17,0,-3,0,100
-PIP3,PO,images/MS2/Phospholipids/PIP3/PIP3_neg_PO.png,-1,HG,-9,-18,-16,0,-3,0,100
-PIP3,HG(PIP3),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3).png,-1,HG,-3,-5,-2,0,0,0,100
-PIP3,HG(PIP3 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3-H2O).png,-1,HG,-3,-7,-3,0,0,0,100
-PIP3,HG(PIP3 - 2H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3-2H2O).png,-1,HG,-3,-9,-4,0,0,0,100
-PIP3,HG(PIP2),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP2).png,-1,HG,-3,-8,-6,0,-1,0,100
-PIP3,HG(PIP2 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP2-H2O).png,-1,HG,-3,-10,-7,0,-1,0,100
-PIP3,HG(IP2),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP2).png,-1,HG,-3,-9,-9,0,-2,0,100
-PIP3,HG(IP2 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP2-H2O).png,-1,HG,-3,-11,-10,0,-2,0,100
-PIP3,HG(IP),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP).png,-1,HG,-3,-10,-12,0,-3,0,100
-PIP3,HG(IP - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-H2O).png,-1,HG,-3,-12,-13,0,-3,0,100
-PIP3,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-2H2O).png,-1,HG,-3,-14,-14,0,-3,0,100
-PIP3,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-3H2O).png,-1,HG,-3,-16,-15,0,-3,0,100
+PIP2,FA1,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PIP2,FA2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PIP2,FA1',images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'.png,-1,FA2,9,18,16,0,3,0,100
+PIP2,FA2',images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'.png,-1,FA1,9,18,16,0,3,0,100
+PIP2,FA1' + O,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O.png,-1,FA2,9,20,15,0,3,0,100
+PIP2,FA2' + O,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O.png,-1,FA1,9,20,15,0,3,0,100
+PIP2,FA1' + O - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-IP2.png,-1,FA2,3,8,6,0,1,0,100
+PIP2,FA2' + O - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-IP2.png,-1,FA1,3,8,6,0,1,0,100
+PIP2,FA1' - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-IP2.png,-1,FA2,3,6,5,0,1,0,100
+PIP2,FA2' - IP2,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-IP2.png,-1,FA1,3,6,5,0,1,0,100
+PIP2,FA1' - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-HPO3.png,-1,FA2,9,17,13,0,2,0,100
+PIP2,FA2' - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-HPO3.png,-1,FA1,9,17,13,0,2,0,100
+PIP2,FA1' + O - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-HPO3.png,-1,FA2,9,19,14,0,2,0,100
+PIP2,FA2' + O - HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-HPO3.png,-1,FA1,9,19,14,0,2,0,100
+PIP2,FA1' - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'-2HPO3.png,-1,FA2,9,16,10,0,1,0,100
+PIP2,FA2' - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'-2HPO3.png,-1,FA1,9,16,10,0,1,0,100
+PIP2,FA1' + O - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA1'+O-2HPO3.png,-1,FA2,9,18,11,0,1,0,100
+PIP2,FA2' + O - 2 * HPO3,images/MS2/Phospholipids/PIP2/PIP2_neg_FA2'+O-2HPO3.png,-1,FA1,9,18,11,0,1,0,100
+PIP3,P,images/MS2/Phospholipids/PIP3/PIP3_neg_P.png,-1,HG,-9,-19,-17,0,-3,0,100
+PIP3,PO,images/MS2/Phospholipids/PIP3/PIP3_neg_PO.png,-1,HG,-9,-17,-16,0,-3,0,100
+PIP3,HG(PIP3),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3).png,-1,HG,-3,-4,-2,0,0,0,100
+PIP3,HG(PIP3 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3-H2O).png,-1,HG,-3,-6,-3,0,0,0,100
+PIP3,HG(PIP3 - 2H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP3-2H2O).png,-1,HG,-3,-8,-4,0,0,0,100
+PIP3,HG(PIP2),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP2).png,-1,HG,-3,-7,-6,0,-1,0,100
+PIP3,HG(PIP2 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(PIP2-H2O).png,-1,HG,-3,-9,-7,0,-1,0,100
+PIP3,HG(IP2),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP2).png,-1,HG,-3,-8,-9,0,-2,0,100
+PIP3,HG(IP2 - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP2-H2O).png,-1,HG,-3,-10,-10,0,-2,0,100
+PIP3,HG(IP),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP).png,-1,HG,-3,-9,-12,0,-3,0,100
+PIP3,HG(IP - H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-H2O).png,-1,HG,-3,-11,-13,0,-3,0,100
+PIP3,HG(IP - 2 * H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-2H2O).png,-1,HG,-3,-13,-14,0,-3,0,100
+PIP3,HG(IP - 3 * H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_HG(IP-3H2O).png,-1,HG,-3,-15,-15,0,-3,0,100
 PIP3,NL(HPO3),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(HPO3).png,-1,HG;FA1;FA2,0,-1,-3,0,-1,0,100
 PIP3,NL(H3PO4),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(H3PO4).png,-1,HG;FA1;FA2,0,-3,-4,0,-1,0,100
 PIP3,NL(H3PO4 + H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(H3PO4+H2O).png,-1,HG;FA1;FA2,0,-5,-5,0,-1,0,100
@@ -1133,35 +1133,35 @@ PIP3,NL(2 * H3PO4),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(2H3PO4).png,-1,HG;F
 PIP3,NL(2 * H3PO4 + H2O),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(2H3PO4+H2O).png,-1,HG;FA1;FA2,0,-8,-9,0,-2,0,100
 PIP3,NL(3 * H3PO4),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(3H3PO4).png,-1,HG;FA1;FA2,0,-9,-12,0,-3,0,100
 PIP3,NL(IP3),images/MS2/Phospholipids/PIP3/PIP3_neg_NL(IP3).png,-1,HG;FA1;FA2,-6,-13,-14,0,-3,0,100
-PIP3,FA1,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PIP3,FA2,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PIP3,FA1' - H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-H3PO4.png,-1,FA2,9,15,15,0,3,0,100
-PIP3,FA2' - H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-H3PO4.png,-1,FA1,9,15,15,0,3,0,100
-PIP3,FA1' - H3PO4 - H2O,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-H3PO4-H2O.png,-1,FA2,9,13,14,0,3,0,100
-PIP3,FA2' - H3PO4 - H2O,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-H3PO4-H2O.png,-1,FA1,9,13,14,0,3,0,100
-PIP3,FA1' + O - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-2HPO3.png,-1,FA2,9,14,12,0,2,0,100
-PIP3,FA2' + O - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-2HPO3.png,-1,FA1,9,14,12,0,2,0,100
-PIP3,FA1' - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-2HPO3.png,-1,FA2,9,16,13,0,2,0,100
-PIP3,FA2' - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-2HPO3.png,-1,FA1,9,16,13,0,2,0,100
-PIP3,FA1' - 2 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-2H3PO4.png,-1,FA2,9,12,11,0,2,0,100
-PIP3,FA2' - 2 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-2H3PO4.png,-1,FA1,9,12,11,0,2,0,100
-PIP3,FA1' + O - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-3H3PO4.png,-1,FA2,9,11,8,0,1,0,100
-PIP3,FA2' + O - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-3H3PO4.png,-1,FA1,9,11,8,0,1,0,100
-PIP3,FA1' - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-3H3PO4.png,-1,FA2,9,9,7,0,1,0,100
-PIP3,FA2' - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-3H3PO4.png,-1,FA1,9,9,7,0,1,0,100
-PIP3,FA1' + O - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-IP3.png,-1,FA2,3,7,6,0,1,0,100
-PIP3,FA2' + O - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-IP3.png,-1,FA1,3,7,6,0,1,0,100
-PIP3,FA1' - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-IP3.png,-1,FA2,3,5,5,0,1,0,100
-PIP3,FA2' - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-IP3.png,-1,FA1,3,5,5,0,1,0,100
-PS,FA1' + O,images/MS2/Phospholipids/PS/PS_neg_FA1'+O.png,-1,FA1,3,7,6,0,1,0,100
-PS,FA1,images/MS2/Phospholipids/PS/PS_neg_FA1.png,-1,FA1,0,0,1,0,0,0,100
-PS,FA1',images/MS2/Phospholipids/PS/PS_neg_FA1'.png,-1,FA1,3,5,5,0,1,0,100
-PS,FA2' + O,images/MS2/Phospholipids/PS/PS_neg_FA2'+O.png,-1,FA2,3,7,6,0,1,0,100
-PS,FA2,images/MS2/Phospholipids/PS/PS_neg_FA2.png,-1,FA2,0,0,1,0,0,0,100
-PS,FA2',images/MS2/Phospholipids/PS/PS_neg_FA2'.png,-1,FA2,3,5,5,0,1,0,100
-PS,GP,images/MS2/Phospholipids/PS/PS_neg_GP.png,-1,HG,-3,-6,-3,-1,0,0,100
-PS,NL(C3H5NO2),images/MS2/Phospholipids/PS/PS_pos_NL.png,-1,HG;FA1;FA2,-3,-5,-2,-1,0,0,100
+PIP3,FA1,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PIP3,FA2,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PIP3,FA1' - H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-H3PO4.png,-1,FA2,9,16,15,0,3,0,100
+PIP3,FA2' - H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-H3PO4.png,-1,FA1,9,16,15,0,3,0,100
+PIP3,FA1' - H3PO4 - H2O,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-H3PO4-H2O.png,-1,FA2,9,14,14,0,3,0,100
+PIP3,FA2' - H3PO4 - H2O,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-H3PO4-H2O.png,-1,FA1,9,14,14,0,3,0,100
+PIP3,FA1' + O - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-2HPO3.png,-1,FA2,9,15,12,0,2,0,100
+PIP3,FA2' + O - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-2HPO3.png,-1,FA1,9,15,12,0,2,0,100
+PIP3,FA1' - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-2HPO3.png,-1,FA2,9,17,13,0,2,0,100
+PIP3,FA2' - 2 * HPO3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-2HPO3.png,-1,FA1,9,17,13,0,2,0,100
+PIP3,FA1' - 2 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-2H3PO4.png,-1,FA2,9,13,11,0,2,0,100
+PIP3,FA2' - 2 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-2H3PO4.png,-1,FA1,9,13,11,0,2,0,100
+PIP3,FA1' + O - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-3H3PO4.png,-1,FA2,9,12,8,0,1,0,100
+PIP3,FA2' + O - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-3H3PO4.png,-1,FA1,9,12,8,0,1,0,100
+PIP3,FA1' - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-3H3PO4.png,-1,FA2,9,10,7,0,1,0,100
+PIP3,FA2' - 3 * H3PO4,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-3H3PO4.png,-1,FA1,9,10,7,0,1,0,100
+PIP3,FA1' + O - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'+O-IP3.png,-1,FA2,3,8,6,0,1,0,100
+PIP3,FA2' + O - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'+O-IP3.png,-1,FA1,3,8,6,0,1,0,100
+PIP3,FA1' - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA1'-IP3.png,-1,FA2,3,6,5,0,1,0,100
+PIP3,FA2' - IP3,images/MS2/Phospholipids/PIP3/PIP3_neg_FA2'-IP3.png,-1,FA1,3,6,5,0,1,0,100
+PS,FA1' + O,images/MS2/Phospholipids/PS/PS_neg_FA1'+O.png,-1,FA1,3,8,6,0,1,0,100
+PS,FA1,images/MS2/Phospholipids/PS/PS_neg_FA1.png,-1,FA1,0,1,1,0,0,0,100
+PS,FA1',images/MS2/Phospholipids/PS/PS_neg_FA1'.png,-1,FA1,3,6,5,0,1,0,100
+PS,FA2' + O,images/MS2/Phospholipids/PS/PS_neg_FA2'+O.png,-1,FA2,3,8,6,0,1,0,100
+PS,FA2,images/MS2/Phospholipids/PS/PS_neg_FA2.png,-1,FA2,0,1,1,0,0,0,100
+PS,FA2',images/MS2/Phospholipids/PS/PS_neg_FA2'.png,-1,FA2,3,6,5,0,1,0,100
+PS,GP,images/MS2/Phospholipids/PS/PS_neg_GP.png,-1,HG,-3,-5,-3,-1,0,0,100
 PS,NL(PS),images/MS2/Phospholipids/PS/PS_pos_NL.png,1,HG;FA1;FA2,-3,-8,-6,-1,-1,0,100
+PS,NL(C3H5NO2),images/MS2/Phospholipids/PS/PS_pos_NL.png,-1,HG;FA1;FA2,-3,-4,-2,-1,0,0,100
 Resolvin D1,357.2066,%,-1,,0,0,0,0,0,0,100
 Resolvin D1,277.1443,%,-1,,0,0,0,0,0,0,100
 Resolvin D1,233.1545,%,-1,,0,0,0,0,0,0,100

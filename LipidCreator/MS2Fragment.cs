@@ -36,7 +36,7 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, O = 4, O17 = 5, O18 = 6, N = 7, N15 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
+    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
     
     [Serializable]
     public class MS2Fragment
@@ -53,8 +53,8 @@ namespace LipidCreator
         public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
             {"C", (int)Molecules.C},
             {"H", (int)Molecules.H},
-            {"O", (int)Molecules.O},
             {"N", (int)Molecules.N},
+            {"O", (int)Molecules.O},
             {"P", (int)Molecules.P},
             {"P'", (int)Molecules.P32},
             {"S", (int)Molecules.S},

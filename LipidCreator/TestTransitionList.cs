@@ -132,7 +132,6 @@ namespace LipidCreator
                     lipid.adducts.Keys.CopyTo(keys, 0);
                     foreach (string key in keys) lipid.adducts[key] = false;
                     lipid.adducts[adduct] = true;
-        Console.WriteLine("'" + adduct + "'");
                     
                     
                     foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.positiveFragments) fragments.Value.Clear();

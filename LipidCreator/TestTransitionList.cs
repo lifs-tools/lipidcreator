@@ -145,7 +145,7 @@ namespace LipidCreator
                     lcf.assembleLipids();
                     
                     if (lcf.transitionList.Rows.Count == 0) throw new Exception("Error: no fragment computed.");
-                    
+                    int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
                         if (row[LipidCreator.PRODUCT_NAME].Equals(unitTestRow[6]))
@@ -162,8 +162,10 @@ namespace LipidCreator
                             Assert((string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA], unitTestRow[7], "product formula: ");
                             Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), Convert.ToDouble(unitTestRow[8], CultureInfo.InvariantCulture), "product mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), Convert.ToInt32(unitTestRow[9]), "product charge: ");
+                            ++cnt;
                         }
                     }
+                    if (cnt != 1) throw new Exception("Error: fragment not found.");
                 }
                 
                 

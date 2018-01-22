@@ -57,6 +57,7 @@ namespace LipidCreator
         public string inputParameters;
         public Tutorial tutorial;
         public MS2Form ms2fragmentsForm = null;
+        public MediatorMS2Form mediatorMS2fragmentsForm = null;
         
         
         public CreatorGUI(string inputParameters)
@@ -2063,15 +2064,6 @@ namespace LipidCreator
             //medPictureBox.SendToBack();
         }
         
-        void openMediatorMS2Form(object sender, EventArgs e)
-        {
-            MediatorMS2Form mediatorMS2fragments = new MediatorMS2Form(this, (Mediator)currentLipid);
-            mediatorMS2fragments.Owner = this;
-            mediatorMS2fragments.ShowInTaskbar = false;
-            mediatorMS2fragments.ShowDialog();
-            mediatorMS2fragments.Dispose();
-        }
-        
         
         ////////////////////// Remaining parts ////////////////////////////////
         
@@ -2593,19 +2585,33 @@ namespace LipidCreator
         
         public void openMS2Form(Object sender, EventArgs e)
         {
-            if (currentIndex == LipidCategory.NoLipid) return;
-            ms2fragmentsForm = (MS2Form)((currentIndex == LipidCategory.Mediator) ? ((Form)new MediatorMS2Form(this, (Mediator)currentLipid)) : ((Form)new LipidMS2Form(this, currentLipid)));
-            ms2fragmentsForm.Owner = this;
-            ms2fragmentsForm.ShowInTaskbar = false;
+            Form formToOpen = null;
+            switch ((int)currentIndex)
+            {
+                case (int)LipidCategory.NoLipid:
+                    return;
+                
+                case ((int)LipidCategory.Mediator):
+                    mediatorMS2fragmentsForm = new MediatorMS2Form(this, (Mediator)currentLipid);
+                    formToOpen = (Form)mediatorMS2fragmentsForm;
+                    break;
+                
+                default:
+                    ms2fragmentsForm = new MS2Form(this, currentLipid);
+                    formToOpen = (Form)ms2fragmentsForm;
+                    break;
+            }
+            formToOpen.Owner = this;
+            formToOpen.ShowInTaskbar = false;
             
             if (tutorial.tutorial == Tutorials.NoTutorial)
             {
-                ms2fragmentsForm.ShowDialog();
-                ms2fragmentsForm.Dispose();
+                formToOpen.ShowDialog();
+                formToOpen.Dispose();
             }
             else
             {
-                ms2fragmentsForm.Show();
+                formToOpen.Show();
             }
         }
         

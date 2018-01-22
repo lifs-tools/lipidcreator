@@ -36,7 +36,7 @@ using System.Windows.Forms;
 namespace LipidCreator
 {
     [Serializable]
-    public partial class MediatorMS2Form : MS2Form
+    public partial class MediatorMS2Form : Form
     {
         
         public Image fragmentComplete = null;
@@ -45,10 +45,12 @@ namespace LipidCreator
         public ArrayList negativeIDs;
         public bool senderInterupt;
         Dictionary<string, ArrayList> isotopeDict;
+        public CreatorGUI creatorGUI;
         
-        public MediatorMS2Form(CreatorGUI creatorGUI, Mediator currentLipid) : base(creatorGUI)
+        public MediatorMS2Form(CreatorGUI creatorGUI, Mediator currentLipid)
         {
             this.currentLipid = currentLipid;
+            this.creatorGUI = creatorGUI;
             
             isotopeDict = new Dictionary<string, ArrayList>();
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])

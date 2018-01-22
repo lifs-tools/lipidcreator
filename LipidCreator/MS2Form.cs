@@ -36,18 +36,21 @@ using System.Windows.Forms;
 namespace LipidCreator
 {
     [Serializable]
-    public partial class LipidMS2Form : MS2Form
+    public partial class MS2Form : Form
     {
         
         public Image fragmentComplete = null;
         public Lipid currentLipid;
         public bool senderInterupt;
         public bool loading;
+        public NewFragment newFragment;
+        public CreatorGUI creatorGUI;
         
-        public LipidMS2Form(CreatorGUI creatorGUI, Lipid currentLipid) : base (creatorGUI)
+        public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
         {
             senderInterupt = false;
             loading = false;
+            this.creatorGUI = creatorGUI;
             
             
             if (currentLipid is GLLipid){
@@ -326,7 +329,6 @@ namespace LipidCreator
             ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
             ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
             ((TabPage)tabPages[index]).Controls.Add(isotopeList);
-            ((TabPage)tabPages[index]).Controls.Add(tutorialArrow);
             
             isotopeList.Items.Add("Monoisotopic");
             String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
@@ -414,11 +416,19 @@ namespace LipidCreator
         
         private void addFragmentClick(object sender, EventArgs e)
         {
-            NewFragment newPositiveFragment = new NewFragment(this);
-            newPositiveFragment.Owner = this;
-            newPositiveFragment.ShowInTaskbar = false;
-            newPositiveFragment.ShowDialog();
-            newPositiveFragment.Dispose();
+            newFragment = new NewFragment(this);
+            newFragment.Owner = this;
+            newFragment.ShowInTaskbar = false;
+            
+            if (creatorGUI.tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                newFragment.ShowDialog();
+                newFragment.Dispose();
+            }
+            else
+            {
+                newFragment.Show();
+            }
             tabChange(tabControlFragments.SelectedIndex);
         }
     }

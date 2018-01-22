@@ -40,12 +40,12 @@ namespace LipidCreator
     {
 
         Dictionary<string, object[]> elements;
-        LipidMS2Form ms2form;
+        MS2Form ms2form = null;
         string[] buildingBlocks;
         bool chemAdding = true;
         bool updating = false;
 
-        public NewFragment(LipidMS2Form ms2form)
+        public NewFragment(MS2Form ms2form)
         {
             this.ms2form = ms2form;
             elements = createGridData(MS2Fragment.createEmptyElementDict());
@@ -110,23 +110,6 @@ namespace LipidCreator
             {
                 case 0:
                     createCombinations(new String[]{"FA1", "FA2", "FA3", "FA4", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA4", "FA1;FA2", "FA1;FA3", "FA1;FA4", "FA2;FA3", "FA2;FA4", "FA3;FA4", "FA1;FA2;FA3", "FA1;FA2;FA4", "FA1;FA3;FA4", "FA2;FA3;FA4", "HG"};
-                    selectBaseCombobox.Items.Add("FA1");
-                    selectBaseCombobox.Items.Add("FA2");
-                    selectBaseCombobox.Items.Add("FA3");
-                    selectBaseCombobox.Items.Add("FA4");
-                    selectBaseCombobox.Items.Add("FA1 + FA2");
-                    selectBaseCombobox.Items.Add("FA1 + FA3");
-                    selectBaseCombobox.Items.Add("FA1 + FA4");
-                    selectBaseCombobox.Items.Add("FA2 + FA3");
-                    selectBaseCombobox.Items.Add("FA2 + FA4");
-                    selectBaseCombobox.Items.Add("FA3 + FA4");
-                    selectBaseCombobox.Items.Add("FA1 + FA2 + FA3");
-                    selectBaseCombobox.Items.Add("FA1 + FA2 + FA4");
-                    selectBaseCombobox.Items.Add("FA1 + FA3 + FA4");
-                    selectBaseCombobox.Items.Add("FA2 + FA3 + FA4");
-                    */
                     break;
                     
                 case 1:
@@ -144,70 +127,30 @@ namespace LipidCreator
                     
                 case 2:
                     createCombinations(new String[]{"FA1", "FA2", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA1", "FA2", "HG"};
-                    selectBaseCombobox.Items.Add("FA1");
-                    selectBaseCombobox.Items.Add("FA2");
-                    */
                     break;
                     
                 case 3:
                     createCombinations(new String[]{"FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA", "HG"};
-                    selectBaseCombobox.Items.Add("FA");
-                    */
                     break;
                     
                 case 4:
                     createCombinations(new String[]{"LCB", "FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "LCB", "FA", "HG", "LCB;FA", "LCB;HG", "FA;HG", "HG"};
-                    selectBaseCombobox.Items.Add("LCB");
-                    selectBaseCombobox.Items.Add("FA");
-                    selectBaseCombobox.Items.Add("HG");
-                    selectBaseCombobox.Items.Add("LCB + FA");
-                    selectBaseCombobox.Items.Add("LCB + HG");
-                    selectBaseCombobox.Items.Add("FA + HG");
-                    */
                     break;
                     
                 case 5:
                     createCombinations(new String[]{"LCB", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "LCB", "HG", "HG"};
-                    selectBaseCombobox.Items.Add("LCB");
-                    selectBaseCombobox.Items.Add("HG");
-                    */
                     break;
                     
                 case 6:
                     createCombinations(new String[]{"FA1", "FA2", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA1", "FA2", "HG", "FA1;FA2", "FA1;HG", "FA2;HG", "HG"};
-                    selectBaseCombobox.Items.Add("FA1");
-                    selectBaseCombobox.Items.Add("FA2");
-                    selectBaseCombobox.Items.Add("HG");
-                    selectBaseCombobox.Items.Add("FA1 + FA2");
-                    selectBaseCombobox.Items.Add("FA1 + HG");
-                    selectBaseCombobox.Items.Add("FA2 + HG");
-                    */
                     break;
                     
                 case 7:
                     createCombinations(new String[]{"FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA", "HG", "HG"};
-                    selectBaseCombobox.Items.Add("FA");
-                    selectBaseCombobox.Items.Add("HG");
-                    */
                     break;
                     
                 case 8:
                     createCombinations(new String[]{"HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "HG"};
-                    */
                     break;
             }
             buildingBlocks = (string[])buildingBlocksArray.ToArray(typeof(string));

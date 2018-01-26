@@ -143,6 +143,8 @@ namespace LipidCreator
                 Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
             
+            
+            
             string headgroupsFile = prefixPath + "data/headgroups.csv";
             if (File.Exists(headgroupsFile))
             {
@@ -254,10 +256,23 @@ namespace LipidCreator
             headgroups = new Dictionary<String, Precursor>();
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
-            //Stopwatch stopwatch = Stopwatch.StartNew(); // for time measuring
             readInputFiles();
-            //stopwatch.Stop();
-            //Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            
+            foreach(string lipidClass in allFragments.Keys)
+            {
+                if (!headgroups.ContainsKey(lipidClass))
+                {
+                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
+                }
+            }
+            
+            foreach(string lipidClass in headgroups.Keys)
+            {
+                if (!allFragments.ContainsKey(lipidClass))
+                {
+                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
+                }
+            }
         }
         
         
@@ -457,15 +472,30 @@ namespace LipidCreator
         
         
         public Lipid parseLipidSpecies(string speciesName)
-        {
-            if (speciesName.IndexOf("PC O") >= 0) speciesName.Replace("PC O", "PC-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
-            else if (speciesName.IndexOf("PE O") >= 0) speciesName.Replace("PE O", "PE-O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+        {   
+            if (speciesName.IndexOf("PC O") >= 0) speciesName.Replace("PC O", "PC O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+            else if (speciesName.IndexOf("PE O") >= 0) speciesName.Replace("PE O", "PE O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
             
             
-            string headgroup = speciesName.Split(new char[]{' '})[0];
+            string[] speciesToken = speciesName.Split(new char[]{' '});
+            string headgroup = speciesToken[0];
+            int faSeparation = 1;
+            if (speciesToken.Length > 2)
+            {
+                headgroup = speciesToken[0] + " " + speciesToken[1];
+                faSeparation = 2;
+                if (!headgroups.ContainsKey(headgroup))
+                {
+                    headgroup = speciesToken[0];
+                    faSeparation = 1;
+                    if (!headgroups.ContainsKey(headgroup)) return null;
+                }
+            }
+            
             string acids;
             string[] faToken;
             string tokenSeparator;
+            
             
             if (headgroups.ContainsKey(headgroup))
             {
@@ -476,7 +506,7 @@ namespace LipidCreator
                     case (int)LipidCategory.GlyceroLipid:
                         GLLipid gllipid = new GLLipid(this);
                         gllipid.headGroupNames.Add(headgroup);
-                        acids = speciesName.Split(new char[]{' '})[1];
+                        acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
                         if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
@@ -511,7 +541,7 @@ namespace LipidCreator
                     case (int)LipidCategory.PhosphoLipid:
                         PLLipid pllipid = new PLLipid(this);
                         pllipid.headGroupNames.Add(headgroup);
-                        acids = speciesName.Split(new char[]{' '})[1];
+                        acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         switch(headgroup)
@@ -559,7 +589,7 @@ namespace LipidCreator
                     case (int)LipidCategory.SphingoLipid:
                         SLLipid sllipid = new SLLipid(this);
                         sllipid.headGroupNames.Add(headgroup);
-                        acids = speciesName.Split(new char[]{' '})[1];
+                        acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
                         if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
@@ -583,7 +613,7 @@ namespace LipidCreator
                         chlipid.headGroupNames.Add(headgroup);
                         if(precursor.name.Equals(headgroup)) return chlipid;
                         
-                        acids = speciesName.Split(new char[]{' '})[1];
+                        acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
                         if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());

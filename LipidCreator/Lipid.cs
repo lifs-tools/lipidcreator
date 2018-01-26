@@ -99,7 +99,7 @@ namespace LipidCreator
                 {
                     if (!positiveFragments.ContainsKey(lipidClass)) positiveFragments.Add(lipidClass, new HashSet<string>());
                     if (!negativeFragments.ContainsKey(lipidClass)) negativeFragments.Add(lipidClass, new HashSet<string>());
-                    
+             
                     foreach (KeyValuePair<string, MS2Fragment> fragment in lipidCreator.allFragments[lipidClass][true])
                     {
                         positiveFragments[lipidClass].Add(fragment.Value.fragmentName);

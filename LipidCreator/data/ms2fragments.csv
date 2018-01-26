@@ -760,14 +760,14 @@ CL,FA1' [-2],images/MS2/Phospholipids/CL/CL_neg_FA1'_-2.png,-2,FA2;FA3;FA4,9,16,
 CL,FA2' [-2],images/MS2/Phospholipids/CL/CL_neg_FA2'_-2.png,-2,FA1;FA3;FA4,9,16,12,0,2,0,100
 CL,FA3' [-2],images/MS2/Phospholipids/CL/CL_neg_FA3'_-2.png,-2,FA1;FA2;FA4,9,16,12,0,2,0,100
 CL,FA4' [-2],images/MS2/Phospholipids/CL/CL_neg_FA4'_-2.png,-2,FA1;FA2;FA3,9,16,12,0,2,0,100
-CL,FA1' + O[-1],images/MS2/Phospholipids/CL/CL_neg_FA1'+O_-1.png,-1,FA2;FA3;FA4,9,19,13,0,2,0,100
-CL,FA2' + O[-1],images/MS2/Phospholipids/CL/CL_neg_FA2'+O_-1.png,-1,FA1;FA3;FA4,9,19,13,0,2,0,100
-CL,FA3' + O[-1],images/MS2/Phospholipids/CL/CL_neg_FA3'+O_-1.png,-1,FA1;FA2;FA4,9,19,13,0,2,0,100
-CL,FA4' + O[-1],images/MS2/Phospholipids/CL/CL_neg_FA4'+O_-1.png,-1,FA1;FA2;FA3,9,19,13,0,2,0,100
-CL,FA1' + O[-2],images/MS2/Phospholipids/CL/CL_neg_FA1'+O_-2.png,-2,FA2;FA3;FA4,9,18,13,0,2,0,100
-CL,FA2' + O[-2],images/MS2/Phospholipids/CL/CL_neg_FA2'+O_-2.png,-2,FA1;FA3;FA4,9,18,13,0,2,0,100
-CL,FA3' + O[-2],images/MS2/Phospholipids/CL/CL_neg_FA3'+O_-2.png,-2,FA1;FA2;FA4,9,18,13,0,2,0,100
-CL,FA4' + O[-2],images/MS2/Phospholipids/CL/CL_neg_FA4'+O_-2.png,-2,FA1;FA2;FA3,9,18,13,0,2,0,100
+CL,FA1' + O [-1],images/MS2/Phospholipids/CL/CL_neg_FA1'+O_-1.png,-1,FA2;FA3;FA4,9,19,13,0,2,0,100
+CL,FA2' + O [-1],images/MS2/Phospholipids/CL/CL_neg_FA2'+O_-1.png,-1,FA1;FA3;FA4,9,19,13,0,2,0,100
+CL,FA3' + O [-1],images/MS2/Phospholipids/CL/CL_neg_FA3'+O_-1.png,-1,FA1;FA2;FA4,9,19,13,0,2,0,100
+CL,FA4' + O [-1],images/MS2/Phospholipids/CL/CL_neg_FA4'+O_-1.png,-1,FA1;FA2;FA3,9,19,13,0,2,0,100
+CL,FA1' + O [-2],images/MS2/Phospholipids/CL/CL_neg_FA1'+O_-2.png,-2,FA2;FA3;FA4,9,18,13,0,2,0,100
+CL,FA2' + O [-2],images/MS2/Phospholipids/CL/CL_neg_FA2'+O_-2.png,-2,FA1;FA3;FA4,9,18,13,0,2,0,100
+CL,FA3' + O [-2],images/MS2/Phospholipids/CL/CL_neg_FA3'+O_-2.png,-2,FA1;FA2;FA4,9,18,13,0,2,0,100
+CL,FA4' + O [-2],images/MS2/Phospholipids/CL/CL_neg_FA4'+O_-2.png,-2,FA1;FA2;FA3,9,18,13,0,2,0,100
 CL,(FA1 + 2)' + O [-1],images/MS2/Phospholipids/CL/CL_neg_(FA1+2)'+O_-1.png,-1,FA3;FA4,9,18,12,0,2,0,100
 CL,(FA1 + 3)' + O [-1],images/MS2/Phospholipids/CL/CL_neg_(FA1+3)'+O_-1.png,-1,FA2;FA4,9,18,12,0,2,0,100
 CL,(FA1 + 4)' + O [-1],images/MS2/Phospholipids/CL/CL_neg_(FA1+4)'+O_-1.png,-1,FA2;FA3,9,18,12,0,2,0,100

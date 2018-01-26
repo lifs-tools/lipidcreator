@@ -102,11 +102,11 @@ PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,No,Yes,Yes,No,No,
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
 PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
 PL,LPC,8,19,6,1,1,0,0,images/Precursors/LPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
-PL,LPC-O-a,8,19,6,1,1,0,0,images/Precursors/eLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
-PL,LPC-O-p,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
+PL,LPC O-a,8,19,6,1,1,0,0,images/Precursors/eLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
+PL,LPC O-p,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
 PL,LPE,5,13,6,1,1,0,0,images/Precursors/LPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
-PL,LPE-O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
-PL,LPE-O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPE O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
 PL,LPG,6,14,8,0,1,0,0,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,7,Yes,No
 PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,No,No,Yes,Yes,No,Yes,Yes,7,Yes,No
 PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
@@ -114,11 +114,11 @@ PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,No,Yes,Yes,No
 PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
 PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,No,No,Yes,Yes,No,Yes,Yes,6,No,No
 PL,PC,8,18,6,1,1,0,0,images/Precursors/PC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6,No,No
-PL,PC-O-a,8,18,6,1,1,0,0,images/Precursors/ePC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6,Yes,No
-PL,PC-O-p,8,18,6,1,1,0,0,images/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6,Yes,No
+PL,PC O-a,8,18,6,1,1,0,0,images/Precursors/ePC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6,Yes,No
+PL,PC O-p,8,18,6,1,1,0,0,images/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,6,Yes,No
 PL,PE,5,12,6,1,1,0,0,images/Precursors/PE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
-PL,PE-O-a,5,12,6,1,1,0,0,images/Precursors/ePE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,Yes,No
-PL,PE-O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,Yes,No
+PL,PE O-a,5,12,6,1,1,0,0,images/Precursors/ePE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,Yes,No
+PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,Yes,No
 PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 PL,PG,6,13,8,0,1,0,0,images/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 PL,PI,9,17,11,0,1,0,0,images/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No

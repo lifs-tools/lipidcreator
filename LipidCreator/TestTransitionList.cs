@@ -124,9 +124,9 @@ namespace LipidCreator
                     // extract headgroup name
                     bool positive = !(unitTestRow[5][0] == '-');
                     string headgroup = unitTestRow[1];
-                    // exception for lyso-PC -_-
-                    if (headgroup.IndexOf("PC O") >= 0) headgroup.Replace("PC O", "PC-O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
-                    else if (headgroup.IndexOf("PE O") >= 0) headgroup.Replace("PE O", "PE-O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    // exception for PC -_-
+                    if (headgroup.IndexOf("PC O") >= 0) headgroup.Replace("PC O", "PC O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    else if (headgroup.IndexOf("PE O") >= 0) headgroup.Replace("PE O", "PE O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
                     headgroup = headgroup.Split(' ')[0];
                     
                     
@@ -143,8 +143,16 @@ namespace LipidCreator
                     lipid.adducts[adduct] = true;
                     foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.positiveFragments) fragments.Value.Clear();
                     foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.negativeFragments) fragments.Value.Clear();
-                    if (positive) lipid.positiveFragments[headgroup].Add(unitTestRow[6]);
-                    else lipid.negativeFragments[headgroup].Add(unitTestRow[6]);
+                    if (positive)
+                    {
+                        if (!lcf.allFragments[headgroup][true].ContainsKey(unitTestRow[6])) throw new Exception("Error: unknown fragment '" + unitTestRow[6] + "'");
+                        lipid.positiveFragments[headgroup].Add(unitTestRow[6]);
+                    }
+                    else
+                    {
+                        if (!lcf.allFragments[headgroup][false].ContainsKey(unitTestRow[6])) throw new Exception("Error: unknown fragment '" + unitTestRow[6] + "'");
+                        lipid.negativeFragments[headgroup].Add(unitTestRow[6]);
+                    }
                     
                     
                     // create transition

@@ -46,27 +46,28 @@ namespace LipidCreator
         public NewFragment newFragment;
         public CreatorGUI creatorGUI;
         
-        public MS2Form(CreatorGUI creatorGUI, Lipid currentLipid)
+        public MS2Form(CreatorGUI creatorGUI)
         {
             senderInterupt = false;
             loading = false;
             this.creatorGUI = creatorGUI;
+            Lipid currentLipidTmp = creatorGUI.currentLipid;
             
             
-            if (currentLipid is GLLipid){
-                this.currentLipid = new GLLipid((GLLipid)currentLipid);
+            if (currentLipidTmp is GLLipid){
+                this.currentLipid = new GLLipid((GLLipid)currentLipidTmp);
             }
-            else if (currentLipid is PLLipid)
+            else if (currentLipidTmp is PLLipid)
             {
-                this.currentLipid = new PLLipid((PLLipid)currentLipid);
+                this.currentLipid = new PLLipid((PLLipid)currentLipidTmp);
             }
-            else if (currentLipid is SLLipid)
+            else if (currentLipidTmp is SLLipid)
             {
-                this.currentLipid = new SLLipid((SLLipid)currentLipid);
+                this.currentLipid = new SLLipid((SLLipid)currentLipidTmp);
             }
-            else if (currentLipid is Cholesterol)
+            else if (currentLipidTmp is Cholesterol)
             {
-                this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
+                this.currentLipid = new Cholesterol((Cholesterol)currentLipidTmp);
             }
             
             InitializeComponent();

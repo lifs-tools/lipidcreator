@@ -241,7 +241,7 @@ namespace LipidCreator
             this.ResumeLayout(false);
             this.PerformLayout();
 
-            controlElements = new ArrayList(){cancelButton, addButton, numericUpDownCharge, dataGridViewElements, groupboxAddingSubtracting};
+            controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements, groupboxAddingSubtracting};
         }
 
         #endregion

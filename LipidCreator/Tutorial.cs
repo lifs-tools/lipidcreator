@@ -90,7 +90,32 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
             tutorial = t;
-            tutorialStep = 9;
+            tutorialStep = 13;
+            
+            
+            
+            
+            // TODO: remove these lines
+            creatorGUI.changeTab((int)LipidCategory.PhosphoLipid);
+            creatorGUI.ms2fragmentsForm = new MS2Form(creatorGUI);
+            creatorGUI.ms2fragmentsForm.Owner = creatorGUI;
+            creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
+            creatorGUI.ms2fragmentsForm.Show();
+            TabControl ms2tc = creatorGUI.ms2fragmentsForm.tabControlFragments;
+            for (; pgIndex < ms2tc.TabPages.Count; ++pgIndex)
+            {
+                if (ms2tc.TabPages[pgIndex].Text.Equals("PG")) break;
+            } 
+            creatorGUI.ms2fragmentsForm.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+            ms2tc.SelectedIndexChanged += new System.EventHandler(tabInteraction);
+            creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
+            creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
+            creatorGUI.ms2fragmentsForm.buttonAddFragment.Click += buttonInteraction;
+            
+            
+            
+            
+            
             nextEnabled = true;
             currentTab = LipidCategory.NoLipid;
             ((TabPage)creatorGUI.tabList[(int)currentTab]).Controls.Add(tutorialArrow);
@@ -147,7 +172,8 @@ namespace LipidCreator
                     ((Control)element).Enabled = (bool)elementsEnabledState[i];
                 }
             }
-            if (creatorGUI.ms2fragmentsForm != null){
+            if (creatorGUI.ms2fragmentsForm != null)
+            {
                 if (creatorGUI.ms2fragmentsForm.newFragment != null) creatorGUI.ms2fragmentsForm.newFragment.Close();
                 creatorGUI.ms2fragmentsForm.Close();
             }
@@ -181,17 +207,16 @@ namespace LipidCreator
                 }
                 creatorGUI.ms2fragmentsForm.Refresh();
                 
-                /*
-                if (((LipidMS2Form)creatorGUI.ms2fragmentsForm).newFragment != null)
+                
+                if (creatorGUI.ms2fragmentsForm.newFragment != null)
                 {
-                    NewFragment newFrag = ((LipidMS2Form)creatorGUI.ms2fragmentsForm).newFragment;
+                    NewFragment newFrag = creatorGUI.ms2fragmentsForm.newFragment;
                     foreach (Control control in newFrag.controlElements)
                     {
                         control.Enabled = false;
                     }
-                    newFrag.tutorialArrow.Visible = false;
                     creatorGUI.ms2fragmentsForm.Refresh();
-                }*/
+                }
             }
         }
         
@@ -528,6 +553,11 @@ namespace LipidCreator
                 case 14:
                     changeTab(LipidCategory.PhosphoLipid);
                     changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
+                    if (creatorGUI.ms2fragmentsForm.newFragment != null)
+                    {
+                        creatorGUI.ms2fragmentsForm.newFragment.Close();
+                        creatorGUI.ms2fragmentsForm.newFragment = null;
+                    }
                     
                     Button ms2fragButton = creatorGUI.ms2fragmentsForm.buttonAddFragment;
                     
@@ -544,51 +574,11 @@ namespace LipidCreator
                     changeTab(LipidCategory.PhosphoLipid);
                     changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
                     
+                    creatorGUI.ms2fragmentsForm.newFragment.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                     
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Open 'Add fragment' dialog", "It is possible to define new fragments Please click on 'Add fragment' button to open the according dialog.");
-                    nextEnabled = false;
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Continue", "This form enables to define own fragments. In the current version of this tool, the definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added. Please Continue.");
                     break;
                     
-                /*   
-                    
-                case 20:
-                    changeTab(LipidCategory.PhosphoLipid);
-                    Button plAddLipid = creatorGUI.addLipidButton;
-                    creatorGUI.tutorialArrow.update(new Point(plAddLipid.Location.X + (plAddLipid.Size.Width >> 1), plAddLipid.Location.Y), "rb");
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Add lipid", "LipidCreator has a basket system. Once a lipid assembly is set, one can put the assembly into the basket and proceed with other assemblies. Please add the lipid.");
-                    
-                    
-                    creatorGUI.plPosAdductCheckbox1.Checked = true; // TODO: remove
-                    creatorGUI.plHgListbox.SelectedIndices.Add(8); // TODO: remove
-                    creatorGUI.lipidCreator.registeredLipids.Clear();
-                    creatorGUI.refreshRegisteredLipidsTable();
-                    creatorGUI.addLipidButton.Enabled = true;
-                    nextEnabled = false;
-                    break;
-                case 11:
-                    changeTab(LipidCategory.PhosphoLipid);
-                    TabPage s = (TabPage)creatorGUI.tabList[(int)LipidCategory.SphingoLipid];
-                    creatorGUI.tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 3.5), 0), "rt");
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(160, 300), "Foo", "Ok, we continue with as second assembly. Let's take randomly sphingolipids. Please change the view to sphingolipids.");
-                    break;
-                    
-                    
-                case 12:
-                    changeTab(LipidCategory.SphingoLipid);
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 300), "The structure of the sphingolipids is very similar to phopholipids. The only difference is that for the long chain base either two or three hydroxyl groups are selectable and the fatty acid is restricted to the ether bond. The headgroup (class) selection remains the same.");
-                    break;
-                    
-                    
-                case 13:
-                    changeTab(LipidCategory.SphingoLipid);
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 300), "The structure of the sphingolipids is very similar to phopholipids. The only difference is that for the long chain base either two or three hydroxyl groups are selectable and the fatty acid is restricted to the ether bond. The headgroup (class) selection remains the same.");
-                    break;
-                */
                 default:
                     quitTutorial();
                     break;

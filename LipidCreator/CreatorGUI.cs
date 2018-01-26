@@ -2597,7 +2597,7 @@ namespace LipidCreator
                     break;
                 
                 default:
-                    ms2fragmentsForm = new MS2Form(this, currentLipid);
+                    ms2fragmentsForm = new MS2Form(this);
                     formToOpen = (Form)ms2fragmentsForm;
                     break;
             }

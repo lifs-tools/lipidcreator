@@ -147,30 +147,36 @@ namespace LipidCreator
             SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
             
             saveFileDialog1.InitialDirectory = "c:\\";
-            saveFileDialog1.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "csv files (*.csv)|*.csv|tsv files (*.tsv)|*.tsv|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 0;
             saveFileDialog1.RestoreDirectory = true;
 
             if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                string mode = ".csv";
+                string separator = ",";
+                if(saveFileDialog1.FilterIndex==2) {
+                    mode = ".tsv";
+                    separator = "\t";
+                }
                 DialogResult mbr = MessageBox.Show ("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
                 
                 if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
-                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_positive.csv"))) {
-                        outputFile.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
+                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (mode, "_positive"+mode))) {
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
                             if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2") {
-                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                             }
                         }
                         outputFile.Dispose ();
                         outputFile.Close ();
                     }
-                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (".csv", "_negative.csv"))) {
-                        outputFile.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
+                    using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (mode, "_negative"+mode))) {
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
                             if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2") {
-                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                             }
                         }
                         outputFile.Dispose ();
@@ -182,9 +188,9 @@ namespace LipidCreator
                     this.Enabled = false;
                     StreamWriter writer;
                     if ((writer = new StreamWriter (saveFileDialog1.OpenFile ())) != null) {
-                        writer.WriteLine (String.Join (",", LipidCreator.DATA_COLUMN_KEYS));
+                        writer.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
                         foreach (DataRow row in currentView.Rows) {
-                            writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS));
+                            writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }
                         writer.Dispose ();
                         writer.Close ();
@@ -195,17 +201,31 @@ namespace LipidCreator
             }
         }
 
-        private string toLine (DataRow row, string[] columnKeys)
+        private string toHeaderLine(string separator, string[] columnKeys) {
+            string quote = "";
+            if(separator==",") {
+                quote = "\"";
+            }
+            return String.Join(separator, columnKeys.ToList().ConvertAll<string>(key => quote+key+quote).ToArray());
+        }
+
+        private string toLine (DataRow row, string[] columnKeys, string separator)
         {
             List<string> line = new List<string> ();
             foreach (String columnKey in LipidCreator.DATA_COLUMN_KEYS) {
                 if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
                     line.Add (((String)row [columnKey]).Replace (",", "."));
                 } else {
-                    line.Add (((String)row [columnKey]));
+                    //quote strings when we are in csv mode
+                    if (separator == ",")
+                    {
+                        line.Add("\""+((String)row[columnKey])+"\"");
+                    } else { //otherwise just add the plain string
+                        line.Add(((String)row[columnKey]));
+                    }
                 }
             }
-            return String.Join (",", line.ToArray ());
+            return String.Join (separator, line.ToArray ());
         }
 
         private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)

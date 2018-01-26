@@ -232,7 +232,6 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        public Overlay tutorialArrow;
         public TutorialWindow tutorialWindow;
         
         public System.Timers.Timer timerEasterEgg;
@@ -529,8 +528,6 @@ namespace LipidCreator
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            tutorialArrow = new Overlay(lipidCreator.prefixPath);
-            tutorialArrow.Visible = false;
             tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
             tutorialWindow.Visible = false;
             
@@ -974,6 +971,8 @@ namespace LipidCreator
             homeTab.Text = "Home";
             
             
+            Font homeFont = new Font(homeTab.Font.FontFamily, 8.25F);
+            homeTab.Font = homeFont;
             
 
             // tab for cardiolipins
@@ -2171,10 +2170,6 @@ namespace LipidCreator
             tutorialStart.Location = new Point(40, 40);
             tutorialStart.BackColor = SystemColors.Control;
             tutorialStart.Click += startTutorial1;
-            
-            tutorialArrow.Size = new Size(120, 160);
-            tutorialArrow.Location = new Point(552, 60);
-            this.Controls.Add(tutorialArrow);
             
             tutorialWindow.Size = new Size(240, 160);
             tutorialWindow.Location = new Point(40, 60);

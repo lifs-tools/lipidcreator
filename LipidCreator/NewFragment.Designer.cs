@@ -23,6 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System.Collections;
+using System.Collections.Generic;
+
 namespace LipidCreator
 {
 
@@ -238,22 +241,25 @@ namespace LipidCreator
             this.ResumeLayout(false);
             this.PerformLayout();
 
+            controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements, groupboxAddingSubtracting};
         }
 
         #endregion
 
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Label labelMass;
-        private MyNumericUpDown numericUpDownCharge;
-        private System.Windows.Forms.TextBox textBoxFragmentName;
-        private System.Windows.Forms.Label labelCharge;
-        private System.Windows.Forms.Label labelFragmentName;
-        private System.Windows.Forms.Label labelSelectBase;
-        private System.Windows.Forms.DataGridView dataGridViewElements;
-        private System.Windows.Forms.ComboBox selectBaseCombobox;
-        private System.Windows.Forms.GroupBox groupboxAddingSubtracting;
-        private System.Windows.Forms.RadioButton radioButtonAdding;
-        private System.Windows.Forms.RadioButton radioButtonSubtracting;
+        public System.Windows.Forms.Button cancelButton;
+        public System.Windows.Forms.Button addButton;
+        public System.Windows.Forms.Label labelMass;
+        public MyNumericUpDown numericUpDownCharge;
+        public System.Windows.Forms.TextBox textBoxFragmentName;
+        public System.Windows.Forms.Label labelCharge;
+        public System.Windows.Forms.Label labelFragmentName;
+        public System.Windows.Forms.Label labelSelectBase;
+        public System.Windows.Forms.DataGridView dataGridViewElements;
+        public System.Windows.Forms.ComboBox selectBaseCombobox;
+        public System.Windows.Forms.GroupBox groupboxAddingSubtracting;
+        public System.Windows.Forms.RadioButton radioButtonAdding;
+        public System.Windows.Forms.RadioButton radioButtonSubtracting;
+        public ArrayList controlElements;
+        public Overlay tutorialArrow;
     }
 }

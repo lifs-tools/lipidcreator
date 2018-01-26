@@ -34,28 +34,9 @@ using System.IO;
 namespace LipidCreator
 {
 
-    public class MS2Form : Form
+    partial class MS2Form
     {
-        public Overlay tutorialArrow;
-        public TutorialWindow tutorialWindow;
-        public CreatorGUI creatorGUI;
-        
-        public MS2Form(CreatorGUI creatorGUI)
-        {
-            this.creatorGUI = creatorGUI;
-            tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
-            tutorialArrow.Visible = false;
-            
-            tutorialWindow = new TutorialWindow(creatorGUI, creatorGUI.lipidCreator.prefixPath);
-            tutorialWindow.Visible = false;
-            
-            this.Controls.Add(tutorialArrow);
-            this.Controls.Add(tutorialWindow);
-        }
-    }
-
-    partial class LipidMS2Form
-    {
+        /*
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -73,6 +54,7 @@ namespace LipidCreator
             }
             base.Dispose(disposing);
         }
+        */
 
         #region Windows Form Designer generated code
 

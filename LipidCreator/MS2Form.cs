@@ -36,34 +36,38 @@ using System.Windows.Forms;
 namespace LipidCreator
 {
     [Serializable]
-    public partial class LipidMS2Form : MS2Form
+    public partial class MS2Form : Form
     {
         
         public Image fragmentComplete = null;
         public Lipid currentLipid;
         public bool senderInterupt;
         public bool loading;
+        public NewFragment newFragment;
+        public CreatorGUI creatorGUI;
         
-        public LipidMS2Form(CreatorGUI creatorGUI, Lipid currentLipid) : base (creatorGUI)
+        public MS2Form(CreatorGUI creatorGUI)
         {
             senderInterupt = false;
             loading = false;
+            this.creatorGUI = creatorGUI;
+            Lipid currentLipidTmp = creatorGUI.currentLipid;
             
             
-            if (currentLipid is GLLipid){
-                this.currentLipid = new GLLipid((GLLipid)currentLipid);
+            if (currentLipidTmp is GLLipid){
+                this.currentLipid = new GLLipid((GLLipid)currentLipidTmp);
             }
-            else if (currentLipid is PLLipid)
+            else if (currentLipidTmp is PLLipid)
             {
-                this.currentLipid = new PLLipid((PLLipid)currentLipid);
+                this.currentLipid = new PLLipid((PLLipid)currentLipidTmp);
             }
-            else if (currentLipid is SLLipid)
+            else if (currentLipidTmp is SLLipid)
             {
-                this.currentLipid = new SLLipid((SLLipid)currentLipid);
+                this.currentLipid = new SLLipid((SLLipid)currentLipidTmp);
             }
-            else if (currentLipid is Cholesterol)
+            else if (currentLipidTmp is Cholesterol)
             {
-                this.currentLipid = new Cholesterol((Cholesterol)currentLipid);
+                this.currentLipid = new Cholesterol((Cholesterol)currentLipidTmp);
             }
             
             InitializeComponent();
@@ -326,7 +330,6 @@ namespace LipidCreator
             ((TabPage)tabPages[index]).Controls.Add(checkedListBoxPositiveFragments);
             ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
             ((TabPage)tabPages[index]).Controls.Add(isotopeList);
-            ((TabPage)tabPages[index]).Controls.Add(tutorialArrow);
             
             isotopeList.Items.Add("Monoisotopic");
             String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
@@ -414,11 +417,19 @@ namespace LipidCreator
         
         private void addFragmentClick(object sender, EventArgs e)
         {
-            NewFragment newPositiveFragment = new NewFragment(this);
-            newPositiveFragment.Owner = this;
-            newPositiveFragment.ShowInTaskbar = false;
-            newPositiveFragment.ShowDialog();
-            newPositiveFragment.Dispose();
+            newFragment = new NewFragment(this);
+            newFragment.Owner = this;
+            newFragment.ShowInTaskbar = false;
+            
+            if (creatorGUI.tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                newFragment.ShowDialog();
+                newFragment.Dispose();
+            }
+            else
+            {
+                newFragment.Show();
+            }
             tabChange(tabControlFragments.SelectedIndex);
         }
     }

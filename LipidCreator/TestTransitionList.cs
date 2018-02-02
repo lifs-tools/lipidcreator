@@ -77,8 +77,8 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
-            try {
             
+            //try {
                 int lineCounter = 1;
                 string unitTestFile = "data/unit-test-transition-list.csv";
                 if (File.Exists(unitTestFile))
@@ -113,6 +113,9 @@ namespace LipidCreator
                 // loop over each row of unit test file
                 foreach (string[] unitTestRow in unitTestData)
                 {
+                
+            try {
+                
                     Console.WriteLine("Testing: " + String.Join(" / ", unitTestRow));
                     
                     
@@ -125,9 +128,23 @@ namespace LipidCreator
                     bool positive = !(unitTestRow[5][0] == '-');
                     string headgroup = unitTestRow[1];
                     // exception for PC -_-
-                    if (headgroup.IndexOf("PC O") >= 0) headgroup.Replace("PC O", "PC O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
-                    else if (headgroup.IndexOf("PE O") >= 0) headgroup.Replace("PE O", "PE O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
-                    headgroup = headgroup.Split(' ')[0];
+                    if (headgroup.IndexOf("PC O") >= 0) headgroup = headgroup.Replace("PC O", "PC O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    else if (headgroup.IndexOf("PE O") >= 0) headgroup = headgroup.Replace("PE O", "PE O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
+                    
+                    string[] speciesToken = headgroup.Split(new char[]{' '});
+                    headgroup = speciesToken[0];
+                    if (speciesToken.Length > 2)
+                    {
+                        headgroup = speciesToken[0] + " " + speciesToken[1];
+                        if (!lcf.headgroups.ContainsKey(headgroup))
+                        {
+                            headgroup = speciesToken[0];
+                            if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: headgroup could not be determined");
+                        }
+                    }
+                    
+                    
+                    
                     
                     
                     // subtracting adduct from precursor
@@ -135,6 +152,7 @@ namespace LipidCreator
                     adduct = adduct.Substring(2, adduct.Length - 2);
                     adduct = adduct.Split(']')[0];
 
+                    if (!lipid.adducts.ContainsKey(adduct)) throw new Exception("Error: unknown precursor adduct '" + unitTestRow[3] + "'");
                     
                     // setting fragment in either positive or negative mode
                     string[] keys = new string[lipid.adducts.Keys.Count];
@@ -155,10 +173,16 @@ namespace LipidCreator
                     }
                     
                     
+                    if (!lipid.adducts[adduct] || !lcf.headgroups[headgroup].adductRestrictions[adduct]) throw new Exception("Error: combination '" + headgroup + "' and '" + unitTestRow[3] + "' are not valid");
+                    
+                    
                     // create transition
                     lcf.registeredLipids.Clear();
                     lcf.registeredLipids.Add(lipid);
                     lcf.assembleLipids();
+                    
+                    //Console.WriteLine(headgroup + " " + ((PrecursorData)lcf.precursorDataList[0]).precursorName);
+                    //Console.WriteLine(lcf.precursorDataList.Count);
                     
                     // resolve the [adduct] wildcards if present
                     string fragementName = unitTestRow[6];
@@ -168,7 +192,8 @@ namespace LipidCreator
                     int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
-                        if (row[LipidCreator.PRODUCT_NAME].Equals(fragementName))
+                        //Console.WriteLine(row[LipidCreator.PRODUCT_NAME] + " " + row[LipidCreator.PRODUCT_ADDUCT]);
+                        if (row[LipidCreator.PRODUCT_NAME].Equals(fragementName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
                         {
                             // precursor
                             Assert((string)row[LipidCreator.MOLECULE_LIST_NAME], unitTestRow[0], "class: ");
@@ -186,16 +211,30 @@ namespace LipidCreator
                             ++cnt;
                         }
                     }
-                    if (cnt != 1) throw new Exception("Error: fragment not found.");
+                    if (cnt != 1) throw new Exception("Error: fragment '" + fragementName + "' with adduct '" + unitTestRow[8] + "' not found.");
+                  
+                    
                 }
                 
-                Console.WriteLine("Test passed, no errors found");
-            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                //Environment.Exit(-1);
             }
+                Console.WriteLine("Test passed, no errors found");  
+                    
+            }
+            
+            /*
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                //Environment.Exit(-1);
+            }*/
         }
     }
 }

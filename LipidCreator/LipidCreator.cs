@@ -473,8 +473,8 @@ namespace LipidCreator
         
         public Lipid parseLipidSpecies(string speciesName)
         {   
-            if (speciesName.IndexOf("PC O") >= 0) speciesName.Replace("PC O", "PC O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
-            else if (speciesName.IndexOf("PE O") >= 0) speciesName.Replace("PE O", "PE O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+            if (speciesName.IndexOf("PC O") >= 0) speciesName = speciesName.Replace("PC O", "PC O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
+            else if (speciesName.IndexOf("PE O") >= 0) speciesName = speciesName.Replace("PE O", "PE O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
             
             
             string[] speciesToken = speciesName.Split(new char[]{' '});
@@ -508,7 +508,6 @@ namespace LipidCreator
                         gllipid.headGroupNames.Add(headgroup);
                         acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
-                        if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         if (headgroup.Equals("MAG") && faToken.Length != 1) return null;
                         if (headgroup.Equals("DAG") && faToken.Length != 2) return null;
@@ -519,21 +518,31 @@ namespace LipidCreator
                                 gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
                                 gllipid.fag2 = parseFattyAcidGroup("", true);
                                 gllipid.fag3 = parseFattyAcidGroup("", true);
+                                if (gllipid.fag1 == null) return null;
+                                break;
+                                
+                            case "MGDG": case "DGDG": case "SQDG":
+                                ((GLLipid)gllipid).containsSugar = true;
+                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
+                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
+                                gllipid.fag3 = parseFattyAcidGroup("", true);
+                                if (gllipid.fag1 == null || gllipid.fag2 == null) return null;
                                 break;
                                 
                             case "DAG":
                                 gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
                                 gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
                                 gllipid.fag3 = parseFattyAcidGroup("", true);
+                                if (gllipid.fag1 == null || gllipid.fag2 == null) return null;
                                 break;
                                 
                             case "TAG":
                                 gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
                                 gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
                                 gllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
+                                if (gllipid.fag1 == null || gllipid.fag2 == null || gllipid.fag3 == null) return null;
                                 break;
                         }
-                        if (gllipid.fag1 == null || gllipid.fag2 == null || gllipid.fag3 == null) return null;
                         return gllipid;
                         
                         
@@ -591,7 +600,6 @@ namespace LipidCreator
                         sllipid.headGroupNames.Add(headgroup);
                         acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
-                        if (tokenSeparator.Length == 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         if (faToken.Length > 2 || faToken.Length == 0) return null;
                         else if (faToken.Length == 1){
@@ -611,11 +619,12 @@ namespace LipidCreator
                     case (int)LipidCategory.Cholesterol:
                         Cholesterol chlipid = new Cholesterol(this);
                         chlipid.headGroupNames.Add(headgroup);
-                        if(precursor.name.Equals(headgroup)) return chlipid;
+                        if(precursor.name.Equals("Ch")) return chlipid;
                         
+                        ((Cholesterol)chlipid).containsEster = true;
                         acids = speciesToken[faSeparation];
                         tokenSeparator = getSeparator(acids);
-                        if (tokenSeparator.Length == 0) return null;
+                        if (tokenSeparator.Length != 0) return null;
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         if (faToken.Length != 1) return null;
                         chlipid.fag = parseFattyAcidGroup(faToken[0], false);
@@ -650,7 +659,6 @@ namespace LipidCreator
             {
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
-            
             
             // create fragment list            
             foreach (PrecursorData precursorData in this.precursorDataList)

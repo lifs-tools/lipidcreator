@@ -31,15 +31,7 @@ using System.Data.SQLite;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-/*
-using System.Drawing;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
-using System.IO;
-using Ionic.Zlib;
 
-using SkylineTool;
-*/
 namespace LipidCreator
 {
     [Serializable]
@@ -331,13 +323,15 @@ namespace LipidCreator
                             {
                                 if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                 {
-                                    if (isPlamalogen) headgroup = headgroup + "-O-p";
-                                    else if (isFAe) headgroup = headgroup + "-O-a";
+                                    if (isPlamalogen) headgroup = headgroup + " O-p";
+                                    else if (isFAe) headgroup = headgroup + " O-a";
                                 }
                                 if (isLyso) headgroup = "L" + headgroup;
                             }
                             
                             String key = headgroup + " ";
+                            if (isPlamalogen) key = key.Replace("O-p", "O");
+                            else if (isFAe) key = key.Replace("O-a", "O");
                             int i = 0;
                             foreach (FattyAcid fa in sortedAcids)
                             {
@@ -351,6 +345,7 @@ namespace LipidCreator
                             
                             if (usedKeys.Contains(key)) continue;
                             
+                          
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
@@ -383,7 +378,6 @@ namespace LipidCreator
                                 precursorData.fa4 = null;
                                 precursorData.lcb = null;
                                 precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
-                                
                                 precursorDataList.Add(precursorData);
                                 
                                 foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)

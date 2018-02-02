@@ -189,7 +189,7 @@ namespace LipidCreator
             else
             {
                 String headgroup = "Ch";
-                String key = headgroup + " ";
+                String key = headgroup;
                 if (usedKeys.Contains(key)) return;
                 
                 foreach (KeyValuePair<string, bool> adduct in adducts)

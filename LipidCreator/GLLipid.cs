@@ -173,6 +173,7 @@ namespace LipidCreator
                             
                             if (usedKeys.Contains(key)) continue;
                             
+                            
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;

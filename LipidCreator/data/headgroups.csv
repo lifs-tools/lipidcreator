@@ -4,7 +4,7 @@ Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,No,No,Yes,No,N
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,2,No,No
 GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,No,No,Yes,No,No,No,No,3,No,No
-GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,No,No,Yes,No,No,No,No,6,No,No
+GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 GL,SQDG,9,16,10,0,0,1,0,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 GL,TAG,3,5,3,0,0,0,0,images/Precursors/TG_pos_pre.png,No,No,Yes,No,No,No,No,1,No,No
 Mediator,10-HDoHE,22,32,3,0,0,0,0,images/Precursors/10-HDoHE.png,No,No,No,Yes,No,No,No,8,No,No
@@ -100,16 +100,16 @@ PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Ye
 PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,No,No,No,6,No,No
 PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,No,Yes,Yes,No,No,0,No,No
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
-PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,No,No,Yes,Yes,No,Yes,Yes,7,Yes,No
 PL,LPC,8,19,6,1,1,0,0,images/Precursors/LPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
 PL,LPC O-a,8,19,6,1,1,0,0,images/Precursors/eLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
 PL,LPC O-p,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,Yes,No,No,Yes,Yes,7,Yes,No
-PL,LPE,5,13,6,1,1,0,0,images/Precursors/LPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
-PL,LPE O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
-PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPE,5,13,6,1,1,0,0,images/Precursors/LPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPE O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,7,Yes,No
 PL,LPG,6,14,8,0,1,0,0,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,7,Yes,No
-PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,No,No,Yes,Yes,No,Yes,Yes,7,Yes,No
-PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,No,No,No,Yes,No,Yes,Yes,7,Yes,No
+PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,7,Yes,No
+PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,7,Yes,No
 PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,No,Yes,Yes,No,No,1,No,No
 PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
 PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,No,No,Yes,Yes,No,Yes,Yes,6,No,No
@@ -122,9 +122,9 @@ PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,Yes,
 PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 PL,PG,6,13,8,0,1,0,0,images/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
 PL,PI,9,17,11,0,1,0,0,images/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,6,No,No
-PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,No,No,No,Yes,No,No,No,6,No,No
-PL,PIP2,9,19,17,0,3,0,0,images/Precursors/PIP2_neg_pre.png,No,No,No,Yes,No,No,No,6,No,No
-PL,PIP3,9,20,20,0,4,0,0,images/Precursors/PIP3_neg_pre.png,No,No,No,Yes,No,No,No,6,No,No
+PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,6,No,No
+PL,PIP2,9,19,17,0,3,0,0,images/Precursors/PIP2_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,6,No,No
+PL,PIP3,9,20,20,0,4,0,0,images/Precursors/PIP3_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,6,No,No
 PL,PS,6,12,8,1,1,0,0,images/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
 SL,Cer,0,1,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No
 SL,CerP,0,2,3,0,1,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No

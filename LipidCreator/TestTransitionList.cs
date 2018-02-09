@@ -78,7 +78,7 @@ namespace LipidCreator
             ArrayList unitTestData = new ArrayList();
             
             
-            //try {
+            try {
                 int lineCounter = 1;
                 string unitTestFile = "data/unit-test-transition-list.csv";
                 if (File.Exists(unitTestFile))
@@ -114,7 +114,7 @@ namespace LipidCreator
                 foreach (string[] unitTestRow in unitTestData)
                 {
                 
-            try {
+            //try {
                 
                     Console.WriteLine("Testing: " + String.Join(" / ", unitTestRow));
                     
@@ -215,19 +215,7 @@ namespace LipidCreator
                   
                     
                 }
-                
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine();
-                //Environment.Exit(-1);
-            }
-                Console.WriteLine("Test passed, no errors found");  
-                    
-            }
-            
-            /*
+              /*  
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -235,6 +223,18 @@ namespace LipidCreator
                 Console.WriteLine();
                 //Environment.Exit(-1);
             }*/
+                Console.WriteLine("Test passed, no errors found");  
+                    
+            }
+            
+            
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                //Environment.Exit(-1);
+            }
         }
     }
 }

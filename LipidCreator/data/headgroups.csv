@@ -1,4 +1,4 @@
-Category,Precursor,C,H,O,N,P,S,d,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks,Derivative,Heavy Isotope
+Category,Precursor,C,H,O,N,P,S,d,file,#NAME?,+2H,0,#NAME?,-2H,#NAME?,#NAME?,Building Blocks,Derivative,Heavy Isotope
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,8,No,No
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,No,No,Yes,No,No,No,No,3,No,No
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,2,No,No
@@ -126,22 +126,22 @@ PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,Yes,No,Yes,Yes,Yes,No,N
 PL,PIP2,9,19,17,0,3,0,0,images/Precursors/PIP2_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,6,No,No
 PL,PIP3,9,20,20,0,4,0,0,images/Precursors/PIP3_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,6,No,No
 PL,PS,6,12,8,1,1,0,0,images/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,Yes,Yes,6,No,No
-SL,Cer,0,1,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No
-SL,CerP,0,2,3,0,1,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No
-SL,EPC,2,7,3,1,1,0,0,images/Precursors/CerPE_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
-SL,GB3,18,31,15,0,0,0,0,images/Precursors/GB3Cer_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
-SL,GB4,26,44,20,1,0,0,0,images/Precursors/GB4Cer_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
-SL,GD3,34,55,26,2,0,0,0,images/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
-SL,GM3,23,38,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
-SL,GM4,17,28,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
-SL,Hex2Cer,12,21,10,0,0,0,0,images/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
-SL,HexCer,6,11,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
-SL,IPC,6,12,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
-SL,LCB,0,2,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
-SL,LCBP,0,3,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
-SL,LHexCer,6,12,5,0,0,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5,No,No
-SL,LSM,5,14,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
-SL,M(IP)2C,18,33,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
-SL,MIPC,12,22,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
-SL,SHexCer,6,11,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,No,Yes,No,No,Yes,4,No,No
-SL,SM,5,13,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
+SL,Cer,0,0,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No
+SL,CerP,0,1,3,0,1,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,4,No,No
+SL,EPC,2,6,3,1,1,0,0,images/Precursors/CerPE_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
+SL,GB3,18,30,15,0,0,0,0,images/Precursors/GB3Cer_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
+SL,GB4,26,43,20,1,0,0,0,images/Precursors/GB4Cer_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
+SL,GD3,34,54,26,2,0,0,0,images/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
+SL,GM3,23,37,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
+SL,GM4,17,27,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,4,No,No
+SL,Hex2Cer,12,20,10,0,0,0,0,images/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
+SL,HexCer,6,10,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
+SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
+SL,LCB,0,1,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
+SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
+SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5,No,No
+SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
+SL,M(IP)2C,18,32,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
+SL,MIPC,12,21,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
+SL,SHexCer,6,10,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,No,Yes,No,No,Yes,4,No,No
+SL,SM,5,12,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No

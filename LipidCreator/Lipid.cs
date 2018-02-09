@@ -215,22 +215,22 @@ namespace LipidCreator
                 ++reportedFragments;
             }
             
-            if(reportedFragments > 0)
-            {
-                DataRow lipidRowPrecursor = transitionList.NewRow();
-                lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
-                lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-                lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
-                lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
-                lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-                transitionList.Rows.Add(lipidRowPrecursor);
-            }
+            //if(reportedFragments > 0)
+            //{
+            DataRow lipidRowPrecursor = transitionList.NewRow();
+            lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+            lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
+            lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+            lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
+            lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
+            lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+            transitionList.Rows.Add(lipidRowPrecursor);
+            //}
         }
         
         
@@ -414,7 +414,7 @@ namespace LipidCreator
                     fragment.computeIntensity(),
                     new PeakAnnotation(fragName,
                         fragment.fragmentCharge,
-                        getAdductAsString(fragment.fragmentCharge, (fragment.fragmentCharge > 0 ? "+" : "-") + "H"),
+                        getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]),
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));
             }

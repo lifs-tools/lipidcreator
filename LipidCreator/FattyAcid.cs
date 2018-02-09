@@ -77,7 +77,7 @@ namespace LipidCreator
                 // long chain base
                 this.suffix = "";
                 atomsCount[(int)Molecules.C] = length; // C
-                atomsCount[(int)Molecules.H] = (2 * (length - db) + 1); // H
+                atomsCount[(int)Molecules.H] = (2 * (length - db) + 2); // H
                 atomsCount[(int)Molecules.O] = hydroxyl; // O
                 atomsCount[(int)Molecules.N] = 1; // N
             }

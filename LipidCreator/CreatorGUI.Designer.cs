@@ -658,7 +658,7 @@ namespace LipidCreator
             List<String> glHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
             {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && headgroup.Length > 2) glHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && headgroup.Length > 3) glHgList.Add(headgroup);
             }
             glHgList.Sort();
             

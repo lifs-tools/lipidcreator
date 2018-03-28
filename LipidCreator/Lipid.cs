@@ -67,7 +67,6 @@ namespace LipidCreator
     [Serializable]
     public class Lipid
     {
-        public string className;
         public Dictionary<string, HashSet<string>> positiveFragments;
         public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
@@ -76,10 +75,12 @@ namespace LipidCreator
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public static string HEAVY_LABEL_SEPARATOR = "-";
+        public LipidCreator lipidCreator;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
     
-        public Lipid(LipidCreator lipidCreator, LipidCategory lipidCategory)
+        public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {
+            lipidCreator = _lipidCreator;
             adducts = new Dictionary<String, bool>();
             adducts.Add("+H", false);
             adducts.Add("+2H", false);
@@ -137,10 +138,10 @@ namespace LipidCreator
                 
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
                 
-                // Exception for two lipid fragments
-                if (precursorData.moleculeListName.Equals("BMP") && fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]")) continue;
-                //if (precursorData.moleculeListName.Equals("DG") && fragment.fragmentName.Equals("NL(H2O)") && !precursorData.precursorAdduct.Equals("[M+NH4]")) continue;
-            
+                // Exception for lipids with NL(NH3) fragment
+                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]1+")) continue;
+                
+                
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                 lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
@@ -183,9 +184,6 @@ namespace LipidCreator
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
-                
-                
-                
                 
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
@@ -436,16 +434,25 @@ namespace LipidCreator
         
         public virtual string serialize()
         {
-            string xml = "<className>" + className + "</className>\n";
-            xml += "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
+            HashSet<string> headGroupSet = new HashSet<string>();
+            
+            foreach (string headGroupName in headGroupNames ){
+                headGroupSet.Add(headGroupName);
+                foreach (Precursor heavyPrecursor in lipidCreator.headgroups[headGroupName].heavyLabeledPrecursors){
+                    headGroupSet.Add(heavyPrecursor.name);
+                }
+            }
+            
+        
+            string xml = "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
             foreach (KeyValuePair<String, bool> item in adducts)
             {
-                if (item.Value) xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
+                xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
             }
             
             foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
             {
-                if (positiveFragment.Value.Count > 0)
+                if (headGroupSet.Contains(positiveFragment.Key))
                 {
                     xml += "<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n";
                     foreach (string fragment in positiveFragment.Value)
@@ -458,7 +465,7 @@ namespace LipidCreator
             
             foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)
             {
-                if (negativeFragment.Value.Count > 0)
+                if (headGroupSet.Contains(negativeFragment.Key))
                 {
                     xml += "<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n";
                     foreach (string fragment in negativeFragment.Value)
@@ -473,9 +480,11 @@ namespace LipidCreator
         
         public Lipid(Lipid copy)
         {
+            lipidCreator = copy.lipidCreator;
             adducts = new Dictionary<string, bool>();
-            foreach (KeyValuePair<string, bool> adduct in copy.adducts) adducts.Add(adduct.Key, adduct.Value);
-            className = copy.className;
+            foreach (KeyValuePair<string, bool> adduct in copy.adducts){
+                adducts.Add(adduct.Key, adduct.Value);
+            }
             representativeFA = copy.representativeFA;
             headGroupNames = new List<String>();
         
@@ -564,14 +573,9 @@ namespace LipidCreator
         
         
         public virtual void import(XElement node, string importVersion)
-        {
-            foreach (KeyValuePair<string, bool> adduct in adducts) adducts[adduct.Key] = false;
-            
+        {   
             switch (node.Name.ToString())
             {
-                case "className":
-                    className = node.Value.ToString();
-                    break;
                     
                 case "representativeFA":
                     representativeFA = node.Value == "1";
@@ -585,7 +589,8 @@ namespace LipidCreator
                 case "positiveFragments":
                     string posLipidClass = node.Attribute("lipidClass").Value.ToString();
                     if (!positiveFragments.ContainsKey(posLipidClass)) positiveFragments.Add(posLipidClass, new HashSet<string>());
-                    var posFragments = node.Descendants("fragments");
+                    else positiveFragments[posLipidClass].Clear();
+                    var posFragments = node.Descendants("fragment");
                     foreach (var fragment in posFragments)
                     {
                         positiveFragments[posLipidClass].Add(fragment.Value.ToString());
@@ -595,7 +600,8 @@ namespace LipidCreator
                 case "negativeFragments":
                     string negLipidClass = node.Attribute("lipidClass").Value.ToString();
                     if (!negativeFragments.ContainsKey(negLipidClass)) negativeFragments.Add(negLipidClass, new HashSet<string>());
-                    var negFragments = node.Descendants("fragments");
+                    else negativeFragments[negLipidClass].Clear();
+                    var negFragments = node.Descendants("fragment");
                     foreach (var fragment in negFragments)
                     {
                         negativeFragments[negLipidClass].Add(fragment.Value.ToString());

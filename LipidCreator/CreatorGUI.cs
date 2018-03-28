@@ -287,6 +287,7 @@ namespace LipidCreator
                         clFA4Checkbox2.Checked = currentPLLipid.fag4.faTypes["FAp"];
                         clFA4Checkbox3.Checked = currentPLLipid.fag4.faTypes["FAa"];
                         
+                        
                         clPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
                         clPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
                         clPosAdductCheckbox3.Checked = currentPLLipid.adducts["+NH4"];
@@ -354,6 +355,7 @@ namespace LipidCreator
                         plFA2Checkbox2.Checked = currentPLLipid.fag2.faTypes["FAp"];
                         plFA2Checkbox3.Checked = currentPLLipid.fag2.faTypes["FAa"];
                     
+                        
                         
                         plPosAdductCheckbox1.Checked = currentPLLipid.adducts["+H"];
                         plPosAdductCheckbox2.Checked = currentPLLipid.adducts["+2H"];
@@ -1069,8 +1071,8 @@ namespace LipidCreator
             ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
             if (((GLLipid)currentLipid).representativeFA)
             {
-                glFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
-                glFA3Checkbox1.Checked =  ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked =  ((CheckBox)sender).Checked;
             }
         }
         public void glFA1Checkbox2CheckedChanged(Object sender, EventArgs e)
@@ -1079,8 +1081,8 @@ namespace LipidCreator
             ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
             if (((GLLipid)currentLipid).representativeFA)
             {
-                glFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
-                glFA3Checkbox2.Checked =  ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = ((CheckBox)sender).Checked;
             }
         }
         public void glFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
@@ -1089,8 +1091,8 @@ namespace LipidCreator
             ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
             if (((GLLipid)currentLipid).representativeFA)
             {
-                glFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
-                glFA3Checkbox3.Checked =  ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = ((CheckBox)sender).Checked;
             }
         }
         
@@ -1351,12 +1353,12 @@ namespace LipidCreator
                 glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
                 glFA2Combobox.Text = glFA1Combobox.Text;
                 glFA3Combobox.Text = glFA1Combobox.Text;
-                glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
-                glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
-                glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
-                glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
-                glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
-                glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
                 
                 
             }

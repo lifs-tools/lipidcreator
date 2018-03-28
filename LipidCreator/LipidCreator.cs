@@ -59,6 +59,7 @@ namespace LipidCreator
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
         public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Molecule Formula";
+        public const string PRECURSOR_ION_FORMULA = "Precursor Ion Formula";
         public const string PRECURSOR_ADDUCT = "Precursor Adduct";
         public const string PRECURSOR_MZ = "Precursor Ion m/z";
         public const string PRECURSOR_CHARGE = "Precursor Charge";
@@ -896,6 +897,7 @@ namespace LipidCreator
                         throw new Exception("Error global import");
                 }
             }
+            
         }
         
         

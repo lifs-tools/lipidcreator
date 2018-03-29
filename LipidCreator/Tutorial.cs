@@ -627,14 +627,29 @@ namespace LipidCreator
                     changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Enabled = true;
-                    
                     creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged += new EventHandler(numericInteraction);
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set the charge", "Accordingly, the constant elements can be either added or subtracted from the fragment. We keep adding the fragments. Please set the charge to -1.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set the charge", "Accordingly, the constant elements can be either added or subtracted from the fragment. We keep adding the fragments. In the right most upper field, the charge can be set. Please set to +1.");
                     nextEnabled = false;
                     break;
                     
+                default:
+                    quitTutorial();
+                    break;
+                    
+                    
+                case 18:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Enabled = true;
+                    creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged += new EventHandler(numericInteraction);
+                    
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "Finally, a constant set of elements can be defined which will be depending on the previous parameter.");
+                    nextEnabled = false;
+                    break;
                     
                 default:
                     quitTutorial();

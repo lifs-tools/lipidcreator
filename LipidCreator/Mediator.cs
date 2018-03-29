@@ -98,7 +98,7 @@ namespace LipidCreator
                 String key = headgroup;
                 
                 if (headgroup.IndexOf("/") > -1 && onlyHeavyLabeled == 0) continue;
-                else if (headgroup.IndexOf("/") == -1 && onlyHeavyLabeled != 0) continue;
+                else if (headgroup.IndexOf("/") == -1 && onlyHeavyLabeled == 1) continue;
                 
                 if (usedKeys.Contains(key)) continue;
                 

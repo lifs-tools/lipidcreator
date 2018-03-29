@@ -139,10 +139,12 @@ namespace LipidCreator
                         precursorData.fa3 = null;
                         precursorData.fa4 = null;
                         precursorData.lcb = null;
-                        precursorData.fragmentNames = (!onlyPrecursors) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
+                        precursorData.addPrecursor = (onlyPrecursors != 0);
+                        precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
                         
-                        if (!onlyHeavyLabeled) precursorDataList.Add(precursorData);
+                        if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
                                 
+                        if (onlyHeavyLabeled == 0) continue;
                         foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
                         {
                             string heavyHeadgroup = heavyPrecursor.name;
@@ -179,7 +181,8 @@ namespace LipidCreator
                             heavyPrecursorData.fa3 = null;
                             heavyPrecursorData.fa4 = null;
                             heavyPrecursorData.lcb = null;
-                            heavyPrecursorData.fragmentNames = (!onlyPrecursors) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                            heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
+                            heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
                             
                             precursorDataList.Add(heavyPrecursorData);
                         }
@@ -220,10 +223,12 @@ namespace LipidCreator
                     precursorData.fa3 = null;
                     precursorData.fa4 = null;
                     precursorData.lcb = null;
-                    precursorData.fragmentNames = (!onlyPrecursors) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
+                    precursorData.addPrecursor = (onlyPrecursors != 0);
+                    precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
                     
-                    precursorDataList.Add(precursorData);
+                    if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
                                 
+                    if (onlyHeavyLabeled == 0) continue;
                     foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
                     {
                         string heavyHeadgroup = heavyPrecursor.name;
@@ -256,7 +261,8 @@ namespace LipidCreator
                         heavyPrecursorData.fa3 = null;
                         heavyPrecursorData.fa4 = null;
                         heavyPrecursorData.lcb = null;
-                        heavyPrecursorData.fragmentNames = (!onlyPrecursors) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                        heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
+                        heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
                         
                         precursorDataList.Add(heavyPrecursorData);
                     }

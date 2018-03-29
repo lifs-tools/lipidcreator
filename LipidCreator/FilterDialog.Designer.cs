@@ -63,7 +63,7 @@
             "Compute with precursor transitions"});
             this.comboBox1.Location = new System.Drawing.Point(24, 19);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(201, 21);
+            this.comboBox1.Size = new System.Drawing.Size(251, 21);
             this.comboBox1.TabIndex = 4;
             // 
             // comboBox2
@@ -75,7 +75,7 @@
             "Compute with heavy labeled isotopes"});
             this.comboBox2.Location = new System.Drawing.Point(24, 46);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(201, 21);
+            this.comboBox2.Size = new System.Drawing.Size(251, 21);
             this.comboBox2.TabIndex = 5;
             // 
             // FilterDialog

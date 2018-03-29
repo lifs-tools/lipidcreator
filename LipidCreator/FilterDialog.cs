@@ -21,8 +21,8 @@ namespace LipidCreator
             
             InitializeComponent();
             
-            checkBox1.Checked = lipid.onlyPrecursors;
-            checkBox2.Checked = lipid.onlyHeavyLabeled;
+            comboBox1.SelectedIndex = lipid.onlyPrecursors;
+            comboBox2.SelectedIndex = lipid.onlyHeavyLabeled;
         }
         
         private void cancelClick(object sender, EventArgs e)
@@ -32,8 +32,8 @@ namespace LipidCreator
         
         private void applyClick(object sender, EventArgs e)
         {
-            lipid.onlyPrecursors = checkBox1.Checked;
-            lipid.onlyHeavyLabeled = checkBox2.Checked;
+            lipid.onlyPrecursors = comboBox1.SelectedIndex;
+            lipid.onlyHeavyLabeled = comboBox2.SelectedIndex;
             this.Close();
         }
     }

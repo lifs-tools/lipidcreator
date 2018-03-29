@@ -54,6 +54,7 @@ namespace LipidCreator
         public double precursorM_Z;
         public int precursorCharge;
         public string adduct;
+        public bool addPrecursor;
         public Dictionary<int, int> atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
@@ -135,19 +136,21 @@ namespace LipidCreator
         public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
         {
             
-            DataRow lipidRowPrecursor = transitionList.NewRow();
-            lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-            lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
-            lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-            lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
-            lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
-            lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-            transitionList.Rows.Add(lipidRowPrecursor);
+            if (precursorData.addPrecursor){
+                DataRow lipidRowPrecursor = transitionList.NewRow();
+                lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
+                lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+                lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
+                lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
+                lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                transitionList.Rows.Add(lipidRowPrecursor);
+            }
             
             
             foreach (string fragmentName in precursorData.fragmentNames)

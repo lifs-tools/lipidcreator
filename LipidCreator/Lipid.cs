@@ -71,8 +71,8 @@ namespace LipidCreator
         public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
-        public bool onlyPrecursors;
-        public bool onlyHeavyLabeled;
+        public int onlyPrecursors;
+        public int onlyHeavyLabeled;
         public List<String> headGroupNames;
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
@@ -94,8 +94,8 @@ namespace LipidCreator
             positiveFragments = new Dictionary<string, HashSet<string>>();
             negativeFragments = new Dictionary<string, HashSet<string>>();
             representativeFA = false;
-            onlyPrecursors = false;
-            onlyHeavyLabeled = false;
+            onlyPrecursors = 0;
+            onlyHeavyLabeled = 2;
             headGroupNames = new List<String>();
             
             if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
@@ -446,8 +446,8 @@ namespace LipidCreator
             
         
             string xml = "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
-            xml += "<onlyPrecursors>" + (onlyPrecursors ? 1 : 0) + "</onlyPrecursors>\n";
-            xml += "<onlyHeavyLabeled>" + (onlyHeavyLabeled ? 1 : 0) + "</onlyHeavyLabeled>\n";
+            xml += "<onlyPrecursors>" + onlyPrecursors + "</onlyPrecursors>\n";
+            xml += "<onlyHeavyLabeled>" + onlyHeavyLabeled + "</onlyHeavyLabeled>\n";
             foreach (KeyValuePair<String, bool> item in adducts)
             {
                 xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
@@ -587,11 +587,11 @@ namespace LipidCreator
                     break;
                     
                 case "onlyPrecursors":
-                    onlyPrecursors = node.Value == "1";
+                    onlyPrecursors = Convert.ToInt32(node.Value.ToString());
                     break;
                     
                 case "onlyHeavyLabeled":
-                    onlyHeavyLabeled = node.Value == "1";
+                    onlyHeavyLabeled = Convert.ToInt32(node.Value.ToString());
                     break;
                     
                 case "adduct":

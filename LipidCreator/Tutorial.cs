@@ -262,6 +262,19 @@ namespace LipidCreator
         
         
         
+        
+        public void numericInteraction(object sender, System.EventArgs e)
+        {
+            MyNumericUpDown numericUpDown = (MyNumericUpDown)sender;
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 17)
+            {
+                nextEnabled = numericUpDown.Value == 1;
+            }
+            tutorialWindow.Refresh();
+        }
+        
+        
+        
         public void tabInteraction(Object sender,  EventArgs e)
         {
             if (creatorGUI.changingTabForced) return;
@@ -310,6 +323,10 @@ namespace LipidCreator
                 HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
                 nextEnabled = nextEnabled && doubleBondCounts != null && doubleBondCounts.Intersect(expectedDB).Count() == 1;
             }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 16)
+            {
+                nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text != "") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
+            }
             tutorialWindow.Refresh();
         }
         
@@ -323,6 +340,15 @@ namespace LipidCreator
             tutorialWindow.Refresh();
         }
         
+        
+        public void comboBoxInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 16)
+            {
+                nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text != "") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
+            }
+            tutorialWindow.Refresh();
+        }
         
         
         public void buttonInteraction(Object sender, EventArgs e)
@@ -578,6 +604,37 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Continue", "This form enables to define own fragments. In the current version of this tool, the definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added. Please Continue.");
                     break;
+                    
+                    
+                case 16:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Enabled = true;
+                    creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.Enabled = true;
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.TextChanged += new EventHandler(textBoxInteraction);
+                    creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
+                    
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Define a name, select a fragment base", "Give the new fragment an arbitrary name. Tha fragment can either be fixed or dependent on building blocks as head groups of fatty acids. In this example, the new fragment contains a fatty acid, please select FA1.");
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 17:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    changeMS2Tab(pgIndex, creatorGUI.ms2fragmentsForm);
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Enabled = true;
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged += new EventHandler(numericInteraction);
+                    
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set the charge", "Accordingly, the constant elements can be either added or subtracted from the fragment. We keep adding the fragments. Please set the charge to -1.");
+                    nextEnabled = false;
+                    break;
+                    
                     
                 default:
                     quitTutorial();

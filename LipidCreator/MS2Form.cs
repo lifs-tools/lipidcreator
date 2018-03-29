@@ -374,6 +374,7 @@ namespace LipidCreator
         private void List_RightClick(object sender, MouseEventArgs e)
         {
 
+                /*
             if (e.Button == MouseButtons.Right)
             {
                 int index = checkedListBoxNegativeFragments.IndexFromPoint(e.Location);
@@ -382,6 +383,7 @@ namespace LipidCreator
                     Console.WriteLine(index);
                 }
             }
+                */
 
         }
         

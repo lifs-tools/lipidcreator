@@ -120,6 +120,7 @@ namespace LipidCreator
         public void changeDataGridContent(Dictionary<string, object[]> data)
         {
             updating = true;
+            currentDict = null;
             foreach (KeyValuePair<string, object[]> row in data)
             {
                 int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
@@ -533,7 +534,6 @@ namespace LipidCreator
             if (mbr == DialogResult.Yes) {
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
-                Console.WriteLine(headgroup + " " + heavyHeadgroup);
                 Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
                 creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Remove(heavyHeadgroup);
                 creatorGUI.lipidCreator.allFragments.Remove(heavyHeadgroup);

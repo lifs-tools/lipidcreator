@@ -59,7 +59,11 @@ namespace LipidCreator
             int i = 0;
             foreach (DataRow row in currentView.Rows)
             {
-                string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
+            string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
+            string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
+            
+                //string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
+                string replicateKey = prec_mass + "/" + prod_mass;
                 if (!replicateKeys.Contains (replicateKey)) {
                     replicateKeys.Add (replicateKey);
                     transitionListUnique.ImportRow (row);

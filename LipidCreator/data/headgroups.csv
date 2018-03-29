@@ -1,4 +1,4 @@
-Category,Precursor,C,H,O,N,P,S,d,file,#NAME?,+2H,0,#NAME?,-2H,#NAME?,#NAME?,Building Blocks,Derivative,Heavy Isotope
+Category,Precursor,C,H,O,N,P,S,d,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks,Derivative,Heavy Isotope
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,8,No,No
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,No,No,Yes,No,No,No,No,3,No,No
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,2,No,No
@@ -139,7 +139,7 @@ SL,HexCer,6,10,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,
 SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
 SL,LCB,0,1,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
 SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
-SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5,No,No
+SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,5,No,No
 SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,No,No,5,No,No
 SL,M(IP)2C,18,32,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
 SL,MIPC,12,21,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No

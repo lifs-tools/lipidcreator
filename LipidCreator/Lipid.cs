@@ -71,6 +71,8 @@ namespace LipidCreator
         public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
         public bool representativeFA;
+        public bool onlyPrecursors;
+        public bool onlyHeavyLabeled;
         public List<String> headGroupNames;
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
@@ -92,6 +94,8 @@ namespace LipidCreator
             positiveFragments = new Dictionary<string, HashSet<string>>();
             negativeFragments = new Dictionary<string, HashSet<string>>();
             representativeFA = false;
+            onlyPrecursors = false;
+            onlyHeavyLabeled = false;
             headGroupNames = new List<String>();
             
             if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
@@ -129,8 +133,23 @@ namespace LipidCreator
         
         
         public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
-        {                    
-            int reportedFragments = 0;
+        {
+            
+            DataRow lipidRowPrecursor = transitionList.NewRow();
+            lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
+            lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+            lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
+            lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
+            lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
+            lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
+            lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+            transitionList.Rows.Add(lipidRowPrecursor);
+            
+            
             foreach (string fragmentName in precursorData.fragmentNames)
             {
                 // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
@@ -210,25 +229,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 
                 transitionList.Rows.Add(lipidRow);
-                ++reportedFragments;
             }
-            
-            //if(reportedFragments > 0)
-            //{
-            DataRow lipidRowPrecursor = transitionList.NewRow();
-            lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
-            lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-            lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
-            lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-            lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
-            lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
-            lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
-            transitionList.Rows.Add(lipidRowPrecursor);
-            //}
         }
         
         
@@ -445,6 +446,8 @@ namespace LipidCreator
             
         
             string xml = "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
+            xml += "<onlyPrecursors>" + (onlyPrecursors ? 1 : 0) + "</onlyPrecursors>\n";
+            xml += "<onlyHeavyLabeled>" + (onlyHeavyLabeled ? 1 : 0) + "</onlyHeavyLabeled>\n";
             foreach (KeyValuePair<String, bool> item in adducts)
             {
                 xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
@@ -486,6 +489,8 @@ namespace LipidCreator
                 adducts.Add(adduct.Key, adduct.Value);
             }
             representativeFA = copy.representativeFA;
+            onlyPrecursors = copy.onlyPrecursors;
+            onlyHeavyLabeled = copy.onlyHeavyLabeled;
             headGroupNames = new List<String>();
         
             positiveFragments = new Dictionary<string, HashSet<string>>();
@@ -579,6 +584,14 @@ namespace LipidCreator
                     
                 case "representativeFA":
                     representativeFA = node.Value == "1";
+                    break;
+                    
+                case "onlyPrecursors":
+                    onlyPrecursors = node.Value == "1";
+                    break;
+                    
+                case "onlyHeavyLabeled":
+                    onlyHeavyLabeled = node.Value == "1";
                     break;
                     
                 case "adduct":

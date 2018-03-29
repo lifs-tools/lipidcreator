@@ -96,11 +96,13 @@ namespace LipidCreator
             {   
                 string headgroup = headgroupIter;                
                 String key = headgroup;
+                if (headgroup.IndexOf("/") > -1) continue;
                 
                 if (usedKeys.Contains(key)) continue;
                 
                 foreach (KeyValuePair<string, bool> adduct in adducts)
                 {
+                
                     if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
                     
                     usedKeys.Add(key);
@@ -128,7 +130,7 @@ namespace LipidCreator
                     precursorData.fa3 = null;
                     precursorData.fa4 = null;
                     precursorData.lcb = null;
-                    precursorData.fragmentNames = (charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup];
+                    precursorData.fragmentNames = (!onlyPrecursors) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
                     
                     precursorDataList.Add(precursorData);
                 }

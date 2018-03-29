@@ -1742,7 +1742,6 @@ namespace LipidCreator
             plNegAdductCheckbox2.Parent = plNegativeAdduct;
             plNegAdductCheckbox2.Location = new Point(10, 35);
             plNegAdductCheckbox2.Text = "-2H⁻ ⁻";
-            plNegAdductCheckbox2.Enabled = false;
             plNegAdductCheckbox2.CheckedChanged += new EventHandler(plNegAdductCheckbox2CheckedChanged);
             plNegAdductCheckbox3.Parent = plNegativeAdduct;
             plNegAdductCheckbox3.Location = new Point(10, 55);

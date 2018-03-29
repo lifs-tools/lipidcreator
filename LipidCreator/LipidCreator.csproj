@@ -128,6 +128,12 @@
     </Compile>
     <Compile Include="FattyAcid.cs" />
     <Compile Include="FattyAcidGroup.cs" />
+    <Compile Include="FilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterDialog.Designer.cs">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="GLLipid.cs" />
     <Compile Include="Lipid.cs" />
     <Compile Include="LipidsReview.cs">
@@ -173,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddHeavyPrecursor.resx">
       <DependentUpon>AddHeavyPrecursor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterDialog.resx">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LipidsReview.resx">
       <DependentUpon>LipidsReview.cs</DependentUpon>

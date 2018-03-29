@@ -271,6 +271,7 @@ namespace LipidCreator
         public Button modifyLipidButton;
         public Button MS2fragmentsLipidButton;
         public Button addHeavyIsotopeButton;
+        public Button filtersButton;
         public Button tutorialStart;
         
         
@@ -620,6 +621,7 @@ namespace LipidCreator
             lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
+            filtersButton = new Button();
             modifyLipidButton = new Button();
             MS2fragmentsLipidButton = new Button();
 
@@ -2122,6 +2124,13 @@ namespace LipidCreator
             addHeavyIsotopeButton.BackColor = SystemColors.Control;
             addHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 
+            filtersButton.Text = "Filters";
+            filtersButton.Width = 100;
+            filtersButton.Height = 26;
+            filtersButton.Location = new Point(320, topLowButtons);
+            filtersButton.BackColor = SystemColors.Control;
+            filtersButton.Click += openFilterDialog;
+
             
             
             lipidsGridview.AutoSize = true;
@@ -2174,7 +2183,7 @@ namespace LipidCreator
             tutorialWindow.Location = new Point(40, 60);
             this.Controls.Add(tutorialWindow);
         
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
             
             
         }

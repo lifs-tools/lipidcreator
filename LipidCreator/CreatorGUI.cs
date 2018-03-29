@@ -492,6 +492,7 @@ namespace LipidCreator
             {
                 ((TabPage)tabList[index]).Controls.Add(MS2fragmentsLipidButton);
                 ((TabPage)tabList[index]).Controls.Add(addHeavyIsotopeButton);
+                ((TabPage)tabList[index]).Controls.Add(filtersButton);
                 ((TabPage)tabList[index]).Controls.Add(modifyLipidButton);
                 modifyLipidButton.Enabled = lipidModifications[(int)currentIndex] > -1;
                 ((TabPage)tabList[index]).Controls.Add(addLipidButton);
@@ -2615,6 +2616,16 @@ namespace LipidCreator
             {
                 formToOpen.Show();
             }
+        }
+        
+        
+        public void openFilterDialog(Object sender, EventArgs e)
+        {
+            FilterDialog filterDialog = new FilterDialog(this, (Lipid)currentLipid);
+            filterDialog.Owner = this;
+            filterDialog.ShowInTaskbar = false;
+            filterDialog.ShowDialog();
+            filterDialog.Dispose();
         }
         
         

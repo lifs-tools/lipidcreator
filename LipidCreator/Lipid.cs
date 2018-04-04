@@ -185,23 +185,15 @@ namespace LipidCreator
                         case "FA":
                         case "FA1":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                            atomsCountFragment[(int)Molecules.H] -= (fragment.fragmentCharge > 0) ? 1 : -1;
-                            atomsCountFragment[(int)Molecules.O] += 1;
                             break;
                         case "FA2":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
-                            atomsCountFragment[(int)Molecules.H] -= (fragment.fragmentCharge > 0) ? 1 : -1;
-                            atomsCountFragment[(int)Molecules.O] += 1;
                             break;
                         case "FA3":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
-                            atomsCountFragment[(int)Molecules.H] -= (fragment.fragmentCharge > 0) ? 1 : -1;
-                            atomsCountFragment[(int)Molecules.O] += 1;
                             break;
                         case "FA4":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
-                            atomsCountFragment[(int)Molecules.H] -= (fragment.fragmentCharge > 0) ? 1 : -1;
-                            atomsCountFragment[(int)Molecules.O] += 1;
                             break;
                         case "HG":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);

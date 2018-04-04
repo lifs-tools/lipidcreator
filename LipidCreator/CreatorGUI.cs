@@ -105,7 +105,7 @@ namespace LipidCreator
             }
             tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
             tutorial = new Tutorial(this);
-            changeTab(0);
+            changeTab(2);
         }
         
         public void resetLipidCreator(Object sender, EventArgs e)

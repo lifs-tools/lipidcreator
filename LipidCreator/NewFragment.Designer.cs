@@ -189,7 +189,7 @@ namespace LipidCreator
             //
             radioButtonAdding.Size = new System.Drawing.Size(40,13);
             radioButtonAdding.Location = new System.Drawing.Point(10,18);
-            radioButtonAdding.Click += new System.EventHandler(addingClicked);
+            radioButtonAdding.CheckedChanged += new System.EventHandler(addingClicked);
             radioButtonAdding.Text = "Add";
             radioButtonAdding.Checked = true;
             groupboxAddingSubtracting.Controls.Add(radioButtonAdding);
@@ -198,7 +198,7 @@ namespace LipidCreator
             //
             radioButtonSubtracting.Size = new System.Drawing.Size(60,13);
             radioButtonSubtracting.Location = new System.Drawing.Point(50,18);
-            radioButtonSubtracting.Click += new System.EventHandler(subtractingClicked);
+            radioButtonSubtracting.CheckedChanged += new System.EventHandler(subtractingClicked);
             radioButtonSubtracting.Text = "Subtract";
             groupboxAddingSubtracting.Controls.Add(radioButtonSubtracting);
 

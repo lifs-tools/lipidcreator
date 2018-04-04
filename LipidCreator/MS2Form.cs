@@ -263,6 +263,16 @@ namespace LipidCreator
                 pictureBoxFragments.Image = fragmentComplete;
             }
         }
+        
+        
+        public void testFunction(Object sender, EventArgs e)
+        {
+            Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
+            int hoveredIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
+            Console.WriteLine(hoveredIndex);
+        }
+        
+        
 
         public void tabIndexChanged(Object sender, EventArgs e)
         {

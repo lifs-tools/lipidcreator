@@ -198,7 +198,6 @@ namespace LipidCreator
                     mult = -1;
                     radioButtonSubtracting.Checked = true;
                 }
-                Console.WriteLine(positiveVals + " " + negativeVals);
                 foreach (KeyValuePair<string, object[]> row in data)
                 {
                     int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];

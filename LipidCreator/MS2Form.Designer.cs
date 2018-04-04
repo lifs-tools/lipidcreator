@@ -85,6 +85,9 @@ namespace LipidCreator
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonAddFragment = new System.Windows.Forms.Button();
             this.tabControlFragments = new System.Windows.Forms.TabControl();
+            this.contextMenuFragment = new System.Windows.Forms.ContextMenu();
+            this.menuFragmentItem1 = new System.Windows.Forms.MenuItem();
+            this.menuFragmentItem2 = new System.Windows.Forms.MenuItem();
             toolTip1 = new System.Windows.Forms.ToolTip();
             this.tabPages = new ArrayList();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).BeginInit();
@@ -235,6 +238,7 @@ namespace LipidCreator
             this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
             this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
             this.checkedListBoxNegativeFragments.MouseUp += new System.Windows.Forms.MouseEventHandler(this.List_RightClick);
+            this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
             // 
             // button2
             // 
@@ -274,6 +278,25 @@ namespace LipidCreator
             this.tabControlFragments.Size = new System.Drawing.Size(1144, 380);
             this.tabControlFragments.TabIndex = 11;
             this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
+            
+            this.contextMenuFragment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuFragmentItem1,
+            this.menuFragmentItem2});
+            this.contextMenuFragment.Opening += new System.EventHandler(testFunction);
+            // 
+            // menuItem1
+            // 
+            this.menuFragmentItem1.Index = 0;
+            this.menuFragmentItem1.Text = "Edit fragment";
+            this.menuFragmentItem1.Click += new System.EventHandler(testFunction);
+            // 
+            // menuItem2
+            // 
+            this.menuFragmentItem2.Index = 1;
+            this.menuFragmentItem2.Text = "Delete fragment";
+            this.menuFragmentItem2.Click += new System.EventHandler(testFunction);
+            
+            
             // 
             // MS2Form
             // 
@@ -318,5 +341,9 @@ namespace LipidCreator
         public ToolTip toolTip1;
         public ComboBox isotopeList;
         public ArrayList controlElements;
+        
+        private ContextMenu contextMenuFragment;
+        private MenuItem menuFragmentItem1;
+        private MenuItem menuFragmentItem2;
     }
 }

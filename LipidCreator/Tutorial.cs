@@ -634,10 +634,6 @@ namespace LipidCreator
                     nextEnabled = false;
                     break;
                     
-                default:
-                    quitTutorial();
-                    break;
-                    
                     
                 case 18:
                     changeTab(LipidCategory.PhosphoLipid);
@@ -647,7 +643,7 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged += new EventHandler(numericInteraction);
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "Finally, a constant set of elements can be defined which will be depending on the previous parameter.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "Finally, a constant set of elements can be defined which will be depending on the previous parameter either added or subtracted from the fragment. Please");
                     nextEnabled = false;
                     break;
                     

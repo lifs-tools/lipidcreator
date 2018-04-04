@@ -181,38 +181,14 @@ namespace LipidCreator
                     }
                 }
                 
-                int positiveVals = 0;
-                int negativeVals = 0;
-                foreach (KeyValuePair<string, object[]> row in data)
-                {
-                    if ((int)row.Value[0] > 0) ++positiveVals;
-                    else ++negativeVals;
-                    
-                    if ((int)row.Value[1] > 0) ++positiveVals;
-                    else ++negativeVals;
-                }
-                
-                int mult = 1;
-                if (positiveVals < negativeVals)
-                {
-                    mult = -1;
-                    radioButtonSubtracting.Checked = true;
-                }
                 foreach (KeyValuePair<string, object[]> row in data)
                 {
                     int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
                     
-                    dataGridViewElements.Rows[l].Cells[1].Value = mult * (int)row.Value[0];
-                    dataGridViewElements.Rows[l].Cells[2].Value = mult * (int)row.Value[1];
+                    dataGridViewElements.Rows[l].Cells[1].Value = row.Value[0];
+                    dataGridViewElements.Rows[l].Cells[2].Value = row.Value[1];
                     dataGridViewElements.Rows[l].Cells[3].Value = row.Value[2];
                 }
-                
-                
-                
-                
-                
-                
-                
                 
                 
             }
@@ -366,7 +342,7 @@ namespace LipidCreator
                 catch (Exception ee){
                     n = 0;
                 }
-                n = Math.Max(n, 0);
+                if (selectBaseCombobox.SelectedIndex == 0) n = Math.Max(n, 0);
                 elements[key][e.ColumnIndex - 1] = n;
                 dataGridViewElements.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = n;
             }
@@ -381,37 +357,15 @@ namespace LipidCreator
         
         public void selectBaseComboboxValueChanged(Object sender, EventArgs e)
         {
-            if (selectBaseCombobox.SelectedIndex > 0)
-            {
-                groupboxAddingSubtracting.Enabled = true;
-            }
-            else
-            {
-                groupboxAddingSubtracting.Enabled = false;
-                chemAdding = true;
-                radioButtonAdding.Checked = true;
-            }
-            updateInfo();
-        }
-        
-        void addingClicked(Object sender,EventArgs e)
-        {
-            chemAdding = true;
-            updateInfo();
-        }
-        
-        void subtractingClicked(Object sender,EventArgs e)
-        {
-            chemAdding = false;
             updateInfo();
         }
 
         private void updateInfo()
         {
             //double mass = 0;
-            string chemForm = "";
+            string chemFormP = "";
+            string chemFormN = "";
             string baseName = "";
-            string connector = "";
             string lBracket = "";
             string rBracket = "";
             string chrg = "";
@@ -428,24 +382,26 @@ namespace LipidCreator
                 int heavyElementCount = (int)elements[element][1];
                 string heavyElement = MS2Fragment.ELEMENT_SHORTCUTS[MS2Fragment.HEAVY_POSITIONS[(string)elements[element][2]]];
                 
-                if (elementCount > 0) chemForm += element + Convert.ToString(elementCount);
-                if (heavyElementCount > 0) chemForm += heavyElement + Convert.ToString(heavyElementCount);
+                if (elementCount > 0) chemFormP += element + Convert.ToString(elementCount);
+                if (heavyElementCount > 0) chemFormP += heavyElement + Convert.ToString(heavyElementCount);
+                
+                if (elementCount < 0) chemFormN += element + Convert.ToString(-elementCount);
+                if (heavyElementCount < 0) chemFormN += heavyElement + Convert.ToString(-heavyElementCount);
             }
-            if (chemForm != "" && numericUpDownCharge.Value > 0)
+            if (chemFormP != "" || chemFormN != "")
             {
-                chrg = "+";
+                if (numericUpDownCharge.Value > 0) chrg = "+";
+                else chrg = "+";
             }
-            else if (chemForm != "" && numericUpDownCharge.Value < 0)
+            string combinedChemForm = "";
+            if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
             {
-                chrg = "-";
-            }
-            if (baseName.Length > 0 && chemForm.Length > 0)
-            {
-                connector = chemAdding ? " + " : " - ";
+                if (chemFormP.Length > 0) combinedChemForm += " + " + chemFormP;
+                if (chemFormN.Length > 0) combinedChemForm += " - " + chemFormN;
                 lBracket = "(";
                 rBracket = ")";
             }
-            labelMass.Text = lBracket + baseName + connector + chemForm + rBracket + chrg;
+            labelMass.Text = lBracket + baseName + combinedChemForm + rBracket + chrg;
         }
 
         private void numericUpDown1TextChanged(object sender, EventArgs e)

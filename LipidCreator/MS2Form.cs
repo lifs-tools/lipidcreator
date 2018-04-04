@@ -170,17 +170,16 @@ namespace LipidCreator
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
-                //menuFragmentItem1.Enabled = fragment.userDefined;
+                menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
                 if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
                 // create tool tip           
-                string chemForm = "";
+                string chemFormP = "";       
+                string chemFormN = "";
                 string baseName = "";
-                string connector = "";
                 string lBracket = "";
                 string rBracket = "";
-                bool chemAdding = true;
                 
                 if (fragment.fragmentBase.Count > 0)
                 {
@@ -193,19 +192,18 @@ namespace LipidCreator
                 
                 foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (row.Value != 0)
-                    {
-                        chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
-                        chemAdding = row.Value > 0;
-                    }
+                    if (row.Value > 0) chemFormP += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                    else if (row.Value < 0) chemFormN += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
                 }
-                if (baseName.Length > 0 && chemForm.Length > 0)
+                string combinedChemForm = "";
+                if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
                 {
-                    connector = chemAdding ? " + " : " - ";
+                    if (chemFormP.Length > 0) combinedChemForm += " + " + chemFormP;
+                    if (chemFormN.Length > 0) combinedChemForm += " - " + chemFormN;
                     lBracket = "(";
                     rBracket = ")";
                 }
-                string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "+";
+                string toolTipText = lBracket + baseName + combinedChemForm + rBracket + "+";
                 toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, toolTipText);
             }
             else
@@ -229,17 +227,16 @@ namespace LipidCreator
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
-                //menuFragmentItem1.Enabled = fragment.userDefined;
+                menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
                 if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
-                // create tool tip              
-                string chemForm = "";
+                // create tool tip           
+                string chemFormP = "";       
+                string chemFormN = "";
                 string baseName = "";
-                string connector = "";
                 string lBracket = "";
                 string rBracket = "";
-                bool chemAdding = true;
                 
                 if (fragment.fragmentBase.Count > 0)
                 {
@@ -252,19 +249,18 @@ namespace LipidCreator
                 
                 foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (row.Value != 0)
-                    {
-                        chemForm += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
-                        chemAdding = row.Value > 0;
-                    }
+                    if (row.Value > 0) chemFormP += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                    else if (row.Value < 0) chemFormN += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
                 }
-                if (baseName.Length > 0 && chemForm.Length > 0)
+                string combinedChemForm = "";
+                if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
                 {
-                    connector = chemAdding ? " + " : " - ";
+                    if (chemFormP.Length > 0) combinedChemForm += " + " + chemFormP;
+                    if (chemFormN.Length > 0) combinedChemForm += " - " + chemFormN;
                     lBracket = "(";
                     rBracket = ")";
                 }
-                string toolTipText = lBracket + baseName + connector + chemForm + rBracket + "-";
+                string toolTipText = lBracket + baseName + combinedChemForm + rBracket + "-";
                 toolTip1.SetToolTip(this.checkedListBoxNegativeFragments, toolTipText);
             }
             else

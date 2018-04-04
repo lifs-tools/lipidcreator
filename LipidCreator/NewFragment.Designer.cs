@@ -78,9 +78,6 @@ namespace LipidCreator
             this.labelCharge = new System.Windows.Forms.Label();
             this.labelFragmentName = new System.Windows.Forms.Label();
             this.labelSelectBase = new System.Windows.Forms.Label();
-            this.groupboxAddingSubtracting = new System.Windows.Forms.GroupBox();
-            this.radioButtonAdding = new System.Windows.Forms.RadioButton();
-            this.radioButtonSubtracting = new System.Windows.Forms.RadioButton();
             selectBaseCombobox = new System.Windows.Forms.ComboBox();
             this.dataGridViewElements = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCharge)).BeginInit();
@@ -179,28 +176,6 @@ namespace LipidCreator
             this.selectBaseCombobox.Location = new System.Drawing.Point(110, 24);
             this.selectBaseCombobox.Size = new System.Drawing.Size(180, 20);
             selectBaseCombobox.SelectedIndexChanged += new System.EventHandler(this.selectBaseComboboxValueChanged);
-            //
-            groupboxAddingSubtracting.Text = "... chemical formula";
-            groupboxAddingSubtracting.Location = new System.Drawing.Point(300,8);
-            groupboxAddingSubtracting.Size = new System.Drawing.Size(120,36);
-            groupboxAddingSubtracting.Enabled = false;
-            //
-            //
-            //
-            radioButtonAdding.Size = new System.Drawing.Size(40,13);
-            radioButtonAdding.Location = new System.Drawing.Point(10,18);
-            radioButtonAdding.CheckedChanged += new System.EventHandler(addingClicked);
-            radioButtonAdding.Text = "Add";
-            radioButtonAdding.Checked = true;
-            groupboxAddingSubtracting.Controls.Add(radioButtonAdding);
-            //
-            //
-            //
-            radioButtonSubtracting.Size = new System.Drawing.Size(60,13);
-            radioButtonSubtracting.Location = new System.Drawing.Point(50,18);
-            radioButtonSubtracting.CheckedChanged += new System.EventHandler(subtractingClicked);
-            radioButtonSubtracting.Text = "Subtract";
-            groupboxAddingSubtracting.Controls.Add(radioButtonSubtracting);
 
             // 
             // dataGridView1
@@ -233,7 +208,6 @@ namespace LipidCreator
             this.Controls.Add(this.labelMass);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(groupboxAddingSubtracting);
             this.Name = "NewFragment";
             this.Text = "New Fragment";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCharge)).EndInit();
@@ -241,7 +215,7 @@ namespace LipidCreator
             this.ResumeLayout(false);
             this.PerformLayout();
 
-            controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements, groupboxAddingSubtracting};
+            controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements};
         }
 
         #endregion
@@ -256,9 +230,6 @@ namespace LipidCreator
         public System.Windows.Forms.Label labelSelectBase;
         public System.Windows.Forms.DataGridView dataGridViewElements;
         public System.Windows.Forms.ComboBox selectBaseCombobox;
-        public System.Windows.Forms.GroupBox groupboxAddingSubtracting;
-        public System.Windows.Forms.RadioButton radioButtonAdding;
-        public System.Windows.Forms.RadioButton radioButtonSubtracting;
         public ArrayList controlElements;
         public Overlay tutorialArrow;
     }

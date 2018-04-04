@@ -115,7 +115,7 @@ namespace LipidCreator
             this.checkedListBoxPositiveFragments.CheckOnClick = true;
             this.checkedListBoxPositiveFragments.FormattingEnabled = true;
             this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 62);
-            this.checkedListBoxPositiveFragments.Name = "checkedListBox1";
+            this.checkedListBoxPositiveFragments.Name = "checkedListBoxPositive";
             this.checkedListBoxPositiveFragments.ScrollAlwaysVisible = true;
             this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(150, 254);
             this.checkedListBoxPositiveFragments.TabIndex = 2;
@@ -229,7 +229,7 @@ namespace LipidCreator
             this.checkedListBoxNegativeFragments.CheckOnClick = true;
             this.checkedListBoxNegativeFragments.FormattingEnabled = true;
             this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(170, 62);
-            this.checkedListBoxNegativeFragments.Name = "checkedListBox2";
+            this.checkedListBoxNegativeFragments.Name = "checkedListBoxNegative";
             this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
             this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(150, 254);
             this.checkedListBoxNegativeFragments.TabIndex = 5;
@@ -237,8 +237,6 @@ namespace LipidCreator
             this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
             this.checkedListBoxNegativeFragments.MouseLeave += new System.EventHandler(this.checkedListBoxMouseLeave);
             this.checkedListBoxNegativeFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(this.checkedListBoxNegativeMouseHover);
-            this.checkedListBoxNegativeFragments.MouseUp += new System.Windows.Forms.MouseEventHandler(this.List_RightClick);
-            this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
             // 
             // button2
             // 
@@ -279,22 +277,24 @@ namespace LipidCreator
             this.tabControlFragments.TabIndex = 11;
             this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
             
+            
+            
             this.contextMenuFragment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuFragmentItem1,
             this.menuFragmentItem2});
-            this.contextMenuFragment.Opening += new System.EventHandler(testFunction);
+            this.contextMenuFragment.Popup += new System.EventHandler(contextMenuFragmentPopup);
             // 
             // menuItem1
             // 
             this.menuFragmentItem1.Index = 0;
             this.menuFragmentItem1.Text = "Edit fragment";
-            this.menuFragmentItem1.Click += new System.EventHandler(testFunction);
+            this.menuFragmentItem1.Click += new System.EventHandler(editFragment);
             // 
             // menuItem2
             // 
             this.menuFragmentItem2.Index = 1;
             this.menuFragmentItem2.Text = "Delete fragment";
-            this.menuFragmentItem2.Click += new System.EventHandler(testFunction);
+            this.menuFragmentItem2.Click += new System.EventHandler(deleteFragment);
             
             
             // 

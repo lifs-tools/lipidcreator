@@ -44,10 +44,14 @@ namespace LipidCreator
         string[] buildingBlocks;
         bool chemAdding = true;
         bool updating = false;
+        bool edit = false;
+        MS2Fragment ms2Fragment;
+        
 
-        public NewFragment(MS2Form ms2form)
+        public NewFragment(MS2Form ms2form, bool _edit = false)
         {
             this.ms2form = ms2form;
+            edit = _edit;
             elements = createGridData(MS2Fragment.createEmptyElementDict());
             InitializeComponent();
             
@@ -100,61 +104,119 @@ namespace LipidCreator
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, HG
             // 7 -> fixed, FA1, HG, HG
             // 8 -> fixed, HG
-            String lipidClass = ((TabPage)ms2form.tabPages[ms2form.tabControlFragments.SelectedIndex]).Text;
+            string lipidClass = ms2form.getHeadgroup();
             int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
+            
+            
+            String[][] builidingBlocks = new String[9][];
+            builidingBlocks[0] = new String[]{"FA1", "FA2", "FA3", "FA4", "HG"};
+            builidingBlocks[1] = new String[]{"FA1", "FA2", "FA3", "HG"};
+            builidingBlocks[2] = new String[]{"FA1", "FA2", "HG"};
+            builidingBlocks[3] = new String[]{"FA", "HG"};
+            builidingBlocks[4] = new String[]{"LCB", "FA", "HG"};
+            builidingBlocks[5] = new String[]{"LCB", "HG"};
+            builidingBlocks[6] = new String[]{"FA1", "FA2", "HG"};
+            builidingBlocks[7] = new String[]{"FA", "HG"};
+            builidingBlocks[8] = new String[]{"HG"};
+            
             
             selectBaseCombobox.Items.Add("fixed");
             ArrayList buildingBlocksArray = new ArrayList();
             buildingBlocksArray.Add("");
-            switch(bbType)
-            {
-                case 0:
-                    createCombinations(new String[]{"FA1", "FA2", "FA3", "FA4", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 1:
-                    createCombinations(new String[]{"FA1", "FA2", "FA3", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    /*
-                    buildingBlocks = new string[]{"", "FA1", "FA2", "FA3", "FA1;FA2", "FA1;FA3", "FA2;FA3", "HG"};
-                    selectBaseCombobox.Items.Add("FA1");
-                    selectBaseCombobox.Items.Add("FA2");
-                    selectBaseCombobox.Items.Add("FA3");
-                    selectBaseCombobox.Items.Add("FA1 + FA2");
-                    selectBaseCombobox.Items.Add("FA1 + FA3");
-                    selectBaseCombobox.Items.Add("FA2 + FA3");
-                    */
-                    break;
-                    
-                case 2:
-                    createCombinations(new String[]{"FA1", "FA2", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 3:
-                    createCombinations(new String[]{"FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 4:
-                    createCombinations(new String[]{"LCB", "FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 5:
-                    createCombinations(new String[]{"LCB", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 6:
-                    createCombinations(new String[]{"FA1", "FA2", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 7:
-                    createCombinations(new String[]{"FA", "HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-                    
-                case 8:
-                    createCombinations(new String[]{"HG"}, -1, "", selectBaseCombobox, buildingBlocksArray);
-                    break;
-            }
+            createCombinations(builidingBlocks[bbType], -1, "", selectBaseCombobox, buildingBlocksArray);
             buildingBlocks = (string[])buildingBlocksArray.ToArray(typeof(string));
             selectBaseCombobox.SelectedIndex = 0;
+            
+            if (edit)
+            {
+                bool isPositive = ms2form.editDeletePositive.Name.Equals("checkedListBoxPositive");
+                string fragmentName = (string)ms2form.editDeletePositive.Items[ms2form.editDeleteIndex];
+                ms2Fragment = new MS2Fragment(ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][isPositive][fragmentName]);
+                textBoxFragmentName.Text = fragmentName;
+                textBoxFragmentName.Enabled = false;
+                addButton.Text = "OK";
+                
+                HashSet<string> fragmentBB = new HashSet<string>(  (String[]) ms2Fragment.fragmentBase.ToArray( typeof( string ) ));
+                for (int i = 1; i < buildingBlocksArray.Count; ++i)
+                {
+                    HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(';'));
+                    int intersect = fragmentBB.Intersect(currentBB).Count();
+                    if (intersect == fragmentBB.Count() && intersect == currentBB.Count())
+                    {
+                        selectBaseCombobox.SelectedIndex = i;
+                        break;
+                    }
+                }
+                
+                numericUpDownCharge.Value = ms2Fragment.fragmentCharge;
+                
+                
+                
+                
+                
+                
+                
+                Dictionary<int, int> input = ms2Fragment.fragmentElements;
+                Dictionary<string, object[]> data = new Dictionary<string, object[]>();
+            
+                foreach (KeyValuePair<int, int> row in input)
+                {
+                    if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
+                    {
+                        // check for heavy isotopes
+                        int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
+                        int heavyElementCount = 0;
+                        string heavyShortcut = "";
+                        for (; heavyElementIndex >= 0; --heavyElementIndex)
+                        {
+                            heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
+                            heavyShortcut = MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]];
+                            if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
+                            {
+                                break;
+                            }
+                        }
+                
+                        data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    }
+                }
+                
+                int positiveVals = 0;
+                int negativeVals = 0;
+                foreach (KeyValuePair<string, object[]> row in data)
+                {
+                    if ((int)row.Value[0] > 0) ++positiveVals;
+                    else ++negativeVals;
+                    
+                    if ((int)row.Value[1] > 0) ++positiveVals;
+                    else ++negativeVals;
+                }
+                
+                int mult = 1;
+                if (positiveVals < negativeVals)
+                {
+                    mult = -1;
+                    radioButtonSubtracting.Checked = true;
+                }
+                Console.WriteLine(positiveVals + " " + negativeVals);
+                foreach (KeyValuePair<string, object[]> row in data)
+                {
+                    int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
+                    
+                    dataGridViewElements.Rows[l].Cells[1].Value = mult * (int)row.Value[0];
+                    dataGridViewElements.Rows[l].Cells[2].Value = mult * (int)row.Value[1];
+                    dataGridViewElements.Rows[l].Cells[3].Value = row.Value[2];
+                }
+                
+                
+                
+                
+                
+                
+                
+                
+                
+            }
         }
         
         
@@ -259,7 +321,7 @@ namespace LipidCreator
             
             string lipidClass = ms2form.getHeadgroup();
             int charge = Convert.ToInt32(numericUpDownCharge.Value);
-            if (ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].ContainsKey(textBoxFragmentName.Text))
+            if (!edit && ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].ContainsKey(textBoxFragmentName.Text))
             {
                 MessageBox.Show((charge >= 0 ? "Positive" : "Negative") + " fragment '" + textBoxFragmentName.Text + "' already registered for lipid class '" + lipidClass + "'");
                 return;
@@ -269,14 +331,21 @@ namespace LipidCreator
             Dictionary<int, int> newElements = createElementData(elements);
             MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
-            ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, newFragment);
-            if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
+                
+            if (!edit)
             {
-                ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);
+                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, newFragment);
+                if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
+                {
+                    ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);
+                }
+                else
+                {
+                    ms2form.checkedListBoxNegativeFragments.Items.Add(textBoxFragmentName.Text);
+                }
             }
-            else
-            {
-                ms2form.checkedListBoxNegativeFragments.Items.Add(textBoxFragmentName.Text);
+            else {
+                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0][textBoxFragmentName.Text] = newFragment;
             }
             this.Close();
         }

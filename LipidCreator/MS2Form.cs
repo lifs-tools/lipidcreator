@@ -45,6 +45,8 @@ namespace LipidCreator
         public bool loading;
         public NewFragment newFragment;
         public CreatorGUI creatorGUI;
+        public CheckedListBox editDeletePositive;
+        public int editDeleteIndex;
         
         public MS2Form(CreatorGUI creatorGUI)
         {
@@ -164,9 +166,12 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
+                this.checkedListBoxPositiveFragments.ContextMenu = this.contextMenuFragment;
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
+                //menuFragmentItem1.Enabled = fragment.userDefined;
+                menuFragmentItem2.Enabled = fragment.userDefined;
                 if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
                 // create tool tip           
@@ -205,6 +210,7 @@ namespace LipidCreator
             }
             else
             {
+                this.checkedListBoxPositiveFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
             }
         }
@@ -219,9 +225,12 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
+                this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
+                //menuFragmentItem1.Enabled = fragment.userDefined;
+                menuFragmentItem2.Enabled = fragment.userDefined;
                 if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
                 
                 // create tool tip              
@@ -260,18 +269,48 @@ namespace LipidCreator
             }
             else
             {
+                this.checkedListBoxNegativeFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
             }
         }
         
         
-        public void testFunction(Object sender, EventArgs e)
+        public void contextMenuFragmentPopup(Object sender, EventArgs e)
         {
-            Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
-            int hoveredIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
-            Console.WriteLine(hoveredIndex);
+            editDeletePositive = (CheckedListBox)((ContextMenu)sender).SourceControl;
+            Point point = editDeletePositive.PointToClient(Cursor.Position);
+            editDeleteIndex = editDeletePositive.IndexFromPoint(point);
         }
         
+        
+        public void editFragment(Object sender, EventArgs e)
+        {
+            newFragment = new NewFragment(this, true);
+            newFragment.Owner = this;
+            newFragment.ShowInTaskbar = false;
+            newFragment.ShowDialog();
+            newFragment.Dispose();
+        }
+        
+        
+        public void deleteFragment(Object sender, EventArgs e)
+        {
+            string lipidClass = getHeadgroup();
+            string fragmentName = (string)editDeletePositive.Items[editDeleteIndex];
+            bool isPositive = editDeletePositive.Name.Equals("checkedListBoxPositive");
+            bool userDefined = creatorGUI.lipidCreator.allFragments[lipidClass][isPositive][fragmentName].userDefined;
+            if (userDefined){
+                if (isPositive){
+                    currentLipid.positiveFragments[lipidClass].Remove(fragmentName);
+                    checkedListBoxPositiveFragments.Items.RemoveAt(editDeleteIndex);
+                }
+                else {
+                    currentLipid.negativeFragments[lipidClass].Remove(fragmentName);
+                    checkedListBoxNegativeFragments.Items.RemoveAt(editDeleteIndex);
+                }
+                creatorGUI.lipidCreator.allFragments[lipidClass][isPositive].Remove(fragmentName);
+            }
+        }
         
 
         public void tabIndexChanged(Object sender, EventArgs e)
@@ -380,22 +419,6 @@ namespace LipidCreator
             }
         }
         
-        
-        private void List_RightClick(object sender, MouseEventArgs e)
-        {
-
-                /*
-            if (e.Button == MouseButtons.Right)
-            {
-                int index = checkedListBoxNegativeFragments.IndexFromPoint(e.Location);
-                if (index != ListBox.NoMatches)
-                {
-                    Console.WriteLine(index);
-                }
-            }
-                */
-
-        }
         
         private void cancelClick(object sender, EventArgs e)
         {

@@ -213,6 +213,9 @@ namespace LipidCreator
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewElements)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
             controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements};
         }

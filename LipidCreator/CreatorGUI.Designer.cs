@@ -510,7 +510,9 @@ namespace LipidCreator
         public ArrayList controlElements;
         
         
-
+        public int minWindowHeight = 768;
+        public int windowWidth = 1060;
+        public int minLipidGridHeight = 200;
         
 
         /// <summary>
@@ -610,8 +612,9 @@ namespace LipidCreator
             this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuOptions, this.menuHelp } );
             
             tabControl = new TabControl();
-            this.Size = new System.Drawing.Size(1060, 700);
-            this.MinimumSize = new System.Drawing.Size(1060, 700);
+            this.Size = new System.Drawing.Size(windowWidth, minWindowHeight);
+            this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeight);
+            this.MaximumSize = new System.Drawing.Size(windowWidth, int.MaxValue);
             homeTab = new TabPage();
             glycerolipidsTab = new TabPage();
             phospholipidsTab = new TabPage();
@@ -644,7 +647,7 @@ namespace LipidCreator
             int sep = 15;
             int sepText = 20;
             int faLength = 150;
-            int topLowButtons = 390;
+            int topLowButtons = 410;
             int leftGroupboxes = 1000;
 
             
@@ -2085,13 +2088,12 @@ namespace LipidCreator
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             medPictureBox.SendToBack();
             
-            
 
             lipidsGroupbox.Controls.Add(lipidsGridview);
             lipidsGroupbox.Controls.Add(openReviewFormButton);
             lipidsGroupbox.Dock = DockStyle.Bottom;
             lipidsGroupbox.Text = "Lipid list";
-            lipidsGroupbox.Height = 180;
+            lipidsGroupbox.Height = minLipidGridHeight;
 
             addLipidButton.Text = "Add lipid";
             addLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2182,6 +2184,7 @@ namespace LipidCreator
             tutorialWindow.Size = new Size(240, 160);
             tutorialWindow.Location = new Point(40, 60);
             this.Controls.Add(tutorialWindow);
+            this.SizeChanged += new EventHandler(windowSizeChanged);
         
             controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
             

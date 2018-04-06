@@ -97,11 +97,11 @@ namespace LipidCreator
             this.Controls.Add(this.textLibraryName);
             this.Controls.Add(this.linkLabel);
             this.Controls.Add(this.buttonOK);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AboutDialog";
             this.Text = "About";
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 

@@ -161,8 +161,6 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "FilterDialog";
             this.Text = "Transition list filters";
             this.groupBox1.ResumeLayout(false);
@@ -170,6 +168,9 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
         }
 

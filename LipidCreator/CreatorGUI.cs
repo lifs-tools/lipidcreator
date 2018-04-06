@@ -2631,6 +2631,11 @@ namespace LipidCreator
             filterDialog.Dispose();
         }
         
+        public void windowSizeChanged(Object sender, EventArgs e)
+        {
+            lipidsGroupbox.Height = minLipidGridHeight + this.Height - minWindowHeight;
+        }
+        
         
         public void startTutorial1(Object sender, EventArgs e)
         {

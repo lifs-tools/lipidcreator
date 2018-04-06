@@ -106,6 +106,9 @@ namespace LipidCreator
             tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
             tutorial = new Tutorial(this);
             changeTab(2);
+            
+            Rectangle r = Screen.FromControl(this).Bounds;
+            Console.WriteLine(r.Width);
         }
         
         public void resetLipidCreator(Object sender, EventArgs e)

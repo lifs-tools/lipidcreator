@@ -268,6 +268,8 @@ namespace LipidCreator
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonAddFragment);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
             this.Name = "MediatorMS2Form";
             this.Text = "Mediator MS2 Fragments";

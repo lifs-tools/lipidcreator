@@ -42,7 +42,6 @@ namespace LipidCreator
         Dictionary<string, object[]> elements;
         MS2Form ms2form = null;
         string[] buildingBlocks;
-        bool chemAdding = true;
         bool updating = false;
         bool edit = false;
         MS2Fragment ms2Fragment;
@@ -285,14 +284,6 @@ namespace LipidCreator
                 MessageBox.Show("Fragment must have an either positive or negative charge");
                 return;
             }
-            if (!chemAdding)
-            {
-                foreach (KeyValuePair<string, object[]> row in elements)
-                {
-                    row.Value[0] = -(int)row.Value[0];
-                    row.Value[1] = -(int)row.Value[1];
-                }
-            }
             
             string lipidClass = ms2form.getHeadgroup();
             int charge = Convert.ToInt32(numericUpDownCharge.Value);
@@ -357,6 +348,13 @@ namespace LipidCreator
         
         public void selectBaseComboboxValueChanged(Object sender, EventArgs e)
         {
+            if (selectBaseCombobox.SelectedIndex == 0)
+            {
+                for (int i = 0; i < dataGridViewElements.Rows.Count; ++i){
+                    if ((int)dataGridViewElements.Rows[i].Cells[1].Value < 0) dataGridViewElements.Rows[i].Cells[1].Value = 0;
+                    if ((int)dataGridViewElements.Rows[i].Cells[2].Value < 0) dataGridViewElements.Rows[i].Cells[2].Value = 0;
+                }
+            }
             updateInfo();
         }
 
@@ -366,8 +364,6 @@ namespace LipidCreator
             string chemFormP = "";
             string chemFormN = "";
             string baseName = "";
-            string lBracket = "";
-            string rBracket = "";
             string chrg = "";
             
             if (selectBaseCombobox.SelectedIndex > 0)
@@ -388,20 +384,18 @@ namespace LipidCreator
                 if (elementCount < 0) chemFormN += element + Convert.ToString(-elementCount);
                 if (heavyElementCount < 0) chemFormN += heavyElement + Convert.ToString(-heavyElementCount);
             }
-            if (chemFormP != "" || chemFormN != "")
+            
+            if (numericUpDownCharge.Value > 0) chrg = Convert.ToString(numericUpDownCharge.Value) + "+";
+            else if (numericUpDownCharge.Value < 0) chrg = Convert.ToString(-numericUpDownCharge.Value) + "-";
+            
+            string combinedChemForm = baseName;
+            if (chemFormP.Length > 0 || chemFormN.Length > 0)
             {
-                if (numericUpDownCharge.Value > 0) chrg = "+";
-                else chrg = "+";
-            }
-            string combinedChemForm = "";
-            if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
-            {
-                if (chemFormP.Length > 0) combinedChemForm += " + " + chemFormP;
+                if (chemFormP.Length > 0) combinedChemForm += ((combinedChemForm != "") ? " + " : "") + chemFormP;
                 if (chemFormN.Length > 0) combinedChemForm += " - " + chemFormN;
-                lBracket = "(";
-                rBracket = ")";
             }
-            labelMass.Text = lBracket + baseName + combinedChemForm + rBracket + chrg;
+            if (combinedChemForm != "") labelMass.Text = "(" + combinedChemForm + ")" + chrg;
+            else labelMass.Text = "";
         }
 
         private void numericUpDown1TextChanged(object sender, EventArgs e)

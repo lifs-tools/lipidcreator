@@ -102,6 +102,8 @@ namespace LipidCreator
             this.Text = "About";
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
         }
 

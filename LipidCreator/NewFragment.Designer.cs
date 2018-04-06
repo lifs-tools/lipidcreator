@@ -111,7 +111,6 @@ namespace LipidCreator
             this.labelMass.Name = "label1";
             this.labelMass.Size = new System.Drawing.Size(39, 10);
             this.labelMass.TabIndex = 3;
-            this.labelMass.Text = "0.0 Da";
             // 
             // numericUpDown1
             // 

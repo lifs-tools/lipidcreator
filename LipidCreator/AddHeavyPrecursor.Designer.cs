@@ -282,6 +282,8 @@ namespace LipidCreator
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
         }
 

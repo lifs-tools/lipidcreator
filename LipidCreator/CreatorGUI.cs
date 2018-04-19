@@ -106,16 +106,50 @@ namespace LipidCreator
             }
             tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
             tutorial = new Tutorial(this);
-            changeTab(2);
             
             Rectangle r = Screen.FromControl(this).Bounds;
             double hgt = r.Height * 0.9;
             if (hgt > minWindowHeight)
             {
                 this.Width = (int)hgt;
-                //windowSizeChanged(null, null);
             }
+            glPosAdductCheckbox1.Enabled = false;
+            glPosAdductCheckbox2.Enabled = false;
+            glPosAdductCheckbox3.Enabled = false;
+            glNegAdductCheckbox1.Enabled = false;
+            glNegAdductCheckbox2.Enabled = false;
+            glNegAdductCheckbox3.Enabled = false;
+            glNegAdductCheckbox4.Enabled = false;
             
+            plPosAdductCheckbox1.Enabled = false;
+            plPosAdductCheckbox2.Enabled = false;
+            plPosAdductCheckbox3.Enabled = false;
+            plNegAdductCheckbox1.Enabled = false;
+            plNegAdductCheckbox2.Enabled = false;
+            plNegAdductCheckbox3.Enabled = false;
+            plNegAdductCheckbox4.Enabled = false;
+            
+            slPosAdductCheckbox1.Enabled = false;
+            slPosAdductCheckbox2.Enabled = false;
+            slPosAdductCheckbox3.Enabled = false;
+            slNegAdductCheckbox1.Enabled = false;
+            slNegAdductCheckbox2.Enabled = false;
+            slNegAdductCheckbox3.Enabled = false;
+            slNegAdductCheckbox4.Enabled = false;
+            
+            chPosAdductCheckbox1.Enabled = false;
+            chPosAdductCheckbox2.Enabled = false;
+            chPosAdductCheckbox3.Enabled = false;
+            chNegAdductCheckbox1.Enabled = false;
+            chNegAdductCheckbox2.Enabled = false;
+            chNegAdductCheckbox3.Enabled = false;
+            chNegAdductCheckbox4.Enabled = false;
+            
+            medNegAdductCheckbox1.Enabled = false;
+            medNegAdductCheckbox2.Enabled = false;
+            medNegAdductCheckbox3.Enabled = false;
+            medNegAdductCheckbox4.Enabled = false;
+            changeTab(2);
         }
         
         public void resetLipidCreator(Object sender, EventArgs e)
@@ -184,6 +218,64 @@ namespace LipidCreator
 
         public void changeTabElements(int index)
         {
+        
+            // enable all adduct checkboxes
+            foreach (KeyValuePair<string, Precursor> row in lipidCreator.headgroups)
+            {
+                int category = (int)row.Value.category;
+                switch (category)
+                {
+                    case (int)LipidCategory.GlyceroLipid:
+                        glPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
+                        glPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
+                        glPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
+                        glNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        glNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        glNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        glNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        break;
+                    
+                    case (int)LipidCategory.PhosphoLipid:
+                        plPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
+                        plPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
+                        plPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
+                        plNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        plNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        plNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        plNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        break;
+                        
+                    case (int)LipidCategory.SphingoLipid:
+                        slPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
+                        slPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
+                        slPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
+                        slNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        slNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        slNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        slNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        break;
+                        
+                    case (int)LipidCategory.Mediator:
+                        medNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        medNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        medNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        medNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        break;
+                        
+                    case (int)LipidCategory.Cholesterol:
+                        chPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
+                        chPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
+                        chPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
+                        chNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        chNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        chNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        chNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        break;
+                }
+                
+            }
+        
+        
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
             switch((LipidCategory)index)
@@ -2665,7 +2757,7 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreator.assembleLipids();
-            CreatorGUI.analytics("lipidcreator", "create_transition_list");
+            CreatorGUI.analytics("lipidcreator", "create-transition-list");
             LipidsReview lipidsReview = new LipidsReview(lipidCreator);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
@@ -2822,7 +2914,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-            analytics("lipidcreator" + ((args.Length > 0) ? "" : "-standalone"), "launch");
+            analytics("lipidcreator" + ((args.Length > 0) ? "-external" : "-standalone"), "launch");
             CreatorGUI creatorGUI = new CreatorGUI((args.Length > 0) ? args[0] : null);
             Application.Run(creatorGUI);
         }

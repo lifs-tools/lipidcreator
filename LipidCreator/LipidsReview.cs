@@ -63,7 +63,7 @@ namespace LipidCreator
             string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
                 string replicateKey = prec_mass + "/" + prod_mass;
                 if (!replicateKeys.ContainsKey (replicateKey)) {
-                    string note = (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
+                    string note = "replicate of " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
                     replicateKeys.Add(replicateKey, note);
                     transitionListUnique.ImportRow (row);
                 }

@@ -149,6 +149,7 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
                 lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
                 lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
+                lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
             }
             
@@ -230,6 +231,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
                 lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
+                lipidRow[LipidCreator.NOTE] = "";
                 
                 transitionList.Rows.Add(lipidRow);
             }

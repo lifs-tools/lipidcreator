@@ -68,6 +68,7 @@ namespace LipidCreator
         public const string PRODUCT_ADDUCT = "Product Adduct";
         public const string PRODUCT_MZ = "Product Ion m/z";
         public const string PRODUCT_CHARGE = "Product Charge";
+        public const string NOTE = "Note";
         public readonly static string[] DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
@@ -79,7 +80,8 @@ namespace LipidCreator
             PRODUCT_NEUTRAL_FORMULA,
             PRODUCT_ADDUCT,
             PRODUCT_MZ,
-            PRODUCT_CHARGE
+            PRODUCT_CHARGE,
+            NOTE
         };
         
         

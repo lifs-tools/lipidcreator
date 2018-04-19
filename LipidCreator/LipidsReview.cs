@@ -54,22 +54,22 @@ namespace LipidCreator
             currentView = this.transitionList;
             replicates = new ArrayList();
             transitionListUnique = lipidCreatorForm.addDataColumns (new DataTable ());
-            HashSet<String> replicateKeys = new HashSet<String> ();
+            Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
             
             int i = 0;
             foreach (DataRow row in currentView.Rows)
             {
             string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
             string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
-            
-                //string replicateKey = (String)row [LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "/" + (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA] : (String)row [LipidCreator.PRODUCT_NAME]);
                 string replicateKey = prec_mass + "/" + prod_mass;
-                if (!replicateKeys.Contains (replicateKey)) {
-                    replicateKeys.Add (replicateKey);
+                if (!replicateKeys.ContainsKey (replicateKey)) {
+                    string note = (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
+                    replicateKeys.Add(replicateKey, note);
                     transitionListUnique.ImportRow (row);
                 }
                 else
                 {
+                    row[LipidCreator.NOTE] = replicateKeys[replicateKey];
                     replicates.Add(i);
                 }
                 ++i;

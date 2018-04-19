@@ -34,6 +34,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Net;
 
 namespace LipidCreator
 {
@@ -108,7 +109,13 @@ namespace LipidCreator
             changeTab(2);
             
             Rectangle r = Screen.FromControl(this).Bounds;
-            Console.WriteLine(r.Width);
+            double hgt = r.Height * 0.9;
+            if (hgt > minWindowHeight)
+            {
+                this.Width = (int)hgt;
+                //windowSizeChanged(null, null);
+            }
+            
         }
         
         public void resetLipidCreator(Object sender, EventArgs e)
@@ -2658,6 +2665,7 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreator.assembleLipids();
+            CreatorGUI.analytics("lipidcreator", "create_transition_list");
             LipidsReview lipidsReview = new LipidsReview(lipidCreator);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
@@ -2800,11 +2808,21 @@ namespace LipidCreator
             aboutDialog.ShowDialog ();
             aboutDialog.Dispose ();
         }
+        
+        
+        protected async static void analytics(string category, string action)
+        {
+            WebRequest request = WebRequest.Create("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
+            request.Timeout = 5000;
+            WebResponse response = request.GetResponse();  
+            response.Close();  
+        }
     
     
         [STAThread]
         public static void Main(string[] args)
         {
+            analytics("lipidcreator" + ((args.Length > 0) ? "" : "-standalone"), "launch");
             CreatorGUI creatorGUI = new CreatorGUI((args.Length > 0) ? args[0] : null);
             Application.Run(creatorGUI);
         }

@@ -739,7 +739,7 @@ namespace LipidCreator
                 pipeString += entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + ","; // ProdFormula, no prodAdduct
                 pipeString += entry[LipidCreator.PRODUCT_ADDUCT] + ","; // preAdduct
                 pipeString += entry[LipidCreator.PRODUCT_MZ] + ","; // prodMz
-                pipeString += entry[LipidCreator.PRODUCT_CHARGE]; // prodCharge
+                pipeString += entry[LipidCreator.PRODUCT_CHARGE] + ","; // prodCharge
                 pipeString += entry[LipidCreator.NOTE]; // note
                 pipeString += "\n";
             }

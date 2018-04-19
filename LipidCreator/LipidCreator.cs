@@ -719,7 +719,8 @@ namespace LipidCreator
                 "ProductFormula",
                 "ProductAdduct",
                 "ProductMz",
-                "ProductCharge"
+                "ProductCharge",
+                "Note"
             });
             string pipeString = header + "\n";
             double maxMass = 0;
@@ -739,6 +740,7 @@ namespace LipidCreator
                 pipeString += entry[LipidCreator.PRODUCT_ADDUCT] + ","; // preAdduct
                 pipeString += entry[LipidCreator.PRODUCT_MZ] + ","; // prodMz
                 pipeString += entry[LipidCreator.PRODUCT_CHARGE]; // prodCharge
+                pipeString += entry[LipidCreator.NOTE]; // note
                 pipeString += "\n";
             }
             try

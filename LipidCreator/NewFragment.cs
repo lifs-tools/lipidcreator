@@ -39,12 +39,12 @@ namespace LipidCreator
     public partial class NewFragment : Form
     {
 
-        Dictionary<string, object[]> elements;
-        MS2Form ms2form = null;
-        string[] buildingBlocks;
-        bool updating = false;
-        bool edit = false;
-        MS2Fragment ms2Fragment;
+        public Dictionary<string, object[]> elements;
+        public MS2Form ms2form = null;
+        public string[] buildingBlocks;
+        public bool updating = false;
+        public bool edit = false;
+        public MS2Fragment ms2Fragment;
         
 
         public NewFragment(MS2Form ms2form, bool _edit = false)
@@ -148,12 +148,6 @@ namespace LipidCreator
                 }
                 
                 numericUpDownCharge.Value = ms2Fragment.fragmentCharge;
-                
-                
-                
-                
-                
-                
                 
                 Dictionary<int, int> input = ms2Fragment.fragmentElements;
                 Dictionary<string, object[]> data = new Dictionary<string, object[]>();
@@ -295,6 +289,7 @@ namespace LipidCreator
         
             
             Dictionary<int, int> newElements = createElementData(elements);
+            Console.WriteLine(buildingBlocks[selectBaseCombobox.SelectedIndex]);
             MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 

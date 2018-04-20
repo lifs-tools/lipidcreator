@@ -148,18 +148,27 @@ namespace LipidCreator
             medNegAdductCheckbox2.Enabled = false;
             medNegAdductCheckbox3.Enabled = false;
             medNegAdductCheckbox4.Enabled = false;
-            changeTab(2);
+            changeTab(0);
         }
         
-        public void resetLipidCreator(Object sender, EventArgs e)
+        
+        public void resetLipidCreatorMenu(Object sender, EventArgs e)
         {
-            DialogResult mbr = MessageBox.Show ("Are you sure to reset complete LipidCreator? All information and settings will be discarded.", "Reset LipidCreator", MessageBoxButtons.YesNo);
+            resetLipidCreator();
+        }
+        
+        
+        public bool resetLipidCreator()
+        {
+            DialogResult mbr = MessageBox.Show ("You are going to reset LipidCreator. All information and settings will be discarded. Are you sure?", "Reset LipidCreator", MessageBoxButtons.YesNo);
             if (mbr == DialogResult.Yes) {
                 lipidCreator = new LipidCreator(inputParameters);
                 resetAllLipids();
                 refreshRegisteredLipidsTable();
                 changeTab((int)currentIndex);
+                return true;
             }
+            return false;
         }
         
         public void resetAllLipids()

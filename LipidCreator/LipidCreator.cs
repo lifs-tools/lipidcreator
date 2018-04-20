@@ -40,6 +40,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using SkylineTool;
+using System.Net;
+using System.Threading;
 
 namespace LipidCreator
 {   
@@ -804,6 +806,28 @@ namespace LipidCreator
         
         
         
+        
+        public static void analytics(string category, string action)
+        {
+            Thread th = new Thread(() => analyticsRequest(category, action));
+            th.Start();
+            
+        }
+        
+        public static void analyticsRequest(string category, string action)
+        {
+            try
+            {
+                WebRequest request = WebRequest.Create("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
+                request.Timeout = 5000;
+                WebResponse response = request.GetResponse();  
+                response.Close();
+            }
+            catch (Exception e)
+            {
+            
+            }
+        }
         
         
         

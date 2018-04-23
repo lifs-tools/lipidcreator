@@ -91,11 +91,11 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
         
-            if (!creatorGUI.resetLipidCreator()) return;
+            // if (!creatorGUI.resetLipidCreator()) return;
         
         
             tutorial = t;
-            tutorialStep = 23;
+            tutorialStep = 25;
             
             
             
@@ -140,7 +140,8 @@ namespace LipidCreator
             creatorGUI.addHeavyPrecursor.ShowInTaskbar = false;
             creatorGUI.addHeavyPrecursor.Show();
             initHeavyLabeled();
-            
+            creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex = 24;
+            creatorGUI.addHeavyPrecursor.textBox1.Text = "13C6d12";
             
             
             
@@ -204,22 +205,13 @@ namespace LipidCreator
         
         public void initHeavyLabeled()
         {
+            creatorGUI.addHeavyPrecursor.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
             creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
+            creatorGUI.addHeavyPrecursor.comboBox2.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.addHeavyPrecursor.textBox1.TextChanged += new EventHandler(textBoxInteraction);
-            
-            /*
-            public System.Windows.Forms.ComboBox comboBox1;
-            public System.Windows.Forms.TextBox textBox1;
-            public System.Windows.Forms.Label label4;
-            public System.Windows.Forms.DataGridView dataGridView1;
-            public System.Windows.Forms.Label label5;
-            public System.Windows.Forms.ComboBox comboBox2;
-            public System.Windows.Forms.ComboBox comboBox3;
-            public System.Windows.Forms.Button button1;
-            public System.Windows.Forms.Button button2;
-            public System.Windows.Forms.Button button3;
-            public System.Windows.Forms.Button button4;
-            */
+            creatorGUI.addHeavyPrecursor.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
+            creatorGUI.addHeavyPrecursor.button1.Click += buttonInteraction;
+            creatorGUI.addHeavyPrecursor.button2.Click += buttonInteraction;
         }
         
         
@@ -348,6 +340,8 @@ namespace LipidCreator
         }
         
         
+        
+        
         public void listBoxInteraction(object sender, System.EventArgs e)
         {
             ListBox box = (ListBox)sender;
@@ -355,6 +349,8 @@ namespace LipidCreator
             else nextEnabled = false;
             tutorialWindow.Refresh();
         }
+        
+        
         
         
         
@@ -368,6 +364,8 @@ namespace LipidCreator
             }
             tutorialWindow.Refresh();
         }
+        
+        
         
         
         
@@ -390,6 +388,8 @@ namespace LipidCreator
             if (creatorGUI.ms2fragmentsForm != null) creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = currentMS2TabIndex;
             
         }
+        
+        
         
         
         
@@ -426,10 +426,14 @@ namespace LipidCreator
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 24)
             {
                 string lipidClass = (string)creatorGUI.addHeavyPrecursor.comboBox1.Items[creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex];
-                nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "d11") && (lipidClass == "PG");
+                nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "13C6d12") && (lipidClass == "PG");
             }
             tutorialWindow.Refresh();
         }
+        
+        
+        
+        
         
         
         public void checkBoxInteraction(Object sender, EventArgs e)
@@ -442,6 +446,9 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public void comboBoxInteraction(Object sender, EventArgs e)
         {
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == 16)
@@ -451,10 +458,18 @@ namespace LipidCreator
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 24)
             {
                 string lipidClass = (string)creatorGUI.addHeavyPrecursor.comboBox1.Items[creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex];
-                nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "d11") && (lipidClass == "PG");
+                nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "13C6d12") && (lipidClass == "PG");
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 27)
+            {
+                nextEnabled = creatorGUI.addHeavyPrecursor.comboBox2.SelectedIndex == 1;
             }
             tutorialWindow.Refresh();
         }
+        
+        
+        
+        
         
         public void tableCellChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
@@ -475,19 +490,57 @@ namespace LipidCreator
                         break;
                     }
                 }
+                creatorGUI.ms2fragmentsForm.Refresh();
             }
-            creatorGUI.ms2fragmentsForm.Refresh();
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 26)
+            {
+                DataGridView dgv = creatorGUI.addHeavyPrecursor.dataGridView1;
+                for (int i = 0; i < dgv.Rows.Count; ++i){
+                    string key = dgv.Rows[i].Cells[0].Value.ToString();
+                    int val = 0;
+                    if (key == "C") val = 6;
+                    
+                    if ((int)creatorGUI.addHeavyPrecursor.currentDict[key][1] != val)
+                    {
+                        nextEnabled = false;
+                        break;
+                    }
+                }
+                creatorGUI.addHeavyPrecursor.Refresh();
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 28)
+            {
+                DataGridView dgv = creatorGUI.addHeavyPrecursor.dataGridView1;
+                for (int i = 0; i < dgv.Rows.Count; ++i){
+                    string key = dgv.Rows[i].Cells[0].Value.ToString();
+                    int val = 0;
+                    if (key == "H") val = 12;
+                    
+                    if ((int)creatorGUI.addHeavyPrecursor.currentDict[key][1] != val)
+                    {
+                        nextEnabled = false;
+                        break;
+                    }
+                }
+                creatorGUI.addHeavyPrecursor.Refresh();
+            }
+            tutorialWindow.Refresh();
         }
+        
+        
+        
+        
         
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-        Console.WriteLine(tutorialStep);
-            if (tutorial == Tutorials.TutorialPRM && (tutorialStep == 10 || tutorialStep == 14 || tutorialStep == 19 || tutorialStep == 21 || tutorialStep == 22))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
         }
+        
+        
         
         
         
@@ -512,6 +565,9 @@ namespace LipidCreator
         
         
         
+        
+        
+        
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {   
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == 21)
@@ -524,6 +580,8 @@ namespace LipidCreator
                 quitTutorial();
             }
         }
+        
+        
         
         
         
@@ -845,7 +903,7 @@ namespace LipidCreator
                     creatorGUI.addHeavyPrecursor.comboBox1.Enabled = true;
                     creatorGUI.addHeavyPrecursor.textBox1.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Select PG and name it 'd20'", "Please select the current lipid class PG and name it with the suffix 'd20'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Select PG and name it '13C6d12'", "Please select the current lipid class PG and name it with the suffix '13C6d12'.");
                     
                     nextEnabled = false;
                     break;
@@ -862,7 +920,9 @@ namespace LipidCreator
                 case 26:
                     changeTab(LipidCategory.PhosphoLipid);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy.");
+                    creatorGUI.addHeavyPrecursor.dataGridView1.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set 13C to 6", "In head group mode, the number of mono isotopic elements is fixed and will be updated, when heavy labeled elements are added. For head group, we want to change the carbons. Please set 13C to 6.");
                     
                     nextEnabled = false;
                     break;
@@ -870,8 +930,74 @@ namespace LipidCreator
                     
                 case 27:
                     changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.addHeavyPrecursor.comboBox2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Change building block to 'Fatty Acid 1'", "To continue with the modification, please change the building block to 'Fatty Acid 1'.");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 28:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.addHeavyPrecursor.dataGridView1.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set 2H to 12", "Since the fatty acid building block has a variable number of elements depending e.g. on the carbon chain length, no fixed mono isotopic element numbers are provided. The heavy labeled elements numbers act as an upper limit for the element. Please set 2H to 12.");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 29:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.addHeavyPrecursor.button2.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Add isotope", "You are adding the heavy isotope by clicking on 'Add isotope'. All fragments of the mono isotopic parent will be copied and are enabled to be updated or deleted.");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 30:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Continue", "All user defined heavy isotopes can be modified by changing the window mode in the upper part. This function will be not explained in detail.");
+                    
+                    break;
+                    
+                    
+                case 31:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    creatorGUI.addHeavyPrecursor.button1.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Close window", "For updating the fragments of the freshly created heavey isotope, please close the window.");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 32:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 33:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy");
+                    
+                    nextEnabled = false;
+                    break;
+                    
+                    
+                case 100:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy");
                     
                     nextEnabled = false;
                     break;

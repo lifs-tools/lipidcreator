@@ -98,10 +98,9 @@ namespace LipidCreator
         string text;
         string instruction;
         public Label paging;
-        //public Image nextEnabledImage;
-        //public Image nextDisabledImage;
         public Image previousEnabledImage;
         public Image previousDisabledImage;
+        public bool previousEnabled;
     
         public TutorialWindow(CreatorGUI creatorGUI, string prefixPath)
         {
@@ -120,8 +119,6 @@ namespace LipidCreator
             closeButton.Size = closeButton.Image.Size;
             this.Controls.Add(closeButton);
             
-            //nextEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-enabled.png");
-            //nextDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/next-disabled.png");
             previousEnabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-enabled.png");
             previousDisabledImage = Image.FromFile(prefixPath + "images/Tutorial/previous-disabled.png");
             
@@ -143,31 +140,42 @@ namespace LipidCreator
             this.Controls.Add(paging);
         }
         
-        public void update(Size size, Point location, string instr, string txt)
+        
+        
+        public void update(Size size, Point location, string instr, string txt, bool prevEnabled = true)
         {
             Size = size;
             Location = location;
             instruction = instr;
             text = txt;
             Visible = true;
+            previousEnabled = prevEnabled;
             Refresh();
             if (Parent != null) Parent.Refresh();
         }
+        
+        
         
         public void closeTutorialWindow(Object sender, EventArgs e)
         {
             creatorGUI.tutorial.quitTutorial();
         }
         
+        
+        
         public void previousTutorialWindow(Object sender, EventArgs e)
         {
-            if (creatorGUI.tutorial.tutorialStep > 1) creatorGUI.tutorial.nextTutorialStep(false);
+            if (previousEnabled) creatorGUI.tutorial.nextTutorialStep(false);
         }
+        
+        
         
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
             if (creatorGUI.tutorial.nextEnabled) creatorGUI.tutorial.nextTutorialStep(true);
         }
+        
+        
     
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -188,8 +196,7 @@ namespace LipidCreator
             g.Dispose();
             
             
-            if (creatorGUI.tutorial.tutorialStep > 1) previous.Image = previousEnabledImage;
-            else previous.Image = previousDisabledImage;
+            previous.Image = previousEnabled ? previousEnabledImage : previousDisabledImage;
             
             next.Enabled = creatorGUI.tutorial.nextEnabled;
             next.Location = new Point(this.Size.Width - next.Size.Width - 20, 40);
@@ -207,6 +214,7 @@ namespace LipidCreator
     }
     
 
+    
     partial class CreatorGUI
     {
         /// <summary>

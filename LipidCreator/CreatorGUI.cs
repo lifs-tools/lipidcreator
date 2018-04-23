@@ -58,6 +58,7 @@ namespace LipidCreator
         public Tutorial tutorial;
         public MS2Form ms2fragmentsForm = null;
         public MediatorMS2Form mediatorMS2fragmentsForm = null;
+        public AddHeavyPrecursor addHeavyPrecursor = null;
         
         
         public CreatorGUI(string inputParameters)
@@ -2731,17 +2732,20 @@ namespace LipidCreator
         
         public void openFilterDialog(Object sender, EventArgs e)
         {
-            FilterDialog filterDialog = new FilterDialog(this, (Lipid)currentLipid);
+            FilterDialog filterDialog = new FilterDialog((Lipid)currentLipid);
             filterDialog.Owner = this;
             filterDialog.ShowInTaskbar = false;
             filterDialog.ShowDialog();
             filterDialog.Dispose();
         }
         
+        
+        
         public void windowSizeChanged(Object sender, EventArgs e)
         {
             lipidsGroupbox.Height = minLipidGridHeight + this.Height - minWindowHeight;
         }
+        
         
         
         public void startTutorial1(Object sender, EventArgs e)
@@ -2750,15 +2754,25 @@ namespace LipidCreator
         }
         
         
+        
         public void openHeavyIsotopeForm(Object sender, EventArgs e)
         {
             if (currentIndex == LipidCategory.NoLipid) return;
-            AddHeavyPrecursor addHeavyPrecursor = new AddHeavyPrecursor(this, currentIndex);
+            addHeavyPrecursor = new AddHeavyPrecursor(this, currentIndex);
             addHeavyPrecursor.Owner = this;
             addHeavyPrecursor.ShowInTaskbar = false;
-            addHeavyPrecursor.ShowDialog();
-            addHeavyPrecursor.Dispose();
-            resetLipid(null, null);
+            
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                addHeavyPrecursor.ShowDialog();
+                addHeavyPrecursor.Dispose();
+            }
+            else
+            {
+                addHeavyPrecursor.Show();
+            }
+            //resetLipid(null, null);
+            
         }
         
         
@@ -2769,9 +2783,20 @@ namespace LipidCreator
             LipidsReview lipidsReview = new LipidsReview(lipidCreator);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
-            lipidsReview.ShowDialog();
-            lipidsReview.Dispose();
+            
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                lipidsReview.ShowDialog();
+                lipidsReview.Dispose();
+            }
+            else
+            {
+                lipidsReview.Show();
+            }
+              
         }
+        
+        
         
         protected void menuImportPredefinedClick(object sender, System.EventArgs e)
         {
@@ -2853,6 +2878,8 @@ namespace LipidCreator
             }
         }
         
+        
+        
         protected void menuExportClick(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -2873,6 +2900,8 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
         
         protected void menuExportSettingsClick(object sender, System.EventArgs e)
         {
@@ -2895,10 +2924,14 @@ namespace LipidCreator
             }
         }
         
+        
+        
         protected void menuExitClick(object sender, System.EventArgs e)
         {
             Application.Exit();
         }
+        
+        
 
         protected void menuAboutClick(object sender, System.EventArgs e)
         {
@@ -2908,6 +2941,7 @@ namespace LipidCreator
             aboutDialog.ShowDialog ();
             aboutDialog.Dispose ();
         }
+    
     
     
         [STAThread]

@@ -12,11 +12,9 @@ namespace LipidCreator
 {
     public partial class FilterDialog : Form
     {
-        CreatorGUI creatorGUI;
         Lipid lipid;
-        public FilterDialog(CreatorGUI _creatorGUI, Lipid _lipid)
+        public FilterDialog(Lipid _lipid)
         {
-            creatorGUI = _creatorGUI;
             lipid = _lipid;
             
             InitializeComponent();

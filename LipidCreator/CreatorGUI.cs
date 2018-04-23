@@ -244,6 +244,8 @@ namespace LipidCreator
 
         public void changeTabElements(int index)
         {
+            this.Refresh();
+        
         
             // enable all adduct checkboxes
             foreach (KeyValuePair<string, Precursor> row in lipidCreator.headgroups)

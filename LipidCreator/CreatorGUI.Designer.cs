@@ -620,6 +620,10 @@ namespace LipidCreator
             this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuOptions, this.menuHelp } );
             
             tabControl = new TabControl();
+            tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+            tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(tabControl_DrawItem);
+
+            
             this.Size = new System.Drawing.Size(windowWidth, minWindowHeight);
             this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeight);
             this.MaximumSize = new System.Drawing.Size(windowWidth, int.MaxValue);

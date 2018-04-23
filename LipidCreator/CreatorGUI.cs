@@ -224,6 +224,23 @@ namespace LipidCreator
             currentTabIndex = ((TabControl)sender).SelectedIndex;
             changeTab(currentTabIndex);            
         }
+        
+        public void tabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            Color color = (e.Index == currentTabIndex) ? Color.White : TabControl.DefaultBackColor;
+            using (Brush br = new SolidBrush (color))
+            {
+                e.Graphics.FillRectangle(br, e.Bounds);
+                SizeF sz = e.Graphics.MeasureString(tabControl.TabPages[e.Index].Text, e.Font);
+                e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
+
+                Rectangle rect = e.Bounds;
+                rect.Offset(0, 1);
+                rect.Inflate(0, -1);
+                e.Graphics.DrawRectangle(Pens.DarkGray, rect);
+                e.DrawFocusRectangle();
+            }
+        }
 
         public void changeTabElements(int index)
         {
@@ -287,6 +304,7 @@ namespace LipidCreator
         
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
+            
             switch((LipidCategory)index)
             {
                 case LipidCategory.GlyceroLipid:

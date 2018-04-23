@@ -352,7 +352,6 @@ namespace LipidCreator
                     pictureBoxFragments.Image = null;
                 }
             }
-            
         }
         
 

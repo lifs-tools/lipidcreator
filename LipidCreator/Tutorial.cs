@@ -66,8 +66,8 @@ namespace LipidCreator
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
                 {(int)Tutorials.TutorialPRM, 80},
-                {(int)Tutorials.TutorialMRM, 0},
-                {(int)Tutorials.TutorialHeavyLabeled, 0}
+                {(int)Tutorials.TutorialMRM, 20},
+                {(int)Tutorials.TutorialHeavyLabeled, 20}
             };
             tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
             tutorialWindow = new TutorialWindow(creatorGUI, creatorGUI.lipidCreator.prefixPath);

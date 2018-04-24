@@ -230,15 +230,15 @@ namespace LipidCreator
             Color color = (e.Index == currentTabIndex) ? Color.White : TabControl.DefaultBackColor;
             using (Brush br = new SolidBrush (color))
             {
-                e.Graphics.FillRectangle(br, e.Bounds);
+                Rectangle rect = e.Bounds;
+                rect.X += 4;
+                rect.Y += 3;
+                rect.Width -= 8;
+                //rect.Height -= 3;
+                e.Graphics.FillRectangle(br, rect);
+                
                 SizeF sz = e.Graphics.MeasureString(tabControl.TabPages[e.Index].Text, e.Font);
                 e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
-
-                Rectangle rect = e.Bounds;
-                rect.Offset(0, 1);
-                rect.Inflate(0, -1);
-                e.Graphics.DrawRectangle(Pens.DarkGray, rect);
-                e.DrawFocusRectangle();
             }
         }
 
@@ -2768,9 +2768,23 @@ namespace LipidCreator
         
         
         
-        public void startTutorial1(Object sender, EventArgs e)
+        public void startFirstTutorial(Object sender, EventArgs e)
         {
             tutorial.startTutorial(Tutorials.TutorialPRM);
+        }
+        
+        
+        
+        public void startSecondTutorial(Object sender, EventArgs e)
+        {
+            tutorial.startTutorial(Tutorials.TutorialMRM);
+        }
+        
+        
+        
+        public void startThirdTutorial(Object sender, EventArgs e)
+        {
+            tutorial.startTutorial(Tutorials.TutorialHeavyLabeled);
         }
         
         

@@ -280,7 +280,9 @@ namespace LipidCreator
         public Button MS2fragmentsLipidButton;
         public Button addHeavyIsotopeButton;
         public Button filtersButton;
-        public Button tutorialStart;
+        public Button startFirstTutorialButton;
+        public Button startSecondTutorialButton;
+        public Button startThirdTutorialButton;
         
         
 
@@ -2184,14 +2186,34 @@ namespace LipidCreator
             DefaultCheckboxBGB = clPosAdductCheckbox1.BackColor.B;
             
             
-            tutorialStart = new Button();
-            homeTab.Controls.Add(tutorialStart);
-            tutorialStart.Text = "Start tutorial";
-            tutorialStart.Width = 150;
-            tutorialStart.Height = 26;
-            tutorialStart.Location = new Point(40, 40);
-            tutorialStart.BackColor = SystemColors.Control;
-            tutorialStart.Click += startTutorial1;
+            startFirstTutorialButton = new Button();
+            homeTab.Controls.Add(startFirstTutorialButton);
+            startFirstTutorialButton.Text = "Start PRM tutorial";
+            startFirstTutorialButton.Width = 150;
+            startFirstTutorialButton.Height = 26;
+            startFirstTutorialButton.Location = new Point(40, 40);
+            startFirstTutorialButton.BackColor = SystemColors.Control;
+            startFirstTutorialButton.Click += startFirstTutorial;
+            
+            
+            startSecondTutorialButton = new Button();
+            homeTab.Controls.Add(startSecondTutorialButton);
+            startSecondTutorialButton.Text = "Start MRM tutorial";
+            startSecondTutorialButton.Width = 150;
+            startSecondTutorialButton.Height = 26;
+            startSecondTutorialButton.Location = new Point(220, 40);
+            startSecondTutorialButton.BackColor = SystemColors.Control;
+            startSecondTutorialButton.Click += startSecondTutorial;
+            
+            
+            startThirdTutorialButton = new Button();
+            homeTab.Controls.Add(startThirdTutorialButton);
+            startThirdTutorialButton.Text = "Start heavy isotope tutorial";
+            startThirdTutorialButton.Width = 170;
+            startThirdTutorialButton.Height = 26;
+            startThirdTutorialButton.Location = new Point(400, 40);
+            startThirdTutorialButton.BackColor = SystemColors.Control;
+            startThirdTutorialButton.Click += startThirdTutorial;
             
             tutorialWindow.Size = new Size(240, 160);
             tutorialWindow.Location = new Point(40, 60);

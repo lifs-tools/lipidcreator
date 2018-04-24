@@ -316,7 +316,7 @@ namespace LipidCreator
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
             this.tabControlFragments.ResumeLayout(false);
             
-            controlElements = new ArrayList(){checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, buttonCancel, buttonOK, buttonAddFragment, isotopeList, labelPositiveDeselectAll, labelPositiveSelectAll, labelNegativeDeselectAll, labelNegativeSelectAll};
+            controlElements = new ArrayList(){checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, buttonCancel, buttonOK, buttonAddFragment, isotopeList, labelPositiveDeselectAll, labelPositiveSelectAll, labelNegativeDeselectAll, labelNegativeSelectAll, menuFragmentItem1, menuFragmentItem2};
         }
 
         #endregion
@@ -344,8 +344,8 @@ namespace LipidCreator
         public ComboBox isotopeList;
         public ArrayList controlElements;
         
-        private ContextMenu contextMenuFragment;
-        private MenuItem menuFragmentItem1;
-        private MenuItem menuFragmentItem2;
+        public ContextMenu contextMenuFragment;
+        public MenuItem menuFragmentItem1;
+        public MenuItem menuFragmentItem2;
     }
 }

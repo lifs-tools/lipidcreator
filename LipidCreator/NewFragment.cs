@@ -289,7 +289,6 @@ namespace LipidCreator
         
             
             Dictionary<int, int> newElements = createElementData(elements);
-            Console.WriteLine(buildingBlocks[selectBaseCombobox.SelectedIndex]);
             MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 

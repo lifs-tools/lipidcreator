@@ -284,8 +284,16 @@ namespace LipidCreator
             newFragment = new NewFragment(this, true);
             newFragment.Owner = this;
             newFragment.ShowInTaskbar = false;
-            newFragment.ShowDialog();
-            newFragment.Dispose();
+            if (creatorGUI.tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                newFragment.ShowDialog();
+                newFragment.Dispose();
+            }
+            else
+            {
+                newFragment.Show();
+            }
+            
         }
         
         

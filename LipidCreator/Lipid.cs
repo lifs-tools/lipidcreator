@@ -99,7 +99,7 @@ namespace LipidCreator
             onlyPrecursors = 0;
             onlyHeavyLabeled = 2;
             headGroupNames = new List<String>();
-            lipidCreator.lipidUpdate.Update += new LipidUpdateEventHandler(this.Update);
+            lipidCreator.Update += new LipidUpdateEventHandler(this.Update);
             
             if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
             {
@@ -545,7 +545,7 @@ namespace LipidCreator
             onlyPrecursors = copy.onlyPrecursors;
             onlyHeavyLabeled = copy.onlyHeavyLabeled;
             headGroupNames = new List<String>();
-            lipidCreator.lipidUpdate.Update += new LipidUpdateEventHandler(this.Update);
+            lipidCreator.Update += new LipidUpdateEventHandler(this.Update);
         
             positiveFragments = new Dictionary<string, HashSet<string>>();
             negativeFragments = new Dictionary<string, HashSet<string>>();

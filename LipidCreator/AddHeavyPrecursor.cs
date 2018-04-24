@@ -550,7 +550,7 @@ namespace LipidCreator
                         break;
                     }
                 }
-                creatorGUI.lipidCreator.lipidUpdate.OnUpdate(new EventArgs());
+                creatorGUI.lipidCreator.OnUpdate(new EventArgs());
                 updateAvailableIsotopes();
             }
         }
@@ -629,7 +629,7 @@ namespace LipidCreator
                             creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, fragment);
                         }
                     }
-                    creatorGUI.lipidCreator.lipidUpdate.OnUpdate(new EventArgs());
+                    creatorGUI.lipidCreator.OnUpdate(new EventArgs());
                     MessageBox.Show("Heavy isotope was successfully added!", "Isotope added");
                 }
             }

@@ -47,20 +47,11 @@ namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
-    public class LipidUpdate 
-    {
-        public event LipidUpdateEventHandler Update;
-        
-        public virtual void OnUpdate(EventArgs e)
-        {
-            LipidUpdateEventHandler handler = Update;
-            if (handler != null) handler(this, e);
-        }
-    }
-
     [Serializable]
     public class LipidCreator
     {   
+    
+        public event LipidUpdateEventHandler Update;
         public const string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
         public Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
@@ -70,7 +61,6 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
-        public LipidUpdate lipidUpdate;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -100,6 +90,11 @@ namespace LipidCreator
             NOTE
         };
         
+        public virtual void OnUpdate(EventArgs e)
+        {
+            LipidUpdateEventHandler handler = Update;
+            if (handler != null) handler(this, e);
+        }
         
         public void readInputFiles()
         {
@@ -180,7 +175,6 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            //String[] tokens = line.Split(new char[] {','}); // StringSplitOptions.RemoveEmptyEntries
                             if (tokens.Length != 20) throw new Exception("invalid line in file, number of columns in line != 20");
                             
                             Precursor headgroup = new Precursor();
@@ -269,7 +263,6 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? prefixPath : "");
-            lipidUpdate = new LipidUpdate();
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
@@ -942,7 +935,7 @@ namespace LipidCreator
                         throw new Exception("Error global import");
                 }
             }
-            lipidUpdate.OnUpdate(new EventArgs());
+            OnUpdate(new EventArgs());
         }
         
         

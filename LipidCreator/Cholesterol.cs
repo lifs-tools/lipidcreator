@@ -66,6 +66,12 @@ namespace LipidCreator
             return xml;
         }
         
+        // synchronize the fragment list with list from LipidCreator root
+        public override void Update(object sender, EventArgs e)
+        {
+            Updating((int)LipidCategory.Cholesterol);
+        }
+        
         
         public override void import(XElement node, string importVersion)
         {

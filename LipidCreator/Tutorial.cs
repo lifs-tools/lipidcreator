@@ -619,10 +619,7 @@ namespace LipidCreator
         }
         
         
-        
-        
-        
-        public void TutorialPRMStep()
+        public void prepareStep()
         {
             disableEverything();
             nextEnabled = true;
@@ -632,6 +629,12 @@ namespace LipidCreator
             creatorGUI.Refresh();
             if (creatorGUI.ms2fragmentsForm != null) creatorGUI.ms2fragmentsForm.Refresh();
             if (creatorGUI.addHeavyPrecursor != null) creatorGUI.addHeavyPrecursor.Refresh();
+        }
+        
+        
+        public void TutorialPRMStep()
+        {
+            prepareStep();
             switch(tutorialStep)
             {   
                 case 1:
@@ -1072,13 +1075,40 @@ namespace LipidCreator
         
         public void TutorialMRMStep()
         {
-        
+            prepareStep();
+            switch(tutorialStep)
+            {   
+                case 1:
+                    changeTab(LipidCategory.NoLipid);
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
+                    nextEnabled = true;
+                    break;
+                    
+                default:
+                    quitTutorial();
+                    break;
+            }
         }
         
         
         public void TutorialHeavyLabeledStep()
         {
         
+            prepareStep();
+            switch(tutorialStep)
+            {   
+                case 1:
+                    changeTab(LipidCategory.NoLipid);
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
+                    nextEnabled = true;
+                    break;
+                    
+                default:
+                    quitTutorial();
+                    break;
+            }
         }
     }    
 }

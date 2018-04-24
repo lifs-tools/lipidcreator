@@ -45,6 +45,19 @@ using System.Threading;
 
 namespace LipidCreator
 {   
+    public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
+
+    public class LipidUpdate 
+    {
+        public event LipidUpdateEventHandler Update;
+        
+        public virtual void OnUpdate(EventArgs e)
+        {
+            LipidUpdateEventHandler handler = Update;
+            if (handler != null) handler(this, e);
+        }
+    }
+
     [Serializable]
     public class LipidCreator
     {   
@@ -57,6 +70,7 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
+        public LipidUpdate lipidUpdate;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -255,6 +269,7 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? prefixPath : "");
+            lipidUpdate = new LipidUpdate();
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
@@ -927,7 +942,7 @@ namespace LipidCreator
                         throw new Exception("Error global import");
                 }
             }
-            
+            lipidUpdate.OnUpdate(new EventArgs());
         }
         
         

@@ -71,6 +71,12 @@ namespace LipidCreator
             return xml;
         }
         
+        // synchronize the fragment list with list from LipidCreator root
+        public override void Update(object sender, EventArgs e)
+        {
+            Updating((int)LipidCategory.SphingoLipid);
+        }
+        
         public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;

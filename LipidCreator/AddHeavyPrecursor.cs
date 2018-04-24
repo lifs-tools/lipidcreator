@@ -536,26 +536,6 @@ namespace LipidCreator
                 string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
                 Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
                 
-                
-                // assemble all available lipids from differend arrays
-                ArrayList allLipids = new ArrayList(creatorGUI.lipidTabList);
-                allLipids.AddRange(creatorGUI.lipidCreator.registeredLipids);
-                foreach (Lipid lipid in allLipids)
-                {
-                    if (lipid != null && lipid.positiveFragments.ContainsKey(heavyHeadgroup)) lipid.positiveFragments.Remove(heavyHeadgroup);
-                    if (lipid != null && lipid.negativeFragments.ContainsKey(heavyHeadgroup)) lipid.negativeFragments.Remove(heavyHeadgroup);
-                }
-                
-                foreach (Lipid lipid in allLipids)
-                {
-                    if (lipid != null)
-                    {
-                        lipid.positiveFragments.Remove(heavyHeadgroup);
-                        lipid.negativeFragments.Remove(heavyHeadgroup);
-                    }
-                }
-                
-                
                 creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Remove(heavyHeadgroup);
                 creatorGUI.lipidCreator.allFragments.Remove(heavyHeadgroup);
                 creatorGUI.lipidCreator.headgroups.Remove(heavyHeadgroup);
@@ -570,6 +550,7 @@ namespace LipidCreator
                         break;
                     }
                 }
+                creatorGUI.lipidCreator.lipidUpdate.OnUpdate(new EventArgs());
                 updateAvailableIsotopes();
             }
         }
@@ -634,24 +615,11 @@ namespace LipidCreator
                     
                     if (heavyPrecursor.category != LipidCategory.Mediator)
                     {
-                        // assemble all available lipids from differend arrays
-                        ArrayList allLipids = new ArrayList(creatorGUI.lipidTabList);
-                        allLipids.AddRange(creatorGUI.lipidCreator.registeredLipids);
-                        foreach (Lipid lipid in allLipids)
-                        {
-                            if (lipid != null && !lipid.positiveFragments.ContainsKey(name)) lipid.positiveFragments.Add(name, new HashSet<string>());
-                            if (lipid != null && !lipid.negativeFragments.ContainsKey(name)) lipid.negativeFragments.Add(name, new HashSet<string>());
-                        }
-                    
                         foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
                         {
                             MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
                             fragment.userDefined = true;
                             creatorGUI.lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, fragment);
-                            
-                            
-                            // Add fragments to existing lipids
-                            foreach (Lipid lipid in allLipids) if (lipid != null) lipid.positiveFragments[name].Add(ms2Fragment.Key);
                             
                         }
                         foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][false])
@@ -659,11 +627,9 @@ namespace LipidCreator
                             MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
                             fragment.userDefined = true;
                             creatorGUI.lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, fragment);
-                            
-                            // Add fragments to existing lipids
-                            foreach (Lipid lipid in allLipids) if (lipid != null) lipid.negativeFragments[name].Add(ms2Fragment.Key);
                         }
                     }
+                    creatorGUI.lipidCreator.lipidUpdate.OnUpdate(new EventArgs());
                     MessageBox.Show("Heavy isotope was successfully added!", "Isotope added");
                 }
             }

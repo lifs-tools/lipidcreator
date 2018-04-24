@@ -65,6 +65,7 @@ namespace LipidCreator
     }
     
     
+    
     [Serializable]
     public class Lipid
     {
@@ -98,6 +99,7 @@ namespace LipidCreator
             onlyPrecursors = 0;
             onlyHeavyLabeled = 2;
             headGroupNames = new List<String>();
+            lipidCreator.lipidUpdate.Update += new LipidUpdateEventHandler(this.Update);
             
             if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
             {
@@ -118,6 +120,52 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        // synchronize the fragment list with list from LipidCreator root
+        public virtual void Update(object sender, EventArgs e)
+        {
+        }
+        
+        public void Updating(int category)
+        {
+            HashSet<string> headgroupsInLipid = new HashSet<string>(positiveFragments.Keys);
+            
+            HashSet<string> headgroupsInLC = new HashSet<string>();
+            foreach (String lipidClass in lipidCreator.categoryToClass[category]) headgroupsInLC.Add(lipidClass);
+            
+            
+            // check for adding headgroups
+            HashSet<string> addHeadgroups = new HashSet<string>(headgroupsInLC);
+            addHeadgroups.ExceptWith(headgroupsInLipid);
+            
+            foreach (string lipidClass in addHeadgroups)
+            {
+                if (!positiveFragments.ContainsKey(lipidClass)) positiveFragments.Add(lipidClass, new HashSet<string>());
+                if (!negativeFragments.ContainsKey(lipidClass)) negativeFragments.Add(lipidClass, new HashSet<string>());
+            
+                foreach (KeyValuePair<string, MS2Fragment> fragment in lipidCreator.allFragments[lipidClass][true])
+                {
+                    positiveFragments[lipidClass].Add(fragment.Value.fragmentName);
+                }
+                
+                foreach (KeyValuePair<string, MS2Fragment> fragment in lipidCreator.allFragments[lipidClass][false])
+                {
+                    negativeFragments[lipidClass].Add(fragment.Value.fragmentName);
+                }
+            }
+            
+            // check for adding headgroups
+            HashSet<string> deleteHeadgroups = new HashSet<string>(headgroupsInLipid);
+            deleteHeadgroups.ExceptWith(headgroupsInLC);
+            
+            foreach (string hg in deleteHeadgroups)
+            {
+                positiveFragments.Remove(hg);
+                negativeFragments.Remove(hg);
+            }
+        }
+        
         
         public virtual void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
@@ -497,6 +545,7 @@ namespace LipidCreator
             onlyPrecursors = copy.onlyPrecursors;
             onlyHeavyLabeled = copy.onlyHeavyLabeled;
             headGroupNames = new List<String>();
+            lipidCreator.lipidUpdate.Update += new LipidUpdateEventHandler(this.Update);
         
             positiveFragments = new Dictionary<string, HashSet<string>>();
             negativeFragments = new Dictionary<string, HashSet<string>>();

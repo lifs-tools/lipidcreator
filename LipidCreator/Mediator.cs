@@ -79,6 +79,12 @@ namespace LipidCreator
             }
         }
         
+        // synchronize the fragment list with list from LipidCreator root
+        public override void Update(object sender, EventArgs e)
+        {
+            Updating((int)LipidCategory.Mediator);
+        }
+        
         
         public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {

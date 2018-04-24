@@ -84,6 +84,7 @@ namespace LipidCreator
             creatorGUI.MS2fragmentsLipidButton.Click += buttonInteraction;
             creatorGUI.addLipidButton.Click += buttonInteraction;
             creatorGUI.addHeavyIsotopeButton.Click += buttonInteraction;
+            creatorGUI.openReviewFormButton.Click += buttonInteraction;
         }
         
         
@@ -95,7 +96,7 @@ namespace LipidCreator
         
         
             tutorial = t;
-            tutorialStep = 31;
+            tutorialStep = 40;
             currentTab = LipidCategory.NoLipid;
             
             
@@ -142,7 +143,6 @@ namespace LipidCreator
             initHeavyLabeled();
             creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex = 24;
             creatorGUI.addHeavyPrecursor.textBox1.Text = "13C6d30";
-            */
             
             XDocument doc;
             try 
@@ -155,6 +155,11 @@ namespace LipidCreator
                 MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
                 Console.WriteLine(ex.StackTrace);
             }
+            */
+            
+            
+            creatorGUI.changeTab(2);
+            creatorGUI.plHgListbox.SetSelected(1, true);
             
             
             
@@ -318,7 +323,7 @@ namespace LipidCreator
         
         
         
-        public void changeTab(LipidCategory lip)
+        public void changeTab(LipidCategory lip, Control control = null)
         {
             if (currentTab != lip)
             {
@@ -327,7 +332,8 @@ namespace LipidCreator
             }
             
             Control tab = (TabPage)creatorGUI.tabList[(int)currentTab];
-            tab.Controls.Add(tutorialArrow);
+            if (control == null) control = tab;
+            control.Controls.Add(tutorialArrow);
             tab.Controls.Add(tutorialWindow);
             tutorialArrow.BringToFront();
             tutorialWindow.BringToFront();
@@ -600,7 +606,7 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -1178,10 +1184,27 @@ namespace LipidCreator
                 case 41:
                     changeTab(LipidCategory.PhosphoLipid);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Continue", "continue", false);
+                    Button alb = creatorGUI.addLipidButton;
+                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1), alb.Location.Y), "rb");
+                    alb.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
                     
                     break;
                     
+                    
+                case 42:
+                    changeTab(LipidCategory.PhosphoLipid, creatorGUI);
+                    
+                    
+                    Button orfb = creatorGUI.openReviewFormButton;
+                    orfb.Enabled = true;
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
+                    
+                    nextEnabled = false;
+                    break;
                     
                 case 100:
                     changeTab(LipidCategory.PhosphoLipid);

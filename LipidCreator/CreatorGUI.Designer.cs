@@ -982,7 +982,7 @@ namespace LipidCreator
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
             tabControl.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
-            tabControl.ItemSize = new Size(160, 32);
+            tabControl.ItemSize = new Size(160, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
             

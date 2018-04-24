@@ -1860,9 +1860,9 @@ namespace LipidCreator
         {
             if (settingListbox) return;
             currentLipid.headGroupNames.Clear();
-            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            foreach(string itemChecked in plHgListbox.SelectedItems)
             {
-                currentLipid.headGroupNames.Add(itemChecked.ToString());
+                currentLipid.headGroupNames.Add(itemChecked);
             }
             
         }

@@ -180,8 +180,7 @@ namespace LipidCreator
                                                       new PLLipid(lipidCreator),
                                                       new SLLipid(lipidCreator),
                                                       new Cholesterol(lipidCreator),
-                                                      new Mediator(lipidCreator)
-                                                      });
+                                                      new Mediator(lipidCreator)});
         }
         
         private void lipidsGridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -213,29 +212,32 @@ namespace LipidCreator
         public void changeTab(int index)
         {
             changingTabForced = true;
-            currentTabIndex = index;
-            tabControl.SelectedIndex = currentTabIndex;
-            changeTabElements(currentTabIndex);
+            currentLipid = (Lipid)lipidTabList[index];
+            currentIndex = (LipidCategory)index;
+            tabControl.SelectedIndex = index;
+            changeTabElements(index);
             changingTabForced = false;
         }
         
-        public void tabIndexChanged(Object sender,  EventArgs e)
+        
+        
+        public void tabIndexChanged(Object sender, EventArgs e)
         {
             if (changingTabForced) return;
-            currentTabIndex = ((TabControl)sender).SelectedIndex;
-            changeTab(currentTabIndex);            
+            changeTab(((TabControl)sender).SelectedIndex);
         }
+        
+        
         
         public void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
-            Color color = (e.Index == currentTabIndex) ? Color.White : TabControl.DefaultBackColor;
+            Color color = (e.Index == (int)currentIndex) ? Color.White : TabControl.DefaultBackColor;
             using (Brush br = new SolidBrush (color))
             {
                 Rectangle rect = e.Bounds;
                 rect.X += 4;
                 rect.Y += 3;
                 rect.Width -= 8;
-                //rect.Height -= 3;
                 e.Graphics.FillRectangle(br, rect);
                 
                 SizeF sz = e.Graphics.MeasureString(tabControl.TabPages[e.Index].Text, e.Font);
@@ -305,8 +307,6 @@ namespace LipidCreator
             }
         
         
-            currentLipid = (Lipid)lipidTabList[index];
-            currentIndex = (LipidCategory)index;
             
             switch((LipidCategory)index)
             {

@@ -981,7 +981,7 @@ namespace LipidCreator
             tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
-            tabControl.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
+            tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
             tabControl.ItemSize = new Size(160, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
@@ -2221,9 +2221,7 @@ namespace LipidCreator
             this.Controls.Add(tutorialWindow);
             this.SizeChanged += new EventHandler(windowSizeChanged);
         
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
-            
-            
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct};
         }
 
         #endregion

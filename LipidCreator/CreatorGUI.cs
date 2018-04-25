@@ -59,6 +59,7 @@ namespace LipidCreator
         public MS2Form ms2fragmentsForm = null;
         public MediatorMS2Form mediatorMS2fragmentsForm = null;
         public AddHeavyPrecursor addHeavyPrecursor = null;
+        public LipidsReview lipidsReview = null;
         
         
         public CreatorGUI(string inputParameters)
@@ -2805,7 +2806,6 @@ namespace LipidCreator
             {
                 addHeavyPrecursor.Show();
             }
-            //resetLipid(null, null);
             
         }
         
@@ -2814,7 +2814,7 @@ namespace LipidCreator
         {
             lipidCreator.assembleLipids();
             LipidCreator.analytics("lipidcreator", "create-transition-list");
-            LipidsReview lipidsReview = new LipidsReview(lipidCreator);
+            lipidsReview = new LipidsReview(lipidCreator);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             

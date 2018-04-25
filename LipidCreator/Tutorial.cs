@@ -65,7 +65,7 @@ namespace LipidCreator
             currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
-                {(int)Tutorials.TutorialPRM, 80},
+                {(int)Tutorials.TutorialPRM, 44},
                 {(int)Tutorials.TutorialMRM, 20},
                 {(int)Tutorials.TutorialHeavyLabeled, 20}
             };
@@ -233,6 +233,14 @@ namespace LipidCreator
         
         
         
+        public void initLipidReview()
+        {
+            creatorGUI.lipidsReview.buttonStoreTransitionList.Click += buttonInteraction;
+            creatorGUI.lipidsReview.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+        }
+        
+        
+        
         public void nextTutorialStep(bool forward)
         {
             tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 1));
@@ -267,6 +275,14 @@ namespace LipidCreator
             {
                 if (creatorGUI.ms2fragmentsForm.newFragment != null) creatorGUI.ms2fragmentsForm.newFragment.Close();
                 creatorGUI.ms2fragmentsForm.Close();
+            }
+            if (creatorGUI.addHeavyPrecursor != null)
+            {
+                creatorGUI.addHeavyPrecursor.Close();
+            }
+            if (creatorGUI.lipidsReview != null)
+            {
+                creatorGUI.lipidsReview.Close();
             }
             creatorGUI.Enabled = true;
             creatorGUI.changeTab((int)currentTab);
@@ -304,20 +320,21 @@ namespace LipidCreator
                 if (creatorGUI.ms2fragmentsForm.newFragment != null)
                 {
                     NewFragment newFrag = creatorGUI.ms2fragmentsForm.newFragment;
-                    foreach (Control control in newFrag.controlElements)
-                    {
-                        control.Enabled = false;
-                    }
+                    foreach (Control control in newFrag.controlElements) control.Enabled = false;
                     creatorGUI.ms2fragmentsForm.Refresh();
                 }
             }
+            
             if (creatorGUI.addHeavyPrecursor != null)
             {
-                foreach (Control control in creatorGUI.addHeavyPrecursor.controlElements)
-                {
-                    control.Enabled = false;
-                }
+                foreach (Control control in creatorGUI.addHeavyPrecursor.controlElements) control.Enabled = false;
                 creatorGUI.addHeavyPrecursor.Refresh();
+            }
+            
+            if (creatorGUI.lipidsReview != null)
+            {
+                foreach (Control control in creatorGUI.lipidsReview.controlElements) control.Enabled = false;
+                creatorGUI.lipidsReview.Refresh();
             }
         }
         
@@ -606,7 +623,7 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -1206,12 +1223,44 @@ namespace LipidCreator
                     nextEnabled = false;
                     break;
                     
-                case 100:
-                    changeTab(LipidCategory.PhosphoLipid);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Dummy", "Dummy");
+                case 43:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    initLipidReview();
+                    
+                    Button bstl = creatorGUI.lipidsReview.buttonStoreTransitionList;
+                    bstl.Enabled = true;
+                    
+                    tutorialArrow.Parent.Controls.Remove(tutorialArrow);
+                    tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+                    creatorGUI.lipidsReview.Controls.Add(tutorialArrow);
+                    creatorGUI.lipidsReview.Controls.Add(tutorialWindow);
+                    tutorialArrow.BringToFront();
+                    tutorialWindow.BringToFront();
+                    
+                    tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "You have created a transition list. To store the list in csv format, please click on 'Store transition list' and choose a folder and filename.", false);
                     
                     nextEnabled = false;
+                    tutorialArrow.Refresh();
+                    tutorialWindow.Refresh();
+                    creatorGUI.lipidsReview.Refresh();
+                    break;
+                    
+                    
+                case 44:
+                    changeTab(LipidCategory.PhosphoLipid);
+                    
+                    tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+                    creatorGUI.lipidsReview.Controls.Add(tutorialWindow);
+                    tutorialWindow.BringToFront();
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");
+                    
+                    tutorialArrow.Refresh();
+                    tutorialWindow.Refresh();
+                    creatorGUI.lipidsReview.Refresh();
                     break;
                     
                     

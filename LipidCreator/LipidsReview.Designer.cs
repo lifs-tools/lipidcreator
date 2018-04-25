@@ -169,17 +169,19 @@ namespace LipidCreator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-
+            
+            controlElements = new ArrayList(){buttonSendToSkyline, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridViewTransitions;
-        private System.Windows.Forms.Button buttonSendToSkyline;
-        private Button buttonStoreTransitionList;
-        private CheckBox checkBoxHideReplicates;
-        private CheckBox checkBoxCreateSpectralLibrary;
-        private Button buttonStoreSpectralLibrary;
-        private Label labelNumberOfTransitions;
+        public System.Windows.Forms.DataGridView dataGridViewTransitions;
+        public System.Windows.Forms.Button buttonSendToSkyline;
+        public Button buttonStoreTransitionList;
+        public CheckBox checkBoxHideReplicates;
+        public CheckBox checkBoxCreateSpectralLibrary;
+        public Button buttonStoreSpectralLibrary;
+        public Label labelNumberOfTransitions;
+        public ArrayList controlElements;
     }
 }

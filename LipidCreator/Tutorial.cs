@@ -96,7 +96,7 @@ namespace LipidCreator
         
         
             tutorial = t;
-            tutorialStep = 40;
+            tutorialStep = 0;
             currentTab = LipidCategory.NoLipid;
             
             

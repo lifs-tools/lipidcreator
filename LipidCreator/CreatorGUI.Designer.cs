@@ -988,6 +988,7 @@ namespace LipidCreator
             
             
             homeTab.Text = "Home";
+            homeTab.BackColor = Color.White;
             
             
             Font homeFont = new Font(homeTab.Font.FontFamily, 8.25F);

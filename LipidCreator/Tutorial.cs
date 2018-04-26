@@ -88,8 +88,6 @@ namespace LipidCreator
             creatorGUI.openReviewFormButton.Click += buttonInteraction;
         }
         
-        
-        
         public void startTutorial(Tutorials t)
         {
         
@@ -97,7 +95,7 @@ namespace LipidCreator
         
         
             tutorial = t;
-            tutorialStep = 1;
+            tutorialStep = 0;
             currentTab = LipidCategory.NoLipid;
             
             
@@ -247,6 +245,7 @@ namespace LipidCreator
         
         public void nextTutorialStep(bool forward)
         {
+        
             tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 1));
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
@@ -346,12 +345,11 @@ namespace LipidCreator
         public void setTutorialControls(Control controlForArrow, Control controlForWindow = null)
         {
             if (controlForWindow == null) controlForWindow = controlForArrow;
-            
+                
+                
             controlForArrow.Controls.Add(tutorialArrow);
             controlForWindow.Controls.Add(tutorialWindow);
             
-            tutorialArrow.BringToFront();
-            tutorialWindow.BringToFront();
         }
         
         
@@ -700,6 +698,9 @@ namespace LipidCreator
             {   
                 case 1:
                     setTutorialControls(creatorGUI.homeTab);
+            creatorGUI.Refresh();
+                    
+                    tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.7), 0), "lt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
                     
@@ -707,9 +708,9 @@ namespace LipidCreator
                     
                     
                 case 2:
+                    Console.WriteLine("update");
                     setTutorialControls(creatorGUI.homeTab);
                     
-                    TabPage p = (TabPage)creatorGUI.tabList[(int)LipidCategory.PhosphoLipid];
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "click on 'Phosholipids' tab", "Let's start. LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators. To go on the lipid assembly form for phopholipids, please click at the 'Phospholipids' tab.");
@@ -724,9 +725,9 @@ namespace LipidCreator
                     ListBox plHG = creatorGUI.plHgListbox;
                     int plHGpg = 0;
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
-                    tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
+                    tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight) + 200), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.");
+                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -829,7 +830,7 @@ namespace LipidCreator
                     
                     
                 case 11:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[0]);
                     currentMS2TabIndex = 0;
                     initMS2Form();
                     
@@ -839,7 +840,8 @@ namespace LipidCreator
                     
                      
                 case 12:
-                    changeMS2Tab(0, (TabPage)creatorGUI.ms2fragmentsForm.tabPages[0]);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[0]);
+                    //changeMS2Tab(0, (TabPage)creatorGUI.ms2fragmentsForm.tabPages[0]);
                     
                     TabControl ms2tc2 = creatorGUI.ms2fragmentsForm.tabControlFragments;
                     tutorialArrow.update(new Point((int)(ms2tc2.ItemSize.Width * ((pgIndex % 16) + 0.5)), 0), "lt");
@@ -1251,6 +1253,7 @@ namespace LipidCreator
                     quitTutorial();
                     break;
             }
+            Console.WriteLine("end step");
         }
         
         

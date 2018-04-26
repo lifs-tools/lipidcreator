@@ -66,28 +66,55 @@ namespace LipidCreator
             fixPoints.Add("lb", new Point(26, 120));
             fixPoints.Add("rt", new Point(134, 0));
             fixPoints.Add("rb", new Point(134, 120));
+            Text = "arrow <-";
         }
         
         public void update(Point location, string dir)
         {
+            BringToFront();
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             this.Visible = true;
-            Refresh();
+            //if (Parent != null) Parent.Refresh();
+            //Refresh();
         }
         
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.BringToFront();
+        Console.WriteLine("arrow");
             this.Size = arrows[direction].Size;
             Graphics g = e.Graphics;
+            
+            
+            Rectangle rect = RectangleToScreen(ClientRectangle);
+            rect.X -= 20;
+            //g.CopyFromScreen(rect.Location, Point.Empty, arrows[direction].Size);
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
-            base.OnPaint(e);
         }
     }
     
     
+    public class Sentinal : Control
+    {
+        public bool inLoop = false;
+    
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (inLoop) return;
+            if (((CreatorGUI)Parent).tutorial.tutorialArrow.Visible && !inLoop)
+            {
+                inLoop = true;
+                ((CreatorGUI)Parent).tutorial.tutorialArrow.Visible = false;
+                
+                ((CreatorGUI)Parent).Refresh();
+                ((CreatorGUI)Parent).tutorial.tutorialArrow.Visible = true;
+                ((CreatorGUI)Parent).Refresh();
+                
+                inLoop = false;
+            }
+        }
+    }
     
     public class TutorialWindow : Control
     {
@@ -144,14 +171,15 @@ namespace LipidCreator
         
         public void update(Size size, Point location, string instr, string txt, bool prevEnabled = true)
         {
+            BringToFront();
             Size = size;
             Location = location;
             instruction = instr;
             text = txt;
             Visible = true;
             previousEnabled = prevEnabled;
-            Refresh();
             if (Parent != null) Parent.Refresh();
+            Refresh();
         }
         
         
@@ -213,7 +241,6 @@ namespace LipidCreator
         }
     }
     
-
     
     partial class CreatorGUI
     {
@@ -226,6 +253,8 @@ namespace LipidCreator
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        
+        /*
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -233,14 +262,15 @@ namespace LipidCreator
                 components.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
+        
 
         #region Windows Form Designer generated code
         public Image deleteImage;
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        public TutorialWindow tutorialWindow;
+        //public TutorialWindow tutorialWindow;
         
         public System.Timers.Timer timerEasterEgg;
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
@@ -283,6 +313,7 @@ namespace LipidCreator
         public Button startFirstTutorialButton;
         public Button startSecondTutorialButton;
         public Button startThirdTutorialButton;
+        public Sentinal sentinal;
         
         
 
@@ -524,6 +555,14 @@ namespace LipidCreator
         public int windowWidth = 1060;
         public int minLipidGridHeight = 200;
         
+        
+        public override void Refresh()
+        {
+            if (sentinal.inLoop) return;
+            Controls.Remove(sentinal);
+            Controls.Add(sentinal);
+        }
+        
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -535,14 +574,18 @@ namespace LipidCreator
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Text = "LipidCreator";
             
+            
+            sentinal = new Sentinal();
+            this.Controls.Add(sentinal);
+            
             this.components = new System.ComponentModel.Container();
             this.timerEasterEgg = new System.Timers.Timer(5);
             this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
-            tutorialWindow.Visible = false;
+            //tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
+            //tutorialWindow.Visible = false;
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
@@ -2216,12 +2259,14 @@ namespace LipidCreator
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             
-            tutorialWindow.Size = new Size(240, 160);
+            /*tutorialWindow.Size = new Size(240, 160);
             tutorialWindow.Location = new Point(40, 60);
             this.Controls.Add(tutorialWindow);
+            */
             this.SizeChanged += new EventHandler(windowSizeChanged);
+            
         
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
         }
 
         #endregion

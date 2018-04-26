@@ -41,7 +41,18 @@ namespace LipidCreator
         public Dictionary<string, Image> arrows;
         public Dictionary<string, Point> fixPoints;
         public string direction;
-
+        Bitmap bmp;
+        
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = cp.ExStyle | 0x20;
+                return cp;
+            }
+        }
+    
         public Overlay(string prefixPath)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -66,7 +77,6 @@ namespace LipidCreator
             fixPoints.Add("lb", new Point(26, 120));
             fixPoints.Add("rt", new Point(134, 0));
             fixPoints.Add("rb", new Point(134, 120));
-            Text = "arrow <-";
         }
         
         public void update(Point location, string dir)
@@ -74,47 +84,36 @@ namespace LipidCreator
             BringToFront();
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
-            this.Visible = true;
-            //if (Parent != null) Parent.Refresh();
-            //Refresh();
+            Size = arrows[direction].Size;
+            
+            Visible = false;
+            Refresh();
+            Application.DoEvents();
+
+            
+            Rectangle screenRectangle = RectangleToScreen(Parent.ClientRectangle);
+            int titleHeight = screenRectangle.Top - Parent.Top;
+            int Right = screenRectangle.Left - Parent.Left;
+
+            bmp = new Bitmap(Parent.Width, Parent.Height);
+            Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
+            Bitmap bmpImage = new Bitmap(2000, 2000);
+            Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
+            bmp = bmpImage.Clone(copy, bmp.PixelFormat);
+            BackgroundImage = bmp;
+            
+            Visible = true;
         }
         
         protected override void OnPaint(PaintEventArgs e)
         {
-        Console.WriteLine("arrow");
-            this.Size = arrows[direction].Size;
             Graphics g = e.Graphics;
-            
-            
-            Rectangle rect = RectangleToScreen(ClientRectangle);
-            rect.X -= 20;
-            //g.CopyFromScreen(rect.Location, Point.Empty, arrows[direction].Size);
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
+            base.OnPaint(e);
         }
     }
     
-    
-    public class Sentinal : Control
-    {
-        public bool inLoop = false;
-    
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (inLoop) return;
-            if (((CreatorGUI)Parent).tutorial.tutorialArrow.Visible && !inLoop)
-            {
-                inLoop = true;
-                ((CreatorGUI)Parent).tutorial.tutorialArrow.Visible = false;
-                
-                ((CreatorGUI)Parent).Refresh();
-                ((CreatorGUI)Parent).tutorial.tutorialArrow.Visible = true;
-                ((CreatorGUI)Parent).Refresh();
-                
-                inLoop = false;
-            }
-        }
-    }
     
     public class TutorialWindow : Control
     {
@@ -254,17 +253,7 @@ namespace LipidCreator
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         
-        /*
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
         
-
         #region Windows Form Designer generated code
         public Image deleteImage;
         public Image editImage;
@@ -313,7 +302,6 @@ namespace LipidCreator
         public Button startFirstTutorialButton;
         public Button startSecondTutorialButton;
         public Button startThirdTutorialButton;
-        public Sentinal sentinal;
         
         
 
@@ -556,12 +544,6 @@ namespace LipidCreator
         public int minLipidGridHeight = 200;
         
         
-        public override void Refresh()
-        {
-            if (sentinal.inLoop) return;
-            Controls.Remove(sentinal);
-            Controls.Add(sentinal);
-        }
         
 
         /// <summary>
@@ -575,8 +557,10 @@ namespace LipidCreator
             this.Text = "LipidCreator";
             
             
+            /*
             sentinal = new Sentinal();
             this.Controls.Add(sentinal);
+            */
             
             this.components = new System.ComponentModel.Container();
             this.timerEasterEgg = new System.Timers.Timer(5);

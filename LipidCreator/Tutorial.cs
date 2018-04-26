@@ -55,6 +55,7 @@ namespace LipidCreator
         public int currentMS2TabIndex;
         public Overlay tutorialArrow;
         public TutorialWindow tutorialWindow;
+        public System.Timers.Timer timer;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -346,10 +347,8 @@ namespace LipidCreator
         {
             if (controlForWindow == null) controlForWindow = controlForArrow;
                 
-                
             controlForArrow.Controls.Add(tutorialArrow);
             controlForWindow.Controls.Add(tutorialWindow);
-            
         }
         
         
@@ -418,19 +417,19 @@ namespace LipidCreator
             {
                 if (e.TabPageIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
                 {
-                    nextTutorialStep(true);
+                    //nextTutorialStep(true);
                     return;
                 }
                 else if (creatorGUI.ms2fragmentsForm != null)
                 {
                     if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 12)
                     {
-                        nextTutorialStep(true);
+                        //nextTutorialStep(true);
                         return;
                     }
                     else if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 33)
                     {
-                        nextTutorialStep(true);
+                        //nextTutorialStep(true);
                         return;
                     }
                     else
@@ -446,14 +445,9 @@ namespace LipidCreator
         }
         
         
-        
         public void tabPostInteraction(Object sender,  EventArgs e)
         {   
-            /*
-            if (creatorGUI.changingTabForced) return;
-            if (tutorial == Tutorials.NoTutorial) return;
-            creatorGUI.changeTab((int)currentTab);
-            */
+           nextTutorialStep(true);
         }
         
         
@@ -682,33 +676,45 @@ namespace LipidCreator
         {
             disableEverything();
             nextEnabled = true;
-            creatorGUI.Enabled = true;
             tutorialWindow.Visible = false;
             tutorialArrow.Visible = false;
-            creatorGUI.Refresh();
-            if (creatorGUI.ms2fragmentsForm != null) creatorGUI.ms2fragmentsForm.Refresh();
-            if (creatorGUI.addHeavyPrecursor != null) creatorGUI.addHeavyPrecursor.Refresh();
         }
         
+        void TransparentBackground(Control parent, Control C)
+        {
+            C.Visible = false;
+
+            C.Refresh();
+            Application.DoEvents();
+
+            Rectangle screenRectangle = C.RectangleToScreen(parent.ClientRectangle);
+            int titleHeight = screenRectangle.Top - parent.Top;
+            int Right = screenRectangle.Left - parent.Left;
+
+            Bitmap bmp = new Bitmap(parent.Width, parent.Height);
+            parent.DrawToBitmap(bmp, new Rectangle(0, 0, parent.Width, parent.Height));
+            Bitmap bmpImage = new Bitmap(bmp);
+            bmp = bmpImage.Clone(new Rectangle(C.Location.X+Right, C.Location.Y + titleHeight, C.Width, C.Height), bmpImage.PixelFormat);
+            C.BackgroundImage = bmp;
+
+            C.Visible = true;
+        }
         
         public void TutorialPRMStep()
         {
             prepareStep();
+            
             switch(tutorialStep)
             {   
                 case 1:
                     setTutorialControls(creatorGUI.homeTab);
-            creatorGUI.Refresh();
                     
-                    tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.7), 0), "lt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
-                    
                     break;
                     
                     
                 case 2:
-                    Console.WriteLine("update");
                     setTutorialControls(creatorGUI.homeTab);
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
@@ -725,7 +731,7 @@ namespace LipidCreator
                     ListBox plHG = creatorGUI.plHgListbox;
                     int plHGpg = 0;
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
-                    tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight) + 200), "tl");
+                    tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
                     
@@ -1253,7 +1259,6 @@ namespace LipidCreator
                     quitTutorial();
                     break;
             }
-            Console.WriteLine("end step");
         }
         
         

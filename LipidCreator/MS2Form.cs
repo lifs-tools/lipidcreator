@@ -129,12 +129,6 @@ namespace LipidCreator
         }
         
         
-        void isShown(object sender, EventArgs e)
-        {
-            Application.DoEvents();
-        }
-        
-        
         
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {

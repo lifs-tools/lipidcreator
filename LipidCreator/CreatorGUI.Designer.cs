@@ -41,7 +41,18 @@ namespace LipidCreator
         public Dictionary<string, Image> arrows;
         public Dictionary<string, Point> fixPoints;
         public string direction;
-
+        Bitmap bmp;
+        
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = cp.ExStyle | 0x20;
+                return cp;
+            }
+        }
+    
         public Overlay(string prefixPath)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -70,16 +81,37 @@ namespace LipidCreator
         
         public void update(Point location, string dir)
         {
+            BringToFront();
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
-            this.Visible = true;
-            Refresh();
+            Size = arrows[direction].Size;
+            
+            // to create the illusion of transprency for the red arrows, a snapshot is taken from the current
+            // frame as the background
+            Visible = false;
+            Parent.Refresh();
+            Application.DoEvents();
+            
+            
+            Rectangle screenRectangle = RectangleToScreen(Parent.ClientRectangle);
+            int titleHeight = screenRectangle.Top - Parent.Top;
+            int Right = screenRectangle.Left - Parent.Left;
+
+            Console.WriteLine("arrow");
+            bmp = new Bitmap(Parent.Width, Parent.Height);
+            Console.WriteLine(Parent.Name);
+            Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
+            Bitmap bmpImage = new Bitmap(2000, 2000);
+            Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
+            bmp = bmpImage.Clone(copy, bmp.PixelFormat);
+            Console.WriteLine(bmp.GetPixel(5, 100));
+            BackgroundImage = bmp;
+            
+            Visible = true;
         }
         
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.BringToFront();
-            this.Size = arrows[direction].Size;
             Graphics g = e.Graphics;
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
@@ -88,10 +120,9 @@ namespace LipidCreator
     }
     
     
-    
     public class TutorialWindow : Control
     {
-        public CreatorGUI creatorGUI;
+        public Tutorial tutorial;
         public PictureBox closeButton;
         public PictureBox previous;
         public Button next;
@@ -102,10 +133,10 @@ namespace LipidCreator
         public Image previousDisabledImage;
         public bool previousEnabled;
     
-        public TutorialWindow(CreatorGUI creatorGUI, string prefixPath)
+        public TutorialWindow(Tutorial _tutorial, string prefixPath)
         {
-            this.creatorGUI = creatorGUI;
-            this.BackColor = Color.White;
+            tutorial = _tutorial;
+            BackColor = Color.White;
             
             closeButton = new PictureBox();
             previous = new PictureBox();
@@ -144,35 +175,36 @@ namespace LipidCreator
         
         public void update(Size size, Point location, string instr, string txt, bool prevEnabled = true)
         {
+            BringToFront();
             Size = size;
             Location = location;
             instruction = instr;
             text = txt;
             Visible = true;
             previousEnabled = prevEnabled;
-            Refresh();
             if (Parent != null) Parent.Refresh();
+            Refresh();
         }
         
         
         
         public void closeTutorialWindow(Object sender, EventArgs e)
         {
-            creatorGUI.tutorial.quitTutorial();
+            tutorial.quitTutorial();
         }
         
         
         
         public void previousTutorialWindow(Object sender, EventArgs e)
         {
-            if (previousEnabled) creatorGUI.tutorial.nextTutorialStep(false);
+            if (previousEnabled) tutorial.nextTutorialStep(false);
         }
         
         
         
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
-            if (creatorGUI.tutorial.nextEnabled) creatorGUI.tutorial.nextTutorialStep(true);
+            if (tutorial.nextEnabled) tutorial.nextTutorialStep(true);
         }
         
         
@@ -198,10 +230,10 @@ namespace LipidCreator
             
             previous.Image = previousEnabled ? previousEnabledImage : previousDisabledImage;
             
-            next.Enabled = creatorGUI.tutorial.nextEnabled;
+            next.Enabled = tutorial.nextEnabled;
             next.Location = new Point(this.Size.Width - next.Size.Width - 20, 40);
             
-            paging.Text = creatorGUI.tutorial.tutorialStep.ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
+            paging.Text = tutorial.tutorialStep.ToString() + " / " + tutorial.maxSteps[(int)tutorial.tutorial];
             paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 15 - paging.Size.Height);
         
             closeButton.Location = new Point(this.Size.Width - 5 - closeButton.Size.Width, 5);
@@ -213,34 +245,22 @@ namespace LipidCreator
         }
     }
     
-
     
     partial class CreatorGUI
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
+        
+        
         #region Windows Form Designer generated code
         public Image deleteImage;
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        public TutorialWindow tutorialWindow;
+        //public TutorialWindow tutorialWindow;
         
         public System.Timers.Timer timerEasterEgg;
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
@@ -524,6 +544,8 @@ namespace LipidCreator
         public int windowWidth = 1060;
         public int minLipidGridHeight = 200;
         
+        
+        
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -531,18 +553,16 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Text = "LipidCreator";
             
-            this.components = new System.ComponentModel.Container();
+            
+            
             this.timerEasterEgg = new System.Timers.Timer(5);
             this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
-            tutorialWindow.Visible = false;
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
@@ -981,7 +1001,7 @@ namespace LipidCreator
             tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
-            tabControl.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
+            tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
             tabControl.ItemSize = new Size(160, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
@@ -2216,14 +2236,14 @@ namespace LipidCreator
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             
-            tutorialWindow.Size = new Size(240, 160);
+            /*tutorialWindow.Size = new Size(240, 160);
             tutorialWindow.Location = new Point(40, 60);
             this.Controls.Add(tutorialWindow);
+            */
             this.SizeChanged += new EventHandler(windowSizeChanged);
+            
         
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab};
-            
-            
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
         }
 
         #endregion

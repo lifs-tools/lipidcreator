@@ -65,6 +65,7 @@ namespace LipidCreator
         private void InitializeComponent()
         {
             this.Size = new System.Drawing.Size(1168, 467);
+            this.Shown += new EventHandler(isShown);
         
             this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
             this.checkedListBoxPositiveFragments = new System.Windows.Forms.CheckedListBox();

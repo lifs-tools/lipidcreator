@@ -286,7 +286,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            controlElements = new ArrayList(){comboBox1, label1, label2, label3, textBox1, label4, dataGridView1, label5, comboBox2, comboBox3, button1, button2, button3, button4, groupBox1, radioButton2, radioButton1};
+            controlElements = new ArrayList(){comboBox1, textBox1, dataGridView1, comboBox2, comboBox3, button1, button2, button3, button4, groupBox1, radioButton2, radioButton1};
         }
 
         #endregion

@@ -86,20 +86,25 @@ namespace LipidCreator
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             Size = arrows[direction].Size;
             
+            // to create the illusion of transprency for the red arrows, a snapshot is taken from the current
+            // frame as the background
             Visible = false;
-            Refresh();
+            Parent.Refresh();
             Application.DoEvents();
-
+            
             
             Rectangle screenRectangle = RectangleToScreen(Parent.ClientRectangle);
             int titleHeight = screenRectangle.Top - Parent.Top;
             int Right = screenRectangle.Left - Parent.Left;
 
+            Console.WriteLine("arrow");
             bmp = new Bitmap(Parent.Width, Parent.Height);
+            Console.WriteLine(Parent.Name);
             Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
             Bitmap bmpImage = new Bitmap(2000, 2000);
             Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
             bmp = bmpImage.Clone(copy, bmp.PixelFormat);
+            Console.WriteLine(bmp.GetPixel(5, 100));
             BackgroundImage = bmp;
             
             Visible = true;
@@ -117,7 +122,7 @@ namespace LipidCreator
     
     public class TutorialWindow : Control
     {
-        public CreatorGUI creatorGUI;
+        public Tutorial tutorial;
         public PictureBox closeButton;
         public PictureBox previous;
         public Button next;
@@ -128,10 +133,10 @@ namespace LipidCreator
         public Image previousDisabledImage;
         public bool previousEnabled;
     
-        public TutorialWindow(CreatorGUI creatorGUI, string prefixPath)
+        public TutorialWindow(Tutorial _tutorial, string prefixPath)
         {
-            this.creatorGUI = creatorGUI;
-            this.BackColor = Color.White;
+            tutorial = _tutorial;
+            BackColor = Color.White;
             
             closeButton = new PictureBox();
             previous = new PictureBox();
@@ -185,21 +190,21 @@ namespace LipidCreator
         
         public void closeTutorialWindow(Object sender, EventArgs e)
         {
-            creatorGUI.tutorial.quitTutorial();
+            tutorial.quitTutorial();
         }
         
         
         
         public void previousTutorialWindow(Object sender, EventArgs e)
         {
-            if (previousEnabled) creatorGUI.tutorial.nextTutorialStep(false);
+            if (previousEnabled) tutorial.nextTutorialStep(false);
         }
         
         
         
         public void nextTutorialWindow(Object sender, EventArgs e)
         {
-            if (creatorGUI.tutorial.nextEnabled) creatorGUI.tutorial.nextTutorialStep(true);
+            if (tutorial.nextEnabled) tutorial.nextTutorialStep(true);
         }
         
         
@@ -225,10 +230,10 @@ namespace LipidCreator
             
             previous.Image = previousEnabled ? previousEnabledImage : previousDisabledImage;
             
-            next.Enabled = creatorGUI.tutorial.nextEnabled;
+            next.Enabled = tutorial.nextEnabled;
             next.Location = new Point(this.Size.Width - next.Size.Width - 20, 40);
             
-            paging.Text = creatorGUI.tutorial.tutorialStep.ToString() + " / " + creatorGUI.tutorial.maxSteps[(int)creatorGUI.tutorial.tutorial];
+            paging.Text = tutorial.tutorialStep.ToString() + " / " + tutorial.maxSteps[(int)tutorial.tutorial];
             paging.Location = new Point(this.Size.Width - 20 - paging.Size.Width, this.Size.Height - 15 - paging.Size.Height);
         
             closeButton.Location = new Point(this.Size.Width - 5 - closeButton.Size.Width, 5);
@@ -243,10 +248,6 @@ namespace LipidCreator
     
     partial class CreatorGUI
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -552,24 +553,16 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Text = "LipidCreator";
             
             
-            /*
-            sentinal = new Sentinal();
-            this.Controls.Add(sentinal);
-            */
             
-            this.components = new System.ComponentModel.Container();
             this.timerEasterEgg = new System.Timers.Timer(5);
             this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
             this.Menu = this.mainMenuLipidCreator;
-            //tutorialWindow = new TutorialWindow(this, lipidCreator.prefixPath);
-            //tutorialWindow.Visible = false;
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();

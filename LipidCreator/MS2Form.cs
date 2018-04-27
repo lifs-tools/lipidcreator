@@ -99,21 +99,27 @@ namespace LipidCreator
             tabChange(0);
         }
         
+        
+        
         public string getHeadgroup()
         {
             if (isotopeList.SelectedIndex == 0) return ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
             return ((string)isotopeList.Items[isotopeList.SelectedIndex]).Replace(Lipid.HEAVY_LABEL_SEPARATOR, "/");
         }
+        
+        
 
         void checkedListBoxMouseLeave(object sender, EventArgs e)
         {
             pictureBoxFragments.Image = fragmentComplete;
         }
         
+        
+        
         void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
-            currentLipid.positiveFragments.Clear();
+            currentLipid.positiveFragments[getHeadgroup()].Clear();
             for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
             {
                 currentLipid.positiveFragments[getHeadgroup()].Add((string)checkedListBoxPositiveFragments.Items[i]);
@@ -122,16 +128,13 @@ namespace LipidCreator
             senderInterupt = false;
         }
         
-        void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
+        
+        void isShown(object sender, EventArgs e)
         {
-            senderInterupt = true;
-            currentLipid.positiveFragments[getHeadgroup()].Clear();
-            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
-            {
-                checkedListBoxPositiveFragments.SetItemChecked(i, false);
-            }
-            senderInterupt = false;
+            Application.DoEvents();
         }
+        
+        
         
         void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
         {
@@ -145,6 +148,21 @@ namespace LipidCreator
             senderInterupt = false;
         }
         
+        
+        
+        void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            currentLipid.positiveFragments[getHeadgroup()].Clear();
+            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
+            {
+                checkedListBoxPositiveFragments.SetItemChecked(i, false);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        
         void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
         {
             senderInterupt = true;
@@ -155,6 +173,9 @@ namespace LipidCreator
             }
             senderInterupt = false;
         }
+        
+        
+        
 
         private void checkedListBoxPositiveMouseHover(object sender, MouseEventArgs e)
         {
@@ -212,6 +233,9 @@ namespace LipidCreator
                 pictureBoxFragments.Image = fragmentComplete;
             }
         }
+        
+        
+        
 
         private void checkedListBoxNegativeMouseHover(object sender, MouseEventArgs e)
         {
@@ -271,12 +295,14 @@ namespace LipidCreator
         }
         
         
+        
         public void contextMenuFragmentPopup(Object sender, EventArgs e)
         {
             editDeletePositive = (CheckedListBox)((ContextMenu)sender).SourceControl;
             Point point = editDeletePositive.PointToClient(Cursor.Position);
             editDeleteIndex = editDeletePositive.IndexFromPoint(point);
         }
+        
         
         
         public void editFragment(Object sender, EventArgs e)
@@ -295,6 +321,7 @@ namespace LipidCreator
             }
             
         }
+        
         
         
         public void deleteFragment(Object sender, EventArgs e)
@@ -316,11 +343,14 @@ namespace LipidCreator
             }
         }
         
+        
 
         public void tabIndexChanged(Object sender, EventArgs e)
         {
             tabChange(((TabControl)sender).SelectedIndex);
         }
+        
+        
         
         
         public void isotopeListComboBoxValueChanged(object sender, EventArgs e)

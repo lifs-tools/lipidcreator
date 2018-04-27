@@ -2745,7 +2745,7 @@ namespace LipidCreator
             }
             else
             {
-                //formToOpen.Show();
+                formToOpen.Show();
             }
         }
         

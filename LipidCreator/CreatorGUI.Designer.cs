@@ -97,14 +97,11 @@ namespace LipidCreator
             int titleHeight = screenRectangle.Top - Parent.Top;
             int Right = screenRectangle.Left - Parent.Left;
 
-            Console.WriteLine("arrow");
             bmp = new Bitmap(Parent.Width, Parent.Height);
-            Console.WriteLine(Parent.Name);
             Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
             Bitmap bmpImage = new Bitmap(2000, 2000);
             Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
             bmp = bmpImage.Clone(copy, bmp.PixelFormat);
-            Console.WriteLine(bmp.GetPixel(5, 100));
             BackgroundImage = bmp;
             
             Visible = true;

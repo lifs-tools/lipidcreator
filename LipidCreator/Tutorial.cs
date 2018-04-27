@@ -343,16 +343,6 @@ namespace LipidCreator
         }
         
         
-        public void formInteraction(Object sender, EventArgs e)
-        {
-        Console.WriteLine("form");
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{32}).Contains(tutorialStep)))
-            {
-                nextTutorialStep(true);
-            }
-        }
-        
-        
         public void setTutorialControls(Control controlForArrow, Control controlForWindow = null)
         {
             if (controlForWindow == null) controlForWindow = controlForArrow;

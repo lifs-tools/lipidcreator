@@ -630,14 +630,9 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
-            }
-            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 32)
-            {
-                creatorGUI.ms2fragmentsForm.Shown += new EventHandler(formInteraction);
-                creatorGUI.ms2fragmentsForm.Show();
             }
         }
         

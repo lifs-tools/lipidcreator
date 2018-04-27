@@ -155,12 +155,12 @@ namespace LipidCreator
                 MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
                 Console.WriteLine(ex.StackTrace);
             }
-            */
             
             
             creatorGUI.changeTab(2);
             creatorGUI.plHgListbox.SetSelected(1, true);
             
+            */
             
             
             
@@ -354,6 +354,7 @@ namespace LipidCreator
             tab.Controls.Add(tutorialWindow);
             tutorialArrow.BringToFront();
             tutorialWindow.BringToFront();
+            Console.WriteLine("jepp");
             
             tab.Enabled = true;
             tutorialArrow.Refresh();

@@ -47,6 +47,7 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public CheckedListBox editDeletePositive;
         public int editDeleteIndex;
+        public int hoveredIndex;
         
         public MS2Form(CreatorGUI creatorGUI)
         {
@@ -92,7 +93,7 @@ namespace LipidCreator
             }
             if (tabPages.Count > 16) {
                 tabControlFragments.Multiline = true;
-                tabControlFragments.ItemSize = new Size(tabControlFragments.Width / 16 + 1, 20);
+                tabControlFragments.ItemSize = new Size(tabControlFragments.Width / 16 - 1, 20);
                 tabControlFragments.SizeMode = TabSizeMode.Fixed;
             }
             
@@ -177,10 +178,11 @@ namespace LipidCreator
             toolTip1.Hide(this.checkedListBoxPositiveFragments);
             toolTip1.SetToolTip(this.checkedListBoxNegativeFragments, "");
             Point point = checkedListBoxPositiveFragments.PointToClient(Cursor.Position);
-            int hoveredIndex = checkedListBoxPositiveFragments.IndexFromPoint(point);
+            int hIndex = checkedListBoxPositiveFragments.IndexFromPoint(point);
 
-            if (hoveredIndex != -1)
+            if (hIndex != -1 && hoveredIndex != hIndex)
             {
+                hoveredIndex = hIndex;
                 this.checkedListBoxPositiveFragments.ContextMenu = this.contextMenuFragment;
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
@@ -237,10 +239,11 @@ namespace LipidCreator
             toolTip1.Hide(this.checkedListBoxNegativeFragments);
             toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
-            int hoveredIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
+            int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
 
-            if (hoveredIndex != -1)
+            if (hIndex != -1 && hoveredIndex != hIndex)
             {
+                hoveredIndex = hIndex;
                 this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];

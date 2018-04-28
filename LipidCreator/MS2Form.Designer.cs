@@ -34,27 +34,31 @@ using System.IO;
 namespace LipidCreator
 {
 
+
+    public class CustomPictureBox : PictureBox
+    {
+        public event EventHandler ImageChanged;
+        public Image Image
+        {
+            get
+            {
+                return base.Image;
+            }
+            set
+            {
+                if (base.Image != value)
+                {
+                    base.Image = value;
+                    if (this.ImageChanged != null)
+                        this.ImageChanged(this, new EventArgs());
+                }
+            }
+        }
+    }
+
+
     partial class MS2Form
     {
-        /*
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-        */
 
         #region Windows Form Designer generated code
 
@@ -64,9 +68,8 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.Size = new System.Drawing.Size(1168, 467);
         
-            this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
+            this.pictureBoxFragments = new CustomPictureBox();
             this.checkedListBoxPositiveFragments = new System.Windows.Forms.CheckedListBox();
             this.labelPositiveFragments = new System.Windows.Forms.Label();
             this.labelNegativeFragments = new System.Windows.Forms.Label();
@@ -273,7 +276,7 @@ namespace LipidCreator
             this.tabControlFragments.Location = new System.Drawing.Point(12, 6);
             this.tabControlFragments.Name = "tabControl1";
             this.tabControlFragments.SelectedIndex = 0;
-            this.tabControlFragments.Size = new System.Drawing.Size(1144, 380);
+            this.tabControlFragments.Size = new System.Drawing.Size(1154, 380);
             this.tabControlFragments.TabIndex = 11;
             this.tabControlFragments.SelectedIndexChanged += new System.EventHandler(tabIndexChanged);
             
@@ -302,7 +305,7 @@ namespace LipidCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1168, 440);
+            this.ClientSize = new System.Drawing.Size(1184, 440);
             this.Controls.Add(this.tabControlFragments);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -321,7 +324,7 @@ namespace LipidCreator
 
         #endregion
 
-        public PictureBox pictureBoxFragments;
+        public CustomPictureBox pictureBoxFragments;
         public CheckedListBox checkedListBoxPositiveFragments;
         public CheckedListBox checkedListBoxNegativeFragments;
         public Label labelPositiveFragments;

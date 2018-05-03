@@ -621,12 +621,9 @@ namespace LipidCreator
             
             if (currentLipid != null)
             {
-                ((TabPage)tabList[index]).Controls.Add(MS2fragmentsLipidButton);
-                ((TabPage)tabList[index]).Controls.Add(addHeavyIsotopeButton);
-                ((TabPage)tabList[index]).Controls.Add(filtersButton);
-                ((TabPage)tabList[index]).Controls.Add(modifyLipidButton);
+                ((TabPage)tabList[index]).Controls.Add(lcStep2);
+                ((TabPage)tabList[index]).Controls.Add(lcStep3);                
                 modifyLipidButton.Enabled = lipidModifications[(int)currentIndex] > -1;
-                ((TabPage)tabList[index]).Controls.Add(addLipidButton);
             }
         }
         

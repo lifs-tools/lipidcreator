@@ -547,7 +547,7 @@ namespace LipidCreator
         
         public int minWindowHeight = 768;
         public int windowWidth = 1060;
-        public int minLipidGridHeight = 200;
+        public int minLipidGridHeight = 100;
         public int step1Height = 400;
         
         
@@ -686,7 +686,7 @@ namespace LipidCreator
             int sep = 15;
             int sepText = 20;
             int faLength = 150;
-            int topLowButtons = 410;
+            int topLowButtons = 20;
             int leftGroupboxes = 1000;
 
             
@@ -2176,6 +2176,51 @@ namespace LipidCreator
             lipidsGroupbox.Dock = DockStyle.Bottom;
             lipidsGroupbox.Text = "Lipid list";
             lipidsGroupbox.Height = minLipidGridHeight;
+            
+            
+            
+            lcStep2.Controls.Add(addHeavyIsotopeButton);
+            lcStep2.Controls.Add(MS2fragmentsLipidButton);
+            lcStep2.Controls.Add(filtersButton);
+            lcStep2.SendToBack();
+            lcStep2.Location = new Point(10, step1Height + 20);
+            lcStep2.Width = 430;
+            lcStep2.Height = 60;
+            lcStep2.Text = "Step 2: MS/MS selection";
+
+            
+            lcStep3.Controls.Add(modifyLipidButton);
+            lcStep3.Controls.Add(addLipidButton);
+            lcStep3.SendToBack();
+            lcStep3.Width = 320;
+            lcStep3.Height = 60;
+            lcStep3.Location = new Point(plStep1.Left + plStep1.Width - lcStep3.Width, step1Height + 20);
+            lcStep3.Text = "Step 3: Assembly registration";
+            
+            
+
+            addHeavyIsotopeButton.Text = "Manage heavy isotopes";
+            addHeavyIsotopeButton.Width = 150;
+            addHeavyIsotopeButton.Height = 26;
+            addHeavyIsotopeButton.Location = new Point(10, topLowButtons);
+            addHeavyIsotopeButton.BackColor = SystemColors.Control;
+            addHeavyIsotopeButton.Click += openHeavyIsotopeForm;
+
+            MS2fragmentsLipidButton.Text = "MS2 fragments";
+            MS2fragmentsLipidButton.Width = 130;
+            MS2fragmentsLipidButton.Height = 26;
+            MS2fragmentsLipidButton.Location = new Point(170, topLowButtons);
+            MS2fragmentsLipidButton.BackColor = SystemColors.Control;
+            MS2fragmentsLipidButton.Click += openMS2Form;
+
+            filtersButton.Text = "Filters";
+            filtersButton.Width = 100;
+            filtersButton.Height = 26;
+            filtersButton.Location = new Point(310, topLowButtons);
+            filtersButton.BackColor = SystemColors.Control;
+            filtersButton.Click += openFilterDialog;
+            
+            
 
             addLipidButton.Text = "Add lipid";
             addLipidButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2183,38 +2228,20 @@ namespace LipidCreator
             addLipidButton.Height = 26;
             addLipidButton.Image = addImage;
             addLipidButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            addLipidButton.Location = new Point(leftGroupboxes - addLipidButton.Width, topLowButtons);
+            addLipidButton.Location = new Point(lcStep3.Width - addLipidButton.Width - 10, topLowButtons);
             addLipidButton.BackColor = SystemColors.Control;
             addLipidButton.Click += registerLipid;
-
+            
             modifyLipidButton.Text = "Modify lipid";
             modifyLipidButton.Width = 130;
             modifyLipidButton.Height = 26;
-            modifyLipidButton.Location = new Point(leftGroupboxes - addLipidButton.Width - modifyLipidButton.Width - 10, topLowButtons);
+            modifyLipidButton.Location = new Point(lcStep3.Width - addLipidButton.Width - modifyLipidButton.Width - 20, topLowButtons);
             modifyLipidButton.BackColor = SystemColors.Control;
             modifyLipidButton.Click += modifyLipid;
-
-            MS2fragmentsLipidButton.Text = "MS2 fragments";
-            MS2fragmentsLipidButton.Width = 130;
-            MS2fragmentsLipidButton.Height = 26;
-            MS2fragmentsLipidButton.Location = new Point(180, topLowButtons);
-            MS2fragmentsLipidButton.BackColor = SystemColors.Control;
-            MS2fragmentsLipidButton.Click += openMS2Form;
-
-            addHeavyIsotopeButton.Text = "Manage heavy isotopes";
-            addHeavyIsotopeButton.Width = 150;
-            addHeavyIsotopeButton.Height = 26;
-            addHeavyIsotopeButton.Location = new Point(20, topLowButtons);
-            addHeavyIsotopeButton.BackColor = SystemColors.Control;
-            addHeavyIsotopeButton.Click += openHeavyIsotopeForm;
-
-            filtersButton.Text = "Filters";
-            filtersButton.Width = 100;
-            filtersButton.Height = 26;
-            filtersButton.Location = new Point(320, topLowButtons);
-            filtersButton.BackColor = SystemColors.Control;
-            filtersButton.Click += openFilterDialog;
-
+            
+            
+            
+            
             
             
             lipidsGridview.AutoSize = true;

@@ -214,6 +214,7 @@ namespace LipidCreator
             changingTabForced = true;
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
+            Console.WriteLine("changed index");
             tabControl.SelectedIndex = index;
             changeTabElements(index);
             changingTabForced = false;
@@ -232,6 +233,7 @@ namespace LipidCreator
         public void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
             Color color = (e.Index == (int)currentIndex) ? Color.White : TabControl.DefaultBackColor;
+            Console.WriteLine("draw");
             using (Brush br = new SolidBrush (color))
             {
                 Rectangle rect = e.Bounds;

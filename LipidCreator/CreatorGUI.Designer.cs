@@ -162,7 +162,7 @@ namespace LipidCreator
             
             paging.Text = " 1 / 20";
             paging.Font = new Font("Arial", 10);
-            paging.Size = new Size(40, 14);
+            paging.Size = new Size(50, 14);
             paging.AutoSize = false;    
             paging.TextAlign = ContentAlignment.MiddleRight;
             this.Controls.Add(paging);
@@ -179,8 +179,8 @@ namespace LipidCreator
             text = txt;
             Visible = true;
             previousEnabled = prevEnabled;
-            if (Parent != null) Parent.Refresh();
-            Refresh();
+            //if (Parent != null) Parent.Refresh();
+            //Refresh();
         }
         
         

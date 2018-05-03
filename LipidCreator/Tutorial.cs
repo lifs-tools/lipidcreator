@@ -105,7 +105,7 @@ namespace LipidCreator
         
         
             tutorial = t;
-            tutorialStep = 31;
+            tutorialStep = 9;
             currentTab = LipidCategory.NoLipid;
             
             
@@ -142,18 +142,29 @@ namespace LipidCreator
             ms2tc.SelectedIndexChanged += new EventHandler(tabPostInteraction);
             
             
-            creatorGUI.ms2fragmentsForm.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
-            creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
-            creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
+            creatorGUI.ms2fragmentsForm.FormClosing += new FormClosingEventHandler(closingInteraction);
+            creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemCheck += new ItemCheckEventHandler(checkedListBoxInteraction);
+            creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck += new ItemCheckEventHandler(checkedListBoxInteraction);
             creatorGUI.ms2fragmentsForm.buttonAddFragment.Click += buttonInteraction;
             creatorGUI.ms2fragmentsForm.buttonOK.Click += buttonInteraction;
             creatorGUI.ms2fragmentsForm.isotopeList.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
-            creatorGUI.ms2fragmentsForm.contextMenuFragment.Popup += new System.EventHandler(contextMenuPopupInteraction);
-            creatorGUI.ms2fragmentsForm.menuFragmentItem1.Click += new System.EventHandler(buttonInteraction);
-            creatorGUI.ms2fragmentsForm.menuFragmentItem2.Click += new System.EventHandler(buttonInteraction);
+            creatorGUI.ms2fragmentsForm.contextMenuFragment.Popup += new EventHandler(contextMenuPopupInteraction);
+            creatorGUI.ms2fragmentsForm.menuFragmentItem1.Click += new EventHandler(buttonInteraction);
+            creatorGUI.ms2fragmentsForm.menuFragmentItem2.Click += new EventHandler(buttonInteraction);
+            creatorGUI.ms2fragmentsForm.pictureBoxFragments.ImageChanged += new EventHandler(mouseHoverInteraction);
             
             creatorGUI.ms2fragmentsForm.Refresh();
         }
+        
+        
+        public void mouseHoverInteraction(object sender, EventArgs e)
+        {
+            tutorialArrow.BringToFront();
+            tutorialWindow.BringToFront();
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
+        }
+        
         
         
         
@@ -647,9 +658,13 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
-            if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
-            if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
-            if(e.CloseReason != CloseReason.UserClosing) quitTutorial();
+            Console.WriteLine("end");
+            if(e.CloseReason != CloseReason.UserClosing)
+            {
+                
+                Console.WriteLine("end");
+                quitTutorial();
+            }
         }
         
         
@@ -694,7 +709,7 @@ namespace LipidCreator
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
                     tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
+                    tutorialWindow.update(new Size(500, 240), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -707,7 +722,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
+                    tutorialWindow.update(new Size(500, 240), new Point(460, 200), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
                                       
                     
                     plFA1.Text = "12 - 15";
@@ -735,8 +750,8 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(60, 200), "Continue", "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
-                    nextEnabled = true;
                     
+                    nextEnabled = true;
                     break;
                     
                     

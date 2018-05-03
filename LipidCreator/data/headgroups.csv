@@ -1,4 +1,4 @@
-Category,Precursor,C,H,O,N,P,S,d,file,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Building Blocks,Derivative,Heavy Isotope
+Category,Precursor,C,H,O,N,P,S,d,file,#NAME?,+2H,0,#NAME?,-2H,#NAME?,#NAME?,Building Blocks,Derivative,Heavy Isotope
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,8,No,No
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,No,No,Yes,No,No,No,No,3,No,No
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,2,No,No
@@ -39,8 +39,10 @@ Mediator,18-HEPE,20,30,3,0,0,0,0,images/Precursors/18-HEPE.png,No,No,No,Yes,No,N
 Mediator,5-HEPE,20,30,3,0,0,0,0,images/Precursors/5-HEPE.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,5-HETE,20,32,3,0,0,0,0,images/Precursors/5-HETE.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,5-HETE/d8,20,24,3,0,0,0,8,images/Precursors/IS/5-HETE_d8.png,No,No,No,Yes,No,No,No,8,No,Yes
+Mediator,5-HpETE,20,32,4,0,0,0,0,images/Precursors/5-HpETE.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,5-OxoETE,20,30,3,0,0,0,0,images/Precursors/5-OxoETE.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,5-OxoETE/d7,20,23,3,0,0,0,7,images/Precursors/IS/5-OxoETE_d7.png,No,No,No,Yes,No,No,No,8,No,Yes
+Mediator,"5,12-DiHETE",20,32,4,0,0,0,0,"images/Precursors/5,12-DiHETE.png",No,No,No,Yes,No,No,No,8,No,No
 Mediator,"5,6-DiHETE",20,32,4,0,0,0,0,"images/Precursors/5,6-DiHETE.png",No,No,No,Yes,No,No,No,8,No,No
 Mediator,"5,6,15-LXA4",20,32,5,0,0,0,0,"images/Precursors/5,6,15-LXA4.png",No,No,No,Yes,No,No,No,8,No,No
 Mediator,5(6)-EET,20,32,3,0,0,0,0,images/Precursors/5(6)-EET.png,No,No,No,Yes,No,No,No,8,No,No
@@ -67,6 +69,7 @@ Mediator,EPA,20,30,2,0,0,0,0,images/Precursors/EPA.png,No,No,No,Yes,No,No,No,8,N
 Mediator,EPA/d5,20,25,2,0,0,0,5,images/Precursors/IS/EPA_d5.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,Linoleic acid,18,32,2,0,0,0,0,images/Precursors/Linoleic Acid.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,Linoleic acid/d4,18,28,2,0,0,0,4,images/Precursors/IS/Linoleic Acid_d4.png,No,No,No,Yes,No,No,No,8,No,Yes
+Mediator,Linoleic acid/d11,18,21,2,0,0,0,11,images/Precursors/IS/LA_d11.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,LTB4,20,32,4,0,0,0,0,images/Precursors/LTB4.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,LTB4/d4,20,28,4,0,0,0,4,images/Precursors/IS/LTB4_d4.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,LTC4,30,47,9,3,0,1,0,images/Precursors/LTC4.png,No,No,No,Yes,No,No,No,8,No,No
@@ -82,6 +85,7 @@ Mediator,PGD2,20,32,5,0,0,0,0,images/Precursors/PGD2.png,No,No,No,Yes,No,No,No,8
 Mediator,PGD2/d4,20,28,5,0,0,0,4,images/Precursors/IS/PGD2_d4.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,PGE2,20,32,5,0,0,0,0,images/Precursors/PGE2.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,PGE2/d4,20,28,5,0,0,0,4,images/Precursors/IS/PGE2_d4.png,No,No,No,Yes,No,No,No,8,No,Yes
+Mediator,PGE2/d9,20,23,5,0,0,0,9,images/Precursors/IS/PGE2_d9.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,PGF2alpha,20,34,5,0,0,0,0,images/Precursors/PGF2alpha.png,No,No,No,Yes,No,No,No,8,No,No
 Mediator,PGF2alpha/d4,20,30,5,0,0,0,4,images/Precursors/IS/PGF2alpha_d4.png,No,No,No,Yes,No,No,No,8,No,Yes
 Mediator,PGI2,20,32,5,0,0,0,0,images/Precursors/PGI2.png,No,No,No,Yes,No,No,No,8,No,No
@@ -144,4 +148,4 @@ SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,No,No,5,
 SL,M(IP)2C,18,32,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,4,No,No
 SL,MIPC,12,21,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,4,No,No
 SL,SHexCer,6,10,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,Yes,Yes,No,No,Yes,4,No,No
-SL,SM,5,12,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,No,No,4,No,No
+SL,SM,5,12,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,Yes,Yes,4,No,No

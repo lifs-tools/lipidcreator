@@ -211,18 +211,16 @@ namespace LipidCreator
         
         public void changeTab(int index)
         {
+            tabControl.SelectedIndex = index;
             changingTabForced = true;
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
-            Console.WriteLine("changed index");
-            tabControl.SelectedIndex = index;
             changeTabElements(index);
+            tabControl.Refresh();
             changingTabForced = false;
         }
         
-        
-        
-        public void tabIndexChanged(Object sender, EventArgs e)
+        public void tabIndexChanged(Object sender, TabControlCancelEventArgs e)
         {
             if (changingTabForced) return;
             changeTab(((TabControl)sender).SelectedIndex);
@@ -233,7 +231,6 @@ namespace LipidCreator
         public void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
             Color color = (e.Index == (int)currentIndex) ? Color.White : TabControl.DefaultBackColor;
-            Console.WriteLine("draw");
             using (Brush br = new SolidBrush (color))
             {
                 Rectangle rect = e.Bounds;
@@ -1661,8 +1658,6 @@ namespace LipidCreator
             ((PLLipid)currentLipid).isCL = ((CheckBox)sender).Checked;
             if (((CheckBox)sender).Checked)
             {
-                plPictureBox.Image = cardioBackboneImage;
-                plPictureBox.Location = new Point(5, 5);
                 plHgListbox.Visible = false;
                 plHGLabel.Visible = false;
                 plFA1Checkbox3.Visible = false;
@@ -1733,10 +1728,7 @@ namespace LipidCreator
                 clDB4Label.SendToBack();
             }
             else
-            {
-                plPictureBox.Image = phosphoBackboneImage;
-                plPictureBox.Location = new Point(107, 13);
-                
+            {   
                 clFA1Checkbox3.Visible = false;
                 clFA1Checkbox2.Visible = false;
                 clFA1Checkbox1.Visible = false;

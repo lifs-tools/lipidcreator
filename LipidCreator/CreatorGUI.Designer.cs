@@ -547,8 +547,8 @@ namespace LipidCreator
         
         public int minWindowHeight = 768;
         public int windowWidth = 1060;
-        public int minLipidGridHeight = 100;
-        public int step1Height = 400;
+        public int minLipidGridHeight = 140;
+        public int step1Height = 420;
         
         
 
@@ -1014,7 +1014,8 @@ namespace LipidCreator
             tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
             tabControl.Font = tabFont;
-            tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
+            tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
+            //tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
             tabControl.ItemSize = new Size(160, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
@@ -1118,7 +1119,7 @@ namespace LipidCreator
             
 
             clPictureBox.Image = cardioBackboneImage;
-            clPictureBox.Location = new Point(5, 5);
+            clPictureBox.Location = new Point(5, 15);
             clPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             clPictureBox.SendToBack();
             
@@ -1126,7 +1127,7 @@ namespace LipidCreator
 
             clFA1Combobox.BringToFront();
             clFA1Textbox.BringToFront();
-            clFA1Textbox.Location = new Point(400, 64);
+            clFA1Textbox.Location = new Point(400, 74);
             clFA1Textbox.Width = faLength;
             clFA1Textbox.TextChanged += new EventHandler(clFA1TextboxValueChanged);
             toolTip.SetToolTip(clFA1Textbox, formattingFA);
@@ -1211,7 +1212,7 @@ namespace LipidCreator
 
             clFA2Combobox.BringToFront();
             clFA2Textbox.BringToFront();
-            clFA2Textbox.Location = new Point(312, 144);
+            clFA2Textbox.Location = new Point(312, 154);
             clFA2Textbox.Width = faLength;
             clFA2Textbox.TextChanged += new EventHandler(clFA2TextboxValueChanged);
             toolTip.SetToolTip(clFA2Textbox, formattingFA);
@@ -1257,7 +1258,7 @@ namespace LipidCreator
 
             clFA3Combobox.BringToFront();
             clFA3Textbox.BringToFront();
-            clFA3Textbox.Location = new Point(436, 260);
+            clFA3Textbox.Location = new Point(436, 270);
             clFA3Textbox.Width = faLength;
             clFA3Textbox.TextChanged += new EventHandler(clFA3TextboxValueChanged);
             toolTip.SetToolTip(clFA3Textbox, formattingFA);
@@ -1308,7 +1309,7 @@ namespace LipidCreator
 
             clFA4Combobox.BringToFront();
             clFA4Textbox.BringToFront();
-            clFA4Textbox.Location = new Point(350, 344);
+            clFA4Textbox.Location = new Point(350, 354);
             clFA4Textbox.Width = faLength;
             clFA4Textbox.TextChanged += new EventHandler(clFA4TextboxValueChanged);
             toolTip.SetToolTip(clFA4Textbox, formattingFA);
@@ -1399,7 +1400,7 @@ namespace LipidCreator
             
             glStep1.SendToBack();
             glStep1.Location = new Point(10, 10);
-            glStep1.Width = Width - 40;
+            glStep1.Width = Width - 50;
             glStep1.Height = step1Height;
             glStep1.Text = "Step 1: Precursor selection";
             
@@ -1669,13 +1670,13 @@ namespace LipidCreator
             
             plStep1.SendToBack();
             plStep1.Location = new Point(10, 10);
-            plStep1.Width = Width - 40;
+            plStep1.Width = Width - 50;
             plStep1.Height = step1Height;
             plStep1.Text = "Step 1: Precursor selection";
 
             plFA1Combobox.BringToFront();
             plFA1Textbox.BringToFront();
-            plFA1Textbox.Location = new Point(400, 64);
+            plFA1Textbox.Location = new Point(400, 74);
             plFA1Textbox.Width = faLength;
             plFA1Textbox.Text = "0, 2, 4, 6-7";
             plFA1Textbox.TextChanged += new EventHandler(plFA1TextboxValueChanged);
@@ -1719,7 +1720,7 @@ namespace LipidCreator
 
             plFA2Combobox.BringToFront();
             plFA2Textbox.BringToFront();
-            plFA2Textbox.Location = new Point(312, 144);
+            plFA2Textbox.Location = new Point(312, 154);
             plFA2Textbox.Width = faLength;
             plFA2Textbox.Text = "2, 5, 17-19";
             plFA2Textbox.TextChanged += new EventHandler(plFA2TextboxValueChanged);
@@ -1820,7 +1821,7 @@ namespace LipidCreator
 
 
             plPictureBox.Image = phosphoBackboneImage;
-            plPictureBox.Location = new Point(107, 13);
+            plPictureBox.Location = new Point(107, 23);
             plPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             plPictureBox.SendToBack();
             
@@ -1863,7 +1864,7 @@ namespace LipidCreator
             
             slStep1.SendToBack();
             slStep1.Location = new Point(10, 10);
-            slStep1.Width = Width - 40;
+            slStep1.Width = Width - 50;
             slStep1.Height = step1Height;
             slStep1.Text = "Step 1: Precursor selection";
 
@@ -2011,7 +2012,7 @@ namespace LipidCreator
             
             chStep1.SendToBack();
             chStep1.Location = new Point(10, 10);
-            chStep1.Width = Width - 40;
+            chStep1.Width = Width - 50;
             chStep1.Height = step1Height;
             chStep1.Text = "Step 1: Precursor selection";
             
@@ -2126,7 +2127,7 @@ namespace LipidCreator
             
             medStep1.SendToBack();
             medStep1.Location = new Point(10, 10);
-            medStep1.Width = Width - 40;
+            medStep1.Width = Width - 50;
             medStep1.Height = step1Height;
             medStep1.Text = "Step 1: Precursor selection";
             

@@ -571,7 +571,7 @@ namespace LipidCreator
                     chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
                     chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
                     chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
-                    addLipidButton.Text = "Add cholesterol";
+                    addLipidButton.Text = "Add cholesterols";
                     chContainsEster.Checked = currentCHLipid.containsEster;
                     
                     chFATextbox.Text = currentCHLipid.fag.lengthInfo;
@@ -608,7 +608,7 @@ namespace LipidCreator
                     medNegAdductCheckbox2.Checked = currentMedLipid.adducts["-2H"];
                     medNegAdductCheckbox3.Checked = currentMedLipid.adducts["+HCOO"];
                     medNegAdductCheckbox4.Checked = currentMedLipid.adducts["+CH3COO"];
-                    addLipidButton.Text = "Add mediator";
+                    addLipidButton.Text = "Add mediators";
                     break;
                     
                 default:

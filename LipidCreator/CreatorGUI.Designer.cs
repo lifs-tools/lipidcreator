@@ -422,6 +422,14 @@ namespace LipidCreator
         public GroupBox chPositiveAdduct;
         public GroupBox chNegativeAdduct;
         public GroupBox medNegativeAdduct;
+        
+        public GroupBox glStep1;
+        public GroupBox plStep1;
+        public GroupBox slStep1;
+        public GroupBox chStep1;
+        public GroupBox medStep1;
+        public GroupBox lcStep2;
+        public GroupBox lcStep3;
 
         public CheckBox clPosAdductCheckbox1;
         public CheckBox clPosAdductCheckbox2;
@@ -540,7 +548,7 @@ namespace LipidCreator
         public int minWindowHeight = 768;
         public int windowWidth = 1060;
         public int minLipidGridHeight = 200;
-        
+        public int step1Height = 400;
         
         
 
@@ -924,6 +932,14 @@ namespace LipidCreator
             chPositiveAdduct = new GroupBox();
             chNegativeAdduct = new GroupBox();
             medNegativeAdduct = new GroupBox();
+            
+            glStep1 = new GroupBox();
+            plStep1 = new GroupBox();
+            slStep1 = new GroupBox();
+            chStep1 = new GroupBox();
+            medStep1 = new GroupBox();
+            lcStep2 = new GroupBox();
+            lcStep3 = new GroupBox();
 
             clPosAdductCheckbox1 = new CheckBox();
             clPosAdductCheckbox2 = new CheckBox();
@@ -1013,46 +1029,47 @@ namespace LipidCreator
             
 
             // tab for cardiolipins
-            phospholipidsTab.Controls.Add(clFA1Checkbox3);
-            phospholipidsTab.Controls.Add(clFA1Checkbox2);
-            phospholipidsTab.Controls.Add(clFA1Checkbox1);
-            phospholipidsTab.Controls.Add(clFA2Checkbox3);
-            phospholipidsTab.Controls.Add(clFA2Checkbox2);
-            phospholipidsTab.Controls.Add(clFA2Checkbox1);
-            phospholipidsTab.Controls.Add(clFA3Checkbox3);
-            phospholipidsTab.Controls.Add(clFA3Checkbox2);
-            phospholipidsTab.Controls.Add(clFA3Checkbox1);
-            phospholipidsTab.Controls.Add(clFA4Checkbox3);
-            phospholipidsTab.Controls.Add(clFA4Checkbox2);
-            phospholipidsTab.Controls.Add(clFA4Checkbox1);
-            phospholipidsTab.Controls.Add(clPositiveAdduct);
-            phospholipidsTab.Controls.Add(clNegativeAdduct);
-            phospholipidsTab.Controls.Add(clPictureBox);
-            phospholipidsTab.Controls.Add(clFA1Textbox);
-            phospholipidsTab.Controls.Add(clFA2Textbox);
-            phospholipidsTab.Controls.Add(clFA3Textbox);
-            phospholipidsTab.Controls.Add(clFA4Textbox);
-            phospholipidsTab.Controls.Add(clDB1Textbox);
-            phospholipidsTab.Controls.Add(clDB2Textbox);
-            phospholipidsTab.Controls.Add(clDB3Textbox);
-            phospholipidsTab.Controls.Add(clDB4Textbox);
-            phospholipidsTab.Controls.Add(clRepresentativeFA);
-            phospholipidsTab.Controls.Add(clHydroxyl1Textbox);
-            phospholipidsTab.Controls.Add(clHydroxyl2Textbox);
-            phospholipidsTab.Controls.Add(clHydroxyl3Textbox);
-            phospholipidsTab.Controls.Add(clHydroxyl4Textbox);
-            phospholipidsTab.Controls.Add(clFA1Combobox);
-            phospholipidsTab.Controls.Add(clFA2Combobox);
-            phospholipidsTab.Controls.Add(clFA3Combobox);
-            phospholipidsTab.Controls.Add(clFA4Combobox);
-            phospholipidsTab.Controls.Add(clDB1Label);
-            phospholipidsTab.Controls.Add(clDB2Label);
-            phospholipidsTab.Controls.Add(clDB3Label);
-            phospholipidsTab.Controls.Add(clDB4Label);
-            phospholipidsTab.Controls.Add(clHydroxyl1Label);
-            phospholipidsTab.Controls.Add(clHydroxyl2Label);
-            phospholipidsTab.Controls.Add(clHydroxyl3Label);
-            phospholipidsTab.Controls.Add(clHydroxyl4Label);
+            phospholipidsTab.Controls.Add(plStep1);
+            plStep1.Controls.Add(clFA1Checkbox3);
+            plStep1.Controls.Add(clFA1Checkbox2);
+            plStep1.Controls.Add(clFA1Checkbox1);
+            plStep1.Controls.Add(clFA2Checkbox3);
+            plStep1.Controls.Add(clFA2Checkbox2);
+            plStep1.Controls.Add(clFA2Checkbox1);
+            plStep1.Controls.Add(clFA3Checkbox3);
+            plStep1.Controls.Add(clFA3Checkbox2);
+            plStep1.Controls.Add(clFA3Checkbox1);
+            plStep1.Controls.Add(clFA4Checkbox3);
+            plStep1.Controls.Add(clFA4Checkbox2);
+            plStep1.Controls.Add(clFA4Checkbox1);
+            plStep1.Controls.Add(clPositiveAdduct);
+            plStep1.Controls.Add(clNegativeAdduct);
+            plStep1.Controls.Add(clPictureBox);
+            plStep1.Controls.Add(clFA1Textbox);
+            plStep1.Controls.Add(clFA2Textbox);
+            plStep1.Controls.Add(clFA3Textbox);
+            plStep1.Controls.Add(clFA4Textbox);
+            plStep1.Controls.Add(clDB1Textbox);
+            plStep1.Controls.Add(clDB2Textbox);
+            plStep1.Controls.Add(clDB3Textbox);
+            plStep1.Controls.Add(clDB4Textbox);
+            plStep1.Controls.Add(clRepresentativeFA);
+            plStep1.Controls.Add(clHydroxyl1Textbox);
+            plStep1.Controls.Add(clHydroxyl2Textbox);
+            plStep1.Controls.Add(clHydroxyl3Textbox);
+            plStep1.Controls.Add(clHydroxyl4Textbox);
+            plStep1.Controls.Add(clFA1Combobox);
+            plStep1.Controls.Add(clFA2Combobox);
+            plStep1.Controls.Add(clFA3Combobox);
+            plStep1.Controls.Add(clFA4Combobox);
+            plStep1.Controls.Add(clDB1Label);
+            plStep1.Controls.Add(clDB2Label);
+            plStep1.Controls.Add(clDB3Label);
+            plStep1.Controls.Add(clDB4Label);
+            plStep1.Controls.Add(clHydroxyl1Label);
+            plStep1.Controls.Add(clHydroxyl2Label);
+            plStep1.Controls.Add(clHydroxyl3Label);
+            plStep1.Controls.Add(clHydroxyl4Label);
             Font plFont = new Font(phospholipidsTab.Font.FontFamily, 8.25F);
             phospholipidsTab.Font = plFont;
             
@@ -1333,42 +1350,43 @@ namespace LipidCreator
 
 
             // tab for glycerolipids
-            glycerolipidsTab.Controls.Add(glFA1Checkbox3);
-            glycerolipidsTab.Controls.Add(glFA1Checkbox2);
-            glycerolipidsTab.Controls.Add(glFA1Checkbox1);
-            glycerolipidsTab.Controls.Add(glFA2Checkbox3);
-            glycerolipidsTab.Controls.Add(glFA2Checkbox2);
-            glycerolipidsTab.Controls.Add(glFA2Checkbox1);
-            glycerolipidsTab.Controls.Add(glFA3Checkbox3);
-            glycerolipidsTab.Controls.Add(glFA3Checkbox2);
-            glycerolipidsTab.Controls.Add(glFA3Checkbox1);
-            glycerolipidsTab.Controls.Add(glPictureBox);
-            glycerolipidsTab.Controls.Add(glArrow);
-            glycerolipidsTab.Controls.Add(glFA1Textbox);
-            glycerolipidsTab.Controls.Add(glFA2Textbox);
-            glycerolipidsTab.Controls.Add(glFA3Textbox);
-            glycerolipidsTab.Controls.Add(glDB1Textbox);
-            glycerolipidsTab.Controls.Add(glDB2Textbox);
-            glycerolipidsTab.Controls.Add(glDB3Textbox);
-            glycerolipidsTab.Controls.Add(glHydroxyl1Textbox);
-            glycerolipidsTab.Controls.Add(glHydroxyl2Textbox);
-            glycerolipidsTab.Controls.Add(glHydroxyl3Textbox);
-            glycerolipidsTab.Controls.Add(glFA1Combobox);
-            glycerolipidsTab.Controls.Add(glFA2Combobox);
-            glycerolipidsTab.Controls.Add(glFA3Combobox);
-            glycerolipidsTab.Controls.Add(glHgListbox);
-            glycerolipidsTab.Controls.Add(glHGLabel);
-            glycerolipidsTab.Controls.Add(glContainsSugar);
-            glycerolipidsTab.Controls.Add(glDB1Label);
-            glycerolipidsTab.Controls.Add(glDB2Label);
-            glycerolipidsTab.Controls.Add(glDB3Label);
-            glycerolipidsTab.Controls.Add(glHydroxyl1Label);
-            glycerolipidsTab.Controls.Add(glHydroxyl2Label);
-            glycerolipidsTab.Controls.Add(glHydroxyl3Label);
-            glycerolipidsTab.Controls.Add(glRepresentativeFA);
-            glycerolipidsTab.Controls.Add(glPositiveAdduct);
-            glycerolipidsTab.Controls.Add(glNegativeAdduct);
-            glycerolipidsTab.Controls.Add(easterText);
+            glycerolipidsTab.Controls.Add(glStep1);
+            glStep1.Controls.Add(glFA1Checkbox3);
+            glStep1.Controls.Add(glFA1Checkbox2);
+            glStep1.Controls.Add(glFA1Checkbox1);
+            glStep1.Controls.Add(glFA2Checkbox3);
+            glStep1.Controls.Add(glFA2Checkbox2);
+            glStep1.Controls.Add(glFA2Checkbox1);
+            glStep1.Controls.Add(glFA3Checkbox3);
+            glStep1.Controls.Add(glFA3Checkbox2);
+            glStep1.Controls.Add(glFA3Checkbox1);
+            glStep1.Controls.Add(glPictureBox);
+            glStep1.Controls.Add(glArrow);
+            glStep1.Controls.Add(glFA1Textbox);
+            glStep1.Controls.Add(glFA2Textbox);
+            glStep1.Controls.Add(glFA3Textbox);
+            glStep1.Controls.Add(glDB1Textbox);
+            glStep1.Controls.Add(glDB2Textbox);
+            glStep1.Controls.Add(glDB3Textbox);
+            glStep1.Controls.Add(glHydroxyl1Textbox);
+            glStep1.Controls.Add(glHydroxyl2Textbox);
+            glStep1.Controls.Add(glHydroxyl3Textbox);
+            glStep1.Controls.Add(glFA1Combobox);
+            glStep1.Controls.Add(glFA2Combobox);
+            glStep1.Controls.Add(glFA3Combobox);
+            glStep1.Controls.Add(glHgListbox);
+            glStep1.Controls.Add(glHGLabel);
+            glStep1.Controls.Add(glContainsSugar);
+            glStep1.Controls.Add(glDB1Label);
+            glStep1.Controls.Add(glDB2Label);
+            glStep1.Controls.Add(glDB3Label);
+            glStep1.Controls.Add(glHydroxyl1Label);
+            glStep1.Controls.Add(glHydroxyl2Label);
+            glStep1.Controls.Add(glHydroxyl3Label);
+            glStep1.Controls.Add(glRepresentativeFA);
+            glStep1.Controls.Add(glPositiveAdduct);
+            glStep1.Controls.Add(glNegativeAdduct);
+            glStep1.Controls.Add(easterText);
             glycerolipidsTab.Parent = tabControl;
             glycerolipidsTab.Text = "Glycerolipids";
             glycerolipidsTab.Location = new Point(0, 0);
@@ -1379,7 +1397,12 @@ namespace LipidCreator
             Font glFont = new Font(glycerolipidsTab.Font.FontFamily, 8.25F);
             glycerolipidsTab.Font = glFont;
             
-
+            glStep1.SendToBack();
+            glStep1.Location = new Point(10, 10);
+            glStep1.Width = Width - 40;
+            glStep1.Height = step1Height;
+            glStep1.Text = "Step 1: Precursor selection";
+            
             
             
             easterText.Location = new Point(1030, 5);
@@ -1611,31 +1634,31 @@ namespace LipidCreator
 
 
             // tab for phospholipids
-            phospholipidsTab.Controls.Add(plFA1Checkbox3);
-            phospholipidsTab.Controls.Add(plFA1Checkbox2);
-            phospholipidsTab.Controls.Add(plFA1Checkbox1);
-            //phospholipidsTab.Controls.Add(plFA2Checkbox3);
-            //phospholipidsTab.Controls.Add(plFA2Checkbox2);
-            phospholipidsTab.Controls.Add(plFA2Checkbox1);
-            phospholipidsTab.Controls.Add(plIsCL);
-            phospholipidsTab.Controls.Add(plPictureBox);
-            phospholipidsTab.Controls.Add(plFA1Textbox);
-            phospholipidsTab.Controls.Add(plFA2Textbox);
-            phospholipidsTab.Controls.Add(plDB1Textbox);
-            phospholipidsTab.Controls.Add(plDB2Textbox);
-            phospholipidsTab.Controls.Add(plHydroxyl1Textbox);
-            phospholipidsTab.Controls.Add(plHydroxyl2Textbox);
-            phospholipidsTab.Controls.Add(plFA1Combobox);
-            phospholipidsTab.Controls.Add(plFA2Combobox);
-            phospholipidsTab.Controls.Add(plDB1Label);
-            phospholipidsTab.Controls.Add(plDB2Label);
-            phospholipidsTab.Controls.Add(plHydroxyl1Label);
-            phospholipidsTab.Controls.Add(plHydroxyl2Label);
-            phospholipidsTab.Controls.Add(plHgListbox);
-            phospholipidsTab.Controls.Add(plHGLabel);
-            phospholipidsTab.Controls.Add(plRepresentativeFA);
-            phospholipidsTab.Controls.Add(plPositiveAdduct);
-            phospholipidsTab.Controls.Add(plNegativeAdduct);
+            
+            phospholipidsTab.Controls.Add(plStep1);
+            plStep1.Controls.Add(plFA1Checkbox3);
+            plStep1.Controls.Add(plFA1Checkbox2);
+            plStep1.Controls.Add(plFA1Checkbox1);
+            plStep1.Controls.Add(plFA2Checkbox1);
+            plStep1.Controls.Add(plIsCL);
+            plStep1.Controls.Add(plPictureBox);
+            plStep1.Controls.Add(plFA1Textbox);
+            plStep1.Controls.Add(plFA2Textbox);
+            plStep1.Controls.Add(plDB1Textbox);
+            plStep1.Controls.Add(plDB2Textbox);
+            plStep1.Controls.Add(plHydroxyl1Textbox);
+            plStep1.Controls.Add(plHydroxyl2Textbox);
+            plStep1.Controls.Add(plFA1Combobox);
+            plStep1.Controls.Add(plFA2Combobox);
+            plStep1.Controls.Add(plDB1Label);
+            plStep1.Controls.Add(plDB2Label);
+            plStep1.Controls.Add(plHydroxyl1Label);
+            plStep1.Controls.Add(plHydroxyl2Label);
+            plStep1.Controls.Add(plHgListbox);
+            plStep1.Controls.Add(plHGLabel);
+            plStep1.Controls.Add(plRepresentativeFA);
+            plStep1.Controls.Add(plPositiveAdduct);
+            plStep1.Controls.Add(plNegativeAdduct);
             phospholipidsTab.Parent = tabControl;
             phospholipidsTab.Text = "Phospholipids";
             phospholipidsTab.Location = new Point(0, 0);
@@ -1643,6 +1666,12 @@ namespace LipidCreator
             phospholipidsTab.AutoSize = true;
             phospholipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             phospholipidsTab.BackColor = Color.White;
+            
+            plStep1.SendToBack();
+            plStep1.Location = new Point(10, 10);
+            plStep1.Width = Width - 40;
+            plStep1.Height = step1Height;
+            plStep1.Text = "Step 1: Precursor selection";
 
             plFA1Combobox.BringToFront();
             plFA1Textbox.BringToFront();
@@ -1804,23 +1833,24 @@ namespace LipidCreator
 
 
             // tab for sphingolipids
-            sphingolipidsTab.Controls.Add(slPictureBox);
-            sphingolipidsTab.Controls.Add(slLCBTextbox);
-            sphingolipidsTab.Controls.Add(slFATextbox);
-            sphingolipidsTab.Controls.Add(slDB1Textbox);
-            sphingolipidsTab.Controls.Add(slDB2Textbox);
-            sphingolipidsTab.Controls.Add(slLCBCombobox);
-            sphingolipidsTab.Controls.Add(slFACombobox);
-            sphingolipidsTab.Controls.Add(slDB1Label);
-            sphingolipidsTab.Controls.Add(slDB2Label);
-            sphingolipidsTab.Controls.Add(slHGLabel);
-            sphingolipidsTab.Controls.Add(slHgListbox);
-            sphingolipidsTab.Controls.Add(slLCBHydroxyCombobox);
-            sphingolipidsTab.Controls.Add(slFAHydroxyCombobox);
-            sphingolipidsTab.Controls.Add(slFAHydroxyLabel);
-            sphingolipidsTab.Controls.Add(slLCBHydroxyLabel);
-            sphingolipidsTab.Controls.Add(slPositiveAdduct);
-            sphingolipidsTab.Controls.Add(slNegativeAdduct);
+            sphingolipidsTab.Controls.Add(slStep1);
+            slStep1.Controls.Add(slPictureBox);
+            slStep1.Controls.Add(slLCBTextbox);
+            slStep1.Controls.Add(slFATextbox);
+            slStep1.Controls.Add(slDB1Textbox);
+            slStep1.Controls.Add(slDB2Textbox);
+            slStep1.Controls.Add(slLCBCombobox);
+            slStep1.Controls.Add(slFACombobox);
+            slStep1.Controls.Add(slDB1Label);
+            slStep1.Controls.Add(slDB2Label);
+            slStep1.Controls.Add(slHGLabel);
+            slStep1.Controls.Add(slHgListbox);
+            slStep1.Controls.Add(slLCBHydroxyCombobox);
+            slStep1.Controls.Add(slFAHydroxyCombobox);
+            slStep1.Controls.Add(slFAHydroxyLabel);
+            slStep1.Controls.Add(slLCBHydroxyLabel);
+            slStep1.Controls.Add(slPositiveAdduct);
+            slStep1.Controls.Add(slNegativeAdduct);
             sphingolipidsTab.Parent = tabControl;
             sphingolipidsTab.Text = "Sphingolipids";
             sphingolipidsTab.Location = new Point(0, 0);
@@ -1830,6 +1860,12 @@ namespace LipidCreator
             sphingolipidsTab.BackColor = Color.White;
             Font slFont = new Font(sphingolipidsTab.Font.FontFamily, 8.25F);
             sphingolipidsTab.Font = slFont;
+            
+            slStep1.SendToBack();
+            slStep1.Location = new Point(10, 10);
+            slStep1.Width = Width - 40;
+            slStep1.Height = step1Height;
+            slStep1.Text = "Step 1: Precursor selection";
 
             slFACombobox.BringToFront();
             slFATextbox.BringToFront();
@@ -1952,16 +1988,17 @@ namespace LipidCreator
             
             
             // tab for cholesterols
-            cholesterollipidsTab.Controls.Add(chPictureBox);
-            cholesterollipidsTab.Controls.Add(chPositiveAdduct);
-            cholesterollipidsTab.Controls.Add(chNegativeAdduct);
-            cholesterollipidsTab.Controls.Add(chContainsEster);
-            cholesterollipidsTab.Controls.Add(chFACombobox);
-            cholesterollipidsTab.Controls.Add(chFATextbox);
-            cholesterollipidsTab.Controls.Add(chDBTextbox);
-            cholesterollipidsTab.Controls.Add(chDBLabel);
-            cholesterollipidsTab.Controls.Add(chHydroxylTextbox);
-            cholesterollipidsTab.Controls.Add(chFAHydroxyLabel);
+            cholesterollipidsTab.Controls.Add(chStep1);
+            chStep1.Controls.Add(chPictureBox);
+            chStep1.Controls.Add(chPositiveAdduct);
+            chStep1.Controls.Add(chNegativeAdduct);
+            chStep1.Controls.Add(chContainsEster);
+            chStep1.Controls.Add(chFACombobox);
+            chStep1.Controls.Add(chFATextbox);
+            chStep1.Controls.Add(chDBTextbox);
+            chStep1.Controls.Add(chDBLabel);
+            chStep1.Controls.Add(chHydroxylTextbox);
+            chStep1.Controls.Add(chFAHydroxyLabel);
             
             cholesterollipidsTab.Text = "Cholesterols";
             cholesterollipidsTab.Location = new Point(0, 0);
@@ -1971,6 +2008,12 @@ namespace LipidCreator
             cholesterollipidsTab.BackColor = Color.White;
             Font cholFont = new Font(cholesterollipidsTab.Font.FontFamily, 8.25F);
             cholesterollipidsTab.Font = cholFont;
+            
+            chStep1.SendToBack();
+            chStep1.Location = new Point(10, 10);
+            chStep1.Width = Width - 40;
+            chStep1.Height = step1Height;
+            chStep1.Text = "Step 1: Precursor selection";
             
             chPositiveAdduct.Width = 120;
             chPositiveAdduct.Location = new Point(leftGroupboxes - chPositiveAdduct.Width, 60);
@@ -2067,9 +2110,10 @@ namespace LipidCreator
             
             
             // tab for mediators
-            mediatorlipidsTab.Controls.Add(medNegativeAdduct);
-            mediatorlipidsTab.Controls.Add(medHgListbox);
-            mediatorlipidsTab.Controls.Add(medPictureBox);
+            mediatorlipidsTab.Controls.Add(medStep1);
+            medStep1.Controls.Add(medNegativeAdduct);
+            medStep1.Controls.Add(medHgListbox);
+            medStep1.Controls.Add(medPictureBox);
             
             mediatorlipidsTab.Text = "Mediators";
             mediatorlipidsTab.Location = new Point(0, 0);
@@ -2079,6 +2123,12 @@ namespace LipidCreator
             mediatorlipidsTab.BackColor = Color.White;
             Font medFont = new Font(mediatorlipidsTab.Font.FontFamily, 8.25F);
             mediatorlipidsTab.Font = medFont;
+            
+            medStep1.SendToBack();
+            medStep1.Location = new Point(10, 10);
+            medStep1.Width = Width - 40;
+            medStep1.Height = step1Height;
+            medStep1.Text = "Step 1: Precursor selection";
             
             medNegativeAdduct.Width = 120;
             medNegativeAdduct.Location = new Point(leftGroupboxes - medNegativeAdduct.Width, 200);
@@ -2147,14 +2197,14 @@ namespace LipidCreator
             MS2fragmentsLipidButton.Text = "MS2 fragments";
             MS2fragmentsLipidButton.Width = 130;
             MS2fragmentsLipidButton.Height = 26;
-            MS2fragmentsLipidButton.Location = new Point(20, topLowButtons);
+            MS2fragmentsLipidButton.Location = new Point(180, topLowButtons);
             MS2fragmentsLipidButton.BackColor = SystemColors.Control;
             MS2fragmentsLipidButton.Click += openMS2Form;
 
             addHeavyIsotopeButton.Text = "Manage heavy isotopes";
             addHeavyIsotopeButton.Width = 150;
             addHeavyIsotopeButton.Height = 26;
-            addHeavyIsotopeButton.Location = new Point(160, topLowButtons);
+            addHeavyIsotopeButton.Location = new Point(20, topLowButtons);
             addHeavyIsotopeButton.BackColor = SystemColors.Control;
             addHeavyIsotopeButton.Click += openHeavyIsotopeForm;
 

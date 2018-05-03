@@ -2545,14 +2545,14 @@ namespace LipidCreator
                     GLLipid currentGLLipid = (GLLipid)currentRegisteredLipid;
                     row["Category"] = "Glycerolipid";
                     row["Building Block 1"] = "FA: " + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
-                    row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
+                    if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
                     if (currentGLLipid.containsSugar)
                     {
                         row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
                     }
                     else
                     {
-                        row["Building Block 3"] = "FA: " + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
+                        if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
                     }
                 }
                 else if (currentRegisteredLipid is PLLipid)
@@ -2564,14 +2564,14 @@ namespace LipidCreator
                         row["Building Block 1"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
                         row["Building Block 2"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
                         row["Building Block 3"] = "FA: " + currentPLLipid.fag3.lengthInfo + "; DB: " + currentPLLipid.fag3.dbInfo + "; OH: " + currentPLLipid.fag3.hydroxylInfo;
-                        row["Building Block 4"] = "FA: " + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
+                        if (!currentPLLipid.fag4.faTypes["FAx"]) row["Building Block 4"] = "FA: " + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
                     }
                     else
                     {
                         row["Category"] = "Phospholipid";
                         row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
                         row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                        row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                        if (!currentPLLipid.fag2.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
                     }
                 }
                 else if (currentRegisteredLipid is SLLipid)

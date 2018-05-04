@@ -1119,7 +1119,7 @@ namespace LipidCreator
             
 
             clPictureBox.Image = cardioBackboneImage;
-            clPictureBox.Location = new Point(5, 15);
+            clPictureBox.Location = new Point(5, 20);
             clPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             clPictureBox.SendToBack();
             
@@ -1258,7 +1258,7 @@ namespace LipidCreator
 
             clFA3Combobox.BringToFront();
             clFA3Textbox.BringToFront();
-            clFA3Textbox.Location = new Point(436, 270);
+            clFA3Textbox.Location = new Point(440, 256);
             clFA3Textbox.Width = faLength;
             clFA3Textbox.TextChanged += new EventHandler(clFA3TextboxValueChanged);
             toolTip.SetToolTip(clFA3Textbox, formattingFA);
@@ -1309,7 +1309,7 @@ namespace LipidCreator
 
             clFA4Combobox.BringToFront();
             clFA4Textbox.BringToFront();
-            clFA4Textbox.Location = new Point(350, 354);
+            clFA4Textbox.Location = new Point(352, 336);
             clFA4Textbox.Width = faLength;
             clFA4Textbox.TextChanged += new EventHandler(clFA4TextboxValueChanged);
             toolTip.SetToolTip(clFA4Textbox, formattingFA);

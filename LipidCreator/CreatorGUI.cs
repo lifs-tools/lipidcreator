@@ -2593,7 +2593,7 @@ namespace LipidCreator
                 else if (currentRegisteredLipid is Mediator)
                 {
                     Mediator currentMedLipid = (Mediator)currentRegisteredLipid;
-                    row["Building Block 1"] = "HG: " + String.Join(", ", currentMedLipid.headGroupNames);
+                    row["Building Block 1"] = String.Join(", ", currentMedLipid.headGroupNames);
                     row["Category"] = "Mediator";
                 }
                 

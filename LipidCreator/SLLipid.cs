@@ -39,6 +39,7 @@ namespace LipidCreator
     {
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
+        public bool isLyso;
     
         public SLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
         {
@@ -46,6 +47,7 @@ namespace LipidCreator
             fag = new FattyAcidGroup();
             lcb.hydroxylCounts.Add(2);
             fag.hydroxylCounts.Add(0);
+            isLyso = false;
             adducts["+H"] = true;
             adducts["-H"] = false;
         }
@@ -54,12 +56,13 @@ namespace LipidCreator
         {
             lcb = new FattyAcidGroup(copy.lcb);
             fag = new FattyAcidGroup(copy.fag);
+            isLyso = copy.isLyso;
         }
         
         
         public override string serialize()
         {
-            string xml = "<lipid type=\"SL\">\n";
+            string xml = "<lipid type=\"SL\" isLyso=\"" + isLyso + "\">\n";
             xml += lcb.serialize();
             xml += fag.serialize();
             foreach (string headgroup in headGroupNames)
@@ -80,6 +83,7 @@ namespace LipidCreator
         public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;
+            isLyso = node.Attribute("isLyso").Value == "True";
             headGroupNames.Clear();
             foreach (XElement child in node.Elements())
             {
@@ -122,7 +126,8 @@ namespace LipidCreator
                 foreach (string headgroup in headGroupNames)
                 {
                     
-                    if (headgroup != "LCB" && headgroup != "LCBP" && headgroup != "LSM" && headgroup != "LHexCer") // sphingolipids without fatty acid
+                    //if (headgroup != "LCB" && headgroup != "LCBP" && headgroup != "LSM" && headgroup != "LHexCer")
+                    if (isLyso) // sphingolipids without fatty acid
                     {
                     
                         foreach (FattyAcid fa in fag.getFattyAcids())

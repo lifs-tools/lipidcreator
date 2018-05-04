@@ -87,7 +87,7 @@ namespace LipidCreator
         {
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
-            isCL = node.Attribute("type").Value == "True";
+            isCL = node.Attribute("isCL").Value == "True";
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

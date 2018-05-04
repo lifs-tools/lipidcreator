@@ -304,7 +304,7 @@ namespace LipidCreator
                 
             }
         
-        
+            extendWindow(((LipidCategory)index == LipidCategory.PhosphoLipid) && ((PLLipid)currentLipid).isCL);
             
             switch((LipidCategory)index)
             {
@@ -1656,6 +1656,7 @@ namespace LipidCreator
         public void plIsCLCheckedChanged(Object sender, EventArgs e)
         {
             ((PLLipid)currentLipid).isCL = ((CheckBox)sender).Checked;
+            extendWindow(((CheckBox)sender).Checked);
             if (((CheckBox)sender).Checked)
             {
                 plHgListbox.Visible = false;
@@ -1800,6 +1801,28 @@ namespace LipidCreator
             }
             changeTab((int)LipidCategory.PhosphoLipid);
             plIsCL.BringToFront();
+        }
+        
+        void extendWindow(bool isCL)
+        {
+            if (isCL && !windowExtended)
+            {
+                windowExtended = true;
+                this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeightExtended);
+                this.Size = new System.Drawing.Size(windowWidth, minWindowHeightExtended);
+                lipidsGroupbox.Height = minLipidGridHeight;
+                plStep1.Height = step1HeightExtended;
+            }
+            else if (!isCL && windowExtended)
+            {
+                windowExtended = false;
+                this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeight);
+                this.Size = new System.Drawing.Size(windowWidth, minWindowHeight);
+                lipidsGroupbox.Height = minLipidGridHeight;
+                plStep1.Height = step1Height;
+            }
+            lcStep2.Top = plStep1.Height + 20;
+            lcStep3.Top = plStep1.Height + 20;
         }
         
         void plFA1Checkbox3MouseLeave(object sender, EventArgs e)
@@ -2068,7 +2091,31 @@ namespace LipidCreator
             }
         }
         
-        
+        void slIsLysoCheckedChanged(object sender, EventArgs e)
+        {
+            ((SLLipid)currentLipid).isLyso = ((CheckBox)sender).Checked;
+            if (((CheckBox)sender).Checked)
+            {
+                slPictureBox.Image = sphingoLysoBackboneImage;
+                slFACombobox.Visible = false;
+                slFATextbox.Visible = false;
+                slDB1Textbox.Visible = false;
+                slFAHydroxyCombobox.Visible = false;
+                slDB1Label.Visible = false;
+                slFAHydroxyLabel.Visible = false;
+            }
+            else
+            {
+                slPictureBox.Image = sphingoBackboneImage;
+                slFACombobox.Visible = true;
+                slFATextbox.Visible = true;
+                slDB1Textbox.Visible = true;
+                slFAHydroxyCombobox.Visible = true;
+                slDB1Label.Visible = true;
+                slFAHydroxyLabel.Visible = true;
+            }
+            
+        }
         
         ////////////////////// Cholesterols ////////////////////////////////
         
@@ -2178,7 +2225,7 @@ namespace LipidCreator
             {
                 string mediatorFile = lipidCreator.headgroups[medHgListbox.Items[hoveredIndex].ToString()].pathToImage;
                 medPictureBox.Image = Image.FromFile(mediatorFile);
-                medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
+                medPictureBox.Top = mediatorMiddleHeight - (medPictureBox.Image.Height >> 1);
                 medPictureBox.SendToBack();
             }
         }

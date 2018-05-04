@@ -337,6 +337,7 @@ namespace LipidCreator
         Image phosphoBackboneImageFA2e;
         Image phosphoBackboneImageFA2p;
         Image sphingoBackboneImage;
+        Image sphingoLysoBackboneImage;
         Image cholesterolBackboneImage;
         Image cholesterolEsterBackboneImage;
         
@@ -408,6 +409,7 @@ namespace LipidCreator
         public CheckBox plFA2Checkbox2;
         public CheckBox plFA2Checkbox3;
         public CheckBox plIsCL;
+        public CheckBox slIsLyso;
         public CheckBox glContainsSugar;
         public CheckBox chContainsEster;
 
@@ -545,11 +547,14 @@ namespace LipidCreator
         public ArrayList controlElements;
         
         
-        public int minWindowHeight = 768;
+        public int minWindowHeight = 710;
+        public int minWindowHeightExtended = 790;
         public int windowWidth = 1060;
-        public int minLipidGridHeight = 140;
-        public int step1Height = 420;
-        
+        public int minLipidGridHeight = 180;
+        public int step1Height = 320;
+        public int step1HeightExtended = 400;
+        public bool windowExtended = false;
+        public int mediatorMiddleHeight = 164;
         
 
         /// <summary>
@@ -688,6 +693,7 @@ namespace LipidCreator
             int faLength = 150;
             int topLowButtons = 20;
             int leftGroupboxes = 1000;
+            int topGroupboxes = 30;
 
             
             deleteImage = Image.FromFile(lipidCreator.prefixPath + "images/delete-small.png");
@@ -762,6 +768,7 @@ namespace LipidCreator
             phosphoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp1.png");
             phosphoBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp2.png");
             sphingoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones.png");
+            sphingoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones_onlyLCB.png");
             cholesterolBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/Ch.png");
             cholesterolEsterBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/ChE.png");
             glArrowImage = Image.FromFile(lipidCreator.prefixPath + "images/arrow.png");
@@ -918,6 +925,7 @@ namespace LipidCreator
             glRepresentativeFA = new CheckBox();
             plRepresentativeFA = new CheckBox();
             plIsCL = new CheckBox();
+            slIsLyso = new CheckBox();
             glContainsSugar = new CheckBox();
             chContainsEster = new CheckBox();
 
@@ -1168,7 +1176,7 @@ namespace LipidCreator
             clFA1Checkbox1.CheckedChanged += new EventHandler(clFA1Checkbox1CheckedChanged);
 
             clPositiveAdduct.Width = 120;
-            clPositiveAdduct.Location = new Point(leftGroupboxes - clPositiveAdduct.Width, 60);
+            clPositiveAdduct.Location = new Point(leftGroupboxes - clPositiveAdduct.Width, topGroupboxes);
             clPositiveAdduct.Height = 120;
             clPositiveAdduct.Text = "Positive adducts";
             clPosAdductCheckbox1.Parent = clPositiveAdduct;
@@ -1186,7 +1194,7 @@ namespace LipidCreator
             clPosAdductCheckbox3.Enabled = false;
             clPosAdductCheckbox3.CheckedChanged += new EventHandler(clPosAdductCheckbox3CheckedChanged);
             clNegativeAdduct.Width = 120;
-            clNegativeAdduct.Location = new Point(leftGroupboxes - clNegativeAdduct.Width, 200);
+            clNegativeAdduct.Location = new Point(leftGroupboxes - clNegativeAdduct.Width, clPositiveAdduct.Top + 140);
             clNegativeAdduct.Height = 120;
             clNegativeAdduct.Text = "Negative adducts";
             clNegAdductCheckbox1.Parent = clNegativeAdduct;
@@ -1415,7 +1423,7 @@ namespace LipidCreator
 
             glFA1Combobox.BringToFront();
             glFA1Textbox.BringToFront();
-            glFA1Textbox.Location = new Point(196, 130);
+            glFA1Textbox.Location = new Point(196, 70);
             glFA1Textbox.Width = faLength;
             glFA1Textbox.Text = "0, 2, 4, 6-7";
             glFA1Textbox.TextChanged += new EventHandler(glFA1TextboxValueChanged);
@@ -1459,7 +1467,7 @@ namespace LipidCreator
 
             glFA2Combobox.BringToFront();
             glFA2Textbox.BringToFront();
-            glFA2Textbox.Location = new Point(290, 202);
+            glFA2Textbox.Location = new Point(290, 142);
             glFA2Textbox.Width = faLength;
             glFA2Textbox.Text = "0, 5, 17-19";
             glFA2Textbox.TextChanged += new EventHandler(glFA2TextboxValueChanged);
@@ -1503,7 +1511,7 @@ namespace LipidCreator
 
             glFA3Combobox.BringToFront();
             glFA3Textbox.BringToFront();
-            glFA3Textbox.Location = new Point(158, 302);
+            glFA3Textbox.Location = new Point(158, 242);
             glFA3Textbox.Width = faLength;
             glFA3Textbox.Text = "20-22";
             glFA3Textbox.TextChanged += new EventHandler(glFA3TextboxValueChanged);
@@ -1546,7 +1554,7 @@ namespace LipidCreator
             glFA3Checkbox1.CheckedChanged += new EventHandler(glFA3Checkbox1CheckedChanged);
 
             
-            glHgListbox.Location = new Point(132, 288);
+            glHgListbox.Location = new Point(132, 228);
             glHgListbox.Size = new Size(70, 50);
             glHgListbox.BringToFront();
             glHgListbox.BorderStyle = BorderStyle.Fixed3D;
@@ -1561,7 +1569,7 @@ namespace LipidCreator
             
 
             glPositiveAdduct.Width = 120;
-            glPositiveAdduct.Location = new Point(leftGroupboxes - glPositiveAdduct.Width, 60);
+            glPositiveAdduct.Location = new Point(leftGroupboxes - glPositiveAdduct.Width, topGroupboxes);
             glPositiveAdduct.Height = 120;
             glPositiveAdduct.Text = "Positive adducts";
             glPositiveAdduct.DoubleClick += new EventHandler(triggerEasteregg);
@@ -1581,7 +1589,7 @@ namespace LipidCreator
             glPosAdductCheckbox3.Checked = true;
             glPosAdductCheckbox3.CheckedChanged += new EventHandler(glPosAdductCheckbox3CheckedChanged);
             glNegativeAdduct.Width = 120;
-            glNegativeAdduct.Location = new Point(leftGroupboxes - glNegativeAdduct.Width, 200);
+            glNegativeAdduct.Location = new Point(leftGroupboxes - glNegativeAdduct.Width, glPositiveAdduct.Top + 140);
             glNegativeAdduct.Height = 120;
             glNegativeAdduct.Text = "Negative adducts";
             glNegAdductCheckbox1.Parent = glNegativeAdduct;
@@ -1606,22 +1614,17 @@ namespace LipidCreator
             glNegAdductCheckbox4.CheckedChanged += new EventHandler(glNegAdductCheckbox4CheckedChanged);
 
             glPictureBox.Image = glyceroBackboneImage;
-            glPictureBox.Location = new Point(77, 79);
-            glPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-            glPictureBox.SendToBack();
-
-            glPictureBox.Image = glyceroBackboneImage;
-            glPictureBox.Location = new Point(77, 79);
+            glPictureBox.Location = new Point(77, 19);
             glPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             glPictureBox.SendToBack();
 
             glArrow.Image = glArrowImage;
-            glArrow.Location = new Point(10, 90);
+            glArrow.Location = new Point(10, 30);
             glArrow.SizeMode = PictureBoxSizeMode.AutoSize;
             glArrow.SendToBack();
 
 
-            glContainsSugar.Location = new Point(158, 350);
+            glContainsSugar.Location = new Point(158, 240);
             glContainsSugar.Width = 120;
             glContainsSugar.Text = "Contains sugar";
             glContainsSugar.CheckedChanged += new EventHandler(glContainsSugarCheckedChanged);
@@ -1781,7 +1784,7 @@ namespace LipidCreator
             plHGLabel.Text = "Head group";
 
             plPositiveAdduct.Width = 120;
-            plPositiveAdduct.Location = new Point(leftGroupboxes - plPositiveAdduct.Width, 60);
+            plPositiveAdduct.Location = new Point(leftGroupboxes - plPositiveAdduct.Width, topGroupboxes);
             plPositiveAdduct.Height = 120;
             plPositiveAdduct.Text = "Positive adducts";
             plPosAdductCheckbox1.Parent = plPositiveAdduct;
@@ -1799,7 +1802,7 @@ namespace LipidCreator
             plPosAdductCheckbox3.Text = "+NH4⁺";
             plPosAdductCheckbox3.CheckedChanged += new EventHandler(plPosAdductCheckbox3CheckedChanged);
             plNegativeAdduct.Width = 120;
-            plNegativeAdduct.Location = new Point(leftGroupboxes - plNegativeAdduct.Width, 200);
+            plNegativeAdduct.Location = new Point(leftGroupboxes - plNegativeAdduct.Width, plPositiveAdduct.Top + 140);
             plNegativeAdduct.Height = 120;
             plNegativeAdduct.Text = "Negative adducts";
             plNegAdductCheckbox1.Parent = plNegativeAdduct;
@@ -1842,6 +1845,7 @@ namespace LipidCreator
             slStep1.Controls.Add(slDB2Textbox);
             slStep1.Controls.Add(slLCBCombobox);
             slStep1.Controls.Add(slFACombobox);
+            slStep1.Controls.Add(slIsLyso);
             slStep1.Controls.Add(slDB1Label);
             slStep1.Controls.Add(slDB2Label);
             slStep1.Controls.Add(slHGLabel);
@@ -1867,10 +1871,16 @@ namespace LipidCreator
             slStep1.Width = Width - 50;
             slStep1.Height = step1Height;
             slStep1.Text = "Step 1: Precursor selection";
+            
+            
+            slIsLyso.Location = new Point(180, 261);
+            slIsLyso.Text = "Is lyso";
+            slIsLyso.CheckedChanged += new EventHandler(slIsLysoCheckedChanged);
+            slIsLyso.BringToFront();
 
             slFACombobox.BringToFront();
             slFATextbox.BringToFront();
-            slFATextbox.Location = new Point(258, 280);
+            slFATextbox.Location = new Point(258, 235);
             slFATextbox.Width = faLength;
             slFATextbox.Text = "2, 5, 17-19";
             slFATextbox.TextChanged += new EventHandler(slFATextboxValueChanged);
@@ -1901,7 +1911,7 @@ namespace LipidCreator
             slLCBTextbox.BringToFront();
             slLCBHydroxyCombobox.BringToFront();
             slFAHydroxyCombobox.BringToFront();
-            slLCBTextbox.Location = new Point(294, 203);
+            slLCBTextbox.Location = new Point(294, 158);
             slLCBTextbox.Width = faLength;
             slLCBTextbox.Text = "14, 16-18, 22";
             slLCBTextbox.TextChanged += new EventHandler(slLCBTextboxValueChanged);
@@ -1928,7 +1938,7 @@ namespace LipidCreator
             slLCBHydroxyLabel.Text = hydroxylText;
 
             slHGLabel.BringToFront();
-            slHgListbox.Location = new Point(54, 105);
+            slHgListbox.Location = new Point(54, 40);
             slHgListbox.Size = new Size(80, 260);
             slHgListbox.BringToFront();
             slHgListbox.BorderStyle = BorderStyle.Fixed3D;
@@ -1941,7 +1951,7 @@ namespace LipidCreator
             
 
             slPositiveAdduct.Width = 120;
-            slPositiveAdduct.Location = new Point(leftGroupboxes - slPositiveAdduct.Width, 60);
+            slPositiveAdduct.Location = new Point(leftGroupboxes - slPositiveAdduct.Width, topGroupboxes);
             slPositiveAdduct.Height = 120;
             slPositiveAdduct.Text = "Positive adducts";
             slPosAdductCheckbox1.Parent = slPositiveAdduct;
@@ -1959,7 +1969,7 @@ namespace LipidCreator
             slPosAdductCheckbox3.Text = "+NH4⁺";
             slPosAdductCheckbox3.CheckedChanged += new EventHandler(slPosAdductCheckbox3CheckedChanged);
             slNegativeAdduct.Width = 120;
-            slNegativeAdduct.Location = new Point(leftGroupboxes - slNegativeAdduct.Width, 200);
+            slNegativeAdduct.Location = new Point(leftGroupboxes - slNegativeAdduct.Width, slPositiveAdduct.Top + 140);
             slNegativeAdduct.Height = 120;
             slNegativeAdduct.Text = "Negative adducts";
             slNegAdductCheckbox1.Parent = slNegativeAdduct;
@@ -1981,7 +1991,7 @@ namespace LipidCreator
             slNegAdductCheckbox4.CheckedChanged += new EventHandler(slNegAdductCheckbox4CheckedChanged);
 
             slPictureBox.Image = sphingoBackboneImage;
-            slPictureBox.Location = new Point((int)(214 - sphingoBackboneImage.Width * 0.5), (int)(204 - sphingoBackboneImage.Height * 0.5));
+            slPictureBox.Location = new Point(214 - (sphingoBackboneImage.Width >> 1), 159 - (sphingoBackboneImage.Height >> 1));
             slPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             slPictureBox.SendToBack();
             
@@ -1992,7 +2002,7 @@ namespace LipidCreator
             cholesterollipidsTab.Controls.Add(chStep1);
             chStep1.Controls.Add(chPictureBox);
             chStep1.Controls.Add(chPositiveAdduct);
-            chStep1.Controls.Add(chNegativeAdduct);
+            //chStep1.Controls.Add(chNegativeAdduct);
             chStep1.Controls.Add(chContainsEster);
             chStep1.Controls.Add(chFACombobox);
             chStep1.Controls.Add(chFATextbox);
@@ -2017,7 +2027,7 @@ namespace LipidCreator
             chStep1.Text = "Step 1: Precursor selection";
             
             chPositiveAdduct.Width = 120;
-            chPositiveAdduct.Location = new Point(leftGroupboxes - chPositiveAdduct.Width, 60);
+            chPositiveAdduct.Location = new Point(leftGroupboxes - chPositiveAdduct.Width, topGroupboxes);
             chPositiveAdduct.Height = 120;
             chPositiveAdduct.Text = "Positive adducts";
             chPosAdductCheckbox1.Parent = chPositiveAdduct;
@@ -2036,7 +2046,7 @@ namespace LipidCreator
             chPosAdductCheckbox3.Checked = true;
             chPosAdductCheckbox3.CheckedChanged += new EventHandler(chPosAdductCheckbox3CheckedChanged);
             chNegativeAdduct.Width = 120;
-            chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, 200);
+            chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, chPositiveAdduct.Top + 140);
             chNegativeAdduct.Height = 120;
             chNegativeAdduct.Text = "Negative adducts";
             chNegAdductCheckbox1.Parent = chNegativeAdduct;
@@ -2061,11 +2071,11 @@ namespace LipidCreator
             chNegAdductCheckbox4.CheckedChanged += new EventHandler(chNegAdductCheckbox4CheckedChanged);
             
             chPictureBox.Image = cholesterolBackboneImage;
-            chPictureBox.Location = new Point(30, 130);
+            chPictureBox.Location = new Point(30, 30);
             chPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             chPictureBox.SendToBack();
             
-            chContainsEster.Location = new Point(480, 390);
+            chContainsEster.Location = new Point(490, 290);
             chContainsEster.Width = 120;
             chContainsEster.Text = "Contains Ester";
             chContainsEster.CheckedChanged += new EventHandler(chContainsEsterCheckedChanged);
@@ -2073,7 +2083,7 @@ namespace LipidCreator
             
             chFACombobox.BringToFront();
             chFATextbox.BringToFront();
-            chFATextbox.Location = new Point(616, 358);
+            chFATextbox.Location = new Point(616, 258);
             chFATextbox.Width = faLength;
             chFATextbox.Text = "2, 5, 17-19";
             chFATextbox.TextChanged += new EventHandler(chFATextboxValueChanged);
@@ -2132,7 +2142,7 @@ namespace LipidCreator
             medStep1.Text = "Step 1: Precursor selection";
             
             medNegativeAdduct.Width = 120;
-            medNegativeAdduct.Location = new Point(leftGroupboxes - medNegativeAdduct.Width, 200);
+            medNegativeAdduct.Location = new Point(leftGroupboxes - medNegativeAdduct.Width, 170);
             medNegativeAdduct.Height = 120;
             medNegativeAdduct.Text = "Negative adducts";
             
@@ -2153,7 +2163,7 @@ namespace LipidCreator
             medNegAdductCheckbox4.Text = "+CH3COO⁻";
             medNegAdductCheckbox4.Enabled = false;
             
-            medHgListbox.Location = new Point(34, 105);
+            medHgListbox.Location = new Point(34, 35);
             medHgListbox.Size = new Size(140, 260);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
@@ -2162,11 +2172,11 @@ namespace LipidCreator
             medHgListbox.MouseLeave += new System.EventHandler(medHGListboxMouseLeave);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             
-            medPictureBox.Location = new Point(210, 100);
+            medPictureBox.Location = new Point(210, 30);
             if (medHgListbox.Items.Count > 0)
             {
                 medPictureBox.Image = Image.FromFile(lipidCreator.headgroups[medHgListbox.Items[0].ToString()].pathToImage);
-                medPictureBox.Top = 230 - (medPictureBox.Image.Height >> 1);
+                medPictureBox.Top = mediatorMiddleHeight - (medPictureBox.Image.Height >> 1);
             }
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             medPictureBox.SendToBack();

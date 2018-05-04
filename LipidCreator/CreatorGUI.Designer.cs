@@ -547,14 +547,15 @@ namespace LipidCreator
         public ArrayList controlElements;
         
         
-        public int minWindowHeight = 710;
-        public int minWindowHeightExtended = 790;
+        public int minWindowHeight = 720;
+        public int minWindowHeightExtended = 800;
         public int windowWidth = 1060;
         public int minLipidGridHeight = 180;
         public int step1Height = 320;
         public int step1HeightExtended = 400;
         public bool windowExtended = false;
         public int mediatorMiddleHeight = 164;
+        public long easterEggMilliseconds;
         
 
         /// <summary>
@@ -566,9 +567,7 @@ namespace LipidCreator
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Text = "LipidCreator";
             
-            
-            
-            this.timerEasterEgg = new System.Timers.Timer(5);
+            this.timerEasterEgg = new System.Timers.Timer(15);
             this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
             
             this.mainMenuLipidCreator = new System.Windows.Forms.MainMenu();
@@ -719,13 +718,6 @@ namespace LipidCreator
             }
             plHgList.Sort();
             
-            List<String> slHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
-            {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) slHgList.Add(headgroup);
-            }
-            slHgList.Sort();
-            
             List<String> medHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
@@ -738,7 +730,6 @@ namespace LipidCreator
             
             glHgListbox.Items.AddRange(glHgList.ToArray());
             plHgListbox.Items.AddRange(plHgList.ToArray());
-            slHgListbox.Items.AddRange(slHgList.ToArray());
             medHgListbox.Items.AddRange(medHgList.ToArray());
             
             cardioBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_backbones.png");
@@ -1395,7 +1386,6 @@ namespace LipidCreator
             glStep1.Controls.Add(glRepresentativeFA);
             glStep1.Controls.Add(glPositiveAdduct);
             glStep1.Controls.Add(glNegativeAdduct);
-            glStep1.Controls.Add(easterText);
             glycerolipidsTab.Parent = tabControl;
             glycerolipidsTab.Text = "Glycerolipids";
             glycerolipidsTab.Location = new Point(0, 0);
@@ -1413,12 +1403,6 @@ namespace LipidCreator
             glStep1.Text = "Step 1: Precursor selection";
             
             
-            
-            easterText.Location = new Point(1030, 5);
-            easterText.Text = "Fat is unfair, it sticks 2 minutes in your mouth, 2 hours in your stomach and 2 decades at your hips.";
-            easterText.Visible = false;
-            easterText.Font = new Font(new Font(easterText.Font.FontFamily, 40), FontStyle.Bold);
-            easterText.AutoSize = true;
             
 
             glFA1Combobox.BringToFront();
@@ -1572,7 +1556,6 @@ namespace LipidCreator
             glPositiveAdduct.Location = new Point(leftGroupboxes - glPositiveAdduct.Width, topGroupboxes);
             glPositiveAdduct.Height = 120;
             glPositiveAdduct.Text = "Positive adducts";
-            glPositiveAdduct.DoubleClick += new EventHandler(triggerEasteregg);
             glPosAdductCheckbox1.Parent = glPositiveAdduct;
             glPosAdductCheckbox1.Location = new Point(10, 15);
             glPosAdductCheckbox1.Text = "+H⁺";
@@ -1624,7 +1607,7 @@ namespace LipidCreator
             glArrow.SendToBack();
 
 
-            glContainsSugar.Location = new Point(158, 240);
+            glContainsSugar.Location = new Point(158, 290);
             glContainsSugar.Width = 120;
             glContainsSugar.Text = "Contains sugar";
             glContainsSugar.CheckedChanged += new EventHandler(glContainsSugarCheckedChanged);
@@ -1663,6 +1646,7 @@ namespace LipidCreator
             plStep1.Controls.Add(plRepresentativeFA);
             plStep1.Controls.Add(plPositiveAdduct);
             plStep1.Controls.Add(plNegativeAdduct);
+            plStep1.Controls.Add(easterText);
             phospholipidsTab.Parent = tabControl;
             phospholipidsTab.Text = "Phospholipids";
             phospholipidsTab.Location = new Point(0, 0);
@@ -1782,11 +1766,19 @@ namespace LipidCreator
             
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";
+            
+            
+            easterText.Location = new Point(1030, 250);
+            easterText.Text = "Fat is unfair, it sticks 2 minutes in your mouth, 2 hours in your stomach and 2 decades at your hips.";
+            easterText.Visible = false;
+            easterText.Font = new Font(new Font(easterText.Font.FontFamily, 40), FontStyle.Bold);
+            easterText.AutoSize = true;
 
             plPositiveAdduct.Width = 120;
             plPositiveAdduct.Location = new Point(leftGroupboxes - plPositiveAdduct.Width, topGroupboxes);
             plPositiveAdduct.Height = 120;
             plPositiveAdduct.Text = "Positive adducts";
+            plPositiveAdduct.DoubleClick += new EventHandler(triggerEasteregg);
             plPosAdductCheckbox1.Parent = plPositiveAdduct;
             plPosAdductCheckbox1.Location = new Point(10, 15);
             plPosAdductCheckbox1.Text = "+H⁺";

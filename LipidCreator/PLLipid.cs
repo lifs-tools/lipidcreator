@@ -295,7 +295,6 @@ namespace LipidCreator
             }
             else
             {
-
                 if (headGroupNames.Count == 0) return;
                 bool isPlamalogen = false;
                 bool isFAe = false;
@@ -354,6 +353,7 @@ namespace LipidCreator
                             
                             if (usedKeys.Contains(key)) continue;
                             
+                            
                           
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
@@ -394,6 +394,7 @@ namespace LipidCreator
                                 if (onlyHeavyLabeled == 0) continue;
                                 foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
                                 {
+                                    
                                     string heavyHeadgroup = heavyPrecursor.name;
                                     
                                     if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
@@ -403,8 +404,9 @@ namespace LipidCreator
                                 
                                     FattyAcid heavyFA1 = new FattyAcid(fa1);
                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
+                                    
                                     heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
-                                    heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
+                                    if (!isLyso) heavyFA2.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[1]);
                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                     heavySortedAcids.Add(heavyFA1);
                                     heavySortedAcids.Add(heavyFA2);

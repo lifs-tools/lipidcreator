@@ -512,6 +512,10 @@ namespace LipidCreator
                     
                 case LipidCategory.SphingoLipid:
                     SLLipid currentSLLipid = (SLLipid)currentLipid;
+                    
+                    slIsLyso.Checked = currentSLLipid.isLyso;
+                    changeLyso(currentSLLipid.isLyso);
+                    
                     settingListbox = true;
                     for (int i = 0; i < slHgListbox.Items.Count; ++i)
                     {
@@ -552,7 +556,6 @@ namespace LipidCreator
                     slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
                     slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
                     addLipidButton.Text = "Add sphingolipids";
-                    
                     
                     updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
                     updateRanges(currentSLLipid.lcb, slDB2Textbox, 3);
@@ -1280,9 +1283,14 @@ namespace LipidCreator
         
         public void triggerEasteregg(Object sender, EventArgs e)
         {
-            easterText.Left = 1030;
-            easterText.Visible = true;
-            this.timerEasterEgg.Enabled = true;
+            if (!((PLLipid)currentLipid).isCL)
+            {
+                easterText.Left = Width + 20;
+                easterEggMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                easterText.Visible = true;
+                this.timerEasterEgg.Enabled = true;
+                Enabled = false;
+            }
         }
         
         public void sugarHeady(Object sender, EventArgs e)
@@ -1292,10 +1300,13 @@ namespace LipidCreator
         
         private void timerEasterEggTick(object sender, System.Timers.ElapsedEventArgs e)
         {
-            easterText.Left -= 10;
+            long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            easterText.Left -= (int)((milliseconds - easterEggMilliseconds) * 0.5);
+            easterEggMilliseconds = milliseconds;
             if (easterText.Left < -easterText.Width){
                 this.timerEasterEgg.Enabled = false;
                 easterText.Visible = false;
+                Enabled = true;
             }
         }
         
@@ -1805,6 +1816,7 @@ namespace LipidCreator
         
         void extendWindow(bool isCL)
         {
+            easterText.Visible = false;
             if (isCL && !windowExtended)
             {
                 windowExtended = true;
@@ -2094,8 +2106,21 @@ namespace LipidCreator
         void slIsLysoCheckedChanged(object sender, EventArgs e)
         {
             ((SLLipid)currentLipid).isLyso = ((CheckBox)sender).Checked;
-            if (((CheckBox)sender).Checked)
+            changeLyso(((CheckBox)sender).Checked);
+        }
+        
+        void changeLyso(bool lyso)
+        {
+            List<String> slHgList = new List<String>();
+            HashSet<string> lysos = new HashSet<string>(new string[]{"LCB", "LCBP", "LSM", "LHexCer"});
+            slHgListbox.Items.Clear();
+            
+            if (lyso)
             {
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                }
                 slPictureBox.Image = sphingoLysoBackboneImage;
                 slFACombobox.Visible = false;
                 slFATextbox.Visible = false;
@@ -2106,6 +2131,10 @@ namespace LipidCreator
             }
             else
             {
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                }
                 slPictureBox.Image = sphingoBackboneImage;
                 slFACombobox.Visible = true;
                 slFATextbox.Visible = true;
@@ -2115,6 +2144,8 @@ namespace LipidCreator
                 slFAHydroxyLabel.Visible = true;
             }
             
+            slHgList.Sort();
+            slHgListbox.Items.AddRange(slHgList.ToArray());
         }
         
         ////////////////////// Cholesterols ////////////////////////////////
@@ -2627,7 +2658,7 @@ namespace LipidCreator
                     row["Category"] = "Sphingolipid";
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
                     row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
-                    row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
+                    if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
                 }
                 
                 else if (currentRegisteredLipid is Cholesterol)

@@ -2003,6 +2003,7 @@ namespace LipidCreator
             lipidsGridview.ReadOnly = true;
             lipidsGridview.MultiSelect = false;
             lipidsGridview.RowTemplate.Height = 34;
+            lipidsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
             lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
             lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;

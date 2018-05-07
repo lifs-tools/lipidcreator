@@ -2393,32 +2393,116 @@ namespace LipidCreator
         public void modifyLipid(Object sender, EventArgs e)
         {
             LipidCategory result = checkPropertiesValid();
+            int rowIndex = lipidModifications[(int)result];
             switch (result)
             {
                 case LipidCategory.GlyceroLipid:
-                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new GLLipid((GLLipid)currentLipid);
-                    refreshRegisteredLipidsTable();
+                    lipidCreator.registeredLipids[rowIndex] = new GLLipid((GLLipid)currentLipid);
                     break;
                 case LipidCategory.PhosphoLipid:
-                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new PLLipid((PLLipid)currentLipid);
-                    refreshRegisteredLipidsTable();
+                    lipidCreator.registeredLipids[rowIndex] = new PLLipid((PLLipid)currentLipid);
                     break;
+                    
                 case LipidCategory.SphingoLipid:
-                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new SLLipid((SLLipid)currentLipid);
-                    refreshRegisteredLipidsTable();
+                    lipidCreator.registeredLipids[rowIndex] = new SLLipid((SLLipid)currentLipid);
                     break;
+                    
                 case LipidCategory.Cholesterol:
-                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new Cholesterol((Cholesterol)currentLipid);
-                    refreshRegisteredLipidsTable();
+                    lipidCreator.registeredLipids[rowIndex] = new Cholesterol((Cholesterol)currentLipid);
                     break;
+                    
                 case LipidCategory.Mediator:
-                    lipidCreator.registeredLipids[lipidModifications[(int)result]] = new Mediator((Mediator)currentLipid);
-                    refreshRegisteredLipidsTable();
+                    lipidCreator.registeredLipids[rowIndex] = new Mediator((Mediator)currentLipid);
                     break;
                 default:
-                    break;
+                    return;
             }
+            
+            DataRow tmpRow = createLipidsGridviewRow(currentLipid);
+            foreach (DataColumn dc in registeredLipidsDatatable.Columns) registeredLipidsDatatable.Rows[rowIndex][dc.ColumnName] = tmpRow[dc.ColumnName];
+            
+            lipidsGridview.Rows[rowIndex].Cells["Edit"].Value = editImage;
+            lipidsGridview.Rows[rowIndex].Cells["Delete"].Value = deleteImage;
+            lipidsGridview.Update();
+            lipidsGridview.Refresh();
         }
+        
+        
+        public DataRow createLipidsGridviewRow(Lipid currentRegisteredLipid)
+        {
+            DataRow row = registeredLipidsDatatable.NewRow();
+            if (currentRegisteredLipid is GLLipid)
+            {
+                GLLipid currentGLLipid = (GLLipid)currentRegisteredLipid;
+                row["Category"] = "Glycerolipid";
+                row["Building Block 1"] = "FA: " + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
+                if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
+                if (currentGLLipid.containsSugar)
+                {
+                    row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
+                }
+                else
+                {
+                    if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
+                }
+            }
+            else if (currentRegisteredLipid is PLLipid)
+            {
+                PLLipid currentPLLipid = (PLLipid)currentRegisteredLipid;
+                if (currentPLLipid.isCL)
+                {
+                    row["Category"] = "Cardiolipin";
+                    row["Building Block 1"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
+                    row["Building Block 2"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                    row["Building Block 3"] = "FA: " + currentPLLipid.fag3.lengthInfo + "; DB: " + currentPLLipid.fag3.dbInfo + "; OH: " + currentPLLipid.fag3.hydroxylInfo;
+                    if (!currentPLLipid.fag4.faTypes["FAx"]) row["Building Block 4"] = "FA: " + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
+                }
+                else
+                {
+                    row["Category"] = "Phospholipid";
+                    row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
+                    row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
+                    if (!currentPLLipid.fag2.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                }
+            }
+            else if (currentRegisteredLipid is SLLipid)
+            {
+                SLLipid currentSLLipid = (SLLipid)currentRegisteredLipid;
+                row["Category"] = "Sphingolipid";
+                row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
+                row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
+                if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
+            }
+            
+            else if (currentRegisteredLipid is Cholesterol)
+            {
+                Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
+                row["Category"] = "Cholesterol";
+                if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+            }
+            
+            else if (currentRegisteredLipid is Mediator)
+            {
+                Mediator currentMedLipid = (Mediator)currentRegisteredLipid;
+                row["Building Block 1"] = String.Join(", ", currentMedLipid.headGroupNames);
+                row["Category"] = "Mediator";
+            }
+            
+            
+            string adductsStr = "";
+            if (currentRegisteredLipid.adducts["+H"]) adductsStr += "+H⁺";
+            if (currentRegisteredLipid.adducts["+2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+2H⁺⁺";
+            if (currentRegisteredLipid.adducts["+NH4"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+NH4⁺";
+            if (currentRegisteredLipid.adducts["-H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-H⁻";
+            if (currentRegisteredLipid.adducts["-2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-2H⁻ ⁻";
+            if (currentRegisteredLipid.adducts["+HCOO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+HCOO⁻";
+            if (currentRegisteredLipid.adducts["+CH3COO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+CH3COO⁻";
+            row["Adducts"] = adductsStr;
+            
+            return row;
+        }
+        
+        
         
         public void registerLipid(Object sender, EventArgs e)
         {
@@ -2427,106 +2511,41 @@ namespace LipidCreator
             {
                 case LipidCategory.GlyceroLipid:
                     lipidCreator.registeredLipids.Add(new GLLipid((GLLipid)currentLipid));
-                    refreshRegisteredLipidsTable();
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     break;
                 case LipidCategory.PhosphoLipid:
                     lipidCreator.registeredLipids.Add(new PLLipid((PLLipid)currentLipid));
-                    refreshRegisteredLipidsTable();
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     break;
                 case LipidCategory.SphingoLipid:
                     lipidCreator.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
-                    refreshRegisteredLipidsTable();
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     break;
                 case LipidCategory.Cholesterol:
                     lipidCreator.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
-                    refreshRegisteredLipidsTable();
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     break;
                 case LipidCategory.Mediator:
                     lipidCreator.registeredLipids.Add(new Mediator((Mediator)currentLipid));
-                    refreshRegisteredLipidsTable();
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     break;
                 default:
                     break;
             }
+            lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Edit"].Value = editImage;
+            lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Delete"].Value = deleteImage;
+            lipidsGridview.Update();
+            lipidsGridview.Refresh();
         }
+        
+        
         
         public void refreshRegisteredLipidsTable()
         {
             registeredLipidsDatatable.Clear();
             foreach (Lipid currentRegisteredLipid in lipidCreator.registeredLipids)
             {
-                DataRow row = registeredLipidsDatatable.NewRow();
-                if (currentRegisteredLipid is GLLipid)
-                {
-                    GLLipid currentGLLipid = (GLLipid)currentRegisteredLipid;
-                    row["Category"] = "Glycerolipid";
-                    row["Building Block 1"] = "FA: " + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
-                    if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
-                    if (currentGLLipid.containsSugar)
-                    {
-                        row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
-                    }
-                    else
-                    {
-                        if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
-                    }
-                }
-                else if (currentRegisteredLipid is PLLipid)
-                {
-                    PLLipid currentPLLipid = (PLLipid)currentRegisteredLipid;
-                    if (currentPLLipid.isCL)
-                    {
-                        row["Category"] = "Cardiolipin";
-                        row["Building Block 1"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                        row["Building Block 2"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
-                        row["Building Block 3"] = "FA: " + currentPLLipid.fag3.lengthInfo + "; DB: " + currentPLLipid.fag3.dbInfo + "; OH: " + currentPLLipid.fag3.hydroxylInfo;
-                        if (!currentPLLipid.fag4.faTypes["FAx"]) row["Building Block 4"] = "FA: " + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
-                    }
-                    else
-                    {
-                        row["Category"] = "Phospholipid";
-                        row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
-                        row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                        if (!currentPLLipid.fag2.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
-                    }
-                }
-                else if (currentRegisteredLipid is SLLipid)
-                {
-                    SLLipid currentSLLipid = (SLLipid)currentRegisteredLipid;
-                    row["Category"] = "Sphingolipid";
-                    row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
-                    row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
-                    if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
-                }
-                
-                else if (currentRegisteredLipid is Cholesterol)
-                {
-                    Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
-                    row["Category"] = "Cholesterol";
-                    if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
-                }
-                
-                else if (currentRegisteredLipid is Mediator)
-                {
-                    Mediator currentMedLipid = (Mediator)currentRegisteredLipid;
-                    row["Building Block 1"] = String.Join(", ", currentMedLipid.headGroupNames);
-                    row["Category"] = "Mediator";
-                }
-                
-                
-                string adductsStr = "";
-                if (currentRegisteredLipid.adducts["+H"]) adductsStr += "+H⁺";
-                if (currentRegisteredLipid.adducts["+2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+2H⁺⁺";
-                if (currentRegisteredLipid.adducts["+NH4"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+NH4⁺";
-                if (currentRegisteredLipid.adducts["-H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-H⁻";
-                if (currentRegisteredLipid.adducts["-2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-2H⁻ ⁻";
-                if (currentRegisteredLipid.adducts["+HCOO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+HCOO⁻";
-                if (currentRegisteredLipid.adducts["+CH3COO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+CH3COO⁻";
-                row["Adducts"] = adductsStr;
-                
-                registeredLipidsDatatable.Rows.Add(row);
-                lipidsGridview.DataSource = registeredLipidsDatatable;
-                
+                registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentRegisteredLipid));
                 
                 for (int i = 0; i < lipidsGridview.Rows.Count; ++i)
                 {
@@ -2580,35 +2599,7 @@ namespace LipidCreator
             }
             else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
             {
-                Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
-                int tabIndex = 0;
-                if (currentRegisteredLipid is GLLipid)
-                {
-                    tabIndex = (int)LipidCategory.GlyceroLipid;
-                }
-                else if (currentRegisteredLipid is PLLipid)
-                {
-                    tabIndex = (int)LipidCategory.PhosphoLipid;
-                }
-                else if (currentRegisteredLipid is SLLipid)
-                {
-                    tabIndex = (int)LipidCategory.SphingoLipid;
-                }
-                else if (currentRegisteredLipid is Cholesterol)
-                {
-                    tabIndex = (int)LipidCategory.Cholesterol;
-                }
-                else if (currentRegisteredLipid is Mediator)
-                {
-                    tabIndex = (int)LipidCategory.Mediator;
-                }
-                lipidCreator.registeredLipids.RemoveAt(rowIndex);
-                refreshRegisteredLipidsTable();
-                lipidModifications[tabIndex] = -1;
-                if (tabIndex == currentTabIndex)
-                {
-                    changeTab(tabIndex);
-                }
+                deleteLipidsGridviewRow(rowIndex);
             }
         }
         
@@ -2617,10 +2608,43 @@ namespace LipidCreator
         {
             if (e.KeyCode == Keys.Delete && lipidCreator.registeredLipids.Count > 0 && ((DataGridView)sender).SelectedRows.Count > 0)
             {   
-                lipidCreator.registeredLipids.RemoveAt(((DataGridView)sender).SelectedRows[0].Index);
-                refreshRegisteredLipidsTable();
+                deleteLipidsGridviewRow(((DataGridView)sender).SelectedRows[0].Index);
                 e.Handled = true;
             }
+        }
+        
+        
+        public void deleteLipidsGridviewRow(int rowIndex)
+        {
+            Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
+            int tabIndex = 0;
+            if (currentRegisteredLipid is GLLipid) tabIndex = (int)LipidCategory.GlyceroLipid;
+            else if (currentRegisteredLipid is PLLipid) tabIndex = (int)LipidCategory.PhosphoLipid;
+            else if (currentRegisteredLipid is SLLipid) tabIndex = (int)LipidCategory.SphingoLipid;
+            else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Cholesterol;
+            else if (currentRegisteredLipid is Mediator) tabIndex = (int)LipidCategory.Mediator;
+            
+            DataTable tmpTable = registeredLipidsDatatable.Clone();
+            for (int i = 0; i < registeredLipidsDatatable.Rows.Count; ++i)
+            {
+                if (i != rowIndex) tmpTable.ImportRow(registeredLipidsDatatable.Rows[i]);
+            }
+            registeredLipidsDatatable.Rows.Clear();
+            
+            foreach (DataRow row in tmpTable.Rows) registeredLipidsDatatable.ImportRow(row);
+            
+            if ((int)lipidModifications[tabIndex] == rowIndex) lipidModifications[tabIndex] = -1;
+            if (tabIndex == (int)currentIndex) changeTab(tabIndex);
+            
+            for (int i = 0; i < lipidsGridview.Rows.Count; ++i)
+            {
+                lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
+                lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
+            }
+            
+            lipidCreator.registeredLipids.RemoveAt(rowIndex);
+            lipidsGridview.Update();
+            lipidsGridview.Refresh();
         }
         
         

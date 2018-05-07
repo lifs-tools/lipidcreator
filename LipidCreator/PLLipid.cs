@@ -42,6 +42,7 @@ namespace LipidCreator
         public FattyAcidGroup fag3;
         public FattyAcidGroup fag4;
         public bool isCL;
+        public bool isLyso;
     
         public PLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.PhosphoLipid)
         {
@@ -50,6 +51,7 @@ namespace LipidCreator
             fag3 = new FattyAcidGroup();
             fag4 = new FattyAcidGroup();
             isCL = false;
+            isLyso = false;
         }
     
         public PLLipid(PLLipid copy) : base((Lipid)copy)
@@ -59,11 +61,12 @@ namespace LipidCreator
             fag3 = new FattyAcidGroup(copy.fag3);
             fag4 = new FattyAcidGroup(copy.fag4);
             isCL = copy.isCL;
+            isLyso = copy.isLyso;
         }
         
         public override string serialize()
         {
-            string xml = "<lipid type=\"PL\" isCL=\"" + isCL + "\">\n";
+            string xml = "<lipid type=\"PL\" isCL=\"" + isCL + "\" isLyso=\"" + isLyso + "\">\n";
             xml += fag1.serialize();
             xml += fag2.serialize();
             xml += fag3.serialize();
@@ -88,6 +91,7 @@ namespace LipidCreator
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
             isCL = node.Attribute("isCL").Value == "True";
+            isLyso = node.Attribute("isLyso").Value == "True";
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

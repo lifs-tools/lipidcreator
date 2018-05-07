@@ -390,6 +390,11 @@ namespace LipidCreator
                     
                 case LipidCategory.PhosphoLipid:
                     PLLipid currentPLLipid = (PLLipid)currentLipid;
+                    
+                    if (currentPLLipid.isCL) plIsCL.Checked = true;
+                    else if (currentPLLipid.isLyso) plIsLyso.Checked = true;
+                    else plRegular.Checked = true;
+                    
                     if (currentPLLipid.isCL) // Cardiolipin
                     {
                         plHGLabel.Visible = false;
@@ -1580,14 +1585,15 @@ namespace LipidCreator
             ((PLLipid)currentLipid).fag2.faTypes["FAx"] = !((PLLipid)currentLipid).fag2.anyFAChecked();
         }
         
-        public void plIsCLCheckedChanged(Object sender, EventArgs e)
+        public void plTypeCheckedChanged(Object sender, EventArgs e)
         {
-            ((PLLipid)currentLipid).isCL = ((CheckBox)sender).Checked;
-            extendWindow(((CheckBox)sender).Checked);
+            ((PLLipid)currentLipid).isCL = plIsCL.Checked;
+            ((PLLipid)currentLipid).isLyso = plIsLyso.Checked;
+            
+            extendWindow(plIsCL.Checked);
             
             
             changeTab((int)LipidCategory.PhosphoLipid);
-            plIsCL.BringToFront();
         }
         
         void extendWindow(bool isCL)
@@ -1595,8 +1601,7 @@ namespace LipidCreator
             ignoreLipidGroupBox = true;
             easterText.Visible = false;
             if (isCL && !windowExtended)
-            {Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
+            {
                 windowExtended = true;
             
                 this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeightExtended);
@@ -1605,8 +1610,6 @@ namespace LipidCreator
                 plStep1.Height = step1HeightExtended;
                 lcStep2.Top = plStep1.Height + 20;
                 lcStep3.Top = plStep1.Height + 20;
-            stopWatch.Stop();
-            Console.WriteLine(stopWatch.Elapsed);
             }
             else if (!isCL && windowExtended)
             {
@@ -2475,7 +2478,7 @@ namespace LipidCreator
             lipidsGridview.Update();
             lipidsGridview.Refresh();
             
-            
+            for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
             lipidModifications[tabIndex] = lipidsGridview.Rows.Count - 1;
             modifyLipidButton.Enabled = true;
         }
@@ -2593,6 +2596,7 @@ namespace LipidCreator
             
                 Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
                 int tabIndex = 0;
+                for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
                 if (currentRegisteredLipid is GLLipid)
                 {
                     tabIndex = (int)LipidCategory.GlyceroLipid;

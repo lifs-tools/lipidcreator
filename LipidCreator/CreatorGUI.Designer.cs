@@ -397,7 +397,6 @@ namespace LipidCreator
         public CheckBox plFA2Checkbox1;
         public CheckBox plFA2Checkbox2;
         public CheckBox plFA2Checkbox3;
-        public CheckBox plIsCL;
         public CheckBox slIsLyso;
         public CheckBox glContainsSugar;
         public CheckBox chContainsEster;
@@ -477,6 +476,10 @@ namespace LipidCreator
         public TextBox plHydroxyl2Textbox;
         public TextBox chHydroxylTextbox;
         
+        public GroupBox plTypeGroup;
+        public RadioButton plRegular;
+        public RadioButton plIsCL;
+        public RadioButton plIsLyso;
 
         Label clDB3Label;
         Label clDB4Label;
@@ -876,10 +879,14 @@ namespace LipidCreator
             plFA2Checkbox3 = new CheckBox();
             glRepresentativeFA = new CheckBox();
             plRepresentativeFA = new CheckBox();
-            plIsCL = new CheckBox();
             slIsLyso = new CheckBox();
             glContainsSugar = new CheckBox();
             chContainsEster = new CheckBox();
+            
+            plTypeGroup = new GroupBox();
+            plRegular = new RadioButton();
+            plIsCL = new RadioButton();
+            plIsLyso = new RadioButton();
             
             glPositiveAdduct = new GroupBox();
             glNegativeAdduct = new GroupBox();
@@ -1389,7 +1396,7 @@ namespace LipidCreator
             plStep1.Controls.Add(plFA2Checkbox3);
             plStep1.Controls.Add(plFA2Checkbox2);
             plStep1.Controls.Add(plFA2Checkbox1);
-            plStep1.Controls.Add(plIsCL);
+            plStep1.Controls.Add(plTypeGroup);
             plStep1.Controls.Add(plPictureBox);
             plStep1.Controls.Add(plFA1Textbox);
             plStep1.Controls.Add(plFA2Textbox);
@@ -1511,10 +1518,27 @@ namespace LipidCreator
             plFA2Checkbox1.Checked = true;
             plFA2Checkbox1.CheckedChanged += new EventHandler(plF2Checkbox1CheckedChanged);
             
-            plIsCL.Location = new Point(130, 36);
-            plIsCL.Text = "Is cardiolipin";
-            plIsCL.CheckedChanged += new EventHandler(plIsCLCheckedChanged);
-            plIsCL.BringToFront();
+            
+            
+            plTypeGroup.Location = new Point(400, 8);
+            plTypeGroup.Size = new Size(240, 40);
+            plTypeGroup.Text = "Type";
+            plTypeGroup.Controls.Add(plIsCL);
+            plTypeGroup.Controls.Add(plIsLyso);
+            plTypeGroup.Controls.Add(plRegular);
+            
+            plRegular.Location = new Point(10, 14);
+            plRegular.Text = "Regular";
+            plRegular.CheckedChanged += new EventHandler(plTypeCheckedChanged);
+            
+            plIsLyso.Location = new Point(90, 14);
+            plIsLyso.Text = "Lyso";
+            plIsLyso.CheckedChanged += new EventHandler(plTypeCheckedChanged);
+            
+            plIsCL.Location = new Point(150, 14);
+            plIsCL.Text = "Cardiolipin";
+            plIsCL.Width = 80;
+            plIsCL.CheckedChanged += new EventHandler(plTypeCheckedChanged);
 
             
             plHgListbox.Location = new Point(25, 50);

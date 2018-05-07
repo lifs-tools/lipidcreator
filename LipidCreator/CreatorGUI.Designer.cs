@@ -342,7 +342,6 @@ namespace LipidCreator
         Image cholesterolEsterBackboneImage;
         
 
-        public PictureBox clPictureBox;
         public PictureBox glPictureBox;
         public PictureBox plPictureBox;
         public PictureBox slPictureBox;
@@ -354,8 +353,6 @@ namespace LipidCreator
         public ListBox slHgListbox;
         public ListBox medHgListbox;
 
-        public TextBox clFA1Textbox;
-        public TextBox clFA2Textbox;
         public TextBox clFA3Textbox;
         public TextBox clFA4Textbox;
         public TextBox glFA1Textbox;
@@ -367,8 +364,6 @@ namespace LipidCreator
         public TextBox slFATextbox;
         public TextBox chFATextbox;
 
-        public ComboBox clFA1Combobox;
-        public ComboBox clFA2Combobox;
         public ComboBox clFA3Combobox;
         public ComboBox clFA4Combobox;
         public ComboBox glFA1Combobox;
@@ -381,12 +376,6 @@ namespace LipidCreator
         public ComboBox chFACombobox;
 
 
-        public CheckBox clFA1Checkbox1;
-        public CheckBox clFA1Checkbox2;
-        public CheckBox clFA1Checkbox3;
-        public CheckBox clFA2Checkbox1;
-        public CheckBox clFA2Checkbox2;
-        public CheckBox clFA2Checkbox3;
         public CheckBox clFA3Checkbox1;
         public CheckBox clFA3Checkbox2;
         public CheckBox clFA3Checkbox3;
@@ -413,8 +402,6 @@ namespace LipidCreator
         public CheckBox glContainsSugar;
         public CheckBox chContainsEster;
 
-        public GroupBox clPositiveAdduct;
-        public GroupBox clNegativeAdduct;
         public GroupBox glPositiveAdduct;
         public GroupBox glNegativeAdduct;
         public GroupBox plPositiveAdduct;
@@ -433,13 +420,6 @@ namespace LipidCreator
         public GroupBox lcStep2;
         public GroupBox lcStep3;
 
-        public CheckBox clPosAdductCheckbox1;
-        public CheckBox clPosAdductCheckbox2;
-        public CheckBox clPosAdductCheckbox3;
-        public CheckBox clNegAdductCheckbox1;
-        public CheckBox clNegAdductCheckbox2;
-        public CheckBox clNegAdductCheckbox3;
-        public CheckBox clNegAdductCheckbox4;
         public CheckBox glPosAdductCheckbox1;
         public CheckBox glPosAdductCheckbox2;
         public CheckBox glPosAdductCheckbox3;
@@ -473,13 +453,10 @@ namespace LipidCreator
         public CheckBox medNegAdductCheckbox3;
         public CheckBox medNegAdductCheckbox4;
         
-        public CheckBox clRepresentativeFA;
         public CheckBox glRepresentativeFA;
         public CheckBox plRepresentativeFA;
         Color highlightedCheckboxColor;
 
-        public TextBox clDB1Textbox;
-        public TextBox clDB2Textbox;
         public TextBox clDB3Textbox;
         public TextBox clDB4Textbox;
         public TextBox glDB1Textbox;
@@ -491,8 +468,6 @@ namespace LipidCreator
         public TextBox slDB2Textbox;
         public TextBox chDBTextbox;
         
-        public TextBox clHydroxyl1Textbox;
-        public TextBox clHydroxyl2Textbox;
         public TextBox clHydroxyl3Textbox;
         public TextBox clHydroxyl4Textbox;
         public TextBox glHydroxyl1Textbox;
@@ -503,8 +478,6 @@ namespace LipidCreator
         public TextBox chHydroxylTextbox;
         
 
-        Label clDB1Label;
-        Label clDB2Label;
         Label clDB3Label;
         Label clDB4Label;
         Label glDB1Label;
@@ -517,8 +490,6 @@ namespace LipidCreator
         Label chDBLabel;
         Label slLCBHydroxyLabel;
         Label slFAHydroxyLabel;
-        Label clHydroxyl1Label;
-        Label clHydroxyl2Label;
         Label clHydroxyl3Label;
         Label clHydroxyl4Label;
         Label glHydroxyl1Label;
@@ -676,7 +647,6 @@ namespace LipidCreator
             openReviewFormButton = new Button();
             
 
-            clPictureBox = new PictureBox();
             glPictureBox = new PictureBox();
             plPictureBox = new PictureBox();
             slPictureBox = new PictureBox();
@@ -727,7 +697,6 @@ namespace LipidCreator
             
             
             
-            
             glHgListbox.Items.AddRange(glHgList.ToArray());
             plHgListbox.Items.AddRange(plHgList.ToArray());
             medHgListbox.Items.AddRange(medHgList.ToArray());
@@ -774,18 +743,8 @@ namespace LipidCreator
             glyceroBackboneImageFA3p = glyceroBackboneImageFA3pOrig;
             
             
-            clFA1Textbox = new TextBox();
-            clFA2Textbox = new TextBox();
             clFA3Textbox = new TextBox();
             clFA4Textbox = new TextBox();
-            clFA1Combobox = new ComboBox();
-            clFA1Combobox.Items.Add("Fatty acid chain");
-            clFA1Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            clFA1Combobox.Items.Add("Fatty acid chain - even carbon no.");
-            clFA2Combobox = new ComboBox();
-            clFA2Combobox.Items.Add("Fatty acid chain");
-            clFA2Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            clFA2Combobox.Items.Add("Fatty acid chain - even carbon no.");
             clFA3Combobox = new ComboBox();
             clFA3Combobox.Items.Add("Fatty acid chain");
             clFA3Combobox.Items.Add("Fatty acid chain - odd carbon no.");
@@ -794,20 +753,12 @@ namespace LipidCreator
             clFA4Combobox.Items.Add("Fatty acid chain");
             clFA4Combobox.Items.Add("Fatty acid chain - odd carbon no.");
             clFA4Combobox.Items.Add("Fatty acid chain - even carbon no.");
-            clDB1Textbox = new TextBox();
-            clDB2Textbox = new TextBox();
             clDB3Textbox = new TextBox();
             clDB4Textbox = new TextBox();
-            clHydroxyl1Textbox = new TextBox();
-            clHydroxyl2Textbox = new TextBox();
             clHydroxyl3Textbox = new TextBox();
             clHydroxyl4Textbox = new TextBox();
-            clHydroxyl1Label = new Label();
-            clHydroxyl2Label = new Label();
             clHydroxyl3Label = new Label();
             clHydroxyl4Label = new Label();
-            clDB1Label = new Label();
-            clDB2Label = new Label();
             clDB3Label = new Label();
             clDB4Label = new Label();
             glFA1Textbox = new TextBox();
@@ -885,12 +836,6 @@ namespace LipidCreator
             chHydroxylTextbox = new TextBox();
             chFAHydroxyLabel = new Label();
 
-            clFA1Checkbox1 = new CheckBox();
-            clFA1Checkbox2 = new CheckBox();
-            clFA1Checkbox3 = new CheckBox();
-            clFA2Checkbox1 = new CheckBox();
-            clFA2Checkbox2 = new CheckBox();
-            clFA2Checkbox3 = new CheckBox();
             clFA3Checkbox1 = new CheckBox();
             clFA3Checkbox2 = new CheckBox();
             clFA3Checkbox3 = new CheckBox();
@@ -912,16 +857,13 @@ namespace LipidCreator
             plFA2Checkbox1 = new CheckBox();
             plFA2Checkbox2 = new CheckBox();
             plFA2Checkbox3 = new CheckBox();
-            clRepresentativeFA = new CheckBox();
             glRepresentativeFA = new CheckBox();
             plRepresentativeFA = new CheckBox();
             plIsCL = new CheckBox();
             slIsLyso = new CheckBox();
             glContainsSugar = new CheckBox();
             chContainsEster = new CheckBox();
-
-            clPositiveAdduct = new GroupBox();
-            clNegativeAdduct = new GroupBox();
+            
             glPositiveAdduct = new GroupBox();
             glNegativeAdduct = new GroupBox();
             plPositiveAdduct = new GroupBox();
@@ -940,13 +882,6 @@ namespace LipidCreator
             lcStep2 = new GroupBox();
             lcStep3 = new GroupBox();
 
-            clPosAdductCheckbox1 = new CheckBox();
-            clPosAdductCheckbox2 = new CheckBox();
-            clPosAdductCheckbox3 = new CheckBox();
-            clNegAdductCheckbox1 = new CheckBox();
-            clNegAdductCheckbox2 = new CheckBox();
-            clNegAdductCheckbox3 = new CheckBox();
-            clNegAdductCheckbox4 = new CheckBox();
             glPosAdductCheckbox1 = new CheckBox();
             glPosAdductCheckbox2 = new CheckBox();
             glPosAdductCheckbox3 = new CheckBox();
@@ -996,6 +931,7 @@ namespace LipidCreator
             toolTip = new ToolTip();
             
             
+            
 
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
@@ -1030,229 +966,41 @@ namespace LipidCreator
 
             // tab for cardiolipins
             phospholipidsTab.Controls.Add(plStep1);
-            plStep1.Controls.Add(clFA1Checkbox3);
-            plStep1.Controls.Add(clFA1Checkbox2);
-            plStep1.Controls.Add(clFA1Checkbox1);
-            plStep1.Controls.Add(clFA2Checkbox3);
-            plStep1.Controls.Add(clFA2Checkbox2);
-            plStep1.Controls.Add(clFA2Checkbox1);
             plStep1.Controls.Add(clFA3Checkbox3);
             plStep1.Controls.Add(clFA3Checkbox2);
             plStep1.Controls.Add(clFA3Checkbox1);
             plStep1.Controls.Add(clFA4Checkbox3);
             plStep1.Controls.Add(clFA4Checkbox2);
             plStep1.Controls.Add(clFA4Checkbox1);
-            plStep1.Controls.Add(clPositiveAdduct);
-            plStep1.Controls.Add(clNegativeAdduct);
-            plStep1.Controls.Add(clPictureBox);
-            plStep1.Controls.Add(clFA1Textbox);
-            plStep1.Controls.Add(clFA2Textbox);
             plStep1.Controls.Add(clFA3Textbox);
             plStep1.Controls.Add(clFA4Textbox);
-            plStep1.Controls.Add(clDB1Textbox);
-            plStep1.Controls.Add(clDB2Textbox);
             plStep1.Controls.Add(clDB3Textbox);
             plStep1.Controls.Add(clDB4Textbox);
-            plStep1.Controls.Add(clRepresentativeFA);
-            plStep1.Controls.Add(clHydroxyl1Textbox);
-            plStep1.Controls.Add(clHydroxyl2Textbox);
             plStep1.Controls.Add(clHydroxyl3Textbox);
             plStep1.Controls.Add(clHydroxyl4Textbox);
-            plStep1.Controls.Add(clFA1Combobox);
-            plStep1.Controls.Add(clFA2Combobox);
             plStep1.Controls.Add(clFA3Combobox);
             plStep1.Controls.Add(clFA4Combobox);
-            plStep1.Controls.Add(clDB1Label);
-            plStep1.Controls.Add(clDB2Label);
             plStep1.Controls.Add(clDB3Label);
             plStep1.Controls.Add(clDB4Label);
-            plStep1.Controls.Add(clHydroxyl1Label);
-            plStep1.Controls.Add(clHydroxyl2Label);
             plStep1.Controls.Add(clHydroxyl3Label);
             plStep1.Controls.Add(clHydroxyl4Label);
             Font plFont = new Font(phospholipidsTab.Font.FontFamily, 8.25F);
             phospholipidsTab.Font = plFont;
             
             
-            
-            clFA1Checkbox3.Visible = false;
-            clFA1Checkbox2.Visible = false;
-            clFA1Checkbox1.Visible = false;
-            clFA2Checkbox3.Visible = false;
-            clFA2Checkbox2.Visible = false;
-            clFA2Checkbox1.Visible = false;
-            clFA3Checkbox3.Visible = false;
-            clFA3Checkbox2.Visible = false;
-            clFA3Checkbox1.Visible = false;
-            clFA4Checkbox3.Visible = false;
-            clFA4Checkbox2.Visible = false;
-            clFA4Checkbox1.Visible = false;
-            clPositiveAdduct.Visible = false;
-            clNegativeAdduct.Visible = false;
-            clPictureBox.Visible = false;
-            clFA1Textbox.Visible = false;
-            clFA2Textbox.Visible = false;
             clFA3Textbox.Visible = false;
             clFA4Textbox.Visible = false;
-            clDB1Textbox.Visible = false;
-            clDB2Textbox.Visible = false;
             clDB3Textbox.Visible = false;
             clDB4Textbox.Visible = false;
-            clHydroxyl1Textbox.Visible = false;
-            clHydroxyl2Textbox.Visible = false;
             clHydroxyl3Textbox.Visible = false;
             clHydroxyl4Textbox.Visible = false;
-            clFA1Combobox.Visible = false;
-            clFA2Combobox.Visible = false;
             clFA3Combobox.Visible = false;
             clFA4Combobox.Visible = false;
-            clDB1Label.Visible = false;
-            clDB2Label.Visible = false;
             clDB3Label.Visible = false;
             clDB4Label.Visible = false;
-            clHydroxyl1Label.Visible = false;
-            clHydroxyl2Label.Visible = false;
             clHydroxyl3Label.Visible = false;
             clHydroxyl4Label.Visible = false;
-            clRepresentativeFA.Visible = false;
             
-
-            clPictureBox.Image = cardioBackboneImage;
-            clPictureBox.Location = new Point(5, 20);
-            clPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-            clPictureBox.SendToBack();
-            
-
-
-            clFA1Combobox.BringToFront();
-            clFA1Textbox.BringToFront();
-            clFA1Textbox.Location = new Point(400, 74);
-            clFA1Textbox.Width = faLength;
-            clFA1Textbox.TextChanged += new EventHandler(clFA1TextboxValueChanged);
-            toolTip.SetToolTip(clFA1Textbox, formattingFA);
-            clFA1Combobox.Location = new Point(clFA1Textbox.Left, clFA1Textbox.Top - sepText);
-            clFA1Combobox.Width = faLength;
-            clFA1Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            clFA1Combobox.SelectedIndexChanged += new EventHandler(clFA1ComboboxValueChanged);
-            clDB1Textbox.Location = new Point(clFA1Textbox.Left + clFA1Textbox.Width + sep, clFA1Textbox.Top);
-            clDB1Textbox.Width = dbLength;
-            clDB1Textbox.TextChanged += new EventHandler(clDB1TextboxValueChanged);
-            toolTip.SetToolTip(clDB1Textbox, formattingDB);
-            clDB1Label.Width = dbLength;
-            clDB1Label.Location = new Point(clDB1Textbox.Left, clDB1Textbox.Top - sep);
-            clDB1Label.Text = dbText;
-            clHydroxyl1Textbox.Width = dbLength;
-            clHydroxyl1Textbox.Location = new Point(clDB1Textbox.Left + clDB1Textbox.Width + sep, clDB1Textbox.Top);
-            clHydroxyl1Textbox.TextChanged += new EventHandler(clHydroxyl1TextboxValueChanged);
-            toolTip.SetToolTip(clHydroxyl1Textbox, formattingHydroxyl);
-            clHydroxyl1Label.Width = dbLength;
-            clHydroxyl1Label.Location = new Point(clHydroxyl1Textbox.Left, clHydroxyl1Textbox.Top - sep);
-            clHydroxyl1Label.Text = hydroxylText;
-            
-
-            clFA1Checkbox3.Location = new Point(clFA1Textbox.Left + 90, clFA1Textbox.Top + clFA1Textbox.Height);
-            clFA1Checkbox3.Text = "FAa";
-            clFA1Checkbox3.CheckedChanged += new EventHandler(clFA1Checkbox3CheckedChanged);
-            clFA1Checkbox3.MouseLeave += new System.EventHandler(clFA1Checkbox3MouseLeave);
-            clFA1Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA1Checkbox3MouseHover);
-            clFA1Checkbox2.Location = new Point(clFA1Textbox.Left + 40, clFA1Textbox.Top + clFA1Textbox.Height);
-            clFA1Checkbox2.Text = "FAp";
-            toolTip.SetToolTip(clFA1Checkbox2, FApInformation);
-            clFA1Checkbox2.CheckedChanged += new EventHandler(clFA1Checkbox2CheckedChanged);
-            clFA1Checkbox2.MouseLeave += new System.EventHandler(clFA1Checkbox2MouseLeave);
-            clFA1Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA1Checkbox2MouseHover);
-            clFA1Checkbox1.Location = new Point(clFA1Textbox.Left, clFA1Textbox.Top + clFA1Textbox.Height);
-            clFA1Checkbox1.Text = "FA";
-            clFA1Checkbox1.Checked = true;
-            clFA1Checkbox1.CheckedChanged += new EventHandler(clFA1Checkbox1CheckedChanged);
-
-            clPositiveAdduct.Width = 120;
-            clPositiveAdduct.Location = new Point(leftGroupboxes - clPositiveAdduct.Width, topGroupboxes);
-            clPositiveAdduct.Height = 120;
-            clPositiveAdduct.Text = "Positive adducts";
-            clPosAdductCheckbox1.Parent = clPositiveAdduct;
-            clPosAdductCheckbox1.Location = new Point(10, 15);
-            clPosAdductCheckbox1.Text = "+H⁺";
-            clPosAdductCheckbox1.Checked = true;
-            clPosAdductCheckbox1.CheckedChanged += new EventHandler(clPosAdductCheckbox1CheckedChanged);
-            clPosAdductCheckbox2.Parent = clPositiveAdduct;
-            clPosAdductCheckbox2.Location = new Point(10, 35);
-            clPosAdductCheckbox2.Text = "+2H⁺⁺";
-            clPosAdductCheckbox2.CheckedChanged += new EventHandler(clPosAdductCheckbox2CheckedChanged);
-            clPosAdductCheckbox3.Parent = clPositiveAdduct;
-            clPosAdductCheckbox3.Location = new Point(10, 55);
-            clPosAdductCheckbox3.Text = "+NH4⁺";
-            clPosAdductCheckbox3.Enabled = false;
-            clPosAdductCheckbox3.CheckedChanged += new EventHandler(clPosAdductCheckbox3CheckedChanged);
-            clNegativeAdduct.Width = 120;
-            clNegativeAdduct.Location = new Point(leftGroupboxes - clNegativeAdduct.Width, clPositiveAdduct.Top + 140);
-            clNegativeAdduct.Height = 120;
-            clNegativeAdduct.Text = "Negative adducts";
-            clNegAdductCheckbox1.Parent = clNegativeAdduct;
-            clNegAdductCheckbox1.Location = new Point(10, 15);
-            clNegAdductCheckbox1.Text = "-H⁻";
-            clNegAdductCheckbox1.CheckedChanged += new EventHandler(clNegAdductCheckbox1CheckedChanged);
-            clNegAdductCheckbox2.Parent = clNegativeAdduct;
-            clNegAdductCheckbox2.Location = new Point(10, 35);
-            clNegAdductCheckbox2.Text = "-2H⁻ ⁻";
-            clNegAdductCheckbox2.CheckedChanged += new EventHandler(clNegAdductCheckbox2CheckedChanged);
-            clNegAdductCheckbox3.Parent = clNegativeAdduct;
-            clNegAdductCheckbox3.Location = new Point(10, 55);
-            clNegAdductCheckbox3.Text = "+HCOO⁻";
-            clNegAdductCheckbox3.Enabled = false;
-            clNegAdductCheckbox3.CheckedChanged += new EventHandler(clNegAdductCheckbox3CheckedChanged);
-            clNegAdductCheckbox4.Parent = clNegativeAdduct;
-            clNegAdductCheckbox4.Location = new Point(10, 75);
-            clNegAdductCheckbox4.Text = "+CH3COO⁻";
-            clNegAdductCheckbox4.Enabled = false;
-            clNegAdductCheckbox4.CheckedChanged += new EventHandler(clNegAdductCheckbox4CheckedChanged);
-
-
-
-            clFA2Combobox.BringToFront();
-            clFA2Textbox.BringToFront();
-            clFA2Textbox.Location = new Point(312, 154);
-            clFA2Textbox.Width = faLength;
-            clFA2Textbox.TextChanged += new EventHandler(clFA2TextboxValueChanged);
-            toolTip.SetToolTip(clFA2Textbox, formattingFA);
-            clFA2Combobox.Location = new Point(clFA2Textbox.Left, clFA2Textbox.Top - sepText);
-            clFA2Combobox.Width = faLength;
-            clFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            clFA2Combobox.SelectedIndexChanged += new EventHandler(clFA2ComboboxValueChanged);
-            clDB2Textbox.Location = new Point(clFA2Textbox.Left + clFA2Textbox.Width + sep, clFA2Textbox.Top);
-            clDB2Textbox.Width = dbLength;
-            clDB2Textbox.TextChanged += new EventHandler(clDB2TextboxValueChanged);
-            toolTip.SetToolTip(clDB2Textbox, formattingDB);
-            clDB2Label.Location = new Point(clDB2Textbox.Left, clDB2Textbox.Top - sep);
-            clDB2Label.Width = dbLength;
-            clDB2Label.Text = dbText;
-            clHydroxyl2Textbox.Width = dbLength;
-            clHydroxyl2Textbox.Location = new Point(clDB2Textbox.Left + clDB2Textbox.Width + sep, clDB2Textbox.Top);
-            clHydroxyl2Textbox.TextChanged += new EventHandler(clHydroxyl2TextboxValueChanged);
-            toolTip.SetToolTip(clHydroxyl2Textbox, formattingHydroxyl);
-            clHydroxyl2Label.Width = dbLength;
-            clHydroxyl2Label.Location = new Point(clHydroxyl2Textbox.Left, clHydroxyl2Textbox.Top - sep);
-            clHydroxyl2Label.Text = hydroxylText;
-
-            clFA2Checkbox3.Location = new Point(clFA2Textbox.Left + 90, clFA2Textbox.Top + clFA2Textbox.Height);
-            clFA2Checkbox3.Text = "FAa";
-            clFA2Checkbox3.CheckedChanged += new EventHandler(clFA2Checkbox3CheckedChanged);
-            clFA2Checkbox3.MouseLeave += new System.EventHandler(clFA2Checkbox3MouseLeave);
-            clFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA2Checkbox3MouseHover);
-            clFA2Checkbox2.Location = new Point(clFA2Textbox.Left + 40, clFA2Textbox.Top + clFA2Textbox.Height);
-            clFA2Checkbox2.Text = "FAp";
-            toolTip.SetToolTip(clFA2Checkbox2, FApInformation);
-            clFA2Checkbox2.CheckedChanged += new EventHandler(clFA2Checkbox2CheckedChanged);
-            clFA2Checkbox2.MouseLeave += new System.EventHandler(clFA2Checkbox2MouseLeave);
-            clFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA2Checkbox2MouseHover);
-            clFA2Checkbox1.Location = new Point(clFA2Textbox.Left, clFA2Textbox.Top + clFA2Textbox.Height);
-            clFA2Checkbox1.Text = "FA";
-            clFA2Checkbox1.Checked = true;
-            clFA2Checkbox1.CheckedChanged += new EventHandler(clFA2Checkbox1CheckedChanged);
-
-
-
-
 
 
             clFA3Combobox.BringToFront();
@@ -1280,6 +1028,7 @@ namespace LipidCreator
             clHydroxyl3Label.Location = new Point(clHydroxyl3Textbox.Left, clHydroxyl3Textbox.Top - sep);
             clHydroxyl3Label.Text = hydroxylText;
 
+
             clFA3Checkbox3.Location = new Point(clFA3Textbox.Left + 90, clFA3Textbox.Top + clFA3Textbox.Height);
             clFA3Checkbox3.Text = "FAa";
             clFA3Checkbox3.CheckedChanged += new EventHandler(clFA3Checkbox3CheckedChanged);
@@ -1296,13 +1045,6 @@ namespace LipidCreator
             clFA3Checkbox1.Checked = true;
             clFA3Checkbox1.CheckedChanged += new EventHandler(clFA3Checkbox1CheckedChanged);
 
-
-            
-            clRepresentativeFA.Location = new Point(clHydroxyl1Textbox.Left + clHydroxyl1Textbox.Width + sep, clHydroxyl1Textbox.Top);
-            clRepresentativeFA.Width = 120;
-            clRepresentativeFA.Text = "First FA representative";
-            clRepresentativeFA.CheckedChanged += new EventHandler(clRepresentativeFACheckedChanged);
-            clRepresentativeFA.SendToBack();
 
 
 
@@ -1619,6 +1361,7 @@ namespace LipidCreator
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
             glRepresentativeFA.SendToBack();
 
+            
 
             // tab for phospholipids
             
@@ -1626,6 +1369,8 @@ namespace LipidCreator
             plStep1.Controls.Add(plFA1Checkbox3);
             plStep1.Controls.Add(plFA1Checkbox2);
             plStep1.Controls.Add(plFA1Checkbox1);
+            plStep1.Controls.Add(plFA2Checkbox3);
+            plStep1.Controls.Add(plFA2Checkbox2);
             plStep1.Controls.Add(plFA2Checkbox1);
             plStep1.Controls.Add(plIsCL);
             plStep1.Controls.Add(plPictureBox);
@@ -1820,7 +1565,7 @@ namespace LipidCreator
             plPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             plPictureBox.SendToBack();
             
-            plRepresentativeFA.Location = new Point(clHydroxyl1Textbox.Left + clHydroxyl1Textbox.Width + sep, clHydroxyl1Textbox.Top);
+            plRepresentativeFA.Location = new Point(plHydroxyl1Textbox.Left + plHydroxyl1Textbox.Width + sep, plHydroxyl1Textbox.Top);
             plRepresentativeFA.Width = 120;
             plRepresentativeFA.Text = "First FA representative";
             plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
@@ -2279,9 +2024,9 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.Padding = new Padding(5);
 
-            DefaultCheckboxBGR = clPosAdductCheckbox1.BackColor.R;
-            DefaultCheckboxBGG = clPosAdductCheckbox1.BackColor.G;
-            DefaultCheckboxBGB = clPosAdductCheckbox1.BackColor.B;
+            DefaultCheckboxBGR = plPosAdductCheckbox1.BackColor.R;
+            DefaultCheckboxBGG = plPosAdductCheckbox1.BackColor.G;
+            DefaultCheckboxBGB = plPosAdductCheckbox1.BackColor.B;
             
             
             startFirstTutorialButton = new Button();
@@ -2313,10 +2058,6 @@ namespace LipidCreator
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             
-            /*tutorialWindow.Size = new Size(240, 160);
-            tutorialWindow.Location = new Point(40, 60);
-            this.Controls.Add(tutorialWindow);
-            */
             this.SizeChanged += new EventHandler(windowSizeChanged);
             
         

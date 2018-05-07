@@ -529,6 +529,23 @@ namespace LipidCreator
         public long easterEggMilliseconds;
         
 
+        public Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        {
+            var ratioX = (double)maxWidth / image.Width;
+            var ratioY = (double)maxHeight / image.Height;
+            var ratio = Math.Min(ratioX, ratioY);
+
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
+
+            var newImage = new Bitmap(newWidth, newHeight);
+
+            using (var graphics = Graphics.FromImage(newImage))
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+            return newImage;
+        }
+        
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -665,9 +682,9 @@ namespace LipidCreator
             int topGroupboxes = 30;
 
             
-            deleteImage = Image.FromFile(lipidCreator.prefixPath + "images/delete-small.png");
-            editImage = Image.FromFile(lipidCreator.prefixPath + "images/edit-small.png");
-            addImage = Image.FromFile(lipidCreator.prefixPath + "images/add-small.png");
+            deleteImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/delete.png"), 32, 26);
+            editImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/edit.png"), 32, 26);
+            addImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/add.png"), 24, 24);
             
             glHgListbox = new ListBox();
             plHgListbox = new ListBox();

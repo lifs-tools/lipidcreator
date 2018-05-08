@@ -226,7 +226,7 @@ namespace LipidCreator
                         }
                     }
                     else
-                    {                
+                    {
                         String key = headgroup + " ";
                         key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
                         if (usedKeys.Contains(key)) continue;
@@ -264,6 +264,8 @@ namespace LipidCreator
                             precursorData.lcb = lcbType;
                             precursorData.addPrecursor = (onlyPrecursors != 0);
                             precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
+                            
+                            
                             
                             if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
                                 

@@ -207,6 +207,7 @@ namespace LipidCreator
                 // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
                 
+                
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
                 
                 // Exception for lipids with NL(NH3) fragment
@@ -253,8 +254,6 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                
-                Console.WriteLine(chemFormFragment + " " + LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge));
                 
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);

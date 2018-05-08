@@ -516,6 +516,18 @@ namespace LipidCreator
             string[] faToken;
             string tokenSeparator;
             
+            HashSet<string> phosphoLysos = new HashSet<string>();
+            HashSet<string> sphingoLysos = new HashSet<string>();
+            
+            foreach(string hg in categoryToClass[(int)LipidCategory.PhosphoLipid])
+            {
+                if (headgroups[hg].attributes.Contains("lyso")) phosphoLysos.Add(hg);
+            }
+            
+            foreach(string hg in categoryToClass[(int)LipidCategory.SphingoLipid])
+            {
+                if (headgroups[hg].attributes.Contains("lyso")) sphingoLysos.Add(hg);
+            }
             
             if (headgroups.ContainsKey(headgroup))
             {
@@ -596,11 +608,12 @@ namespace LipidCreator
                                 break;
                                 
                             default:
-                                if (headgroup[0] == 'L')
+                                if (phosphoLysos.Contains(headgroup))
                                 {
                                     if (faToken.Length != 1) return null;
                                     pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
                                     pllipid.fag2 = parseFattyAcidGroup("", true);
+                                    pllipid.isLyso = true;
                                 }
                                 else
                                 {
@@ -622,8 +635,8 @@ namespace LipidCreator
                         tokenSeparator = getSeparator(acids);
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         if (faToken.Length > 2 || faToken.Length == 0) return null;
-                        else if (faToken.Length == 1){
-                            if (headgroup != "LCB" && headgroup != "LCBP" && headgroup != "LSM" && headgroup != "LHexCer") return null;
+                        else if (sphingoLysos.Contains(headgroup)){
+                            sllipid.isLyso = true;
                             sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
                             if (sllipid.lcb == null) return null;
                         }

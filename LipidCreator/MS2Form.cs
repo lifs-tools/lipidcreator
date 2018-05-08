@@ -184,7 +184,7 @@ namespace LipidCreator
             {
                 this.checkedListBoxPositiveFragments.ContextMenu = this.contextMenuFragment;
                 string lipidClass = getHeadgroup();
-                string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
+                string fragmentName = (string)checkedListBoxPositiveFragments.Items[hIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
@@ -245,7 +245,7 @@ namespace LipidCreator
             {
                 this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
                 String lipidClass = getHeadgroup();
-                string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
+                string fragmentName = (string)checkedListBoxNegativeFragments.Items[hIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;

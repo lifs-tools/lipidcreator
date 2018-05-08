@@ -180,16 +180,16 @@ namespace LipidCreator
             Point point = checkedListBoxPositiveFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxPositiveFragments.IndexFromPoint(point);
 
-            if (hIndex != -1 && hoveredIndex != hIndex)
+            if (hIndex != -1)
             {
-                hoveredIndex = hIndex;
                 this.checkedListBoxPositiveFragments.ContextMenu = this.contextMenuFragment;
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
-                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0 && hoveredIndex != hIndex) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                hoveredIndex = hIndex;
                 
                 // create tool tip           
                 string chemFormP = "";       
@@ -241,16 +241,16 @@ namespace LipidCreator
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
 
-            if (hIndex != -1 && hoveredIndex != hIndex)
+            if (hIndex != -1)
             {
-                hoveredIndex = hIndex;
                 this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hoveredIndex];
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
-                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0 && hoveredIndex != hIndex) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                hoveredIndex = hIndex;
                 
                 // create tool tip           
                 string chemFormP = "";       

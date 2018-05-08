@@ -1953,14 +1953,13 @@ namespace LipidCreator
         {
             
             List<String> slHgList = new List<String>();
-            HashSet<string> lysos = new HashSet<string>(new string[]{"LCB", "LCBP", "LSM", "LHexCer"});
             slHgListbox.Items.Clear();
             
             if (lyso)
             {
                 foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && lipidCreator.lysoSphingoLipids.Contains(headgroup)) slHgList.Add(headgroup);
                 }
                 slPictureBox.Image = sphingoLysoBackboneImage;
                 slFACombobox.Visible = false;
@@ -1974,7 +1973,7 @@ namespace LipidCreator
             {
                 foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !lipidCreator.lysoSphingoLipids.Contains(headgroup)) slHgList.Add(headgroup);
                 }
                 slPictureBox.Image = sphingoBackboneImage;
                 slFACombobox.Visible = true;

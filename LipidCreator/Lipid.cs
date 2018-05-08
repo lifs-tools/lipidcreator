@@ -253,6 +253,9 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                
+                Console.WriteLine(chemFormFragment + " " + LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge));
+                
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
                 

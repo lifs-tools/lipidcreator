@@ -61,6 +61,7 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
+        public HashSet<string> lysoSphingoLipids;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -175,7 +176,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length != 20) throw new Exception("invalid line in file, number of columns in line != 20");
+                            if (tokens.Length < 20) throw new Exception("invalid line in file, number of columns in line < 20");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -227,6 +228,14 @@ namespace LipidCreator
                             headgroup.derivative = tokens[18].Equals("Yes");
                             headgroup.heavyLabeled = tokens[19].Equals("Yes");
                             
+                            if (tokens.Length > 20)
+                            {
+                                if (tokens[20].Equals("lyso"))
+                                {
+                                
+                                }
+                            }
+                            
                             if (headgroup.heavyLabeled)
                             {
                                 string monoName = headgroup.name.Split(new char[]{'/'})[0];
@@ -269,6 +278,7 @@ namespace LipidCreator
             headgroups = new Dictionary<String, Precursor>();
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
+            lysoSphingoLipids = new HashSet<string>();
             readInputFiles();
             
             foreach(string lipidClass in allFragments.Keys)
@@ -777,6 +787,7 @@ namespace LipidCreator
                 if (precursor.Value.userDefined)
                 {
                     xml += precursor.Value.serialize();
+                    //if (precursor.Value)
                 }
             }
             

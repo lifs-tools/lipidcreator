@@ -62,6 +62,7 @@ namespace LipidCreator
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
+        public HashSet<string> lysoPhosphoLipids;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -176,7 +177,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length < 20) throw new Exception("invalid line in file, number of columns in line < 20");
+                            if (tokens.Length < 19) throw new Exception("invalid line in file, number of columns in line < 19");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -225,18 +226,10 @@ namespace LipidCreator
                             headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
                             headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
                             headgroup.buildingBlockType = Convert.ToInt32(tokens[17]);
-                            headgroup.derivative = tokens[18].Equals("Yes");
-                            headgroup.heavyLabeled = tokens[19].Equals("Yes");
+                            if (tokens[18].Length > 0) headgroup.attributes = new HashSet<string>(tokens[18].Split(new char[]{';'}));
+                            headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             
-                            if (tokens.Length > 20)
-                            {
-                                if (tokens[20].Equals("lyso"))
-                                {
-                                
-                                }
-                            }
-                            
-                            if (headgroup.heavyLabeled)
+                            if (headgroup.attributes.Contains("heavy"))
                             {
                                 string monoName = headgroup.name.Split(new char[]{'/'})[0];
                                 if (headgroups.ContainsKey(monoName))
@@ -279,6 +272,7 @@ namespace LipidCreator
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
+            lysoPhosphoLipids = new HashSet<string>();
             readInputFiles();
             
             foreach(string lipidClass in allFragments.Keys)
@@ -317,6 +311,7 @@ namespace LipidCreator
                                 throw new Exception("invalid line in file");
                             case ',':
                                 listTokens.Add(line.Substring(start, length));
+                                length = 0;
                                 state = 1;
                                 break;
                             default:
@@ -335,6 +330,7 @@ namespace LipidCreator
                                 break;
                             case ',':
                                 listTokens.Add("");
+                                length = 0;
                                 break;
                             default:
                                 length = 1;
@@ -353,6 +349,7 @@ namespace LipidCreator
                         if (line[i] == ',')
                         {
                             listTokens.Add(line.Substring(start, length));
+                            length = 0;
                             state = 1;
                         }    
                         else throw new Exception("invalid line in file");

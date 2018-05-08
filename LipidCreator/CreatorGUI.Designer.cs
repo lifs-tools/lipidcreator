@@ -697,21 +697,21 @@ namespace LipidCreator
             List<String> glHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
             {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && headgroup.Length > 3) glHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && headgroup.Length > 3) glHgList.Add(headgroup);
             }
             glHgList.Sort();
             
             List<String> plHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
             {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
             }
             plHgList.Sort();
             
             List<String> medHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled) medHgList.Add(headgroup);
+                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")) medHgList.Add(headgroup);
             }
             medHgList.Sort();
             

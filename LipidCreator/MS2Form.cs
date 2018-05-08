@@ -77,7 +77,7 @@ namespace LipidCreator
             
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)creatorGUI.currentIndex])
             {
-                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled)
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy"))
                 {
                     TabPage tp = new TabPage();
                     tp.Location = new System.Drawing.Point(4, 22);

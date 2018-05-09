@@ -1590,11 +1590,10 @@ namespace LipidCreator
             ((PLLipid)currentLipid).isCL = plIsCL.Checked;
             ((PLLipid)currentLipid).isLyso = plIsLyso.Checked;
             
-            extendWindow(plIsCL.Checked);
-            
-            
             changeTab((int)LipidCategory.PhosphoLipid);
         }
+        
+        
         
         void extendWindow(bool isCL)
         {
@@ -1953,14 +1952,14 @@ namespace LipidCreator
         {
             
             List<String> slHgList = new List<String>();
-            HashSet<string> lysos = new HashSet<string>(new string[]{"LCB", "LCBP", "LSM", "LHexCer"});
             slHgListbox.Items.Clear();
+            
             
             if (lyso)
             {
                 foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) slHgList.Add(headgroup);
                 }
                 slPictureBox.Image = sphingoLysoBackboneImage;
                 slFACombobox.Visible = false;
@@ -1974,7 +1973,7 @@ namespace LipidCreator
             {
                 foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].heavyLabeled && !lysos.Contains(headgroup)) slHgList.Add(headgroup);
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) slHgList.Add(headgroup);
                 }
                 slPictureBox.Image = sphingoBackboneImage;
                 slFACombobox.Visible = true;

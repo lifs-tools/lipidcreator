@@ -46,10 +46,10 @@ namespace LipidCreator
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
         public bool derivative;
-        public bool heavyLabeled;
         public ArrayList heavyLabeledPrecursors;
         public bool userDefined;
         public ArrayList userDefinedFattyAcids;
+        public HashSet<string> attributes;
         
         
         public Precursor()
@@ -59,11 +59,12 @@ namespace LipidCreator
             heavyLabeledPrecursors = new ArrayList();
             userDefined = false;
             userDefinedFattyAcids = null;
+            attributes = new HashSet<string>();
         }
         
         public string serialize()
         {
-            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\" derivative=\"" + derivative + "\" heavyLabeled=\"" + heavyLabeled + "\" userDefined=\"" + userDefined + "\">\n";
+            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\" derivative=\"" + derivative + "\" userDefined=\"" + userDefined + "\">\n";
             foreach (KeyValuePair<string, bool> adductRestriction in adductRestrictions)
             {
                 xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
@@ -71,6 +72,10 @@ namespace LipidCreator
             foreach (KeyValuePair<int, int> kvp in elements)
             {
                 xml += "<Element type=\"" + MS2Fragment.ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+            }
+            foreach (string attribute in attributes)
+            {
+                xml += "<Attribute>" + attribute + "</Attribute>\n";
             }
             
             if (userDefined)
@@ -98,7 +103,6 @@ namespace LipidCreator
             pathToImage = node.Attribute("pathToImage").Value;
             buildingBlockType = Convert.ToInt32(node.Attribute("buildingBlockType").Value);
             derivative = node.Attribute("derivative").Value.Equals("True");
-            heavyLabeled = node.Attribute("heavyLabeled").Value.Equals("True");
             userDefined = node.Attribute("userDefined").Value.Equals("True");
             
             foreach(XElement child in node.Elements())
@@ -107,11 +111,14 @@ namespace LipidCreator
                 {
                     case "AdductRestriction":
                         adductRestrictions.Add(child.Attribute("key").Value.ToString(), child.Attribute("value").Value.Equals("True"));
-                        
                         break;
                         
                     case "Element":
                         elements[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        break;
+                        
+                    case "Attribute":
+                        attributes.Add(child.Value.ToString());
                         break;
                         
                     case "userDefinedFattyAcids":

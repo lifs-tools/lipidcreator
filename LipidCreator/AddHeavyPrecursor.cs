@@ -82,7 +82,7 @@ namespace LipidCreator
             
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)category])
             {
-                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) comboBox1.Items.Add(lipidClass);
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy")) comboBox1.Items.Add(lipidClass);
             }
             if (comboBox1.Items.Count > 0)
             {
@@ -586,7 +586,7 @@ namespace LipidCreator
                 heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
                 foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions) heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
                 heavyPrecursor.derivative = precursor.derivative;
-                heavyPrecursor.heavyLabeled = true;
+                heavyPrecursor.attributes.Add("heavy");
                 heavyPrecursor.userDefined = true;
                 heavyPrecursor.userDefinedFattyAcids = new ArrayList();
                 for (int i = 1; i < buildingBlockElementDicts.Count; ++i)

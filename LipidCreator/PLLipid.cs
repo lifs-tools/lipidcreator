@@ -385,8 +385,17 @@ namespace LipidCreator
                                 precursorData.precursorCharge = charge;
                                 precursorData.adduct = adduct.Key;
                                 precursorData.atomsCount = headgroups[headgroup].elements;
-                                precursorData.fa1 = sortedAcids[0];
-                                precursorData.fa2 = sortedAcids[1];
+                                
+                                if (isFAe || isPlamalogen)
+                                {
+                                    precursorData.fa1 = fa1;
+                                    precursorData.fa2 = fa2;
+                                }
+                                else
+                                {
+                                    precursorData.fa1 = sortedAcids[0];
+                                    precursorData.fa2 = sortedAcids[1];
+                                }
                                 precursorData.fa3 = null;
                                 precursorData.fa4 = null;
                                 precursorData.lcb = null;
@@ -414,7 +423,7 @@ namespace LipidCreator
                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                     heavySortedAcids.Add(heavyFA1);
                                     heavySortedAcids.Add(heavyFA2);
-                                    heavySortedAcids.Sort();
+                                    if (!isFAe && !isPlamalogen) heavySortedAcids.Sort();
                         
                                     Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);

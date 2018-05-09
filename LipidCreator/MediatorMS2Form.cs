@@ -55,7 +55,7 @@ namespace LipidCreator
             isotopeDict = new Dictionary<string, ArrayList>();
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                if (creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled)
+                if (creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy"))
                 {
                     string monoName = lipidClass.Split(new char[]{'/'})[0];
                     string deuterium = lipidClass.Split(new char[]{'/'})[1];
@@ -72,7 +72,7 @@ namespace LipidCreator
             List<String> medHgList = new List<String>();
             foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
-                if (!creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeled) medHgList.Add(lipidClass);
+                if (!creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy")) medHgList.Add(lipidClass);
             }
             medHgList.Sort();
             medHgListbox.Items.AddRange(medHgList.ToArray());

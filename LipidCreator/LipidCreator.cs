@@ -61,6 +61,8 @@ namespace LipidCreator
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
+        public HashSet<string> lysoSphingoLipids;
+        public HashSet<string> lysoPhosphoLipids;
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -175,7 +177,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length != 20) throw new Exception("invalid line in file, number of columns in line != 20");
+                            if (tokens.Length < 19) throw new Exception("invalid line in file, number of columns in line < 19");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -224,10 +226,10 @@ namespace LipidCreator
                             headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
                             headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
                             headgroup.buildingBlockType = Convert.ToInt32(tokens[17]);
-                            headgroup.derivative = tokens[18].Equals("Yes");
-                            headgroup.heavyLabeled = tokens[19].Equals("Yes");
+                            if (tokens[18].Length > 0) headgroup.attributes = new HashSet<string>(tokens[18].Split(new char[]{';'}));
+                            headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             
-                            if (headgroup.heavyLabeled)
+                            if (headgroup.attributes.Contains("heavy"))
                             {
                                 string monoName = headgroup.name.Split(new char[]{'/'})[0];
                                 if (headgroups.ContainsKey(monoName))
@@ -269,6 +271,8 @@ namespace LipidCreator
             headgroups = new Dictionary<String, Precursor>();
             transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
+            lysoSphingoLipids = new HashSet<string>();
+            lysoPhosphoLipids = new HashSet<string>();
             readInputFiles();
             
             foreach(string lipidClass in allFragments.Keys)
@@ -307,6 +311,7 @@ namespace LipidCreator
                                 throw new Exception("invalid line in file");
                             case ',':
                                 listTokens.Add(line.Substring(start, length));
+                                length = 0;
                                 state = 1;
                                 break;
                             default:
@@ -325,6 +330,7 @@ namespace LipidCreator
                                 break;
                             case ',':
                                 listTokens.Add("");
+                                length = 0;
                                 break;
                             default:
                                 length = 1;
@@ -343,6 +349,7 @@ namespace LipidCreator
                         if (line[i] == ',')
                         {
                             listTokens.Add(line.Substring(start, length));
+                            length = 0;
                             state = 1;
                         }    
                         else throw new Exception("invalid line in file");
@@ -509,6 +516,18 @@ namespace LipidCreator
             string[] faToken;
             string tokenSeparator;
             
+            HashSet<string> phosphoLysos = new HashSet<string>();
+            HashSet<string> sphingoLysos = new HashSet<string>();
+            
+            foreach(string hg in categoryToClass[(int)LipidCategory.PhosphoLipid])
+            {
+                if (headgroups[hg].attributes.Contains("lyso")) phosphoLysos.Add(hg);
+            }
+            
+            foreach(string hg in categoryToClass[(int)LipidCategory.SphingoLipid])
+            {
+                if (headgroups[hg].attributes.Contains("lyso")) sphingoLysos.Add(hg);
+            }
             
             if (headgroups.ContainsKey(headgroup))
             {
@@ -589,11 +608,12 @@ namespace LipidCreator
                                 break;
                                 
                             default:
-                                if (headgroup[0] == 'L')
+                                if (phosphoLysos.Contains(headgroup))
                                 {
                                     if (faToken.Length != 1) return null;
                                     pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
                                     pllipid.fag2 = parseFattyAcidGroup("", true);
+                                    pllipid.isLyso = true;
                                 }
                                 else
                                 {
@@ -615,8 +635,8 @@ namespace LipidCreator
                         tokenSeparator = getSeparator(acids);
                         faToken = acids.Split(tokenSeparator.ToCharArray());
                         if (faToken.Length > 2 || faToken.Length == 0) return null;
-                        else if (faToken.Length == 1){
-                            if (headgroup != "LCB" && headgroup != "LCBP" && headgroup != "LSM" && headgroup != "LHexCer") return null;
+                        else if (sphingoLysos.Contains(headgroup)){
+                            sllipid.isLyso = true;
                             sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
                             if (sllipid.lcb == null) return null;
                         }
@@ -777,6 +797,7 @@ namespace LipidCreator
                 if (precursor.Value.userDefined)
                 {
                     xml += precursor.Value.serialize();
+                    //if (precursor.Value)
                 }
             }
             

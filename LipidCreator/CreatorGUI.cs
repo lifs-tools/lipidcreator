@@ -1590,11 +1590,10 @@ namespace LipidCreator
             ((PLLipid)currentLipid).isCL = plIsCL.Checked;
             ((PLLipid)currentLipid).isLyso = plIsLyso.Checked;
             
-            extendWindow(plIsCL.Checked);
-            
-            
             changeTab((int)LipidCategory.PhosphoLipid);
         }
+        
+        
         
         void extendWindow(bool isCL)
         {
@@ -1954,6 +1953,7 @@ namespace LipidCreator
             
             List<String> slHgList = new List<String>();
             slHgListbox.Items.Clear();
+            
             
             if (lyso)
             {

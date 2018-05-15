@@ -402,7 +402,6 @@ namespace LipidCreator
                     plHydroxyl2Textbox.Visible = true;
                     plDB2Label.Visible = true;
                     plHydroxyl2Label.Visible = true;
-                    plFA2Checkbox1.Visible = true;
                     
                     
                     
@@ -431,6 +430,7 @@ namespace LipidCreator
                         clDB4Label.Visible = true;
                         plFA2Checkbox3.Visible = true;
                         plFA2Checkbox2.Visible = true;
+                        plFA2Checkbox1.Visible = true;
                         
                         
                         plFA1Textbox.Text = currentPLLipid.fag1.lengthInfo;
@@ -518,6 +518,7 @@ namespace LipidCreator
                         clDB3Label.Visible = false;
                         clDB4Label.Visible = false;
                         
+                        plFA2Checkbox1.Checked = false;
                         plFA2Checkbox2.Checked = false;
                         plFA2Checkbox3.Checked = false;
                         
@@ -525,6 +526,7 @@ namespace LipidCreator
                         plHGLabel.Visible = true;
                         plFA2Checkbox3.Visible = false;
                         plFA2Checkbox2.Visible = false;
+                        plFA2Checkbox1.Visible = false;
                         settingListbox = true;
                         
                         plChangeLyso(currentPLLipid.isLyso);
@@ -580,13 +582,13 @@ namespace LipidCreator
                         updateRanges(currentPLLipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
                         updateRanges(currentPLLipid.fag1, plDB1Textbox, 3);
                         updateRanges(currentPLLipid.fag1, plHydroxyl1Textbox, 4);
-                        updateRanges(currentPLLipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-                        updateRanges(currentPLLipid.fag2, plDB2Textbox, 3);
-                        updateRanges(currentPLLipid.fag2, plHydroxyl2Textbox, 4);
-                        
+                        if (!currentPLLipid.isLyso)
+                        {
+                            updateRanges(currentPLLipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
+                            updateRanges(currentPLLipid.fag2, plDB2Textbox, 3);
+                            updateRanges(currentPLLipid.fag2, plHydroxyl2Textbox, 4);
+                        }
                         plRepresentativeFA.Checked = currentPLLipid.representativeFA;
-                        //plPictureBox.Image = phosphoBackboneImage;
-                        //plPictureBox.SendToBack();
                     }
                     break;
                     
@@ -2534,6 +2536,31 @@ namespace LipidCreator
         }
         
         
+        public string FARepresentation(FattyAcidGroup fag)
+        {
+            string faRepresentation = "";
+            
+            if (fag.faTypes["FA"])
+            {
+                if (faRepresentation.Length > 0) faRepresentation += ", ";
+                faRepresentation += "FA";
+            }
+            if (fag.faTypes["FAp"])
+            {
+                if (faRepresentation.Length > 0) faRepresentation += ", ";
+                faRepresentation += "FAp";
+            }
+            if (fag.faTypes["FAa"])
+            {
+                if (faRepresentation.Length > 0) faRepresentation += ", ";
+                faRepresentation += "FAa";
+            }
+            faRepresentation += ": ";
+            
+            return faRepresentation;
+        }
+        
+        
         public DataRow createLipidsGridviewRow(Lipid currentRegisteredLipid)
         {
             DataRow row = registeredLipidsDatatable.NewRow();
@@ -2541,15 +2568,15 @@ namespace LipidCreator
             {
                 GLLipid currentGLLipid = (GLLipid)currentRegisteredLipid;
                 row["Category"] = "Glycerolipid";
-                row["Building Block 1"] = "FA: " + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
-                if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = "FA: " + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
+                row["Building Block 1"] = FARepresentation(currentGLLipid.fag1) + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
+                if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = FARepresentation(currentGLLipid.fag2) + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
                 if (currentGLLipid.containsSugar)
                 {
                     row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
                 }
                 else
                 {
-                    if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
+                    if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = FARepresentation(currentGLLipid.fag3) + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
                 }
             }
             else if (currentRegisteredLipid is PLLipid)
@@ -2558,17 +2585,17 @@ namespace LipidCreator
                 if (currentPLLipid.isCL)
                 {
                     row["Category"] = "Cardiolipin";
-                    row["Building Block 1"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                    row["Building Block 2"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
-                    row["Building Block 3"] = "FA: " + currentPLLipid.fag3.lengthInfo + "; DB: " + currentPLLipid.fag3.dbInfo + "; OH: " + currentPLLipid.fag3.hydroxylInfo;
-                    if (!currentPLLipid.fag4.faTypes["FAx"]) row["Building Block 4"] = "FA: " + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
+                    row["Building Block 1"] = FARepresentation(currentPLLipid.fag1) + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentPLLipid.fag2) + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                    row["Building Block 3"] = FARepresentation(currentPLLipid.fag3) + currentPLLipid.fag3.lengthInfo + "; DB: " + currentPLLipid.fag3.dbInfo + "; OH: " + currentPLLipid.fag3.hydroxylInfo;
+                    if (!currentPLLipid.fag4.faTypes["FAx"]) row["Building Block 4"] = FARepresentation(currentPLLipid.fag4) + currentPLLipid.fag4.lengthInfo + "; DB: " + currentPLLipid.fag4.dbInfo + "; OH: " + currentPLLipid.fag4.hydroxylInfo;
                 }
                 else
                 {
                     row["Category"] = "Phospholipid";
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
-                    row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                    if (!currentPLLipid.isLyso) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentPLLipid.fag1) + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
+                    if (!currentPLLipid.isLyso) row["Building Block 3"] = FARepresentation(currentPLLipid.fag2) + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
                 }
             }
             else if (currentRegisteredLipid is SLLipid)

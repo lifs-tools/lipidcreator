@@ -395,6 +395,17 @@ namespace LipidCreator
                     else if (currentPLLipid.isLyso) plIsLyso.Checked = true;
                     else plRegular.Checked = true;
                     
+                    // unset lyso
+                    plFA2Combobox.Visible = true;
+                    plFA2Textbox.Visible = true;
+                    plDB2Textbox.Visible = true;
+                    plHydroxyl2Textbox.Visible = true;
+                    plDB2Label.Visible = true;
+                    plHydroxyl2Label.Visible = true;
+                    plFA2Checkbox1.Visible = true;
+                    
+                    
+                    
                     if (currentPLLipid.isCL) // Cardiolipin
                     {
                         plHGLabel.Visible = false;
@@ -564,7 +575,6 @@ namespace LipidCreator
                         plNegAdductCheckbox3.Checked = currentPLLipid.adducts["+HCOO"];
                         plNegAdductCheckbox4.Checked = currentPLLipid.adducts["+CH3COO"];
                         addLipidButton.Text = "Add phospholipids";
-                        plIsCL.Checked = false;
                         
                         
                         updateRanges(currentPLLipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
@@ -575,9 +585,8 @@ namespace LipidCreator
                         updateRanges(currentPLLipid.fag2, plHydroxyl2Textbox, 4);
                         
                         plRepresentativeFA.Checked = currentPLLipid.representativeFA;
-                        plPictureBox.Image = phosphoBackboneImage;
-                        plPictureBox.Location = new Point(107, 23);
-                        plPictureBox.SendToBack();
+                        //plPictureBox.Image = phosphoBackboneImage;
+                        //plPictureBox.SendToBack();
                     }
                     break;
                     
@@ -1631,7 +1640,7 @@ namespace LipidCreator
         
         void plFA1Checkbox3MouseLeave(object sender, EventArgs e)
         {
-            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? - : phosphoBackboneImage);
+            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? phosphoLysoBackboneImage : phosphoBackboneImage);
             plPictureBox.SendToBack();
         }
         private void plFA1Checkbox3MouseHover(object sender, MouseEventArgs e)
@@ -1642,7 +1651,7 @@ namespace LipidCreator
         
         void plFA1Checkbox2MouseLeave(object sender, EventArgs e)
         {
-            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : phosphoBackboneImage;
+            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? phosphoLysoBackboneImage : phosphoBackboneImage);
             plPictureBox.SendToBack();
         }
         private void plFA1Checkbox2MouseHover(object sender, MouseEventArgs e)
@@ -1723,8 +1732,6 @@ namespace LipidCreator
                     clFA4Checkbox2.Enabled = false;
                     clFA4Checkbox3.Enabled = false;
                 }
-                
-                
             }
             else
             {
@@ -1828,15 +1835,16 @@ namespace LipidCreator
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
                 }
+                plPictureBox.Left = 106;
                 plPictureBox.Image = phosphoLysoBackboneImage;
-                /*
-                slFACombobox.Visible = false;
-                slFATextbox.Visible = false;
-                slDB1Textbox.Visible = false;
-                slFAHydroxyCombobox.Visible = false;
-                slDB1Label.Visible = false;
-                slFAHydroxyLabel.Visible = false;
-                */
+                
+                plFA2Combobox.Visible = false;
+                plFA2Textbox.Visible = false;
+                plDB2Textbox.Visible = false;
+                plHydroxyl2Textbox.Visible = false;
+                plDB2Label.Visible = false;
+                plHydroxyl2Label.Visible = false;
+                plFA2Checkbox1.Visible = false;
             }
             else
             {
@@ -1844,15 +1852,8 @@ namespace LipidCreator
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
                 }
+                plPictureBox.Left = 107;
                 plPictureBox.Image = phosphoBackboneImage;
-                /*
-                slFACombobox.Visible = true;
-                slFATextbox.Visible = true;
-                slDB1Textbox.Visible = true;
-                slFAHydroxyCombobox.Visible = true;
-                slDB1Label.Visible = true;
-                slFAHydroxyLabel.Visible = true;
-                */
             }
             
             plHgList.Sort();
@@ -2567,7 +2568,7 @@ namespace LipidCreator
                     row["Category"] = "Phospholipid";
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPLLipid.headGroupNames);
                     row["Building Block 2"] = "FA: " + currentPLLipid.fag1.lengthInfo + "; DB: " + currentPLLipid.fag1.dbInfo + "; OH: " + currentPLLipid.fag1.hydroxylInfo;
-                    if (!currentPLLipid.fag2.faTypes["FAx"]) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
+                    if (!currentPLLipid.isLyso) row["Building Block 3"] = "FA: " + currentPLLipid.fag2.lengthInfo + "; DB: " + currentPLLipid.fag2.dbInfo + "; OH: " + currentPLLipid.fag2.hydroxylInfo;
                 }
             }
             else if (currentRegisteredLipid is SLLipid)

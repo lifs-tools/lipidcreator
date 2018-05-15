@@ -87,7 +87,7 @@ namespace LipidCreator
         
             // if (!creatorGUI.resetLipidCreator()) return;
             
-            creatorGUI.changeTab(2);
+            //creatorGUI.changeTab(2);
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Selecting += new TabControlCancelEventHandler(tabPreInteraction);
@@ -105,7 +105,7 @@ namespace LipidCreator
         
         
             tutorial = t;
-            tutorialStep = 9;
+            tutorialStep = 0;
             currentTab = LipidCategory.NoLipid;
             
             
@@ -709,7 +709,7 @@ namespace LipidCreator
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
                     tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 240), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select solely 'PG' headgroup", "Great, phospholipids have multiple headgroups. The user can multiply select them. Notice that when hovering above the headgroups, the according adducts are highlighted. We are interested in phosphatidylglycerol (PG). Please select only PG as headgroup and continue.", false);
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -722,7 +722,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(500, 240), new Point(460, 200), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately. PG contains two FAs. We want to create a transition list of PGs with carbon length of first FA between 14 and 18 and additionally 20. Please type in first FA carbon field '14-18, 20'.");
                                       
                     
                     plFA1.Text = "12 - 15";
@@ -736,7 +736,7 @@ namespace LipidCreator
                     TextBox plDB1 = creatorGUI.plDB1Textbox;
                     tutorialArrow.update(new Point(plDB1.Location.X + plDB1.Size.Width, plDB1.Location.Y + (plDB1.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(60, 200), "Set first double bond occurrences to '0-1'", "Here, one can specify the number of double bonds (DBs) for first FA. We are for example interested zero and one DBs. Please type in first FA double bond field '0-1' or '0,1'.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Set first double bond occurrences to '0-1'", "Here, one can specify the number of double bonds (DBs) for first FA. We are for example interested zero and one DBs. Please type in first FA double bond field '0-1' or '0,1'.");
                                       
                     
                     plDB1.Text = "0";
@@ -749,7 +749,7 @@ namespace LipidCreator
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(60, 200), "Continue", "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Continue", "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
                     
                     nextEnabled = true;
                     break;
@@ -760,7 +760,7 @@ namespace LipidCreator
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Continue", "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Continue", "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
                     nextEnabled = true;
                     
                     break;
@@ -771,7 +771,7 @@ namespace LipidCreator
                     TextBox plFA2 = creatorGUI.plFA2Textbox;
                     tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Set second FA carbon lengths to '8-10' and DB to '2'", "For the second fatty acid, we are interested in carbon length 8-10 and exactly 2 double bonds. Please make the following adjustments.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set second FA carbon lengths to '8-10' and DB to '2'", "For the second fatty acid, we are interested in carbon length 8-10 and exactly 2 double bonds. Please make the following adjustments.");
                     
                     plFA2.Text = "12 - 15";
                     plFA2.Enabled = true;
@@ -786,7 +786,7 @@ namespace LipidCreator
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
                     tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(60, 200), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Please select the positive adduct +H(+) and proceed.");
                     
                     
                     adductP1.Checked = false;
@@ -801,7 +801,7 @@ namespace LipidCreator
                     Button ms2 = creatorGUI.MS2fragmentsLipidButton;
                     tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(460, 200), "Open MS2 fragments dialog", "As next, we will have a deeper look into all MS2 fragments of our selected lipids. Please open the MS2 fragments dialog.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Open MS2 fragments dialog", "As next, we will have a deeper look into all MS2 fragments of our selected lipids. Please open the MS2 fragments dialog.");
                     
                     ms2.Enabled = true;
                     break;

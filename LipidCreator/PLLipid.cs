@@ -304,12 +304,12 @@ namespace LipidCreator
                 if (fag1.faTypes["FAx"]) return;
                 
                 bool isPlamalogen = false;
-                bool isFAe = false;
+                bool isFAa = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     switch (fa1.suffix)
                     {
-                        case "a": isFAe = true; break;
+                        case "a": isFAa = true; break;
                         case "p": isPlamalogen = true; break;
                         default: break;
                     }
@@ -322,13 +322,13 @@ namespace LipidCreator
                             if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                             {
                                 if (isPlamalogen) headgroup = headgroup + " O-p";
-                                else if (isFAe) headgroup = headgroup + " O-a";
+                                else if (isFAa) headgroup = headgroup + " O-a";
                             }
                         }
                         
                         String key = headgroup + " ";
                         if (isPlamalogen) key = key.Replace("O-p", "O");
-                        else if (isFAe) key = key.Replace("O-a", "O");
+                        else if (isFAa) key = key.Replace("O-a", "O");
                         
                         if (fa1.length > 0){
                             key += Convert.ToString(fa1.length) + ":" + Convert.ToString(fa1.db);
@@ -426,12 +426,12 @@ namespace LipidCreator
             {
                 if (headGroupNames.Count == 0) return;
                 bool isPlamalogen = false;
-                bool isFAe = false;
+                bool isFAa = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     switch (fa1.suffix)
                     {
-                        case "a": isFAe = true; break;
+                        case "a": isFAa = true; break;
                         case "p": isPlamalogen = true; break;
                         default: break;
                     }
@@ -441,7 +441,7 @@ namespace LipidCreator
                     {
                         switch (fa2.suffix)
                         {
-                            case "a": isFAe = true; break;
+                            case "a": isFAa = true; break;
                             case "p": isPlamalogen = true; break;
                             default: break;
                         }        
@@ -458,13 +458,13 @@ namespace LipidCreator
                                 if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                 {
                                     if (isPlamalogen) headgroup = headgroup + " O-p";
-                                    else if (isFAe) headgroup = headgroup + " O-a";
+                                    else if (isFAa) headgroup = headgroup + " O-a";
                                 }
                             }
                             
                             String key = headgroup + " ";
                             if (isPlamalogen) key = key.Replace("O-p", "O");
-                            else if (isFAe) key = key.Replace("O-a", "O");
+                            else if (isFAa) key = key.Replace("O-a", "O");
                             int i = 0;
                             foreach (FattyAcid fa in sortedAcids)
                             {
@@ -507,7 +507,7 @@ namespace LipidCreator
                                 precursorData.adduct = adduct.Key;
                                 precursorData.atomsCount = headgroups[headgroup].elements;
                                 
-                                if (isFAe || isPlamalogen)
+                                if (isFAa || isPlamalogen)
                                 {
                                     precursorData.fa1 = fa1;
                                     precursorData.fa2 = fa2;
@@ -544,7 +544,7 @@ namespace LipidCreator
                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
                                     heavySortedAcids.Add(heavyFA1);
                                     heavySortedAcids.Add(heavyFA2);
-                                    if (!isFAe && !isPlamalogen) heavySortedAcids.Sort();
+                                    if (!isFAa && !isPlamalogen) heavySortedAcids.Sort();
                         
                                     Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);

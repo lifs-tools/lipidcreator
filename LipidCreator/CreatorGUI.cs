@@ -518,7 +518,6 @@ namespace LipidCreator
                         clDB3Label.Visible = false;
                         clDB4Label.Visible = false;
                         
-                        plFA2Checkbox1.Checked = false;
                         plFA2Checkbox2.Checked = false;
                         plFA2Checkbox3.Checked = false;
                         

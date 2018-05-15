@@ -515,6 +515,10 @@ namespace LipidCreator
                         plFA2Checkbox3.Visible = false;
                         plFA2Checkbox2.Visible = false;
                         settingListbox = true;
+                        
+                        plChangeLyso(currentPLLipid.isLyso);
+                        
+                        
                         for (int i = 0; i < plHgListbox.Items.Count; ++i)
                         {
                             plHgListbox.SetSelected(i, false);
@@ -581,7 +585,7 @@ namespace LipidCreator
                     SLLipid currentSLLipid = (SLLipid)currentLipid;
                     
                     slIsLyso.Checked = currentSLLipid.isLyso;
-                    changeLyso(currentSLLipid.isLyso);
+                    slChangeLyso(currentSLLipid.isLyso);
                     
                     settingListbox = true;
                     for (int i = 0; i < slHgListbox.Items.Count; ++i)
@@ -1589,7 +1593,7 @@ namespace LipidCreator
         {
             ((PLLipid)currentLipid).isCL = plIsCL.Checked;
             ((PLLipid)currentLipid).isLyso = plIsLyso.Checked;
-            
+
             changeTab((int)LipidCategory.PhosphoLipid);
         }
         
@@ -1627,12 +1631,12 @@ namespace LipidCreator
         
         void plFA1Checkbox3MouseLeave(object sender, EventArgs e)
         {
-            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : phosphoBackboneImage;
+            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? - : phosphoBackboneImage);
             plPictureBox.SendToBack();
         }
         private void plFA1Checkbox3MouseHover(object sender, MouseEventArgs e)
         {
-            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1e : phosphoBackboneImageFA1e;
+            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1e : (plIsLyso.Checked ? phosphoLysoBackboneImageFA1e : phosphoBackboneImageFA1e);
             plPictureBox.SendToBack();
         }
         
@@ -1643,7 +1647,7 @@ namespace LipidCreator
         }
         private void plFA1Checkbox2MouseHover(object sender, MouseEventArgs e)
         {
-            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1p : phosphoBackboneImageFA1p;
+            plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1p : (plIsLyso.Checked ? phosphoLysoBackboneImageFA1p : phosphoBackboneImageFA1p);
             plPictureBox.SendToBack();
         }
 
@@ -1811,6 +1815,50 @@ namespace LipidCreator
             }
         }
         
+        void plChangeLyso(bool lyso)
+        {
+            
+            List<String> plHgList = new List<String>();
+            plHgListbox.Items.Clear();
+            
+            
+            if (lyso)
+            {
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
+                }
+                plPictureBox.Image = phosphoLysoBackboneImage;
+                /*
+                slFACombobox.Visible = false;
+                slFATextbox.Visible = false;
+                slDB1Textbox.Visible = false;
+                slFAHydroxyCombobox.Visible = false;
+                slDB1Label.Visible = false;
+                slFAHydroxyLabel.Visible = false;
+                */
+            }
+            else
+            {
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
+                }
+                plPictureBox.Image = phosphoBackboneImage;
+                /*
+                slFACombobox.Visible = true;
+                slFATextbox.Visible = true;
+                slDB1Textbox.Visible = true;
+                slFAHydroxyCombobox.Visible = true;
+                slDB1Label.Visible = true;
+                slFAHydroxyLabel.Visible = true;
+                */
+            }
+            
+            plHgList.Sort();
+            plHgListbox.Items.AddRange(plHgList.ToArray());
+        }
+        
         ////////////////////// SL ////////////////////////////////
         
         
@@ -1942,13 +1990,17 @@ namespace LipidCreator
             }
         }
         
+        
+        
         void slIsLysoCheckedChanged(object sender, EventArgs e)
         {
             ((SLLipid)currentLipid).isLyso = ((CheckBox)sender).Checked;
-            changeLyso(((CheckBox)sender).Checked);
+            slChangeLyso(((CheckBox)sender).Checked);
         }
         
-        void changeLyso(bool lyso)
+        
+        
+        void slChangeLyso(bool lyso)
         {
             
             List<String> slHgList = new List<String>();
@@ -1986,8 +2038,6 @@ namespace LipidCreator
             
             slHgList.Sort();
             slHgListbox.Items.AddRange(slHgList.ToArray());
-            
-            
         }
         
         ////////////////////// Cholesterols ////////////////////////////////

@@ -336,6 +336,9 @@ namespace LipidCreator
         Image phosphoBackboneImageFA1p;
         Image phosphoBackboneImageFA2e;
         Image phosphoBackboneImageFA2p;
+        Image phosphoLysoBackboneImage;
+        Image phosphoLysoBackboneImageFA1e;
+        Image phosphoLysoBackboneImageFA1p;
         Image sphingoBackboneImage;
         Image sphingoLysoBackboneImage;
         Image cholesterolBackboneImage;
@@ -701,12 +704,14 @@ namespace LipidCreator
             }
             glHgList.Sort();
             
+            /*
             List<String> plHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
             {
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
             }
             plHgList.Sort();
+            */
             
             List<String> medHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
@@ -718,7 +723,7 @@ namespace LipidCreator
             
             
             glHgListbox.Items.AddRange(glHgList.ToArray());
-            plHgListbox.Items.AddRange(plHgList.ToArray());
+            //plHgListbox.Items.AddRange(plHgList.ToArray());
             medHgListbox.Items.AddRange(medHgList.ToArray());
             
             cardioBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_backbones.png");
@@ -747,6 +752,9 @@ namespace LipidCreator
             phosphoBackboneImageFA2e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAe2.png");
             phosphoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp1.png");
             phosphoBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp2.png");
+            phosphoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_backbone.png");
+            phosphoLysoBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAe.png");
+            phosphoLysoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAp.png");
             sphingoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones.png");
             sphingoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones_onlyLCB.png");
             cholesterolBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/Ch.png");

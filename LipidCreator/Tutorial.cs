@@ -102,6 +102,7 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
+            creatorGUI.plPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
         
         
             tutorial = t;

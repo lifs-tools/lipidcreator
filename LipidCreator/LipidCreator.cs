@@ -63,7 +63,9 @@ namespace LipidCreator
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
         public HashSet<string> lysoPhosphoLipids;
-        public Dictionary<string, ArrayList> msDevices; 
+        public Dictionary<string, ArrayList> msInstruments;
+        public ArrayList availableInstruments;
+        public CollisionEnergy collisionEnergyHandler;
         
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -262,13 +264,13 @@ namespace LipidCreator
             
             
             
-            string devicesFile = prefixPath + "data/ms-devices.csv";
-            if (File.Exists(devicesFile))
+            string instrumentsFile = prefixPath + "data/ms-instruments.csv";
+            if (File.Exists(instrumentsFile))
             {
                 lineCounter = 1;
                 try
                 {
-                    using (StreamReader sr = new StreamReader(devicesFile))
+                    using (StreamReader sr = new StreamReader(instrumentsFile))
                     {
                         String line = sr.ReadLine(); // omit titles
                         while((line = sr.ReadLine()) != null)
@@ -283,24 +285,91 @@ namespace LipidCreator
                             ArrayList devData = new ArrayList();
                             
                             devData.Add(tokens[1]);
-                            devData.Add(tokens[2]);
+                            devData.Add(tokens[2] == "true");
                             
-                            msDevices.Add(tokens[0], devData);
+                            msInstruments.Add(tokens[0], devData);
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + devicesFile + "' in line '" + lineCounter + "' could not be read:");
+                    Console.WriteLine("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:");
                     Console.WriteLine(e.Message);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + devicesFile + " does not exist or can not be opened.");
+                Console.WriteLine("Error: file " + instrumentsFile + " does not exist or can not be opened.");
             }
             
             
+            
+            string ceParametersFile = prefixPath + "data/collision-energy-parameters.csv";
+            if (File.Exists(ceParametersFile))
+            {
+                lineCounter = 1;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(ceParametersFile))
+                    {
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            
+                            string[] tokens = parseLine(line);
+                            if (tokens.Length != 7) throw new Exception("invalid line in file, number of columns in line < 19");
+                            
+                            string instrument = tokens[0];
+                            string lipidClass = tokens[1];
+                            string fragment = tokens[2];
+                            string adduct = tokens[3];
+                            int charge = Convert.ToInt32(tokens[4]);
+                            string paramKey = tokens[5];
+                            string paramValue = tokens[6];
+                            
+                            
+                            if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                            {
+                                collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>>());
+                            }
+                            
+                            if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
+                            {
+                                collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>());
+                            }
+                            
+                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(fragment))
+                            {
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(fragment, new Dictionary<string, Dictionary<int, Dictionary<string, string>>>());
+                            }
+                            
+                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment].ContainsKey(adduct))
+                            {
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment].Add(adduct, new Dictionary<int, Dictionary<string, string>>());
+                            }
+                            
+                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment][adduct].ContainsKey(charge))
+                            {
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment][adduct].Add(charge, new Dictionary<string, string>());
+                            }
+                            
+                            collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment][adduct][charge].Add(paramKey, paramValue);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: file " + ceParametersFile + " does not exist or can not be opened.");
+            }
         }
         
 
@@ -318,8 +387,13 @@ namespace LipidCreator
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
             lysoPhosphoLipids = new HashSet<string>();
-            msDevices = new Dictionary<string, ArrayList>();
+            msInstruments = new Dictionary<string, ArrayList>();
+            collisionEnergyHandler = new CollisionEnergy();
+            availableInstruments = new ArrayList();
+            availableInstruments.Add("");
             readInputFiles();
+            
+            foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);
             
             foreach(string lipidClass in allFragments.Keys)
             {

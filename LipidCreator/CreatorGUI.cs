@@ -63,6 +63,7 @@ namespace LipidCreator
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
         public bool ignoreLipidGroupBox = false;
+        public string selectedInstrumentForCE = "";
         
         
         public CreatorGUI(string inputParameters)
@@ -157,6 +158,18 @@ namespace LipidCreator
             medNegAdductCheckbox3.Enabled = false;
             medNegAdductCheckbox4.Enabled = false;
             changeTab(0);
+            
+            for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
+            {
+                string instrument = (string)lipidCreator.availableInstruments[i];
+                if (lipidCreator.msInstruments.ContainsKey(instrument)){
+                    MenuItem instrumentItem = new MenuItem();
+                    menuCollisionEnergy.MenuItems.Add(instrumentItem);
+                    instrumentItem.Text = (string)lipidCreator.msInstruments[instrument][0];
+                    instrumentItem.RadioCheck = true;
+                    instrumentItem.Click += new System.EventHandler (changeInstrumentForCE);
+                }
+            }
         }
         
         
@@ -2752,6 +2765,18 @@ namespace LipidCreator
             lipidCreator.registeredLipids.RemoveAt(rowIndex);
             lipidsGridview.Update();
             lipidsGridview.Refresh();
+        }
+        
+        
+        public void changeInstrumentForCE(Object sender, EventArgs e)
+        {
+            int index = ((MenuItem)sender).Index;
+            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            
+            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
+            {
+                item.Checked = item.Index == index;
+            }
         }
         
         

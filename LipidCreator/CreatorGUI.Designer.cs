@@ -300,6 +300,8 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuDash3;
         public System.Windows.Forms.MenuItem menuExit;
         public System.Windows.Forms.MenuItem menuOptions;
+        public System.Windows.Forms.MenuItem menuCollisionEnergy;
+        public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
         public System.Windows.Forms.MenuItem menuMS2Fragments;
         public System.Windows.Forms.MenuItem menuIsotopes;
         public System.Windows.Forms.MenuItem menuResetCategory;
@@ -612,6 +614,8 @@ namespace LipidCreator
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
+            this.menuCollisionEnergy = new System.Windows.Forms.MenuItem ();
+            this.menuCollisionEnergyNone = new System.Windows.Forms.MenuItem ();
             this.menuMS2Fragments = new System.Windows.Forms.MenuItem ();
             this.menuIsotopes = new System.Windows.Forms.MenuItem ();
             this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuImportSettings, menuExportSettings, menuDash3, menuExit});
@@ -644,8 +648,16 @@ namespace LipidCreator
             this.menuExit.Click += new System.EventHandler (menuExitClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergy, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
             this.menuOptions.Text = "Options";
+            
+            this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
+            this.menuCollisionEnergy.Text = "Collision Energy computation";
+            
+            this.menuCollisionEnergyNone.Text = "No computation";
+            this.menuCollisionEnergyNone.RadioCheck = true;
+            this.menuCollisionEnergyNone.Checked = true;
+            this.menuCollisionEnergyNone.Click += new System.EventHandler (changeInstrumentForCE);
             
             this.menuMS2Fragments.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
             this.menuMS2Fragments.Text = "&MS2 fragments";
@@ -1024,8 +1036,7 @@ namespace LipidCreator
             
             
             homeTab.Text = "Home";
-            //homeTab.BackColor = Color.White;
-            homeTab.BackgroundImage = Image.FromFile("images/LIFS/hometab.png");
+            homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
             
             
             Font homeFont = new Font(homeTab.Font.FontFamily, 8.25F);

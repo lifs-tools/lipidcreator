@@ -533,6 +533,10 @@ namespace LipidCreator
         Label plHydroxyl2Label;
         Label chFAHydroxyLabel;
         
+        Label homeText;
+        Label homeText2;
+        Label homeText3;
+        
         PictureBox glArrow;
         Image glArrowImage;
         Label easterText;
@@ -891,6 +895,9 @@ namespace LipidCreator
             chDBTextbox = new TextBox();
             chHydroxylTextbox = new TextBox();
             chFAHydroxyLabel = new Label();
+            homeText = new Label();
+            homeText2 = new Label();
+            homeText3 = new Label();
 
             clFA3Checkbox1 = new CheckBox();
             clFA3Checkbox2 = new CheckBox();
@@ -1017,7 +1024,8 @@ namespace LipidCreator
             
             
             homeTab.Text = "Home";
-            homeTab.BackColor = Color.White;
+            //homeTab.BackColor = Color.White;
+            homeTab.BackgroundImage = Image.FromFile("images/LIFS/hometab.png");
             
             
             Font homeFont = new Font(homeTab.Font.FontFamily, 8.25F);
@@ -2107,12 +2115,43 @@ namespace LipidCreator
             DefaultCheckboxBGB = plPosAdductCheckbox1.BackColor.B;
             
             
+            
+            //Font tabFont2 = new Font(homeTab.Font.FontFamily, 16);
+            //homeTab.Font = tabFont2;
+            
+            homeTab.Controls.Add(homeText);
+            homeTab.Controls.Add(homeText2);
+            homeTab.Controls.Add(homeText3);
+            
+            homeText.Width = 560;
+            homeText.Height = 100;
+            homeText.Location = new Point(60, 20);
+            homeText.Text = "LipidCreator offers several features including i) using lipid building blocks, ii) latest lipid nomenclature [3], iii) lipid fragmentation, iv) transition mass-calculator, v) an in-silico spectral library generator and vi) implementing full integration with new small molecule support in Skyline." + Environment.NewLine;
+            homeText.BackColor = Color.Transparent;
+            homeText.Font = new Font(homeTab.Font.FontFamily, 13);
+            
+            homeText2.Width = 560;
+            homeText2.Height = 40;
+            homeText2.Location = new Point(60, 220);
+            homeText2.Text = "LipidCreator offers several interactive tutorils for an easy introduction into its functionality:" + Environment.NewLine;
+            homeText2.BackColor = Color.Transparent;
+            homeText2.Font = new Font(homeTab.Font.FontFamily, 13);
+            
+            
+            homeText3.Width = 560;
+            homeText3.Height = 80;
+            homeText3.Location = new Point(60, 340);
+            homeText3.Text = "LipidCreator version 1.0.1" + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
+            homeText3.BackColor = Color.Transparent;
+            homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
+            
+            
             startFirstTutorialButton = new Button();
             homeTab.Controls.Add(startFirstTutorialButton);
             startFirstTutorialButton.Text = "Start PRM tutorial";
             startFirstTutorialButton.Width = 150;
             startFirstTutorialButton.Height = 26;
-            startFirstTutorialButton.Location = new Point(40, 40);
+            startFirstTutorialButton.Location = new Point(60, 270);
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
@@ -2122,7 +2161,7 @@ namespace LipidCreator
             startSecondTutorialButton.Text = "Start MRM tutorial";
             startSecondTutorialButton.Width = 150;
             startSecondTutorialButton.Height = 26;
-            startSecondTutorialButton.Location = new Point(220, 40);
+            startSecondTutorialButton.Location = new Point(240, 270);
             startSecondTutorialButton.BackColor = SystemColors.Control;
             startSecondTutorialButton.Click += startSecondTutorial;
             
@@ -2132,7 +2171,7 @@ namespace LipidCreator
             startThirdTutorialButton.Text = "Start heavy isotope tutorial";
             startThirdTutorialButton.Width = 170;
             startThirdTutorialButton.Height = 26;
-            startThirdTutorialButton.Location = new Point(400, 40);
+            startThirdTutorialButton.Location = new Point(420, 270);
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             

@@ -2155,7 +2155,6 @@ namespace LipidCreator
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
-            
             startSecondTutorialButton = new Button();
             homeTab.Controls.Add(startSecondTutorialButton);
             startSecondTutorialButton.Text = "Start MRM tutorial";

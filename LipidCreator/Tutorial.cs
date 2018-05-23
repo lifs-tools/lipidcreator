@@ -102,6 +102,7 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
+            creatorGUI.plPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
         
         
             tutorial = t;
@@ -159,10 +160,41 @@ namespace LipidCreator
         
         public void mouseHoverInteraction(object sender, EventArgs e)
         {
-            tutorialArrow.BringToFront();
-            tutorialWindow.BringToFront();
-            tutorialArrow.Refresh();
-            tutorialWindow.Refresh();
+            
+            if (tutorialWindow.Parent != null)
+            {
+                int zIndex = tutorialWindow.Parent.Controls.GetChildIndex(tutorialWindow);
+                
+                foreach (Control c in tutorialWindow.Parent.Controls)
+                {
+                    if (c == tutorialArrow || c == tutorialWindow) continue;
+                    int cIndex = tutorialWindow.Parent.Controls.GetChildIndex(c);
+                    if (zIndex > cIndex)
+                    {
+                        tutorialWindow.Parent.Controls.SetChildIndex(tutorialWindow, 0);
+                        tutorialWindow.Parent.Refresh();
+                        break;
+                    }
+                }
+            }
+        
+            //Console.WriteLine("haha");
+            if (tutorialArrow.Parent != null)
+            {
+                int zIndex = tutorialArrow.Parent.Controls.GetChildIndex(tutorialArrow);
+                foreach (Control c in tutorialArrow.Parent.Controls)
+                {
+                    if (c == tutorialArrow || c == tutorialWindow) continue;
+                    int cIndex = tutorialArrow.Parent.Controls.GetChildIndex(c);
+                if (c == creatorGUI.plPictureBox) Console.WriteLine("A: " + zIndex + " " + cIndex + " " + c.Text);
+                    if (zIndex > cIndex)
+                    {
+                        tutorialArrow.Parent.Controls.SetChildIndex(tutorialArrow, 0);
+                        tutorialArrow.Parent.Refresh();
+                        break;
+                    }
+                }
+            }
         }
         
         
@@ -702,7 +734,7 @@ namespace LipidCreator
                     
                     
                 case 3:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
                     ListBox plHG = creatorGUI.plHgListbox;
                     int plHGpg = 0;
@@ -717,7 +749,7 @@ namespace LipidCreator
                     
                     
                 case 4:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");

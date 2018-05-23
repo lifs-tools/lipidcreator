@@ -33,30 +33,6 @@ using System.IO;
 
 namespace LipidCreator
 {
-
-
-    public class CustomPictureBox : PictureBox
-    {
-        public event EventHandler ImageChanged;
-        public Image Image
-        {
-            get
-            {
-                return base.Image;
-            }
-            set
-            {
-                if (base.Image != value)
-                {
-                    base.Image = value;
-                    if (this.ImageChanged != null)
-                        this.ImageChanged(this, new EventArgs());
-                }
-            }
-        }
-    }
-
-
     partial class MS2Form
     {
 

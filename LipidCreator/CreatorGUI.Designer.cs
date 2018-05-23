@@ -241,6 +241,34 @@ namespace LipidCreator
             base.OnPaint(e);
         }
     }
+
+
+    public class CustomPictureBox : PictureBox
+    {
+        public event EventHandler ImageChanged;
+        new public Image Image
+        {
+            get
+            {
+                return base.Image;
+            }
+            set
+            {
+                if (base.Image != value)
+                {
+                    base.Image = value;
+                    if (this.ImageChanged != null) this.ImageChanged(this, new EventArgs());
+                }
+            }
+        }
+        
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Application.DoEvents();
+            if (this.ImageChanged != null) this.ImageChanged(this, new EventArgs());
+        }
+    }
     
     
     partial class CreatorGUI
@@ -346,7 +374,7 @@ namespace LipidCreator
         
 
         public PictureBox glPictureBox;
-        public PictureBox plPictureBox;
+        public CustomPictureBox plPictureBox;
         public PictureBox slPictureBox;
         public PictureBox chPictureBox;
         public PictureBox medPictureBox;
@@ -671,7 +699,7 @@ namespace LipidCreator
             
 
             glPictureBox = new PictureBox();
-            plPictureBox = new PictureBox();
+            plPictureBox = new CustomPictureBox();
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
             medPictureBox = new PictureBox();

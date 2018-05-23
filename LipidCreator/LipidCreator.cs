@@ -63,6 +63,8 @@ namespace LipidCreator
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
         public HashSet<string> lysoPhosphoLipids;
+        public Dictionary<string, ArrayList> msDevices; 
+        
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
@@ -256,6 +258,49 @@ namespace LipidCreator
             {
                 Console.WriteLine("Error: file " + headgroupsFile + " does not exist or can not be opened.");
             }
+            
+            
+            
+            
+            string devicesFile = prefixPath + "data/ms-devices.csv";
+            if (File.Exists(devicesFile))
+            {
+                lineCounter = 1;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(devicesFile))
+                    {
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            
+                            string[] tokens = parseLine(line);
+                            if (tokens.Length != 3) throw new Exception("invalid line in file, number of columns in line < 19");
+                            
+                            ArrayList devData = new ArrayList();
+                            
+                            devData.Add(tokens[1]);
+                            devData.Add(tokens[2]);
+                            
+                            msDevices.Add(tokens[0], devData);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("The file '" + devicesFile + "' in line '" + lineCounter + "' could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: file " + devicesFile + " does not exist or can not be opened.");
+            }
+            
+            
         }
         
 
@@ -273,6 +318,7 @@ namespace LipidCreator
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
             lysoPhosphoLipids = new HashSet<string>();
+            msDevices = new Dictionary<string, ArrayList>();
             readInputFiles();
             
             foreach(string lipidClass in allFragments.Keys)

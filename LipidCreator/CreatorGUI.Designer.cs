@@ -265,7 +265,7 @@ namespace LipidCreator
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Console.WriteLine("huhu");
+            Application.DoEvents();
             if (this.ImageChanged != null) this.ImageChanged(this, new EventArgs());
         }
     }

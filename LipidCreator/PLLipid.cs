@@ -216,6 +216,7 @@ namespace LipidCreator
                                     PrecursorData precursorData = new PrecursorData();
                                     precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     precursorData.moleculeListName = headgroup;
+                                    precursorData.fullMoleculeListName = headgroup;
                                     precursorData.lipidClass = headgroup;
                                     precursorData.precursorName = key;
                                     precursorData.precursorIonFormula = chemForm;
@@ -273,6 +274,7 @@ namespace LipidCreator
                                         PrecursorData heavyPrecursorData = new PrecursorData();
                                         heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                         heavyPrecursorData.moleculeListName = headgroup;
+                                        heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                         heavyPrecursorData.lipidClass = heavyHeadgroup;
                                         heavyPrecursorData.precursorName = heavyKey;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
@@ -355,6 +357,7 @@ namespace LipidCreator
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                             precursorData.moleculeListName = headgroup;
+                            precursorData.fullMoleculeListName = headgroup;
                             precursorData.lipidClass = headgroup;
                             precursorData.precursorName = key;
                             precursorData.precursorIonFormula = chemForm;
@@ -399,6 +402,7 @@ namespace LipidCreator
                                 PrecursorData heavyPrecursorData = new PrecursorData();
                                 heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
+                                heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.lipidClass = heavyHeadgroup;
                                 heavyPrecursorData.precursorName = heavyKey;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
@@ -498,6 +502,7 @@ namespace LipidCreator
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 precursorData.moleculeListName = headgroup;
+                                precursorData.fullMoleculeListName = headgroup;
                                 precursorData.lipidClass = headgroup;
                                 precursorData.precursorName = key;
                                 precursorData.precursorIonFormula = chemForm;
@@ -558,6 +563,7 @@ namespace LipidCreator
                                     PrecursorData heavyPrecursorData = new PrecursorData();
                                     heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
+                                    heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.lipidClass = heavyHeadgroup;
                                     heavyPrecursorData.precursorName = heavyKey;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;

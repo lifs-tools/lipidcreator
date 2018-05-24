@@ -200,7 +200,7 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
                 
-                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null)
+                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
@@ -306,7 +306,7 @@ namespace LipidCreator
                 transitionList.Rows.Add(lipidRow);
                 
                 
-                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null)
+                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);

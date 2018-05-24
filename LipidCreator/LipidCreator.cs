@@ -845,7 +845,14 @@ namespace LipidCreator
                         fragmentScores[lipidClass][adduct][2] = collisionEnergy;
                     }
                     
-                    if (collisionEnergy > 0) row[LipidCreator.COLLISION_ENERGY] = collisionEnergy;
+                    if (collisionEnergy > 0)
+                    {
+                        row[LipidCreator.COLLISION_ENERGY] = collisionEnergy;
+                        
+                        string fragment = (string)transitionList.Rows[i][LipidCreator.PRODUCT_NAME];
+                        double intens = collisionEnergyHandler.getIntensity(instrument, lipidClass, fragment, adduct, collisionEnergy);
+                        row[LipidCreator.NOTE] = intens;
+                    }
                 }
             }
         }
@@ -1229,7 +1236,7 @@ namespace LipidCreator
             // Write the annotated spectra
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.addSpectra(command, precursorData, allFragments);
+                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler);
             }
             
             

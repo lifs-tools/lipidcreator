@@ -397,9 +397,9 @@ namespace LipidCreator
             // add MS1 information - always claim FileId=1 (SpectrumSourceFiles has an entry for this, saying that these are generated spectra)
             sql =
                 "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" +
-                precursorData.precursorName + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
-                ", '" + precursorData.precursorAdduct + "', '-', '-', 0, " + numFragments +
-                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula + "')";
+                precursorData.precursorName.Replace("'", "''") + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
+                ", '" + precursorData.precursorAdduct.Replace("'", "''") + "', '-', '-', 0, " + numFragments +
+                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula.Replace("'", "''") + "')";
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
@@ -446,20 +446,34 @@ namespace LipidCreator
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
                         "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", '" + ann.Name + "', '" + ann.Formula + "', '', '', " + ann.Charge + ", '" + adduct + "', '" + ann.Comment + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                        i + ", '" + ann.Name.Replace("'", "''") + "', '" + ann.Formula.Replace("'", "''") + "', '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
                     command.ExecuteNonQuery();
                 }
             }
         }
                 
-        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
+        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler)
         {
             if (precursorData.fragmentNames.Count == 0) return;
             
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
             {
+            
                 MS2Fragment fragment = fragmentPair.Value;
+                
+                // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
+                if (precursorData.moleculeListName.Equals("LCB") && fragment.fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
+                
+                // Exception for lipids with NL(NH3) fragment
+                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]1+")) continue;
+                
+                
+                // Exception for lipids for NL([adduct]) and +H or -H as adduct
+                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdduct.Equals("[M+H]1+") || precursorData.precursorAdduct.Equals("[M-H]1-"))) continue;
+            
+            
+            
                 Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
@@ -498,7 +512,7 @@ namespace LipidCreator
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
                     chemFormFragment = "";
-                    fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 
                 peaks.Add(new Peak(massFragment,

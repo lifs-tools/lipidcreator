@@ -84,13 +84,13 @@ namespace LipidCreator
             this.dataGridViewTransitions.ReadOnly = true;
             this.dataGridViewTransitions.RowHeadersVisible = false;
             this.dataGridViewTransitions.RowTemplate.Height = 34;
-            this.dataGridViewTransitions.Size = new System.Drawing.Size(955, 409);
+            this.dataGridViewTransitions.Size = new System.Drawing.Size(1055, 409);
             this.dataGridViewTransitions.TabIndex = 0;
             this.dataGridViewTransitions.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(gridviewDataBindingComplete);
             // 
             // button1
             // 
-            this.buttonSendToSkyline.Location = new System.Drawing.Point(360, 448);
+            this.buttonSendToSkyline.Location = new System.Drawing.Point(410, 448);
             this.buttonSendToSkyline.Name = "button1";
             this.buttonSendToSkyline.Size = new System.Drawing.Size(258, 34);
             this.buttonSendToSkyline.TabIndex = 1;
@@ -122,7 +122,7 @@ namespace LipidCreator
             // checkBox2
             // 
             this.checkBoxCreateSpectralLibrary.AutoSize = true;
-            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(450, 426);
+            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(500, 426);
             this.checkBoxCreateSpectralLibrary.Name = "checkBox2";
             this.checkBoxCreateSpectralLibrary.Size = new System.Drawing.Size(96, 17);
             this.checkBoxCreateSpectralLibrary.TabIndex = 3;
@@ -131,7 +131,7 @@ namespace LipidCreator
             // 
             // button3
             // 
-            this.buttonStoreSpectralLibrary.Location = new System.Drawing.Point(709, 448);
+            this.buttonStoreSpectralLibrary.Location = new System.Drawing.Point(809, 448);
             this.buttonStoreSpectralLibrary.Name = "button3";
             this.buttonStoreSpectralLibrary.Size = new System.Drawing.Size(258, 34);
             this.buttonStoreSpectralLibrary.TabIndex = 4;
@@ -153,7 +153,7 @@ namespace LipidCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(979, 494);
+            this.ClientSize = new System.Drawing.Size(1079, 494);
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);
             this.Controls.Add(this.checkBoxHideReplicates);

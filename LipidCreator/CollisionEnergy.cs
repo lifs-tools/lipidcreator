@@ -132,7 +132,6 @@ namespace LipidCreator
                         Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[fragment];
                         if (parLevel3.ContainsKey(adduct))
                         {
-                        
                             Dictionary<string, string> parLevel4 = parLevel3[adduct];
                             if (parLevel4.ContainsKey("model"))
                             {
@@ -172,13 +171,15 @@ namespace LipidCreator
         {
             if (parameters.ContainsKey("meanlog") && parameters.ContainsKey("sdlog") && parameters.ContainsKey("shift") && parameters.ContainsKey("scale"))
             {
-                double scl = Convert.ToDouble(parameters["scale"]);
-                double m = Convert.ToDouble(parameters["meanlog"]);
-                double sd = Convert.ToDouble(parameters["sdlog"]);
-                double sft = Convert.ToDouble(parameters["shift"]);
-                if (collisionEnergy - sft < 0) return -1;
+                double scl = Convert.ToDouble(parameters["scale"], CultureInfo.InvariantCulture);
+                double m = Convert.ToDouble(parameters["meanlog"], CultureInfo.InvariantCulture);
+                double sd = Convert.ToDouble(parameters["sdlog"], CultureInfo.InvariantCulture);
+                double sft = Convert.ToDouble(parameters["shift"], CultureInfo.InvariantCulture);
+                collisionEnergy += sft;
                 
-                return scl / ((collisionEnergy - sft) * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-square(Math.Log(collisionEnergy - sft) - m) / (2 * square(sd)));
+                if (collisionEnergy < 0) return -1;
+                
+                return scl / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-square(Math.Log(collisionEnergy) - m) / (2 * square(sd)));
             }
             return -1;
         }

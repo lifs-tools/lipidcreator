@@ -47,6 +47,7 @@ namespace LipidCreator
     {
         public LipidCategory lipidCategory;
         public string moleculeListName;
+        public string fullMoleculeListName; // including heavy labeled suffix
         public string lipidClass;
         public string precursorName;
         public string precursorIonFormula;
@@ -180,8 +181,7 @@ namespace LipidCreator
         }
         
         
-        
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, Dictionary<string, Dictionary<string, ArrayList>> fragmentScores = null, CollisionEnergy collisionEnergyHandler = null, string instrument = "", ArrayList lipidClassNames = null)
         {
             
             if (precursorData.addPrecursor){
@@ -199,11 +199,28 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
+                
+                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null)
+                {
+                    string lipidClass = precursorData.fullMoleculeListName;
+                    lipidClassNames.Add(lipidClass);
+                    string adduct = precursorData.precursorAdduct;
+                    
+                    if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
+                    if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count, -1.0});
+                    
+                    double score = collisionEnergyHandler.getScore(instrument, lipidClass, "precursor", adduct);
+                    if ((double)fragmentScores[lipidClass][adduct][0] < score){
+                        fragmentScores[lipidClass][adduct][0] = score;
+                        fragmentScores[lipidClass][adduct][1] = transitionList.Rows.Count;
+                    }
+                }
             }
             
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+            
                 // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
                 
@@ -267,7 +284,7 @@ namespace LipidCreator
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
                     chemFormFragment = "";
-                    fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
+                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
@@ -286,8 +303,24 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 lipidRow[LipidCreator.NOTE] = "";
-                
                 transitionList.Rows.Add(lipidRow);
+                
+                
+                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null)
+                {
+                    string lipidClass = precursorData.fullMoleculeListName;
+                    lipidClassNames.Add(lipidClass);
+                    string adduct = precursorData.precursorAdduct;
+                    
+                    if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
+                    if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count - 1, -1.0});
+                    
+                    double score = collisionEnergyHandler.getScore(instrument, lipidClass, fragName, adduct);
+                    if ((double)fragmentScores[lipidClass][adduct][0] < score){
+                        fragmentScores[lipidClass][adduct][0] = score;
+                        fragmentScores[lipidClass][adduct][1] = transitionList.Rows.Count - 1;
+                    }
+                }
             }
         }
         

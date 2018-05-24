@@ -2875,9 +2875,9 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids();
+            lipidCreator.assembleLipids(selectedInstrumentForCE);
             LipidCreator.analytics("lipidcreator", "create-transition-list");
-            lipidsReview = new LipidsReview(lipidCreator);
+            lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
             

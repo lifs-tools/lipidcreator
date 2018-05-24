@@ -32,16 +32,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
-using System.Data.SQLite;
-using Ionic.Zlib;
-using System.Diagnostics;
-
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using SkylineTool;
-using System.Net;
-using System.Threading;
+using System.Globalization;
 
 
 
@@ -51,7 +42,7 @@ namespace LipidCreator
     public class CollisionEnergy
     { 
         // instrument CV term -> class -> fragment -> adduct -> charge -> parameter -> value
-        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>>> instrumentParameters;
+        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
         public Dictionary<string, Func<Dictionary<string, string>, double, double>> intensityFunctions;
         public Dictionary<string, Func<Dictionary<string, string>, double>> optimalCEFunctions;
         
@@ -63,47 +54,43 @@ namespace LipidCreator
         
         public CollisionEnergy()
         {
-            instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>>>();
+            instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>>();
             intensityFunctions = new Dictionary<string, Func<Dictionary<string, string>, double, double>>();
-            intensityFunctions.Add("unNormDlnormPar", intensityLogNormal);
+            intensityFunctions.Add("dlnormPar", intensityLogNormal);
             
             optimalCEFunctions = new Dictionary<string, Func<Dictionary<string, string>, double>>();
-            optimalCEFunctions.Add("unNormDlnormPar", optimalCollisionEnergyLogNormal);
+            optimalCEFunctions.Add("dlnormPar", optimalCollisionEnergyLogNormal);
         }
         
         
         
         
-        public double getCollisionEnergy(string instrument, string lipidClass, string fragment, string adduct, int charge)
+        public double getCollisionEnergy(string instrument, string lipidClass, string fragment, string adduct)
         {
             double energy = -1;
             if (instrumentParameters.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>> parLevel1 = instrumentParameters[instrument];
+                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>> parLevel2 = parLevel1[lipidClass];
+                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(fragment))
                     {
                         
-                        Dictionary<string, Dictionary<int, Dictionary<string, string>>> parLevel3 = parLevel2[fragment];
+                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[fragment];
                         if (parLevel3.ContainsKey(adduct))
                         {
                         
-                            Dictionary<int, Dictionary<string, string>> parLevel4 = parLevel3[adduct];
-                            if (parLevel4.ContainsKey(charge))
+                            Dictionary<string, string> parLevel4 = parLevel3[adduct];
+                            if (parLevel4.ContainsKey("model"))
                             {
                             
-                                Dictionary<string, string> parLevel5 = parLevel4[charge];
-                                if (parLevel5.ContainsKey("model"))
+                                string model = parLevel4["model"];
+                                if (optimalCEFunctions.ContainsKey(model))
                                 {
-                                    string model = parLevel5["model"];
-                                    if (optimalCEFunctions.ContainsKey(model))
-                                    {
-                                        energy = optimalCEFunctions[model](parLevel5);
-                                    }
+                                    energy = optimalCEFunctions[model](parLevel4);
                                 }
                             }
                         }
@@ -115,39 +102,44 @@ namespace LipidCreator
         
         
         
+        public double getScore(string instrument, string lipidClass, string fragment, string adduct)
+        {
+            if(!instrumentParameters.ContainsKey(instrument)) return -1.0;
+            if(!instrumentParameters[instrument].ContainsKey(lipidClass)) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass].ContainsKey(fragment)) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass][fragment].ContainsKey(adduct)) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass][fragment][adduct].ContainsKey("score")) return -1.0;
+            
+            return Convert.ToDouble(instrumentParameters[instrument][lipidClass][fragment][adduct]["score"]);
+        }
         
         
         
-        public double getIntensity(string instrument, string lipidClass, string fragment, string adduct, int charge, double collisionEnergy)
+        public double getIntensity(string instrument, string lipidClass, string fragment, string adduct, double collisionEnergy)
         {
             double intensity = MS2Fragment.DEFAULT_INTENSITY;
             if (instrumentParameters.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>>> parLevel1 = instrumentParameters[instrument];
+                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<int, Dictionary<string, string>>>> parLevel2 = parLevel1[lipidClass];
+                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(fragment))
                     {
                         
-                        Dictionary<string, Dictionary<int, Dictionary<string, string>>> parLevel3 = parLevel2[fragment];
+                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[fragment];
                         if (parLevel3.ContainsKey(adduct))
                         {
                         
-                            Dictionary<int, Dictionary<string, string>> parLevel4 = parLevel3[adduct];
-                            if (parLevel4.ContainsKey(charge))
+                            Dictionary<string, string> parLevel4 = parLevel3[adduct];
+                            if (parLevel4.ContainsKey("model"))
                             {
-                            
-                                Dictionary<string, string> parLevel5 = parLevel4[charge];
-                                if (parLevel5.ContainsKey("model"))
+                                string model = parLevel4["model"];
+                                if (intensityFunctions.ContainsKey(model))
                                 {
-                                    string model = parLevel5["model"];
-                                    if (intensityFunctions.ContainsKey(model))
-                                    {
-                                        intensity = intensityFunctions[model](parLevel5, collisionEnergy);
-                                    }
+                                    intensity = intensityFunctions[model](parLevel4, collisionEnergy);
                                 }
                             }
                         }
@@ -160,26 +152,32 @@ namespace LipidCreator
         
         
         
+        
         public double optimalCollisionEnergyLogNormal(Dictionary<string, string> parameters)
         {
+        
             if (parameters.ContainsKey("meanlog") && parameters.ContainsKey("sdlog") && parameters.ContainsKey("shift"))
             {
-                double m = Convert.ToDouble(parameters.ContainsKey("meanlog"));
-                double sd = Convert.ToDouble(parameters.ContainsKey("sdlog"));
-                double sft = Convert.ToDouble(parameters.ContainsKey("shift"));
-                return Math.Exp(m - square(sd)) + sft;
+                double m = Convert.ToDouble(parameters["meanlog"], CultureInfo.InvariantCulture);
+                double sd = Convert.ToDouble(parameters["sdlog"], CultureInfo.InvariantCulture);
+                double sft = Convert.ToDouble(parameters["shift"], CultureInfo.InvariantCulture);
+                return Math.Exp(m - square(sd)) - sft;
             }
             return -1;
         }
+        
+        
         
         public double intensityLogNormal(Dictionary<string, string> parameters, double collisionEnergy)
         {
             if (parameters.ContainsKey("meanlog") && parameters.ContainsKey("sdlog") && parameters.ContainsKey("shift") && parameters.ContainsKey("scale"))
             {
-                double m = Convert.ToDouble(parameters.ContainsKey("meanlog"));
-                double scl = Convert.ToDouble(parameters.ContainsKey("scale"));
-                double sd = Convert.ToDouble(parameters.ContainsKey("sdlog"));
-                double sft = Convert.ToDouble(parameters.ContainsKey("shift"));
+                double scl = Convert.ToDouble(parameters["scale"]);
+                double m = Convert.ToDouble(parameters["meanlog"]);
+                double sd = Convert.ToDouble(parameters["sdlog"]);
+                double sft = Convert.ToDouble(parameters["shift"]);
+                if (collisionEnergy - sft < 0) return -1;
+                
                 return scl / ((collisionEnergy - sft) * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-square(Math.Log(collisionEnergy - sft) - m) / (2 * square(sd)));
             }
             return -1;

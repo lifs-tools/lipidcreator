@@ -44,16 +44,16 @@ namespace LipidCreator
         public DataTable transitionListUnique;
         public ArrayList replicates;
         public DataTable currentView;
-        public LipidCreator lipidCreatorForm;
+        public CreatorGUI creatorGUI;
         public string[] dataColumns = {};
 
-        public LipidsReview (LipidCreator lipidCreatorForm)
+        public LipidsReview (CreatorGUI _creatorGUI)
         {
-            this.lipidCreatorForm = lipidCreatorForm;
-            transitionList = lipidCreatorForm.transitionList;
+            creatorGUI = _creatorGUI;
+            transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
             replicates = new ArrayList();
-            transitionListUnique = lipidCreatorForm.addDataColumns (new DataTable ());
+            transitionListUnique = creatorGUI.lipidCreator.addDataColumns (new DataTable ());
             Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
             
             int i = 0;
@@ -78,8 +78,7 @@ namespace LipidCreator
             
             InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;
-            buttonSendToSkyline.Enabled = lipidCreatorForm.openedAsExternal;
-            checkBoxCreateSpectralLibrary.Enabled = lipidCreatorForm.openedAsExternal;
+            buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
             foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns) {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -87,6 +86,10 @@ namespace LipidCreator
             
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
+            
+            buttonStoreSpectralLibrary.Enabled = creatorGUI.selectedInstrumentForCE.Length > 0 && (bool)creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE][1];
+            
+            checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
         }
         
         
@@ -115,12 +118,12 @@ namespace LipidCreator
                 spectralName.Dispose ();
                 if (specName [0].Length > 0) {
                     string blibPath = Application.StartupPath + "\\..\\Temp\\" + specName[0] + ".blib";
-                    lipidCreatorForm.createBlib (blibPath);
-                    lipidCreatorForm.sendToSkyline (currentView, specName[0], blibPath);
+                    creatorGUI.lipidCreator.createBlib (blibPath);
+                    creatorGUI.lipidCreator.sendToSkyline (currentView, specName[0], blibPath);
                     MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
             } else {
-                lipidCreatorForm.sendToSkyline (currentView, "", "");
+                creatorGUI.lipidCreator.sendToSkyline (currentView, "", "");
                 MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
             }
             this.Enabled = true;
@@ -245,7 +248,7 @@ namespace LipidCreator
                 this.Enabled = false;
                 try
                 {
-                    lipidCreatorForm.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
+                    creatorGUI.lipidCreator.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
                     MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
                 }
                 catch (Exception exception)

@@ -124,6 +124,7 @@ namespace LipidCreator
 
                     PrecursorData precursorData = new PrecursorData();
                     precursorData.lipidCategory = LipidCategory.Mediator;
+                    precursorData.fullMoleculeListName = headgroup;
                     precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
                     precursorData.lipidClass = headgroup;
                     precursorData.precursorName = key.Replace("/", HEAVY_LABEL_SEPARATOR);

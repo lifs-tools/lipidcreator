@@ -30,12 +30,40 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace LipidCreator
 {
     partial class MS2Form
     {
-
+    
+        [DllImport("user32")]
+        private static extern IntPtr GetWindowDC(IntPtr hwnd);
+ 
+        // you also need ReleaseDC
+        [DllImport("user32")]
+        private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        
+    
+        protected override void OnPaint(PaintEventArgs e)
+        {
+        
+            
+            IntPtr hdc = GetWindowDC(this.Handle);
+        
+            //base.OnPaint(e);
+            
+            
+            Graphics g = e.Graphics;
+            Pen blackPen = new Pen(Color.Black, 10);
+            g.DrawRectangle(blackPen, 50, 50, 20, 20);
+            g.Dispose();
+            
+            ReleaseDC(this.Handle, hdc);
+        }
+    
+    
+        
         #region Windows Form Designer generated code
 
         /// <summary>

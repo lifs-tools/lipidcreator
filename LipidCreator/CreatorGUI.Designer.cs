@@ -81,7 +81,6 @@ namespace LipidCreator
         
         public void update(Point location, string dir)
         {
-            BringToFront();
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             Size = arrows[direction].Size;
@@ -89,9 +88,6 @@ namespace LipidCreator
             // to create the illusion of transprency for the red arrows, a snapshot is taken from the current
             // frame as the background
             Visible = false;
-            Parent.Refresh();
-            Application.DoEvents();
-            
             
             Rectangle screenRectangle = RectangleToScreen(Parent.ClientRectangle);
             int titleHeight = screenRectangle.Top - Parent.Top;
@@ -105,10 +101,14 @@ namespace LipidCreator
             BackgroundImage = bmp;
             
             Visible = true;
+            BringToFront();
+            Refresh();
         }
         
         protected override void OnPaint(PaintEventArgs e)
         {
+        Console.WriteLine("paint");
+            BringToFront();
             Graphics g = e.Graphics;
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
@@ -172,15 +172,14 @@ namespace LipidCreator
         
         public void update(Size size, Point location, string instr, string txt, bool prevEnabled = true)
         {
-            BringToFront();
             Size = size;
             Location = location;
             instruction = instr;
             text = txt;
             Visible = true;
             previousEnabled = prevEnabled;
-            //if (Parent != null) Parent.Refresh();
-            //Refresh();
+            BringToFront();
+            Refresh();
         }
         
         
@@ -257,16 +256,10 @@ namespace LipidCreator
                 if (base.Image != value)
                 {
                     base.Image = value;
+                    SendToBack();
                     if (this.ImageChanged != null) this.ImageChanged(this, new EventArgs());
                 }
             }
-        }
-        
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            Application.DoEvents();
-            if (this.ImageChanged != null) this.ImageChanged(this, new EventArgs());
         }
     }
     
@@ -285,7 +278,6 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        //public TutorialWindow tutorialWindow;
         
         public System.Timers.Timer timerEasterEgg;
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
@@ -2187,8 +2179,8 @@ namespace LipidCreator
             
             this.SizeChanged += new EventHandler(windowSizeChanged);
             
-        
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plIsCL, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
+            
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
         }
 
         #endregion

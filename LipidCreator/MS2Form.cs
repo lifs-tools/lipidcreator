@@ -410,6 +410,8 @@ namespace LipidCreator
             ((TabPage)tabPages[index]).Controls.Add(pictureBoxFragments);
             ((TabPage)tabPages[index]).Controls.Add(isotopeList);
             
+            Console.WriteLine("page");
+            
             isotopeList.Items.Add("Monoisotopic");
             String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
             foreach(Precursor heavyPrecursor in creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeledPrecursors)

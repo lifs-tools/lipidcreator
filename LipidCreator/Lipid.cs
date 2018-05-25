@@ -338,7 +338,7 @@ namespace LipidCreator
                 Name = name.Replace("'", "''"); // escape single quotes for sqlite insertion
                 Charge = z;
                 Adduct = adduct;
-                Formula = formula.Replace("'", "''"); // escape single quotes for sqlite insertion;
+                Formula = formula;
                 Comment = comment.Replace("'", "''"); // escape single quotes for sqlite insertion;
             }
 
@@ -446,7 +446,9 @@ namespace LipidCreator
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
                         "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", '" + ann.Name.Replace("'", "''") + "', '" + ann.Formula.Replace("'", "''") + "', '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                        i + ", '" + ann.Name.Replace("'", "''") + "', @formula, '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                    SQLiteParameter parameterFormula = new SQLiteParameter("@formula", ann.Formula);
+                    command.Parameters.Add(parameterFormula);
                     command.ExecuteNonQuery();
                 }
             }

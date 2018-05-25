@@ -1869,7 +1869,7 @@ namespace LipidCreator
                 plPictureBox.Left = 107;
                 plPictureBox.Image = phosphoBackboneImage;
             }
-            
+            plPictureBox.SendToBack();
             plHgList.Sort();
             plHgListbox.Items.AddRange(plHgList.ToArray());
         }

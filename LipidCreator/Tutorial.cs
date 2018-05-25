@@ -48,7 +48,6 @@ namespace LipidCreator
         public int tutorialStep;
         public CreatorGUI creatorGUI;
         public ArrayList elementsEnabledState;
-        public LipidCategory currentTab;
         public Dictionary<int, int> maxSteps;
         public bool nextEnabled;
         public int pgIndex;
@@ -65,7 +64,6 @@ namespace LipidCreator
             nextEnabled = true;
             creatorGUIEventHandlers = new ArrayList();
             this.creatorGUI = creatorGUI;
-            currentTab = LipidCategory.NoLipid;
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
                 {(int)Tutorials.TutorialPRM, 44},
@@ -87,7 +85,27 @@ namespace LipidCreator
         
             // if (!creatorGUI.resetLipidCreator()) return;
             
-            //creatorGUI.changeTab(2);
+            creatorGUI.changeTab(2);
+            tutorial = t;
+            tutorialStep = 10;
+            
+            
+            
+            
+            
+            
+            
+            creatorGUI.ms2fragmentsForm = new MS2Form(creatorGUI);
+            creatorGUI.ms2fragmentsForm.Owner = creatorGUI;
+            creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
+            creatorGUI.ms2fragmentsForm.Show();
+            initMS2Form();
+            //creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
+            
+            
+            
+            
+            
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Selecting += new TabControlCancelEventHandler(tabPreInteraction);
@@ -102,12 +120,6 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
-            creatorGUI.plPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
-        
-        
-            tutorial = t;
-            tutorialStep = 0;
-            currentTab = LipidCategory.NoLipid;
             
             
             elementsEnabledState = new ArrayList();
@@ -153,51 +165,17 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.menuFragmentItem1.Click += new EventHandler(buttonInteraction);
             creatorGUI.ms2fragmentsForm.menuFragmentItem2.Click += new EventHandler(buttonInteraction);
             creatorGUI.ms2fragmentsForm.pictureBoxFragments.ImageChanged += new EventHandler(mouseHoverInteraction);
-            
             creatorGUI.ms2fragmentsForm.Refresh();
         }
         
         
         public void mouseHoverInteraction(object sender, EventArgs e)
         {
-            
-            if (tutorialWindow.Parent != null)
-            {
-                int zIndex = tutorialWindow.Parent.Controls.GetChildIndex(tutorialWindow);
-                
-                foreach (Control c in tutorialWindow.Parent.Controls)
-                {
-                    if (c == tutorialArrow || c == tutorialWindow) continue;
-                    int cIndex = tutorialWindow.Parent.Controls.GetChildIndex(c);
-                    if (zIndex > cIndex)
-                    {
-                        tutorialWindow.Parent.Controls.SetChildIndex(tutorialWindow, 0);
-                        tutorialWindow.Parent.Refresh();
-                        break;
-                    }
-                }
-            }
-        
-            //Console.WriteLine("haha");
-            if (tutorialArrow.Parent != null)
-            {
-                int zIndex = tutorialArrow.Parent.Controls.GetChildIndex(tutorialArrow);
-                foreach (Control c in tutorialArrow.Parent.Controls)
-                {
-                    if (c == tutorialArrow || c == tutorialWindow) continue;
-                    int cIndex = tutorialArrow.Parent.Controls.GetChildIndex(c);
-                if (c == creatorGUI.plPictureBox) Console.WriteLine("A: " + zIndex + " " + cIndex + " " + c.Text);
-                    if (zIndex > cIndex)
-                    {
-                        tutorialArrow.Parent.Controls.SetChildIndex(tutorialArrow, 0);
-                        tutorialArrow.Parent.Refresh();
-                        break;
-                    }
-                }
-            }
+            tutorialWindow.BringToFront();
+            tutorialArrow.BringToFront();
+            tutorialArrow.Refresh();
+            tutorialArrow.Refresh();
         }
-        
-        
         
         
         public void initAddFragmentForm()
@@ -235,7 +213,6 @@ namespace LipidCreator
         
         public void nextTutorialStep(bool forward)
         {
-        
             tutorialStep = forward ? (tutorialStep + 1) : (Math.Max(tutorialStep - 1, 1));
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
@@ -332,7 +309,6 @@ namespace LipidCreator
                 creatorGUI.lipidsReview.Close();
             }
             creatorGUI.Enabled = true;
-            creatorGUI.changeTab((int)currentTab);
         }
         
         
@@ -390,8 +366,8 @@ namespace LipidCreator
         {
             if (controlForWindow == null) controlForWindow = controlForArrow;
                 
-            controlForArrow.Controls.Add(tutorialArrow);
             controlForWindow.Controls.Add(tutorialWindow);
+            controlForArrow.Controls.Add(tutorialArrow);
         }
         
         
@@ -424,7 +400,6 @@ namespace LipidCreator
         
         
         
-        
         public void numericInteraction(object sender, System.EventArgs e)
         {
             MyNumericUpDown numericUpDown = (MyNumericUpDown)sender;
@@ -434,6 +409,8 @@ namespace LipidCreator
             }
             tutorialWindow.Refresh();
         }
+        
+        
         
         
         
@@ -469,8 +446,8 @@ namespace LipidCreator
         
         
         public void tabPostInteraction(Object sender,  EventArgs e)
-        {   
-           nextTutorialStep(true);
+        {
+            nextTutorialStep(true);
         }
         
         
@@ -680,7 +657,7 @@ namespace LipidCreator
                  
                  nextEnabled = (posFrag.Count == 1 && posFrag.Contains("NL(PG)") && negFrag.Count == 2 && negFrag.Contains("FA1") && negFrag.Contains("HG(PG)"));
             }
-            creatorGUI.ms2fragmentsForm.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -690,11 +667,8 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
-            Console.WriteLine("end");
             if(e.CloseReason != CloseReason.UserClosing)
             {
-                
-                Console.WriteLine("end");
                 quitTutorial();
             }
         }
@@ -720,6 +694,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -735,6 +710,7 @@ namespace LipidCreator
                     
                 case 3:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
+                    //setTutorialControls(creatorGUI);
                     
                     ListBox plHG = creatorGUI.plHgListbox;
                     int plHGpg = 0;
@@ -763,7 +739,7 @@ namespace LipidCreator
                     
                     
                 case 5:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
                     TextBox plDB1 = creatorGUI.plDB1Textbox;
                     tutorialArrow.update(new Point(plDB1.Location.X + plDB1.Size.Width, plDB1.Location.Y + (plDB1.Size.Height >> 1)), "tl");
@@ -777,29 +753,31 @@ namespace LipidCreator
                     
                     
                 case 6:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Continue", "Even more parameters can be set for fatty acids. For instance, up to ten hydroxyl groups can be adjusted to FAs. In this tutorial, we stick to zero hydroxyls.");
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
                 case 7:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Continue", "Additionally, fatty acids with ether bond or with ester bond (plasmenyl and plasmanyl) can be created.");
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     
                     break;
                     
                     
                 case 8:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     TextBox plFA2 = creatorGUI.plFA2Textbox;
                     tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
                     
@@ -813,7 +791,7 @@ namespace LipidCreator
                     
                     
                 case 9:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     CheckBox adductP1 = creatorGUI.plPosAdductCheckbox1;
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
                     tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
@@ -831,7 +809,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button ms2 = creatorGUI.MS2fragmentsLipidButton;
-                    tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y), "lb");
+                    tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Open MS2 fragments dialog", "As next, we will have a deeper look into all MS2 fragments of our selected lipids. Please open the MS2 fragments dialog.");
                     
@@ -841,12 +819,13 @@ namespace LipidCreator
                     
                 case 11:
                     initMS2Form();
-                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[0], creatorGUI.ms2fragmentsForm);
+                    setTutorialControls(creatorGUI.ms2fragmentsForm);
                     currentMS2TabIndex = 0;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.", false);
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                      
@@ -880,14 +859,16 @@ namespace LipidCreator
                     
                 
                 case 14:
+                    //setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     Button ms2fragButton = creatorGUI.ms2fragmentsForm.buttonAddFragment;
                     
-                    tutorialArrow.update(new Point(ms2fragButton.Location.X + (ms2fragButton.Size.Width >> 1), ms2fragButton.Location.Y), "lb");
                     ms2fragButton.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Open 'Add fragment' dialog", "It is possible to define new fragments Please click on 'Add fragment' button to open the according dialog.");
+                    
+                    tutorialArrow.update(new Point(ms2fragButton.Location.X + (ms2fragButton.Size.Width >> 1), ms2fragButton.Location.Y), "lb");
                     
                     break;
                     
@@ -900,6 +881,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Continue", "This form enables to define own fragments. In the current version of this tool, the definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added. Please Continue.", false);
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -996,6 +978,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Continue", "In the upper part, the mode can be selected either adding a new heavy labeled isotope or edit existing user defined heavy isotopes. Let's create one.", false);
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -1016,6 +999,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Continue", "PG has three building blocks. That is the head group and two variable fatty acids. We will edit the head group and the first fatty acid. Please continue for editing the head group.");
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -1062,6 +1046,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Continue", "All user defined heavy isotopes can be modified by changing the window mode in the upper part. This function will be not explained in detail.");
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -1136,6 +1121,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Continue", "Since all fragments have a list of constant elements, you have to check for all effected fragments, if your precursor modifications satisfy the fragment moditifactions.");
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -1232,6 +1218,7 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");
                     
                     nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                     

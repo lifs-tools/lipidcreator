@@ -1117,7 +1117,7 @@ namespace LipidCreator
         }
         
         
-        public void createBlib(String filename)
+        public void createBlib(String filename, string instrument)
         {
             if (File.Exists(filename)) File.Delete(filename);
         
@@ -1236,7 +1236,7 @@ namespace LipidCreator
             // Write the annotated spectra
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
-                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler);
+                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, instrument);
             }
             
             

@@ -118,7 +118,7 @@ namespace LipidCreator
                 spectralName.Dispose ();
                 if (specName [0].Length > 0) {
                     string blibPath = Application.StartupPath + "\\..\\Temp\\" + specName[0] + ".blib";
-                    creatorGUI.lipidCreator.createBlib (blibPath);
+                    creatorGUI.lipidCreator.createBlib (blibPath, creatorGUI.selectedInstrumentForCE);
                     creatorGUI.lipidCreator.sendToSkyline (currentView, specName[0], blibPath);
                     MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
                 }
@@ -248,7 +248,7 @@ namespace LipidCreator
                 this.Enabled = false;
                 try
                 {
-                    creatorGUI.lipidCreator.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
+                    creatorGUI.lipidCreator.createBlib(Path.GetFullPath(saveFileDialog1.FileName), creatorGUI.selectedInstrumentForCE);
                     MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
                 }
                 catch (Exception exception)

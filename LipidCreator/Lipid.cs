@@ -326,19 +326,19 @@ namespace LipidCreator
         
         
         
-        protected class PeakAnnotation
+        public class PeakAnnotation
         {
-            public string Name { get; private set; }
-            public int Charge { get; private set; }
-            public string Adduct { get; private set; } // can be left blank for molecular ions, mostly useful for precursor ions or describing neutral losses
-            public string Formula { get; private set; }
-            public string Comment { get; private set; }
+            public string Name { get; set; }
+            public int Charge { get; set; }
+            public string Adduct { get; set; } // can be left blank for molecular ions, mostly useful for precursor ions or describing neutral losses
+            public string Formula { get; set; }
+            public string Comment { get; set; }
             public PeakAnnotation(string name, int z, string adduct, string formula, string comment)
             {
                 Name = name.Replace("'", "''"); // escape single quotes for sqlite insertion
                 Charge = z;
                 Adduct = adduct;
-                Formula = formula.Replace("'", "''"); // escape single quotes for sqlite insertion;
+                Formula = formula;
                 Comment = comment.Replace("'", "''"); // escape single quotes for sqlite insertion;
             }
 
@@ -348,11 +348,11 @@ namespace LipidCreator
             }
         }
 
-        protected class Peak
+        public class Peak
         {
-            public double Mz { get; private set; }
-            public double Intensity { get; private set; }
-            public PeakAnnotation Annotation { get; private set; }
+            public double Mz { get; set; }
+            public double Intensity { get; set; }
+            public PeakAnnotation Annotation { get; set; }
 
             public Peak(double mz, double intensity, PeakAnnotation annotation)
             {
@@ -367,7 +367,7 @@ namespace LipidCreator
             }
         }
 
-        protected static void SavePeaks(SQLiteCommand command, PrecursorData precursorData, IEnumerable<Peak> peaksList)
+        public static void SavePeaks(SQLiteCommand command, PrecursorData precursorData, IEnumerable<Peak> peaksList)
         {
             string sql;
             var peaks = peaksList.OrderBy(o => o.Mz).ToArray(); // .blib expects  ascending mz
@@ -446,15 +446,20 @@ namespace LipidCreator
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
                         "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", '" + ann.Name.Replace("'", "''") + "', '" + ann.Formula.Replace("'", "''") + "', '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                        i + ", '" + ann.Name.Replace("'", "''") + "', @formula, '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                    SQLiteParameter parameterFormula = new SQLiteParameter("@formula", ann.Formula);
+                    command.Parameters.Add(parameterFormula);
                     command.ExecuteNonQuery();
                 }
             }
         }
                 
-        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler)
+        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
             if (precursorData.fragmentNames.Count == 0) return;
+            int topScoreFragmentPos = 0;
+            double topScore = -1000;
+            string precursorAdduct = precursorData.precursorAdduct;  
             
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
@@ -516,12 +521,20 @@ namespace LipidCreator
                 }
                 
                 peaks.Add(new Peak(massFragment,
-                    fragment.computeIntensity(),
+                    MS2Fragment.DEFAULT_INTENSITY,
                     new PeakAnnotation(fragName,
                         fragment.fragmentCharge,
                         getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]),
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));
+                      
+                double score = collisionEnergyHandler.getScore(instrument, precursorData.fullMoleculeListName, fragName, precursorAdduct);
+                
+                if (topScore < score)
+                {
+                    topScore = score;
+                    topScoreFragmentPos = peaks.Count - 1;
+                }
             }
             
             // add precursor
@@ -532,6 +545,27 @@ namespace LipidCreator
                     precursorData.precursorAdduct,
                     precursorData.precursorIonFormula,
                     "precursor")));
+                    
+            double precursorScore = collisionEnergyHandler.getScore(instrument, precursorData.fullMoleculeListName, "precursor", precursorAdduct);
+            
+            if (topScore < precursorScore)
+            {
+                topScore = precursorScore;
+                topScoreFragmentPos = peaks.Count - 1;
+            }
+            
+            string topFragment = peaks[topScoreFragmentPos].Annotation.Name;
+            double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, topFragment, precursorAdduct);
+            
+            Console.WriteLine(collisionEnergy);
+            if (collisionEnergy > 0)
+            {
+                foreach (Peak peak in peaks)
+                {
+                    string fragment = peak.Annotation.Name;
+                    peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, fragment, precursorAdduct, collisionEnergy);
+                }
+            }
             
             // Commit to .blib
             SavePeaks(command, precursorData, peaks);

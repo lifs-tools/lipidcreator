@@ -2139,19 +2139,19 @@ namespace LipidCreator
             homeText.Location = new Point(60, 20);
             homeText.Text = "LipidCreator offers several features including i) using lipid building blocks, ii) latest lipid nomenclature [3], iii) lipid fragmentation, iv) transition mass-calculator, v) an in-silico spectral library generator and vi) implementing full integration with new small molecule support in Skyline." + Environment.NewLine;
             homeText.BackColor = Color.Transparent;
-            homeText.Font = new Font(homeTab.Font.FontFamily, 13);
+            homeText.Font = new Font(homeTab.Font.FontFamily, 12);
             
             homeText2.Width = 560;
             homeText2.Height = 40;
             homeText2.Location = new Point(60, 220);
             homeText2.Text = "LipidCreator offers several interactive tutorils for an easy introduction into its functionality:" + Environment.NewLine;
             homeText2.BackColor = Color.Transparent;
-            homeText2.Font = new Font(homeTab.Font.FontFamily, 13);
+            homeText2.Font = new Font(homeTab.Font.FontFamily, 12);
             
             
             homeText3.Width = 560;
             homeText3.Height = 80;
-            homeText3.Location = new Point(60, 340);
+            homeText3.Location = new Point(60, 320);
             homeText3.Text = "LipidCreator version 1.0.1" + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
             homeText3.BackColor = Color.Transparent;
             homeText3.Font = new Font(homeTab.Font.FontFamily, 10);

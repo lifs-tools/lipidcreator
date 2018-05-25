@@ -48,7 +48,8 @@ namespace LipidCreator
         public ArrayList fragmentBase;
         public double intensity;
         public bool userDefined;
-        public const double DEFAULT_INTENSITY = 100.0;
+        public const double MAX_INTENSITY = 100.0;
+        public const double DEFAULT_INTENSITY = 10.0;
         public string CommentForSpectralLibrary { get { return fragmentName; } }
         public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
             {"C", (int)Molecules.C},

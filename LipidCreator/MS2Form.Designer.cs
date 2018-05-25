@@ -36,7 +36,7 @@ namespace LipidCreator
 {
     partial class MS2Form
     {
-    
+        
         [DllImport("user32")]
         private static extern IntPtr GetWindowDC(IntPtr hwnd);
  
@@ -47,19 +47,13 @@ namespace LipidCreator
     
         protected override void OnPaint(PaintEventArgs e)
         {
-        
-            
-            IntPtr hdc = GetWindowDC(this.Handle);
-        
-            //base.OnPaint(e);
-            
-            
-            Graphics g = e.Graphics;
-            Pen blackPen = new Pen(Color.Black, 10);
-            g.DrawRectangle(blackPen, 50, 50, 20, 20);
-            g.Dispose();
-            
-            ReleaseDC(this.Handle, hdc);
+        IntPtr hdc = GetWindowDC( this.Handle );
+Graphics g = Graphics.FromHdc( hdc );
+           base.OnPaint(e);
+            Pen pen = new Pen(Color.FromArgb(255, 0, 0, 0));
+            g.DrawRectangle(pen, 0, 0, 300, 100);
+g.Dispose();
+ReleaseDC( this.Handle, hdc );
         }
     
     

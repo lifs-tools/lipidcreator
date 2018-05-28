@@ -1,302 +1,63 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="Layer_1"
-   x="0px"
-   y="0px"
-   viewBox="0 0 841.9 1190.6"
-   enable-background="new 0 0 841.9 1190.6"
-   xml:space="preserve"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="arrow.svg"
-   inkscape:export-filename="/media/home/Programme/LipidCreator/LipidCreator/images/arrow.png"
-   inkscape:export-xdpi="400"
-   inkscape:export-ydpi="400"><metadata
-     id="metadata77"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-     id="defs75" /><sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="998"
-     id="namedview73"
-     showgrid="false"
-     inkscape:zoom="8.9703855"
-     inkscape:cx="553.23217"
-     inkscape:cy="544.38849"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Layer_1" /><g
-     id="g3"
-     inkscape:export-xdpi="400"
-     inkscape:export-ydpi="400"
-     transform="matrix(0.83540172,0,0,1,87.610814,0)"
-     style="fill:#dddddd;fill-opacity:1;stroke:#dddddd;stroke-opacity:1"><g
-       id="g5"
-       style="fill:#dddddd;fill-opacity:1;stroke:#dddddd;stroke-opacity:1"><line
-         stroke-miterlimit="10"
-         x1="532.79999"
-         y1="616.5"
-         x2="532.79999"
-         y2="667.09998"
-         id="line7"
-         style="fill:#dddddd;stroke:#dddddd;stroke-width:5;stroke-miterlimit:10;fill-opacity:1;stroke-opacity:1" /><g
-         id="g9"
-         style="fill:#dddddd;fill-opacity:1;stroke:#dddddd;stroke-opacity:1"><polygon
-           points="525.3,664.9 532.7,677.9 540.2,664.9 "
-           id="polygon11"
-           style="fill:#dddddd;fill-opacity:1;stroke:#dddddd;stroke-opacity:1" /></g></g></g><text
-     transform="matrix(0.9976 0 0 1 525.1685 631.125)"
-     font-size="9"
-     id="text13"
-     inkscape:export-xdpi="400"
-     inkscape:export-ydpi="400"
-     font-family="'ArialMT'"
-     fill="#9D9D9C"
-     style="fill:#bfbfbf;fill-opacity:1;">MG</text>
-<text
-     transform="scale(0.99879925,1.0012022)"
-     font-size="9"
-     id="text15"
-     inkscape:export-xdpi="400"
-     inkscape:export-ydpi="400"
-     x="526.29742"
-     y="647.14795"
-     style="font-size:8.98919392px;font-family:ArialMT;fill:#bfbfbf;stroke:none;stroke-opacity:1;fill-opacity:1;">DG</text>
-<text
-     transform="scale(0.99879925,1.0012022)"
-     font-size="9"
-     id="text17"
-     inkscape:export-xdpi="400"
-     inkscape:export-ydpi="400"
-     x="526.79742"
-     y="669.22101"
-     style="font-size:8.98919392px;font-family:ArialMT;fill:#bfbfbf;fill-opacity:1;">TG</text>
-<line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="545.2"
-     y1="657"
-     x2="545.2"
-     y2="649.2"
-     id="line19" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="545.2"
-     y1="649.2"
-     x2="554.6"
-     y2="644.3"
-     id="line21" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="554.6"
-     y1="644.3"
-     x2="564.2"
-     y2="649.8"
-     id="line23" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="571.1"
-     y1="645.8"
-     x2="564.2"
-     y2="649.8"
-     id="line25" /><text
-     transform="matrix(0.9976 0 0 1 542.5285 663.2604)"
-     fill="#010202"
-     font-family="'ArialMT'"
-     font-size="6.6772"
-     id="text27">O</text>
-<line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="554.6"
-     y1="644.3"
-     x2="554.6"
-     y2="636.1"
-     id="line29" /><g
-     id="g31"><g
-       id="g33"><text
-         transform="matrix(0.9976 0 0 1 572.0684 647.8238)"
-         fill="#010202"
-         font-family="'ArialMT'"
-         font-size="6.6772"
-         id="text35">O</text>
-</g></g><g
-     id="g37"><text
-       transform="matrix(0.9976 0 0 1 550.4185 679.3949)"
-       fill="#010202"
-       font-family="'ArialMT'"
-       font-size="6.6772"
-       id="text39">O</text>
-<line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="559.9"
-       y1="664.9"
-       x2="553.2"
-       y2="668.8"
-       id="line41" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="546.2"
-       y1="664.8"
-       x2="553.1"
-       y2="668.8"
-       id="line43" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="553.9"
-       y1="668.5"
-       x2="553.9"
-       y2="673.4"
-       id="line45" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="552.4"
-       y1="668.4"
-       x2="552.4"
-       y2="673.4"
-       id="line47" /></g><text
-     transform="matrix(0.9976 0 0 1 552.1882 634.8343)"
-     fill="#010202"
-     font-family="'ArialMT'"
-     font-size="6.6772"
-     id="text49">O</text>
-<g
-     id="g51"><text
-       transform="matrix(0.9976 0 0 1 559.7404 619.2313)"
-       fill="#010202"
-       font-family="'ArialMT'"
-       font-size="6.6772"
-       id="text53">O</text>
-<line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="555.6"
-       y1="628.8"
-       x2="562.3"
-       y2="624.9"
-       id="line55" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="569.3"
-       y1="628.9"
-       x2="562.4"
-       y2="624.9"
-       id="line57" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="561.6"
-       y1="625.2"
-       x2="561.6"
-       y2="620.3"
-       id="line59" /><line
-       fill="none"
-       stroke="#010202"
-       stroke-width="0.4"
-       stroke-linecap="round"
-       stroke-miterlimit="2"
-       x1="563.1"
-       y1="625.2"
-       x2="563.1"
-       y2="620.3"
-       id="line61" /></g><text
-     transform="matrix(0.9976 0 0 1 582.5733 660.4044)"
-     fill="#010202"
-     font-family="'ArialMT'"
-     font-size="6.6772"
-     id="text63">O</text>
-<line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="591.7"
-     y1="645.9"
-     x2="585"
-     y2="649.8"
-     id="line65" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="578.1"
-     y1="645.8"
-     x2="585"
-     y2="649.8"
-     id="line67" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="585.7"
-     y1="649.5"
-     x2="585.7"
-     y2="654.4"
-     id="line69" /><line
-     fill="none"
-     stroke="#010202"
-     stroke-width="0.4"
-     stroke-linecap="round"
-     stroke-miterlimit="2"
-     x1="584.3"
-     y1="649.5"
-     x2="584.3"
-     y2="654.4"
-     id="line71" /></svg>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="Layer_1" inkscape:version="0.91 r13725" sodipodi:docname="arrow.svg" inkscape:export-filename="/media/home/Programme/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="400" inkscape:export-ydpi="400" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 595.3 841.9"
+	 enable-background="new 0 0 595.3 841.9" xml:space="preserve">
+<sodipodi:namedview  id="namedview73" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1920" inkscape:window-height="1060" inkscape:window-x="1920" inkscape:window-y="0" inkscape:window-maximized="1" inkscape:current-layer="Layer_1" inkscape:cx="562.93516" borderopacity="1" gridtolerance="10" bordercolor="#666666" pagecolor="#ffffff" inkscape:cy="539.59585" objecttolerance="10" showgrid="false" inkscape:zoom="6.3430204" guidetolerance="10">
+	</sodipodi:namedview>
+<g id="g3" transform="matrix(0.83540172,0,0,1,87.610814,0)" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849">
+	<g id="g5">
+		
+			<line id="line7" fill="none" stroke="#B3DEF4" stroke-width="5" stroke-miterlimit="10" x1="347.4" y1="435.9" x2="347.4" y2="471.7"/>
+		<g id="g9">
+			<polygon id="polygon11" fill="#B3DEF4" points="342,470.2 347.3,479.3 352.6,470.2 			"/>
+		</g>
+	</g>
+</g>
+<text id="text13" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849" transform="matrix(0.9976 0 0 1 370.3484 446.2758)" fill="#69A5CA" enable-background="new    " font-family="'Arial-BoldMT'" font-size="6.3636">MAG</text>
+<text id="text15" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849" transform="matrix(0.9976 0 0 1 370.5618 458.1557)" enable-background="new    "><tspan x="0" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="6.3636">D</tspan><tspan x="4.6" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="1"> </tspan><tspan x="4.9" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="6.3636">AG</tspan></text>
+<text id="text17" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849" transform="matrix(0.9976 0 0 1 370.9149 473.7806)" enable-background="new    "><tspan x="0" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="6.3636">T</tspan><tspan x="3.9" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="1"> </tspan><tspan x="4.2" y="0" fill="#69A5CA" font-family="'Arial-BoldMT'" font-size="6.3636">AG</tspan></text>
+<line id="line19" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="399.6" y1="464.6" x2="399.6" y2="459.1">
+</line>
+<line id="line21" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="399.6" y1="459.1" x2="406.3" y2="455.6"/>
+<line id="line23" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="406.3" y1="455.6" x2="413.1" y2="459.5"/>
+<line id="line25" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="417.9" y1="456.7" x2="413.1" y2="459.5"/>
+<text id="text27" inkscape:export-filename="/media/lipidomics/Dominik/LipidCreator/LipidCreator/images/arrow.png" inkscape:export-xdpi="398.54849" inkscape:export-ydpi="398.54849" transform="matrix(0.9976 0 0 1 397.7451 468.9974)" fill="#010202" enable-background="new    " font-family="'ArialMT'" font-size="4.7212">O</text>
+<line id="line29" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="406.3" y1="455.6" x2="406.3" y2="449.8"/>
+<g id="g31" transform="translate(20,0)">
+	<g id="g33">
+		
+			<text id="text35" transform="matrix(0.9976 0 0 1 398.6328 458.0832)" fill="#010202" font-family="'ArialMT'" font-size="4.7212">O</text>
+	</g>
+</g>
+<g id="g37" transform="translate(20,0)">
+	<text id="text39" transform="matrix(0.9976 0 0 1 383.3242 480.4056)" fill="#010202" font-family="'ArialMT'" font-size="4.7212">O</text>
+	
+		<line id="line41" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="390" y1="470.2" x2="385.3" y2="472.9"/>
+	
+		<line id="line43" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="380.3" y1="470.1" x2="385.2" y2="472.9"/>
+	
+		<line id="line45" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="385.8" y1="472.7" x2="385.8" y2="476.2"/>
+	
+		<line id="line47" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="384.7" y1="472.6" x2="384.7" y2="476.2"/>
+</g>
+<text id="text49" transform="matrix(0.9976 0 0 1 404.5751 448.8988)" fill="#010202" font-family="'ArialMT'" font-size="4.7212">O</text>
+<g id="g51" transform="translate(20,0)">
+	<text id="text53" transform="matrix(0.9976 0 0 1 389.916 437.8665)" fill="#010202" font-family="'ArialMT'" font-size="4.7212">O</text>
+	
+		<line id="line55" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="387" y1="444.6" x2="391.7" y2="441.9"/>
+	
+		<line id="line57" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="396.7" y1="444.7" x2="391.8" y2="441.9"/>
+	
+		<line id="line59" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="391.2" y1="442.1" x2="391.2" y2="438.6"/>
+	
+		<line id="line61" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="392.3" y1="442.1" x2="392.3" y2="438.6"/>
+</g>
+<text id="text63" transform="matrix(0.9976 0 0 1 426.0595 466.978)" fill="#010202" font-family="'ArialMT'" font-size="4.7212">O</text>
+<line id="line65" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="432.5" y1="456.7" x2="427.8" y2="459.5"/>
+<line id="line67" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="422.9" y1="456.7" x2="427.8" y2="459.5"/>
+<line id="line69" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="428.3" y1="459.3" x2="428.3" y2="462.7"/>
+<line id="line71" fill="none" stroke="#010202" stroke-width="0.4" stroke-linecap="round" stroke-miterlimit="2" x1="427.3" y1="459.3" x2="427.3" y2="462.7"/>
+</svg>

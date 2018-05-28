@@ -56,6 +56,7 @@ namespace LipidCreator
         public TutorialWindow tutorialWindow;
         public System.Timers.Timer timer;
         public ArrayList creatorGUIEventHandlers;
+        public bool continueTutorial = false;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -87,7 +88,7 @@ namespace LipidCreator
             
             creatorGUI.changeTab(2);
             tutorial = t;
-            tutorialStep = 19;
+            tutorialStep = 20;
             
             
             
@@ -97,7 +98,7 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
             creatorGUI.ms2fragmentsForm.Show();
             initMS2Form();
-            creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
+            //creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
             
             
             
@@ -208,17 +209,22 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialMRM) TutorialMRMStep();
             else if (tutorial == Tutorials.TutorialHeavyLabeled) TutorialHeavyLabeledStep();
-            else quitTutorial();
+            else quitTutorial(true);
         }
         
         
         
-        public void quitTutorial()
+        public void quitTutorial(bool userDefined = false)
         {
+        
+            Console.WriteLine("quit process");
             tutorial = Tutorials.NoTutorial;
             tutorialStep = 0;
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
+            
+            if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
+            if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             
             creatorGUI.plHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Selecting -= new TabControlCancelEventHandler(tabPreInteraction);
@@ -286,16 +292,16 @@ namespace LipidCreator
                     ((Control)element).Enabled = (bool)elementsEnabledState[i];
                 }
             }
-            if (creatorGUI.ms2fragmentsForm != null)
+            if (creatorGUI.ms2fragmentsForm != null && !userDefined)
             {
                 if (creatorGUI.ms2fragmentsForm.newFragment != null) creatorGUI.ms2fragmentsForm.newFragment.Close();
                 creatorGUI.ms2fragmentsForm.Close();
             }
-            if (creatorGUI.addHeavyPrecursor != null)
+            if (creatorGUI.addHeavyPrecursor != null && !userDefined)
             {
                 creatorGUI.addHeavyPrecursor.Close();
             }
-            if (creatorGUI.lipidsReview != null)
+            if (creatorGUI.lipidsReview != null && !userDefined)
             {
                 creatorGUI.lipidsReview.Close();
             }
@@ -308,6 +314,7 @@ namespace LipidCreator
         {
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+            continueTutorial = false;
             
             foreach (Object element in creatorGUI.controlElements)
             {
@@ -626,8 +633,10 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
+            Console.WriteLine("click");
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
             {
+                continueTutorial = true;
                 nextTutorialStep(true);
             }
         }
@@ -669,9 +678,13 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
-            if(e.CloseReason != CloseReason.UserClosing)
+            Console.WriteLine("close command " + tutorialStep + " " + continueTutorial);
+            if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
+            if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+            if(e.CloseReason == CloseReason.UserClosing && !continueTutorial)
             {
-                quitTutorial();
+                Console.WriteLine("quit");
+                quitTutorial(true);
             }
         }
         
@@ -1224,7 +1237,7 @@ namespace LipidCreator
                     
                     
                 default:
-                    quitTutorial();
+                    quitTutorial(true);
                     break;
             }
         }

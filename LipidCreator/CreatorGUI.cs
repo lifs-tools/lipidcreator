@@ -253,7 +253,12 @@ namespace LipidCreator
         
         public void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
+        
             Color color = (e.Index == (int)currentIndex) ? Color.White : TabControl.DefaultBackColor;
+            //Color color = (e.Index == (int)currentIndex) ? Color.White :  Color.FromArgb(199, 223, 237);
+            //Color color = (e.Index == (int)currentIndex) ? Color.White :  Color.FromArgb(180, 209, 228);
+            //Brush brush = (e.Index == (int)currentIndex) ? Brushes.Black :  Brushes.White;
+            Brush brush = (e.Index == (int)currentIndex) ? Brushes.Black :  Brushes.Black;
             using (Brush br = new SolidBrush (color))
             {
                 Rectangle rect = e.Bounds;
@@ -263,7 +268,7 @@ namespace LipidCreator
                 e.Graphics.FillRectangle(br, rect);
                 
                 SizeF sz = e.Graphics.MeasureString(tabControl.TabPages[e.Index].Text, e.Font);
-                e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, Brushes.Black, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
+                e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, brush, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
             }
         }
 

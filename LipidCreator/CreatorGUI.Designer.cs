@@ -31,17 +31,29 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+//using System.Runtime.InteropServices;
 
 namespace LipidCreator
 {
 
-
+    
     public class Overlay : Control
     {
         public Dictionary<string, Image> arrows;
         public Dictionary<string, Point> fixPoints;
         public string direction;
         Bitmap bmp;
+        
+        
+        /*
+        [DllImport("user32")]
+        private static extern IntPtr GetWindowDC(IntPtr hwnd);
+ 
+        // you also need ReleaseDC
+        [DllImport("user32")]
+        private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        
+        */
         
         protected override CreateParams CreateParams
         {
@@ -107,12 +119,20 @@ namespace LipidCreator
         
         protected override void OnPaint(PaintEventArgs e)
         {
-        Console.WriteLine("paint");
             BringToFront();
             Graphics g = e.Graphics;
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
             base.OnPaint(e);
+            
+            /*
+            IntPtr hdc = GetWindowDC( Parent.Handle );
+            Graphics g = Graphics.FromHdc( hdc );
+            g.DrawImage(arrows[direction], Left, Top, arrows[direction].Size.Width, arrows[direction].Size.Height);
+            base.OnPaint(e);
+            g.Dispose();
+            ReleaseDC( Parent.Handle, hdc );
+            */
         }
     }
     

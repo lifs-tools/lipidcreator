@@ -87,10 +87,7 @@ namespace LipidCreator
             
             creatorGUI.changeTab(2);
             tutorial = t;
-            tutorialStep = 10;
-            
-            
-            
+            tutorialStep = 19;
             
             
             
@@ -100,10 +97,7 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
             creatorGUI.ms2fragmentsForm.Show();
             initMS2Form();
-            //creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
-            
-            
-            
+            creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
             
             
             
@@ -171,9 +165,6 @@ namespace LipidCreator
         
         public void mouseHoverInteraction(object sender, EventArgs e)
         {
-            tutorialWindow.BringToFront();
-            tutorialArrow.BringToFront();
-            tutorialArrow.Refresh();
             tutorialArrow.Refresh();
         }
         
@@ -428,6 +419,11 @@ namespace LipidCreator
                     {
                         return;
                     }
+                    // TODO: delete this else if
+                    else if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 19)
+                    {
+                        return;
+                    }
                     else if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 33)
                     {
                         return;
@@ -447,7 +443,13 @@ namespace LipidCreator
         
         public void tabPostInteraction(Object sender,  EventArgs e)
         {
-            nextTutorialStep(true);
+            if ((tutorial == Tutorials.TutorialPRM && tutorialStep == 2) ||
+               (tutorial == Tutorials.TutorialPRM && tutorialStep == 12) ||
+               (tutorial == Tutorials.TutorialPRM && tutorialStep == 19) ||
+               (tutorial == Tutorials.TutorialPRM && tutorialStep == 33))
+            {
+                nextTutorialStep(true);
+            }
         }
         
         
@@ -859,16 +861,15 @@ namespace LipidCreator
                     
                 
                 case 14:
-                    //setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
-                    setTutorialControls(creatorGUI.ms2fragmentsForm);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     Button ms2fragButton = creatorGUI.ms2fragmentsForm.buttonAddFragment;
                     
                     ms2fragButton.Enabled = true;
+                    tutorialArrow.update(new Point(ms2fragButton.Location.X + (ms2fragButton.Size.Width >> 1) - creatorGUI.ms2fragmentsForm.tabControlFragments.Left, creatorGUI.ms2fragmentsForm.tabControlFragments.Height - 46), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Open 'Add fragment' dialog", "It is possible to define new fragments Please click on 'Add fragment' button to open the according dialog.");
                     
-                    tutorialArrow.update(new Point(ms2fragButton.Location.X + (ms2fragButton.Size.Width >> 1), ms2fragButton.Location.Y), "lb");
                     
                     break;
                     
@@ -931,7 +932,7 @@ namespace LipidCreator
                     
                     
                 case 20:
-                    setTutorialControls(creatorGUI.ms2fragmentsForm);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment = null;
                     CheckedListBox posCLB = creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments;
@@ -944,11 +945,11 @@ namespace LipidCreator
                     
                     
                 case 21:
-                    setTutorialControls(creatorGUI.ms2fragmentsForm);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     Button b = creatorGUI.ms2fragmentsForm.buttonOK;
                     b.Enabled = true;
-                    tutorialArrow.update(new Point(b.Location.X + (b.Size.Width >> 1), b.Location.Y), "rb");
+                    tutorialArrow.update(new Point(b.Location.X + (b.Size.Width >> 1) - creatorGUI.ms2fragmentsForm.tabControlFragments.Left, creatorGUI.ms2fragmentsForm.tabControlFragments.Height - 46), "rb");
                     
                     
                     tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click OK", "Please confirm the fragment selection by clicking on the 'OK' button.");

@@ -66,6 +66,9 @@ namespace LipidCreator
         public string selectedInstrumentForCE = "";
         
         
+        
+        
+        
         public CreatorGUI(string inputParameters)
         {
             this.inputParameters = inputParameters;

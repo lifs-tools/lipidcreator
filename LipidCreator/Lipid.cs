@@ -335,11 +335,11 @@ namespace LipidCreator
             public string Comment { get; set; }
             public PeakAnnotation(string name, int z, string adduct, string formula, string comment)
             {
-                Name = name.Replace("'", "''"); // escape single quotes for sqlite insertion
+                Name = name;
                 Charge = z;
                 Adduct = adduct;
                 Formula = formula;
-                Comment = comment.Replace("'", "''"); // escape single quotes for sqlite insertion;
+                Comment = comment;
             }
 
             public override string ToString()
@@ -396,11 +396,16 @@ namespace LipidCreator
 
             // add MS1 information - always claim FileId=1 (SpectrumSourceFiles has an entry for this, saying that these are generated spectra)
             sql =
-                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" +
-                precursorData.precursorName.Replace("'", "''") + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
-                ", '" + precursorData.precursorAdduct.Replace("'", "''") + "', '-', '-', 0, " + numFragments +
-                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula.Replace("'", "''") + "')";
+                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES(@precursorName, " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
+                ", @precursorAdduct, '-', '-', 0, " + numFragments +
+                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
+            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorName);
+            SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdduct);
+            SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
+            command.Parameters.Add(parameterPrecursorName);
+            command.Parameters.Add(parameterPrecursorAdduct);
+            command.Parameters.Add(parameterPrecursorIonFormula);
             command.ExecuteNonQuery();
 
             // add spectrum
@@ -446,9 +451,18 @@ namespace LipidCreator
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
                         "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", '" + ann.Name.Replace("'", "''") + "', @formula, '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
-                    SQLiteParameter parameterFormula = new SQLiteParameter("@formula", ann.Formula);
-                    command.Parameters.Add(parameterFormula);
+                        i + ", @annotationName, @annotationFormula, '', '', " + ann.Charge + ", @annotationAdduct, @annotationComment, " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                    
+                    SQLiteParameter parameterAnnName = new SQLiteParameter("@annotationName", ann.Name);
+                    SQLiteParameter parameterAnnFormula = new SQLiteParameter("@annotationFormula", ann.Formula);
+                    SQLiteParameter parameterAnnAdduct = new SQLiteParameter("@annotationAdduct", adduct);
+                    SQLiteParameter parameterAnnComment = new SQLiteParameter("@annotationComment", ann.Comment);
+                    
+                    command.Parameters.Add(parameterAnnName);
+                    command.Parameters.Add(parameterAnnFormula);
+                    command.Parameters.Add(parameterAnnAdduct);
+                    command.Parameters.Add(parameterAnnComment);
+                    
                     command.ExecuteNonQuery();
                 }
             }

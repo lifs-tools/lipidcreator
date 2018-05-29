@@ -42,6 +42,7 @@ namespace LipidCreator
     public class MS2Fragment
     {
         public String fragmentName;
+        public String fragmentOutputName;
         public int fragmentCharge;
         public String fragmentFile;
         public Dictionary<int, int> fragmentElements;
@@ -201,6 +202,7 @@ namespace LipidCreator
         {
             string xml = "<MS2Fragment";
             xml += " fragmentName=\"" + fragmentName + "\"";
+            xml += " fragmentOutputName=\"" + fragmentOutputName + "\"";
             xml += " fragmentCharge=\"" + fragmentCharge + "\"";
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
@@ -221,6 +223,7 @@ namespace LipidCreator
         {
             fragmentBase.Clear();
             fragmentName = node.Attribute("fragmentName").Value.ToString();
+            fragmentOutputName = node.Attribute("fragmentOutputName").Value.ToString();
             fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
@@ -265,6 +268,7 @@ namespace LipidCreator
         public MS2Fragment()
         {
             fragmentName = "-";
+            fragmentOutputName = "-";
             fragmentCharge = -1;
             fragmentFile = "-";
             fragmentElements = new Dictionary<int, int>();
@@ -279,6 +283,7 @@ namespace LipidCreator
         public MS2Fragment(String name, String fileName)
         {
             fragmentName = name;
+            fragmentOutputName = name;
             fragmentCharge = -1;
             fragmentFile = fileName;
             fragmentElements = new Dictionary<int, int>();
@@ -292,6 +297,7 @@ namespace LipidCreator
         public MS2Fragment(String name, String fileName, int charge)
         {
             fragmentName = name;
+            fragmentOutputName = name;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = new Dictionary<int, int>();
@@ -303,9 +309,10 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms)
+        public MS2Fragment(String name, String outputname, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms)
         {
             fragmentName = name;
+            fragmentOutputName = outputname;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = dataElements;
@@ -316,9 +323,10 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, double intens)
+        public MS2Fragment(String name, String outputname, int charge, String fileName, Dictionary<int, int> dataElements, String baseForms, double intens)
         {
             fragmentName = name;
+            fragmentOutputName = outputname;
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = dataElements;

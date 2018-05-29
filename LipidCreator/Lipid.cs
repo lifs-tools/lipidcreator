@@ -244,7 +244,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 
                 
-                string fragName = fragment.fragmentName;
+                string fragName = fragment.fragmentOutputName;
                 Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
@@ -293,6 +293,29 @@ namespace LipidCreator
                     fragName = fragName.Replace("[adduct]", tmpFrag);
                 }
                 
+                if (fragName.IndexOf("[xx:x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                }
+                if (fragName.IndexOf("[yy:y]") > -1)
+                {
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                }
+                if (fragName.IndexOf("[zz:z]") > -1)
+                {
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                }
+                if (fragName.IndexOf("[uu:u]") > -1)
+                {
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                }
+                if (fragName.IndexOf("[xx:x;x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
+                }
+                
+                
+                
                 string fragAdduct = getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]);
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
@@ -303,6 +326,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 lipidRow[LipidCreator.NOTE] = "";
+                lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                 transitionList.Rows.Add(lipidRow);
                 
                 

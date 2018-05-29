@@ -219,7 +219,7 @@ namespace LipidCreator
         private string toLine (DataRow row, string[] columnKeys, string separator)
         {
             List<string> line = new List<string> ();
-            foreach (String columnKey in LipidCreator.DATA_COLUMN_KEYS) {
+            foreach (String columnKey in columnKeys) {
                 if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
                     line.Add (((String)row [columnKey]).Replace (",", "."));
                 } else {

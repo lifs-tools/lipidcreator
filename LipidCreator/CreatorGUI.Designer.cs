@@ -93,6 +93,7 @@ namespace LipidCreator
         
         public void update(Point location, string dir)
         {
+            if (Parent == null) return;
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             Size = arrows[direction].Size;
@@ -107,7 +108,7 @@ namespace LipidCreator
 
             bmp = new Bitmap(Parent.Width, Parent.Height);
             Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
-            Bitmap bmpImage = new Bitmap(2000, 2000);
+            Bitmap bmpImage = new Bitmap(5000, 5000);
             Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
             bmp = bmpImage.Clone(copy, bmp.PixelFormat);
             BackgroundImage = bmp;

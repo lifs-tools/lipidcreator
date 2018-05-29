@@ -130,26 +130,26 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
-                            atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[5]);
-                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[6]);
-                            atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[7]);
-                            atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[8]);
-                            atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[9]);
-                            atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[10]);
-                            string fragmentFile = prefixPath + tokens[2];
-                            if (tokens[2] != "%" && !File.Exists(fragmentFile))
+                            atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[6]);
+                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[7]);
+                            atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[8]);
+                            atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[9]);
+                            atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[10]);
+                            atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[11]);
+                            string fragmentFile = prefixPath + tokens[3];
+                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
-                            int charge = Convert.ToInt32(tokens[3]);
-                            if (tokens[11].Length > 0)
+                            int charge = Convert.ToInt32(tokens[4]);
+                            if (tokens[12].Length > 0)
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4], Convert.ToDouble(tokens[11])));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4]));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5]));
                             }
                         }
                     }

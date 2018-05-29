@@ -474,9 +474,11 @@ namespace LipidCreator
                             {
                                 if (fa.length > 0 && fa.suffix != "x"){
                                     if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
+                                    /*
                                     key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                                     if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
-                                    key += fa.suffix;
+                                    key += fa.suffix;*/
+                                    key += fa.ToString();
                                 }
                             }
                             

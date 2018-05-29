@@ -50,13 +50,14 @@ namespace LipidCreator
         public ArrayList elementsEnabledState;
         public Dictionary<int, int> maxSteps;
         public bool nextEnabled;
-        public int pgIndex;
-        public int currentMS2TabIndex;
+        public int pgIndex = 0;
+        public int currentTabIndex = 0;
         public Overlay tutorialArrow;
         public TutorialWindow tutorialWindow;
         public System.Timers.Timer timer;
         public ArrayList creatorGUIEventHandlers;
         public bool continueTutorial = false;
+        public bool passTabChange = false;
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -86,25 +87,25 @@ namespace LipidCreator
         
             // if (!creatorGUI.resetLipidCreator()) return;
             
-            creatorGUI.changeTab(2);
             tutorial = t;
-            tutorialStep = 20;
+            tutorialStep = 9;
+            creatorGUI.changeTab(2);
             
             
-            
-            
+            /*
             creatorGUI.ms2fragmentsForm = new MS2Form(creatorGUI);
             creatorGUI.ms2fragmentsForm.Owner = creatorGUI;
             creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
             creatorGUI.ms2fragmentsForm.Show();
             initMS2Form();
             //creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
-            
+            */
             
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
-            creatorGUI.tabControl.Selecting += new TabControlCancelEventHandler(tabPreInteraction);
-            creatorGUI.tabControl.SelectedIndexChanged += new EventHandler(tabPostInteraction);
+            creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
+            creatorGUI.tabControl.MouseMove += new MouseEventHandler(dragInteraction);
+            creatorGUI.tabControl.SelectedIndexChanged += new EventHandler(tabSelectedInteraction);
             creatorGUI.plFA1Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plDB1Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plFA2Textbox.TextChanged += new EventHandler(textBoxInteraction);
@@ -146,8 +147,9 @@ namespace LipidCreator
                 if (ms2tc.TabPages[pgIndex].Text.Equals("PG")) break;
             } 
             ms2tc.SelectedIndex = 0;
-            ms2tc.Selecting += new TabControlCancelEventHandler(tabPreInteraction);
-            ms2tc.SelectedIndexChanged += new EventHandler(tabPostInteraction);
+            ms2tc.MouseMove += new MouseEventHandler(dragInteraction);
+            ms2tc.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
+            ms2tc.SelectedIndexChanged += new EventHandler(tabSelectedInteraction);
             
             
             creatorGUI.ms2fragmentsForm.FormClosing += new FormClosingEventHandler(closingInteraction);
@@ -155,6 +157,7 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck += new ItemCheckEventHandler(checkedListBoxInteraction);
             creatorGUI.ms2fragmentsForm.buttonAddFragment.Click += buttonInteraction;
             creatorGUI.ms2fragmentsForm.buttonOK.Click += buttonInteraction;
+            creatorGUI.ms2fragmentsForm.buttonOK.MouseDown += mouseDownInteraction;
             creatorGUI.ms2fragmentsForm.isotopeList.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.ms2fragmentsForm.contextMenuFragment.Popup += new EventHandler(contextMenuPopupInteraction);
             creatorGUI.ms2fragmentsForm.menuFragmentItem1.Click += new EventHandler(buttonInteraction);
@@ -227,8 +230,9 @@ namespace LipidCreator
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             
             creatorGUI.plHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
-            creatorGUI.tabControl.Selecting -= new TabControlCancelEventHandler(tabPreInteraction);
-            creatorGUI.tabControl.SelectedIndexChanged -= new EventHandler(tabPostInteraction);
+            creatorGUI.tabControl.MouseMove -= new MouseEventHandler(dragInteraction);
+            creatorGUI.tabControl.Deselecting -= new TabControlCancelEventHandler(tabDeselectingInteraction);
+            creatorGUI.tabControl.SelectedIndexChanged -= new EventHandler(tabSelectedInteraction);
             creatorGUI.plFA1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plDB1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plFA2Textbox.TextChanged -= new EventHandler(textBoxInteraction);
@@ -252,6 +256,7 @@ namespace LipidCreator
                 creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck -= new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
                 creatorGUI.ms2fragmentsForm.buttonAddFragment.Click -= buttonInteraction;
                 creatorGUI.ms2fragmentsForm.buttonOK.Click -= buttonInteraction;
+                creatorGUI.ms2fragmentsForm.buttonOK.MouseDown -= mouseDownInteraction;
                 creatorGUI.ms2fragmentsForm.isotopeList.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
                 creatorGUI.ms2fragmentsForm.contextMenuFragment.Popup -= new System.EventHandler(contextMenuPopupInteraction);
                 creatorGUI.ms2fragmentsForm.menuFragmentItem1.Click -= new System.EventHandler(buttonInteraction);
@@ -410,35 +415,21 @@ namespace LipidCreator
         
         
         
-        
-        
-        public void tabPreInteraction(Object sender,  TabControlCancelEventArgs e)
+        public void tabDeselectingInteraction(Object sender, TabControlCancelEventArgs e)
         {
             if (tutorial != Tutorials.NoTutorial)
             {
-                if (e.TabPageIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
+                if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
                 {
                     return;
                 }
-                else if (creatorGUI.ms2fragmentsForm != null)
+                else if (currentTabIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 12)
                 {
-                    if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 12)
-                    {
-                        return;
-                    }
-                    // TODO: delete this else if
-                    else if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 19)
-                    {
-                        return;
-                    }
-                    else if (e.TabPageIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 33)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        e.Cancel = true;
-                    }
+                    return;
+                }
+                else if (currentTabIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 33)
+                {
+                    return;
                 }
                 else
                 {
@@ -447,16 +438,23 @@ namespace LipidCreator
             }
         }
         
-        
-        public void tabPostInteraction(Object sender,  EventArgs e)
+        public void dragInteraction(object sender, MouseEventArgs e)
         {
-            if ((tutorial == Tutorials.TutorialPRM && tutorialStep == 2) ||
-               (tutorial == Tutorials.TutorialPRM && tutorialStep == 12) ||
-               (tutorial == Tutorials.TutorialPRM && tutorialStep == 19) ||
-               (tutorial == Tutorials.TutorialPRM && tutorialStep == 33))
-            {
-                nextTutorialStep(true);
+            for (int i = 0; i < ((TabControl)sender).TabCount; ++i)
+            {  
+                if (((TabControl)sender).GetTabRect(i).Contains(e.Location))
+                {
+                    currentTabIndex = i;
+                    break;
+                }
             }
+        }
+        
+        
+        
+        public void tabSelectedInteraction(Object sender,  EventArgs e)
+        {
+            nextTutorialStep(true);
         }
         
         
@@ -633,14 +631,20 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            Console.WriteLine("click");
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
             {
-                continueTutorial = true;
                 nextTutorialStep(true);
             }
         }
         
+        
+        public void mouseDownInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            {
+                continueTutorial = true;
+            }
+        }
         
         
         
@@ -678,12 +682,10 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
-            Console.WriteLine("close command " + tutorialStep + " " + continueTutorial);
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             if(e.CloseReason == CloseReason.UserClosing && !continueTutorial)
             {
-                Console.WriteLine("quit");
                 quitTutorial(true);
             }
         }
@@ -835,7 +837,6 @@ namespace LipidCreator
                 case 11:
                     initMS2Form();
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
-                    currentMS2TabIndex = 0;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Continue", "In the MS2 fragments dialog you can see all predefined positive and negative fragments for all lipid classes of the according category.", false);
                     
@@ -977,7 +978,7 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm = null;
                     Button hli = creatorGUI.addHeavyIsotopeButton;
                     hli.Enabled = true;
-                    tutorialArrow.update(new Point(hli.Location.X + (hli.Size.Width >> 1), hli.Location.Y), "lb");
+                    tutorialArrow.update(new Point(hli.Location.X + (hli.Size.Width >> 1), hli.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Open heavy labeled dialog", "In the next step, we are going to create a heavy labeled isotope of our selected lipid class. Therefore, please open the heavy labeled dialog.", false);
                     

@@ -98,7 +98,7 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.ShowInTaskbar = false;
             creatorGUI.ms2fragmentsForm.Show();
             initMS2Form();
-            //creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
+            creatorGUI.ms2fragmentsForm.tabControlFragments.SelectedIndex = pgIndex;
             */
             
             
@@ -179,6 +179,7 @@ namespace LipidCreator
             creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.ms2fragmentsForm.newFragment.addButton.Click += buttonInteraction;
+            creatorGUI.ms2fragmentsForm.newFragment.addButton.MouseDown += mouseDownInteraction;
             creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged += new EventHandler(numericInteraction);
             creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
         }
@@ -192,6 +193,7 @@ namespace LipidCreator
             creatorGUI.addHeavyPrecursor.comboBox2.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.addHeavyPrecursor.textBox1.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.addHeavyPrecursor.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
+            creatorGUI.addHeavyPrecursor.button1.MouseDown += mouseDownInteraction;
             creatorGUI.addHeavyPrecursor.button1.Click += buttonInteraction;
             creatorGUI.addHeavyPrecursor.button2.Click += buttonInteraction;
         }
@@ -656,21 +658,21 @@ namespace LipidCreator
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG"];
                  
-                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("NL(PG)") && negFrag.Count == 2 && negFrag.Contains("FA1") && negFrag.Contains("HG(PG)"));
+                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 20)
             {
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG"];
                  
-                 nextEnabled = (posFrag.Count == 2 && posFrag.Contains("NL(PG)")&& posFrag.Contains("testFrag") && negFrag.Count == 2 && negFrag.Contains("FA1") && negFrag.Contains("HG(PG)"));
+                 nextEnabled = (posFrag.Count == 2 && posFrag.Contains("-HG(PG,172)")&& posFrag.Contains("testFrag") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == 35)
             {
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG/13C6d30"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG/13C6d30"];
                  
-                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("NL(PG)") && negFrag.Count == 2 && negFrag.Contains("FA1") && negFrag.Contains("HG(PG)"));
+                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
             tutorialWindow.Refresh();
         }
@@ -908,7 +910,7 @@ namespace LipidCreator
                     
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Define a name, select a fragment base", "Give the new fragment the name 'testFrag'. Tha fragment can either be fixed or dependent on building blocks as head groups of fatty acids. In this example, the new fragment contains a fatty acid, please select FA1.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Name 'testFrag', select a fragment base", "Give the new fragment the name 'testFrag'. Tha fragment can either be fixed or dependent on building blocks as head groups of fatty acids. In this example, the new fragment contains a fatty acid, please select FA1.");
                     
                     break;
                     
@@ -1032,7 +1034,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.comboBox2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Change building block to 'Fatty Acid 1'", "To continue with the modification, please change the building block to 'Fatty Acid 1'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Change building block to 'Fatty acid 1'", "To continue with the modification, please change the building block to 'Fatty acid 1'.");
                     
                     break;
                     
@@ -1078,7 +1080,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button ms2_2 = creatorGUI.MS2fragmentsLipidButton;
-                    tutorialArrow.update(new Point(ms2_2.Location.X + (ms2_2.Size.Width >> 1), ms2_2.Location.Y), "lb");
+                    tutorialArrow.update(new Point(ms2_2.Location.X + (ms2_2.Size.Width >> 1), ms2_2.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Open MS2 fragments dialog", "... and open the MS2 fragments dialog, again.", false);
                     
@@ -1117,7 +1119,7 @@ namespace LipidCreator
                     CheckedListBox negCLB_2 = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
                     tutorialArrow.update(new Point(negCLB_2.Location.X + negCLB_2.Size.Width, negCLB_2.Location.Y + (negCLB_2.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only NL(GP)+, FA1- and HG(PG)- fragments", "");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only -HG(PG,172), FA1(+O) and HG(PG,171) fragments", "");
                     
                     creatorGUI.ms2fragmentsForm.labelPositiveDeselectAll.Enabled = true;
                     creatorGUI.ms2fragmentsForm.labelPositiveSelectAll.Enabled = true;
@@ -1149,7 +1151,7 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(negCLB_3.Location.X + negCLB_3.Size.Width, negCLB_3.Location.Y + (negCLB_3.Size.Height >> 1)), "tl");
                     creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Right click on FA1- and 'Edit fragment'", "In our case, FA1- has a constant hydrogen which is yet uneffected from being deuterated. To change, please right click on FA1- and click on 'Edit fragment'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Right click on FA1(+O) and 'Edit fragment'", "In our case, FA1(+O) has a constant hydrogen which is yet uneffected from being deuterated. To change, please right click on FA1(+O) and click on 'Edit fragment'.");
                     
                     break;
                     

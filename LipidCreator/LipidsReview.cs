@@ -170,7 +170,7 @@ namespace LipidCreator
                 if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (mode, "_positive"+mode))) {
-                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
                         foreach (DataRow row in currentView.Rows) {
                             if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2") {
                                 outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
@@ -180,7 +180,7 @@ namespace LipidCreator
                         outputFile.Close ();
                     }
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (mode, "_negative"+mode))) {
-                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
                         foreach (DataRow row in currentView.Rows) {
                             if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2") {
                                 outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
@@ -195,7 +195,7 @@ namespace LipidCreator
                     this.Enabled = false;
                     StreamWriter writer;
                     if ((writer = new StreamWriter (saveFileDialog1.OpenFile ())) != null) {
-                        writer.WriteLine (toHeaderLine (separator, LipidCreator.DATA_COLUMN_KEYS));
+                        writer.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
                         foreach (DataRow row in currentView.Rows) {
                             writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }

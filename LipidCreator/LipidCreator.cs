@@ -82,6 +82,21 @@ namespace LipidCreator
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
+        public const string SKYLINE_API_COLLISION_ENERGY = "PrecursorCE";
+        public readonly static string[] STATIC_SKYLINE_API_HEADER = {
+            "MoleculeGroup",
+            "PrecursorName",
+            "PrecursorFormula",
+            "PrecursorAdduct",
+            "PrecursorMz",
+            "PrecursorCharge",
+            "ProductName",
+            "ProductFormula",
+            "ProductAdduct",
+            "ProductMz",
+            "ProductCharge",
+            "Note"
+        };
         public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
@@ -98,6 +113,7 @@ namespace LipidCreator
         };
         
         public static string[] DATA_COLUMN_KEYS;
+        public static string[] SKYLINE_API_HEADER;
         
         public virtual void OnUpdate(EventArgs e)
         {
@@ -799,11 +815,18 @@ namespace LipidCreator
         
         public void assembleLipids(string instrument = "")
         {
-            var list = new List<string>();
-            list.AddRange(STATIC_DATA_COLUMN_KEYS);
-            if (instrument.Length > 0) list.Add(COLLISION_ENERGY);
-            DATA_COLUMN_KEYS = list.ToArray();
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
             transitionList = addDataColumns(new DataTable ());
+            
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
         
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
@@ -925,40 +948,29 @@ namespace LipidCreator
         {
             if (skylineToolClient == null) return;
             
-            var header = string.Join(",", new string[]
-            { // Skyline specific column names, please do not touch
-                "MoleculeGroup",
-                "PrecursorName",
-                "PrecursorFormula",
-                "PrecursorAdduct",
-                "PrecursorMz",
-                "PrecursorCharge",
-                "ProductName",
-                "ProductFormula",
-                "ProductAdduct",
-                "ProductMz",
-                "ProductCharge",
-                "Note"
-            });
+            string header = string.Join(",", SKYLINE_API_HEADER);
+            
             string pipeString = header + "\n";
             double maxMass = 0;
+            bool withCE = SKYLINE_API_HEADER[SKYLINE_API_HEADER.Length - 1].Equals(SKYLINE_API_COLLISION_ENERGY);
             
             foreach (DataRow entry in dt.Rows)
             {
                 // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                pipeString += entry[LipidCreator.MOLECULE_LIST_NAME] + ","; // listname
-                pipeString += entry[LipidCreator.PRECURSOR_NAME] + ","; // preName
-                pipeString += entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + ","; // PreFormula
-                pipeString += entry[LipidCreator.PRECURSOR_ADDUCT] + ","; // preAdduct
-                pipeString += entry[LipidCreator.PRECURSOR_MZ] + ","; // preMz
+                pipeString += "\"" + entry[LipidCreator.MOLECULE_LIST_NAME] + "\","; // listname
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NAME] + "\","; // preName
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "\","; // PreFormula
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_ADDUCT] + "\","; // preAdduct
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_MZ] + "\","; // preMz
                 maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
-                pipeString += entry[LipidCreator.PRECURSOR_CHARGE] + ","; // preCharge
-                pipeString += entry[LipidCreator.PRODUCT_NAME] + ","; // prodName
-                pipeString += entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + ","; // ProdFormula, no prodAdduct
-                pipeString += entry[LipidCreator.PRODUCT_ADDUCT] + ","; // preAdduct
-                pipeString += entry[LipidCreator.PRODUCT_MZ] + ","; // prodMz
-                pipeString += entry[LipidCreator.PRODUCT_CHARGE] + ","; // prodCharge
-                pipeString += entry[LipidCreator.NOTE]; // note
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_CHARGE] + "\","; // preCharge
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_NAME] + "\","; // prodName
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + "\","; // ProdFormula, no prodAdduct
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_ADDUCT] + "\","; // preAdduct
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_MZ] + "\","; // prodMz
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_CHARGE] + "\","; // prodCharge
+                pipeString += "\"" + entry[LipidCreator.NOTE] + "\""; // note
+                if (withCE) pipeString += ",\"" + entry[LipidCreator.COLLISION_ENERGY] + "\""; // note
                 pipeString += "\n";
             }
             try

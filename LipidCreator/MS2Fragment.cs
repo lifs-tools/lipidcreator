@@ -147,7 +147,6 @@ namespace LipidCreator
             {(int)Molecules.N, new ArrayList(){Molecules.N15}},
             {(int)Molecules.P, new ArrayList(){Molecules.P32}},
             {(int)Molecules.S, new ArrayList(){Molecules.S33, Molecules.S34}}
-            
         };
         
         

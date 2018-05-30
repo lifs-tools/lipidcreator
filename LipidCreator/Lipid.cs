@@ -560,6 +560,33 @@ namespace LipidCreator
                     chemFormFragment = "";
                     //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
+                if (fragName.IndexOf("[adduct]") > -1)
+                {
+                    string tmpFrag = precursorData.precursorAdduct.Replace("[M", "");
+                    tmpFrag = tmpFrag.Split(']')[0];
+                    fragName = fragName.Replace("[adduct]", tmpFrag);
+                }
+                
+                if (fragName.IndexOf("[xx:x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                }
+                if (fragName.IndexOf("[yy:y]") > -1)
+                {
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                }
+                if (fragName.IndexOf("[zz:z]") > -1)
+                {
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                }
+                if (fragName.IndexOf("[uu:u]") > -1)
+                {
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                }
+                if (fragName.IndexOf("[xx:x;x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
+                }
                 
                 peaks.Add(new Peak(massFragment,
                     MS2Fragment.DEFAULT_INTENSITY,

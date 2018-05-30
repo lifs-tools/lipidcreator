@@ -625,7 +625,6 @@ namespace LipidCreator
             string topFragment = peaks[topScoreFragmentPos].Annotation.Name;
             double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, topFragment, precursorAdduct);
             
-            Console.WriteLine(collisionEnergy);
             if (collisionEnergy > 0)
             {
                 foreach (Peak peak in peaks)

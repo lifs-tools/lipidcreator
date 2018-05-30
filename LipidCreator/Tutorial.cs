@@ -85,11 +85,11 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
         
-            // if (!creatorGUI.resetLipidCreator()) return;
+            if (!creatorGUI.resetLipidCreator()) return;
             
             tutorial = t;
-            tutorialStep = 9;
-            creatorGUI.changeTab(2);
+            tutorialStep = 0;
+            //creatorGUI.changeTab(2);
             
             
             /*

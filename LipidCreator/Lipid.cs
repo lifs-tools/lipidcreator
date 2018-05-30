@@ -82,6 +82,8 @@ namespace LipidCreator
         public static string HEAVY_LABEL_SEPARATOR = "-";
         public LipidCreator lipidCreator;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
+        
+        public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
     
         public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {
@@ -202,6 +204,7 @@ namespace LipidCreator
                 
                 if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
+                    lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdduct;
@@ -326,12 +329,12 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_MZ] = fragMZ;
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 lipidRow[LipidCreator.NOTE] = "";
-                lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                 transitionList.Rows.Add(lipidRow);
                 
                 
                 if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
+                    lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdduct;

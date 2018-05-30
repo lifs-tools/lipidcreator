@@ -117,7 +117,7 @@ namespace LipidCreator
                     
                     Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
-                    String chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                    string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                     int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                                         

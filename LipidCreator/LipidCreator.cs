@@ -82,7 +82,7 @@ namespace LipidCreator
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
-        public readonly static string[] DATA_COLUMN_KEYS = {
+        public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
             PRECURSOR_NEUTRAL_FORMULA,
@@ -94,9 +94,10 @@ namespace LipidCreator
             PRODUCT_ADDUCT,
             PRODUCT_MZ,
             PRODUCT_CHARGE,
-            NOTE,
-            COLLISION_ENERGY
+            NOTE
         };
+        
+        public static string[] DATA_COLUMN_KEYS;
         
         public virtual void OnUpdate(EventArgs e)
         {
@@ -379,7 +380,6 @@ namespace LipidCreator
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
-            transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
             lysoPhosphoLipids = new HashSet<string>();
@@ -799,9 +799,14 @@ namespace LipidCreator
         
         public void assembleLipids(string instrument = "")
         {
+            var list = new List<string>();
+            list.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (instrument.Length > 0) list.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = list.ToArray();
+            transitionList = addDataColumns(new DataTable ());
+        
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
-            transitionList.Clear();
             
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
@@ -871,6 +876,26 @@ namespace LipidCreator
                 }
             }
             return chemForm;
+        }
+        
+        
+        
+        
+        public static String computeAdductFormula(Dictionary<int, int> elements, string adduct)
+        {
+            int charge = Lipid.adductToCharge[adduct];
+            String adductForm = "[M";
+            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
+            {
+                if (elements[molecule] > 0)
+                {
+                    adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
+                }
+            }
+            adductForm += adduct;
+            adductForm += Convert.ToString(Math.Abs(charge));
+            adductForm += (charge > 0) ? "+" : "-";
+            return adductForm;
         }
 
         

@@ -75,26 +75,26 @@ namespace LipidCreator
             }
         }
         
-        public int free_number;
-        public Dictionary<string, int> rule_to_NT;
-        public Dictionary<int, int> T_to_NT;
-        public Dictionary<int, int> NT_to_NT;
+        public int freeNumber;
+        public Dictionary<string, int> ruleToNT;
+        public Dictionary<char, ArrayList> TtoNT;
+        public Dictionary<int, ArrayList> NTtoNT;
         public char quote;
         public TreeNode parseTree;
         public bool wordInGrammer;
-        public Dictionary<int, string> NT_to_rule;
+        public Dictionary<int, string> NTtoRule;
         //self.events = _events
     
         public Parser(string filename, char _quote)
         {
-            free_number = 0;
-            rule_to_NT = new Dictionary<string, int>();
-            T_to_NT = new Dictionary<int, int>();
-            NT_to_NT = new Dictionary<int, int>();
+            freeNumber = 0;
+            ruleToNT = new Dictionary<string, int>();
+            TtoNT = new Dictionary<char, ArrayList>();
+            NTtoNT = new Dictionary<int, ArrayList>();
             quote = _quote;
             parseTree = null;
             wordInGrammer = false;
-            NT_to_rule = new Dictionary<int, string>();
+            NTtoRule = new Dictionary<int, string>();
             //events = _events
         }
         
@@ -152,35 +152,199 @@ namespace LipidCreator
             throw new Exception("Error: corrupted token in grammer");
         }
         
-        public ArrayList addTerminal(stirng text)
+        
+        public int addTerminal(string text)
         {
-            /*
-            text = text.strip(self.quote)
-            t_rules = []
-            for c in text:
-                if c not in self.T_to_NT: self.T_to_NT[c] = []
-                self.T_to_NT[c].append(self.free_number)
-                t_rules.append(self.free_number)
-                self.free_number += 1
-            
-            while len(t_rules) > 1:
-                p2_NF = t_rules.pop()
-                p1_NF = t_rules.pop()
+            text = strip(text, quote);
+            ArrayList tRules = new ArrayList();
+            foreach (char c in text)
+            {
+                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new ArrayList());
+                TtoNT[c].Add(freeNumber);
+                tRules.Add(freeNumber);
+                freeNumber += 1;
+            }
+            while (tRules.Count > 1)
+            {
+                int p2NF = (int)tRules[tRules.Count - 1];
+                tRules.RemoveAt(tRules.Count - 1);
+                int p1NF = (int)tRules[tRules.Count - 1];
+                tRules.RemoveAt(tRules.Count - 1);
                 
-                n = self.free_number
-                self.free_number += 1
+                int n = freeNumber;
+                freeNumber += 1;
                 
-                if (p1_NF, p2_NF) not in self.NT_to_NT: self.NT_to_NT[(p1_NF, p2_NF)] = []
-                self.NT_to_NT[(p1_NF, p2_NF)].append(n)
+                int key = (p1NF << 16) | p2NF;
+                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
+                NTtoNT[key].Add(n);
                 
-                t_rules.append(n)
-            return t_rules[0]
-            */
+                tRules.Add(n);
+            }
+            return (int)tRules[0];
         }
         
+        
+        
+        // adding singleton rules, e.g. S -> A, A -> B, B -> C
+        public ArrayList collectBackward(int r1)
+        {
+            ArrayList collection = new ArrayList();
+            collection.Add(r1);
+            int i = 0;
+            while (i < collection.Count)
+            {
+                int r = (int)collection[i];
+                if (NTtoNT.ContainsKey(r))
+                {
+                    foreach (int rf in NTtoNT[r]) collection.Add(rf);
+                }
+                i += 1;
+            }
+            return collection;
+        }
+            
+            
+            
+        
+        public void raiseEventsRecursive(TreeNode node)
+        {
+            //if node.pre_event != None: node.pre_event(node)
+            
+            if (node.terminal != '\0')
+            {
+                raiseEventsRecursive(node.left);
+                raiseEventsRecursive(node.right);
+            }
+                
+            //if node.post_event != None: node.post_event(node)
+        }
+        
+        
+                    
+        
+        public void raiseEvents()
+        {
+            if (parseTree != null) raiseEventsRecursive(parseTree);
+        }
+        
+        
+        
+        
+    
+    
+        // filling the syntax tree including lexers and events
+        public void fillTree(TreeNode node, ArrayList dp, int i, int j)
+        {
+            ArrayList dpCell = ((Dictionary<int, ArrayList>)((ArrayList)dp[i])[j])[node.rule];
+        
+            if (NTtoRule.ContainsKey(node.rule))
+            {
+                /*
+                string preEventName = NTtoRule[node.rule] + "_pre_event";
+                string postEventName = NTtoRule[node.rule] + "_post_event";
+                
+                if pre_event_name in self.events:
+                    node.pre_event = self.events[pre_event_name]
+                if post_event_name in self.events:
+                    node.post_event = self.events[post_event_name]
+                */
+            }
+            if (i == 0)
+            {
+                node.terminal = (char)dpCell[0];
+            }
+            else
+            {
+                node.left = new TreeNode((int)dpCell[0]);
+                node.right = new TreeNode((int)dpCell[1]);
+                int l = (int)((ArrayList)dpCell[2])[0];
+                int r = (int)((ArrayList)dpCell[2])[1];
+                fillTree(node.left, dp, l, r);
+                l = (int)((ArrayList)dpCell[3])[0];
+                r = (int)((ArrayList)dpCell[3])[1];
+                fillTree(node.right, dp, l, r);
+            }
+        }
+        
+        
+        
+        // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
-        
+            wordInGrammer = false;
+            int n = textToParse.Length;
+            ArrayList dp = new ArrayList(); // dp stands for dynamic programming
+            for (int i = 0; i < n; ++i)
+            {
+                ArrayList row = new ArrayList();
+                for (int j = 0; j < n; ++j)
+                {
+                    Dictionary<int, ArrayList> d = new Dictionary<int, ArrayList>();
+                    row.Add(d);
+                }
+                dp.Add(row);
+            }
+            
+            for (int i = 0; i < n; ++i)
+            {
+                char c = textToParse[i];
+                if (!TtoNT.ContainsKey(c)) return;
+                foreach (int r in TtoNT[c])
+                {
+                    foreach (int rf in collectBackward(r))
+                    {
+                        ArrayList al = new ArrayList();
+                        al.Add(c);
+                        ((Dictionary<int, ArrayList>)((ArrayList)dp[0])[i]).Add(rf, al);
+                    }
+                }
+            }        
+            
+            
+            for (int i = 1 ; i < n; ++i)
+            {
+                for (int j = 0; j < n - i; ++j)
+                {
+                    for (int k = 0; k < i; ++k)
+                    {
+                        foreach (int r1 in ((Dictionary<int, ArrayList>)((ArrayList)dp[k])[j]).Keys)
+                        {
+                            foreach (int r2 in ((Dictionary<int, ArrayList>)((ArrayList)dp[i - k - 1])[j + k + 1]).Keys)
+                            {
+                                int key = (r1 << 16) | r2;
+                                if (NTtoNT.ContainsKey(key))
+                                {
+                                    foreach (int r in NTtoNT[key])
+                                    {
+                                        foreach (int rf in collectBackward(r))
+                                        {
+                                            ArrayList content = new ArrayList();
+                                            content.Add(r1);
+                                            content.Add(r2);
+                                            content.Add(new ArrayList{k, j});
+                                            content.Add(new ArrayList{i - k - 1, j + k + 1});
+                                            
+                                            ((Dictionary<int, ArrayList>)((ArrayList)dp[i])[j]).Add(rf, content);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            wordInGrammer = ((Dictionary<int, ArrayList>)((ArrayList)dp[n - 1])[0]).ContainsKey(0);
+            
+            if (wordInGrammer)
+            {
+                parseTree = new TreeNode(0);
+                fillTree(parseTree, dp, n - 1, 0);
+            }
+            else
+            {
+                parseTree = null;
+            }
         }
     }    
 }

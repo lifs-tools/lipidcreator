@@ -132,6 +132,14 @@ namespace LipidCreator
         }
         
         
+        public string strip(string text, char stripChar)
+        {
+            while (text[0] == stripChar) text = text.Substring(1, text.Length - 1);
+            while (text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
+            return text;
+        }
+        
+        
         public bool isTerminal(string token)
         {
             string[] tks = token.Split(quote);
@@ -144,6 +152,31 @@ namespace LipidCreator
             throw new Exception("Error: corrupted token in grammer");
         }
         
+        public ArrayList addTerminal(stirng text)
+        {
+            /*
+            text = text.strip(self.quote)
+            t_rules = []
+            for c in text:
+                if c not in self.T_to_NT: self.T_to_NT[c] = []
+                self.T_to_NT[c].append(self.free_number)
+                t_rules.append(self.free_number)
+                self.free_number += 1
+            
+            while len(t_rules) > 1:
+                p2_NF = t_rules.pop()
+                p1_NF = t_rules.pop()
+                
+                n = self.free_number
+                self.free_number += 1
+                
+                if (p1_NF, p2_NF) not in self.NT_to_NT: self.NT_to_NT[(p1_NF, p2_NF)] = []
+                self.NT_to_NT[(p1_NF, p2_NF)].append(n)
+                
+                t_rules.append(n)
+            return t_rules[0]
+            */
+        }
         
         public void parse(string textToParse)
         {

@@ -38,16 +38,19 @@ namespace LipidCreator
         public int hydroxyl;
         public string suffix;
         public Dictionary<int, int> atomsCount;
+        public bool isLCB;
         
-        public FattyAcid(int l, int db, int hydro){
+        public FattyAcid(int l, int db, int hydro)
+        {
         
         }
         
-        public FattyAcid(int l, int db, int hydro, string suffix, bool isLCB = false)
+        public FattyAcid(int l, int db, int hydro, string suffix, bool _isLCB = false)
         {
             length = l;
             this.db = db;
             hydroxyl = hydro;
+            isLCB = _isLCB;
             atomsCount = MS2Fragment.createEmptyElementDict();
             if (!isLCB)
             {
@@ -87,10 +90,26 @@ namespace LipidCreator
         {
             length = copy.length;
             db = copy.db;
+            isLCB = copy.isLCB;
             hydroxyl = copy.hydroxyl;
             suffix = copy.suffix;
             atomsCount = MS2Fragment.createEmptyElementDict();
             foreach (KeyValuePair<int, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
+        }
+        
+        public override string ToString()
+        {
+            string key = Convert.ToString(length) + ":" + Convert.ToString(db);
+            if (isLCB)
+            {
+                key += ";" + Convert.ToString(hydroxyl);
+            }
+            else
+            {
+                if (hydroxyl > 0) key += ";" + Convert.ToString(hydroxyl);
+                key += suffix;
+            }
+            return key;
         }
         
         

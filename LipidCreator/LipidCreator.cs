@@ -82,7 +82,22 @@ namespace LipidCreator
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
-        public readonly static string[] DATA_COLUMN_KEYS = {
+        public const string SKYLINE_API_COLLISION_ENERGY = "PrecursorCE";
+        public readonly static string[] STATIC_SKYLINE_API_HEADER = {
+            "MoleculeGroup",
+            "PrecursorName",
+            "PrecursorFormula",
+            "PrecursorAdduct",
+            "PrecursorMz",
+            "PrecursorCharge",
+            "ProductName",
+            "ProductFormula",
+            "ProductAdduct",
+            "ProductMz",
+            "ProductCharge",
+            "Note"
+        };
+        public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
             PRECURSOR_NEUTRAL_FORMULA,
@@ -94,9 +109,11 @@ namespace LipidCreator
             PRODUCT_ADDUCT,
             PRODUCT_MZ,
             PRODUCT_CHARGE,
-            NOTE,
-            COLLISION_ENERGY
+            NOTE
         };
+        
+        public static string[] DATA_COLUMN_KEYS;
+        public static string[] SKYLINE_API_HEADER;
         
         public virtual void OnUpdate(EventArgs e)
         {
@@ -130,26 +147,26 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
-                            atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[5]);
-                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[6]);
-                            atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[7]);
-                            atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[8]);
-                            atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[9]);
-                            atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[10]);
-                            string fragmentFile = prefixPath + tokens[2];
-                            if (tokens[2] != "%" && !File.Exists(fragmentFile))
+                            atomsCount[(int)Molecules.C] = Convert.ToInt32(tokens[6]);
+                            atomsCount[(int)Molecules.H] = Convert.ToInt32(tokens[7]);
+                            atomsCount[(int)Molecules.O] = Convert.ToInt32(tokens[8]);
+                            atomsCount[(int)Molecules.N] = Convert.ToInt32(tokens[9]);
+                            atomsCount[(int)Molecules.P] = Convert.ToInt32(tokens[10]);
+                            atomsCount[(int)Molecules.S] = Convert.ToInt32(tokens[11]);
+                            string fragmentFile = prefixPath + tokens[3];
+                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
-                            int charge = Convert.ToInt32(tokens[3]);
-                            if (tokens[11].Length > 0)
+                            int charge = Convert.ToInt32(tokens[4]);
+                            if (tokens[12].Length > 0)
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4], Convert.ToDouble(tokens[11])));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[1], new MS2Fragment(tokens[1], charge, fragmentFile, atomsCount, tokens[4]));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5]));
                             }
                         }
                     }
@@ -379,7 +396,6 @@ namespace LipidCreator
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
-            transitionList = addDataColumns(new DataTable ());
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
             lysoPhosphoLipids = new HashSet<string>();
@@ -799,9 +815,21 @@ namespace LipidCreator
         
         public void assembleLipids(string instrument = "")
         {
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
+            transitionList = addDataColumns(new DataTable ());
+            
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
+        
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
-            transitionList.Clear();
             
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
@@ -872,6 +900,26 @@ namespace LipidCreator
             }
             return chemForm;
         }
+        
+        
+        
+        
+        public static String computeAdductFormula(Dictionary<int, int> elements, string adduct)
+        {
+            int charge = Lipid.adductToCharge[adduct];
+            String adductForm = "[M";
+            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
+            {
+                if (elements[molecule] > 0)
+                {
+                    adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
+                }
+            }
+            adductForm += adduct;
+            adductForm += Convert.ToString(Math.Abs(charge));
+            adductForm += (charge > 0) ? "+" : "-";
+            return adductForm;
+        }
 
         
         
@@ -894,40 +942,29 @@ namespace LipidCreator
         {
             if (skylineToolClient == null) return;
             
-            var header = string.Join(",", new string[]
-            { // Skyline specific column names, please do not touch
-                "MoleculeGroup",
-                "PrecursorName",
-                "PrecursorFormula",
-                "PrecursorAdduct",
-                "PrecursorMz",
-                "PrecursorCharge",
-                "ProductName",
-                "ProductFormula",
-                "ProductAdduct",
-                "ProductMz",
-                "ProductCharge",
-                "Note"
-            });
+            string header = string.Join(",", SKYLINE_API_HEADER);
+            
             string pipeString = header + "\n";
             double maxMass = 0;
+            bool withCE = SKYLINE_API_HEADER[SKYLINE_API_HEADER.Length - 1].Equals(SKYLINE_API_COLLISION_ENERGY);
             
             foreach (DataRow entry in dt.Rows)
             {
                 // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                pipeString += entry[LipidCreator.MOLECULE_LIST_NAME] + ","; // listname
-                pipeString += entry[LipidCreator.PRECURSOR_NAME] + ","; // preName
-                pipeString += entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + ","; // PreFormula
-                pipeString += entry[LipidCreator.PRECURSOR_ADDUCT] + ","; // preAdduct
-                pipeString += entry[LipidCreator.PRECURSOR_MZ] + ","; // preMz
+                pipeString += "\"" + entry[LipidCreator.MOLECULE_LIST_NAME] + "\","; // listname
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NAME] + "\","; // preName
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "\","; // PreFormula
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_ADDUCT] + "\","; // preAdduct
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_MZ] + "\","; // preMz
                 maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
-                pipeString += entry[LipidCreator.PRECURSOR_CHARGE] + ","; // preCharge
-                pipeString += entry[LipidCreator.PRODUCT_NAME] + ","; // prodName
-                pipeString += entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + ","; // ProdFormula, no prodAdduct
-                pipeString += entry[LipidCreator.PRODUCT_ADDUCT] + ","; // preAdduct
-                pipeString += entry[LipidCreator.PRODUCT_MZ] + ","; // prodMz
-                pipeString += entry[LipidCreator.PRODUCT_CHARGE] + ","; // prodCharge
-                pipeString += entry[LipidCreator.NOTE]; // note
+                pipeString += "\"" + entry[LipidCreator.PRECURSOR_CHARGE] + "\","; // preCharge
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_NAME] + "\","; // prodName
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + "\","; // ProdFormula, no prodAdduct
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_ADDUCT] + "\","; // preAdduct
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_MZ] + "\","; // prodMz
+                pipeString += "\"" + entry[LipidCreator.PRODUCT_CHARGE] + "\","; // prodCharge
+                pipeString += "\"" + entry[LipidCreator.NOTE] + "\""; // note
+                if (withCE) pipeString += ",\"" + entry[LipidCreator.COLLISION_ENERGY] + "\""; // note
                 pipeString += "\n";
             }
             try

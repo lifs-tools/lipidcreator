@@ -31,17 +31,29 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+//using System.Runtime.InteropServices;
 
 namespace LipidCreator
 {
 
-
+    
     public class Overlay : Control
     {
         public Dictionary<string, Image> arrows;
         public Dictionary<string, Point> fixPoints;
         public string direction;
         Bitmap bmp;
+        
+        
+        /*
+        [DllImport("user32")]
+        private static extern IntPtr GetWindowDC(IntPtr hwnd);
+ 
+        // you also need ReleaseDC
+        [DllImport("user32")]
+        private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        
+        */
         
         protected override CreateParams CreateParams
         {
@@ -81,6 +93,7 @@ namespace LipidCreator
         
         public void update(Point location, string dir)
         {
+            if (Parent == null) return;
             direction = dir;
             this.Location = new Point(location.X - fixPoints[direction].X, location.Y - fixPoints[direction].Y);
             Size = arrows[direction].Size;
@@ -95,8 +108,11 @@ namespace LipidCreator
 
             bmp = new Bitmap(Parent.Width, Parent.Height);
             Parent.DrawToBitmap(bmp, new Rectangle(0, 0, Parent.Width, Parent.Height));
-            Bitmap bmpImage = new Bitmap(2000, 2000);
-            Rectangle copy = new Rectangle(Location.X + Right, Location.Y + titleHeight, Width, Height);
+            Bitmap bmpImage = new Bitmap(5000, 5000);
+            int x = Math.Max(Location.X + Right, 0);
+            int y = Math.Max(Location.Y + titleHeight, 0);
+            Console.WriteLine((Location.X + Right) + " " + (Location.Y + titleHeight) + " " + Width + " " + Height);
+            Rectangle copy = new Rectangle(x, y, Width, Height);
             bmp = bmpImage.Clone(copy, bmp.PixelFormat);
             BackgroundImage = bmp;
             
@@ -107,7 +123,6 @@ namespace LipidCreator
         
         protected override void OnPaint(PaintEventArgs e)
         {
-        Console.WriteLine("paint");
             BringToFront();
             Graphics g = e.Graphics;
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
@@ -1220,7 +1235,7 @@ namespace LipidCreator
 
             glFA1Combobox.BringToFront();
             glFA1Textbox.BringToFront();
-            glFA1Textbox.Location = new Point(196, 70);
+            glFA1Textbox.Location = new Point(236, 70);
             glFA1Textbox.Width = faLength;
             glFA1Textbox.Text = "0, 2, 4, 6-7";
             glFA1Textbox.TextChanged += new EventHandler(glFA1TextboxValueChanged);
@@ -1264,7 +1279,7 @@ namespace LipidCreator
 
             glFA2Combobox.BringToFront();
             glFA2Textbox.BringToFront();
-            glFA2Textbox.Location = new Point(290, 142);
+            glFA2Textbox.Location = new Point(330, 142);
             glFA2Textbox.Width = faLength;
             glFA2Textbox.Text = "0, 5, 17-19";
             glFA2Textbox.TextChanged += new EventHandler(glFA2TextboxValueChanged);
@@ -1308,7 +1323,7 @@ namespace LipidCreator
 
             glFA3Combobox.BringToFront();
             glFA3Textbox.BringToFront();
-            glFA3Textbox.Location = new Point(158, 242);
+            glFA3Textbox.Location = new Point(198, 242);
             glFA3Textbox.Width = faLength;
             glFA3Textbox.Text = "20-22";
             glFA3Textbox.TextChanged += new EventHandler(glFA3TextboxValueChanged);
@@ -1351,7 +1366,7 @@ namespace LipidCreator
             glFA3Checkbox1.CheckedChanged += new EventHandler(glFA3Checkbox1CheckedChanged);
 
             
-            glHgListbox.Location = new Point(132, 228);
+            glHgListbox.Location = new Point(172, 228);
             glHgListbox.Size = new Size(70, 50);
             glHgListbox.BringToFront();
             glHgListbox.BorderStyle = BorderStyle.Fixed3D;
@@ -1410,7 +1425,7 @@ namespace LipidCreator
             glNegAdductCheckbox4.CheckedChanged += new EventHandler(glNegAdductCheckbox4CheckedChanged);
 
             glPictureBox.Image = glyceroBackboneImage;
-            glPictureBox.Location = new Point(77, 19);
+            glPictureBox.Location = new Point(117, 19);
             glPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             glPictureBox.SendToBack();
 
@@ -1420,14 +1435,14 @@ namespace LipidCreator
             glArrow.SendToBack();
 
 
-            glContainsSugar.Location = new Point(158, 290);
+            glContainsSugar.Location = new Point(198, 290);
             glContainsSugar.Width = 120;
             glContainsSugar.Text = "Contains sugar";
             glContainsSugar.CheckedChanged += new EventHandler(glContainsSugarCheckedChanged);
             glContainsSugar.BringToFront();
             
             glRepresentativeFA.Location = new Point(glHydroxyl1Textbox.Left + glHydroxyl1Textbox.Width + sep, glHydroxyl1Textbox.Top);
-            glRepresentativeFA.Width = 120;
+            glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
             glRepresentativeFA.SendToBack();
@@ -1654,7 +1669,7 @@ namespace LipidCreator
             plPictureBox.SendToBack();
             
             plRepresentativeFA.Location = new Point(plHydroxyl1Textbox.Left + plHydroxyl1Textbox.Width + sep, plHydroxyl1Textbox.Top);
-            plRepresentativeFA.Width = 120;
+            plRepresentativeFA.Width = 150;
             plRepresentativeFA.Text = "First FA representative";
             plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
             plRepresentativeFA.SendToBack();
@@ -2109,7 +2124,7 @@ namespace LipidCreator
 
             this.Controls.Add(tabControl);
             this.Controls.Add(lipidsGroupbox);
-            this.Text = "LipidCreator";
+            this.Text = "LipidCreator v1.0.1";
             this.MaximizeBox = false;
             this.Padding = new Padding(5);
 
@@ -2127,17 +2142,24 @@ namespace LipidCreator
             homeTab.Controls.Add(homeText3);
             
             homeText.Width = 560;
-            homeText.Height = 100;
-            homeText.Location = new Point(60, 20);
-            homeText.Text = "LipidCreator offers several features including i) using lipid building blocks, ii) latest lipid nomenclature [3], iii) lipid fragmentation, iv) transition mass-calculator, v) an in-silico spectral library generator and vi) implementing full integration with new small molecule support in Skyline." + Environment.NewLine;
+            homeText.Height = 120;
+            homeText.Location = new Point(60, 210);
+            homeText.Text = "Targeted assays development based on lipid building blocks:" + Environment.NewLine +
+            " • Lipid fragmentation prediction" + Environment.NewLine +
+            " • Generation of class specific target lists" + Environment.NewLine +
+            " • In-silico spectral library generator" + Environment.NewLine +
+            " • Latest lipid nomenclature" + Environment.NewLine +
+            " • Full integration with new small molecule support in Skyline.";
             homeText.BackColor = Color.Transparent;
+            homeText.ForeColor = Color.White;
             homeText.Font = new Font(homeTab.Font.FontFamily, 12);
             
             homeText2.Width = 560;
             homeText2.Height = 40;
-            homeText2.Location = new Point(60, 220);
-            homeText2.Text = "LipidCreator offers several interactive tutorils for an easy introduction into its functionality:" + Environment.NewLine;
+            homeText2.Location = new Point(60, 330);
+            homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
             homeText2.BackColor = Color.Transparent;
+            homeText2.ForeColor = Color.White;
             homeText2.Font = new Font(homeTab.Font.FontFamily, 12);
             
             
@@ -2147,6 +2169,7 @@ namespace LipidCreator
             homeText3.Text = "LipidCreator version 1.0.1" + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
             homeText3.BackColor = Color.Transparent;
             homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
+            homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();
@@ -2154,7 +2177,7 @@ namespace LipidCreator
             startFirstTutorialButton.Text = "Start PRM tutorial";
             startFirstTutorialButton.Width = 150;
             startFirstTutorialButton.Height = 26;
-            startFirstTutorialButton.Location = new Point(60, 270);
+            startFirstTutorialButton.Location = new Point(60, 380);
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
@@ -2163,7 +2186,7 @@ namespace LipidCreator
             startSecondTutorialButton.Text = "Start MRM tutorial";
             startSecondTutorialButton.Width = 150;
             startSecondTutorialButton.Height = 26;
-            startSecondTutorialButton.Location = new Point(240, 270);
+            startSecondTutorialButton.Location = new Point(240, 380);
             startSecondTutorialButton.BackColor = SystemColors.Control;
             startSecondTutorialButton.Click += startSecondTutorial;
             
@@ -2173,7 +2196,7 @@ namespace LipidCreator
             startThirdTutorialButton.Text = "Start heavy isotope tutorial";
             startThirdTutorialButton.Width = 170;
             startThirdTutorialButton.Height = 26;
-            startThirdTutorialButton.Location = new Point(420, 270);
+            startThirdTutorialButton.Location = new Point(420, 380);
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             

@@ -82,6 +82,8 @@ namespace LipidCreator
         public static string HEAVY_LABEL_SEPARATOR = "-";
         public LipidCreator lipidCreator;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
+        
+        public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
     
         public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {
@@ -202,6 +204,7 @@ namespace LipidCreator
                 
                 if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
+                    lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdduct;
@@ -244,7 +247,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 
                 
-                string fragName = fragment.fragmentName;
+                string fragName = fragment.fragmentOutputName;
                 Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
@@ -293,6 +296,29 @@ namespace LipidCreator
                     fragName = fragName.Replace("[adduct]", tmpFrag);
                 }
                 
+                if (fragName.IndexOf("[xx:x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                }
+                if (fragName.IndexOf("[yy:y]") > -1)
+                {
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                }
+                if (fragName.IndexOf("[zz:z]") > -1)
+                {
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                }
+                if (fragName.IndexOf("[uu:u]") > -1)
+                {
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                }
+                if (fragName.IndexOf("[xx:x;x]") > -1)
+                {
+                    fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
+                }
+                
+                
+                
                 string fragAdduct = getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]);
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
@@ -308,6 +334,7 @@ namespace LipidCreator
                 
                 if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
                 {
+                    lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdduct;
@@ -335,11 +362,11 @@ namespace LipidCreator
             public string Comment { get; set; }
             public PeakAnnotation(string name, int z, string adduct, string formula, string comment)
             {
-                Name = name.Replace("'", "''"); // escape single quotes for sqlite insertion
+                Name = name;
                 Charge = z;
                 Adduct = adduct;
                 Formula = formula;
-                Comment = comment.Replace("'", "''"); // escape single quotes for sqlite insertion;
+                Comment = comment;
             }
 
             public override string ToString()
@@ -396,11 +423,16 @@ namespace LipidCreator
 
             // add MS1 information - always claim FileId=1 (SpectrumSourceFiles has an entry for this, saying that these are generated spectra)
             sql =
-                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES('" +
-                precursorData.precursorName.Replace("'", "''") + "', " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
-                ", '" + precursorData.precursorAdduct.Replace("'", "''") + "', '-', '-', 0, " + numFragments +
-                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  '" + precursorData.precursorIonFormula.Replace("'", "''") + "')";
+                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES(@precursorName, " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
+                ", @precursorAdduct, '-', '-', 0, " + numFragments +
+                ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
+            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorName);
+            SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdduct);
+            SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
+            command.Parameters.Add(parameterPrecursorName);
+            command.Parameters.Add(parameterPrecursorAdduct);
+            command.Parameters.Add(parameterPrecursorIonFormula);
             command.ExecuteNonQuery();
 
             // add spectrum
@@ -446,9 +478,18 @@ namespace LipidCreator
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
                         "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", '" + ann.Name.Replace("'", "''") + "', @formula, '', '', " + ann.Charge + ", '" + adduct.Replace("'", "''") + "', '" + ann.Comment.Replace("'", "''") + "', " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
-                    SQLiteParameter parameterFormula = new SQLiteParameter("@formula", ann.Formula);
-                    command.Parameters.Add(parameterFormula);
+                        i + ", @annotationName, @annotationFormula, '', '', " + ann.Charge + ", @annotationAdduct, @annotationComment, " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                    
+                    SQLiteParameter parameterAnnName = new SQLiteParameter("@annotationName", ann.Name);
+                    SQLiteParameter parameterAnnFormula = new SQLiteParameter("@annotationFormula", ann.Formula);
+                    SQLiteParameter parameterAnnAdduct = new SQLiteParameter("@annotationAdduct", adduct);
+                    SQLiteParameter parameterAnnComment = new SQLiteParameter("@annotationComment", ann.Comment);
+                    
+                    command.Parameters.Add(parameterAnnName);
+                    command.Parameters.Add(parameterAnnFormula);
+                    command.Parameters.Add(parameterAnnAdduct);
+                    command.Parameters.Add(parameterAnnComment);
+                    
                     command.ExecuteNonQuery();
                 }
             }

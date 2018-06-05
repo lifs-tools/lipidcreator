@@ -135,6 +135,7 @@
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="GLLipid.cs" />
+    <Compile Include="CollisionEnergy.cs" />
     <Compile Include="Lipid.cs" />
     <Compile Include="LipidsReview.cs">
       <SubType>Form</SubType>

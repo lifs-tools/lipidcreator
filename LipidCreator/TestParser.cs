@@ -42,9 +42,12 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-            Parser p = new Parser("data/lipidnames.grammer", '"');
-            p.parse("CL 12:1-8:0-12:2;3-26:6");
+            
+            LipidCreator lcf = new LipidCreator(null);
+            Parser p = new Parser(lcf, "data/lipidnames.grammer", '"');
+            p.parse("Cer 12:2;3/26:6");
             Console.WriteLine(p.wordInGrammer);
-        }    
+            p.raiseEvents();
+        }
     }
 }

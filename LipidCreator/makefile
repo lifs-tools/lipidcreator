@@ -6,7 +6,7 @@ main:
 test:
 	#mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs TestTransitionList.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs -out:TestTransitionList.exe
 	
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 TestParser.cs Parser.cs -out:TestParser.exe
+	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs TestParser.cs Parser.cs -out:TestParser.exe
 
 complete: main
 	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf

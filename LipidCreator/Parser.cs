@@ -40,8 +40,8 @@ namespace LipidCreator
             public TreeNode left;
             public TreeNode right;
             public char terminal;
-            //self.pre_event = None
-            //self.post_event = None
+            public Action<TreeNode> preEvent;
+            public Action<TreeNode> postEvent;
             
             
             public TreeNode(int _rule)
@@ -50,14 +50,14 @@ namespace LipidCreator
                 left = null;
                 right = null;
                 terminal = '\0';
-                //self.pre_event = None
-                //self.post_event = None
+                preEvent = null;
+                postEvent = null;
             }
             
             public string getTextRecursive(TreeNode node)
             {
                 string text = "";
-                if (node.terminal != '\0')
+                if (node.terminal == '\0')
                 {
                     text = node.getTextRecursive(node.left);
                     text += node.getTextRecursive(node.right);
@@ -86,12 +86,16 @@ namespace LipidCreator
         public TreeNode parseTree;
         public bool wordInGrammer;
         public Dictionary<int, string> NTtoRule;
-        //self.events = _events
+        public Dictionary<string, Action<Parser.TreeNode>> events;
+        public LipidCreator lipidCreator;
+    
+        // lipid specific variables
+        public Lipid lipid;
+        public int currentFACounter;
+        public FattyAcidGroup fag;
     
     
-    
-    
-        public Parser(string grammerFilename, char _quote = '"')
+        public Parser(LipidCreator _lipidCreator, string grammerFilename, char _quote = '"')
         {
             freeNumber = 0;
             ruleToNT = new Dictionary<string, int>();
@@ -101,8 +105,13 @@ namespace LipidCreator
             parseTree = null;
             wordInGrammer = false;
             NTtoRule = new Dictionary<int, string>();
-            //events = _events
+            lipidCreator = _lipidCreator;
             
+            events = new Dictionary<string, Action<TreeNode>>();
+            events.Add("FA_pre_event", FA_pre_event);
+            events.Add("LCB_pre_event", LCB_pre_event);
+            events.Add("Carbon_pre_event", Carbon_pre_event);
+            events.Add("PL_pre_event", PL_pre_event);
             
             
             
@@ -349,15 +358,15 @@ namespace LipidCreator
         
         public void raiseEventsRecursive(TreeNode node)
         {
-            //if node.pre_event != None: node.pre_event(node)
+            if (node.preEvent != null) node.preEvent(node);
             
-            if (node.terminal != '\0')
+            if (node.terminal == '\0') // node.terminal is != null when node is leaf
             {
                 raiseEventsRecursive(node.left);
                 raiseEventsRecursive(node.right);
             }
                 
-            //if node.post_event != None: node.post_event(node)
+            if (node.postEvent != null) node.postEvent(node);
         }
         
         
@@ -380,21 +389,13 @@ namespace LipidCreator
         
             if (NTtoRule.ContainsKey(node.rule))
             {
-                /*
                 string preEventName = NTtoRule[node.rule] + "_pre_event";
                 string postEventName = NTtoRule[node.rule] + "_post_event";
                 
-                if pre_event_name in self.events:
-                    node.pre_event = self.events[pre_event_name]
-                if post_event_name in self.events:
-                    node.post_event = self.events[post_event_name]
-                */
+                if (events.ContainsKey(preEventName)) node.preEvent = events[preEventName];
+                if (events.ContainsKey(postEventName)) node.postEvent = events[postEventName];
             }
-            if (i == 0)
-            {
-                node.terminal = (char)dpCell[0];
-            }
-            else
+            if (i > 0)
             {
                 node.left = new TreeNode((int)dpCell[0]);
                 node.right = new TreeNode((int)dpCell[1]);
@@ -405,13 +406,23 @@ namespace LipidCreator
                 r = (int)((ArrayList)dpCell[3])[1];
                 fillTree(node.right, dp, l, r);
             }
+            else
+            {
+                node.terminal = (char)dpCell[0];
+            }
         }
+        
+        
         
         
         
         // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
+            lipid = null;
+            currentFACounter = 0;
+            fag = null;
+        
             wordInGrammer = false;
             int n = textToParse.Length;
             ArrayList dp = new ArrayList(); // dp stands for dynamic programming
@@ -485,6 +496,53 @@ namespace LipidCreator
             else
             {
                 parseTree = null;
+            }
+        }
+        
+        
+        
+        // handling all events
+        public void PL_pre_event(Parser.TreeNode node)
+        {
+            lipid = new PLLipid(lipidCreator);
+        }
+        
+        public void LCB_pre_event(Parser.TreeNode node)
+        {
+            Console.WriteLine("new long chain base");
+        }
+        
+        public void FA_pre_event(Parser.TreeNode node)
+        {
+            Console.WriteLine();
+            /*
+            switch(currentFACounter)
+            {
+                case 0:
+                    fag = lipid.fag1;
+                    break;
+                    
+                case 1:
+                    fag = lipid.fag2;
+                    break;
+                    
+                case 2:
+                    fag = lipid.fag3;
+                    break;
+                    
+                case 3:
+                    fag = lipid.fag4;
+                    break;
+            }
+            */
+        }
+        
+        public void Carbon_pre_event(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+                string carbonCount = node.getText();
+                fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
             }
         }
     }    

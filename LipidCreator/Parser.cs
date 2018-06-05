@@ -26,6 +26,7 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LipidCreator
 {    
@@ -75,6 +76,8 @@ namespace LipidCreator
             }
         }
         
+        
+        
         public int freeNumber;
         public Dictionary<string, int> ruleToNT;
         public Dictionary<char, ArrayList> TtoNT;
@@ -85,7 +88,10 @@ namespace LipidCreator
         public Dictionary<int, string> NTtoRule;
         //self.events = _events
     
-        public Parser(string filename, char _quote)
+    
+    
+    
+        public Parser(string grammerFilename, char _quote = '"')
         {
             freeNumber = 0;
             ruleToNT = new Dictionary<string, int>();
@@ -96,7 +102,142 @@ namespace LipidCreator
             wordInGrammer = false;
             NTtoRule = new Dictionary<int, string>();
             //events = _events
+            
+            
+            
+            
+            int lineCounter = 0;
+            if (File.Exists(grammerFilename))
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader(grammerFilename))
+                    {
+                        string line;
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            // skip empty lines and comments
+                            if (line.Length < 1) continue;
+                            if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
+                            if (line.Length < 1) continue;
+                            line = strip(line, ' ');
+                            if (line.Length < 2) continue;
+                            
+                            ArrayList tokens_level_1 = new ArrayList();
+                            foreach (string t in splitString(line, '=', quote))
+                            {
+                                tokens_level_1.Add(strip(t, ' '));
+                            }
+                            if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+
+
+                            string rule = (string)tokens_level_1[0];
+                            
+                            ArrayList products = new ArrayList();
+                            foreach (string p in splitString((string)tokens_level_1[1], '|', quote))
+                            {
+                                products.Add(strip(p, ' '));
+                            }
+                            
+
+                            if (!ruleToNT.ContainsKey(rule))
+                            {
+                                ruleToNT.Add(rule, freeNumber);
+                                freeNumber += 1;
+                            }
+                            int ruleNT = ruleToNT[rule];
+                            NTtoRule.Add(ruleNT, rule);
+                            
+                            
+                            
+                            foreach (string product in products)
+                            {
+                                ArrayList singleNTs = new ArrayList();
+                                foreach (string NT in splitString(product, ' ', quote))
+                                {
+                                    singleNTs.Add(strip(NT, ' '));
+                                }
+                                
+                                
+                                // changing all (non)terminals into rule numbers
+                                for (int i = 0; i < singleNTs.Count; ++i)
+                                {
+                                
+                                    if (isTerminal((string)singleNTs[i]))
+                                    {
+                                        singleNTs[i] = addTerminal((string)singleNTs[i]);
+                                    }
+                                    else
+                                    {
+                                        if (!ruleToNT.ContainsKey((string)singleNTs[i]))
+                                        {
+                                            ruleToNT[(string)singleNTs[i]] = freeNumber;
+                                            freeNumber += 1;
+                                        }
+                                        singleNTs[i] = ruleToNT[(string)singleNTs[i]];
+                                    }
+                                }
+                                
+                                
+                                // more than two rules
+                                while (singleNTs.Count > 2)
+                                {
+                                    int p2NF = (int)singleNTs[singleNTs.Count - 1];
+                                    singleNTs.RemoveAt(singleNTs.Count - 1);
+                                    int p1NF = (int)singleNTs[singleNTs.Count - 1];
+                                    singleNTs.RemoveAt(singleNTs.Count - 1);
+                                    
+                                    int n = freeNumber;
+                                    freeNumber += 1;
+                                    
+                                    int key = (p1NF << 16) | p2NF;
+                                    if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
+                                    NTtoNT[key].Add(n);
+                                    
+                                    singleNTs.Add(n);
+                                }    
+                                
+                                    
+                                // two product rules
+                                if (singleNTs.Count == 2)
+                                {
+                                    int p1NF = (int)singleNTs[0];
+                                    int p2NF = (int)singleNTs[1];
+                                    int key = (p1NF << 16) | p2NF;
+                                    if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
+                                    NTtoNT[key].Add(ruleNT);
+                                }
+                                
+                                
+                                // only one product rule
+                                else if (singleNTs.Count == 1)
+                                {
+                                    int p1NF = (int)singleNTs[0];
+                                    if (!NTtoNT.ContainsKey(p1NF)) NTtoNT.Add(p1NF, new ArrayList());
+                                    NTtoNT[p1NF].Add(ruleNT);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("The file '" + grammerFilename + "' in line '" + lineCounter + "' could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
+            }
+            
+            
         }
+        
+        
+        
+        
         
         public ArrayList splitString(string text, char separator, char quote)
         {
@@ -134,8 +275,8 @@ namespace LipidCreator
         
         public string strip(string text, char stripChar)
         {
-            while (text[0] == stripChar) text = text.Substring(1, text.Length - 1);
-            while (text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
+            while (text.Length > 1 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
+            while (text.Length > 1 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
             return text;
         }
         
@@ -143,7 +284,7 @@ namespace LipidCreator
         public bool isTerminal(string token)
         {
             string[] tks = token.Split(quote);
-            if (tks.Length != 1 || tks.Length != 3) throw new Exception("Error: corrupted token in grammer");
+            if (tks.Length != 1 && tks.Length != 3) throw new Exception("Error: corrupted token in grammer");
             
             if (tks.Length == 1) return false;
         

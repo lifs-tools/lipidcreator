@@ -43,7 +43,8 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             Parser p = new Parser("data/lipidnames.grammer", '"');
-            p.parse("");
+            p.parse("CL 12:1-8:0-12:2;3-26:6");
+            Console.WriteLine(p.wordInGrammer);
         }    
     }
 }

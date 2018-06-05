@@ -351,6 +351,7 @@ namespace LipidCreator
         public MS2Fragment(MS2Fragment copy)
         {
             fragmentName = copy.fragmentName;
+            fragmentOutputName = copy.fragmentOutputName;
             fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
             fragmentElements = new Dictionary<int, int>();

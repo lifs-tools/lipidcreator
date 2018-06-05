@@ -52,6 +52,7 @@ namespace LipidCreator
         public string precursorName;
         public string precursorIonFormula;
         public string precursorAdduct;
+        public string precursorAdductFormula;
         public double precursorM_Z;
         public int precursorCharge;
         public string adduct;
@@ -191,12 +192,12 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
                 lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-                lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdduct;
+                lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdductFormula;
                 lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = precursorData.precursorM_Z;
                 lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
@@ -207,7 +208,7 @@ namespace LipidCreator
                     lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
-                    string adduct = precursorData.precursorAdduct;
+                    string adduct = precursorData.precursorAdductFormula;
                     
                     if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
                     if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count, -1.0});
@@ -223,7 +224,6 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
-            
                 // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
                 
@@ -231,18 +231,18 @@ namespace LipidCreator
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
                 
                 // Exception for lipids with NL(NH3) fragment
-                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]1+")) continue;
+                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
                 
                 
                 // Exception for lipids for NL([adduct]) and +H or -H as adduct
-                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdduct.Equals("[M+H]1+") || precursorData.precursorAdduct.Equals("[M-H]1-"))) continue;
+                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
                 
                 
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                 lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
                 lipidRow[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
-                lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdduct;
+                lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
                 lipidRow[LipidCreator.PRECURSOR_MZ] = precursorData.precursorM_Z;
                 lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 
@@ -278,9 +278,11 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                
+                Console.WriteLine(fragment.fragmentCharge + " " + (chargeToAdduct.ContainsKey(fragment.fragmentCharge)));
+                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
+                
                 
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
@@ -289,13 +291,11 @@ namespace LipidCreator
                     chemFormFragment = "";
                     //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
+                
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
-                    string tmpFrag = precursorData.precursorAdduct.Replace("[M", "");
-                    tmpFrag = tmpFrag.Split(']')[0];
-                    fragName = fragName.Replace("[adduct]", tmpFrag);
+                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct);
                 }
-                
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
                     fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
@@ -319,7 +319,6 @@ namespace LipidCreator
                 
                 
                 
-                string fragAdduct = getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]);
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
                 
@@ -337,7 +336,7 @@ namespace LipidCreator
                     lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
                     lipidClassNames.Add(lipidClass);
-                    string adduct = precursorData.precursorAdduct;
+                    string adduct = precursorData.precursorAdductFormula;
                     
                     if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
                     if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count - 1, -1.0});
@@ -348,6 +347,7 @@ namespace LipidCreator
                         fragmentScores[lipidClass][adduct][1] = transitionList.Rows.Count - 1;
                     }
                 }
+                
             }
         }
         
@@ -428,7 +428,7 @@ namespace LipidCreator
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
             SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorName);
-            SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdduct);
+            SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
             command.Parameters.Add(parameterPrecursorName);
             command.Parameters.Add(parameterPrecursorAdduct);
@@ -500,7 +500,7 @@ namespace LipidCreator
             if (precursorData.fragmentNames.Count == 0) return;
             int topScoreFragmentPos = 0;
             double topScore = -1000;
-            string precursorAdduct = precursorData.precursorAdduct;  
+            string precursorAdduct = precursorData.precursorAdductFormula;  
             
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
@@ -512,11 +512,11 @@ namespace LipidCreator
                 if (precursorData.moleculeListName.Equals("LCB") && fragment.fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
                 
                 // Exception for lipids with NL(NH3) fragment
-                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdduct.Equals("[M+NH4]1+")) continue;
+                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
                 
                 
                 // Exception for lipids for NL([adduct]) and +H or -H as adduct
-                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdduct.Equals("[M+H]1+") || precursorData.precursorAdduct.Equals("[M-H]1-"))) continue;
+                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
             
             
             
@@ -549,7 +549,8 @@ namespace LipidCreator
                     }
                 }
                 
-                String chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragName = fragment.fragmentName;
@@ -562,9 +563,7 @@ namespace LipidCreator
                 }
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
-                    string tmpFrag = precursorData.precursorAdduct.Replace("[M", "");
-                    tmpFrag = tmpFrag.Split(']')[0];
-                    fragName = fragName.Replace("[adduct]", tmpFrag);
+                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct);
                 }
                 
                 if (fragName.IndexOf("[xx:x]") > -1)
@@ -592,7 +591,7 @@ namespace LipidCreator
                     MS2Fragment.DEFAULT_INTENSITY,
                     new PeakAnnotation(fragName,
                         fragment.fragmentCharge,
-                        getAdductAsString(fragment.fragmentCharge, chargeToAdduct[fragment.fragmentCharge]),
+                        fragAdduct,
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));
                       
@@ -610,7 +609,7 @@ namespace LipidCreator
                 MS2Fragment.DEFAULT_INTENSITY,
                 new PeakAnnotation("precursor",
                     precursorData.precursorCharge,
-                    precursorData.precursorAdduct,
+                    precursorData.precursorAdductFormula,
                     precursorData.precursorIonFormula,
                     "precursor")));
                     
@@ -720,27 +719,6 @@ namespace LipidCreator
         }
         
         
-        
-        public static void subtractAdduct(Dictionary<int, int> atomsCount, String adduct)
-        {
-            switch (adduct)
-            {            
-                case "+NH4":
-                    atomsCount[(int)Molecules.H] -= 3;
-                    atomsCount[(int)Molecules.N] -= 1;
-                    break;
-                case "+HCOO":
-                    atomsCount[(int)Molecules.H] -= 2;
-                    atomsCount[(int)Molecules.C] -= 1;
-                    atomsCount[(int)Molecules.O] -= 2;
-                    break;
-                case "+CH3COO":
-                    atomsCount[(int)Molecules.C] -= 2;
-                    atomsCount[(int)Molecules.H] -= 4;
-                    atomsCount[(int)Molecules.O] -= 2;
-                    break;
-            }
-        }
         
         public static int getChargeAndAddAdduct(Dictionary<int, int> atomsCount, String adduct)
         {

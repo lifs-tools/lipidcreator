@@ -111,7 +111,6 @@ namespace LipidCreator
             Bitmap bmpImage = new Bitmap(5000, 5000);
             int x = Math.Max(Location.X + Right, 0);
             int y = Math.Max(Location.Y + titleHeight, 0);
-            Console.WriteLine((Location.X + Right) + " " + (Location.Y + titleHeight) + " " + Width + " " + Height);
             Rectangle copy = new Rectangle(x, y, Width, Height);
             bmp = bmpImage.Clone(copy, bmp.PixelFormat);
             BackgroundImage = bmp;

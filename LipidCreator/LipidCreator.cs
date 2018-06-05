@@ -910,9 +910,10 @@ namespace LipidCreator
         
         
         
-        public static string computeAdductFormula(Dictionary<int, int> elements, string adduct)
+        public static string computeAdductFormula(Dictionary<int, int> elements, string adduct, int charge = 0)
         {
-            int charge = Lipid.adductToCharge[adduct];
+            if (charge == 0) charge = Lipid.adductToCharge[adduct];
+            
             String adductForm = "[M";
             foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
             {

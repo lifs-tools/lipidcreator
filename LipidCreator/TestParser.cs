@@ -44,7 +44,8 @@ namespace LipidCreator
         {
             LipidCreator lcf = new LipidCreator(null);
             Parser p = new Parser(lcf, "data/lipidnames.grammer", '"');
-            p.parse("MAG 26:6");
+            //p.parse("Cer 26:2;3/18:1");
+            p.parse("MAG 4:0;1");
             Console.WriteLine(p.wordInGrammer);
             p.raiseEvents();
         }

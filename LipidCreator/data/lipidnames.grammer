@@ -1,3 +1,4 @@
+# first rule is always start rule
 lipid = GL | PL | SL | Cholesterol | Mediator
 
 ## generic rules
@@ -14,9 +15,9 @@ Hydroxyl_LCB = "2" | "3"
    ## glycerolipid rules
 GL = MGL | DGL | SGL | TGL
 MGL = HG_MGL " " FA
-DGL = HG_DGL " " FA dash FA | HG_DGL " " FA slash FA
-SGL = HG_SGL " " FA dash FA | HG_SGL " " FA slash FA
-TGL = HG_TGL " " FA dash FA dash FA | HG_DGL " " FA slash FA slash FA
+DGL = HG_DGL " " FA unsorted_separator FA | HG_DGL " " FA sorted_separator FA
+SGL = HG_SGL " " FA unsorted_separator FA | HG_SGL " " FA sorted_separator FA
+TGL = HG_TGL " " FA unsorted_separator FA unsorted_separator FA | HG_DGL " " FA sorted_separator FA sorted_separator FA
 
 HG_MGL = "MAG"
 HG_DGL = "DAG"
@@ -28,10 +29,10 @@ HG_TGL = "TAG"
 PL = LPL | DPL | LPL-O | DPL-O | CL | MLCL
 LPL = HG_LPL " " FA
 LPL-O = HG_LPL-O " " FA
-DPL = HG_PL " " FA dash FA | HG_PL " " FA slash FA
-DPL-O = HG_PL-O " " FA dash FA | HG_PL-O " " FA slash FA
-CL = HG_CL " " FA dash FA dash FA dash FA | HG_CL " " FA slash FA slash FA slash FA
-MLCL = HG_MLCL " " FA dash FA dash FA | HG_MLCL " " FA slash FA slash FA
+DPL = HG_PL " " FA unsorted_separator FA | HG_PL " " FA sorted_separator FA
+DPL-O = HG_PL-O " " FA unsorted_separator FA | HG_PL-O " " FA sorted_separator FA
+CL = HG_CL " " FA unsorted_separator FA unsorted_separator FA unsorted_separator FA | HG_CL " " FA sorted_separator FA sorted_separator FA sorted_separator FA
+MLCL = HG_MLCL " " FA unsorted_separator FA unsorted_separator FA | HG_MLCL " " FA sorted_separator FA sorted_separator FA
 
 
 HG_CL = "CL"
@@ -60,5 +61,5 @@ CHe = "CHe " FA
 Mediator = "10-HDoHE" | "11-HDoHE" | "11-HETE" | "11,12-DHET" | "11(12)-EET"| "12-HEPE" | "12-HETE" | "12-HHTrE" | "12-OxoETE" | "12(13)-EpOME" | "13-HODE" | "13-HOTrE" | "14,15-DHET" | "14(15)-EET" | "14(15)-EpETE" | "15-HEPE" | "15-HETE" | "15d-PGJ2" | "16-HDoHE" | "16-HETE" | "18-HEPE" | "5-HEPE" | "5-HETE" | "5-HpETE" | "5-OxoETE" | "5,12-DiHETE" | "5,6-DiHETE" | "5,6,15-LXA4" | "5(6)-EET" | "8-HDoHE" | "8-HETE" | "8,9-DHET" | "8(9)-EET" | "9-HEPE" | "9-HETE" | "9-HODE" | "9-HOTrE" | "9(10)-EpOME" | "AA" | "alpha-LA" | "DHA" | "EPA" | "Linoleic acid" | "LTB4" | "LTC4" | "LTD4" | "Maresin 1" | "Palmitic acid" | "PGB2" | "PGD2" | "PGE2" | "PGF2alpha" | "PGI2" | "Resolvin D1" | "Resolvin D2" | "Resolvin D3" | "Resolvin D5" | "tetranor-12-HETE" | "TXB1" | "TXB2" | "TXB3"
 
 
-slash = "/"
-dash = "-"
+sorted_separator = "/"
+unsorted_separator = "-"

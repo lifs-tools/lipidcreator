@@ -108,10 +108,27 @@ namespace LipidCreator
             lipidCreator = _lipidCreator;
             
             events = new Dictionary<string, Action<TreeNode>>();
-            events.Add("FA_pre_event", FA_pre_event);
-            events.Add("LCB_pre_event", LCB_pre_event);
-            events.Add("Carbon_pre_event", Carbon_pre_event);
-            events.Add("PL_pre_event", PL_pre_event);
+            events.Add("FA_pre_event", FAPreEvent);
+            events.Add("FA_post_event", FAPostEvent);
+            
+            events.Add("LCB_pre_event", LCBPreEvent);
+            events.Add("Carbon_pre_event", CarbonPreEvent);
+            events.Add("DB_pre_event", DBPreEvent);
+            events.Add("Hydroxyl_pre_event", HydroxylPreEvent);
+            events.Add("Hydroxyl_LCB_pre_event", Hydroxyl_LCBPreEvent);
+            events.Add("Ether_pre_event", EtherPreEvent);
+            
+            events.Add("GL_pre_event", GLPreEvent);
+            events.Add("PL_pre_event", PLPreEvent);
+            events.Add("SL_pre_event", SLPreEvent);
+            events.Add("Cholesterol_pre_event", CholesterolPreEvent);
+            events.Add("Mediator_pre_event", MediatorPreEvent);
+            
+            events.Add("HG_MGL_pre_event", HG_MGLPreEvent);
+            events.Add("HG_DGL_pre_event", HG_DGLPreEvent);
+            events.Add("HG_SGL_pre_event", HG_SGLPreEvent);
+            events.Add("HG_TGL_pre_event", HG_TGLPreEvent);
+            
             
             
             
@@ -388,6 +405,7 @@ namespace LipidCreator
             if (i > 0) // 0 => leaf
             {
             
+            
                 // filling the syntax tree including lexers and events
                 int key = ((int)dpCell[0] << 16) | (int)dpCell[1];
                 ArrayList mergedRules = collectBackward(key);
@@ -423,6 +441,28 @@ namespace LipidCreator
             }
             else
             {
+                ArrayList mergedRules = collectBackward(node.rule);
+                
+                // it comes in reversed order, so it makes sence to start with post events
+                foreach(int r in mergedRules)
+                {
+                    if (NTtoRule.ContainsKey(r))
+                    {
+                        string postEventName = NTtoRule[r] + "_post_event";
+                        if (events.ContainsKey(postEventName)) node.postEvents.Add(events[postEventName]);
+                    }
+                }
+                
+                mergedRules.Reverse();
+                foreach(int r in mergedRules)
+                {
+                    if (NTtoRule.ContainsKey(r))
+                    {
+                        string preEventName = NTtoRule[r] + "_pre_event";
+                        if (events.ContainsKey(preEventName)) node.preEvents.Add(events[preEventName]);
+                    }
+                }
+            
                 node.terminal = (char)dpCell[0];
             }
         }
@@ -517,30 +557,183 @@ namespace LipidCreator
         
         
         // handling all events
-        public void PL_pre_event(Parser.TreeNode node)
+        public void GLPreEvent(Parser.TreeNode node)
+        {
+            lipid = new GLLipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((GLLipid)lipid);
+        }
+        
+        public void PLPreEvent(Parser.TreeNode node)
         {
             lipid = new PLLipid(lipidCreator);
             fagEnum = new FattyAcidGroupEnumerator((PLLipid)lipid);
-            Console.WriteLine("PL " + (fagEnum != null));
         }
         
-        public void LCB_pre_event(Parser.TreeNode node)
+        public void SLPreEvent(Parser.TreeNode node)
         {
-            Console.WriteLine("new long chain base");
+            lipid = new SLLipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((SLLipid)lipid);
         }
         
-        public void FA_pre_event(Parser.TreeNode node)
+        public void CholesterolPreEvent(Parser.TreeNode node)
+        {
+            lipid = new Cholesterol(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
+        }
+        
+        public void MediatorPreEvent(Parser.TreeNode node)
+        {
+            lipid = new Mediator(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Mediator)lipid);
+        }
+        
+        public void LCBPreEvent(Parser.TreeNode node)
+        {
+            fag = ((SLLipid)lipid).lcb;
+        }
+        
+        public void FAPreEvent(Parser.TreeNode node)
         {
             fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
         }
         
-        public void Carbon_pre_event(Parser.TreeNode node)
+        public void FAPostEvent(Parser.TreeNode node)
         {
             if (fag != null)
             {
-                Console.WriteLine(fag.lengthInfo);
+                if (fag.carbonCounts.Count == 1 && fag.doubleBondCounts.Count == 1)
+                {
+                    int carbonLength = (new List<int>(fag.carbonCounts))[0];
+                    int doubleBondCount = (new List<int>(fag.doubleBondCounts))[0];
+                    
+                    int maxDoubleBond = (carbonLength - 1) >> 1;
+                    if (doubleBondCount > maxDoubleBond)
+                    {
+                        Console.WriteLine("double bond error");
+                        lipid = null;
+                    }
+                    else if (fag.hydroxylCounts.Count == 1)
+                    {
+                        int hydroxylCount = (new List<int>(fag.hydroxylCounts))[0];
+                        
+                        if (carbonLength < hydroxylCount)
+                        {
+                            Console.WriteLine("hydroxyl number error");
+                            lipid = null;
+                        }
+                    }
+                }
+                else 
+                {
+                    lipid = null;
+                }
+            }
+        }
+        
+        public void CarbonPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
                 string carbonCount = node.getText();
                 fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
+                Console.WriteLine("l: " + fag.lengthInfo + " " + carbonCount);
+            }
+        }
+        
+        public void DBPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+                string doubleBondCount = node.getText();
+                fag.doubleBondCounts.Add(Convert.ToInt32(doubleBondCount));
+                Console.WriteLine("db: " + fag.dbInfo + " " + doubleBondCount);
+            }
+        }
+        
+        public void HydroxylPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+                string hydroxylCount = node.getText();
+                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
+                Console.WriteLine("hy: " + fag.dbInfo + " " + hydroxylCount);
+            }
+        }
+        
+        public void Hydroxyl_LCBPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+                string hydroxylCount = node.getText();
+                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
+                Console.WriteLine("hy: " + fag.hydroxylInfo + " " + hydroxylCount);
+            }
+        }
+        
+        public void EtherPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+            
+                List<string> keys = new List<string>(fag.faTypes.Keys);
+                foreach(string faTypeKey in keys) fag.faTypes[faTypeKey] = false;
+            
+                string faType = node.getText();
+                fag.faTypes["FA" + faType] = false;
+                Console.WriteLine("type: " + faType);
+            }
+        }
+        
+        public void HG_MGLPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                string headgroup = node.getText();
+                lipid.headGroupNames.Add(headgroup);
+                List<string> keys = new List<string>(((GLLipid)lipid).fag2.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag2.faTypes[faTypeKey] = false;
+                ((GLLipid)lipid).fag2.faTypes["FAx"] = true;
+                keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
+                Console.WriteLine("headgroup: " + headgroup);
+            }
+        }
+        
+        public void HG_DGLPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                string headgroup = node.getText();
+                lipid.headGroupNames.Add(headgroup);
+                List<string> keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
+                Console.WriteLine("headgroup: " + headgroup);
+            }
+        }
+        
+        public void HG_SGLPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                string headgroup = node.getText();
+                lipid.headGroupNames.Add(headgroup);
+                List<string> keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
+                ((GLLipid)lipid).containsSugar = true;
+                Console.WriteLine("headgroup: " + headgroup);
+            }
+        }
+        
+        public void HG_TGLPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                string headgroup = node.getText();
+                lipid.headGroupNames.Add(headgroup);
+                Console.WriteLine("headgroup: " + headgroup);
             }
         }
     }    

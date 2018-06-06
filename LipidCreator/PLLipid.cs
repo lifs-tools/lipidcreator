@@ -64,6 +64,11 @@ namespace LipidCreator
             isLyso = copy.isLyso;
         }
         
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList{fag1, fag2, fag3, fag4};
+        }
+        
         public override string serialize()
         {
             string xml = "<lipid type=\"PL\" isCL=\"" + isCL + "\" isLyso=\"" + isLyso + "\">\n";

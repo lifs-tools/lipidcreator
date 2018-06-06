@@ -40,8 +40,8 @@ namespace LipidCreator
             public TreeNode left;
             public TreeNode right;
             public char terminal;
-            public Action<TreeNode> preEvent;
-            public Action<TreeNode> postEvent;
+            public ArrayList preEvents;
+            public ArrayList postEvents;
             
             
             public TreeNode(int _rule)
@@ -50,8 +50,8 @@ namespace LipidCreator
                 left = null;
                 right = null;
                 terminal = '\0';
-                preEvent = null;
-                postEvent = null;
+                preEvents = new ArrayList();
+                postEvents = new ArrayList();
             }
             
             public string getTextRecursive(TreeNode node)
@@ -91,7 +91,7 @@ namespace LipidCreator
     
         // lipid specific variables
         public Lipid lipid;
-        public int currentFACounter;
+        public FattyAcidGroupEnumerator fagEnum;
         public FattyAcidGroup fag;
     
     
@@ -157,7 +157,6 @@ namespace LipidCreator
                             }
                             int ruleNT = ruleToNT[rule];
                             NTtoRule.Add(ruleNT, rule);
-                            
                             
                             
                             foreach (string product in products)
@@ -358,7 +357,7 @@ namespace LipidCreator
         
         public void raiseEventsRecursive(TreeNode node)
         {
-            if (node.preEvent != null) node.preEvent(node);
+            foreach (Action<TreeNode> action in node.preEvents) action(node);
             
             if (node.terminal == '\0') // node.terminal is != null when node is leaf
             {
@@ -366,7 +365,7 @@ namespace LipidCreator
                 raiseEventsRecursive(node.right);
             }
                 
-            if (node.postEvent != null) node.postEvent(node);
+            foreach (Action<TreeNode> action in node.postEvents) action(node);
         }
         
         
@@ -382,29 +381,45 @@ namespace LipidCreator
         
     
     
-        // filling the syntax tree including lexers and events
         public void fillTree(TreeNode node, ArrayList dp, int i, int j)
         {
             ArrayList dpCell = ((Dictionary<int, ArrayList>)((ArrayList)dp[i])[j])[node.rule];
-        
-            if (NTtoRule.ContainsKey(node.rule))
+            
+            if (i > 0) // 0 => leaf
             {
-                string preEventName = NTtoRule[node.rule] + "_pre_event";
-                string postEventName = NTtoRule[node.rule] + "_post_event";
+            
+                // filling the syntax tree including lexers and events
+                int key = ((int)dpCell[0] << 16) | (int)dpCell[1];
+                ArrayList mergedRules = collectBackward(key);
                 
-                if (events.ContainsKey(preEventName)) node.preEvent = events[preEventName];
-                if (events.ContainsKey(postEventName)) node.postEvent = events[postEventName];
-            }
-            if (i > 0)
-            {
+                // it comes in reversed order, so it makes sence to start with post events
+                foreach(int r in mergedRules)
+                {
+                    if (NTtoRule.ContainsKey(r))
+                    {
+                        string postEventName = NTtoRule[r] + "_post_event";
+                        if (events.ContainsKey(postEventName)) node.postEvents.Add(events[postEventName]);
+                    }
+                }
+                
+                mergedRules.Reverse();
+                foreach(int r in mergedRules)
+                {
+                    if (NTtoRule.ContainsKey(r))
+                    {
+                        string preEventName = NTtoRule[r] + "_pre_event";
+                        if (events.ContainsKey(preEventName)) node.preEvents.Add(events[preEventName]);
+                    }
+                }
+            
                 node.left = new TreeNode((int)dpCell[0]);
                 node.right = new TreeNode((int)dpCell[1]);
-                int l = (int)((ArrayList)dpCell[2])[0];
-                int r = (int)((ArrayList)dpCell[2])[1];
-                fillTree(node.left, dp, l, r);
-                l = (int)((ArrayList)dpCell[3])[0];
-                r = (int)((ArrayList)dpCell[3])[1];
-                fillTree(node.right, dp, l, r);
+                int ii = (int)((ArrayList)dpCell[2])[0];
+                int jj = (int)((ArrayList)dpCell[2])[1];
+                fillTree(node.left, dp, ii, jj);
+                ii = (int)((ArrayList)dpCell[3])[0];
+                jj = (int)((ArrayList)dpCell[3])[1];
+                fillTree(node.right, dp, ii, jj);
             }
             else
             {
@@ -420,7 +435,7 @@ namespace LipidCreator
         public void parse(string textToParse)
         {
             lipid = null;
-            currentFACounter = 0;
+            fagEnum = null;
             fag = null;
         
             wordInGrammer = false;
@@ -505,6 +520,8 @@ namespace LipidCreator
         public void PL_pre_event(Parser.TreeNode node)
         {
             lipid = new PLLipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((PLLipid)lipid);
+            Console.WriteLine("PL " + (fagEnum != null));
         }
         
         public void LCB_pre_event(Parser.TreeNode node)
@@ -514,33 +531,14 @@ namespace LipidCreator
         
         public void FA_pre_event(Parser.TreeNode node)
         {
-            Console.WriteLine();
-            /*
-            switch(currentFACounter)
-            {
-                case 0:
-                    fag = lipid.fag1;
-                    break;
-                    
-                case 1:
-                    fag = lipid.fag2;
-                    break;
-                    
-                case 2:
-                    fag = lipid.fag3;
-                    break;
-                    
-                case 3:
-                    fag = lipid.fag4;
-                    break;
-            }
-            */
+            fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
         }
         
         public void Carbon_pre_event(Parser.TreeNode node)
         {
             if (fag != null)
             {
+                Console.WriteLine(fag.lengthInfo);
                 string carbonCount = node.getText();
                 fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
             }

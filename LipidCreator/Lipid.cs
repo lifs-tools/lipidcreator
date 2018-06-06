@@ -66,9 +66,8 @@ namespace LipidCreator
     }
     
     
-    
     [Serializable]
-    public class Lipid
+    public abstract class Lipid
     {
         public Dictionary<string, HashSet<string>> positiveFragments;
         public Dictionary<string, HashSet<string>> negativeFragments;
@@ -125,10 +124,19 @@ namespace LipidCreator
         }
         
         
+        
+        
         // synchronize the fragment list with list from LipidCreator root
-        public virtual void Update(object sender, EventArgs e)
+        public abstract void Update(object sender, EventArgs e);
+        
+        
+        public ArrayList getFattyAcidGroups()
         {
+            return getFattyAcidGroupList();
         }
+        
+        public abstract ArrayList getFattyAcidGroupList();
+        
         
         public void Updating(int category)
         {

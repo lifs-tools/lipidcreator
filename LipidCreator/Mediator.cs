@@ -48,6 +48,14 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList();
+        }
+        
+        
         public override string serialize()
         {
             string xml = "<lipid type=\"Mediator\">\n";

@@ -59,6 +59,11 @@ namespace LipidCreator
             isLyso = copy.isLyso;
         }
         
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList{fag};
+        }
+        
         
         public override string serialize()
         {

@@ -57,6 +57,13 @@ namespace LipidCreator
         }
         
         
+        
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList{fag};
+        }
+        
+        
         public override string serialize()
         {
             string xml = "<lipid type=\"Cholesterol\" containsEster=\"" + containsEster + "\">\n";

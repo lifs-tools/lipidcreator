@@ -32,6 +32,39 @@ using System.Xml.Serialization;
 
 namespace LipidCreator
 {   
+
+    [Serializable]
+    public class FattyAcidGroupEnumerator : IEnumerator
+    {
+        public ArrayList list;
+        public int index;
+        public FattyAcidGroup Current
+        {
+            get { return (FattyAcidGroup)list[index]; }
+        }
+        
+        public FattyAcidGroupEnumerator(Lipid lipid)
+        {
+            index = -1;
+            list = lipid.getFattyAcidGroups();
+        }
+        
+        public bool MoveNext()
+        {
+            ++index;
+            return index < list.Count;
+        }
+        
+        public void Reset()
+        {
+            index = -1;
+        }
+        
+
+        object IEnumerator.Current { get { return Current; } }
+    }
+
+
     [Serializable]
     public class FattyAcidGroup
     {

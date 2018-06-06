@@ -62,6 +62,10 @@ namespace LipidCreator
             containsSugar = copy.containsSugar;
         }
         
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList{fag1, fag2, fag3};
+        }
         
         public override string serialize()
         {

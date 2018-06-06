@@ -133,7 +133,6 @@ namespace LipidCreator
                  
                     if (!isLyso) // sphingolipids with fatty acid
                     {
-                    
                         foreach (FattyAcid fa in fag.getFattyAcids())
                         {
                     
@@ -148,6 +147,7 @@ namespace LipidCreator
                             
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
+                    Console.WriteLine(adduct.Value);
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
                                 
                                 usedKeys.Add(key);

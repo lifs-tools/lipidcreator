@@ -433,6 +433,7 @@ namespace LipidCreator
             
             else
             {
+            
                 if (headGroupNames.Count == 0) return;
                 bool isPlamalogen = false;
                 bool isFAa = false;
@@ -444,7 +445,6 @@ namespace LipidCreator
                         case "p": isPlamalogen = true; break;
                         default: break;
                     }
-                    
                     
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {

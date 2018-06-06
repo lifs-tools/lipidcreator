@@ -44,10 +44,74 @@ namespace LipidCreator
         {
             LipidCreator lcf = new LipidCreator(null);
             Parser p = new Parser(lcf, "data/lipidnames.grammer", '"');
-            //p.parse("Cer 26:2;3/18:1");
-            p.parse("12-HETE");
-            Console.WriteLine(p.wordInGrammer);
+            
+            
+            
+            
+            p.parse("PE O 18:0a-22:6");
             p.raiseEvents();
+            
+            lcf.registeredLipids.Clear();
+            lcf.registeredLipids.Add(p.lipid);
+            lcf.assembleLipids();
+            
+            /*
+            Console.WriteLine("testing valid lipid names:");
+            if (File.Exists("data/lipidnames.txt"))
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader("data/lipidnames.txt"))
+                    {
+                        string line;
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine("testing: " + line);
+                            p.parse(line);
+                            p.raiseEvents();
+                            if (p.lipid == null) throw new Exception("Error: lipid name " + line + " was not parsed.");
+                            
+                            p.lipid.onlyPrecursors = 1;
+                            lcf.registeredLipids.Clear();
+                            lcf.registeredLipids.Add(p.lipid);
+                            lcf.assembleLipids();
+                            
+                            DataRow row = lcf.transitionList.Rows[0];
+                            Console.WriteLine((string)row[LipidCreator.PRECURSOR_NAME]);
+                        }
+                    }
+                }
+                
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            
+            Console.WriteLine("\ntesting invalid lipid names:");
+            if (File.Exists("data/lipidnames-invalid.txt"))
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader("data/lipidnames-invalid.txt"))
+                    {
+                        string line;
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine("testing: " + line);
+                            p.parse(line);
+                            p.raiseEvents();
+                            if (p.lipid != null) throw new Exception("Error: lipid name " + line + " was parsed.");
+                        }
+                    }
+                }
+                
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            */
         }
     }
 }

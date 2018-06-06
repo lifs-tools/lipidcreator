@@ -837,6 +837,7 @@ namespace LipidCreator
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
             
+            Console.WriteLine(precursorDataList.Count);
             
             // create fragment list   
             if (instrument.Length == 0)

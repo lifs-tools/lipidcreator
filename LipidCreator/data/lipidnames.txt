@@ -14,3 +14,5 @@ Hex2Cer 18:1;2/12:0
 Cer 18:1;2/16:0
 MAG 16:0
 PIP2 21:0-22:6
+12-HETE
+Palmitic acid

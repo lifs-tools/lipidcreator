@@ -26,7 +26,6 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 namespace LipidCreator
 {    
@@ -81,6 +80,9 @@ namespace LipidCreator
             
             registeredEvents.Add("HG_CH_pre_event", HG_CHPreEvent);
             
+            registeredEvents.Add("PL_post_event", PLPostEvent);
+            registeredEvents.Add("SL_post_event", SLPostEvent);
+            registeredEvents.Add("Mediator_post_event", MediatorPostEvent);
             
         }
         
@@ -409,6 +411,39 @@ namespace LipidCreator
                 List<string> keys = new List<string>(((Cholesterol)lipid).fag.faTypes.Keys);
                 foreach(string faTypeKey in keys) ((Cholesterol)lipid).fag.faTypes[faTypeKey] = false;
                 ((Cholesterol)lipid).fag.faTypes["FAx"] = true;
+            }
+        }
+            
+        public void PLPostEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                if (lipid.headGroupNames.Count == 0)
+                {
+                    lipid = null;
+                }
+            }
+        }
+            
+        public void SLPostEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                if (lipid.headGroupNames.Count == 0)
+                {
+                    lipid = null;
+                }
+            }
+        }
+            
+        public void MediatorPostEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                if (lipid.headGroupNames.Count == 0)
+                {
+                    lipid = null;
+                }
             }
         }
     }    

@@ -34,48 +34,72 @@ namespace LipidCreator
     [Serializable]
     public class Parser
     {
+        public class ExtendedLinkedList<T> : LinkedList<T>
+        {
+            public T PopFirst()
+            {
+                T current = First.Value;
+                RemoveFirst();
+                return current;
+            }
+            
+            public T PopLast()
+            {
+                T current = Last.Value;
+                RemoveLast();
+                return current;
+            }
+        }
+        
+        
+        // DP stands for dynamic programming
+        public class DPNode
+        {
+            public int rule1;
+            public int rule2;
+            public DPNode left;
+            public DPNode right;
+            
+            public DPNode(int _rule1, int _rule2, DPNode _left, DPNode _right)
+            {
+                rule1 = _rule1;
+                rule2 = _rule2;
+                left = _left;
+                right = _right;
+            }
+        }
+        
+        
+    
         public class TreeNode
         {
             public int rule;
             public TreeNode left;
             public TreeNode right;
             public char terminal;
+            public bool fireEvent;
             
-            
-            public TreeNode(int _rule)
+            public TreeNode(int _rule, bool _fireEvent)
             {
                 rule = _rule;
                 left = null;
                 right = null;
                 terminal = '\0';
+                fireEvent = _fireEvent;
             }
             
-            public static string getTextRecursive(TreeNode node)
+            public string getText(TreeNode node = null)
             {
-                string text = "";
-                if (node.terminal == '\0')
-                {
-                    text = getTextRecursive(node.left);
-                    if (node.right != null) text += getTextRecursive(node.right);
-                }
-                else
-                {
-                    text += node.terminal;
-                }
-                return text;
-            }
-            
-                
-            public string getText()
-            {
-                return getTextRecursive(this);
+                if (node == null) node = this;
+                if (node.terminal == '\0') return getText(node.left) + ((node.right != null) ? getText(node.right) : "");
+                    
+                return Convert.ToString(node.terminal);
             }
         }
         
         
         
-        public int freeNumber;
-        public Dictionary<string, int> ruleToNT;
+        public int nextFreeRuleNumber;
         public Dictionary<char, ArrayList> TtoNT;
         public Dictionary<int, ArrayList> NTtoNT;
         public char quote;
@@ -87,8 +111,7 @@ namespace LipidCreator
     
         public Parser(ParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
         {
-            freeNumber = 0;
-            ruleToNT = new Dictionary<string, int>();
+            nextFreeRuleNumber = 0;
             TtoNT = new Dictionary<char, ArrayList>();
             NTtoNT = new Dictionary<int, ArrayList>();
             quote = _quote;
@@ -98,11 +121,12 @@ namespace LipidCreator
             parserEventHandler = _parserEventHandler;
             
             
-            int lineCounter = 0;
             if (File.Exists(grammerFilename))
             {
+                int lineCounter = 0;
                 try
                 {
+                    Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
                     using (StreamReader sr = new StreamReader(grammerFilename))
                     {
                         string line;
@@ -117,94 +141,78 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             
                             ArrayList tokens_level_1 = new ArrayList();
-                            foreach (string t in splitString(line, '=', quote))
-                            {
-                                tokens_level_1.Add(strip(t, ' '));
-                            }
+                            foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
                             if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
-
 
                             string rule = (string)tokens_level_1[0];
                             
                             ArrayList products = new ArrayList();
-                            foreach (string p in splitString((string)tokens_level_1[1], '|', quote))
-                            {
-                                products.Add(strip(p, ' '));
-                            }
+                            foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
                             
-
-                            if (!ruleToNT.ContainsKey(rule))
-                            {
-                                ruleToNT.Add(rule, freeNumber);
-                                freeNumber += 1;
-                            }
+                            if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleNumber());
                             int ruleNT = ruleToNT[rule];
+                            
+                            if (NTtoRule.ContainsKey(ruleNT)) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' must not be declared two times.");
                             NTtoRule.Add(ruleNT, rule);
                             
                             
                             foreach (string product in products)
                             {
-                                ArrayList singleNTs = new ArrayList();
-                                foreach (string NT in splitString(product, ' ', quote))
-                                {
-                                    singleNTs.Add(strip(NT, ' '));
-                                }
+                                LinkedList<string> nonTerminals = new LinkedList<string>();
+                                ExtendedLinkedList<int> nonTerminalRules = new ExtendedLinkedList<int>();
+                                foreach (string NT in splitString(product, ' ', quote)) nonTerminals.AddLast(strip(NT, ' '));
                                 
                                 
                                 // changing all (non)terminals into rule numbers
-                                for (int i = 0; i < singleNTs.Count; ++i)
+                                foreach (string nonTerminal in nonTerminals)
                                 {
-                                
-                                    if (isTerminal((string)singleNTs[i]))
+                                    if (isTerminal(nonTerminal))
                                     {
-                                        singleNTs[i] = addTerminal((string)singleNTs[i]);
+                                        nonTerminalRules.AddLast(addTerminal(nonTerminal));
                                     }
                                     else
                                     {
-                                        if (!ruleToNT.ContainsKey((string)singleNTs[i]))
+                                        if (!ruleToNT.ContainsKey(nonTerminal))
                                         {
-                                            ruleToNT[(string)singleNTs[i]] = freeNumber;
-                                            freeNumber += 1;
+                                            ruleToNT[nonTerminal] = getNextFreeRuleNumber();
                                         }
-                                        singleNTs[i] = ruleToNT[(string)singleNTs[i]];
+                                        nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
                                     }
                                 }
                                 
                                 
                                 // more than two rules
-                                while (singleNTs.Count > 2)
+                                while (nonTerminalRules.Count > 2)
                                 {
-                                    int p2NF = (int)singleNTs[singleNTs.Count - 1];
-                                    singleNTs.RemoveAt(singleNTs.Count - 1);
-                                    int p1NF = (int)singleNTs[singleNTs.Count - 1];
-                                    singleNTs.RemoveAt(singleNTs.Count - 1);
+                                    int p2NF = nonTerminalRules.PopLast();
+                                    int p1NF = nonTerminalRules.PopLast();
                                     
-                                    int n = freeNumber;
-                                    freeNumber += 1;
+                                    int n = getNextFreeRuleNumber();
                                     
                                     int key = (p1NF << 16) | p2NF;
                                     if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
                                     NTtoNT[key].Add(n);
                                     
-                                    singleNTs.Add(n);
+                                    nonTerminalRules.AddLast(n);
                                 }    
                                 
                                     
                                 // two product rules
-                                if (singleNTs.Count == 2)
+                                if (nonTerminalRules.Count == 2)
                                 {
-                                    int p1NF = (int)singleNTs[0];
-                                    int p2NF = (int)singleNTs[1];
+                                    int p1NF = nonTerminalRules.PopFirst();
+                                    int p2NF = nonTerminalRules.PopFirst();
                                     int key = (p1NF << 16) | p2NF;
                                     if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
                                     NTtoNT[key].Add(ruleNT);
                                 }
-                                
-                                
                                 // only one product rule
-                                else if (singleNTs.Count == 1)
+                                else if (nonTerminalRules.Count == 1)
                                 {
-                                    int p1NF = (int)singleNTs[0];
+                                
+                                    int p1NF = nonTerminalRules.First.Value;
+                                    if (p1NF == ruleNT) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                                    
                                     if (!NTtoNT.ContainsKey(p1NF)) NTtoNT.Add(p1NF, new ArrayList());
                                     NTtoNT[p1NF].Add(ruleNT);
                                 }
@@ -222,10 +230,15 @@ namespace LipidCreator
             {
                 Console.WriteLine("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
             }
-            
-            
         }
         
+        
+        
+        public int getNextFreeRuleNumber()
+        {
+            if (nextFreeRuleNumber < 65536) return nextFreeRuleNumber++;
+            throw new Exception("Error: grammer is too big.");
+        }
         
         
         
@@ -259,15 +272,16 @@ namespace LipidCreator
             }
                     
             if (token.Length > 0) tokens.Add(token);
+            if (inQuote) throw new Exception("Error: corrupted token in grammer");
             
-            return (inQuote ? null : tokens);
+            return tokens;
         }
         
         
         public string strip(string text, char stripChar)
         {
-            while (text.Length > 1 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
-            while (text.Length > 1 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
+            while (text.Length > 0 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
+            while (text.Length > 0 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
             return text;
         }
         
@@ -288,36 +302,32 @@ namespace LipidCreator
         public int addTerminal(string text)
         {
             text = strip(text, quote);
-            ArrayList tRules = new ArrayList();
+            ExtendedLinkedList<int> terminalRules = new ExtendedLinkedList<int>();
             foreach (char c in text)
             {
                 if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new ArrayList());
-                TtoNT[c].Add(freeNumber);
-                tRules.Add(freeNumber);
-                freeNumber += 1;
+                int n = getNextFreeRuleNumber();
+                TtoNT[c].Add(n);
+                terminalRules.AddLast(n);
             }
-            while (tRules.Count > 1)
+            while (terminalRules.Count > 1)
             {
-                int p2NF = (int)tRules[tRules.Count - 1];
-                tRules.RemoveAt(tRules.Count - 1);
-                int p1NF = (int)tRules[tRules.Count - 1];
-                tRules.RemoveAt(tRules.Count - 1);
+                int p2NF = terminalRules.PopLast();
+                int p1NF = terminalRules.PopLast();
                 
-                int n = freeNumber;
-                freeNumber += 1;
+                int n = getNextFreeRuleNumber();
                 
                 int key = (p1NF << 16) | p2NF;
                 if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
                 NTtoNT[key].Add(n);
-                
-                tRules.Add(n);
+                terminalRules.AddLast(n);
             }
-            return (int)tRules[0];
+            return terminalRules.First.Value;
         }
         
         
         
-        // adding singleton rules, e.g. S -> A, A -> B, B -> C
+        // expanding singleton rules, e.g. S -> A, A -> B, B -> C
         public ArrayList collectBackward(int r1)
         {
             ArrayList collection = new ArrayList();
@@ -325,12 +335,11 @@ namespace LipidCreator
             int i = 0;
             while (i < collection.Count)
             {
-                int r = (int)collection[i];
+                int r = (int)collection[i++];
                 if (NTtoNT.ContainsKey(r))
                 {
                     foreach (int rf in NTtoNT[r]) collection.Add(rf);
                 }
-                i += 1;
             }
             return collection;
         }
@@ -340,9 +349,7 @@ namespace LipidCreator
         
         public void raiseEventsRecursive(TreeNode node)
         {
-            //Console.WriteLine("entering " + node.rule + (NTtoRule.ContainsKey(node.rule) ? "(" + NTtoRule[node.rule] + ") " + node.getText(): ""));
-            
-            if (NTtoRule.ContainsKey(node.rule)) parserEventHandler.handleEvent(NTtoRule[node.rule] + "_pre_event", node);
+            if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.rule] + "_pre_event", node);
             
             if (node.terminal == '\0') // node.terminal is != null when node is leaf
             {
@@ -350,7 +357,7 @@ namespace LipidCreator
                 if (node.right != null) raiseEventsRecursive(node.right);
             }
                 
-            if (NTtoRule.ContainsKey(node.rule)) parserEventHandler.handleEvent(NTtoRule[node.rule] + "_post_event", node);
+            if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.rule] + "_post_event", node);
         }
         
         
@@ -364,14 +371,13 @@ namespace LipidCreator
         
         
     
-        public void fillTree(TreeNode node, ArrayList dp, int i, int j)
+        public void fillTree(TreeNode node, DPNode dpNode)
         {
-            ArrayList dpCell = ((Dictionary<int, ArrayList>)((ArrayList)dp[i])[j])[node.rule];
                     
-            if (i > 0) // 0 => leaf
+            if (dpNode.left != null) // null => leaf
             {
                 // filling the syntax tree including lexers and events
-                int key = ((int)dpCell[0] << 16) | (int)dpCell[1];
+                int key = (dpNode.rule1 << 16) | dpNode.rule2;
                 ArrayList mergedRules = collectBackward(key);
                 while ((int)mergedRules[mergedRules.Count - 1] != node.rule) mergedRules.RemoveAt(mergedRules.Count - 1);
                 
@@ -383,26 +389,21 @@ namespace LipidCreator
                     
                     foreach(int r in mergedRules)
                     {
-                        node.left = new TreeNode(r);
+                        node.left = new TreeNode(r, NTtoRule.ContainsKey(r));
                         node = node.left;
                     }
                 }
             
-                node.left = new TreeNode((int)dpCell[0]);
-                node.right = new TreeNode((int)dpCell[1]);
-                int ii = (int)((ArrayList)dpCell[2])[0];
-                int jj = (int)((ArrayList)dpCell[2])[1];
-                fillTree(node.left, dp, ii, jj);
-                ii = (int)((ArrayList)dpCell[3])[0];
-                jj = (int)((ArrayList)dpCell[3])[1];
-                fillTree(node.right, dp, ii, jj);
+                node.left = new TreeNode(dpNode.rule1, NTtoRule.ContainsKey(dpNode.rule1));
+                node.right = new TreeNode(dpNode.rule2, NTtoRule.ContainsKey(dpNode.rule2));
+                fillTree(node.left, dpNode.left);
+                fillTree(node.right, dpNode.right);
             }
             else
             {
-                node.terminal = (char)dpCell[0];
+                node.terminal = (char)dpNode.rule1;
             }
         }
-        
         
         
         
@@ -413,16 +414,14 @@ namespace LipidCreator
             wordInGrammer = false;
             parseTree = null;
             int n = textToParse.Length;
-            ArrayList dp = new ArrayList(); // dp stands for dynamic programming
+            Dictionary<int, DPNode>[][] dp = new Dictionary<int, DPNode>[n][]; // dp stands for dynamic programming
             for (int i = 0; i < n; ++i)
             {
-                ArrayList row = new ArrayList();
-                for (int j = 0; j < n; ++j)
+                dp[i] = new Dictionary<int, DPNode>[n - i];
+                for (int j = 0; j < n - i; ++j)
                 {
-                    Dictionary<int, ArrayList> d = new Dictionary<int, ArrayList>();
-                    row.Add(d);
+                    dp[i][j] = new Dictionary<int, DPNode>();
                 }
-                dp.Add(row);
             }
             
             for (int i = 0; i < n; ++i)
@@ -431,11 +430,10 @@ namespace LipidCreator
                 if (!TtoNT.ContainsKey(c)) return;
                 foreach (int r in TtoNT[c])
                 {
+                    DPNode dl = new DPNode((int)c, 0, null, null);
                     foreach (int rf in collectBackward(r))
                     {
-                        ArrayList al = new ArrayList();
-                        al.Add(c);
-                        ((Dictionary<int, ArrayList>)((ArrayList)dp[0])[i]).Add(rf, al);
+                        dp[0][i].Add(rf, dl);
                     }
                 }
             }        
@@ -447,25 +445,21 @@ namespace LipidCreator
                 {
                     for (int k = 0; k < i; ++k)
                     {
-                        foreach (int r1 in ((Dictionary<int, ArrayList>)((ArrayList)dp[k])[j]).Keys)
+                        int k1 = k + 1;
+                        foreach (KeyValuePair<int, DPNode> r1 in dp[k][j])
                         {
-                            foreach (int r2 in ((Dictionary<int, ArrayList>)((ArrayList)dp[i - k - 1])[j + k + 1]).Keys)
+                            foreach (KeyValuePair<int, DPNode> r2 in dp[i - k1][j + k1])
                             {
-                                int key = (r1 << 16) | r2;
-                                if (NTtoNT.ContainsKey(key))
+                                int key = (r1.Key << 16) | r2.Key;
+                                if (!NTtoNT.ContainsKey(key)) continue;
+                                
+                                DPNode content = new DPNode(r1.Key, r2.Key, r1.Value, r2.Value);
+                                
+                                foreach (int r in NTtoNT[key])
                                 {
-                                    foreach (int r in NTtoNT[key])
-                                    {
-                                        foreach (int rf in collectBackward(r))
-                                        {
-                                            ArrayList content = new ArrayList();
-                                            content.Add(r1);
-                                            content.Add(r2);
-                                            content.Add(new ArrayList{k, j});
-                                            content.Add(new ArrayList{i - k - 1, j + k + 1});
-                                            
-                                            ((Dictionary<int, ArrayList>)((ArrayList)dp[i])[j]).Add(rf, content);
-                                        }
+                                    foreach (int rf in collectBackward(r))
+                                    {   
+                                        dp[i][j].Add(rf, content);
                                     }
                                 }
                             }
@@ -474,12 +468,11 @@ namespace LipidCreator
                 }
             }
             
-            wordInGrammer = ((Dictionary<int, ArrayList>)((ArrayList)dp[n - 1])[0]).ContainsKey(0);
-            
-            if (wordInGrammer)
+            if (dp[n - 1][0].ContainsKey(0)) // 0 => start rule
             {
-                parseTree = new TreeNode(0);
-                fillTree(parseTree, dp, n - 1, 0);
+                wordInGrammer = true;
+                parseTree = new TreeNode(0, NTtoRule.ContainsKey(0));
+                fillTree(parseTree, dp[n - 1][0][0]);
             }
         }
     }    

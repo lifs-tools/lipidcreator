@@ -54,13 +54,13 @@ namespace LipidCreator
                 postEvent = null;
             }
             
-            public string getTextRecursive(TreeNode node)
+            public static string getTextRecursive(TreeNode node)
             {
                 string text = "";
                 if (node.terminal == '\0')
                 {
-                    text = node.getTextRecursive(node.left);
-                    if (right != null) text += node.getTextRecursive(node.right);
+                    text = getTextRecursive(node.left);
+                    if (node.right != null) text += getTextRecursive(node.right);
                 }
                 else
                 {
@@ -385,6 +385,8 @@ namespace LipidCreator
         
         public void raiseEventsRecursive(TreeNode node)
         {
+            //Console.WriteLine("entering " + node.rule + (NTtoRule.ContainsKey(node.rule) ? "(" + NTtoRule[node.rule] + ") " + node.getText(): ""));
+        
             if (node.preEvent != null) node.preEvent(node);
             
             if (node.terminal == '\0') // node.terminal is != null when node is leaf
@@ -427,8 +429,6 @@ namespace LipidCreator
                     
             if (i > 0) // 0 => leaf
             {
-            
-                
                 // filling the syntax tree including lexers and events
                 int key = ((int)dpCell[0] << 16) | (int)dpCell[1];
                 ArrayList mergedRules = collectBackward(key);
@@ -553,6 +553,7 @@ namespace LipidCreator
         
         
         // handling all events
+        
         public void GLPreEvent(Parser.TreeNode node)
         {
             lipid = new GLLipid(lipidCreator);
@@ -569,8 +570,15 @@ namespace LipidCreator
         {
             if (lipid != null)
             {
-                string hg = lipid.headGroupNames[0];
-                if (hg[hg.Length - 1] == '-')
+                if (lipid.headGroupNames.Count != 0)
+                {
+                    string hg = lipid.headGroupNames[0];
+                    if (hg[hg.Length - 1] == '-')
+                    {
+                        lipid = null;
+                    }
+                }
+                else
                 {
                     lipid = null;
                 }
@@ -610,9 +618,10 @@ namespace LipidCreator
         
         public void FAPostEvent(Parser.TreeNode node)
         {
+            // check if created fatty acid is valid
             if (fag != null)
             {
-                if (!fag.isLCB && fag.hydroxylCounts.Count == 0)
+                if (fag.hydroxylCounts.Count == 0)
                 {
                     fag.hydroxylCounts.Add(0);
                 }
@@ -645,6 +654,11 @@ namespace LipidCreator
                 {
                     lipid = null;
                 }
+                
+                // check if at least one fatty acid type is enabled
+                int enablesFATypes = 0;
+                foreach(KeyValuePair<string, bool> kvp in fag.faTypes) enablesFATypes += kvp.Value ? 1 : 0;                
+                if (enablesFATypes == 0) lipid = null;
             }
             else 
             {
@@ -692,12 +706,11 @@ namespace LipidCreator
         {
             if (fag != null)
             {
-            
                 List<string> keys = new List<string>(fag.faTypes.Keys);
                 foreach(string faTypeKey in keys) fag.faTypes[faTypeKey] = false;
             
                 string faType = node.getText();
-                fag.faTypes["FA" + faType] = false;
+                fag.faTypes["FA" + faType] = true;
                 if ((new HashSet<string>{"LPC O-", "LPE O-", "PC O-", "PE O-"}).Contains(lipid.headGroupNames[0]))
                 {
                     lipid.headGroupNames[0] += faType;

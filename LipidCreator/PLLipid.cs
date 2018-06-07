@@ -307,6 +307,7 @@ namespace LipidCreator
             
             else if (isLyso)
             {
+            
                 if (headGroupNames.Count == 0) return;
                 if (fag1.faTypes["FAx"]) return;
                 

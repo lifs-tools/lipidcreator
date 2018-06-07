@@ -47,15 +47,22 @@ namespace LipidCreator
             
             
             
-            
-            p.parse("PE O 18:0a-22:6");
+            /*
+            p.parse("LPE O 19:1p");
             p.raiseEvents();
+            
+            if (p.lipid == null) throw new Exception("Error: lipid name was not parsed.");
+            
             
             lcf.registeredLipids.Clear();
             lcf.registeredLipids.Add(p.lipid);
             lcf.assembleLipids();
             
-            /*
+            Console.WriteLine(lcf.precursorDataList.Count);
+            */
+            
+            bool continueTesting = true;
+            
             Console.WriteLine("testing valid lipid names:");
             if (File.Exists("data/lipidnames.txt"))
             {
@@ -69,7 +76,7 @@ namespace LipidCreator
                             Console.WriteLine("testing: " + line);
                             p.parse(line);
                             p.raiseEvents();
-                            if (p.lipid == null) throw new Exception("Error: lipid name " + line + " was not parsed.");
+                            if (p.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
                             
                             p.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
@@ -77,7 +84,10 @@ namespace LipidCreator
                             lcf.assembleLipids();
                             
                             DataRow row = lcf.transitionList.Rows[0];
-                            Console.WriteLine((string)row[LipidCreator.PRECURSOR_NAME]);
+                            if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                            {
+                                throw new Exception("Error: inserted lipid name '" + line + "' does not equal to computed name '" + row[LipidCreator.PRECURSOR_NAME] + "'.");
+                            }
                         }
                     }
                 }
@@ -85,9 +95,11 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    continueTesting = false;
                 }
             }
             
+            if (!continueTesting) return;
             Console.WriteLine("\ntesting invalid lipid names:");
             if (File.Exists("data/lipidnames-invalid.txt"))
             {
@@ -101,7 +113,7 @@ namespace LipidCreator
                             Console.WriteLine("testing: " + line);
                             p.parse(line);
                             p.raiseEvents();
-                            if (p.lipid != null) throw new Exception("Error: lipid name " + line + " was parsed.");
+                            if (p.lipid != null) throw new Exception("Error: lipid name '" + line + "' was parsed.");
                         }
                     }
                 }
@@ -109,9 +121,14 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    continueTesting = false;
                 }
             }
-            */
+            
+            if (!continueTesting) return;
+            
+            Console.WriteLine();
+            Console.WriteLine("Test passed, no errors found");
         }
     }
 }

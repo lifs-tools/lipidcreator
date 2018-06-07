@@ -43,22 +43,21 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             LipidCreator lcf = new LipidCreator(null);
-            Parser p = new Parser(lcf, "data/lipidnames.grammer", '"');
             
+            ParserEventHandler peh = new ParserEventHandler(lcf);
+            Parser p = new Parser(peh, "data/lipidnames.grammer", '"');
             
             
             /*
             p.parse("LPE O 19:1p");
             p.raiseEvents();
             
-            if (p.lipid == null) throw new Exception("Error: lipid name was not parsed.");
-            
+            Console.WriteLine(p.wordInGrammer);
+            Console.WriteLine(peh.lipid != null);
             
             lcf.registeredLipids.Clear();
             lcf.registeredLipids.Add(p.lipid);
             lcf.assembleLipids();
-            
-            Console.WriteLine(lcf.precursorDataList.Count);
             */
             
             bool continueTesting = true;
@@ -76,11 +75,11 @@ namespace LipidCreator
                             Console.WriteLine("testing: " + line);
                             p.parse(line);
                             p.raiseEvents();
-                            if (p.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
+                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
                             
-                            p.lipid.onlyPrecursors = 1;
+                            peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
-                            lcf.registeredLipids.Add(p.lipid);
+                            lcf.registeredLipids.Add(peh.lipid);
                             lcf.assembleLipids();
                             
                             DataRow row = lcf.transitionList.Rows[0];

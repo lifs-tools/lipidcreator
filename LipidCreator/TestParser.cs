@@ -112,8 +112,7 @@ namespace LipidCreator
                         {
                             Console.WriteLine("testing: " + line);
                             p.parse(line);
-                            p.raiseEvents();
-                            if (p.lipid != null) throw new Exception("Error: lipid name '" + line + "' was parsed.");
+                            if (p.wordInGrammer) throw new Exception("Error: lipid name '" + line + "' was parsed.");
                         }
                     }
                 }

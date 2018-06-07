@@ -157,6 +157,7 @@
       <DependentUpon>MS2Form.cs</DependentUpon>
     </Compile>
     <Compile Include="MS2Fragment.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="NewFragment.cs">
       <SubType>Form</SubType>
     </Compile>

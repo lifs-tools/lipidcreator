@@ -23,30 +23,20 @@
 # SOFTWARE.
 ##################################################################################
 
-## This is a BNF grammer for a lipid subspecies identifiers followed by
+## This is a BNF grammer for lipid subspecies identifiers followed by
 ## J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
 
 # first rule is always start rule
 lipid = GL | PL | SL | Cholesterol | Mediator
 
 
-## generic rules
-FA = FApure | FApure Ether
-FApure = Carbon ":" DB | Carbon ":" DB ";" Hydroxyl
-Ether = "a" | "p"
-LCB = Carbon ":" DB ";" Hydroxyl_LCB
-Carbon = "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" | "21" | "22" | "23" | "24" | "25" | "26" | "27" | "28" | "29" | "30"
-DB = "0" | "1" | "2" | "3" | "4" | "5" | "6"
-Hydroxyl = "1" | "2" | "3" | "4" | "5" | "6"
-Hydroxyl_LCB = "2" | "3"
-
 
 ## glycerolipid rules
 GL = MGL | DGL | SGL | TGL
-MGL = HG_MGL " " FA
-DGL = HG_DGL " " FA unsorted_separator FA | HG_DGL " " FA sorted_separator FA
-SGL = HG_SGL " " FA unsorted_separator FA | HG_SGL " " FA sorted_separator FA
-TGL = HG_TGL " " FA unsorted_separator FA unsorted_separator FA | HG_DGL " " FA sorted_separator FA sorted_separator FA
+MGL = HG_MGL headgroup_separator FA
+DGL = HG_DGL headgroup_separator FA unsorted_FA_separator FA | HG_DGL headgroup_separator FA sorted_FA_separator FA
+SGL = HG_SGL headgroup_separator FA unsorted_FA_separator FA | HG_SGL headgroup_separator FA sorted_FA_separator FA
+TGL = HG_TGL headgroup_separator FA unsorted_FA_separator FA unsorted_FA_separator FA | HG_TGL headgroup_separator FA sorted_FA_separator FA sorted_FA_separator FA
 
 HG_MGL = "MAG"
 HG_DGL = "DAG"
@@ -54,16 +44,16 @@ HG_SGL = "MGAG" | "DGDG" | "SQDG"
 HG_TGL = "TAG"
 
 
+
 ## phospholipid rules
 PL = LPL | DPL | PL-O | CL | MLCL
 PL-O = LPL-O | DPL-O
-LPL = HG_LPL " " FA
-LPL-O = HG_LPL-O " " FA
-DPL = HG_PL " " FA unsorted_separator FA | HG_PL " " FA sorted_separator FA
-DPL-O = HG_PL-O " " FA unsorted_separator FA | HG_PL-O " " FA sorted_separator FA
-CL = HG_CL " " FA unsorted_separator FA unsorted_separator FA unsorted_separator FA | HG_CL " " FA sorted_separator FA sorted_separator FA sorted_separator FA
-MLCL = HG_MLCL " " FA unsorted_separator FA unsorted_separator FA | HG_MLCL " " FA sorted_separator FA sorted_separator FA
-
+LPL = HG_LPL headgroup_separator FA
+LPL-O = HG_LPL-O headgroup_separator FA
+DPL = HG_PL headgroup_separator FA unsorted_FA_separator FA | HG_PL headgroup_separator FA sorted_FA_separator FA
+DPL-O = HG_PL-O headgroup_separator FA unsorted_FA_separator FA | HG_PL-O headgroup_separator FA sorted_FA_separator FA
+CL = HG_CL headgroup_separator FA unsorted_FA_separator FA unsorted_FA_separator FA unsorted_FA_separator FA | HG_CL headgroup_separator FA sorted_FA_separator FA sorted_FA_separator FA sorted_FA_separator FA
+MLCL = HG_MLCL headgroup_separator FA unsorted_FA_separator FA unsorted_FA_separator FA | HG_MLCL headgroup_separator FA sorted_FA_separator FA sorted_FA_separator FA
 
 HG_CL = "CL"
 HG_MLCL = "MLCL"
@@ -73,13 +63,15 @@ HG_LPL-O = "LPC O" | "LPE O"
 HG_PL-O = "PC O" | "PE O"
 
 
+
 ## sphingolipid rules
 SL = LSL | DSL
-LSL = HG_LSL " " LCB
-DSL = HG_DSL " " LCB "/" FA
+LSL = HG_LSL headgroup_separator LCB
+DSL = HG_DSL headgroup_separator LCB sorted_FA_separator FA
 
 HG_LSL = "LCB" | "LCBP" | "LHexCer" | "LSM"
 HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM"
+
 
 
 ## cholesterol lipids
@@ -88,11 +80,29 @@ CH = "Ch"
 CHe = "ChE " FApure
 
 
+
 ## mediator lipids
 Mediator = "10-HDoHE" | "11-HDoHE" | "11-HETE" | "11,12-DHET" | "11(12)-EET"| "12-HEPE" | "12-HETE" | "12-HHTrE" | "12-OxoETE" | "12(13)-EpOME" | "13-HODE" | "13-HOTrE" | "14,15-DHET" | "14(15)-EET" | "14(15)-EpETE" | "15-HEPE" | "15-HETE" | "15d-PGJ2" | "16-HDoHE" | "16-HETE" | "18-HEPE" | "5-HEPE" | "5-HETE" | "5-HpETE" | "5-OxoETE" | "5,12-DiHETE" | "5,6-DiHETE" | "5,6,15-LXA4" | "5(6)-EET" | "8-HDoHE" | "8-HETE" | "8,9-DHET" | "8(9)-EET" | "9-HEPE" | "9-HETE" | "9-HODE" | "9-HOTrE" | "9(10)-EpOME" | "AA" | "alpha-LA" | "DHA" | "EPA" | "Linoleic acid" | "LTB4" | "LTC4" | "LTD4" | "Maresin 1" | "Palmitic acid" | "PGB2" | "PGD2" | "PGE2" | "PGF2alpha" | "PGI2" | "Resolvin D1" | "Resolvin D2" | "Resolvin D3" | "Resolvin D5" | "tetranor-12-HETE" | "TXB1" | "TXB2" | "TXB3"
 
 
 
+## generic rules
+FA = FA_pure | FA_pure Ether
+FA_pure = Carbon ":" DB | Carbon ":" DB ";" Hydroxyl
+Ether = "a" | "p"
+LCB = Carbon ":" DB ";" Hydroxyl
+Carbon = Number
+DB = DB_count | DB_count "(" DB_position ")"
+DB_count = Number
+DB_position = DB_position "," DB_position | Number CisTrans
+CisTrans = "E" | "Z"
+Hydroxyl = Number
+Number = Number Number | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+
+
+
 ## separators
-sorted_separator = "/"
-unsorted_separator = "-"
+sorted_FA_separator = "/"
+unsorted_FA_separator = "-"
+headgroup_separator = " "

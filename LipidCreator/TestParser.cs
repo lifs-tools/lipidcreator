@@ -47,17 +47,14 @@ namespace LipidCreator
             ParserEventHandler peh = new ParserEventHandler(lcf);
             Parser p = new Parser(peh, "data/lipidnames.grammer", '"');
             
-            
             /*
-            p.parse("LPE O 19:1p");
+            p.parse("LPE 12:2(12Z,13E)");
             p.raiseEvents();
             
             Console.WriteLine(p.wordInGrammer);
             Console.WriteLine(peh.lipid != null);
             
-            lcf.registeredLipids.Clear();
-            lcf.registeredLipids.Add(p.lipid);
-            lcf.assembleLipids();
+            Environment.Exit(-1);
             */
             
             bool continueTesting = true;

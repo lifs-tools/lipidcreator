@@ -51,9 +51,8 @@ namespace LipidCreator
             
             registeredEvents.Add("LCB_pre_event", LCBPreEvent);
             registeredEvents.Add("Carbon_pre_event", CarbonPreEvent);
-            registeredEvents.Add("DB_pre_event", DBPreEvent);
+            registeredEvents.Add("DB_count_pre_event", DB_countPreEvent);
             registeredEvents.Add("Hydroxyl_pre_event", HydroxylPreEvent);
-            registeredEvents.Add("Hydroxyl_LCB_pre_event", Hydroxyl_LCBPreEvent);
             registeredEvents.Add("Ether_pre_event", EtherPreEvent);
             
             registeredEvents.Add("GL_pre_event", GLPreEvent);
@@ -226,16 +225,20 @@ namespace LipidCreator
             if (fag != null)
             {
                 string carbonCount = node.getText();
-                fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
+                int carbonCountInt = Convert.ToInt32(carbonCount);
+                if (2 <= carbonCountInt && carbonCountInt <= 30) fag.carbonCounts.Add(carbonCountInt);
+                else fag = null;
             }
         }
         
-        public void DBPreEvent(Parser.TreeNode node)
+        public void DB_countPreEvent(Parser.TreeNode node)
         {
             if (fag != null)
             {
                 string doubleBondCount = node.getText();
-                fag.doubleBondCounts.Add(Convert.ToInt32(doubleBondCount));
+                int doubleBondCountInt = Convert.ToInt32(doubleBondCount);
+                if (0 <= doubleBondCountInt && doubleBondCountInt <= 6) fag.doubleBondCounts.Add(doubleBondCountInt);
+                else fag = null;
             }
         }
         
@@ -244,16 +247,11 @@ namespace LipidCreator
             if (fag != null)
             {
                 string hydroxylCount = node.getText();
-                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
-            }
-        }
-        
-        public void Hydroxyl_LCBPreEvent(Parser.TreeNode node)
-        {
-            if (fag != null)
-            {
-                string hydroxylCount = node.getText();
-                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
+                int hydroxylCountInt = Convert.ToInt32(hydroxylCount);
+                if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if ((lipid is SLLipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if (!(lipid is SLLipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else fag = null;
             }
         }
         

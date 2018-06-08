@@ -38,6 +38,7 @@ namespace LipidCreator
         {
             public T PopFirst()
             {
+                if (First == null) return default(T);
                 T current = First.Value;
                 RemoveFirst();
                 return current;
@@ -45,6 +46,7 @@ namespace LipidCreator
             
             public T PopLast()
             {
+                if (Last == null) return default(T);
                 T current = Last.Value;
                 RemoveLast();
                 return current;
@@ -100,138 +102,127 @@ namespace LipidCreator
         
         
         public int nextFreeRuleIndex;
-        public Dictionary<char, ArrayList> TtoNT;
-        public Dictionary<int, ArrayList> NTtoNT;
+        public Dictionary<char, LinkedList<int>> TtoNT;
+        public Dictionary<int, LinkedList<int>> NTtoNT;
         public char quote;
         public TreeNode parseTree;
         public bool wordInGrammer;
         public Dictionary<int, string> NTtoRule;
         public ParserEventHandler parserEventHandler;
+        public const int SHIFT = 16;
     
     
         public Parser(ParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
         {
-            nextFreeRuleIndex = 0;
-            TtoNT = new Dictionary<char, ArrayList>();
-            NTtoNT = new Dictionary<int, ArrayList>();
+            nextFreeRuleIndex = 1;
+            TtoNT = new Dictionary<char, LinkedList<int>>();
+            NTtoNT = new Dictionary<int, LinkedList<int>>();
+            NTtoRule = new Dictionary<int, string>();
             quote = _quote;
+            parserEventHandler = _parserEventHandler;
             parseTree = null;
             wordInGrammer = false;
-            NTtoRule = new Dictionary<int, string>();
-            parserEventHandler = _parserEventHandler;
             
             
             if (File.Exists(grammerFilename))
             {
                 int lineCounter = 0;
-                try
+                
+                Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
+                using (StreamReader sr = new StreamReader(grammerFilename))
                 {
-                    Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
-                    using (StreamReader sr = new StreamReader(grammerFilename))
+                    string line;
+                    while((line = sr.ReadLine()) != null)
                     {
-                        string line;
-                        while((line = sr.ReadLine()) != null)
-                        {
-                            lineCounter++;
-                            // skip empty lines and comments
-                            if (line.Length < 1) continue;
-                            if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
-                            if (line.Length < 1) continue;
-                            line = strip(line, ' ');
-                            if (line.Length < 2) continue;
-                            
-                            ArrayList tokens_level_1 = new ArrayList();
-                            foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
-                            if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+                        lineCounter++;
+                        // skip empty lines and comments
+                        if (line.Length < 1) continue;
+                        if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
+                        if (line.Length < 1) continue;
+                        line = strip(line, ' ');
+                        if (line.Length < 2) continue;
+                        
+                        ArrayList tokens_level_1 = new ArrayList();
+                        foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
 
-                            string rule = (string)tokens_level_1[0];
+                        string rule = (string)tokens_level_1[0];
+                        
+                        ArrayList products = new ArrayList();
+                        foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
+                        
+                        if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
+                        int newRuleIndex = ruleToNT[rule];
+                        
+                        if (!NTtoRule.ContainsKey(newRuleIndex)) NTtoRule.Add(newRuleIndex, rule);
+                        
+                        
+                        foreach (string product in products)
+                        {
+                            LinkedList<string> nonTerminals = new LinkedList<string>();
+                            ExtendedLinkedList<int> nonTerminalRules = new ExtendedLinkedList<int>();
+                            foreach (string NT in splitString(product, ' ', quote)) nonTerminals.AddLast(strip(NT, ' '));
                             
-                            ArrayList products = new ArrayList();
-                            foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
                             
-                            if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
-                            int newRuleIndex = ruleToNT[rule];
-                            
-                            if (NTtoRule.ContainsKey(newRuleIndex)) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' must not be declared two times.");
-                            NTtoRule.Add(newRuleIndex, rule);
-                            
-                            
-                            foreach (string product in products)
+                            foreach (string nonTerminal in nonTerminals)
                             {
-                                LinkedList<string> nonTerminals = new LinkedList<string>();
-                                ExtendedLinkedList<int> nonTerminalRules = new ExtendedLinkedList<int>();
-                                foreach (string NT in splitString(product, ' ', quote)) nonTerminals.AddLast(strip(NT, ' '));
-                                
-                                
-                                // changing all (non)terminals into rule numbers
-                                foreach (string nonTerminal in nonTerminals)
+                                if (isTerminal(nonTerminal))
                                 {
-                                    if (isTerminal(nonTerminal))
+                                    nonTerminalRules.AddLast(addTerminal(nonTerminal));
+                                }
+                                else
+                                {
+                                    if (!ruleToNT.ContainsKey(nonTerminal))
                                     {
-                                        nonTerminalRules.AddLast(addTerminal(nonTerminal));
+                                        ruleToNT[nonTerminal] = getNextFreeRuleIndex();
                                     }
-                                    else
-                                    {
-                                        if (!ruleToNT.ContainsKey(nonTerminal))
-                                        {
-                                            ruleToNT[nonTerminal] = getNextFreeRuleIndex();
-                                        }
-                                        nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
-                                    }
+                                    nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
                                 }
+                            }
+                            
+                            
+                            // more than two rules, insert intermediate rule indexes
+                            while (nonTerminalRules.Count > 2)
+                            {
+                                int ruleIndex2 = nonTerminalRules.PopLast();
+                                int ruleIndex1 = nonTerminalRules.PopLast();
                                 
+                                int key = computeRuleKey(ruleIndex1, ruleIndex2);
+                                int nextIndex = getNextFreeRuleIndex();
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
+                                NTtoNT[key].AddLast(nextIndex);
+                                nonTerminalRules.AddLast(nextIndex);
+                            }    
+                            
                                 
-                                // more than two rules
-                                while (nonTerminalRules.Count > 2)
-                                {
-                                    int ruleIndex2 = nonTerminalRules.PopLast();
-                                    int ruleIndex1 = nonTerminalRules.PopLast();
-                                    
-                                    int n = getNextFreeRuleIndex();
-                                    
-                                    int key = (ruleIndex1 << 16) | ruleIndex2;
-                                    if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
-                                    NTtoNT[key].Add(n);
-                                    
-                                    nonTerminalRules.AddLast(n);
-                                }    
+                            // two product rules
+                            if (nonTerminalRules.Count == 2)
+                            {
+                                int ruleIndex1 = nonTerminalRules.PopFirst();
+                                int ruleIndex2 = nonTerminalRules.PopFirst();
+                                int key = computeRuleKey(ruleIndex1, ruleIndex2);
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
+                                NTtoNT[key].AddLast(newRuleIndex);
                                 
-                                    
-                                // two product rules
-                                if (nonTerminalRules.Count == 2)
-                                {
-                                    int ruleIndex1 = nonTerminalRules.PopFirst();
-                                    int ruleIndex2 = nonTerminalRules.PopFirst();
-                                    int key = (ruleIndex1 << 16) | ruleIndex2;
-                                    if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
-                                    NTtoNT[key].Add(newRuleIndex);
-                                }
-                                // only one product rule
-                                else if (nonTerminalRules.Count == 1)
-                                {
+                            }
+                            // only one product rule
+                            else if (nonTerminalRules.Count == 1)
+                            {
+                                int ruleIndex1 = nonTerminalRules.First.Value;
+                                if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
                                 
-                                    int ruleIndex1 = nonTerminalRules.First.Value;
-                                    if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
-                                    
-                                    if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new ArrayList());
-                                    NTtoNT[ruleIndex1].Add(newRuleIndex);
-                                }
+                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new LinkedList<int>());
+                                NTtoNT[ruleIndex1].AddLast(newRuleIndex);
                             }
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("The file '" + grammerFilename + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
-                }
             }
             else
             {
-                Console.WriteLine("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
+                throw new Exception("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
             }
         }
-        
         
         
         public int getNextFreeRuleIndex()
@@ -241,6 +232,11 @@ namespace LipidCreator
         }
         
         
+        
+        public int computeRuleKey(int ruleIndex1, int ruleIndex2)
+        {
+            return (ruleIndex1 << SHIFT) | ruleIndex2;
+        }
         
         
         public ArrayList splitString(string text, char separator, char quote)
@@ -286,14 +282,14 @@ namespace LipidCreator
         }
         
         
-        public bool isTerminal(string token)
+        public bool isTerminal(string productToken)
         {
-            string[] tks = token.Split(quote);
+            string[] tks = productToken.Split(quote);
             if (tks.Length != 1 && tks.Length != 3) throw new Exception("Error: corrupted token in grammer");
             
             if (tks.Length == 1) return false;
         
-            if (token[0] == quote && token[token.Length - 1] == quote) return true;
+            if (productToken[0] == quote && productToken[productToken.Length - 1] == quote && productToken.Length > 2) return true;
 
             throw new Exception("Error: corrupted token in grammer");
         }
@@ -305,9 +301,9 @@ namespace LipidCreator
             ExtendedLinkedList<int> terminalRules = new ExtendedLinkedList<int>();
             foreach (char c in text)
             {
-                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new ArrayList());
+                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new LinkedList<int>());
                 int nextIndex = getNextFreeRuleIndex();
-                TtoNT[c].Add(nextIndex);
+                TtoNT[c].AddLast(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
             while (terminalRules.Count > 1)
@@ -317,9 +313,9 @@ namespace LipidCreator
                 
                 int nextIndex = getNextFreeRuleIndex();
                 
-                int key = (ruleIndex1 << 16) | ruleIndex2;
-                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new ArrayList());
-                NTtoNT[key].Add(nextIndex);
+                int key = computeRuleKey(ruleIndex1, ruleIndex2);
+                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
+                NTtoNT[key].AddLast(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
             return terminalRules.First.Value;
@@ -344,6 +340,36 @@ namespace LipidCreator
             }
             return collection;
         }
+        
+        
+        
+        
+        
+        public LinkedList<int> collectBackwards(int childRuleIndex, int parentRuleIndex)
+        {
+            if (!NTtoNT.ContainsKey(childRuleIndex)) return null;
+            LinkedList<int> collection;
+            
+            foreach (int previousIndex in NTtoNT[childRuleIndex])
+            {
+                if (previousIndex == parentRuleIndex)
+                {
+                    collection = new LinkedList<int>();
+                    return collection;
+                }
+                else if (NTtoNT.ContainsKey(previousIndex))
+                {
+                    collection = collectBackwards(previousIndex, parentRuleIndex);
+                    if (collection != null)
+                    {
+                        collection.AddLast(previousIndex);
+                        return collection;
+                    }
+                }
+            }
+            return null;
+        }
+            
             
             
             
@@ -375,28 +401,22 @@ namespace LipidCreator
         // filling the syntax tree including events
         public void fillTree(TreeNode node, DPNode dpNode)
         {
-                    
+           
+            // checking and extending nodes for single rule chains
+            int key = (dpNode.left != null) ? computeRuleKey(dpNode.ruleIndex1, dpNode.ruleIndex2) : dpNode.ruleIndex2;
+            LinkedList<int> mergedRules = collectBackwards(key, node.ruleIndex);
+            if (mergedRules != null)
+            {
+                foreach (int ruleIndex in mergedRules)
+                {
+                    node.left = new TreeNode(ruleIndex, NTtoRule.ContainsKey(ruleIndex));
+                    node = node.left;
+                }
+            }
+            
+            
             if (dpNode.left != null) // null => leaf
             {
-                // checking and extending nodes for single rule chains
-                int key = (dpNode.ruleIndex1 << 16) | dpNode.ruleIndex2;
-                LinkedList<int> mergedRules = collectBackwards(key);
-                while (mergedRules.Last.Value != node.ruleIndex) mergedRules.RemoveLast();
-                if (mergedRules.Count > 2)
-                {
-                    mergedRules.RemoveFirst();
-                    mergedRules.RemoveLast();
-                    
-                    LinkedListNode<int> current = mergedRules.Last;
-                    while(current != null)
-                    {
-                        int r = current.Value;
-                        current = current.Previous;
-                        node.left = new TreeNode(r, NTtoRule.ContainsKey(r));
-                        node = node.left;
-                    }
-                }
-            
                 node.left = new TreeNode(dpNode.ruleIndex1, NTtoRule.ContainsKey(dpNode.ruleIndex1));
                 node.right = new TreeNode(dpNode.ruleIndex2, NTtoRule.ContainsKey(dpNode.ruleIndex2));
                 fillTree(node.left, dpNode.left);
@@ -435,14 +455,13 @@ namespace LipidCreator
                 if (!TtoNT.ContainsKey(c)) return;
                 foreach (int ruleIndex in TtoNT[c])
                 {
-                    DPNode dpNode = new DPNode((int)c, 0, null, null);
+                    DPNode dpNode = new DPNode((int)c, ruleIndex, null, null);
                     foreach (int previousIndex in collectBackwards(ruleIndex))
                     {
                         dpTable[0][i].Add(previousIndex, dpNode);
                     }
                 }
             }        
-            
             
             for (int i = 1 ; i < n; ++i)
             {
@@ -455,16 +474,15 @@ namespace LipidCreator
                         {
                             foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[i - k1][j + k1])
                             {
-                                int key = (indexPair1.Key << 16) | indexPair2.Key;
+                                int key = computeRuleKey(indexPair1.Key, indexPair2.Key);
                                 if (!NTtoNT.ContainsKey(key)) continue;
                                 
                                 DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
-                                
                                 foreach (int ruleIndex in NTtoNT[key])
                                 {
                                     foreach (int previousIndex in collectBackwards(ruleIndex))
-                                    {   
-                                        dpTable[i][j].Add(previousIndex, content);
+                                    {
+                                        if (!dpTable[i][j].ContainsKey(previousIndex)) dpTable[i][j].Add(previousIndex, content);
                                     }
                                 }
                             }
@@ -473,11 +491,11 @@ namespace LipidCreator
                 }
             }
             
-            if (dpTable[n - 1][0].ContainsKey(0)) // 0 => start rule
+            if (dpTable[n - 1][0].ContainsKey(1)) // 0 => start rule
             {
                 wordInGrammer = true;
-                parseTree = new TreeNode(0, NTtoRule.ContainsKey(0));
-                fillTree(parseTree, dpTable[n - 1][0][0]);
+                parseTree = new TreeNode(1, NTtoRule.ContainsKey(1));
+                fillTree(parseTree, dpTable[n - 1][0][1]);
             }
         }
     }    

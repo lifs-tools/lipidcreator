@@ -108,11 +108,11 @@ namespace LipidCreator
         public TreeNode parseTree;
         public bool wordInGrammer;
         public Dictionary<int, string> NTtoRule;
-        public ParserEventHandler parserEventHandler;
+        public BaseParserEventHandler parserEventHandler;
         public const int SHIFT = 16;
     
     
-        public Parser(ParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
+        public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
         {
             nextFreeRuleIndex = 1;
             TtoNT = new Dictionary<char, LinkedList<int>>();
@@ -166,7 +166,7 @@ namespace LipidCreator
                             
                             foreach (string nonTerminal in nonTerminals)
                             {
-                                if (isTerminal(nonTerminal))
+                                if (isTerminal(nonTerminal, quote))
                                 {
                                     nonTerminalRules.AddLast(addTerminal(nonTerminal));
                                 }
@@ -239,7 +239,7 @@ namespace LipidCreator
         }
         
         
-        public ArrayList splitString(string text, char separator, char quote)
+        public static ArrayList splitString(string text, char separator, char quote)
         {
             bool inQuote = false;
             ArrayList tokens = new ArrayList();
@@ -274,7 +274,7 @@ namespace LipidCreator
         }
         
         
-        public string strip(string text, char stripChar)
+        public static string strip(string text, char stripChar)
         {
             while (text.Length > 0 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
             while (text.Length > 0 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
@@ -282,7 +282,7 @@ namespace LipidCreator
         }
         
         
-        public bool isTerminal(string productToken)
+        public static bool isTerminal(string productToken, char quote)
         {
             string[] tks = productToken.Split(quote);
             if (tks.Length != 1 && tks.Length != 3) throw new Exception("Error: corrupted token in grammer");
@@ -344,7 +344,6 @@ namespace LipidCreator
         
         
         
-        
         public LinkedList<int> collectBackwards(int childRuleIndex, int parentRuleIndex)
         {
             if (!NTtoNT.ContainsKey(childRuleIndex)) return null;
@@ -392,7 +391,6 @@ namespace LipidCreator
         
         public void raiseEvents()
         {
-            parserEventHandler.resetLipidBuilder();
             if (parseTree != null) raiseEventsRecursive(parseTree);
         }
         

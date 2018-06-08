@@ -40,7 +40,7 @@ TGL = HG_TGL headgroup_separator FA unsorted_FA_separator FA unsorted_FA_separat
 
 HG_MGL = "MAG"
 HG_DGL = "DAG"
-HG_SGL = "MGAG" | "DGDG" | "SQDG"
+HG_SGL = "MGDG" | "DGDG" | "SQDG"
 HG_TGL = "TAG"
 
 
@@ -77,8 +77,8 @@ HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2C
 ## cholesterol lipids
 Cholesterol = CH | CHe
 CH = "Ch"
-CHe = "ChE " FApure
-
+CHe = CHe_HG headgroup_separator FA
+CHe_HG = "ChE"
 
 
 ## mediator lipids
@@ -88,16 +88,16 @@ Mediator = "10-HDoHE" | "11-HDoHE" | "11-HETE" | "11,12-DHET" | "11(12)-EET"| "1
 
 ## generic rules
 FA = FA_pure | FA_pure Ether
-FA_pure = Carbon ":" DB | Carbon ":" DB ";" Hydroxyl
+FA_pure = Carbon Carbon_DB_separator DB | Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl
 Ether = "a" | "p"
-LCB = Carbon ":" DB ";" Hydroxyl
+LCB = Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl
 Carbon = Number
-DB = DB_count | DB_count "(" DB_position ")"
+DB = DB_count | DB_count round_open_bracket DB_position round_close_bracket
 DB_count = Number
-DB_position = DB_position "," DB_position | Number CisTrans
+DB_position = Number CisTrans | Number CisTrans | DB_position DB_position_separator DB_position
 CisTrans = "E" | "Z"
 Hydroxyl = Number
-Number = Number Number | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+Number =  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | Number Number
 
 
 
@@ -106,3 +106,8 @@ Number = Number Number | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "
 sorted_FA_separator = "/"
 unsorted_FA_separator = "-"
 headgroup_separator = " "
+Carbon_DB_separator = ":"
+DB_hydroxyl_separator = ";"
+DB_position_separator = ","
+round_open_bracket = "("
+round_close_bracket = ")"

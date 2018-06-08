@@ -31,21 +31,21 @@ namespace LipidCreator
 {    
     
     [Serializable]
-    public class ParserEventHandler
+    public class ParserEventHandler : BaseParserEventHandler
     {
-        public Dictionary<string, Action<Parser.TreeNode>> registeredEvents;
         public LipidCreator lipidCreator;
         public Lipid lipid;
         public FattyAcidGroupEnumerator fagEnum;
         public FattyAcidGroup fag;
     
     
-        public ParserEventHandler(LipidCreator _lipidCreator)
+        public ParserEventHandler(LipidCreator _lipidCreator) : base()
         {
             lipidCreator = _lipidCreator;
-            resetLipidBuilder();
+            resetLipidBuilder(null);
             
-            registeredEvents = new Dictionary<string, Action<Parser.TreeNode>>();
+            registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
+            
             registeredEvents.Add("FA_pre_event", FAPreEvent);
             registeredEvents.Add("FA_post_event", FAPostEvent);
             
@@ -86,18 +86,8 @@ namespace LipidCreator
         }
         
         
-        public void handleEvent(string eventName, Parser.TreeNode node)
-        {
-            if (registeredEvents.ContainsKey(eventName))
-            {
-                registeredEvents[eventName](node);
-            }
-        }
         
-        
-        
-        
-        public void resetLipidBuilder()
+        public void resetLipidBuilder(Parser.TreeNode node)
         {
             lipid = null;
             fagEnum = null;

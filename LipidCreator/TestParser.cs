@@ -33,19 +33,142 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Globalization;
-
+using System.Security.Cryptography;
 
 namespace LipidCreator
 {
     public class TestParser
     {
+    
+        static RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+    
+        public static LinkedList<string> assembleLipidname(Dictionary<int, ArrayList> rules, Dictionary<int, string> terminals, LinkedList<string> lipidname, int rule, int prevRandom)
+        {
+        
+            int p = -2;
+            byte[] byteArray = new byte[4];
+            do {
+                provider.GetBytes(byteArray);
+                p = (int)(BitConverter.ToUInt32(byteArray, 0) % rules[rule].Count);
+            }
+            while (p == prevRandom && prevRandom != 0);
+            
+            foreach (int r in (ArrayList)rules[rule][p])
+            {
+                if (terminals.ContainsKey(r)) lipidname.AddLast(terminals[r]);
+                else lipidname = assembleLipidname(rules, terminals, lipidname, r, p);
+            }
+            return lipidname;
+        }
+    
         [STAThread]
         public static void Main(string[] args)
         {
-            LipidCreator lcf = new LipidCreator(null);
+        
+        
+            string grammerFilename = "data/lipidnames.grammer";
+            char quote = '"';
             
+            
+            TestParserEventHandler tpeh = new TestParserEventHandler();
+            Parser pp = new Parser(tpeh, grammerFilename, quote);
+            
+            
+            // creating a random lipid name generator
+            if (File.Exists(grammerFilename))
+            {
+                int lineCounter = 0;
+                int ruleNum = 1;
+                Dictionary<int, ArrayList> rules = new Dictionary<int, ArrayList>();
+                Dictionary<int, string> terminals = new Dictionary<int, string>();
+                Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
+                using (StreamReader sr = new StreamReader(grammerFilename))
+                {
+                    string line;
+                    while((line = sr.ReadLine()) != null)
+                    {
+                        lineCounter++;
+                        // skip empty lines and comments
+                        if (line.Length < 1) continue;
+                        if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
+                        if (line.Length < 1) continue;
+                        line = Parser.strip(line, ' ');
+                        if (line.Length < 2) continue;
+                        
+                        ArrayList tokens_level_1 = new ArrayList();
+                        foreach (string t in Parser.splitString(line, '=', quote)) tokens_level_1.Add(Parser.strip(t, ' '));
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+
+                        string rule = (string)tokens_level_1[0];
+                        
+                        ArrayList products = new ArrayList();
+                        foreach (string pt in Parser.splitString((string)tokens_level_1[1], '|', quote)) products.Add(Parser.strip(pt, ' '));
+                        
+                        
+                        if (!ruleToNT.ContainsKey(rule))
+                        {
+                            ruleToNT.Add(rule, ruleNum++);
+                        }
+                        int currentRule = ruleToNT[rule];
+                        
+                        if (!rules.ContainsKey(currentRule)) rules.Add(currentRule, new ArrayList());
+                        
+                        foreach (string product in products)
+                        {
+                            ArrayList productRules = new ArrayList();
+                            rules[currentRule].Add(productRules);
+                            
+                            LinkedList<string> nonTerminals = new LinkedList<string>();
+                            foreach (string NT in Parser.splitString(product, ' ', quote)) nonTerminals.AddLast(Parser.strip(NT, ' '));
+        
+                            foreach (string nonTerminal in nonTerminals)
+                            {
+                                int nextRule = ruleNum++;
+                                if (Parser.isTerminal(nonTerminal, quote))
+                                {
+                                    nextRule = ruleNum++;
+                                    terminals.Add(nextRule, Parser.strip(nonTerminal, quote));
+                                }
+                                else
+                                {
+                                    if (!ruleToNT.ContainsKey(nonTerminal))
+                                    {
+                                        ruleToNT[nonTerminal] = ruleNum++;
+                                    }
+                                    nextRule = ruleToNT[nonTerminal];
+                                }
+                                productRules.Add(nextRule);
+                            }
+                        }
+                    }
+                }
+                
+                
+                Console.WriteLine("testing generated lipid names:");
+                int ii = 0;
+                while (ii++ < 100){
+                    LinkedList<string> lipidnameList = assembleLipidname(rules, terminals, new LinkedList<string>(), 1, -1);
+                    
+                    string lipidname = String.Join("", lipidnameList);
+                    
+                    Console.WriteLine(lipidname);
+                    if (lipidname.Length > 100) continue;
+                    pp.parse(lipidname);
+                    pp.raiseEvents();
+                    string parsedName = ((TestParserEventHandler)tpeh).lipidname;
+                    if (!lipidname.Equals(parsedName)) throw new Exception("Error, something went wrong: " + parsedName);
+                }
+            }
+            else
+            {
+                throw new Exception("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
+            }
+        
+            Console.WriteLine("");
+        
+            LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
-            Parser p = new Parser(peh, "data/lipidnames.grammer", '"');
+            Parser p = new Parser(peh, grammerFilename, quote);
             
             /*
             p.parse("LPE 12:2(12Z,13E)");

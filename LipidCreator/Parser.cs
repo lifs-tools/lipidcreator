@@ -27,6 +27,7 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 namespace LipidCreator
 {    
@@ -434,10 +435,17 @@ namespace LipidCreator
         // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
+        
             wordInGrammer = false;
             parseTree = null;
             int n = textToParse.Length;
-            Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][]; // dp stands for dynamic programming, nothing else
+            // dp stands for dynamic programming, nothing else
+            Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][];
+            
+            
+            //Stopwatch stopWatch = new Stopwatch();
+            
+            //stopWatch.Start();
             for (int i = 0; i < n; ++i)
             {
                 dpTable[i] = new Dictionary<int, DPNode>[n - i];
@@ -456,21 +464,24 @@ namespace LipidCreator
                     DPNode dpNode = new DPNode((int)c, ruleIndex, null, null);
                     foreach (int previousIndex in collectBackwards(ruleIndex))
                     {
-                        dpTable[0][i].Add(previousIndex, dpNode);
+                        dpTable[i][0].Add(previousIndex, dpNode);
                     }
                 }
-            }        
+            }
             
             for (int i = 1 ; i < n; ++i)
             {
                 for (int j = 0; j < n - i; ++j)
                 {
+                    Dictionary<int, DPNode>[] D = dpTable[j];
+                    int jp1 = j + 1;
+                    int im1 = i - 1;
                     for (int k = 0; k < i; ++k)
-                    {
-                        int k1 = k + 1;
-                        foreach (KeyValuePair<int, DPNode> indexPair1 in dpTable[k][j])
+                    {   
+                        if (D[k].Count == 0 || dpTable[jp1 + k][im1 - k].Count == 0) continue;
+                        foreach (KeyValuePair<int, DPNode> indexPair1 in D[k])
                         {
-                            foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[i - k1][j + k1])
+                            foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
                             {
                                 int key = computeRuleKey(indexPair1.Key, indexPair2.Key);
                                 if (!NTtoNT.ContainsKey(key)) continue;
@@ -480,7 +491,7 @@ namespace LipidCreator
                                 {
                                     foreach (int previousIndex in collectBackwards(ruleIndex))
                                     {
-                                        if (!dpTable[i][j].ContainsKey(previousIndex)) dpTable[i][j].Add(previousIndex, content);
+                                        D[i][previousIndex] = content;
                                     }
                                 }
                             }
@@ -488,13 +499,26 @@ namespace LipidCreator
                     }
                 }
             }
+            //stopWatch.Stop();
+            //Console.WriteLine(stopWatch.Elapsed);
             
-            if (dpTable[n - 1][0].ContainsKey(1)) // 0 => start rule
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            if (dpTable[0][n - 1].ContainsKey(1)) // 0 => start rule
             {
                 wordInGrammer = true;
                 parseTree = new TreeNode(1, NTtoRule.ContainsKey(1));
-                fillTree(parseTree, dpTable[n - 1][0][1]);
+                fillTree(parseTree, dpTable[0][n - 1][1]);
             }
+            
         }
     }    
 }

@@ -78,8 +78,6 @@ namespace LipidCreator
         
         
             Environment.Exit(0);
-        
-        
             */
         
         
@@ -90,6 +88,10 @@ namespace LipidCreator
             TestParserEventHandler tpeh = new TestParserEventHandler();
             Parser pp = new Parser(tpeh, grammerFilename, quote);
                         
+            
+            //pp.parse("PE 16:2-18:3;1");
+            //Environment.Exit(0);
+            
             
             // creating a random lipid name generator
             if (File.Exists(grammerFilename))

@@ -28,6 +28,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace LipidCreator
 {    
@@ -223,6 +224,37 @@ namespace LipidCreator
             {
                 throw new Exception("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
             }
+            
+            
+            
+            HashSet<char> keys = new HashSet<char>(TtoNT.Keys);
+            foreach(char c in keys)
+            {
+                HashSet<int> rules = new HashSet<int>(TtoNT[c]);
+                TtoNT[c].Clear();
+                foreach(int rule in rules)
+                {
+                    foreach (int p in collectBackwards(rule))
+                    {
+                        int key = (p << 16) | rule;
+                        TtoNT[c].Add(key);
+                    }
+                }
+            }
+            
+            
+            
+            
+            
+            HashSet<int> keysNT = new HashSet<int>(NTtoNT.Keys);
+            foreach(int r in keysNT)
+            {
+                HashSet<int> rules = new HashSet<int>(NTtoNT[r]);
+                foreach(int rule in rules)
+                {
+                    foreach (int p in collectBackwards(rule)) NTtoNT[r].Add(p);
+                }
+            }
         }
         
         
@@ -345,6 +377,8 @@ namespace LipidCreator
         
         
         
+        
+        
         public LinkedList<int> collectBackwards(int childRuleIndex, int parentRuleIndex)
         {
             if (!NTtoNT.ContainsKey(childRuleIndex)) return null;
@@ -443,8 +477,9 @@ namespace LipidCreator
             Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][];
             
             
-            //Stopwatch stopWatch = new Stopwatch();
             
+            
+            //Stopwatch stopWatch = new Stopwatch();
             //stopWatch.Start();
             for (int i = 0; i < n; ++i)
             {
@@ -459,26 +494,29 @@ namespace LipidCreator
             {
                 char c = textToParse[i];
                 if (!TtoNT.ContainsKey(c)) return;
+                
                 foreach (int ruleIndex in TtoNT[c])
                 {
-                    DPNode dpNode = new DPNode((int)c, ruleIndex, null, null);
-                    foreach (int previousIndex in collectBackwards(ruleIndex))
-                    {
-                        dpTable[i][0].Add(previousIndex, dpNode);
-                    }
+                    int newKey = ruleIndex >> 16;
+                    int oldKey = ruleIndex & 65535;
+                    DPNode dpNode = new DPNode((int)c, oldKey, null, null);
+                    dpTable[i][0][newKey] =  dpNode;
                 }
             }
             
             for (int i = 1 ; i < n; ++i)
             {
+                
                 for (int j = 0; j < n - i; ++j)
                 {
                     Dictionary<int, DPNode>[] D = dpTable[j];
+                    Dictionary<int, DPNode> Di = D[i];
                     int jp1 = j + 1;
                     int im1 = i - 1;
                     for (int k = 0; k < i; ++k)
                     {   
                         if (D[k].Count == 0 || dpTable[jp1 + k][im1 - k].Count == 0) continue;
+                        
                         foreach (KeyValuePair<int, DPNode> indexPair1 in D[k])
                         {
                             foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
@@ -489,10 +527,7 @@ namespace LipidCreator
                                 DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
                                 foreach (int ruleIndex in NTtoNT[key])
                                 {
-                                    foreach (int previousIndex in collectBackwards(ruleIndex))
-                                    {
-                                        D[i][previousIndex] = content;
-                                    }
+                                    Di[ruleIndex] = content;
                                 }
                             }
                         }
@@ -501,11 +536,6 @@ namespace LipidCreator
             }
             //stopWatch.Stop();
             //Console.WriteLine(stopWatch.Elapsed);
-            
-            
-            
-            
-            
             
             
             

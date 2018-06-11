@@ -159,6 +159,7 @@
     <Compile Include="MS2Fragment.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserEventHandler.cs" />
+    <Compile Include="BaseParserEventHandler.cs" />
     <Compile Include="NewFragment.cs">
       <SubType>Form</SubType>
     </Compile>

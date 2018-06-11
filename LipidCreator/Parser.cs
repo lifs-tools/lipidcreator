@@ -103,8 +103,8 @@ namespace LipidCreator
         
         
         public int nextFreeRuleIndex;
-        public Dictionary<char, LinkedList<int>> TtoNT;
-        public Dictionary<int, LinkedList<int>> NTtoNT;
+        public Dictionary<char, HashSet<int>> TtoNT;
+        public Dictionary<int, HashSet<int>> NTtoNT;
         public char quote;
         public TreeNode parseTree;
         public bool wordInGrammer;
@@ -116,8 +116,8 @@ namespace LipidCreator
         public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
         {
             nextFreeRuleIndex = 1;
-            TtoNT = new Dictionary<char, LinkedList<int>>();
-            NTtoNT = new Dictionary<int, LinkedList<int>>();
+            TtoNT = new Dictionary<char, HashSet<int>>();
+            NTtoNT = new Dictionary<int, HashSet<int>>();
             NTtoRule = new Dictionary<int, string>();
             quote = _quote;
             parserEventHandler = _parserEventHandler;
@@ -190,8 +190,8 @@ namespace LipidCreator
                                 
                                 int key = computeRuleKey(ruleIndex1, ruleIndex2);
                                 int nextIndex = getNextFreeRuleIndex();
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
-                                NTtoNT[key].AddLast(nextIndex);
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                                NTtoNT[key].Add(nextIndex);
                                 nonTerminalRules.AddLast(nextIndex);
                             }    
                             
@@ -202,8 +202,8 @@ namespace LipidCreator
                                 int ruleIndex1 = nonTerminalRules.PopFirst();
                                 int ruleIndex2 = nonTerminalRules.PopFirst();
                                 int key = computeRuleKey(ruleIndex1, ruleIndex2);
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
-                                NTtoNT[key].AddLast(newRuleIndex);
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                                NTtoNT[key].Add(newRuleIndex);
                                 
                             }
                             // only one product rule
@@ -212,8 +212,8 @@ namespace LipidCreator
                                 int ruleIndex1 = nonTerminalRules.First.Value;
                                 if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
                                 
-                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new LinkedList<int>());
-                                NTtoNT[ruleIndex1].AddLast(newRuleIndex);
+                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<int>());
+                                NTtoNT[ruleIndex1].Add(newRuleIndex);
                             }
                         }
                     }
@@ -302,9 +302,9 @@ namespace LipidCreator
             ExtendedLinkedList<int> terminalRules = new ExtendedLinkedList<int>();
             foreach (char c in text)
             {
-                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new LinkedList<int>());
+                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new HashSet<int>());
                 int nextIndex = getNextFreeRuleIndex();
-                TtoNT[c].AddLast(nextIndex);
+                TtoNT[c].Add(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
             while (terminalRules.Count > 1)
@@ -315,8 +315,8 @@ namespace LipidCreator
                 int nextIndex = getNextFreeRuleIndex();
                 
                 int key = computeRuleKey(ruleIndex1, ruleIndex2);
-                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new LinkedList<int>());
-                NTtoNT[key].AddLast(nextIndex);
+                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                NTtoNT[key].Add(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
             return terminalRules.First.Value;

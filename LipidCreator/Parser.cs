@@ -139,7 +139,8 @@ namespace LipidCreator
                         lineCounter++;
                         // skip empty lines and comments
                         if (line.Length < 1) continue;
-                        if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
+                        line = strip(line, ' ');
+                        if (line[0] == '#') continue;
                         if (line.Length < 1) continue;
                         line = strip(line, ' ');
                         if (line.Length < 2) continue;
@@ -163,23 +164,38 @@ namespace LipidCreator
                         {
                             LinkedList<string> nonTerminals = new LinkedList<string>();
                             ExtendedLinkedList<int> nonTerminalRules = new ExtendedLinkedList<int>();
-                            foreach (string NT in splitString(product, ' ', quote)) nonTerminals.AddLast(strip(NT, ' '));
-                            
-                            
-                            foreach (string nonTerminal in nonTerminals)
+                            foreach (string NT in splitString(product, ' ', quote))
                             {
-                                if (isTerminal(nonTerminal, quote))
+                                string stripedNT = strip(NT, ' ');
+                                if (stripedNT[0] == '#') break;
+                                nonTerminals.AddLast(stripedNT);
+                            }
+                            
+                            string NTFirst = nonTerminals.First.Value;
+                            if (nonTerminals.Count > 1 || !isTerminal(NTFirst, quote) || NTFirst.Length != 3)
+                            {
+                            
+                                foreach (string nonTerminal in nonTerminals)
                                 {
-                                    nonTerminalRules.AddLast(addTerminal(nonTerminal));
-                                }
-                                else
-                                {
-                                    if (!ruleToNT.ContainsKey(nonTerminal))
+                                    if (isTerminal(nonTerminal, quote))
                                     {
-                                        ruleToNT[nonTerminal] = getNextFreeRuleIndex();
+                                        nonTerminalRules.AddLast(addTerminal(nonTerminal));
                                     }
-                                    nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
+                                    else
+                                    {
+                                        if (!ruleToNT.ContainsKey(nonTerminal))
+                                        {
+                                            ruleToNT[nonTerminal] = getNextFreeRuleIndex();
+                                        }
+                                        nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                char c = NTFirst[1];
+                                if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<int>();
+                                TtoNT[c].Add(newRuleIndex);
                             }
                             
                             
@@ -226,7 +242,6 @@ namespace LipidCreator
             }
             
             
-            
             HashSet<char> keys = new HashSet<char>(TtoNT.Keys);
             foreach(char c in keys)
             {
@@ -236,14 +251,11 @@ namespace LipidCreator
                 {
                     foreach (int p in collectBackwards(rule))
                     {
-                        int key = (p << 16) | rule;
+                        int key = computeRuleKey(p, rule);
                         TtoNT[c].Add(key);
                     }
                 }
             }
-            
-            
-            
             
             
             HashSet<int> keysNT = new HashSet<int>(NTtoNT.Keys);
@@ -477,6 +489,13 @@ namespace LipidCreator
             Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][];
             
             
+            long[] lookupLeftKey = new long[1 + ((nextFreeRuleIndex + 1) >> 7)];
+            for (int i = 0; i < lookupLeftKey.Length; ++i) lookupLeftKey[i] = 0L;
+            foreach(int rule in NTtoNT.Keys)
+            {
+                int key1 = rule >> SHIFT;
+                lookupLeftKey[key1 >> 7] |= 1L << (key1 & 63);
+            }
             
             
             //Stopwatch stopWatch = new Stopwatch();
@@ -497,7 +516,7 @@ namespace LipidCreator
                 
                 foreach (int ruleIndex in TtoNT[c])
                 {
-                    int newKey = ruleIndex >> 16;
+                    int newKey = ruleIndex >> SHIFT;
                     int oldKey = ruleIndex & 65535;
                     DPNode dpNode = new DPNode((int)c, oldKey, null, null);
                     dpTable[i][0][newKey] =  dpNode;
@@ -519,6 +538,8 @@ namespace LipidCreator
                         
                         foreach (KeyValuePair<int, DPNode> indexPair1 in D[k])
                         {
+                            if (((lookupLeftKey[indexPair1.Key >> 7] >> (indexPair1.Key & 63)) & 1) != 1) continue;
+                            
                             foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
                             {
                                 int key = computeRuleKey(indexPair1.Key, indexPair2.Key);

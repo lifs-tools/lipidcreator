@@ -1,11 +1,11 @@
 R = C | E '=' P | E '=' P C
 C = '#' All
-E = NT | s E | E s
-P = NT | s P | P s | P '|' P | P s P | T
-NT = Var
-T = '"' All '"'
+E = Var | s E | E s
+P = Var | s P | P s | P '|' P | P s P | T
+T = Q All Q
 Var = Char | Char Var_All
 Char = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
 Var_All = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '_' | Char | Var_All Var_All
 All = Var_All | All All | '-' | '(' | ')' | ',' | ' ' | ':' | ';' | '[' | ']' | '<' | '>' | '!' | '?' | '.' | '~' | '+' | '/' | '\' | '=' | '%' | '|'
 s = ' ' | s s
+Q = '"'

@@ -74,6 +74,67 @@ namespace LipidCreator
         }
         
         
+        
+        public class Bitfield
+        {
+            public ulong[] field;
+            public ulong[] superfield;
+            static readonly ulong multiplicator = 0x022fdd63cc95386dUL;
+            static readonly public int[] positions = new int[64] // from http://chessprogramming.wikispaces.com/De+Bruijn+Sequence+Generator
+            { 
+                0, 1,  2, 53,  3,  7, 54, 27, 4, 38, 41,  8, 34, 55, 48, 28,
+                62,  5, 39, 46, 44, 42, 22,  9, 24, 35, 59, 56, 49, 18, 29, 11,
+                63, 52,  6, 26, 37, 40, 33, 47, 61, 45, 43, 21, 23, 58, 17, 10,
+                51, 25, 36, 32, 60, 20, 57, 16, 50, 31, 19, 15, 30, 14, 13, 12
+            };
+            
+            public Bitfield(int length)
+            {
+                int l = 1 + ((length + 1) >> 6);
+                int s = 1 + ((l + 1) >> 6);
+                field = new ulong[l];
+                superfield = new ulong[s];
+                for (int i = 0; i < l; ++i) field[i] = 0;
+                for (int i = 0; i < s; ++i) superfield[i] = 0;
+            }
+            
+            public void set(int pos)
+            {
+                field[pos >> 6] |= (ulong)(1UL << (pos & 63));
+                superfield[pos >> 12] |= (ulong)(1UL << ((pos >> 6) & 63));
+            }
+            
+            public System.Collections.Generic.IEnumerable<int> getBitPositions()
+            {
+                int spre = 0;
+                foreach (ulong cell in superfield)
+                {
+                    ulong sv = cell;
+                    while (sv != 0)
+                    {
+                        // algorithm for getting least significant bit position
+                        ulong sv1 = (ulong)((long)sv & -(long)sv);
+                        int pos = spre + positions[(ulong)(sv1 * multiplicator) >> 58];
+                        
+                        ulong v = field[pos];
+                        while (v != 0)
+                        {
+                            // algorithm for getting least significant bit position
+                            ulong v1 = (ulong)((long)v & -(long)v);
+                            yield return (pos << 6) + positions[(ulong)(v1 * multiplicator) >> 58];
+                            v &= v - 1;
+                        }
+                        
+                        sv &= sv - 1;
+                    }
+                    spre += 64;
+                }
+            }
+        }
+        
+        
+        
+        
     
         public class TreeNode
         {
@@ -487,15 +548,10 @@ namespace LipidCreator
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
             Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][];
+            // Ks is a lookup, which fields in the dpTable are filled
+            Bitfield[] Ks = new Bitfield[n];
             
             
-            long[] lookupLeftKey = new long[1 + ((nextFreeRuleIndex + 1) >> 7)];
-            for (int i = 0; i < lookupLeftKey.Length; ++i) lookupLeftKey[i] = 0L;
-            foreach(int rule in NTtoNT.Keys)
-            {
-                int key1 = rule >> SHIFT;
-                lookupLeftKey[key1 >> 7] |= 1L << (key1 & 63);
-            }
             
             
             //Stopwatch stopWatch = new Stopwatch();
@@ -503,10 +559,8 @@ namespace LipidCreator
             for (int i = 0; i < n; ++i)
             {
                 dpTable[i] = new Dictionary<int, DPNode>[n - i];
-                for (int j = 0; j < n - i; ++j)
-                {
-                    dpTable[i][j] = new Dictionary<int, DPNode>();
-                }
+                Ks[i] = new Bitfield(n - 1);
+                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<int, DPNode>();
             }
             
             for (int i = 0; i < n; ++i)
@@ -520,6 +574,7 @@ namespace LipidCreator
                     int oldKey = ruleIndex & 65535;
                     DPNode dpNode = new DPNode((int)c, oldKey, null, null);
                     dpTable[i][0][newKey] =  dpNode;
+                    Ks[i].set(0);
                 }
             }
             
@@ -532,14 +587,14 @@ namespace LipidCreator
                     Dictionary<int, DPNode> Di = D[i];
                     int jp1 = j + 1;
                     int im1 = i - 1;
-                    for (int k = 0; k < i; ++k)
+                    
+                    foreach(int k in Ks[j].getBitPositions())
                     {   
-                        if (D[k].Count == 0 || dpTable[jp1 + k][im1 - k].Count == 0) continue;
+                        if (k >= i) break;
+                        if (dpTable[jp1 + k][im1 - k].Count == 0) continue;
                         
                         foreach (KeyValuePair<int, DPNode> indexPair1 in D[k])
                         {
-                            if (((lookupLeftKey[indexPair1.Key >> 7] >> (indexPair1.Key & 63)) & 1) != 1) continue;
-                            
                             foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
                             {
                                 int key = computeRuleKey(indexPair1.Key, indexPair2.Key);
@@ -549,6 +604,7 @@ namespace LipidCreator
                                 foreach (int ruleIndex in NTtoNT[key])
                                 {
                                     Di[ruleIndex] = content;
+                                    Ks[j].set(i);
                                 }
                             }
                         }

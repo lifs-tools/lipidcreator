@@ -55,7 +55,6 @@ namespace LipidCreator
         public string precursorAdductFormula;
         public double precursorM_Z;
         public int precursorCharge;
-        public string adduct;
         public bool addPrecursor;
         public Dictionary<int, int> atomsCount;
         public FattyAcid fa1;
@@ -278,7 +277,6 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                Console.WriteLine(fragment.fragmentCharge + " " + (chargeToAdduct.ContainsKey(fragment.fragmentCharge)));
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);

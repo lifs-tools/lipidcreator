@@ -221,10 +221,10 @@ namespace LipidCreator
                                     precursorData.lipidClass = headgroup;
                                     precursorData.precursorName = key;
                                     precursorData.precursorIonFormula = chemForm;
-                                    precursorData.precursorAdduct = adductForm;
+                                    precursorData.precursorAdduct = adduct.Key;
+                                    precursorData.precursorAdductFormula = adductForm;
                                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                     precursorData.precursorCharge = charge;
-                                    precursorData.adduct = adduct.Key;
                                     precursorData.atomsCount = headgroups[headgroup].elements;
                                     precursorData.fa1 = sortedAcids[0];
                                     precursorData.fa2 = sortedAcids[1];
@@ -268,7 +268,7 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(heavyAtomsCount, heavyFA4.atomsCount);
                                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                         string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                                        string heavyadductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
+                                        string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                                         int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                                         double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
                                                                             
@@ -280,10 +280,10 @@ namespace LipidCreator
                                         heavyPrecursorData.lipidClass = heavyHeadgroup;
                                         heavyPrecursorData.precursorName = heavyKey;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                        heavyPrecursorData.precursorAdduct = heavyadductForm;
+                                        heavyPrecursorData.precursorAdduct = adduct.Key;
+                                        heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                                         heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
                                         heavyPrecursorData.precursorCharge = heavyCharge;
-                                        heavyPrecursorData.adduct = adduct.Key;
                                         heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                         heavyPrecursorData.fa1 = heavySortedAcids[0];
                                         heavyPrecursorData.fa2 = heavySortedAcids[1];
@@ -364,10 +364,10 @@ namespace LipidCreator
                             precursorData.lipidClass = headgroup;
                             precursorData.precursorName = key;
                             precursorData.precursorIonFormula = chemForm;
-                            precursorData.precursorAdduct = adductForm;
+                            precursorData.precursorAdduct = adduct.Key;
+                            precursorData.precursorAdductFormula = adductForm;
                             precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                             precursorData.precursorCharge = charge;
-                            precursorData.adduct = adduct.Key;
                             precursorData.atomsCount = headgroups[headgroup].elements;
                             precursorData.fa1 = fa1;
                             precursorData.fa2 = null;
@@ -410,10 +410,10 @@ namespace LipidCreator
                                 heavyPrecursorData.lipidClass = heavyHeadgroup;
                                 heavyPrecursorData.precursorName = heavyKey;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                heavyPrecursorData.precursorAdduct = heavyAdductForm;
+                                heavyPrecursorData.precursorAdduct = adduct.Key;
+                                heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                                 heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
                                 heavyPrecursorData.precursorCharge = heavyCharge;
-                                heavyPrecursorData.adduct = adduct.Key;
                                 heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                 heavyPrecursorData.fa1 = heavyFA1;
                                 heavyPrecursorData.fa2 = null;
@@ -513,10 +513,10 @@ namespace LipidCreator
                                 precursorData.lipidClass = headgroup;
                                 precursorData.precursorName = key;
                                 precursorData.precursorIonFormula = chemForm;
-                                precursorData.precursorAdduct = adductForm;
+                                precursorData.precursorAdduct = adduct.Key;
+                                precursorData.precursorAdductFormula = adductForm;
                                 precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                 precursorData.precursorCharge = charge;
-                                precursorData.adduct = adduct.Key;
                                 precursorData.atomsCount = headgroups[headgroup].elements;
                                 
                                 if (isFAa || isPlamalogen)
@@ -575,10 +575,10 @@ namespace LipidCreator
                                     heavyPrecursorData.lipidClass = heavyHeadgroup;
                                     heavyPrecursorData.precursorName = heavyKey;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                    heavyPrecursorData.precursorAdduct = heavyAdductForm;
+                                    heavyPrecursorData.precursorAdduct = adduct.Key;
+                                    heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                                     heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
                                     heavyPrecursorData.precursorCharge = heavyCharge;
-                                    heavyPrecursorData.adduct = adduct.Key;
                                     heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                     heavyPrecursorData.fa1 = heavySortedAcids[0];
                                     heavyPrecursorData.fa2 = heavySortedAcids[1];

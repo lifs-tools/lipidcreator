@@ -130,10 +130,10 @@ namespace LipidCreator
                     precursorData.lipidClass = headgroup;
                     precursorData.precursorName = headgroup.Split(new Char[]{'/'})[0];
                     precursorData.precursorIonFormula = chemForm;
-                    precursorData.precursorAdduct = adductForm;
+                    precursorData.precursorAdduct = adduct.Key;
+                    precursorData.precursorAdductFormula = adductForm;
                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                     precursorData.precursorCharge = charge;
-                    precursorData.adduct = adduct.Key;
                     precursorData.atomsCount = headgroups[headgroup].elements;
                     precursorData.fa1 = null;
                     precursorData.fa2 = null;

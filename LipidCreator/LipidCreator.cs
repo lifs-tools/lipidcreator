@@ -887,14 +887,20 @@ namespace LipidCreator
         
         
         
-        public static String computeChemicalFormula(Dictionary<int, int> elements)
+        public static string computeChemicalFormula(Dictionary<int, int> elements)
         {
-            String chemForm = "";
-            foreach (int molecule in Enum.GetValues(typeof(Molecules)))
+            String chemForm = "";            
+            foreach (int molecule in MS2Fragment.MONOISOTOPE_POSITIONS.Keys)
             {
-                if (elements[molecule] > 0)
+                int numElements = elements[molecule];
+                foreach (int heavyMolecule in MS2Fragment.HEAVY_DERIVATIVE[molecule])
                 {
-                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[molecule] + ((elements[molecule] > 1) ? Convert.ToString(elements[molecule]) : "");
+                    numElements += elements[heavyMolecule];
+                }
+            
+                if (numElements > 0)
+                {
+                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[molecule] + ((numElements > 1) ? Convert.ToString(numElements) : "");
                 }
             }
             return chemForm;
@@ -903,9 +909,10 @@ namespace LipidCreator
         
         
         
-        public static String computeAdductFormula(Dictionary<int, int> elements, string adduct)
+        public static string computeAdductFormula(Dictionary<int, int> elements, string adduct, int charge = 0)
         {
-            int charge = Lipid.adductToCharge[adduct];
+            if (charge == 0) charge = Lipid.adductToCharge[adduct];
+            
             String adductForm = "[M";
             foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
             {
@@ -914,7 +921,7 @@ namespace LipidCreator
                     adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
                 }
             }
-            adductForm += adduct;
+            adductForm += adduct + "]";
             adductForm += Convert.ToString(Math.Abs(charge));
             adductForm += (charge > 0) ? "+" : "-";
             return adductForm;

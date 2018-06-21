@@ -126,6 +126,7 @@ namespace LipidCreator
                     Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
                     int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                                         
@@ -135,12 +136,12 @@ namespace LipidCreator
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
                     precursorData.lipidClass = headgroup;
-                    precursorData.precursorName = key.Replace("/", HEAVY_LABEL_SEPARATOR);
+                    precursorData.precursorName = headgroup.Split(new Char[]{'/'})[0];
                     precursorData.precursorIonFormula = chemForm;
-                    precursorData.precursorAdduct = Lipid.getAdductAsString(charge, adduct.Key);
+                    precursorData.precursorAdduct = adduct.Key;
+                    precursorData.precursorAdductFormula = adductForm;
                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                     precursorData.precursorCharge = charge;
-                    precursorData.adduct = adduct.Key;
                     precursorData.atomsCount = headgroups[headgroup].elements;
                     precursorData.fa1 = null;
                     precursorData.fa2 = null;

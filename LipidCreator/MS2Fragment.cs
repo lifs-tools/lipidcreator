@@ -147,7 +147,6 @@ namespace LipidCreator
             {(int)Molecules.N, new ArrayList(){Molecules.N15}},
             {(int)Molecules.P, new ArrayList(){Molecules.P32}},
             {(int)Molecules.S, new ArrayList(){Molecules.S33, Molecules.S34}}
-            
         };
         
         
@@ -352,6 +351,7 @@ namespace LipidCreator
         public MS2Fragment(MS2Fragment copy)
         {
             fragmentName = copy.fragmentName;
+            fragmentOutputName = copy.fragmentOutputName;
             fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
             fragmentElements = new Dictionary<int, int>();

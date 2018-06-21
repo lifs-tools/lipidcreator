@@ -643,12 +643,11 @@ namespace LipidCreator
                     slDB2Textbox.Text = currentSLLipid.lcb.dbInfo;
                     slLCBCombobox.SelectedIndex = currentSLLipid.lcb.chainType;
                     slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.lcb.hydroxylCounts.First() - 2;
-                    slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
+                    if (!currentSLLipid.isLyso) slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
                     
                     slFATextbox.Text = currentSLLipid.fag.lengthInfo;
                     slDB1Textbox.Text = currentSLLipid.fag.dbInfo;
                     slFACombobox.SelectedIndex = currentSLLipid.fag.chainType;
-                
                     
                     slPosAdductCheckbox1.Checked = currentSLLipid.adducts["+H"];
                     slPosAdductCheckbox2.Checked = currentSLLipid.adducts["+2H"];

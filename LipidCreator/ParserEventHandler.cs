@@ -51,6 +51,7 @@ namespace LipidCreator
             registeredEvents.Add("FA_post_event", FAPostEvent);
             
             registeredEvents.Add("LCB_pre_event", LCBPreEvent);
+            registeredEvents.Add("LCB_post_event", LCBPostEvent);
             registeredEvents.Add("Carbon_pre_event", CarbonPreEvent);
             registeredEvents.Add("DB_count_pre_event", DB_countPreEvent);
             registeredEvents.Add("Hydroxyl_pre_event", HydroxylPreEvent);
@@ -100,17 +101,16 @@ namespace LipidCreator
         // handling all events
         public void lipidPostEvent(Parser.TreeNode node)
         {
-            if (lipid != null && lipid.headGroupNames.Count > 0)
+            if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
                 lipid.adducts["+H"] = false;
                 lipid.adducts["+2H"] = false;
                 lipid.adducts["+NH4"] = false;
-                lipid.adducts["-H"] = true;
+                lipid.adducts["-H"] = false;
                 lipid.adducts["-2H"] = false;
                 lipid.adducts["+HCOO"] = false;
                 lipid.adducts["+CH3COO"] = false;
-                lipid.adducts["+CH3COO"] = false;
-                lipid.adducts[lipid.headGroupNames[0]] = true;
+                lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
             }
         }
         
@@ -148,8 +148,6 @@ namespace LipidCreator
         }
         
         
-        
-        
         public void SLPreEvent(Parser.TreeNode node)
         {
             lipid = new SLLipid(lipidCreator);
@@ -177,12 +175,23 @@ namespace LipidCreator
             fag = ((SLLipid)lipid).lcb;
         }
         
+        
+        public void LCBPostEvent(Parser.TreeNode node)
+        {
+            FALCBvalidationCheck();
+        }
+        
         public void FAPreEvent(Parser.TreeNode node)
         {
             fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
         }
         
         public void FAPostEvent(Parser.TreeNode node)
+        {
+            FALCBvalidationCheck();
+        }
+        
+        public void FALCBvalidationCheck()
         {
             // check if created fatty acid is valid
             if (fag != null)
@@ -202,18 +211,11 @@ namespace LipidCreator
                     int doubleBondCount = (new List<int>(fag.doubleBondCounts))[0];
                     
                     int maxDoubleBond = (carbonLength - 1) >> 1;
-                    if (doubleBondCount > maxDoubleBond)
-                    {
-                        lipid = null;
-                    }
+                    if (doubleBondCount > maxDoubleBond) lipid = null;
                     else if (fag.hydroxylCounts.Count == 1)
                     {
                         int hydroxylCount = (new List<int>(fag.hydroxylCounts))[0];
-                        
-                        if (carbonLength < hydroxylCount)
-                        {
-                            lipid = null;
-                        }
+                        if (carbonLength < hydroxylCount) lipid = null;
                     }
                 }
                 else 

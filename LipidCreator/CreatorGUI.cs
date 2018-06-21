@@ -2923,6 +2923,45 @@ namespace LipidCreator
         
         
         
+        
+        protected void menuImportListClick(object sender, System.EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(openFileDialog1.FileName))
+                {
+                    try
+                    {
+                        using (StreamReader sr = new StreamReader(openFileDialog1.FileName))
+                        {
+                            string line;
+                            while((line = sr.ReadLine()) != null)
+                            {
+                                lipidCreator.parser.parse(line);
+                                lipidCreator.parser.raiseEvents();
+                                if (lipidCreator.parserEventHandler.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
+                                
+                                lipidCreator.registeredLipids.Add(lipidCreator.parserEventHandler.lipid);
+                            }
+                        }
+                    }
+                    
+                    catch (Exception ee)
+                    {
+                        Console.WriteLine(ee.Message);
+                    }
+                    refreshRegisteredLipidsTable();
+                }
+            }
+        }
+        
+        
         protected void menuImportClick(object sender, System.EventArgs e)
         {
         

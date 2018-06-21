@@ -45,16 +45,6 @@ namespace LipidCreator
         Bitmap bmp;
         
         
-        /*
-        [DllImport("user32")]
-        private static extern IntPtr GetWindowDC(IntPtr hwnd);
- 
-        // you also need ReleaseDC
-        [DllImport("user32")]
-        private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
-        
-        */
-        
         protected override CreateParams CreateParams
         {
             get
@@ -297,6 +287,7 @@ namespace LipidCreator
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
         public System.Windows.Forms.MenuItem menuFile;
         public System.Windows.Forms.MenuItem menuImport;
+        public System.Windows.Forms.MenuItem menuImportList;
         public System.Windows.Forms.MenuItem menuImportSettings;
         public System.Windows.Forms.MenuItem menuImportPredefined;
         public System.Windows.Forms.MenuItem menuExport;
@@ -609,6 +600,7 @@ namespace LipidCreator
             
             this.menuFile = new System.Windows.Forms.MenuItem ();
             this.menuImport = new System.Windows.Forms.MenuItem ();
+            this.menuImportList = new System.Windows.Forms.MenuItem ();
             this.menuImportSettings = new System.Windows.Forms.MenuItem ();
             this.menuImportPredefined = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem ();
@@ -624,12 +616,16 @@ namespace LipidCreator
             this.menuCollisionEnergyNone = new System.Windows.Forms.MenuItem ();
             this.menuMS2Fragments = new System.Windows.Forms.MenuItem ();
             this.menuIsotopes = new System.Windows.Forms.MenuItem ();
-            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportPredefined, menuExport, menuDash, menuImportSettings, menuExportSettings, menuDash3, menuExit});
+            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportList, menuImportPredefined, menuExport, menuDash, menuImportSettings, menuExportSettings, menuDash3, menuExit});
             this.menuFile.Text = "File";
             
             this.menuImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
-            this.menuImport.Text = "&Import";
+            this.menuImport.Text = "&Import Project";
             this.menuImport.Click += new System.EventHandler (menuImportClick);
+            
+            this.menuImportList.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
+            this.menuImportList.Text = "Import &Lipid List";
+            this.menuImportList.Click += new System.EventHandler (menuImportListClick);
             
             this.menuImportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
             this.menuImportSettings.Text = "Import &Settings";
@@ -638,7 +634,7 @@ namespace LipidCreator
             this.menuImportPredefined.Text = "Import Predefined";
             
             this.menuExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
-            this.menuExport.Text = "&Export";
+            this.menuExport.Text = "&Export Project";
             this.menuExport.Click += new System.EventHandler (menuExportClick);
             
             this.menuExportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlT;

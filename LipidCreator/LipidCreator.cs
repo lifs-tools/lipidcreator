@@ -66,6 +66,8 @@ namespace LipidCreator
         public Dictionary<string, ArrayList> msInstruments;
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
+        public ParserEventHandler parserEventHandler;
+        public Parser parser;
         
         public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -405,6 +407,7 @@ namespace LipidCreator
             availableInstruments.Add("");
             readInputFiles();
             
+            
             foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);
             
             foreach(string lipidClass in allFragments.Keys)
@@ -422,6 +425,9 @@ namespace LipidCreator
                     Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
                 }
             }
+            
+            parserEventHandler = new ParserEventHandler(this);
+            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammer", '"');
         }
         
         

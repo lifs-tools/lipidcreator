@@ -48,6 +48,7 @@ namespace LipidCreator
         public bool derivative;
         public ArrayList heavyLabeledPrecursors;
         public bool userDefined;
+        public string defaultAdduct;
         public ArrayList userDefinedFattyAcids;
         public HashSet<string> attributes;
         

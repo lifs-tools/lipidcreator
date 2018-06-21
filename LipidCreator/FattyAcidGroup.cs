@@ -69,9 +69,9 @@ namespace LipidCreator
     public class FattyAcidGroup
     {
         public int chainType; // 0 = no restriction, 1 = odd carbon number, 2 = even carbon number
-        public String lengthInfo;
-        public String dbInfo;
-        public String hydroxylInfo;
+        public string lengthInfo;
+        public string dbInfo;
+        public string hydroxylInfo;
         public bool isLCB;
         public Dictionary<String, bool> faTypes;
         public HashSet<int> carbonCounts;

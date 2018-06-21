@@ -202,7 +202,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length < 19) throw new Exception("invalid line in file, number of columns in line < 19");
+                            if (tokens.Length < 20) throw new Exception("invalid line in file, number of columns in line < 19");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -250,8 +250,9 @@ namespace LipidCreator
                             headgroup.adductRestrictions.Add("-2H", tokens[14].Equals("Yes"));
                             headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
                             headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
-                            headgroup.buildingBlockType = Convert.ToInt32(tokens[17]);
-                            if (tokens[18].Length > 0) headgroup.attributes = new HashSet<string>(tokens[18].Split(new char[]{';'}));
+                            headgroup.defaultAdduct = tokens[17];
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[18]);
+                            if (tokens[19].Length > 0) headgroup.attributes = new HashSet<string>(tokens[19].Split(new char[]{';'}));
                             headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             
                             if (headgroup.attributes.Contains("heavy"))

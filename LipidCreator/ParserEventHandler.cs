@@ -45,6 +45,7 @@ namespace LipidCreator
             resetLipidBuilder(null);
             
             registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
+            registeredEvents.Add("lipid_post_event", lipidPostEvent);
             
             registeredEvents.Add("FA_pre_event", FAPreEvent);
             registeredEvents.Add("FA_post_event", FAPostEvent);
@@ -96,8 +97,25 @@ namespace LipidCreator
         
         
         
-        
         // handling all events
+        public void lipidPostEvent(Parser.TreeNode node)
+        {
+            if (lipid != null && lipid.headGroupNames.Count > 0)
+            {
+                lipid.adducts["+H"] = false;
+                lipid.adducts["+2H"] = false;
+                lipid.adducts["+NH4"] = false;
+                lipid.adducts["-H"] = true;
+                lipid.adducts["-2H"] = false;
+                lipid.adducts["+HCOO"] = false;
+                lipid.adducts["+CH3COO"] = false;
+                lipid.adducts["+CH3COO"] = false;
+                lipid.adducts[lipid.headGroupNames[0]] = true;
+            }
+        }
+        
+        
+        
         public void GLPreEvent(Parser.TreeNode node)
         {
             lipid = new GLLipid(lipidCreator);
@@ -129,6 +147,9 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
         public void SLPreEvent(Parser.TreeNode node)
         {
             lipid = new SLLipid(lipidCreator);
@@ -142,6 +163,7 @@ namespace LipidCreator
             lipid = new Cholesterol(lipidCreator);
             fagEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
         }
+        
         
         public void MediatorPreEvent(Parser.TreeNode node)
         {
@@ -207,6 +229,13 @@ namespace LipidCreator
             else 
             {
                 lipid = null;
+            }
+            
+            if (lipid != null && fag != null)
+            {
+                foreach(int l in fag.carbonCounts) fag.lengthInfo = Convert.ToString(l);
+                foreach(int db in fag.doubleBondCounts) fag.dbInfo = Convert.ToString(db);
+                foreach(int h in fag.hydroxylCounts) fag.hydroxylInfo = Convert.ToString(h);
             }
         }
         

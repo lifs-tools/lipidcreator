@@ -107,22 +107,22 @@ namespace LipidCreator
             int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
             
             
-            String[][] builidingBlocks = new String[9][];
-            builidingBlocks[0] = new String[]{"FA1", "FA2", "FA3", "FA4", "HG"};
-            builidingBlocks[1] = new String[]{"FA1", "FA2", "FA3", "HG"};
-            builidingBlocks[2] = new String[]{"FA1", "FA2", "HG"};
-            builidingBlocks[3] = new String[]{"FA", "HG"};
-            builidingBlocks[4] = new String[]{"LCB", "FA", "HG"};
-            builidingBlocks[5] = new String[]{"LCB", "HG"};
-            builidingBlocks[6] = new String[]{"FA1", "FA2", "HG"};
-            builidingBlocks[7] = new String[]{"FA", "HG"};
-            builidingBlocks[8] = new String[]{"HG"};
+            String[][] buildingBlockList = new String[9][];
+            buildingBlockList[0] = new String[]{"FA1", "FA2", "FA3", "FA4", "HG"};
+            buildingBlockList[1] = new String[]{"FA1", "FA2", "FA3", "HG"};
+            buildingBlockList[2] = new String[]{"FA1", "FA2", "HG"};
+            buildingBlockList[3] = new String[]{"FA", "HG"};
+            buildingBlockList[4] = new String[]{"LCB", "FA", "HG"};
+            buildingBlockList[5] = new String[]{"LCB", "HG"};
+            buildingBlockList[6] = new String[]{"FA1", "FA2", "HG"};
+            buildingBlockList[7] = new String[]{"FA", "HG"};
+            buildingBlockList[8] = new String[]{"HG"};
             
             
             selectBaseCombobox.Items.Add("fixed");
             ArrayList buildingBlocksArray = new ArrayList();
             buildingBlocksArray.Add("");
-            createCombinations(builidingBlocks[bbType], -1, "", selectBaseCombobox, buildingBlocksArray);
+            createCombinations(buildingBlockList[bbType], -1, "", selectBaseCombobox, buildingBlocksArray);
             buildingBlocks = (string[])buildingBlocksArray.ToArray(typeof(string));
             selectBaseCombobox.SelectedIndex = 0;
             
@@ -290,6 +290,7 @@ namespace LipidCreator
             
             Dictionary<int, int> newElements = createElementData(elements);
             MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
+            Console.WriteLine(buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 
             if (!edit)

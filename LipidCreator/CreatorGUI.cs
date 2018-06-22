@@ -2855,7 +2855,7 @@ namespace LipidCreator
         
         public void startThirdTutorial(Object sender, EventArgs e)
         {
-            tutorial.startTutorial(Tutorials.TutorialHeavyLabeled);
+            tutorial.startTutorial(Tutorials.TutorialHL);
         }
         
         

@@ -46,6 +46,7 @@ using System.Xml.Linq;
 7  (int)PRMSteps.Ether
 8  (int)PRMSteps.SecondFADB
 9  (int)PRMSteps.SelectAdduct
+41 (int)PRMSteps.AddLipid
 42  (int)PRMSteps.OpenReview
 43  (int)PRMSteps.StoreList
 44  (int)PRMSteps.Finish
@@ -63,6 +64,10 @@ using System.Xml.Linq;
 19  (int)MRMSteps.AddingFragment
 20  (int)MRMSteps.SelectNew
 21  (int)MRMSteps.ClickOK
+41  (int)MRMSteps.AddLipid
+42  (int)MRMSteps.OpenReview
+43  (int)MRMSteps.StoreList
+44  (int)MRMSteps.Finish
 
 
 22  (int)HLSteps.OpenHeavy
@@ -84,6 +89,10 @@ using System.Xml.Linq;
 38  (int)HLSteps.SetFragElement
 39  (int)HLSteps.ConfirmEdit
 40  (int)HLSteps.CloseFragment
+41  (int)MRMSteps.AddLipid
+42  (int)MRMSteps.OpenReview
+43  (int)MRMSteps.StoreList
+44  (int)MRMSteps.Finish
 
 
 */
@@ -124,9 +133,9 @@ namespace LipidCreator
             this.creatorGUI = creatorGUI;
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
-                {(int)Tutorials.TutorialPRM, Enum.GetNames(typeof(PRMSteps)).Length},
-                {(int)Tutorials.TutorialMRM, Enum.GetNames(typeof(MRMSteps)).Length},
-                {(int)Tutorials.TutorialHL, Enum.GetNames(typeof(HLSteps)).Length}
+                {(int)Tutorials.TutorialPRM, Enum.GetNames(typeof(PRMSteps)).Length - 1},
+                {(int)Tutorials.TutorialMRM, Enum.GetNames(typeof(MRMSteps)).Length - 1},
+                {(int)Tutorials.TutorialHL, Enum.GetNames(typeof(HLSteps)).Length - 1}
             };
             tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
             tutorialWindow = new TutorialWindow(this, creatorGUI.lipidCreator.prefixPath);
@@ -294,6 +303,7 @@ namespace LipidCreator
             {
                 creatorGUI.lipidsReview.buttonStoreTransitionList.Click -= buttonInteraction;
                 creatorGUI.lipidsReview.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                creatorGUI.lipidsReview.Close();
             }
             
             if (creatorGUI.ms2fragmentsForm != null)
@@ -316,7 +326,9 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm.newFragment.addButton.Click -= buttonInteraction;
                     creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.ValueChanged -= new EventHandler(numericInteraction);
                     creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
+                    creatorGUI.ms2fragmentsForm.newFragment.Close();
                 }
+                creatorGUI.ms2fragmentsForm.Close();
                 
             }
             
@@ -329,6 +341,7 @@ namespace LipidCreator
                 creatorGUI.addHeavyPrecursor.dataGridView1.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
                 creatorGUI.addHeavyPrecursor.button1.Click -= buttonInteraction;
                 creatorGUI.addHeavyPrecursor.button2.Click -= buttonInteraction;
+                creatorGUI.addHeavyPrecursor.Close();
             }
             
             for (int i = 0; i < elementsEnabledState.Count; ++i)
@@ -689,15 +702,15 @@ namespace LipidCreator
         public void buttonInteraction(Object sender, EventArgs e)
         {
             
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
-            else if (tutorial == Tutorials.TutorialMRM && (new HashSet<int>(new int[]{(int)MRMSteps.OpenMS2, (int)MRMSteps.AddFragment, (int)MRMSteps.AddingFragment, (int)MRMSteps.ClickOK}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialMRM && (new HashSet<int>(new int[]{(int)MRMSteps.OpenMS2, (int)MRMSteps.AddFragment, (int)MRMSteps.AddingFragment, (int)MRMSteps.ClickOK, (int)MRMSteps.AddLipid, (int)MRMSteps.OpenReview, (int)MRMSteps.StoreList, (int)MRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.AddLipid, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -826,6 +839,8 @@ namespace LipidCreator
                     
                     plFA1.Text = "12 - 15";
                     plFA1.Enabled = true;
+                    tutorialStep = 10;
+                    TutorialPRMStep();
                     break;
                     
                     
@@ -900,8 +915,9 @@ namespace LipidCreator
                 case (int)PRMSteps.AddLipid:
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
+                    
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1), alb.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);

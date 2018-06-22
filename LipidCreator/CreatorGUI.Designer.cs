@@ -31,7 +31,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
-//using System.Runtime.InteropServices;
 
 namespace LipidCreator
 {
@@ -244,6 +243,70 @@ namespace LipidCreator
             base.OnPaint(e);
         }
     }
+    
+    
+    public class Cartesean : Control
+    {
+        public int originXPx = 20;
+        public int originYPx = 20;
+        public int innerWidthPx;
+        public int innerHeightPx;
+        public int maxXVal = 50;
+        public int maxYVal = 2;
+        
+        public Point valueToPx(double valX, double valY)
+        {
+            return new Point((int)(originXPx + valX * innerWidthPx / maxXVal), (int)(Height - originYPx - valY * innerHeightPx / maxYVal));
+        }
+    
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            innerWidthPx = Width - originXPx;
+            innerHeightPx = Height - originYPx;
+        
+            // draw border
+            Graphics g = e.Graphics;
+            Pen blackPen = new Pen(Color.Black, 1);
+            g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
+            
+            
+            Pen redPen = new Pen(Color.Red, 1);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            
+            double lastX = 0;
+            double lastY = 0;
+            for (int i = 0; i <= 100; ++i)
+            {
+                double valX = ((double)i) / 100.0 * maxXVal;
+                double valY = 1.0 / (valX * valX / 100.0 + 1.0);
+                if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
+                lastX = valX;
+                lastY = valY;
+            }
+            
+            
+            Font labelFont = new Font("Arial", 8);
+            
+            
+            
+            // drawing the axes
+            blackPen = new Pen(Color.Black, 2);
+            g.DrawLine(blackPen, new Point(originXPx - 10, Height - originYPx), new Point(Width, Height - originYPx));
+            g.DrawLine(blackPen, new Point(originXPx, Height - originYPx + 10), new Point(originXPx, 0));
+            
+            // labels at y-axis
+            for (int i = 0, j = 0; i < innerWidthPx; i += innerWidthPx / 5, j += 10)
+            {
+                g.DrawLine(blackPen, new Point(originXPx + i, Height - originYPx - 5), new Point(originXPx + i, Height - originYPx + 5));
+                RectangleF instructionRect = new RectangleF(originXPx + i - 10, Height - originYPx + 5, 20, 20);
+                g.DrawString(Convert.ToString(j), labelFont, drawBrush, instructionRect);
+            }
+            
+            
+            
+            base.OnPaint(e);
+        }
+    }
 
 
     public class CustomPictureBox : PictureBox
@@ -309,6 +372,7 @@ namespace LipidCreator
         
         public TabControl tabControl = new TabControl();
         public TabPage homeTab;
+        public TabPage canvasTab;
         public TabPage glycerolipidsTab;
         public TabPage phospholipidsTab;
         public TabPage sphingolipidsTab;
@@ -704,6 +768,7 @@ namespace LipidCreator
             sphingolipidsTab = new TabPage();
             cholesterollipidsTab = new TabPage();
             mediatorlipidsTab = new TabPage();
+            canvasTab = new TabPage();
             lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
@@ -1026,6 +1091,7 @@ namespace LipidCreator
             tabControl.Controls.Add(sphingolipidsTab);
             tabControl.Controls.Add(cholesterollipidsTab);
             tabControl.Controls.Add(mediatorlipidsTab);
+            tabControl.Controls.Add(canvasTab);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, 16);
@@ -2199,6 +2265,18 @@ namespace LipidCreator
             
             
             controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
+            
+            
+            
+            
+            canvasTab.Text = "canvas";
+            Cartesean myParentCanvas = new Cartesean();
+            myParentCanvas.Width = 500;
+            myParentCanvas.Height = 300;
+            canvasTab.Controls.Add(myParentCanvas);
+            myParentCanvas.Location = new Point(10, 10);
+            
+            
         }
 
         #endregion

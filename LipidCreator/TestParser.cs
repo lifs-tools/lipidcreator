@@ -45,7 +45,6 @@ namespace LipidCreator
     
         public static LinkedList<string> assembleLipidname(Dictionary<int, ArrayList> rules, Dictionary<int, string> terminals, LinkedList<string> lipidname, int rule, int prevRandom)
         {
-        
             int p = -2;
             byte[] byteArray = new byte[4];
             do {
@@ -53,6 +52,8 @@ namespace LipidCreator
                 p = (int)(BitConverter.ToUInt32(byteArray, 0) % rules[rule].Count);
             }
             while (p == prevRandom && prevRandom != 0);
+            
+            
             
             foreach (int r in (ArrayList)rules[rule][p])
             {

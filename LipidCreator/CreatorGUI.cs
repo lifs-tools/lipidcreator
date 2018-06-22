@@ -2935,6 +2935,8 @@ namespace LipidCreator
             {
                 if (File.Exists(openFileDialog1.FileName))
                 {
+                    int total = 0;
+                    int valid = 0;
                     try
                     {
                         using (StreamReader sr = new StreamReader(openFileDialog1.FileName))
@@ -2944,9 +2946,13 @@ namespace LipidCreator
                             {
                                 lipidCreator.parser.parse(line);
                                 lipidCreator.parser.raiseEvents();
-                                if (lipidCreator.parserEventHandler.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
+                                if (lipidCreator.parserEventHandler.lipid != null)
+                                {
+                                    lipidCreator.registeredLipids.Add(lipidCreator.parserEventHandler.lipid);
+                                    ++valid;
+                                }
                                 
-                                lipidCreator.registeredLipids.Add(lipidCreator.parserEventHandler.lipid);
+                                ++total;
                             }
                         }
                     }
@@ -2956,6 +2962,7 @@ namespace LipidCreator
                         Console.WriteLine(ee.Message);
                     }
                     refreshRegisteredLipidsTable();
+                    MessageBox.Show("Here, " + valid + " of " + total + " lipid names could be successfully imported!", "Lipid list import");
                 }
             }
         }

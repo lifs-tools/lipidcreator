@@ -61,6 +61,7 @@ namespace LipidCreator
             registeredEvents.Add("headgroup_separator_pre_event", addContext);
             registeredEvents.Add("sorted_FA_separator_pre_event", addContext);
             registeredEvents.Add("unsorted_FA_separator_pre_event", addContext);
+            registeredEvents.Add("adductInfo_pre_event", addContext);
         }
         
         

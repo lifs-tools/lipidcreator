@@ -37,6 +37,8 @@ namespace LipidCreator
         public Lipid lipid;
         public FattyAcidGroupEnumerator fagEnum;
         public FattyAcidGroup fag;
+        public int charge;
+        public string adduct;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -85,6 +87,9 @@ namespace LipidCreator
             registeredEvents.Add("SL_post_event", SLPostEvent);
             registeredEvents.Add("Mediator_post_event", MediatorPostEvent);
             
+            registeredEvents.Add("adduct_pre_event", adductPreEvent);
+            registeredEvents.Add("charge_pre_event", chargePreEvent);
+            registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
         }
         
         
@@ -94,7 +99,10 @@ namespace LipidCreator
             lipid = null;
             fagEnum = null;
             fag = null;
+            charge = 0;
+            adduct = "";
         }
+        
         
         
         
@@ -103,6 +111,7 @@ namespace LipidCreator
         {
             if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
+            
                 lipid.adducts["+H"] = false;
                 lipid.adducts["+2H"] = false;
                 lipid.adducts["+NH4"] = false;
@@ -110,7 +119,23 @@ namespace LipidCreator
                 lipid.adducts["-2H"] = false;
                 lipid.adducts["+HCOO"] = false;
                 lipid.adducts["+CH3COO"] = false;
-                lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+                
+                if (charge != 0)
+                {
+                    if (Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    {
+                        lipid.adducts[adduct] = true;
+                    }
+                    else
+                    {
+                        lipid = null;
+                    }
+                }
+                else
+                {
+                    lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+                }
+                
             }
         }
         
@@ -464,6 +489,24 @@ namespace LipidCreator
                     lipid = null;
                 }
             }
+        }
+        
+        public void adductPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null)
+            {
+                adduct = node.getText();
+            }
+        }
+        
+        public void chargePreEvent(Parser.TreeNode node)
+        {
+            charge = Convert.ToInt32(node.getText());
+        }
+        
+        public void charge_signPreEvent(Parser.TreeNode node)
+        {
+            charge *= node.getText() == "-" ? -1 : 1;
         }
     }    
 }

@@ -49,6 +49,20 @@ using System.Xml.Linq;
 42  (int)PRMSteps.OpenReview
 43  (int)PRMSteps.StoreList
 44  (int)PRMSteps.Finish
+
+
+10  (int)MRMSteps.OpenMS2
+11  (int)MRMSteps.InMS2
+12  (int)MRMSteps.SelectPG
+13  (int)MRMSteps.SelectFragments
+14  (int)MRMSteps.AddFragment
+15  (int)MRMSteps.InFragment
+16  (int)MRMSteps.NameFragment
+17  (int)MRMSteps.SetCharge
+18  (int)MRMSteps.SetElements
+19  (int)MRMSteps.AddingFragment
+20  (int)MRMSteps.SelectNew
+21  (int)MRMSteps.ClickOK
 */
 
 namespace LipidCreator
@@ -56,6 +70,7 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialMRM = 1, TutorialHeavyLabeled = 2};
     public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenReview, StoreList, Finish};
+    public enum MRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, OpenReview, StoreList, Finish};
     
 
     [Serializable]
@@ -424,7 +439,7 @@ namespace LipidCreator
         public void numericInteraction(object sender, System.EventArgs e)
         {
             MyNumericUpDown numericUpDown = (MyNumericUpDown)sender;
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 17)
+            if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.SetCharge)
             {
                 nextEnabled = numericUpDown.Value == 1;
             }
@@ -441,7 +456,11 @@ namespace LipidCreator
                 {
                     return;
                 }
-                else if (currentTabIndex == pgIndex && tutorial == Tutorials.TutorialPRM && tutorialStep == 12)
+                else if (currentTabIndex == pgIndex && tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.SelectPG)
+                {
+                    return;
+                }
+                else if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.PhosphoTab)
                 {
                     return;
                 }
@@ -504,7 +523,7 @@ namespace LipidCreator
                 HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
                 nextEnabled = nextEnabled && doubleBondCounts != null && doubleBondCounts.Intersect(expectedDB).Count() == 1;
             }
-            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 16)
+            else if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.NameFragment)
             {
                 nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text == "testFrag") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
             }
@@ -536,7 +555,7 @@ namespace LipidCreator
         
         public void comboBoxInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 16)
+            if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.NameFragment)
             {
                 nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text == "testFrag") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
             }
@@ -563,7 +582,7 @@ namespace LipidCreator
         public void tableCellChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
             nextEnabled = true;
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 18)
+            if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.SetElements)
             {
                 DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
                 Dictionary<string, object[]> elements = creatorGUI.ms2fragmentsForm.newFragment.elements;
@@ -655,6 +674,10 @@ namespace LipidCreator
             {
                 nextTutorialStep(true);
             }
+            else if (tutorial == Tutorials.TutorialMRM && (new HashSet<int>(new int[]{(int)MRMSteps.OpenMS2, (int)MRMSteps.AddFragment, (int)MRMSteps.AddingFragment, (int)MRMSteps.ClickOK}).Contains(tutorialStep)))
+            {
+                nextTutorialStep(true);
+            }
             
         }
         
@@ -666,6 +689,10 @@ namespace LipidCreator
             {
                 continueTutorial = true;
             }
+            else if (tutorial == Tutorials.TutorialMRM && (new HashSet<int>(new int[]{(int)MRMSteps.OpenMS2, (int)MRMSteps.AddFragment, (int)MRMSteps.AddingFragment, (int)MRMSteps.ClickOK}).Contains(tutorialStep)))
+            {
+                continueTutorial = true;
+            }
         }
         
         
@@ -673,14 +700,14 @@ namespace LipidCreator
         
         public void checkedListBoxInteraction(Object sender, ItemCheckEventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 13)
+            if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.SelectFragments)
             {
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG"];
                  
                  nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
-            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 20)
+            else if (tutorial == Tutorials.TutorialMRM && tutorialStep == (int)MRMSteps.SelectNew)
             {
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG"];
@@ -843,9 +870,81 @@ namespace LipidCreator
                     break;
                     
                     
-                    /*
+                case (int)PRMSteps.OpenReview:
+                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
                     
-                case 10:
+                    
+                    Button orfb = creatorGUI.openReviewFormButton;
+                    orfb.Enabled = true;
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
+                    
+                    break;
+                    
+                    
+                case (int)PRMSteps.StoreList:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    initLipidReview();
+                    
+                    Button bstl = creatorGUI.lipidsReview.buttonStoreTransitionList;
+                    bstl.Enabled = true;
+                    
+                    tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "You have created a transition list. To store the list in csv format, please click on 'Store transition list' and choose a folder and filename.", false);
+                    
+                    break;
+                    
+                    
+                case (int)PRMSteps.Finish:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");
+                    
+                    nextEnabled = true;
+                    tutorialWindow.Refresh();
+                    break;
+                    
+                    
+                default:
+                    quitTutorial(true);
+                    break;
+            }
+        }
+        
+        
+        public void TutorialMRMStep()
+        {
+            prepareStep();
+            switch(tutorialStep)
+            {   
+                case (int)MRMSteps.Welcome:
+                    setTutorialControls(creatorGUI.homeTab);
+                    
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the second tutorial of LipidCreator. The second tutorial builds on the first.", false);
+                    
+                    nextEnabled = true;
+                    tutorialWindow.Refresh();
+                    break;
+                    
+                    
+                case (int)MRMSteps.PhosphoTab:
+                    currentTabIndex = 2;
+                    creatorGUI.changeTab(2);
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Continue", "As you can see, the selection from tutorial one is already present.", false);
+                    nextEnabled = true;
+                    tutorialWindow.Refresh();
+                    
+                    break;
+                    
+                    
+                    
+                    
+                case (int)MRMSteps.OpenMS2:
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button ms2 = creatorGUI.MS2fragmentsLipidButton;
@@ -857,7 +956,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 11:
+                case (int)MRMSteps.InMS2:
                     initMS2Form();
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
@@ -868,7 +967,7 @@ namespace LipidCreator
                     break;
                     
                      
-                case 12:
+                case (int)MRMSteps.SelectPG:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[0], creatorGUI.ms2fragmentsForm);
                     
                     TabControl ms2tc2 = creatorGUI.ms2fragmentsForm.tabControlFragments;
@@ -879,7 +978,7 @@ namespace LipidCreator
                     break;
                     
                      
-                case 13:
+                case (int)MRMSteps.SelectFragments:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     CheckedListBox negCLB = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
@@ -897,7 +996,7 @@ namespace LipidCreator
                     break;
                     
                 
-                case 14:
+                case (int)MRMSteps.AddFragment:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     Button ms2fragButton = creatorGUI.ms2fragmentsForm.buttonAddFragment;
@@ -911,7 +1010,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 15:
+                case (int)MRMSteps.InFragment:
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     initAddFragmentForm();
@@ -923,7 +1022,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 16:
+                case (int)MRMSteps.NameFragment:
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Enabled = true;
@@ -936,7 +1035,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 17:
+                case (int)MRMSteps.SetCharge:
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Enabled = true;
@@ -947,7 +1046,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 18:
+                case (int)MRMSteps.SetElements:
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.Enabled = true;
@@ -958,7 +1057,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 19:
+                case (int)MRMSteps.AddingFragment:
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment.addButton.Enabled = true;
@@ -968,7 +1067,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 20:
+                case (int)MRMSteps.SelectNew:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     creatorGUI.ms2fragmentsForm.newFragment = null;
@@ -981,7 +1080,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 21:
+                case (int)MRMSteps.ClickOK:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     Button b = creatorGUI.ms2fragmentsForm.buttonOK;
@@ -992,6 +1091,73 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click OK", "Please confirm the fragment selection by clicking on the 'OK' button.");
                     
                     break;
+                    
+                    
+                    
+                    
+                    
+                case (int)MRMSteps.OpenReview:
+                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
+                    
+                    
+                    Button orfb = creatorGUI.openReviewFormButton;
+                    orfb.Enabled = true;
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
+                    
+                    break;
+                    
+                    
+                case (int)MRMSteps.StoreList:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    initLipidReview();
+                    
+                    Button bstl = creatorGUI.lipidsReview.buttonStoreTransitionList;
+                    bstl.Enabled = true;
+                    
+                    tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "You have created a transition list. To store the list in csv format, please click on 'Store transition list' and choose a folder and filename.", false);
+                    
+                    break;
+                    
+                    
+                case (int)MRMSteps.Finish:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");
+                    
+                    nextEnabled = true;
+                    tutorialWindow.Refresh();
+                    break;
+                    
+                default:
+                    quitTutorial();
+                    break;
+            }
+        }
+        
+        
+        public void TutorialHeavyLabeledStep()
+        {
+        
+            prepareStep();
+            switch(tutorialStep)
+            {   
+                case 1:
+                    setTutorialControls(creatorGUI.homeTab);
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
+                    nextEnabled = true;
+                    break;
+                    
+                    
+                    
+                    
+                    
+                    /*
+                    
                     
                     
                 case 22:
@@ -1224,81 +1390,12 @@ namespace LipidCreator
                     
                     */
                     
-                case (int)PRMSteps.OpenReview:
-                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
                     
                     
-                    Button orfb = creatorGUI.openReviewFormButton;
-                    orfb.Enabled = true;
-                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
-                    
-                    break;
                     
                     
-                case (int)PRMSteps.StoreList:
-                    setTutorialControls(creatorGUI.lipidsReview);
-                    initLipidReview();
-                    
-                    Button bstl = creatorGUI.lipidsReview.buttonStoreTransitionList;
-                    bstl.Enabled = true;
-                    
-                    tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "You have created a transition list. To store the list in csv format, please click on 'Store transition list' and choose a folder and filename.", false);
-                    
-                    break;
                     
                     
-                case (int)PRMSteps.Finish:
-                    setTutorialControls(creatorGUI.lipidsReview);
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");
-                    
-                    nextEnabled = true;
-                    tutorialWindow.Refresh();
-                    break;
-                    
-                    
-                default:
-                    quitTutorial(true);
-                    break;
-            }
-        }
-        
-        
-        public void TutorialMRMStep()
-        {
-            prepareStep();
-            switch(tutorialStep)
-            {   
-                case 1:
-                    setTutorialControls(creatorGUI.homeTab);
-                    
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
-                    nextEnabled = true;
-                    break;
-                    
-                default:
-                    quitTutorial();
-                    break;
-            }
-        }
-        
-        
-        public void TutorialHeavyLabeledStep()
-        {
-        
-            prepareStep();
-            switch(tutorialStep)
-            {   
-                case 1:
-                    setTutorialControls(creatorGUI.homeTab);
-                    
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on continue", "Welcome to the first tutorial of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create both a transition list and a spectral library for targeted lipidomics.", false);
-                    nextEnabled = true;
-                    break;
                     
                 default:
                     quitTutorial();

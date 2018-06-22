@@ -778,6 +778,7 @@ namespace LipidCreator
                     
                     plFA1.Text = "12 - 15";
                     plFA1.Enabled = true;
+                    
                     break;
                     
                     
@@ -854,20 +855,21 @@ namespace LipidCreator
                     
                     
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + 20 + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
                     break;
                     
+
                     
                 case (int)PRMSteps.OpenReview:
-                    setTutorialControls(creatorGUI);
+                    setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;
                     orfb.Enabled = true;
-                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
                     
@@ -1098,7 +1100,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + 20 + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
@@ -1106,12 +1108,12 @@ namespace LipidCreator
                     
                     
                 case (int)MRMSteps.OpenReview:
-                    setTutorialControls(creatorGUI);
+                    setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;
                     orfb.Enabled = true;
-                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
                     
@@ -1410,7 +1412,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + 20 + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
@@ -1418,12 +1420,12 @@ namespace LipidCreator
                     
                     
                 case (int)HLSteps.OpenReview:
-                    setTutorialControls(creatorGUI);
+                    setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;
                     orfb.Enabled = true;
-                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y + creatorGUI.lipidsGroupbox.Location.Y), "lb");
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
                     

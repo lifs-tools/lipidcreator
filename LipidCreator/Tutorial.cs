@@ -101,7 +101,7 @@ namespace LipidCreator
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
                 {(int)Tutorials.TutorialPRM, Enum.GetNames(typeof(PRMSteps)).Length},
-                {(int)Tutorials.TutorialMRM, 20},
+                {(int)Tutorials.TutorialMRM, Enum.GetNames(typeof(MRMSteps)).Length},
                 {(int)Tutorials.TutorialHeavyLabeled, 20}
             };
             tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
@@ -117,7 +117,7 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
         
-            if (!creatorGUI.resetLipidCreator()) return;
+            //if (!creatorGUI.resetLipidCreator()) return;
             
             tutorial = t;
             tutorialStep = 0;
@@ -491,7 +491,10 @@ namespace LipidCreator
         
         public void tabSelectedInteraction(Object sender,  EventArgs e)
         {
-            nextTutorialStep(true);
+            if (currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialMRM || tutorialStep != (int)MRMSteps.PhosphoTab)
+            {
+                nextTutorialStep(true);
+            }
         }
         
         
@@ -931,11 +934,19 @@ namespace LipidCreator
                     
                     
                 case (int)MRMSteps.PhosphoTab:
+                    ((Lipid)creatorGUI.lipidTabList[2]).headGroupNames.Add("PG");
+                    ((Lipid)creatorGUI.lipidTabList[2]).adducts["+H"] = true;
+                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.lengthInfo = "14-18, 20";
+                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.dbInfo = "0, 1";
+                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.lengthInfo = "8-10";
+                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
+                    
+                
                     currentTabIndex = 2;
                     creatorGUI.changeTab(2);
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Continue", "As you can see, the selection from tutorial one is already present.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Continue", "As you can see, the selection from tutorial one is already present. We can smoothly continue.", false);
                     nextEnabled = true;
                     tutorialWindow.Refresh();
                     

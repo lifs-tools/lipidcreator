@@ -839,8 +839,6 @@ namespace LipidCreator
                     
                     plFA1.Text = "12 - 15";
                     plFA1.Enabled = true;
-                    tutorialStep = 10;
-                    TutorialPRMStep();
                     break;
                     
                     
@@ -925,7 +923,7 @@ namespace LipidCreator
                     
                     
                 case (int)PRMSteps.OpenReview:
-                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
+                    setTutorialControls(creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;
@@ -1161,7 +1159,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1), alb.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
@@ -1169,7 +1167,7 @@ namespace LipidCreator
                     
                     
                 case (int)MRMSteps.OpenReview:
-                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
+                    setTutorialControls(creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;
@@ -1473,7 +1471,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     Button alb = creatorGUI.addLipidButton;
-                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1), alb.Location.Y), "rb");
+                    tutorialArrow.update(new Point(alb.Location.X + (alb.Size.Width >> 1) + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
@@ -1481,7 +1479,7 @@ namespace LipidCreator
                     
                     
                 case (int)HLSteps.OpenReview:
-                    setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
+                    setTutorialControls(creatorGUI);
                     
                     
                     Button orfb = creatorGUI.openReviewFormButton;

@@ -235,6 +235,7 @@ namespace LipidCreator
         public void changeTab(int index)
         {
             tabControl.SelectedIndex = index;
+            if (lipidTabList.Count >= index) return;
             changingTabForced = true;
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;

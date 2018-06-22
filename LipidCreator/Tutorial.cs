@@ -35,67 +35,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-/*
-0  (int)PRMSteps.Null
-1  (int)PRMSteps.Welcome
-2  (int)PRMSteps.PhosphoTab
-3  (int)PRMSteps.PGheadgroup
-4  (int)PRMSteps.SetFA
-5  (int)PRMSteps.SetDB
-6  (int)PRMSteps.MoreParameters
-7  (int)PRMSteps.Ether
-8  (int)PRMSteps.SecondFADB
-9  (int)PRMSteps.SelectAdduct
-41 (int)PRMSteps.AddLipid
-42  (int)PRMSteps.OpenReview
-43  (int)PRMSteps.StoreList
-44  (int)PRMSteps.Finish
 
-
-10  (int)MRMSteps.OpenMS2
-11  (int)MRMSteps.InMS2
-12  (int)MRMSteps.SelectPG
-13  (int)MRMSteps.SelectFragments
-14  (int)MRMSteps.AddFragment
-15  (int)MRMSteps.InFragment
-16  (int)MRMSteps.NameFragment
-17  (int)MRMSteps.SetCharge
-18  (int)MRMSteps.SetElements
-19  (int)MRMSteps.AddingFragment
-20  (int)MRMSteps.SelectNew
-21  (int)MRMSteps.ClickOK
-41  (int)MRMSteps.AddLipid
-42  (int)MRMSteps.OpenReview
-43  (int)MRMSteps.StoreList
-44  (int)MRMSteps.Finish
-
-
-22  (int)HLSteps.OpenHeavy
-23  (int)HLSteps.HeavyPanel
-24  (int)HLSteps.NameHeavy
-25  (int)HLSteps.OptionsExplain
-26  (int)HLSteps.SetElements
-27  (int)HLSteps.ChangeBuildingBlock
-28  (int)HLSteps.SetElements2
-29  (int)HLSteps.AddIsotope
-30  (int)HLSteps.EditExplain
-31  (int)HLSteps.CloseHeavy
-32  (int)HLSteps.OpenMS2
-33  (int)HLSteps.SelectPG
-34  (int)HLSteps.SelectHeavy
-35  (int)HLSteps.SelectFragments
-36  (int)HLSteps.CheckFragment
-37  (int)HLSteps.EditFragment
-38  (int)HLSteps.SetFragElement
-39  (int)HLSteps.ConfirmEdit
-40  (int)HLSteps.CloseFragment
-41  (int)MRMSteps.AddLipid
-42  (int)MRMSteps.OpenReview
-43  (int)MRMSteps.StoreList
-44  (int)MRMSteps.Finish
-
-
-*/
 
 namespace LipidCreator
 {
@@ -150,11 +90,10 @@ namespace LipidCreator
         public void startTutorial(Tutorials t)
         {
         
-            //if (!creatorGUI.resetLipidCreator()) return;
+            if (!creatorGUI.resetLipidCreator()) return;
             
             tutorial = t;
             tutorialStep = 0;
-            
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);

@@ -2622,7 +2622,7 @@ namespace LipidCreator
                 SLLipid currentSLLipid = (SLLipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
-                row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo;
+                row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo + "; OH: " + currentSLLipid.lcb.hydroxylCounts.First();
                 if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
             }
             

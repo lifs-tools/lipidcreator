@@ -35,10 +35,27 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
+/*
+0  (int)PRMSteps.Null
+1  (int)PRMSteps.Welcome
+2  (int)PRMSteps.PhosphoTab
+3  (int)PRMSteps.PGheadgroup
+4  (int)PRMSteps.SetFA
+5  (int)PRMSteps.SetDB
+6  (int)PRMSteps.MoreParameters
+7  (int)PRMSteps.Ether
+8  (int)PRMSteps.SecondFADB
+9  (int)PRMSteps.SelectAdduct
+42  (int)PRMSteps.OpenReview
+43  (int)PRMSteps.StoreList
+44  (int)PRMSteps.Finish
+*/
+
 namespace LipidCreator
 {
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialMRM = 1, TutorialHeavyLabeled = 2};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenReview, StoreList, Finish};
     
 
     [Serializable]
@@ -68,7 +85,7 @@ namespace LipidCreator
             this.creatorGUI = creatorGUI;
             maxSteps = new Dictionary<int, int>(){
                 {(int)Tutorials.NoTutorial, 0},
-                {(int)Tutorials.TutorialPRM, 44},
+                {(int)Tutorials.TutorialPRM, Enum.GetNames(typeof(PRMSteps)).Length},
                 {(int)Tutorials.TutorialMRM, 20},
                 {(int)Tutorials.TutorialHeavyLabeled, 20}
             };
@@ -222,7 +239,6 @@ namespace LipidCreator
         public void quitTutorial(bool userDefined = false)
         {
         
-            Console.WriteLine("quit process");
             tutorial = Tutorials.NoTutorial;
             tutorialStep = 0;
             tutorialArrow.Visible = false;
@@ -381,7 +397,7 @@ namespace LipidCreator
         public void listBoxInteraction(object sender, System.EventArgs e)
         {
             ListBox box = (ListBox)sender;
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 3 && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("PG")) nextEnabled = true;
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PGheadgroup && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("PG")) nextEnabled = true;
             else nextEnabled = false;
             tutorialWindow.Refresh();
         }
@@ -421,7 +437,7 @@ namespace LipidCreator
         {
             if (tutorial != Tutorials.NoTutorial)
             {
-                if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == 2)
+                if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PhosphoTab)
                 {
                     return;
                 }
@@ -464,19 +480,19 @@ namespace LipidCreator
         
         public void textBoxInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 4)
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetFA)
             {
                 HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
                 HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
             }
-            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 5)
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetDB)
             {
                 HashSet<int> expected = new HashSet<int>(){0, 1};
                 HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.doubleBondCounts;
                 nextEnabled = doubleBondCounts != null && doubleBondCounts.Intersect(expected).Count() == 2;
             }
-            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == 8)
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SecondFADB)
             {
                 nextEnabled = true;
                 
@@ -507,7 +523,7 @@ namespace LipidCreator
         
         public void checkBoxInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == 9)
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SelectAdduct)
             {
                 nextEnabled = creatorGUI.plPosAdductCheckbox1.Checked && !creatorGUI.plPosAdductCheckbox3.Checked;
             }
@@ -633,16 +649,20 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            
+            //if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
+            
         }
         
         
         public void mouseDownInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            //if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{10, 14, 19, 21, 22, 29, 31, 32, 37, 39, 40, 41, 42, 43}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
@@ -706,7 +726,7 @@ namespace LipidCreator
             prepareStep();
             switch(tutorialStep)
             {   
-                case 1:
+                case (int)PRMSteps.Welcome:
                     setTutorialControls(creatorGUI.homeTab);
                     
                     
@@ -717,7 +737,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 2:
+                case (int)PRMSteps.PhosphoTab:
                     setTutorialControls(creatorGUI.homeTab);
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
@@ -727,9 +747,8 @@ namespace LipidCreator
                     break;
                     
                     
-                case 3:
+                case (int)PRMSteps.PGheadgroup:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
-                    //setTutorialControls(creatorGUI);
                     
                     ListBox plHG = creatorGUI.plHgListbox;
                     int plHGpg = 0;
@@ -743,7 +762,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 4:
+                case (int)PRMSteps.SetFA:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
@@ -757,7 +776,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 5:
+                case (int)PRMSteps.SetDB:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
                     TextBox plDB1 = creatorGUI.plDB1Textbox;
@@ -771,7 +790,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 6:
+                case (int)PRMSteps.MoreParameters:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
@@ -783,7 +802,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 7:
+                case (int)PRMSteps.Ether:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
@@ -795,7 +814,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 8:
+                case (int)PRMSteps.SecondFADB:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     TextBox plFA2 = creatorGUI.plFA2Textbox;
                     tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
@@ -809,7 +828,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 9:
+                case (int)PRMSteps.SelectAdduct:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     CheckBox adductP1 = creatorGUI.plPosAdductCheckbox1;
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
@@ -823,6 +842,8 @@ namespace LipidCreator
                     adductP1.Enabled = true;
                     break;
                     
+                    
+                    /*
                     
                 case 10:
                     setTutorialControls(creatorGUI.phospholipidsTab);
@@ -1201,8 +1222,9 @@ namespace LipidCreator
                     
                     break;
                     
+                    */
                     
-                case 42:
+                case (int)PRMSteps.OpenReview:
                     setTutorialControls(creatorGUI.phospholipidsTab, creatorGUI);
                     
                     
@@ -1215,7 +1237,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 43:
+                case (int)PRMSteps.StoreList:
                     setTutorialControls(creatorGUI.lipidsReview);
                     initLipidReview();
                     
@@ -1229,7 +1251,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case 44:
+                case (int)PRMSteps.Finish:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
                     tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "Congratulations, you passed the first tutorial. If you need more information, please use the next tutorials or read the documentation. Have fun with LipidCreator.");

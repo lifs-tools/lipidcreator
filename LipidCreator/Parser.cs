@@ -74,7 +74,8 @@ namespace LipidCreator
         }
         
         
-        
+        // this class is dedicated to have an efficient sorted set class storing
+        // values within 0..n-1 and fast sequencial iterator
         public class Bitfield
         {
             public ulong[] field;
@@ -388,12 +389,14 @@ namespace LipidCreator
         }
         
         
+        // checking if string is terminal
         public static bool isTerminal(string productToken, char quote)
         {
-            string[] tks = productToken.Split(quote);
-            if (tks.Length != 1 && tks.Length != 3) throw new Exception("Error: corrupted token in grammer");
+            int cnt = 0;
+            foreach(char c in productToken) cnt += (c == quote) ? 1 : 0;
+            if (cnt != 0 && cnt != 2) throw new Exception("Error: corrupted token in grammer");
             
-            if (tks.Length == 1) return false;
+            if (cnt == 0) return false;
         
             if (productToken[0] == quote && productToken[productToken.Length - 1] == quote && productToken.Length > 2) return true;
 
@@ -401,6 +404,7 @@ namespace LipidCreator
         }
         
         
+        // splitting the whole terminal in a tree structure where characters of terminal are the leafs and the inner nodes are added non terminal rules
         public int addTerminal(string text)
         {
             text = strip(text, quote);
@@ -481,25 +485,24 @@ namespace LipidCreator
             
             
         
-        public void raiseEventsRecursive(TreeNode node)
+        public void raiseEvents(TreeNode node = null)
         {
-            if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_pre_event", node);
-            
-            if (node.terminal == '\0') // node.terminal is != null when node is leaf
+            if (node != null)
             {
-                raiseEventsRecursive(node.left);
-                if (node.right != null) raiseEventsRecursive(node.right);
-            }
+                if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_pre_event", node);
                 
-            if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_post_event", node);
-        }
-        
-        
+                if (node.terminal == '\0') // node.terminal is != null when node is leaf
+                {
+                    raiseEvents(node.left);
+                    if (node.right != null) raiseEvents(node.right);
+                }
                     
-        
-        public void raiseEvents()
-        {
-            if (parseTree != null) raiseEventsRecursive(parseTree);
+                if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_post_event", node);
+            }
+            else
+            {
+                raiseEvents(parseTree);
+            }
         }
         
         

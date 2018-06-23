@@ -16,16 +16,65 @@ namespace LipidCreator
         public double[] xValCoords;
         public double[][] yValCoords;
         public string[] fragmentNames;
-
+        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
+        public string selectedInstrument;
+        public string selectedClass;
+        public string selectedAdduct;
         
         public CEInspector(CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
+            instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>>();
             InitializeComponent();
-            var collisionEnergyHandler = creatorGUI.lipidCreator.collisionEnergyHandler;
             
+            // foreach instrument
+            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
+            {
+                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> p1 = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>();
+                instrumentParameters.Add(kvp1.Key, p1);
+                
+                // foreach class
+                foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
+                {
+                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> p2 = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+                    p1.Add(kvp2.Key, p2);
+                    
+                    // foreach adduct
+                    foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
+                    {
+                        Dictionary<string, Dictionary<string, string>> p3 = new Dictionary<string, Dictionary<string, string>>();
+                        p2.Add(kvp3.Key, p3);
+                        
+                        
+                        // foreach fragment
+                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
+                        {
+                            Dictionary<string, string> p4 = new Dictionary<string, string>();
+                            p3.Add(kvp4.Key, p4);
+                            
+                            // foreach parameter
+                            foreach(KeyValuePair<string, string> p5 in kvp4.Value)
+                            {
+                                p4.Add(p5.Key, p5.Value);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+            foreach (string instrumentName in instrumentParameters.Keys)
+            {
+                instrumentCombobox.Items.Add(instrumentName);
+                instrumentCombobox.SelectedIndex = 0;
+            }
+            
+        }
+        
+        public void computeCurves()
+        {
             xValCoords = new double[cartesean.innerWidthPx + 1];
-            int n = collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"]["[M8H2-H]1-"].Count;
+            int n = instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Count;
             fragmentNames = new string[n];
             yValCoords = new double[n][];
             
@@ -36,7 +85,7 @@ namespace LipidCreator
             }
             
             int k = 0;
-            foreach(string fragmentName in collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"]["[M8H2-H]1-"].Keys)
+            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
             {
                 
                 yValCoords[k] = new double[cartesean.innerWidthPx + 1];
@@ -44,27 +93,41 @@ namespace LipidCreator
                 int j = 0;
                 foreach (double valX in xValCoords)
                 {
-                    yValCoords[k][j] = 10000 * collisionEnergyHandler.getIntensity("MS:1002523", "12-HETE/d8", "[M8H2-H]1-", fragmentName, valX);
+                    yValCoords[k][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
                     ++j;
                 }
                 ++k;
             }
-            
+            cartesean.Refresh();
         }
         
         public void instrumentComboboxChanged(Object sender, EventArgs e)
         {
-        
+            selectedInstrument = (string)instrumentCombobox.Items[instrumentCombobox.SelectedIndex];
+            classCombobox.Items.Clear();
+            foreach(string lipidClass in instrumentParameters[selectedInstrument].Keys)
+            {
+                classCombobox.Items.Add(lipidClass);
+            }
+            classCombobox.SelectedIndex = 0;
         }
         
         public void classComboboxChanged(Object sender, EventArgs e)
         {
-        
+            selectedClass = (string)classCombobox.Items[classCombobox.SelectedIndex];
+            adductCombobox.Items.Clear();
+            foreach(string adduct in instrumentParameters[selectedInstrument][selectedClass].Keys)
+            {
+                adductCombobox.Items.Add(adduct);
+            }
+            adductCombobox.SelectedIndex = 0;
         }
+        
         
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
-        
+            selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
+            computeCurves();
         }
         
         

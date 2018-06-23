@@ -61,6 +61,7 @@ namespace LipidCreator
             ceInspector = _ceInspector;
             innerWidthPx = Width - marginLeft - marginRight;
             innerHeightPx = Height - marginBottom - marginTop;
+            DoubleBuffered = true;
         }
         
         public Point valueToPx(double valX, double valY)

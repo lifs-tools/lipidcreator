@@ -252,6 +252,7 @@ namespace LipidCreator
         public int marginTop = 10;
         public int marginBottom = 20;
         public const int LABEL_EXTENSION = 5;
+        public const double VAL_DENOMINATOR = 100.0;
         
         public int innerWidthPx;
         public int innerHeightPx;
@@ -279,9 +280,9 @@ namespace LipidCreator
             
             double lastX = 0;
             double lastY = 0;
-            for (int i = 0; i <= 100; ++i)
+            for (int i = 0; i <= VAL_DENOMINATOR; ++i)
             {
-                double valX = ((double)i) / 100.0 * maxXVal;
+                double valX = ((double)i) / VAL_DENOMINATOR * maxXVal;
                 double valY = 120.0 / (valX * valX / 100.0 + 1.0);
                 if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
                 lastX = valX;

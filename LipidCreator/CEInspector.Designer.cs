@@ -52,7 +52,7 @@ namespace LipidCreator
         public double maxYVal = 200;
         public int highlight = -1;
         public double offset = 2.4;
-        public double CEval = 25.3;
+        public double CEval = 0;
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
@@ -200,11 +200,15 @@ namespace LipidCreator
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip();
+            this.labelInstrument = new Label();
+            this.labelClass = new Label();
+            this.labelAdduct = new Label();
+            this.labelFragment = new Label();
             this.instrumentCombobox = new ComboBox();
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
             this.SuspendLayout();
-            this.ClientSize = new System.Drawing.Size(800, 500);
+            this.ClientSize = new System.Drawing.Size(950, 412);
             
             // 
             // button1
@@ -237,22 +241,36 @@ namespace LipidCreator
             
             
             instrumentCombobox.Location = new Point(10, 20);
-            instrumentCombobox.Width = 140;
+            instrumentCombobox.Width = 200;
             instrumentCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             instrumentCombobox.SelectedIndexChanged += new EventHandler(instrumentComboboxChanged);
             
             
-            classCombobox.Location = new Point(160, 20);
-            classCombobox.Width = 140;
+            classCombobox.Location = new Point(210, 20);
+            classCombobox.Width = 200;
             classCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             classCombobox.SelectedIndexChanged += new EventHandler(classComboboxChanged);
             
-            adductCombobox.Location = new Point(310, 20);
-            adductCombobox.Width = 140;
+            adductCombobox.Location = new Point(420, 20);
+            adductCombobox.Width = 200;
             adductCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             adductCombobox.SelectedIndexChanged += new EventHandler(adductComboboxChanged);
             
+            labelInstrument.Text = "Instruments:";
+            labelInstrument.Width = 140;
+            labelInstrument.Location = new Point(10, 4);
             
+            labelClass.Text = "Lipid classes:";
+            labelClass.Width = 140;
+            labelClass.Location = new Point(210, 4);
+            
+            labelAdduct.Text = "Adducts:";
+            labelAdduct.Width = 140;
+            labelAdduct.Location = new Point(420, 4);
+            
+            labelFragment.Text = "Fragments:";
+            labelFragment.Width = 140;
+            labelFragment.Location = new Point(700, 4);
             // 
             // CEInspector
             // 
@@ -263,6 +281,10 @@ namespace LipidCreator
             this.Controls.Add(this.instrumentCombobox);
             this.Controls.Add(this.classCombobox);
             this.Controls.Add(this.adductCombobox);
+            this.Controls.Add(this.labelInstrument);
+            this.Controls.Add(this.labelClass);
+            this.Controls.Add(this.labelAdduct);
+            this.Controls.Add(this.labelFragment);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
@@ -280,5 +302,9 @@ namespace LipidCreator
         public ComboBox instrumentCombobox;
         public ComboBox classCombobox;
         public ComboBox adductCombobox;
+        public Label labelInstrument;
+        public Label labelClass;
+        public Label labelAdduct;
+        public Label labelFragment;
     }
 }

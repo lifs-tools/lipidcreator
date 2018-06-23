@@ -73,6 +73,7 @@ namespace LipidCreator
         
         public void computeCurves()
         {
+            cartesean.CEval = 0;
             xValCoords = new double[cartesean.innerWidthPx + 1];
             int n = instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Count;
             fragmentNames = new string[n];
@@ -85,12 +86,22 @@ namespace LipidCreator
             }
             
             int k = 0;
+            int topRank = 100000;
+            string topFragment = "";
             foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
             {
-                
                 yValCoords[k] = new double[cartesean.innerWidthPx + 1];
                 fragmentNames[k] = fragmentName;
                 int j = 0;
+                
+                int rank = creatorGUI.lipidCreator.collisionEnergyHandler.getRank(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
+                if (topRank > rank)
+                {
+                    topRank = rank;
+                    topFragment = fragmentName;
+                }
+                
+                
                 foreach (double valX in xValCoords)
                 {
                     yValCoords[k][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
@@ -98,6 +109,9 @@ namespace LipidCreator
                 }
                 ++k;
             }
+            
+            cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
+            
             cartesean.Refresh();
         }
         

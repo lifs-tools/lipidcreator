@@ -102,15 +102,15 @@ namespace LipidCreator
         
         
         
-        public double getRank(string instrument, string lipidClass, string adduct, string fragment)
+        public int getRank(string instrument, string lipidClass, string adduct, string fragment)
         {
-            if(!instrumentParameters.ContainsKey(instrument)) return -1.0;
-            if(!instrumentParameters[instrument].ContainsKey(lipidClass)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass].ContainsKey(adduct)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey("score")) return -1.0;
+            if(!instrumentParameters.ContainsKey(instrument)) return -1;
+            if(!instrumentParameters[instrument].ContainsKey(lipidClass)) return -1;
+            if(!instrumentParameters[instrument][lipidClass].ContainsKey(adduct)) return -1;
+            if(!instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment)) return -1;
+            if(!instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey("rank")) return -1;
             
-            return Convert.ToDouble(instrumentParameters[instrument][lipidClass][adduct][fragment]["score"]);
+            return Convert.ToInt32(instrumentParameters[instrument][lipidClass][adduct][fragment]["rank"]);
         }
         
         

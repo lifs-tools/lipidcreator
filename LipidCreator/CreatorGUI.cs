@@ -173,6 +173,17 @@ namespace LipidCreator
                     instrumentItem.Click += new System.EventHandler (changeInstrumentForCE);
                 }
             }
+            
+            
+            
+            
+            // TODO: after testing, delete this lines
+            CEInspector ceInspector = new CEInspector();
+            ceInspector.Owner = this;
+            ceInspector.ShowInTaskbar = false;
+            ceInspector.ShowDialog();
+            ceInspector.Dispose();
+            Environment.Exit(0);
         }
         
         

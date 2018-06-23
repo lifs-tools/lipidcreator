@@ -247,22 +247,26 @@ namespace LipidCreator
     
     public class Cartesean : Control
     {
-        public int originXPx = 20;
-        public int originYPx = 20;
+        public int marginLeft = 30;
+        public int marginRight = 10;
+        public int marginTop = 10;
+        public int marginBottom = 20;
+        public const int LABEL_EXTENSION = 5;
+        
         public int innerWidthPx;
         public int innerHeightPx;
         public int maxXVal = 50;
-        public int maxYVal = 2;
+        public int maxYVal = 200;
         
         public Point valueToPx(double valX, double valY)
         {
-            return new Point((int)(originXPx + valX * innerWidthPx / maxXVal), (int)(Height - originYPx - valY * innerHeightPx / maxYVal));
+            return new Point((int)(marginLeft + valX * innerWidthPx / maxXVal), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
     
         protected override void OnPaint(PaintEventArgs e)
         {
-            innerWidthPx = Width - originXPx;
-            innerHeightPx = Height - originYPx;
+            innerWidthPx = Width - marginLeft - marginRight;
+            innerHeightPx = Height - marginBottom - marginTop;
         
             // draw border
             Graphics g = e.Graphics;
@@ -278,7 +282,7 @@ namespace LipidCreator
             for (int i = 0; i <= 100; ++i)
             {
                 double valX = ((double)i) / 100.0 * maxXVal;
-                double valY = 1.0 / (valX * valX / 100.0 + 1.0);
+                double valY = 120.0 / (valX * valX / 100.0 + 1.0);
                 if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
                 lastX = valX;
                 lastY = valY;
@@ -291,14 +295,31 @@ namespace LipidCreator
             
             // drawing the axes
             blackPen = new Pen(Color.Black, 2);
-            g.DrawLine(blackPen, new Point(originXPx - 10, Height - originYPx), new Point(Width, Height - originYPx));
-            g.DrawLine(blackPen, new Point(originXPx, Height - originYPx + 10), new Point(originXPx, 0));
+            g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
+            g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
+            
+            // labels at x-axis
+            for (int i = 0, j = 0; i < Width; i += innerWidthPx / 5, j += maxXVal / 5)
+            {
+                g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
+                
+                
+                int stringSize = (int)g.MeasureString(Convert.ToString(j), labelFont, 20).Width;
+                RectangleF instructionRect = new RectangleF(marginLeft + i - (stringSize >> 1), Height - marginBottom + 5, stringSize, 20);
+                g.DrawString(Convert.ToString(j), labelFont, drawBrush, instructionRect);
+            }
+            
+            
             
             // labels at y-axis
-            for (int i = 0, j = 0; i < innerWidthPx; i += innerWidthPx / 5, j += 10)
+            for (int i = 0, j = 0; i < Height; i += innerHeightPx / 5, j += maxYVal / 5)
             {
-                g.DrawLine(blackPen, new Point(originXPx + i, Height - originYPx - 5), new Point(originXPx + i, Height - originYPx + 5));
-                RectangleF instructionRect = new RectangleF(originXPx + i - 10, Height - originYPx + 5, 20, 20);
+                g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
+                
+                SizeF stringSize = g.MeasureString(Convert.ToString(j), labelFont, 30);
+                int stringSizeW = (int)stringSize.Width;
+                int stringSizeH = (int)stringSize.Height;
+                RectangleF instructionRect = new RectangleF(marginLeft - stringSizeW - (LABEL_EXTENSION << 1), Height - marginBottom - i - (stringSizeH >> 1), stringSizeW, 16);
                 g.DrawString(Convert.ToString(j), labelFont, drawBrush, instructionRect);
             }
             
@@ -2271,8 +2292,8 @@ namespace LipidCreator
             
             canvasTab.Text = "canvas";
             Cartesean myParentCanvas = new Cartesean();
-            myParentCanvas.Width = 500;
-            myParentCanvas.Height = 300;
+            myParentCanvas.Width = 700;
+            myParentCanvas.Height = 350;
             canvasTab.Controls.Add(myParentCanvas);
             myParentCanvas.Location = new Point(10, 10);
             

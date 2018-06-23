@@ -35,85 +35,124 @@ using System.Drawing.Drawing2D;
 namespace LipidCreator
 {
 
-    
-    
     public class Cartesean : Control
     {
-        public int marginLeft = 30;
+        public int marginLeft = 50;
         public int marginRight = 10;
         public int marginTop = 10;
         public int marginBottom = 20;
         public const int LABEL_EXTENSION = 5;
         public const double VAL_DENOMINATOR = 100.0;
+        public CEInspector ceInspector;
         
         public int innerWidthPx;
         public int innerHeightPx;
-        public int maxXVal = 50;
-        public int maxYVal = 200;
+        public double maxXVal = 50;
+        public double maxYVal = 200;
+        public int highlight = -1;
+        public double offset = 2.4;
+        
+        public Cartesean(CEInspector _ceInspector, int width, int height)
+        {
+            Width = width;
+            Height = height;
+            ceInspector = _ceInspector;
+            innerWidthPx = Width - marginLeft - marginRight;
+            innerHeightPx = Height - marginBottom - marginTop;
+        }
         
         public Point valueToPx(double valX, double valY)
         {
             return new Point((int)(marginLeft + valX * innerWidthPx / maxXVal), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
+        
+        public PointF pxToValue(int pxX, int pxY)
+        {
+            return new PointF((float)((pxX - marginLeft) * maxXVal / innerHeightPx), (float)((Height - marginBottom - pxY) * maxYVal / innerHeightPx));
+        }
+        
+        
+        
+        public void mouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (Left <= e.X && e.X <= Left + Width &&
+                Top <= e.Y && e.Y <= Top + Height)
+            {
+                double newYVal = maxYVal + 10 * ((e.Delta > 0) ? -1.0 : 1.0);
+                double newOffset = offset + 0.1 * ((e.Delta > 0) ? -1.0 : 1.0);
+                if (10 <= newYVal)
+                {
+                    maxYVal = newYVal;
+                    offset = newOffset;
+                    ceInspector.mouseMove(sender, e);
+                    Refresh();
+                }
+            }
+        }
     
         protected override void OnPaint(PaintEventArgs e)
         {
-            innerWidthPx = Width - marginLeft - marginRight;
-            innerHeightPx = Height - marginBottom - marginTop;
-        
             // draw border
             Graphics g = e.Graphics;
             Pen blackPen = new Pen(Color.Black, 1);
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
             
             
-            Pen redPen = new Pen(Color.Red, 1);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             
-            double lastX = 0;
-            double lastY = 0;
-            for (int i = 0; i <= VAL_DENOMINATOR; ++i)
+            
+            for(int k = 0; k < ceInspector.fragmentNames.Length; ++k)
             {
-                double valX = ((double)i) / VAL_DENOMINATOR * maxXVal;
-                double valY = 120.0 / (valX * valX / 100.0 + 1.0);
-                if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
-                lastX = valX;
-                lastY = valY;
+                double lastX = 0;
+                double lastY = 0;
+                Pen redPen = new Pen(Color.Red, (k == highlight ? 3 : 1));
+                for (int i = 0; i < ceInspector.yValCoords[k].Length; ++i)
+                {
+                    double valX = ceInspector.xValCoords[i];
+                    double valY = ceInspector.yValCoords[k][i];
+                    
+                    if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
+                    lastX = valX;
+                    lastY = valY;
+                }
             }
             
             
-            Font labelFont = new Font("Arial", 8);
+            
             
             
             
             // drawing the axes
+            Font labelFont = new Font("Arial", 8);
             blackPen = new Pen(Color.Black, 2);
             g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
             
             // labels at x-axis
-            for (int i = 0, j = 0; i < Width; i += innerWidthPx / 5, j += maxXVal / 5)
+            double jj = 0;
+            for (int i = 0; i < Width; i += innerWidthPx / 5, jj += maxXVal / 5.0)
             {
                 g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
                 
                 
-                int stringSize = (int)g.MeasureString(Convert.ToString(j), labelFont, 20).Width;
+                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width;
                 RectangleF instructionRect = new RectangleF(marginLeft + i - (stringSize >> 1), Height - marginBottom + 5, stringSize, 20);
-                g.DrawString(Convert.ToString(j), labelFont, drawBrush, instructionRect);
+                g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
             }
             
             
             
             // labels at y-axis
-            for (int i = 0, j = 0; i < Height; i += innerHeightPx / 5, j += maxYVal / 5)
+            jj = 0;
+            for (int i = 0; i < Height; i += innerHeightPx / 5, jj += maxYVal / 5.0)
             {
                 g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
                 
-                SizeF stringSize = g.MeasureString(Convert.ToString(j), labelFont, 30);
+                SizeF stringSize = g.MeasureString(Convert.ToString(jj), labelFont, 30);
                 int stringSizeW = (int)stringSize.Width;
                 int stringSizeH = (int)stringSize.Height;
                 RectangleF instructionRect = new RectangleF(marginLeft - stringSizeW - (LABEL_EXTENSION << 1), Height - marginBottom - i - (stringSizeH >> 1), stringSizeW, 16);
-                g.DrawString(Convert.ToString(j), labelFont, drawBrush, instructionRect);
+                g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
             }
             
             
@@ -154,8 +193,10 @@ namespace LipidCreator
         {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.ToolTip1 = new System.Windows.Forms.ToolTip();
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(800, 500);
+            
             // 
             // button1
             // 
@@ -179,11 +220,11 @@ namespace LipidCreator
             
             
             
-            Cartesean myParentCanvas = new Cartesean();
-            myParentCanvas.Width = 700;
-            myParentCanvas.Height = 350;
-            myParentCanvas.Location = new Point(10, 10);
-            
+            cartesean = new Cartesean(this, 700, 350);
+            cartesean.Location = new Point(10, 10);
+            cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(mouseMove);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(cartesean.mouseWheel);
+
             // 
             // CEInspector
             // 
@@ -191,18 +232,21 @@ namespace LipidCreator
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(myParentCanvas);
+            this.Controls.Add(cartesean);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            
 
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        public Cartesean cartesean;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button button2;
+        public System.Windows.Forms.ToolTip ToolTip1;
     }
 }

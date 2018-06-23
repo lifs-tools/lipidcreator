@@ -178,7 +178,7 @@ namespace LipidCreator
             
             
             // TODO: after testing, delete this lines
-            CEInspector ceInspector = new CEInspector();
+            CEInspector ceInspector = new CEInspector(this);
             ceInspector.Owner = this;
             ceInspector.ShowInTaskbar = false;
             ceInspector.ShowDialog();

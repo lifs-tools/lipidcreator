@@ -44,6 +44,7 @@ namespace LipidCreator
         public const int LABEL_EXTENSION = 5;
         public const double VAL_DENOMINATOR = 100.0;
         public CEInspector ceInspector;
+        public string [] colors = new string[]{"#e6194b", "#3cb44b", "#ffe119", "#0082c8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#d2f53c", "#fabebe", "#008080", "#e6beff", "#aa6e28", "#fffac8", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000080", "#808080"};
         
         public int innerWidthPx;
         public int innerHeightPx;
@@ -51,6 +52,7 @@ namespace LipidCreator
         public double maxYVal = 200;
         public int highlight = -1;
         public double offset = 2.4;
+        public double CEval = 25.3;
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
@@ -92,39 +94,33 @@ namespace LipidCreator
     
         protected override void OnPaint(PaintEventArgs e)
         {
-            // draw border
             Graphics g = e.Graphics;
-            Pen blackPen = new Pen(Color.Black, 1);
-            g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
+            // draw white background
+            SolidBrush whiteBrush = new SolidBrush(Color.White);
+            Rectangle rectBG = new Rectangle(0, 0, Width, Height);
+            e.Graphics.FillRectangle(whiteBrush, rectBG);
             
-            
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            
-            
+            // draw all curves
             for(int k = 0; k < ceInspector.fragmentNames.Length; ++k)
             {
                 double lastX = 0;
                 double lastY = 0;
-                Pen redPen = new Pen(Color.Red, (k == highlight ? 3 : 1));
+                Pen colorPen = new Pen(ColorTranslator.FromHtml(colors[k % colors.Length]), (k == highlight ? 3 : 2));
                 for (int i = 0; i < ceInspector.yValCoords[k].Length; ++i)
                 {
                     double valX = ceInspector.xValCoords[i];
                     double valY = ceInspector.yValCoords[k][i];
                     
-                    if (i > 0) g.DrawLine(redPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
+                    if (i > 0) g.DrawLine(colorPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
                     lastX = valX;
                     lastY = valY;
                 }
             }
             
-            
-            
-            
-            
-            
             // drawing the axes
             Font labelFont = new Font("Arial", 8);
-            blackPen = new Pen(Color.Black, 2);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            Pen blackPen = new Pen(Color.Black, 2);
             g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
             
@@ -155,6 +151,15 @@ namespace LipidCreator
                 g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
             }
             
+            // draw dashed collision energy line
+            float[] dashValues = { 5, 10 };
+            Pen bPen = new Pen(Color.Black, 1);
+            bPen.DashPattern = dashValues;
+            int ceX = valueToPx(CEval, 0).X;
+            g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
+            
+            // draw border
+            g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
             
             
             base.OnPaint(e);
@@ -194,6 +199,9 @@ namespace LipidCreator
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip();
+            this.instrumentCombobox = new ComboBox();
+            this.classCombobox = new ComboBox();
+            this.adductCombobox = new ComboBox();
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(800, 500);
             
@@ -221,18 +229,39 @@ namespace LipidCreator
             
             
             cartesean = new Cartesean(this, 700, 350);
-            cartesean.Location = new Point(10, 10);
+            cartesean.Location = new Point(10, 50);
             cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(mouseMove);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(cartesean.mouseWheel);
 
+            
+            
+            instrumentCombobox.Location = new Point(10, 20);
+            instrumentCombobox.Width = 140;
+            instrumentCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            instrumentCombobox.SelectedIndexChanged += new EventHandler(instrumentComboboxChanged);
+            
+            
+            classCombobox.Location = new Point(160, 20);
+            classCombobox.Width = 140;
+            classCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            classCombobox.SelectedIndexChanged += new EventHandler(classComboboxChanged);
+            
+            adductCombobox.Location = new Point(310, 20);
+            adductCombobox.Width = 140;
+            adductCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            adductCombobox.SelectedIndexChanged += new EventHandler(adductComboboxChanged);
+            
+            
             // 
             // CEInspector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(cartesean);
+            this.Controls.Add(this.cartesean);
+            this.Controls.Add(this.instrumentCombobox);
+            this.Controls.Add(this.classCombobox);
+            this.Controls.Add(this.adductCombobox);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
@@ -240,7 +269,6 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-
         }
 
         #endregion
@@ -248,5 +276,8 @@ namespace LipidCreator
         public System.Windows.Forms.Button button1;
         public System.Windows.Forms.Button button2;
         public System.Windows.Forms.ToolTip ToolTip1;
+        public ComboBox instrumentCombobox;
+        public ComboBox classCombobox;
+        public ComboBox adductCombobox;
     }
 }

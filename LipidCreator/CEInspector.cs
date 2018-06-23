@@ -16,6 +16,7 @@ namespace LipidCreator
         public double[] xValCoords;
         public double[][] yValCoords;
         public string[] fragmentNames;
+
         
         public CEInspector(CreatorGUI _creatorGUI)
         {
@@ -49,6 +50,23 @@ namespace LipidCreator
             }
             
         }
+        
+        public void instrumentComboboxChanged(Object sender, EventArgs e)
+        {
+        
+        }
+        
+        public void classComboboxChanged(Object sender, EventArgs e)
+        {
+        
+        }
+        
+        public void adductComboboxChanged(Object sender, EventArgs e)
+        {
+        
+        }
+        
+        
         
         public void cancelClick(object sender, EventArgs e)
         {

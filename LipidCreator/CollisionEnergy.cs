@@ -65,7 +65,7 @@ namespace LipidCreator
         
         
         
-        public double getCollisionEnergy(string instrument, string lipidClass, string fragment, string adduct)
+        public double getCollisionEnergy(string instrument, string lipidClass, string adduct, string fragment)
         {
             double energy = -1;
             if (instrumentParameters.ContainsKey(instrument))
@@ -76,14 +76,14 @@ namespace LipidCreator
                 {
                 
                     Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
-                    if (parLevel2.ContainsKey(fragment))
+                    if (parLevel2.ContainsKey(adduct))
                     {
                         
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[fragment];
-                        if (parLevel3.ContainsKey(adduct))
+                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        if (parLevel3.ContainsKey(fragment))
                         {
                         
-                            Dictionary<string, string> parLevel4 = parLevel3[adduct];
+                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("model"))
                             {
                             
@@ -102,20 +102,20 @@ namespace LipidCreator
         
         
         
-        public double getScore(string instrument, string lipidClass, string fragment, string adduct)
+        public double getRank(string instrument, string lipidClass, string adduct, string fragment)
         {
             if(!instrumentParameters.ContainsKey(instrument)) return -1.0;
             if(!instrumentParameters[instrument].ContainsKey(lipidClass)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass].ContainsKey(fragment)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass][fragment].ContainsKey(adduct)) return -1.0;
-            if(!instrumentParameters[instrument][lipidClass][fragment][adduct].ContainsKey("score")) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass].ContainsKey(adduct)) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment)) return -1.0;
+            if(!instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey("score")) return -1.0;
             
-            return Convert.ToDouble(instrumentParameters[instrument][lipidClass][fragment][adduct]["score"]);
+            return Convert.ToDouble(instrumentParameters[instrument][lipidClass][adduct][fragment]["score"]);
         }
         
         
         
-        public double getIntensity(string instrument, string lipidClass, string fragment, string adduct, double collisionEnergy)
+        public double getIntensity(string instrument, string lipidClass, string adduct, string fragment, double collisionEnergy)
         {
             double intensity = MS2Fragment.DEFAULT_INTENSITY;
             if (instrumentParameters.ContainsKey(instrument))
@@ -126,13 +126,13 @@ namespace LipidCreator
                 {
                 
                     Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
-                    if (parLevel2.ContainsKey(fragment))
+                    if (parLevel2.ContainsKey(adduct))
                     {
                         
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[fragment];
-                        if (parLevel3.ContainsKey(adduct))
+                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        if (parLevel3.ContainsKey(fragment))
                         {
-                            Dictionary<string, string> parLevel4 = parLevel3[adduct];
+                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("model"))
                             {
                                 string model = parLevel4["model"];

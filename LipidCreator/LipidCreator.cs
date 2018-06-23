@@ -346,8 +346,8 @@ namespace LipidCreator
                             
                             string instrument = tokens[0];
                             string lipidClass = tokens[1];
-                            string fragment = tokens[2];
-                            string adduct = tokens[3];
+                            string adduct = tokens[2];
+                            string fragment = tokens[3];
                             string paramKey = tokens[4];
                             string paramValue = tokens[5];
                             
@@ -362,17 +362,17 @@ namespace LipidCreator
                                 collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, Dictionary<string, Dictionary<string, string>>>());
                             }
                             
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(fragment))
+                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
                             {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(fragment, new Dictionary<string, Dictionary<string, string>>());
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, Dictionary<string, string>>());
                             }
                             
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment].ContainsKey(adduct))
+                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
                             {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment].Add(adduct, new Dictionary<string, string>());
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
                             }
                             
-                            collisionEnergyHandler.instrumentParameters[instrument][lipidClass][fragment][adduct].Add(paramKey, paramValue);
+                            collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
                         }
                     }
                 }
@@ -875,7 +875,7 @@ namespace LipidCreator
                     if (collisionEnergy < 0){
                         int row_i = (int)fragmentScores[lipidClass][adduct][1];
                         string fragment = (string)transitionList.Rows[row_i][LipidCreator.PRODUCT_NAME];
-                        collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, fragment, adduct);
+                        collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragment);
                         fragmentScores[lipidClass][adduct][2] = collisionEnergy;
                     }
                     
@@ -884,7 +884,7 @@ namespace LipidCreator
                         row[LipidCreator.COLLISION_ENERGY] = collisionEnergy;
                         
                         string fragment = (string)transitionList.Rows[i][LipidCreator.PRODUCT_NAME];
-                        double intens = collisionEnergyHandler.getIntensity(instrument, lipidClass, fragment, adduct, collisionEnergy);
+                        double intens = collisionEnergyHandler.getIntensity(instrument, lipidClass, adduct, fragment, collisionEnergy);
                         row[LipidCreator.NOTE] = intens;
                     }
                 }

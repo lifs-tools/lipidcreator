@@ -105,7 +105,7 @@ namespace LipidCreator
             {
                 double lastX = 0;
                 double lastY = 0;
-                Pen colorPen = new Pen(ColorTranslator.FromHtml(colors[k % colors.Length]), (k == highlight ? 3 : 2));
+                Pen colorPen = new Pen(ColorTranslator.FromHtml(colors[k % colors.Length]), (k == highlight ? 4 : 2));
                 for (int i = 0; i < ceInspector.yValCoords[k].Length; ++i)
                 {
                     double valX = ceInspector.xValCoords[i];

@@ -25,7 +25,7 @@ namespace LipidCreator
             var collisionEnergyHandler = creatorGUI.lipidCreator.collisionEnergyHandler;
             
             xValCoords = new double[cartesean.innerWidthPx + 1];
-            int n = collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"].Count;
+            int n = collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"]["[M8H2-H]1-"].Count;
             fragmentNames = new string[n];
             yValCoords = new double[n][];
             
@@ -36,14 +36,15 @@ namespace LipidCreator
             }
             
             int k = 0;
-            foreach(string fragmentName in collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"].Keys)
+            foreach(string fragmentName in collisionEnergyHandler.instrumentParameters["MS:1002523"]["12-HETE/d8"]["[M8H2-H]1-"].Keys)
             {
+                
                 yValCoords[k] = new double[cartesean.innerWidthPx + 1];
                 fragmentNames[k] = fragmentName;
                 int j = 0;
                 foreach (double valX in xValCoords)
                 {
-                    yValCoords[k][j] = 10000 * collisionEnergyHandler.getIntensity("MS:1002523", "12-HETE/d8", fragmentName, "[M8H2-H]1-", valX);
+                    yValCoords[k][j] = 10000 * collisionEnergyHandler.getIntensity("MS:1002523", "12-HETE/d8", "[M8H2-H]1-", fragmentName, valX);
                     ++j;
                 }
                 ++k;
@@ -106,6 +107,7 @@ namespace LipidCreator
                 else
                 {
                     ToolTip1.SetToolTip(cartesean, null);
+                    ToolTip1.Hide(cartesean);
                 }
             }
         }

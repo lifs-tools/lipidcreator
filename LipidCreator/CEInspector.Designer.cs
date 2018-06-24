@@ -302,6 +302,12 @@ namespace LipidCreator
             fragmentsGridView.Columns[1].Name = "Fragment name";
             fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
             
+            DataGridViewCheckBoxColumn doWork = new DataGridViewCheckBoxColumn();
+            doWork.HeaderText = "Include Dog";
+            doWork.FalseValue = "0";
+            doWork.TrueValue = "1";
+            fragmentsGridView.Columns.Insert(0, doWork);
+            
             // 
             // CEInspector
             // 

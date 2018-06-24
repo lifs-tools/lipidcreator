@@ -71,6 +71,9 @@ namespace LipidCreator
             
         }
         
+        
+        
+        
         public void computeCurves()
         {
             cartesean.CEval = 0;
@@ -115,6 +118,9 @@ namespace LipidCreator
             cartesean.Refresh();
         }
         
+        
+        
+        
         public void instrumentComboboxChanged(Object sender, EventArgs e)
         {
             selectedInstrument = (string)instrumentCombobox.Items[instrumentCombobox.SelectedIndex];
@@ -125,6 +131,10 @@ namespace LipidCreator
             }
             classCombobox.SelectedIndex = 0;
         }
+        
+        
+        
+        
         
         public void classComboboxChanged(Object sender, EventArgs e)
         {
@@ -138,11 +148,23 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
             selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
+            
+            fragmentsGridView.Rows.Clear();
+            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
+            {
+                fragmentsGridView.Rows.Add("a", fragmentName);
+            }
             computeCurves();
         }
+        
+        
+        
         
         
         
@@ -151,10 +173,17 @@ namespace LipidCreator
             this.Close();
         }
         
+        
+        
+        
         public void applyClick(object sender, EventArgs e)
         {
             this.Close();
         }
+        
+        
+        
+        
         
         public void mouseMove(object sender, MouseEventArgs e)
         {
@@ -188,5 +217,142 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        
+      private Rectangle dragBoxFromMouseDown;
+
+private int rowIndexFromMouseDown;
+
+private int rowIndexOfItemUnderMouseToDrop;
+
+private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
+
+{
+
+    if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+
+    {
+
+        // If the mouse moves outside the rectangle, start the drag.
+
+        if (dragBoxFromMouseDown != Rectangle.Empty &&
+
+            !dragBoxFromMouseDown.Contains(e.X, e.Y))
+
+        {
+
+ 
+
+            // Proceed with the drag and drop, passing in the list item.                   
+
+            DragDropEffects dropEffect = fragmentsGridView.DoDragDrop(
+                     fragmentsGridView.Rows[rowIndexFromMouseDown],
+                     DragDropEffects.Move);
+
+        }
+
+    }
+
+}
+
+ 
+
+private void fragmentsGridView_MouseDown(object sender, MouseEventArgs e)
+
+{
+
+    // Get the index of the item the mouse is below.
+
+    rowIndexFromMouseDown = fragmentsGridView.HitTest(e.X, e.Y).RowIndex;
+
+ 
+
+    if (rowIndexFromMouseDown != -1)
+
+    {
+
+        // Remember the point where the mouse down occurred.
+        // The DragSize indicates the size that the mouse can move
+        // before a drag event should be started.               
+
+        Size dragSize = SystemInformation.DragSize;
+
+ 
+
+        // Create a rectangle using the DragSize, with the mouse position being
+
+        // at the center of the rectangle.
+
+        dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width / 2),
+
+                                                       e.Y - (dragSize.Height / 2)),
+                                                dragSize);
+
+    }
+
+    else
+
+        // Reset the rectangle if the mouse is not over an item in the ListBox.
+
+        dragBoxFromMouseDown = Rectangle.Empty;
+
+}
+
+ 
+
+private void fragmentsGridView_DragOver(object sender, DragEventArgs e)
+
+{
+
+    e.Effect = DragDropEffects.Move;
+
+}
+
+ 
+
+private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
+
+{
+
+    // The mouse locations are relative to the screen, so they must be
+
+    // converted to client coordinates.
+
+    Point clientPoint = fragmentsGridView.PointToClient(new Point(e.X, e.Y));
+
+ 
+
+    // Get the row index of the item the mouse is below.
+
+    rowIndexOfItemUnderMouseToDrop =
+
+        fragmentsGridView.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+    
+
+    // If the drag operation was a move then remove and insert the row.
+
+    if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
+
+    {
+
+        DataGridViewRow rowToMove = e.Data.GetData(
+                     typeof(DataGridViewRow)) as DataGridViewRow;
+
+        fragmentsGridView.Rows.RemoveAt(rowIndexFromMouseDown);
+
+        fragmentsGridView.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
+
+ 
+
+    }
+
+}  
+      
+      
+      
+      
+      
     }
 }

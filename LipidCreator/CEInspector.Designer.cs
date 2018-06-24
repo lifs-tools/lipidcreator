@@ -78,8 +78,7 @@ namespace LipidCreator
         
         public void mouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (Left <= e.X && e.X <= Left + Width &&
-                Top <= e.Y && e.Y <= Top + Height)
+            if (ClientRectangle.Contains(PointToClient(Control.MousePosition)))
             {
                 double newYVal = maxYVal + 10 * ((e.Delta > 0) ? -1.0 : 1.0);
                 double newOffset = offset + 0.1 * ((e.Delta > 0) ? -1.0 : 1.0);
@@ -100,6 +99,7 @@ namespace LipidCreator
             SolidBrush whiteBrush = new SolidBrush(Color.White);
             Rectangle rectBG = new Rectangle(0, 0, Width, Height);
             e.Graphics.FillRectangle(whiteBrush, rectBG);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
             
             // draw all curves
             for(int k = 0; k < ceInspector.fragmentNames.Length; ++k)
@@ -120,7 +120,6 @@ namespace LipidCreator
             
             // drawing the axes
             Font labelFont = new Font("Arial", 8);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
             Pen blackPen = new Pen(Color.Black, 2);
             g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
@@ -207,6 +206,7 @@ namespace LipidCreator
             this.instrumentCombobox = new ComboBox();
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
+            this.fragmentsGridView = new DataGridView();
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(950, 412);
             
@@ -271,6 +271,36 @@ namespace LipidCreator
             labelFragment.Text = "Fragments:";
             labelFragment.Width = 140;
             labelFragment.Location = new Point(700, 4);
+            
+            
+            
+            fragmentsGridView.Location = new Point(720, 50);
+            fragmentsGridView.Size = new Size(200, 300);
+            fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            fragmentsGridView.AllowUserToResizeColumns = false;
+            fragmentsGridView.AllowUserToAddRows = false;
+            fragmentsGridView.AllowUserToResizeRows = false;
+            fragmentsGridView.ReadOnly = true;
+            fragmentsGridView.MultiSelect = false;
+            fragmentsGridView.RowTemplate.Height = 34;
+            fragmentsGridView.AllowDrop = true;
+            fragmentsGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            fragmentsGridView.MouseMove += new MouseEventHandler(fragmentsGridView_MouseMove);
+            fragmentsGridView.MouseDown += new MouseEventHandler(fragmentsGridView_MouseDown);
+            fragmentsGridView.DragOver += new DragEventHandler(fragmentsGridView_DragOver);
+            fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
+            fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            fragmentsGridView.RowHeadersVisible = false;
+            fragmentsGridView.ScrollBars = ScrollBars.Vertical;
+            
+            
+            fragmentsGridView.ColumnCount = 2;
+            fragmentsGridView.Columns[0].Name = "Select";
+            fragmentsGridView.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+            fragmentsGridView.Columns[0].Width = 50;
+            fragmentsGridView.Columns[1].Name = "Fragment name";
+            fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            
             // 
             // CEInspector
             // 
@@ -285,6 +315,7 @@ namespace LipidCreator
             this.Controls.Add(this.labelClass);
             this.Controls.Add(this.labelAdduct);
             this.Controls.Add(this.labelFragment);
+            this.Controls.Add(this.fragmentsGridView);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
@@ -306,5 +337,6 @@ namespace LipidCreator
         public Label labelClass;
         public Label labelAdduct;
         public Label labelFragment;
+        public DataGridView fragmentsGridView;
     }
 }

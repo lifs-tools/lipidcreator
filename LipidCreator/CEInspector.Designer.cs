@@ -105,6 +105,7 @@ namespace LipidCreator
             // draw all curves
             for(int k = 0; k < ceInspector.fragmentNames.Length; ++k)
             {
+                if (ceInspector.yValCoords[k] == null) continue;
                 double lastX = 0;
                 double lastY = 0;
                 Pen colorPen = new Pen(ColorTranslator.FromHtml(colors[k % colors.Length]), (k == highlight ? 4 : 2));
@@ -281,7 +282,7 @@ namespace LipidCreator
             fragmentsGridView.AllowUserToResizeColumns = false;
             fragmentsGridView.AllowUserToAddRows = false;
             fragmentsGridView.AllowUserToResizeRows = false;
-            fragmentsGridView.ReadOnly = true;
+            //fragmentsGridView.ReadOnly = true;
             fragmentsGridView.MultiSelect = false;
             fragmentsGridView.RowTemplate.Height = 34;
             fragmentsGridView.AllowDrop = true;
@@ -290,23 +291,23 @@ namespace LipidCreator
             fragmentsGridView.MouseDown += new MouseEventHandler(fragmentsGridView_MouseDown);
             fragmentsGridView.DragOver += new DragEventHandler(fragmentsGridView_DragOver);
             fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
+            fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
             fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             fragmentsGridView.RowHeadersVisible = false;
             fragmentsGridView.ScrollBars = ScrollBars.Vertical;
             
             
-            fragmentsGridView.ColumnCount = 2;
-            fragmentsGridView.Columns[0].Name = "Select";
+            fragmentsGridView.ColumnCount = 1;
+            fragmentsGridView.Columns[0].Name = "Fragment name";
             fragmentsGridView.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-            fragmentsGridView.Columns[0].Width = 50;
-            fragmentsGridView.Columns[1].Name = "Fragment name";
-            fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            fragmentsGridView.Columns[0].ReadOnly = true;
             
-            DataGridViewCheckBoxColumn doWork = new DataGridViewCheckBoxColumn();
-            doWork.HeaderText = "Include Dog";
-            doWork.FalseValue = "0";
-            doWork.TrueValue = "1";
-            fragmentsGridView.Columns.Insert(0, doWork);
+            DataGridViewCheckBoxColumn selectFragment = new DataGridViewCheckBoxColumn();
+            selectFragment.HeaderText = "View";
+            selectFragment.Width = 50;
+            //selectFragment.FalseValue = "0";
+            //selectFragment.TrueValue = "1";
+            fragmentsGridView.Columns.Insert(0, selectFragment);
             
             // 
             // CEInspector

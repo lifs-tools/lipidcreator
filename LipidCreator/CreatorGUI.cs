@@ -183,7 +183,6 @@ namespace LipidCreator
             ceInspector.ShowInTaskbar = false;
             ceInspector.ShowDialog();
             ceInspector.Dispose();
-            Environment.Exit(0);
         }
         
         

@@ -20,6 +20,7 @@ namespace LipidCreator
         public string selectedInstrument;
         public string selectedClass;
         public string selectedAdduct;
+        public bool dataLoading = false;
         
         public CEInspector(CreatorGUI _creatorGUI)
         {
@@ -78,7 +79,8 @@ namespace LipidCreator
         {
             cartesean.CEval = 0;
             xValCoords = new double[cartesean.innerWidthPx + 1];
-            int n = instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Count;
+            int n = fragmentsGridView.Rows.Count;
+            
             fragmentNames = new string[n];
             yValCoords = new double[n][];
             
@@ -89,19 +91,23 @@ namespace LipidCreator
             }
             
             int k = 0;
-            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
+            
+            foreach(DataGridViewRow row in fragmentsGridView.Rows)
             {
-                yValCoords[k] = new double[cartesean.innerWidthPx + 1];
-                fragmentNames[k] = fragmentName;
-                int j = 0;
+                string fragmentName = (string)row.Cells[1].Value;
                 
-                
-                
-                
-                foreach (double valX in xValCoords)
-                {
-                    yValCoords[k][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
-                    ++j;
+                if ((bool)row.Cells[0].Value)
+                {                
+                    yValCoords[k] = new double[cartesean.innerWidthPx + 1];
+                    fragmentNames[k] = fragmentName;
+                    int j = 0;
+                    
+                    
+                    foreach (double valX in xValCoords)
+                    {
+                        yValCoords[k][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
+                        ++j;
+                    }
                 }
                 ++k;
             }
@@ -119,6 +125,8 @@ namespace LipidCreator
             
             foreach(DataGridViewRow row in fragmentsGridView.Rows)
             {
+                
+                if (!(bool)row.Cells[0].Value) continue;
                 string fragmentName = (string)row.Cells[1].Value;
             
                 int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
@@ -170,13 +178,14 @@ namespace LipidCreator
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
             selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
-            
+            dataLoading = true;
             fragmentsGridView.Rows.Clear();
             foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
             {
-                fragmentsGridView.Rows.Add("a", fragmentName);
+                fragmentsGridView.Rows.Add(true, fragmentName);
             }
             computeCurves();
+            dataLoading = false;
         }
         
         
@@ -289,6 +298,15 @@ namespace LipidCreator
         {
             e.Effect = DragDropEffects.Move;
         }
+        
+        
+        
+        private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataLoading) return;
+            computeCurves();
+        }
+
 
         
 

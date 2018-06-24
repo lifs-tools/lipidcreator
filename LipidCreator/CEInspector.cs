@@ -89,20 +89,13 @@ namespace LipidCreator
             }
             
             int k = 0;
-            int topRank = 100000;
-            string topFragment = "";
             foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
             {
                 yValCoords[k] = new double[cartesean.innerWidthPx + 1];
                 fragmentNames[k] = fragmentName;
                 int j = 0;
                 
-                int rank = creatorGUI.lipidCreator.collisionEnergyHandler.getRank(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
-                if (topRank > rank)
-                {
-                    topRank = rank;
-                    topFragment = fragmentName;
-                }
+                
                 
                 
                 foreach (double valX in xValCoords)
@@ -113,10 +106,33 @@ namespace LipidCreator
                 ++k;
             }
             
-            cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
             
             cartesean.Refresh();
         }
+        
+        
+        
+        public void fragmentOrderChanged()
+        {
+            int topRank = 100000;
+            string topFragment = "";
+            
+            foreach(DataGridViewRow row in fragmentsGridView.Rows)
+            {
+                string fragmentName = (string)row.Cells[1].Value;
+            
+                int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
+                if (topRank > rank)
+                {
+                    topRank = rank;
+                    topFragment = fragmentName;
+                }
+            }
+            
+            cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
+            cartesean.Refresh();
+        }
+        
         
         
         
@@ -219,140 +235,89 @@ namespace LipidCreator
         }
         
         
-        
-      private Rectangle dragBoxFromMouseDown;
+        // thank you for the code inspiration:
+        // https://stackoverflow.com/questions/1620947/how-could-i-drag-and-drop-datagridview-rows-under-each-other
+        private Rectangle dragBoxFromMouseDown;
+        private int rowIndexFromMouseDown;
+        private int rowIndexOfItemUnderMouseToDrop;
 
-private int rowIndexFromMouseDown;
-
-private int rowIndexOfItemUnderMouseToDrop;
-
-private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
-
-{
-
-    if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-
-    {
-
-        // If the mouse moves outside the rectangle, start the drag.
-
-        if (dragBoxFromMouseDown != Rectangle.Empty &&
-
-            !dragBoxFromMouseDown.Contains(e.X, e.Y))
-
+        private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
         {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
 
- 
-
-            // Proceed with the drag and drop, passing in the list item.                   
-
-            DragDropEffects dropEffect = fragmentsGridView.DoDragDrop(
-                     fragmentsGridView.Rows[rowIndexFromMouseDown],
-                     DragDropEffects.Move);
-
+                // If the mouse moves outside the rectangle, start the drag.
+                if (dragBoxFromMouseDown != Rectangle.Empty && !dragBoxFromMouseDown.Contains(e.X, e.Y))
+                {
+                    // Proceed with the drag and drop, passing in the list item.   
+                    DragDropEffects dropEffect = fragmentsGridView.DoDragDrop(
+                            fragmentsGridView.Rows[rowIndexFromMouseDown],
+                            DragDropEffects.Move);
+                }
+            }
         }
 
-    }
+        
 
-}
+        private void fragmentsGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Get the index of the item the mouse is below.
+            rowIndexFromMouseDown = fragmentsGridView.HitTest(e.X, e.Y).RowIndex;
+            if (rowIndexFromMouseDown != -1)
+            {
+                // Remember the point where the mouse down occurred.
+                // The DragSize indicates the size that the mouse can move
+                // before a drag event should be started.  
+                Size dragSize = SystemInformation.DragSize;
+                
+                // Create a rectangle using the DragSize, with the mouse position being
+                // at the center of the rectangle.
+                dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width >> 1),
+                                                            e.Y - (dragSize.Height >> 1)),
+                                                        dragSize);
+            }
+            else
+            {
+                // Reset the rectangle if the mouse is not over an item in the ListBox.
+                dragBoxFromMouseDown = Rectangle.Empty;
+            }
+        }
 
- 
+        
 
-private void fragmentsGridView_MouseDown(object sender, MouseEventArgs e)
+        private void fragmentsGridView_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
 
-{
+        
 
-    // Get the index of the item the mouse is below.
+        private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
+        {
+            // The mouse locations are relative to the screen, so they must be
+            // converted to client coordinates.
+            Point clientPoint = fragmentsGridView.PointToClient(new Point(e.X, e.Y));
+            
+            // Get the row index of the item the mouse is below.
+            rowIndexOfItemUnderMouseToDrop = fragmentsGridView.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
 
-    rowIndexFromMouseDown = fragmentsGridView.HitTest(e.X, e.Y).RowIndex;
-
- 
-
-    if (rowIndexFromMouseDown != -1)
-
-    {
-
-        // Remember the point where the mouse down occurred.
-        // The DragSize indicates the size that the mouse can move
-        // before a drag event should be started.               
-
-        Size dragSize = SystemInformation.DragSize;
-
- 
-
-        // Create a rectangle using the DragSize, with the mouse position being
-
-        // at the center of the rectangle.
-
-        dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width / 2),
-
-                                                       e.Y - (dragSize.Height / 2)),
-                                                dragSize);
-
-    }
-
-    else
-
-        // Reset the rectangle if the mouse is not over an item in the ListBox.
-
-        dragBoxFromMouseDown = Rectangle.Empty;
-
-}
-
- 
-
-private void fragmentsGridView_DragOver(object sender, DragEventArgs e)
-
-{
-
-    e.Effect = DragDropEffects.Move;
-
-}
-
- 
-
-private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
-
-{
-
-    // The mouse locations are relative to the screen, so they must be
-
-    // converted to client coordinates.
-
-    Point clientPoint = fragmentsGridView.PointToClient(new Point(e.X, e.Y));
-
- 
-
-    // Get the row index of the item the mouse is below.
-
-    rowIndexOfItemUnderMouseToDrop =
-
-        fragmentsGridView.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
-
-    
-
-    // If the drag operation was a move then remove and insert the row.
-
-    if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
-
-    {
-
-        DataGridViewRow rowToMove = e.Data.GetData(
-                     typeof(DataGridViewRow)) as DataGridViewRow;
-
-        fragmentsGridView.Rows.RemoveAt(rowIndexFromMouseDown);
-
-        fragmentsGridView.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
-
- 
-
-    }
-
-}  
-      
-      
-      
-      
+            // If the drag operation was a move then remove and insert the row.
+            if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
+            {
+                DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+                fragmentsGridView.Rows.RemoveAt(rowIndexFromMouseDown);
+                fragmentsGridView.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
+                
+                int rank = 1;
+                foreach(DataGridViewRow row in fragmentsGridView.Rows)
+                {
+                    instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][(string)row.Cells[1].Value]["rank"] = Convert.ToString(rank);
+                    rank++;
+                }
+                
+                fragmentOrderChanged();
+            }
+        }  
       
     }
 }

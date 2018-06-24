@@ -78,6 +78,7 @@ namespace LipidCreator
         
         public void mouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            // if mouse curves hovers over control
             if (ClientRectangle.Contains(PointToClient(Control.MousePosition)))
             {
                 double newYVal = maxYVal + 10 * ((e.Delta > 0) ? -1.0 : 1.0);

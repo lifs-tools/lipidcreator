@@ -177,15 +177,25 @@ namespace LipidCreator
         
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
+            Console.WriteLine("enter " + adductCombobox.SelectedIndex);
             selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
+            Console.WriteLine("foo 1");
             dataLoading = true;
+            Console.WriteLine("foo 2 - " + fragmentsGridView.Rows.Count);
             fragmentsGridView.Rows.Clear();
-            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
+            
+            
+            Console.WriteLine("foo 3");
+            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys) Console.WriteLine(fragmentName + " " + instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
+            
+            
+            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys.OrderBy(fragmentName => Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"])))
             {
                 fragmentsGridView.Rows.Add(true, fragmentName);
             }
             computeCurves();
             dataLoading = false;
+            Console.WriteLine("leaving");
         }
         
         
@@ -218,13 +228,19 @@ namespace LipidCreator
                 int pos = Math.Max(0, e.X - cartesean.marginLeft);
                 pos = Math.Min(pos, cartesean.innerWidthPx);
                 int highlight = -1;
-                for (int k = 0; k < fragmentNames.Length; ++k)
+            
+                int k = 0;
+                foreach(DataGridViewRow row in fragmentsGridView.Rows)
                 {
-                    if (vals.Y - cartesean.offset <= yValCoords[k][pos] && yValCoords[k][pos] <= vals.Y + cartesean.offset)
+                    if ((bool)row.Cells[0].Value)
                     {
-                        highlight = k;
-                        break;
+                        if (vals.Y - cartesean.offset <= yValCoords[k][pos] && yValCoords[k][pos] <= vals.Y + cartesean.offset)
+                        {
+                            highlight = k;
+                            break;
+                        }
                     }
+                    ++k;
                 }
                 if (cartesean.highlight != highlight)
                 {
@@ -259,9 +275,7 @@ namespace LipidCreator
                 if (dragBoxFromMouseDown != Rectangle.Empty && !dragBoxFromMouseDown.Contains(e.X, e.Y))
                 {
                     // Proceed with the drag and drop, passing in the list item.   
-                    DragDropEffects dropEffect = fragmentsGridView.DoDragDrop(
-                            fragmentsGridView.Rows[rowIndexFromMouseDown],
-                            DragDropEffects.Move);
+                    fragmentsGridView.DoDragDrop(fragmentsGridView.Rows[rowIndexFromMouseDown], DragDropEffects.Move);
                 }
             }
         }
@@ -281,9 +295,7 @@ namespace LipidCreator
                 
                 // Create a rectangle using the DragSize, with the mouse position being
                 // at the center of the rectangle.
-                dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width >> 1),
-                                                            e.Y - (dragSize.Height >> 1)),
-                                                        dragSize);
+                dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width >> 1), e.Y - (dragSize.Height >> 1)), dragSize);
             }
             else
             {
@@ -300,6 +312,12 @@ namespace LipidCreator
         }
         
         
+        private void fragmentsGridView_CellContentClick(object sender, EventArgs e)
+        {
+            fragmentsGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+        
+        
         
         private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
@@ -312,6 +330,7 @@ namespace LipidCreator
 
         private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
         {
+        
             // The mouse locations are relative to the screen, so they must be
             // converted to client coordinates.
             Point clientPoint = fragmentsGridView.PointToClient(new Point(e.X, e.Y));

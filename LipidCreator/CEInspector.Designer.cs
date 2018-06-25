@@ -292,6 +292,7 @@ namespace LipidCreator
             fragmentsGridView.DragOver += new DragEventHandler(fragmentsGridView_DragOver);
             fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
             fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
+            fragmentsGridView.CellContentClick += new DataGridViewCellEventHandler(fragmentsGridView_CellContentClick);
             fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             fragmentsGridView.RowHeadersVisible = false;
             fragmentsGridView.ScrollBars = ScrollBars.Vertical;

@@ -178,11 +178,14 @@ namespace LipidCreator
             }
             
             // draw dashed collision energy line
-            float[] dashValues = { 5, 10 };
-            Pen bPen = new Pen(Color.Black, 1);
-            bPen.DashPattern = dashValues;
-            int ceX = valueToPx(CEval, 0).X;
-            g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
+            if (CEval > 0)
+            {
+                float[] dashValues = { 5, 10 };
+                Pen bPen = new Pen(Color.Black, 1);
+                bPen.DashPattern = dashValues;
+                int ceX = valueToPx(CEval, 0).X;
+                g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
+            }
             
             // draw border
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
@@ -296,13 +299,14 @@ namespace LipidCreator
             
             labelFragment.Text = "Fragments:";
             labelFragment.Width = 140;
-            labelFragment.Location = new Point(700, 4);
+            labelFragment.Height = 16;
+            labelFragment.Location = new Point(720, 34);
             
             
             
             
             fragmentsGridView.Location = new Point(720, 50);
-            fragmentsGridView.Size = new Size(200, 300);
+            fragmentsGridView.Size = new Size(216, 300);
             fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;

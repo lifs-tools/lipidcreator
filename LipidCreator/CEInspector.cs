@@ -20,7 +20,6 @@ namespace LipidCreator
         public string selectedClass;
         public string selectedAdduct;
         public DataTable fragmentsList;
-        public bool dataLoading = false;
         public bool initialCall = true;
         
         public CEInspector(CreatorGUI _creatorGUI)
@@ -88,8 +87,8 @@ namespace LipidCreator
                 fragmentsGridView.Columns[0].Width = 50;
                 fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                 fragmentsGridView.Columns[1].ReadOnly = true;
+                fragmentsGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 initialCall = false;
-                
             }
         }
         
@@ -143,18 +142,25 @@ namespace LipidCreator
             foreach(DataRow row in fragmentsList.Rows)
             {
                 
-                if (!(bool)row["View"]) continue;
-                string fragmentName = (string)row["Fragment Name"];
-            
-                int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
-                if (topRank > rank)
+                if ((bool)row["View"])
                 {
-                    topRank = rank;
-                    topFragment = fragmentName;
+                    string fragmentName = (string)row["Fragment Name"];
+                    int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
+                    if (topRank > rank)
+                    {
+                        topRank = rank;
+                        topFragment = fragmentName;
+                    }
                 }
             }
-            
-            cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
+            if (topFragment.Length > 0)
+            {
+                cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
+            }
+            else
+            {
+                cartesean.CEval = -1;
+            }
             cartesean.Refresh();
         }
         
@@ -195,7 +201,6 @@ namespace LipidCreator
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
             selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
-            dataLoading = true;
             fragmentsList.Rows.Clear();
             
             
@@ -210,7 +215,6 @@ namespace LipidCreator
             fragmentsGridView.Update();
             fragmentsGridView.Refresh();
             computeCurves();
-            dataLoading = false;
         }
         
         
@@ -336,8 +340,7 @@ namespace LipidCreator
         
         private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataLoading) return;
-            cartesean.Refresh();
+            fragmentOrderChanged();
         }
 
 

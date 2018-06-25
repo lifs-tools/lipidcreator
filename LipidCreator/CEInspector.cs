@@ -88,7 +88,7 @@ namespace LipidCreator
                 fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                 fragmentsGridView.Columns[1].ReadOnly = true;
                 fragmentsGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                initialCall = false;
+                //initialCall = false;
             }
         }
         
@@ -343,7 +343,9 @@ namespace LipidCreator
             fragmentOrderChanged();
         }
 
-
+        
+        
+        
         
 
         private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
@@ -359,30 +361,15 @@ namespace LipidCreator
             // If the drag operation was a move then remove and insert the row.
             if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
             {
-            
-                /*
-                
-                DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                fragmentsGridView.Rows.RemoveAt(rowIndexFromMouseDown);
-                fragmentsGridView.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
-                
-                */
+                // data source has to be unconnected while manipulating data table below
+                fragmentsGridView.DataSource = null;
                 
                 
-                bool view = (bool)fragmentsList.Rows[rowIndexFromMouseDown]["View"];
-                string fragment = (string)fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"];
-                
-                fragmentsList.Rows[rowIndexFromMouseDown]["View"] = fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["View"];
-                fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"] = fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["Fragment Name"];
-                
-                fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["View"] = view;
-                fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["Fragment Name"] = fragment;
-                
-                /*
-                DataRow rowToMove = fragmentsList.Rows[rowIndexFromMouseDown];
+                DataRow rowToMove = fragmentsList.NewRow(); // Rows[rowIndexFromMouseDown];
+                rowToMove["View"] = (bool)fragmentsList.Rows[rowIndexFromMouseDown]["View"];
+                rowToMove["Fragment Name"] = (string)fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"];
                 fragmentsList.Rows.RemoveAt(rowIndexFromMouseDown);
-                fragmentsList.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
-                */
+                fragmentsList.Rows.InsertAt(rowToMove, rowIndexOfItemUnderMouseToDrop);
                 
                 
                 
@@ -392,8 +379,12 @@ namespace LipidCreator
                     instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][(string)row["Fragment Name"]]["rank"] = Convert.ToString(rank);
                     rank++;
                 }
+                fragmentsGridView.DataSource = fragmentsList;
+                
                 
                 fragmentsGridView.Update();
+                for (int i = 0; i < fragmentsGridView.Rows.Count; ++i) fragmentsGridView.Rows[i].Selected = false;
+                fragmentsGridView.Rows[rowIndexOfItemUnderMouseToDrop].Selected = true;
                 fragmentsGridView.Refresh();
                 fragmentOrderChanged();
             }

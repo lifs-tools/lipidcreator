@@ -44,13 +44,14 @@ namespace LipidCreator
         public const int LABEL_EXTENSION = 5;
         public const double VAL_DENOMINATOR = 100.0;
         public CEInspector ceInspector;
+        public Dictionary<string, string> fragmentToColor;
         public string [] colors = new string[]{"#e6194b", "#3cb44b", "#ffe119", "#0082c8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#d2f53c", "#fabebe", "#008080", "#e6beff", "#aa6e28", "#fffac8", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000080", "#808080"};
         
         public int innerWidthPx;
         public int innerHeightPx;
         public double maxXVal = 50;
         public double maxYVal = 200;
-        public int highlight = -1;
+        public string highlightName = "";
         public double offset = 2.4;
         public double CEval = 0;
         
@@ -62,17 +63,38 @@ namespace LipidCreator
             innerWidthPx = Width - marginLeft - marginRight;
             innerHeightPx = Height - marginBottom - marginTop;
             DoubleBuffered = true;
+            fragmentToColor = new Dictionary<string, string>();
         }
+        
+        
+        
         
         public Point valueToPx(double valX, double valY)
         {
             return new Point((int)(marginLeft + valX * innerWidthPx / maxXVal), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
         
+        
+        
+        
         public PointF pxToValue(int pxX, int pxY)
         {
             return new PointF((float)((pxX - marginLeft) * maxXVal / innerHeightPx), (float)((Height - marginBottom - pxY) * maxYVal / innerHeightPx));
         }
+        
+        
+        
+        
+        public void setFragmentColors()
+        {
+            int k = 0;
+            fragmentToColor.Clear();
+            foreach(DataRow row in ceInspector.fragmentsList.Rows)
+            {
+                fragmentToColor[(string)row["Fragment name"]] = colors[k++ % colors.Length];
+            }
+        }
+        
         
         
         
@@ -103,16 +125,18 @@ namespace LipidCreator
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             
             // draw all curves
-            for(int k = 0; k < ceInspector.fragmentNames.Length; ++k)
+            
+            foreach(DataRow row in ceInspector.fragmentsList.Rows)
             {
-                if (ceInspector.yValCoords[k] == null) continue;
+                if (!(bool)row["View"]) continue;
+                string fragmentName = (string)row["Fragment name"];
                 double lastX = 0;
                 double lastY = 0;
-                Pen colorPen = new Pen(ColorTranslator.FromHtml(colors[k % colors.Length]), (k == highlight ? 4 : 2));
-                for (int i = 0; i < ceInspector.yValCoords[k].Length; ++i)
+                Pen colorPen = new Pen(ColorTranslator.FromHtml(fragmentToColor[fragmentName]), (fragmentName == highlightName ? 4 : 2));
+                for (int i = 0; i < ceInspector.yValCoords[fragmentName].Length; ++i)
                 {
                     double valX = ceInspector.xValCoords[i];
-                    double valY = ceInspector.yValCoords[k][i];
+                    double valY = ceInspector.yValCoords[fragmentName][i];
                     
                     if (i > 0) g.DrawLine(colorPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
                     lastX = valX;
@@ -208,7 +232,7 @@ namespace LipidCreator
             this.instrumentCombobox = new ComboBox();
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
-            this.fragmentsGridView = new DataGridView();
+            fragmentsGridView = new DataGridView();
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(950, 412);
             
@@ -276,8 +300,10 @@ namespace LipidCreator
             
             
             
+            
             fragmentsGridView.Location = new Point(720, 50);
             fragmentsGridView.Size = new Size(200, 300);
+            fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;
             fragmentsGridView.AllowUserToAddRows = false;
@@ -293,22 +319,30 @@ namespace LipidCreator
             fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
             fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
             fragmentsGridView.CellContentClick += new DataGridViewCellEventHandler(fragmentsGridView_CellContentClick);
-            fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            fragmentsGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(fragmentsGridViewDataBindingComplete);
+            //fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             fragmentsGridView.RowHeadersVisible = false;
             fragmentsGridView.ScrollBars = ScrollBars.Vertical;
             
             
+            /*
             fragmentsGridView.ColumnCount = 1;
-            fragmentsGridView.Columns[0].Name = "Fragment name";
-            fragmentsGridView.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-            fragmentsGridView.Columns[0].ReadOnly = true;
+            
             
             DataGridViewCheckBoxColumn selectFragment = new DataGridViewCheckBoxColumn();
             selectFragment.HeaderText = "View";
             selectFragment.Width = 50;
-            //selectFragment.FalseValue = "0";
-            //selectFragment.TrueValue = "1";
+            selectFragment.TrueValue = true;
+            selectFragment.FalseValue = false;
             fragmentsGridView.Columns.Insert(0, selectFragment);
+            */
+            
+            
+            
+            
+            
+            
+            
             
             // 
             // CEInspector
@@ -333,6 +367,8 @@ namespace LipidCreator
             this.MinimizeBox = false;
             
         }
+        
+        
 
         #endregion
         public Cartesean cartesean;

@@ -14,18 +14,28 @@ namespace LipidCreator
     {
         public CreatorGUI creatorGUI;
         public double[] xValCoords;
-        public double[][] yValCoords;
-        public string[] fragmentNames;
+        public Dictionary<string, double[]> yValCoords;
         public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
         public string selectedInstrument;
         public string selectedClass;
         public string selectedAdduct;
+        public DataTable fragmentsList;
         public bool dataLoading = false;
+        public bool initialCall = true;
         
         public CEInspector(CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
             instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>>();
+            
+            fragmentsList = new DataTable("fragmentsList");
+            fragmentsList.Columns.Add(new DataColumn("View"));
+            fragmentsList.Columns[0].DataType = typeof(bool);
+            fragmentsList.Columns.Add(new DataColumn("Fragment name"));
+            fragmentsList.Columns[1].DataType = typeof(string);
+            
+            
+            
             InitializeComponent();
             
             // foreach instrument
@@ -72,18 +82,26 @@ namespace LipidCreator
             
         }
         
-        
+        private void fragmentsGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            if (initialCall){
+                fragmentsGridView.Columns[0].Width = 50;
+                fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                fragmentsGridView.Columns[1].ReadOnly = true;
+                initialCall = false;
+                
+            }
+        }
         
         
         public void computeCurves()
         {
             cartesean.CEval = 0;
             xValCoords = new double[cartesean.innerWidthPx + 1];
-            int n = fragmentsGridView.Rows.Count;
+            int n = fragmentsList.Rows.Count;
+            cartesean.setFragmentColors();
             
-            fragmentNames = new string[n];
-            yValCoords = new double[n][];
-            
+            yValCoords = new Dictionary<string, double[]>();
             
             for (int i = 0; i <= cartesean.innerWidthPx; ++i)
             {
@@ -92,29 +110,28 @@ namespace LipidCreator
             
             int k = 0;
             
-            foreach(DataGridViewRow row in fragmentsGridView.Rows)
+            foreach(DataRow row in fragmentsList.Rows)
             {
-                string fragmentName = (string)row.Cells[1].Value;
+                string fragmentName = (string)row["Fragment name"];
+                           
+                yValCoords[fragmentName] = new double[cartesean.innerWidthPx + 1];
+                int j = 0;
                 
-                if ((bool)row.Cells[0].Value)
-                {                
-                    yValCoords[k] = new double[cartesean.innerWidthPx + 1];
-                    fragmentNames[k] = fragmentName;
-                    int j = 0;
-                    
-                    
-                    foreach (double valX in xValCoords)
-                    {
-                        yValCoords[k][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
-                        ++j;
-                    }
+                
+                foreach (double valX in xValCoords)
+                {
+                    yValCoords[fragmentName][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
+                    ++j;
                 }
                 ++k;
             }
-            
-            
             cartesean.Refresh();
+            fragmentOrderChanged();
         }
+        
+        
+        
+        
         
         
         
@@ -123,11 +140,11 @@ namespace LipidCreator
             int topRank = 100000;
             string topFragment = "";
             
-            foreach(DataGridViewRow row in fragmentsGridView.Rows)
+            foreach(DataRow row in fragmentsList.Rows)
             {
                 
-                if (!(bool)row.Cells[0].Value) continue;
-                string fragmentName = (string)row.Cells[1].Value;
+                if (!(bool)row["View"]) continue;
+                string fragmentName = (string)row["Fragment Name"];
             
                 int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
                 if (topRank > rank)
@@ -177,25 +194,23 @@ namespace LipidCreator
         
         public void adductComboboxChanged(Object sender, EventArgs e)
         {
-            Console.WriteLine("enter " + adductCombobox.SelectedIndex);
             selectedAdduct = (string)adductCombobox.Items[adductCombobox.SelectedIndex];
-            Console.WriteLine("foo 1");
             dataLoading = true;
-            Console.WriteLine("foo 2 - " + fragmentsGridView.Rows.Count);
-            fragmentsGridView.Rows.Clear();
-            
-            
-            Console.WriteLine("foo 3");
-            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys) Console.WriteLine(fragmentName + " " + instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
+            fragmentsList.Rows.Clear();
             
             
             foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys.OrderBy(fragmentName => Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"])))
             {
-                fragmentsGridView.Rows.Add(true, fragmentName);
+                DataRow row = fragmentsList.NewRow();
+                row["View"] = true;
+                row["Fragment name"] = fragmentName;
+                fragmentsList.Rows.Add(row);
             }
+         
+            fragmentsGridView.Update();
+            fragmentsGridView.Refresh();
             computeCurves();
             dataLoading = false;
-            Console.WriteLine("leaving");
         }
         
         
@@ -227,29 +242,28 @@ namespace LipidCreator
                 PointF vals = cartesean.pxToValue(e.X, e.Y);
                 int pos = Math.Max(0, e.X - cartesean.marginLeft);
                 pos = Math.Min(pos, cartesean.innerWidthPx);
-                int highlight = -1;
+                string highlightName = "";
             
-                int k = 0;
-                foreach(DataGridViewRow row in fragmentsGridView.Rows)
+                foreach(DataRow row in fragmentsList.Rows)
                 {
-                    if ((bool)row.Cells[0].Value)
+                    if ((bool)row["View"])
                     {
-                        if (vals.Y - cartesean.offset <= yValCoords[k][pos] && yValCoords[k][pos] <= vals.Y + cartesean.offset)
+                        string fragmentName = (string)row["Fragment name"];
+                        if (vals.Y - cartesean.offset <= yValCoords[fragmentName][pos] && yValCoords[fragmentName][pos] <= vals.Y + cartesean.offset)
                         {
-                            highlight = k;
+                            highlightName = fragmentName;
                             break;
                         }
                     }
-                    ++k;
                 }
-                if (cartesean.highlight != highlight)
+                if (cartesean.highlightName != highlightName)
                 {
-                    cartesean.highlight = highlight;
+                    cartesean.highlightName = highlightName;
                     cartesean.Refresh();
                 }
-                if (highlight > -1)
+                if (highlightName.Length > 0)
                 {
-                    ToolTip1.SetToolTip(cartesean, fragmentNames[highlight]);
+                    ToolTip1.SetToolTip(cartesean, highlightName);
                 }
                 else
                 {
@@ -268,13 +282,14 @@ namespace LipidCreator
 
         private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
         {
+         
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
             {
 
                 // If the mouse moves outside the rectangle, start the drag.
                 if (dragBoxFromMouseDown != Rectangle.Empty && !dragBoxFromMouseDown.Contains(e.X, e.Y))
                 {
-                    // Proceed with the drag and drop, passing in the list item.   
+                    // Proceed with the drag and drop, passing in the list item. 
                     fragmentsGridView.DoDragDrop(fragmentsGridView.Rows[rowIndexFromMouseDown], DragDropEffects.Move);
                 }
             }
@@ -322,7 +337,7 @@ namespace LipidCreator
         private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (dataLoading) return;
-            computeCurves();
+            cartesean.Refresh();
         }
 
 
@@ -341,17 +356,42 @@ namespace LipidCreator
             // If the drag operation was a move then remove and insert the row.
             if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
             {
+            
+                /*
+                
                 DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
                 fragmentsGridView.Rows.RemoveAt(rowIndexFromMouseDown);
                 fragmentsGridView.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
                 
+                */
+                
+                
+                bool view = (bool)fragmentsList.Rows[rowIndexFromMouseDown]["View"];
+                string fragment = (string)fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"];
+                
+                fragmentsList.Rows[rowIndexFromMouseDown]["View"] = fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["View"];
+                fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"] = fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["Fragment Name"];
+                
+                fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["View"] = view;
+                fragmentsList.Rows[rowIndexOfItemUnderMouseToDrop]["Fragment Name"] = fragment;
+                
+                /*
+                DataRow rowToMove = fragmentsList.Rows[rowIndexFromMouseDown];
+                fragmentsList.Rows.RemoveAt(rowIndexFromMouseDown);
+                fragmentsList.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
+                */
+                
+                
+                
                 int rank = 1;
-                foreach(DataGridViewRow row in fragmentsGridView.Rows)
+                foreach(DataRow row in fragmentsList.Rows)
                 {
-                    instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][(string)row.Cells[1].Value]["rank"] = Convert.ToString(rank);
+                    instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][(string)row["Fragment Name"]]["rank"] = Convert.ToString(rank);
                     rank++;
                 }
                 
+                fragmentsGridView.Update();
+                fragmentsGridView.Refresh();
                 fragmentOrderChanged();
             }
         }  

@@ -16,7 +16,8 @@ namespace LipidCreator
         public double[] xValCoords;
         public Dictionary<string, double[]> yValCoords;
         public Dictionary<string, double> norming;
-        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
+        public Dictionary<string, double> fragmentApex;
+        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies;  // for instrument / class / adduct
         public string selectedInstrument;
         public string selectedClass;
         public string selectedAdduct;
@@ -26,7 +27,8 @@ namespace LipidCreator
         public CEInspector(CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
-            instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>>();
+            collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
+            fragmentApex = new Dictionary<string, double>();
             
             fragmentsList = new DataTable("fragmentsList");
             fragmentsList.Columns.Add(new DataColumn("View"));
@@ -41,40 +43,25 @@ namespace LipidCreator
             // foreach instrument
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
             {
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> p1 = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>();
-                instrumentParameters.Add(kvp1.Key, p1);
+                Dictionary<string, Dictionary<string, double>> p1 = new Dictionary<string, Dictionary<string, double>>();
+                collisionEnergies.Add(kvp1.Key, p1);
                 
                 // foreach class
                 foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
-                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> p2 = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+                    Dictionary<string, double> p2 = new Dictionary<string, double>();
                     p1.Add(kvp2.Key, p2);
                     
                     // foreach adduct
                     foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        Dictionary<string, Dictionary<string, string>> p3 = new Dictionary<string, Dictionary<string, string>>();
-                        p2.Add(kvp3.Key, p3);
-                        
-                        
-                        // foreach fragment
-                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
-                        {
-                            Dictionary<string, string> p4 = new Dictionary<string, string>();
-                            p3.Add(kvp4.Key, p4);
-                            
-                            // foreach parameter
-                            foreach(KeyValuePair<string, string> p5 in kvp4.Value)
-                            {
-                                p4.Add(p5.Key, p5.Value);
-                            }
-                        }
+                        p2.Add(kvp3.Key, 0.0);
                     }
                 }
             }
             
             
-            foreach (string instrumentName in instrumentParameters.Keys)
+            foreach (string instrumentName in collisionEnergies.Keys)
             {
                 instrumentCombobox.Items.Add(instrumentName);
                 instrumentCombobox.SelectedIndex = 0;
@@ -84,19 +71,15 @@ namespace LipidCreator
         
         private void fragmentsGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (initialCall){
-                fragmentsGridView.Columns[0].Width = 50;
-                fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                fragmentsGridView.Columns[1].ReadOnly = true;
-                fragmentsGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                //initialCall = false;
-            }
+            fragmentsGridView.Columns[0].Width = 50;
+            fragmentsGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            fragmentsGridView.Columns[1].ReadOnly = true;
+            fragmentsGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
         
         
         public void computeCurves()
         {
-            cartesean.CEval = 0;
             xValCoords = new double[cartesean.innerWidthPx + 1];
             int n = fragmentsList.Rows.Count;
             cartesean.setFragmentColors();
@@ -107,13 +90,16 @@ namespace LipidCreator
             norming = new Dictionary<string, double>();
             norming["productProfile"] = 0;
             
+            
+            // compute x values (a.k.a. collision energies)
             for (int i = 0; i <= cartesean.innerWidthPx; ++i)
             {
                 xValCoords[i] = cartesean.minXVal + ((double)i) / cartesean.innerWidthPx * (cartesean.maxXVal - cartesean.minXVal);
             }
             
-            int k = 0;
             
+            // precompute y values for all fragment model curves
+            int k = 0;
             foreach(DataRow row in fragmentsList.Rows)
             {
                 string fragmentName = (string)row["Fragment name"];
@@ -122,6 +108,7 @@ namespace LipidCreator
                 norming[fragmentName] = 0;
                 int j = 0;
                 
+                fragmentApex[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
                 
                 foreach (double valX in xValCoords)
                 {
@@ -133,7 +120,7 @@ namespace LipidCreator
                 ++k;
             }
             cartesean.Refresh();
-            fragmentOrderChanged();
+            fragmentSelectionChanged();
         }
         
         
@@ -142,10 +129,8 @@ namespace LipidCreator
         
         
         
-        public void fragmentOrderChanged()
+        public void fragmentSelectionChanged()
         {
-            int topRank = 100000;
-            string topFragment = "";
             norming["productProfile"] = 0;
             
             
@@ -158,12 +143,7 @@ namespace LipidCreator
                 if ((bool)row["View"])
                 {
                     string fragmentName = (string)row["Fragment Name"];
-                    int rank = Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"]);
-                    if (topRank > rank)
-                    {
-                        topRank = rank;
-                        topFragment = fragmentName;
-                    }
+                    
                     for (int j = 0; j < yValCoords[fragmentName].Length; ++j)
                     {
                         yValCoords["productProfile"][j] += Math.Log10(yValCoords[fragmentName][j] / norming[fragmentName]);
@@ -180,15 +160,6 @@ namespace LipidCreator
                 }
             }
             
-            
-            if (topFragment.Length > 0)
-            {
-                cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
-            }
-            else
-            {
-                cartesean.CEval = -1;
-            }
             cartesean.Refresh();
         }
         
@@ -200,7 +171,7 @@ namespace LipidCreator
         {
             selectedInstrument = (string)instrumentCombobox.Items[instrumentCombobox.SelectedIndex];
             classCombobox.Items.Clear();
-            foreach(string lipidClass in instrumentParameters[selectedInstrument].Keys)
+            foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
             {
                 classCombobox.Items.Add(lipidClass);
             }
@@ -215,7 +186,7 @@ namespace LipidCreator
         {
             selectedClass = (string)classCombobox.Items[classCombobox.SelectedIndex];
             adductCombobox.Items.Clear();
-            foreach(string adduct in instrumentParameters[selectedInstrument][selectedClass].Keys)
+            foreach(string adduct in collisionEnergies[selectedInstrument][selectedClass].Keys)
             {
                 adductCombobox.Items.Add(adduct);
             }
@@ -232,7 +203,7 @@ namespace LipidCreator
             fragmentsList.Rows.Clear();
             
             
-            foreach(string fragmentName in instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys.OrderBy(fragmentName => Convert.ToInt32(instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"])))
+            foreach(string fragmentName in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys.OrderBy(fragmentName => Convert.ToInt32(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"])))
             {
                 DataRow row = fragmentsList.NewRow();
                 row["View"] = true;
@@ -288,8 +259,29 @@ namespace LipidCreator
             {
                 cartesean.Cursor = Cursors.Default;
             }
+            
+            
+            
+            if (cartesean.CELineShift)
+            {
+                PointF vals = cartesean.pxToValue(e.X, e.Y);
+                
+                string highlightName = "";
+                foreach (KeyValuePair<string, double> kvp in fragmentApex.OrderBy(x => Math.Abs(e.X - x.Value)))
+                {
+                    if (kvp.Value - Cartesean.CE_GRAB_MARGIN <= vals.X && vals.X <= kvp.Value + Cartesean.CE_GRAB_MARGIN)
+                    {
+                        vals.X = (float)kvp.Value;
+                        highlightName = kvp.Key;
+                        break;
+                    }
+                }
+                if (cartesean.highlightName != highlightName) cartesean.highlightName = highlightName;
+                cartesean.CEval = vals.X;
+                cartesean.Refresh();
+            }
         
-            if (cartesean.marginLeft <= e.X && e.X <= cartesean.Width - cartesean.marginRight)
+            else if (cartesean.marginLeft <= e.X && e.X <= cartesean.Width - cartesean.marginRight)
             {
                 cartesean.Focus();
                 PointF vals = cartesean.pxToValue(e.X, e.Y);
@@ -324,13 +316,6 @@ namespace LipidCreator
                     ToolTip1.Hide(cartesean);
                 }
             }
-            
-            if (cartesean.CELineShift)
-            {
-                PointF vals = cartesean.pxToValue(e.X, e.Y);
-                cartesean.CEval = vals.X;
-                cartesean.Refresh();
-            }
         }
         
         
@@ -343,8 +328,30 @@ namespace LipidCreator
         
         private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            fragmentOrderChanged();
+            fragmentSelectionChanged();
         }
+        
+        
+        
+        
+        private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
+        {
+            int rowIndexFromMouseDown = fragmentsGridView.HitTest(e.X, e.Y).RowIndex;
+            string highlightName = "";
+            if (rowIndexFromMouseDown != -1)
+            {
+                highlightName = (string)fragmentsList.Rows[rowIndexFromMouseDown]["Fragment name"];
+            }
+            
+            if (cartesean.highlightName != highlightName)
+            {
+                cartesean.highlightName = highlightName;
+                cartesean.Refresh();
+            }
+        }
+        
+        
+        
         
         /*
         // thank you for the code inspiration:

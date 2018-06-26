@@ -55,13 +55,14 @@ namespace LipidCreator
         public double maxYVal = 200;
         public string highlightName = "";
         public double offset = 2.4;
-        public double CEval = 0;
+        public double CEval;
         public bool CELineShift = false;
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
             Width = width;
             Height = height;
+            CEval = (maxXVal + minXVal) / 2.0;
             ceInspector = _ceInspector;
             innerWidthPx = Width - marginLeft - marginRight;
             innerHeightPx = Height - marginBottom - marginTop;
@@ -133,14 +134,34 @@ namespace LipidCreator
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            //g.SmoothingMode = SmoothingMode.AntiAlias;
             // draw white background
             SolidBrush whiteBrush = new SolidBrush(Color.White);
             Rectangle rectBG = new Rectangle(0, 0, Width, Height);
             e.Graphics.FillRectangle(whiteBrush, rectBG);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             
-            // draw all curves
             
+            // draw grid in the background
+            Pen grayPen = new Pen(ColorTranslator.FromHtml("#dddddd"));
+            for (int i = 0; i < Width; i += innerWidthPx / 5)
+            {
+                g.DrawLine(grayPen, new Point(marginLeft + i, Height - marginBottom), new Point(marginLeft + i, 0));
+            }
+            for (int i = 0; i < Height; i += innerHeightPx / 5)
+            {
+                g.DrawLine(grayPen, new Point(marginLeft, Height - marginBottom - i), new Point(Width, Height - marginBottom -i ));
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // draw all curves
             double lastX = 0;
             double lastY = 0;
             foreach(DataRow row in ceInspector.fragmentsList.Rows)
@@ -358,12 +379,7 @@ namespace LipidCreator
             fragmentsGridView.RowTemplate.Height = 34;
             fragmentsGridView.AllowDrop = true;
             fragmentsGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            /*
-            fragmentsGridView.MouseMove += new MouseEventHandler(fragmentsGridView_MouseMove);
-            fragmentsGridView.MouseDown += new MouseEventHandler(fragmentsGridView_MouseDown);
-            fragmentsGridView.DragOver += new DragEventHandler(fragmentsGridView_DragOver);
-            fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
-            */
+            fragmentsGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(fragmentsGridView_MouseMove);
             fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
             fragmentsGridView.CellContentClick += new DataGridViewCellEventHandler(fragmentsGridView_CellContentClick);
             fragmentsGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(fragmentsGridViewDataBindingComplete);

@@ -86,14 +86,21 @@ namespace LipidCreator
             double m = (s2sq * m1 + s1sq * m2) / (s1sq + s2sq) - sq(s);
             
             double x = (Math.Exp(m1 - s1sq) - sft1 + Math.Exp(m2 - s2sq) - sft2) / 2.0;
+            
+            // actually this is a newton method x^+ = x - f(x) / f'(x)
+            // with f(x) = log(L(m1, s1, sft1) * L(m2, s2, sft2))
+            // where L is shifted lognormal distribution and
+            // the three parameters m, s, sft (shift) for each
             for (int ii = 0; ii < 10; ++ii)
             {
-                double num = (-s1sq * (sft1 + x) * Math.Log(sft2 + x) - s2sq * (sft2 + x) * Math.Log(sft1 + x) + sft1 * m2 * s1sq - sft1 * s1sq * s2sq + sft2 * m1 * s2sq - sft2 * s1sq * s2sq + m1 * s2sq * x + m2 * s1sq * x - 2 * s1sq * s2sq * x)/(s1sq * s2sq * (sft1 + x) * (sft2 + x));
+                double numerator = (-s1sq * (sft1 + x) * Math.Log(sft2 + x) - s2sq * (sft2 + x) * Math.Log(sft1 + x) + sft1 * m2 * s1sq - sft1 * s1sq * s2sq + sft2 * m1 * s2sq - sft2 * s1sq * s2sq + m1 * s2sq * x + m2 * s1sq * x - 2 * s1sq * s2sq * x)/(s1sq * s2sq * (sft1 + x) * (sft2 + x));
             
-                double den = -((sq(sft1) * s1sq + sq(sft1) * m2 * s1sq + sq(sft2) * s2sq + sq(sft2) * m1 * s2sq - sq(sft1) * s1sq * s2sq - sq(sft2) * s1sq * s2sq + 2 * sft1 * s1sq * x + 2 * sft1 * m2 * s1sq * x + 2 * sft2 * s2sq * x + 2 * sft2 * m1 * s2sq * x - 2 * sft1 * s1sq * s2sq * x - 2 * sft2 * s1sq * s2sq * x + s1sq * sq(x) + m2 * s1sq * sq(x) + s2sq * sq(x) + m1 * s2sq * sq(x) - 2 * s1sq * s2sq * sq(x) - s2sq * sq(sft2 + x) * Math.Log(sft1 + x) - s1sq *sq (sft1 + x) * Math.Log(sft2 + x))/(s1sq * s2sq * sq(sft1 + x) * sq(sft2 + x)));
-                x -= num / den;
+                double denominator = -((sq(sft1) * s1sq + sq(sft1) * m2 * s1sq + sq(sft2) * s2sq + sq(sft2) * m1 * s2sq - sq(sft1) * s1sq * s2sq - sq(sft2) * s1sq * s2sq + 2 * sft1 * s1sq * x + 2 * sft1 * m2 * s1sq * x + 2 * sft2 * s2sq * x + 2 * sft2 * m1 * s2sq * x - 2 * sft1 * s1sq * s2sq * x - 2 * sft2 * s1sq * s2sq * x + s1sq * sq(x) + m2 * s1sq * sq(x) + s2sq * sq(x) + m1 * s2sq * sq(x) - 2 * s1sq * s2sq * sq(x) - s2sq * sq(sft2 + x) * Math.Log(sft1 + x) - s1sq *sq (sft1 + x) * Math.Log(sft2 + x))/(s1sq * s2sq * sq(sft1 + x) * sq(sft2 + x)));
+                x -= numerator / denominator;
             }
             
+            // x stores now the apex (mode) of the product distribution
+            // to get the shift, it has to be subtracted from the unshifted mode
             double sft = Math.Exp(m - sq(s)) - x;
             
             return new Tuple<double, double, double>(m, s, sft); 

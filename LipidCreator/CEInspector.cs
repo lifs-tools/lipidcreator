@@ -66,38 +66,38 @@ namespace LipidCreator
                 instrumentCombobox.Items.Add(instrumentName);
                 instrumentCombobox.SelectedIndex = 0;
             }
-            
-            
-            
-            double E1 = muToE(1, 0.1);
-            double E2 = muToE(1.4, 0.16);
-            double S1 = sigmaToS(1, 0.1);
-            double S2 = sigmaToS(1.4, 0.16);
-            Console.WriteLine(E1 + " " + S1);
-            Console.WriteLine(E2 + " " + S2);
-            
-            PointF p = productDistribution(E1, S1, E2, S2);
-            
-            double E = E1 + E2;
-            double S = S1 + S2;
-            
-            
-            double sigma = Math.Sqrt(Math.Log(S / sq(E) + 1));
-            double mu = Math.Log(E) - sq(S) / 2;
-            //double mu = Math.Log(E / Math.Sqrt(1.0 + S / sq(E)));
-            
-            
-            Console.WriteLine(p + " " + mu + " " + sigma);
-            
         }
         
-        private void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
+        public void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
         {
             cartesean.smooth = true;
             cartesean.Refresh();
             timerSmooth.Enabled = false;
         }
         
+        
+        
+        
+        public Tuple<double, double, double> productLogNormal(double m1, double s1, double sft1, double m2, double s2, double sft2)
+        {
+            double s1sq = sq(s1);
+            double s2sq = sq(s2);
+            double s = Math.Sqrt(s1sq * s2sq / (s1sq + s2sq));
+            double m = (s2sq * m1 + s1sq * m2) / (s1sq + s2sq) - sq(s);
+            
+            double x = (Math.Exp(m1 - s1sq) - sft1 + Math.Exp(m2 - s2sq) - sft2) / 2.0;
+            for (int ii = 0; ii < 10; ++ii)
+            {
+                double num = (-s1sq * (sft1 + x) * Math.Log(sft2 + x) - s2sq * (sft2 + x) * Math.Log(sft1 + x) + sft1 * m2 * s1sq - sft1 * s1sq * s2sq + sft2 * m1 * s2sq - sft2 * s1sq * s2sq + m1 * s2sq * x + m2 * s1sq * x - 2 * s1sq * s2sq * x)/(s1sq * s2sq * (sft1 + x) * (sft2 + x));
+            
+                double den = -((sq(sft1) * s1sq + sq(sft1) * m2 * s1sq + sq(sft2) * s2sq + sq(sft2) * m1 * s2sq - sq(sft1) * s1sq * s2sq - sq(sft2) * s1sq * s2sq + 2 * sft1 * s1sq * x + 2 * sft1 * m2 * s1sq * x + 2 * sft2 * s2sq * x + 2 * sft2 * m1 * s2sq * x - 2 * sft1 * s1sq * s2sq * x - 2 * sft2 * s1sq * s2sq * x + s1sq * sq(x) + m2 * s1sq * sq(x) + s2sq * sq(x) + m1 * s2sq * sq(x) - 2 * s1sq * s2sq * sq(x) - s2sq * sq(sft2 + x) * Math.Log(sft1 + x) - s1sq *sq (sft1 + x) * Math.Log(sft2 + x))/(s1sq * s2sq * sq(sft1 + x) * sq(sft2 + x)));
+                x -= num / den;
+            }
+            
+            double sft = Math.Exp(m - sq(s)) - x;
+            
+            return new Tuple<double, double, double>(m, s, sft); 
+        }
         
         
         

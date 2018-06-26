@@ -68,7 +68,7 @@ namespace LipidCreator
             }
             
             
-            /*
+            
             double E1 = muToE(1, 0.1);
             double E2 = muToE(1.4, 0.16);
             double S1 = sigmaToS(1, 0.1);
@@ -78,8 +78,8 @@ namespace LipidCreator
             
             PointF p = productDistribution(E1, S1, E2, S2);
             
-            double E = p.X;
-            double S = p.Y;
+            double E = E1 + E2;
+            double S = S1 + S2;
             
             
             double sigma = Math.Sqrt(Math.Log(S / sq(E) + 1));
@@ -88,8 +88,18 @@ namespace LipidCreator
             
             
             Console.WriteLine(p + " " + mu + " " + sigma);
-            */
+            
         }
+        
+        private void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            cartesean.smooth = true;
+            cartesean.Refresh();
+            timerSmooth.Enabled = false;
+        }
+        
+        
+        
         
         private void fragmentsGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -154,7 +164,6 @@ namespace LipidCreator
         public void fragmentSelectionChanged()
         {
             norming["productProfile"] = 0;
-            
             
             for(int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 0;
             
@@ -261,13 +270,20 @@ namespace LipidCreator
         
         public void cartesean_mouseUp(object sender, MouseEventArgs e)
         {
-            cartesean.CELineShift = false;
+            if (cartesean.CELineShift)
+            {
+                cartesean.CELineShift = false;
+                cartesean.smooth = true;
+                cartesean.Refresh();
+            }
+            
         }
         
         
         public void cartesean_mouseDown(object sender, MouseEventArgs e)
         {
             cartesean.CELineShift = cartesean.mouseOverCELine(e);
+            if (cartesean.CELineShift) cartesean.smooth = false;
         }
         
         

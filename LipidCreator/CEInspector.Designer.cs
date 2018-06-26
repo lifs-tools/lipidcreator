@@ -57,6 +57,7 @@ namespace LipidCreator
         public double offset = 2.4;
         public double CEval;
         public bool CELineShift = false;
+        public bool smooth = true;
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
@@ -117,6 +118,8 @@ namespace LipidCreator
             {
                 double newYVal = maxYVal + 10 * ((e.Delta > 0) ? -1.0 : 1.0);
                 double newOffset = offset + 0.1 * ((e.Delta > 0) ? -1.0 : 1.0);
+                smooth = false;
+                ceInspector.timerSmooth.Enabled = true;
                 if (10 <= newYVal)
                 {
                     maxYVal = newYVal;
@@ -134,7 +137,9 @@ namespace LipidCreator
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            //g.SmoothingMode = SmoothingMode.AntiAlias;
+            if (smooth) g.SmoothingMode = SmoothingMode.AntiAlias;
+            
+            
             // draw white background
             SolidBrush whiteBrush = new SolidBrush(Color.White);
             Rectangle rectBG = new Rectangle(0, 0, Width, Height);
@@ -288,6 +293,8 @@ namespace LipidCreator
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
             fragmentsGridView = new DataGridView();
+            this.timerSmooth = new System.Timers.Timer(250);
+            this.timerSmooth.Elapsed += this.changeSmooth;
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(950, 412);
             
@@ -431,5 +438,6 @@ namespace LipidCreator
         public Label labelCurrentCE;
         public TextBox textBoxCurrentCE;
         public DataGridView fragmentsGridView;
+        public System.Timers.Timer timerSmooth;
     }
 }

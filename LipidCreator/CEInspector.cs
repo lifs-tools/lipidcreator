@@ -67,6 +67,28 @@ namespace LipidCreator
                 instrumentCombobox.SelectedIndex = 0;
             }
             
+            
+            /*
+            double E1 = muToE(1, 0.1);
+            double E2 = muToE(1.4, 0.16);
+            double S1 = sigmaToS(1, 0.1);
+            double S2 = sigmaToS(1.4, 0.16);
+            Console.WriteLine(E1 + " " + S1);
+            Console.WriteLine(E2 + " " + S2);
+            
+            PointF p = productDistribution(E1, S1, E2, S2);
+            
+            double E = p.X;
+            double S = p.Y;
+            
+            
+            double sigma = Math.Sqrt(Math.Log(S / sq(E) + 1));
+            double mu = Math.Log(E) - sq(S) / 2;
+            //double mu = Math.Log(E / Math.Sqrt(1.0 + S / sq(E)));
+            
+            
+            Console.WriteLine(p + " " + mu + " " + sigma);
+            */
         }
         
         private void fragmentsGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -331,6 +353,32 @@ namespace LipidCreator
             fragmentSelectionChanged();
         }
         
+        public double sq(double x)
+        {
+            return x * x;
+        }
+        
+        public double muToE(double mu, double sigma)
+        {
+            return Math.Exp(mu + sq(sigma) / 2.0);
+        }
+        
+        public double sigmaToS(double mu, double sigma)
+        {
+            return Math.Exp(mu + sq(sigma) / 2.0) * Math.Sqrt(Math.Exp(sq(sigma)) - 1.0);
+        }
+        
+        
+        
+        public PointF productDistribution(double mu1, double sigma1, double mu2, double sigma2)
+        {
+            double sigma1sq = sq(sigma1);
+            double sigma2sq = sq(sigma2);
+            PointF p = new PointF();
+            p.X = (float)((sigma2sq * mu1 + sigma1sq * mu2) / (sigma1sq + sigma2sq));
+            p.Y = (float)Math.Sqrt(sigma1sq * sigma2sq / (sigma1sq + sigma2sq));
+            return p;
+        }
         
         
         

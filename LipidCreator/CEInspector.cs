@@ -15,6 +15,7 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public double[] xValCoords;
         public Dictionary<string, double[]> yValCoords;
+        public Dictionary<string, double> norming;
         public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
         public string selectedInstrument;
         public string selectedClass;
@@ -101,10 +102,14 @@ namespace LipidCreator
             cartesean.setFragmentColors();
             
             yValCoords = new Dictionary<string, double[]>();
+            yValCoords["productProfile"] = new double[cartesean.innerWidthPx + 1];
+            
+            norming = new Dictionary<string, double>();
+            norming["productProfile"] = 0;
             
             for (int i = 0; i <= cartesean.innerWidthPx; ++i)
             {
-                xValCoords[i] = ((double)i) / cartesean.innerWidthPx * cartesean.maxXVal;
+                xValCoords[i] = cartesean.minXVal + ((double)i) / cartesean.innerWidthPx * (cartesean.maxXVal - cartesean.minXVal);
             }
             
             int k = 0;
@@ -114,12 +119,15 @@ namespace LipidCreator
                 string fragmentName = (string)row["Fragment name"];
                            
                 yValCoords[fragmentName] = new double[cartesean.innerWidthPx + 1];
+                norming[fragmentName] = 0;
                 int j = 0;
                 
                 
                 foreach (double valX in xValCoords)
                 {
-                    yValCoords[fragmentName][j] = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
+                    double intens = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
+                    yValCoords[fragmentName][j] = intens;
+                    norming[fragmentName] += intens;
                     ++j;
                 }
                 ++k;
@@ -138,6 +146,11 @@ namespace LipidCreator
         {
             int topRank = 100000;
             string topFragment = "";
+            norming["productProfile"] = 0;
+            
+            
+            for(int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 0;
+            
             
             foreach(DataRow row in fragmentsList.Rows)
             {
@@ -151,8 +164,23 @@ namespace LipidCreator
                         topRank = rank;
                         topFragment = fragmentName;
                     }
+                    for (int j = 0; j < yValCoords[fragmentName].Length; ++j)
+                    {
+                        yValCoords["productProfile"][j] += Math.Log10(yValCoords[fragmentName][j] / norming[fragmentName]);
+                    }
                 }
             }
+            
+            foreach(double intens in yValCoords["productProfile"]) norming["productProfile"] += Math.Pow(10, intens);
+            if (norming["productProfile"] > 0)
+            {
+                for(int i = 0; i < yValCoords["productProfile"].Length; ++i)
+                {
+                    yValCoords["productProfile"][i] = Math.Pow(10, yValCoords["productProfile"][i]) * 10000.0 / norming["productProfile"];
+                }
+            }
+            
+            
             if (topFragment.Length > 0)
             {
                 cartesean.CEval = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, topFragment);
@@ -238,11 +266,32 @@ namespace LipidCreator
         
         
         
-        
-        public void mouseMove(object sender, MouseEventArgs e)
+        public void cartesean_mouseUp(object sender, MouseEventArgs e)
         {
+            cartesean.CELineShift = false;
+        }
+        
+        
+        public void cartesean_mouseDown(object sender, MouseEventArgs e)
+        {
+            cartesean.CELineShift = cartesean.mouseOverCELine(e);
+        }
+        
+        
+        public void cartesean_mouseMove(object sender, MouseEventArgs e)
+        {
+            if (cartesean.mouseOverCELine(e))
+            {
+                cartesean.Cursor = Cursors.Hand;
+            }
+            else
+            {
+                cartesean.Cursor = Cursors.Default;
+            }
+        
             if (cartesean.marginLeft <= e.X && e.X <= cartesean.Width - cartesean.marginRight)
             {
+                cartesean.Focus();
                 PointF vals = cartesean.pxToValue(e.X, e.Y);
                 int pos = Math.Max(0, e.X - cartesean.marginLeft);
                 pos = Math.Min(pos, cartesean.innerWidthPx);
@@ -275,9 +324,29 @@ namespace LipidCreator
                     ToolTip1.Hide(cartesean);
                 }
             }
+            
+            if (cartesean.CELineShift)
+            {
+                PointF vals = cartesean.pxToValue(e.X, e.Y);
+                cartesean.CEval = vals.X;
+                cartesean.Refresh();
+            }
         }
         
         
+        private void fragmentsGridView_CellContentClick(object sender, EventArgs e)
+        {
+            fragmentsGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+        
+        
+        
+        private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            fragmentOrderChanged();
+        }
+        
+        /*
         // thank you for the code inspiration:
         // https://stackoverflow.com/questions/1620947/how-could-i-drag-and-drop-datagridview-rows-under-each-other
         private Rectangle dragBoxFromMouseDown;
@@ -329,19 +398,6 @@ namespace LipidCreator
         {
             e.Effect = DragDropEffects.Move;
         }
-        
-        
-        private void fragmentsGridView_CellContentClick(object sender, EventArgs e)
-        {
-            fragmentsGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
-        }
-        
-        
-        
-        private void fragmentsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            fragmentOrderChanged();
-        }
 
         
         
@@ -389,6 +445,6 @@ namespace LipidCreator
                 fragmentOrderChanged();
             }
         }  
-      
+        */
     }
 }

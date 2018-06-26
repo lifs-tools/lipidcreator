@@ -42,6 +42,7 @@ namespace LipidCreator
         public int marginTop = 10;
         public int marginBottom = 20;
         public const int LABEL_EXTENSION = 5;
+        public const int CE_GRAB_MARGIN = 1;
         public const double VAL_DENOMINATOR = 100.0;
         public CEInspector ceInspector;
         public Dictionary<string, string> fragmentToColor;
@@ -49,11 +50,13 @@ namespace LipidCreator
         
         public int innerWidthPx;
         public int innerHeightPx;
-        public double maxXVal = 50;
+        public double maxXVal = 60;
+        public double minXVal = 10;
         public double maxYVal = 200;
         public string highlightName = "";
         public double offset = 2.4;
         public double CEval = 0;
+        public bool CELineShift = false;
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
@@ -71,7 +74,7 @@ namespace LipidCreator
         
         public Point valueToPx(double valX, double valY)
         {
-            return new Point((int)(marginLeft + valX * innerWidthPx / maxXVal), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
+            return new Point((int)(marginLeft + (valX - minXVal) * innerWidthPx / (maxXVal - minXVal)), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
         
         
@@ -79,7 +82,15 @@ namespace LipidCreator
         
         public PointF pxToValue(int pxX, int pxY)
         {
-            return new PointF((float)((pxX - marginLeft) * maxXVal / innerHeightPx), (float)((Height - marginBottom - pxY) * maxYVal / innerHeightPx));
+            return new PointF((float)((pxX - marginLeft) * (maxXVal - minXVal) / innerWidthPx + minXVal), (float)((Height - marginBottom - pxY) * maxYVal / innerHeightPx));
+        }
+        
+        
+        
+        public bool mouseOverCELine(MouseEventArgs e)
+        {
+            PointF vals = pxToValue(e.X, e.Y);
+            return (CEval - CE_GRAB_MARGIN <= vals.X && vals.X <= CEval + CE_GRAB_MARGIN);
         }
         
         
@@ -109,11 +120,15 @@ namespace LipidCreator
                 {
                     maxYVal = newYVal;
                     offset = newOffset;
-                    ceInspector.mouseMove(sender, e);
+                    ceInspector.cartesean_mouseMove(sender, e);
                     Refresh();
                 }
             }
         }
+        
+        
+        
+        
     
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -126,12 +141,14 @@ namespace LipidCreator
             
             // draw all curves
             
+            double lastX = 0;
+            double lastY = 0;
             foreach(DataRow row in ceInspector.fragmentsList.Rows)
             {
                 if (!(bool)row["View"]) continue;
                 string fragmentName = (string)row["Fragment name"];
-                double lastX = 0;
-                double lastY = 0;
+                lastX = 0;
+                lastY = 0;
                 Pen colorPen = new Pen(ColorTranslator.FromHtml(fragmentToColor[fragmentName]), (fragmentName == highlightName ? 4 : 2));
                 for (int i = 0; i < ceInspector.yValCoords[fragmentName].Length; ++i)
                 {
@@ -143,6 +160,18 @@ namespace LipidCreator
                     lastY = valY;
                 }
             }
+            Pen profilePen = new Pen(Color.Black, 1);
+            lastX = 0;
+            lastY = 0;
+            for (int ii = 0; ii < ceInspector.yValCoords["productProfile"].Length; ++ii)
+            {
+                double valX = ceInspector.xValCoords[ii];
+                double valY = ceInspector.yValCoords["productProfile"][ii];
+                
+                if (ii > 0) g.DrawLine(profilePen, valueToPx(lastX, lastY), valueToPx(valX, valY));
+                lastX = valX;
+                lastY = valY;
+            }
             
             // drawing the axes
             Font labelFont = new Font("Arial", 8);
@@ -151,8 +180,8 @@ namespace LipidCreator
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
             
             // labels at x-axis
-            double jj = 0;
-            for (int i = 0; i < Width; i += innerWidthPx / 5, jj += maxXVal / 5.0)
+            double jj = minXVal;
+            for (int i = 0; i < Width; i += innerWidthPx / 5, jj += (maxXVal - minXVal) / 5.0)
             {
                 g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
                 
@@ -232,6 +261,8 @@ namespace LipidCreator
             this.labelClass = new Label();
             this.labelAdduct = new Label();
             this.labelFragment = new Label();
+            this.labelCurrentCE = new Label();
+            this.textBoxCurrentCE = new TextBox();
             this.instrumentCombobox = new ComboBox();
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
@@ -264,7 +295,9 @@ namespace LipidCreator
             
             cartesean = new Cartesean(this, 700, 350);
             cartesean.Location = new Point(10, 50);
-            cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(mouseMove);
+            cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(cartesean_mouseMove);
+            cartesean.MouseDown += new MouseEventHandler(cartesean_mouseDown);
+            cartesean.MouseUp += new MouseEventHandler(cartesean_mouseUp);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(cartesean.mouseWheel);
 
             
@@ -302,11 +335,19 @@ namespace LipidCreator
             labelFragment.Height = 16;
             labelFragment.Location = new Point(720, 34);
             
+            labelCurrentCE.Text = "Current collision energy:";
+            labelCurrentCE.Width = 140;
+            labelCurrentCE.Height = 16;
+            labelCurrentCE.Location = new Point(720, 304);
+            
+            
+            textBoxCurrentCE.Location = new Point(720, 320);
+            textBoxCurrentCE.Width = 140;
             
             
             
             fragmentsGridView.Location = new Point(720, 50);
-            fragmentsGridView.Size = new Size(216, 300);
+            fragmentsGridView.Size = new Size(216, 240);
             fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;
@@ -317,34 +358,17 @@ namespace LipidCreator
             fragmentsGridView.RowTemplate.Height = 34;
             fragmentsGridView.AllowDrop = true;
             fragmentsGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            /*
             fragmentsGridView.MouseMove += new MouseEventHandler(fragmentsGridView_MouseMove);
             fragmentsGridView.MouseDown += new MouseEventHandler(fragmentsGridView_MouseDown);
             fragmentsGridView.DragOver += new DragEventHandler(fragmentsGridView_DragOver);
             fragmentsGridView.DragDrop += new DragEventHandler(fragmentsGridView_DragDrop);
+            */
             fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
             fragmentsGridView.CellContentClick += new DataGridViewCellEventHandler(fragmentsGridView_CellContentClick);
             fragmentsGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(fragmentsGridViewDataBindingComplete);
-            //fragmentsGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             fragmentsGridView.RowHeadersVisible = false;
             fragmentsGridView.ScrollBars = ScrollBars.Vertical;
-            
-            
-            /*
-            fragmentsGridView.ColumnCount = 1;
-            
-            
-            DataGridViewCheckBoxColumn selectFragment = new DataGridViewCheckBoxColumn();
-            selectFragment.HeaderText = "View";
-            selectFragment.Width = 50;
-            selectFragment.TrueValue = true;
-            selectFragment.FalseValue = false;
-            fragmentsGridView.Columns.Insert(0, selectFragment);
-            */
-            
-            
-            
-            
-            
             
             
             
@@ -362,6 +386,8 @@ namespace LipidCreator
             this.Controls.Add(this.labelClass);
             this.Controls.Add(this.labelAdduct);
             this.Controls.Add(this.labelFragment);
+            this.Controls.Add(this.labelCurrentCE);
+            this.Controls.Add(this.textBoxCurrentCE);
             this.Controls.Add(this.fragmentsGridView);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
@@ -386,6 +412,8 @@ namespace LipidCreator
         public Label labelClass;
         public Label labelAdduct;
         public Label labelFragment;
+        public Label labelCurrentCE;
+        public TextBox textBoxCurrentCE;
         public DataGridView fragmentsGridView;
     }
 }

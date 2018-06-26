@@ -245,7 +245,7 @@ namespace LipidCreator
         public void changeTab(int index)
         {
             tabControl.SelectedIndex = index;
-            if (lipidTabList.Count >= index) return;
+            if (lipidTabList.Count <= index) return;
             changingTabForced = true;
             currentLipid = (Lipid)lipidTabList[index];
             currentIndex = (LipidCategory)index;
@@ -530,7 +530,6 @@ namespace LipidCreator
                     
                     else // Phospholipid
                     {
-                    
                         clFA3Checkbox3.Visible = false;
                         clFA3Checkbox2.Visible = false;
                         clFA3Checkbox1.Visible = false;

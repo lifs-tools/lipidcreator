@@ -371,6 +371,8 @@ namespace LipidCreator
             
             textBoxCurrentCE.Location = new Point(720, 320);
             textBoxCurrentCE.Width = 140;
+            textBoxCurrentCE.Leave += new EventHandler(textBoxCurrentCE_ValueChanged);
+            textBoxCurrentCE.KeyDown += new KeyEventHandler(textBoxCurrentCE_Keydown);
             
             
             

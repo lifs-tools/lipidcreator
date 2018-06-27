@@ -39,6 +39,7 @@ namespace LipidCreator
             
             
             InitializeComponent();
+            textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
             
             // foreach instrument
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
@@ -66,6 +67,8 @@ namespace LipidCreator
                 instrumentCombobox.Items.Add(instrumentName);
                 instrumentCombobox.SelectedIndex = 0;
             }
+            
+            Console.WriteLine(productLogNormal(2.4255, 0.45, 0.2, 1.75, 0.2, 1.7));
         }
         
         public void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
@@ -88,8 +91,8 @@ namespace LipidCreator
             double x = (Math.Exp(m1 - s1sq) - sft1 + Math.Exp(m2 - s2sq) - sft2) / 2.0;
             
             // actually this is a newton method x^+ = x - f(x) / f'(x)
-            // with f(x) = log(L(m1, s1, sft1) * L(m2, s2, sft2))
-            // where L is shifted lognormal distribution and
+            // with f(x) = d/dx log(L(x | m1, s1, sft1) * L(x | m2, s2, sft2))
+            // where L is shifted lognormal pdf and
             // the three parameters m, s, sft (shift) for each
             for (int ii = 0; ii < 10; ++ii)
             {
@@ -203,6 +206,36 @@ namespace LipidCreator
         
         
         
+        
+        public void textBoxCurrentCE_ValueChanged(Object sender, EventArgs e)
+        {
+            checkValidTextBoxtCurrentCE();
+        }
+        
+        public void checkValidTextBoxtCurrentCE()
+        {
+            double oldCE = cartesean.CEval;
+            try
+            {
+                cartesean.CEval = Convert.ToDouble(textBoxCurrentCE.Text);
+            }
+            catch (Exception ee)
+            {
+                
+            }
+            if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
+            {
+                cartesean.CEval = oldCE;
+                textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+            }
+            cartesean.Refresh();
+        }
+        
+        
+        public void textBoxCurrentCE_Keydown(Object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) checkValidTextBoxtCurrentCE();
+        }
         
         
         public void instrumentComboboxChanged(Object sender, EventArgs e)
@@ -323,6 +356,7 @@ namespace LipidCreator
                 }
                 if (cartesean.highlightName != highlightName) cartesean.highlightName = highlightName;
                 cartesean.CEval = vals.X;
+                textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
                 cartesean.Refresh();
             }
         

@@ -296,6 +296,7 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuExit;
         public System.Windows.Forms.MenuItem menuOptions;
         public System.Windows.Forms.MenuItem menuCollisionEnergy;
+        public System.Windows.Forms.MenuItem menuCollisionEnergyOpt;
         public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
         public System.Windows.Forms.MenuItem menuMS2Fragments;
         public System.Windows.Forms.MenuItem menuIsotopes;
@@ -611,6 +612,7 @@ namespace LipidCreator
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
             this.menuCollisionEnergy = new System.Windows.Forms.MenuItem ();
+            this.menuCollisionEnergyOpt = new System.Windows.Forms.MenuItem ();
             this.menuCollisionEnergyNone = new System.Windows.Forms.MenuItem ();
             this.menuMS2Fragments = new System.Windows.Forms.MenuItem ();
             this.menuIsotopes = new System.Windows.Forms.MenuItem ();
@@ -648,11 +650,15 @@ namespace LipidCreator
             this.menuExit.Click += new System.EventHandler (menuExitClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergy, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
             this.menuCollisionEnergy.Text = "Collision Energy computation";
+            
+            this.menuCollisionEnergyOpt.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
+            this.menuCollisionEnergyOpt.Text = "Collision Energy &optimization";
+            this.menuCollisionEnergyOpt.Click += new System.EventHandler (menuCollisionEnergyOptClick);
             
             this.menuCollisionEnergyNone.Text = "No computation";
             this.menuCollisionEnergyNone.RadioCheck = true;

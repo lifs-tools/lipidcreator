@@ -42,7 +42,7 @@ namespace LipidCreator
             
             
             InitializeComponent();
-            textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+            textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
             
             // foreach instrument
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
@@ -135,6 +135,8 @@ namespace LipidCreator
             
             norming = new Dictionary<string, double>();
             norming["productProfile"] = 0;
+            fragmentApex.Clear();
+            fragmentApex["productProfile"] = 0;
             
             
             // compute x values (a.k.a. collision energies)
@@ -179,6 +181,7 @@ namespace LipidCreator
         {
             norming["productProfile"] = 0;
             selectedFragments.Clear();
+            selectedFragments.Add("productProfile");
             
             for(int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 0;
             
@@ -218,6 +221,8 @@ namespace LipidCreator
                 double collisionEnergy = xValCoords[i] + sft;
                 yValCoords["productProfile"][i] = 1000 / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-sq(Math.Log(collisionEnergy) - m) / (2 * sq(sd)));
             }
+            
+            fragmentApex["productProfile"] = Math.Exp(m - sq(sd)) - sft;
             
             /*
             foreach(DataRow row in fragmentsList.Rows)
@@ -271,7 +276,7 @@ namespace LipidCreator
             if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
             {
                 cartesean.CEval = oldCE;
-                textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+                textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
             }
             collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
             cartesean.Refresh();
@@ -330,7 +335,7 @@ namespace LipidCreator
             
             
             cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
-            textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+            textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
          
             fragmentsGridView.Update();
             fragmentsGridView.Refresh();
@@ -360,22 +365,17 @@ namespace LipidCreator
                     // foreach adduct
                     foreach(KeyValuePair<string, double> kvp3 in kvp2.Value)
                     {
-                        string stringCE = String.Format("{0:0.00}", kvp3.Value);
+                        string stringCE = String.Format(new CultureInfo("en-US"), "{0:0.00}", kvp3.Value);
+                        Console.WriteLine(stringCE);
+                        
                         // foreach fragment
                         foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])
                         {
-                            kvp4.Value["CE"] = String.Format("{0:0.00}", stringCE);
+                            kvp4.Value["CE"] = stringCE;
                         }
                     }
                 }
             }
-        
-        
-        
-        
-        
-        
-        
         
             this.Close();
         }
@@ -430,7 +430,7 @@ namespace LipidCreator
                 }
                 if (cartesean.highlightName != highlightName) cartesean.highlightName = highlightName;
                 cartesean.CEval = vals.X;
-                textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+                textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 cartesean.Refresh();
             }

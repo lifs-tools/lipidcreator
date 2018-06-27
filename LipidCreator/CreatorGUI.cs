@@ -174,15 +174,6 @@ namespace LipidCreator
                 }
             }
             
-            
-            
-            
-            // TODO: after testing, delete this lines
-            CEInspector ceInspector = new CEInspector(this);
-            ceInspector.Owner = this;
-            ceInspector.ShowInTaskbar = false;
-            ceInspector.ShowDialog();
-            ceInspector.Dispose();
         }
         
         
@@ -3038,7 +3029,15 @@ namespace LipidCreator
             }
         }
         
-        
+        protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
+        {
+            // TODO: after testing, delete this lines
+            CEInspector ceInspector = new CEInspector(this);
+            ceInspector.Owner = this;
+            ceInspector.ShowInTaskbar = false;
+            ceInspector.ShowDialog();
+            ceInspector.Dispose();
+        }
         
         protected void menuExportClick(object sender, System.EventArgs e)
         {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace LipidCreator
 {
@@ -23,12 +24,14 @@ namespace LipidCreator
         public string selectedAdduct;
         public DataTable fragmentsList;
         public bool initialCall = true;
+        public HashSet<string> selectedFragments;
         
         public CEInspector(CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
             collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
             fragmentApex = new Dictionary<string, double>();
+            selectedFragments = new HashSet<string>();
             
             fragmentsList = new DataTable("fragmentsList");
             fragmentsList.Columns.Add(new DataColumn("View"));
@@ -67,8 +70,6 @@ namespace LipidCreator
                 instrumentCombobox.Items.Add(instrumentName);
                 instrumentCombobox.SelectedIndex = 0;
             }
-            
-            Console.WriteLine(productLogNormal(2.4255, 0.45, 0.2, 1.75, 0.2, 1.7));
         }
         
         public void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
@@ -94,7 +95,7 @@ namespace LipidCreator
             // with f(x) = d/dx log(L(x | m1, s1, sft1) * L(x | m2, s2, sft2))
             // where L is shifted lognormal pdf and
             // the three parameters m, s, sft (shift) for each
-            for (int ii = 0; ii < 10; ++ii)
+            for (int ii = 0; ii < 20; ++ii)
             {
                 double numerator = (-s1sq * (sft1 + x) * Math.Log(sft2 + x) - s2sq * (sft2 + x) * Math.Log(sft1 + x) + sft1 * m2 * s1sq - sft1 * s1sq * s2sq + sft2 * m1 * s2sq - sft2 * s1sq * s2sq + m1 * s2sq * x + m2 * s1sq * x - 2 * s1sq * s2sq * x)/(s1sq * s2sq * (sft1 + x) * (sft2 + x));
             
@@ -174,10 +175,48 @@ namespace LipidCreator
         public void fragmentSelectionChanged()
         {
             norming["productProfile"] = 0;
+            selectedFragments.Clear();
             
             for(int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 0;
             
+            double m = -1, sd = -1, sft = 0;
+            foreach(DataRow row in fragmentsList.Rows)
+            {
+                if ((bool)row["View"])
+                {
+                    string fragmentName = (string)row["Fragment Name"];
+                    selectedFragments.Add(fragmentName);
+                    Dictionary<string, string> pars =  creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName];
+                    if (sd < 0)
+                    {
+                        m = Convert.ToDouble(pars["meanlog"], CultureInfo.InvariantCulture);
+                        sd = Convert.ToDouble(pars["sdlog"], CultureInfo.InvariantCulture);
+                        sft = Convert.ToDouble(pars["shift"], CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        Tuple<double, double, double> t = productLogNormal(m,
+                        sd,
+                        sft,
+                        Convert.ToDouble(pars["meanlog"], CultureInfo.InvariantCulture),
+                        Convert.ToDouble(pars["sdlog"], CultureInfo.InvariantCulture),
+                        Convert.ToDouble(pars["shift"], CultureInfo.InvariantCulture));
+                        
+                        m = t.Item1;
+                        sd = t.Item2;
+                        sft = t.Item3;
+                    }
+                }
+            }
             
+            
+            for (int i = 0; i < xValCoords.Length; ++i)
+            {
+                double collisionEnergy = xValCoords[i] + sft;
+                yValCoords["productProfile"][i] = 1000 / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-sq(Math.Log(collisionEnergy) - m) / (2 * sq(sd)));
+            }
+            
+            /*
             foreach(DataRow row in fragmentsList.Rows)
             {
                 
@@ -200,6 +239,7 @@ namespace LipidCreator
                     yValCoords["productProfile"][i] = Math.Pow(10, yValCoords["productProfile"][i]) * 10000.0 / norming["productProfile"];
                 }
             }
+            */
             
             cartesean.Refresh();
         }
@@ -345,7 +385,7 @@ namespace LipidCreator
                 PointF vals = cartesean.pxToValue(e.X, e.Y);
                 
                 string highlightName = "";
-                foreach (KeyValuePair<string, double> kvp in fragmentApex.OrderBy(x => Math.Abs(e.X - x.Value)))
+                foreach (KeyValuePair<string, double> kvp in fragmentApex.Where(x => selectedFragments.Contains(x.Key)).OrderBy(x => Math.Abs(e.X - x.Value)))
                 {
                     if (kvp.Value - Cartesean.CE_GRAB_MARGIN <= vals.X && vals.X <= kvp.Value + Cartesean.CE_GRAB_MARGIN)
                     {
@@ -455,108 +495,5 @@ namespace LipidCreator
             }
         }
         
-        
-        
-        
-        /*
-        // thank you for the code inspiration:
-        // https://stackoverflow.com/questions/1620947/how-could-i-drag-and-drop-datagridview-rows-under-each-other
-        private Rectangle dragBoxFromMouseDown;
-        private int rowIndexFromMouseDown;
-        private int rowIndexOfItemUnderMouseToDrop;
-
-        private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
-        {
-         
-            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-            {
-
-                // If the mouse moves outside the rectangle, start the drag.
-                if (dragBoxFromMouseDown != Rectangle.Empty && !dragBoxFromMouseDown.Contains(e.X, e.Y))
-                {
-                    // Proceed with the drag and drop, passing in the list item. 
-                    fragmentsGridView.DoDragDrop(fragmentsGridView.Rows[rowIndexFromMouseDown], DragDropEffects.Move);
-                }
-            }
-        }
-
-        
-
-        private void fragmentsGridView_MouseDown(object sender, MouseEventArgs e)
-        {
-            // Get the index of the item the mouse is below.
-            rowIndexFromMouseDown = fragmentsGridView.HitTest(e.X, e.Y).RowIndex;
-            if (rowIndexFromMouseDown != -1)
-            {
-                // Remember the point where the mouse down occurred.
-                // The DragSize indicates the size that the mouse can move
-                // before a drag event should be started.  
-                Size dragSize = SystemInformation.DragSize;
-                
-                // Create a rectangle using the DragSize, with the mouse position being
-                // at the center of the rectangle.
-                dragBoxFromMouseDown = new Rectangle(new Point(e.X - (dragSize.Width >> 1), e.Y - (dragSize.Height >> 1)), dragSize);
-            }
-            else
-            {
-                // Reset the rectangle if the mouse is not over an item in the ListBox.
-                dragBoxFromMouseDown = Rectangle.Empty;
-            }
-        }
-
-        
-
-        private void fragmentsGridView_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-
-        
-        
-        
-        
-
-        private void fragmentsGridView_DragDrop(object sender, DragEventArgs e)
-        {
-        
-            // The mouse locations are relative to the screen, so they must be
-            // converted to client coordinates.
-            Point clientPoint = fragmentsGridView.PointToClient(new Point(e.X, e.Y));
-            
-            // Get the row index of the item the mouse is below.
-            rowIndexOfItemUnderMouseToDrop = fragmentsGridView.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
-
-            // If the drag operation was a move then remove and insert the row.
-            if (e.Effect== DragDropEffects.Move && rowIndexOfItemUnderMouseToDrop > -1)
-            {
-                // data source has to be unconnected while manipulating data table below
-                fragmentsGridView.DataSource = null;
-                
-                
-                DataRow rowToMove = fragmentsList.NewRow(); // Rows[rowIndexFromMouseDown];
-                rowToMove["View"] = (bool)fragmentsList.Rows[rowIndexFromMouseDown]["View"];
-                rowToMove["Fragment Name"] = (string)fragmentsList.Rows[rowIndexFromMouseDown]["Fragment Name"];
-                fragmentsList.Rows.RemoveAt(rowIndexFromMouseDown);
-                fragmentsList.Rows.InsertAt(rowToMove, rowIndexOfItemUnderMouseToDrop);
-                
-                
-                
-                int rank = 1;
-                foreach(DataRow row in fragmentsList.Rows)
-                {
-                    instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][(string)row["Fragment Name"]]["rank"] = Convert.ToString(rank);
-                    rank++;
-                }
-                fragmentsGridView.DataSource = fragmentsList;
-                
-                
-                fragmentsGridView.Update();
-                for (int i = 0; i < fragmentsGridView.Rows.Count; ++i) fragmentsGridView.Rows[i].Selected = false;
-                fragmentsGridView.Rows[rowIndexOfItemUnderMouseToDrop].Selected = true;
-                fragmentsGridView.Refresh();
-                fragmentOrderChanged();
-            }
-        }  
-        */
     }
 }

@@ -65,6 +65,28 @@ namespace LipidCreator
         
         
         
+        public void addCollisionEnergyFields()
+        {
+            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in instrumentParameters)
+            {
+                // foreach class
+                foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
+                {
+                    // foreach adduct
+                    foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
+                    {
+                        // foreach fragment
+                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
+                        {
+                            kvp4.Value.Add("CE", "30.0");
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
         public double getCollisionEnergy(string instrument, string lipidClass, string adduct, string fragment)
         {
             double energy = -1;

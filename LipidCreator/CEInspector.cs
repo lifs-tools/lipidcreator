@@ -59,7 +59,10 @@ namespace LipidCreator
                     // foreach adduct
                     foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        p2.Add(kvp3.Key, 0.0);
+                        var e = kvp3.Value.Keys.GetEnumerator();
+                        e.MoveNext();
+                        string firstFragment = e.Current;
+                        p2.Add(kvp3.Key, Convert.ToDouble(kvp3.Value[firstFragment]["CE"], CultureInfo.InvariantCulture));
                     }
                 }
             }
@@ -252,6 +255,8 @@ namespace LipidCreator
             checkValidTextBoxtCurrentCE();
         }
         
+        
+        
         public void checkValidTextBoxtCurrentCE()
         {
             double oldCE = cartesean.CEval;
@@ -268,6 +273,7 @@ namespace LipidCreator
                 cartesean.CEval = oldCE;
                 textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
             }
+            collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
             cartesean.Refresh();
         }
         
@@ -321,6 +327,10 @@ namespace LipidCreator
                 row["Fragment name"] = fragmentName;
                 fragmentsList.Rows.Add(row);
             }
+            
+            
+            cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
+            textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
          
             fragmentsGridView.Update();
             fragmentsGridView.Refresh();
@@ -342,6 +352,31 @@ namespace LipidCreator
         
         public void applyClick(object sender, EventArgs e)
         {
+            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, double>>> kvp1 in collisionEnergies)
+            {
+                // foreach class
+                foreach(KeyValuePair<string, Dictionary<string, double>> kvp2 in kvp1.Value)
+                {
+                    // foreach adduct
+                    foreach(KeyValuePair<string, double> kvp3 in kvp2.Value)
+                    {
+                        string stringCE = String.Format("{0:0.00}", kvp3.Value);
+                        // foreach fragment
+                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])
+                        {
+                            kvp4.Value["CE"] = String.Format("{0:0.00}", stringCE);
+                        }
+                    }
+                }
+            }
+        
+        
+        
+        
+        
+        
+        
+        
             this.Close();
         }
         
@@ -356,7 +391,6 @@ namespace LipidCreator
                 cartesean.smooth = true;
                 cartesean.Refresh();
             }
-            
         }
         
         
@@ -397,6 +431,7 @@ namespace LipidCreator
                 if (cartesean.highlightName != highlightName) cartesean.highlightName = highlightName;
                 cartesean.CEval = vals.X;
                 textBoxCurrentCE.Text = String.Format("{0:0.00}",cartesean.CEval);
+                collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 cartesean.Refresh();
             }
         

@@ -191,7 +191,9 @@ namespace LipidCreator
         }
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, Dictionary<string, Dictionary<string, ArrayList>> fragmentScores = null, CollisionEnergy collisionEnergyHandler = null, string instrument = "", ArrayList lipidClassNames = null)
+        
+        
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler = null, string instrument = "")
         {
             
             if (precursorData.addPrecursor){
@@ -210,21 +212,11 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
                 
-                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
+                if (collisionEnergyHandler != null && instrument.Length > 0)
                 {
-                    lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
-                    lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdductFormula;
-                    
-                    if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
-                    if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count, -1.0});
-                    
-                    double rank = collisionEnergyHandler.getRank(instrument, lipidClass, "precursor", adduct);
-                    if ((double)fragmentScores[lipidClass][adduct][0] > rank){
-                        fragmentScores[lipidClass][adduct][0] = rank;
-                        fragmentScores[lipidClass][adduct][1] = transitionList.Rows.Count;
-                    }
+                    lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, "precursor");
                 }
             }
             
@@ -337,21 +329,11 @@ namespace LipidCreator
                 transitionList.Rows.Add(lipidRow);
                 
                 
-                if (fragmentScores != null && collisionEnergyHandler != null && lipidClassNames != null && instrument.Length > 0)
+                if (collisionEnergyHandler != null && instrument.Length > 0)
                 {
-                    lipidRow[LipidCreator.COLLISION_ENERGY] = "";
                     string lipidClass = precursorData.fullMoleculeListName;
-                    lipidClassNames.Add(lipidClass);
                     string adduct = precursorData.precursorAdductFormula;
-                    
-                    if (!fragmentScores.ContainsKey(lipidClass)) fragmentScores.Add(lipidClass, new Dictionary<string, ArrayList>());
-                    if (!fragmentScores[lipidClass].ContainsKey(adduct)) fragmentScores[lipidClass].Add(adduct, new ArrayList{-1000.0, transitionList.Rows.Count - 1, -1.0});
-                    
-                    double rank = collisionEnergyHandler.getRank(instrument, lipidClass, fragName, adduct);
-                    if ((double)fragmentScores[lipidClass][adduct][0] > rank){
-                        fragmentScores[lipidClass][adduct][0] = rank;
-                        fragmentScores[lipidClass][adduct][1] = transitionList.Rows.Count - 1;
-                    }
+                    lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragName);
                 }
                 
             }
@@ -504,8 +486,6 @@ namespace LipidCreator
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
             if (precursorData.fragmentNames.Count == 0) return;
-            int topRankFragmentPos = 0;
-            double topRank = 1000;
             string precursorAdduct = precursorData.precursorAdductFormula;  
             
             var peaks = new List<Peak>();
@@ -600,14 +580,6 @@ namespace LipidCreator
                         fragAdduct,
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));
-                      
-                double rank = collisionEnergyHandler.getRank(instrument, precursorData.fullMoleculeListName, fragName, precursorAdduct);
-                
-                if (topRank > rank)
-                {
-                    topRank = rank;
-                    topRankFragmentPos = peaks.Count - 1;
-                }
             }
             
             // add precursor
@@ -619,24 +591,13 @@ namespace LipidCreator
                     precursorData.precursorIonFormula,
                     "precursor")));
                     
-            double precursorRank = collisionEnergyHandler.getRank(instrument, precursorData.fullMoleculeListName, "precursor", precursorAdduct);
             
-            if (topRank > precursorRank)
+            
+            foreach (Peak peak in peaks)
             {
-                topRank = precursorRank;
-                topRankFragmentPos = peaks.Count - 1;
-            }
-            
-            string topFragment = peaks[topRankFragmentPos].Annotation.Name;
-            double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, precursorAdduct, topFragment);
-            
-            if (collisionEnergy > 0)
-            {
-                foreach (Peak peak in peaks)
-                {
-                    string fragment = peak.Annotation.Name;
-                    peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, precursorAdduct, fragment, collisionEnergy);
-                }
+                string fragment = peak.Annotation.Name;
+                double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, precursorAdduct, fragment);
+                peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, precursorAdduct, fragment, collisionEnergy);
             }
             
             // Commit to .blib

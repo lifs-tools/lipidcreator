@@ -16,7 +16,6 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public double[] xValCoords;
         public Dictionary<string, double[]> yValCoords;
-        public Dictionary<string, double> norming;
         public Dictionary<string, double> fragmentApex;
         public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies;  // for instrument / class / adduct
         public string selectedInstrument;
@@ -73,7 +72,10 @@ namespace LipidCreator
                 instrumentCombobox.Items.Add(instrumentName);
                 instrumentCombobox.SelectedIndex = 0;
             }
+            
         }
+        
+        
         
         public void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -82,36 +84,6 @@ namespace LipidCreator
             timerSmooth.Enabled = false;
         }
         
-        
-        
-        
-        public Tuple<double, double, double> productLogNormal(double m1, double s1, double sft1, double m2, double s2, double sft2)
-        {
-            double s1sq = sq(s1);
-            double s2sq = sq(s2);
-            double s = Math.Sqrt(s1sq * s2sq / (s1sq + s2sq));
-            double m = (s2sq * m1 + s1sq * m2) / (s1sq + s2sq) - sq(s);
-            
-            double x = (Math.Exp(m1 - s1sq) - sft1 + Math.Exp(m2 - s2sq) - sft2) / 2.0;
-            
-            // actually this is a newton method x^+ = x - f(x) / f'(x)
-            // with f(x) = d/dx log(L(x | m1, s1, sft1) * L(x | m2, s2, sft2))
-            // where L is shifted lognormal pdf and
-            // the three parameters m, s, sft (shift) for each
-            for (int ii = 0; ii < 20; ++ii)
-            {
-                double numerator = (-s1sq * (sft1 + x) * Math.Log(sft2 + x) - s2sq * (sft2 + x) * Math.Log(sft1 + x) + sft1 * m2 * s1sq - sft1 * s1sq * s2sq + sft2 * m1 * s2sq - sft2 * s1sq * s2sq + m1 * s2sq * x + m2 * s1sq * x - 2 * s1sq * s2sq * x)/(s1sq * s2sq * (sft1 + x) * (sft2 + x));
-            
-                double denominator = -((sq(sft1) * s1sq + sq(sft1) * m2 * s1sq + sq(sft2) * s2sq + sq(sft2) * m1 * s2sq - sq(sft1) * s1sq * s2sq - sq(sft2) * s1sq * s2sq + 2 * sft1 * s1sq * x + 2 * sft1 * m2 * s1sq * x + 2 * sft2 * s2sq * x + 2 * sft2 * m1 * s2sq * x - 2 * sft1 * s1sq * s2sq * x - 2 * sft2 * s1sq * s2sq * x + s1sq * sq(x) + m2 * s1sq * sq(x) + s2sq * sq(x) + m1 * s2sq * sq(x) - 2 * s1sq * s2sq * sq(x) - s2sq * sq(sft2 + x) * Math.Log(sft1 + x) - s1sq *sq (sft1 + x) * Math.Log(sft2 + x))/(s1sq * s2sq * sq(sft1 + x) * sq(sft2 + x)));
-                x -= numerator / denominator;
-            }
-            
-            // x stores now the apex (mode) of the product distribution
-            // to get the shift, it has to be subtracted from the unshifted mode
-            double sft = Math.Exp(m - sq(s)) - x;
-            
-            return new Tuple<double, double, double>(m, s, sft); 
-        }
         
         
         
@@ -133,8 +105,6 @@ namespace LipidCreator
             yValCoords = new Dictionary<string, double[]>();
             yValCoords["productProfile"] = new double[cartesean.innerWidthPx + 1];
             
-            norming = new Dictionary<string, double>();
-            norming["productProfile"] = 0;
             fragmentApex.Clear();
             fragmentApex["productProfile"] = 0;
             
@@ -153,18 +123,9 @@ namespace LipidCreator
                 string fragmentName = (string)row["Fragment name"];
                            
                 yValCoords[fragmentName] = new double[cartesean.innerWidthPx + 1];
-                norming[fragmentName] = 0;
-                int j = 0;
+                fragmentApex[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getApex(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
                 
-                fragmentApex[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getCollisionEnergy(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
-                
-                foreach (double valX in xValCoords)
-                {
-                    double intens = 10000 * creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, valX);
-                    yValCoords[fragmentName][j] = intens;
-                    norming[fragmentName] += intens;
-                    ++j;
-                }
+                yValCoords[fragmentName] = CollisionEnergy.computeLogNormalCurve(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName], xValCoords, 1000);
                 ++k;
             }
             cartesean.Refresh();
@@ -179,76 +140,36 @@ namespace LipidCreator
         
         public void fragmentSelectionChanged()
         {
-            norming["productProfile"] = 0;
             selectedFragments.Clear();
             selectedFragments.Add("productProfile");
             
-            for(int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 0;
+            for (int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 1;
             
-            double m = -1, sd = -1, sft = 0;
+            //int ii = 0;
             foreach(DataRow row in fragmentsList.Rows)
             {
                 if ((bool)row["View"])
                 {
                     string fragmentName = (string)row["Fragment Name"];
                     selectedFragments.Add(fragmentName);
-                    Dictionary<string, string> pars =  creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName];
-                    if (sd < 0)
-                    {
-                        m = Convert.ToDouble(pars["meanlog"], CultureInfo.InvariantCulture);
-                        sd = Convert.ToDouble(pars["sdlog"], CultureInfo.InvariantCulture);
-                        sft = Convert.ToDouble(pars["shift"], CultureInfo.InvariantCulture);
-                    }
-                    else
-                    {
-                        Tuple<double, double, double> t = productLogNormal(m,
-                        sd,
-                        sft,
-                        Convert.ToDouble(pars["meanlog"], CultureInfo.InvariantCulture),
-                        Convert.ToDouble(pars["sdlog"], CultureInfo.InvariantCulture),
-                        Convert.ToDouble(pars["shift"], CultureInfo.InvariantCulture));
-                        
-                        m = t.Item1;
-                        sd = t.Item2;
-                        sft = t.Item3;
-                    }
-                }
-            }
-            
-            
-            for (int i = 0; i < xValCoords.Length; ++i)
-            {
-                double collisionEnergy = xValCoords[i] + sft;
-                yValCoords["productProfile"][i] = 1000 / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-sq(Math.Log(collisionEnergy) - m) / (2 * sq(sd)));
-            }
-            
-            fragmentApex["productProfile"] = Math.Exp(m - sq(sd)) - sft;
-            
-            /*
-            foreach(DataRow row in fragmentsList.Rows)
-            {
-                
-                if ((bool)row["View"])
-                {
-                    string fragmentName = (string)row["Fragment Name"];
                     
-                    for (int j = 0; j < yValCoords[fragmentName].Length; ++j)
-                    {
-                        yValCoords["productProfile"][j] += Math.Log10(yValCoords[fragmentName][j] / norming[fragmentName]);
-                    }
+                    yValCoords["productProfile"] = CollisionEnergy.productTwoDistributions(yValCoords["productProfile"], yValCoords[fragmentName]);
                 }
             }
             
-            foreach(double intens in yValCoords["productProfile"]) norming["productProfile"] += Math.Pow(10, intens);
-            if (norming["productProfile"] > 0)
+            double argMaxY = 0;
+            double maxY = 0;
+            for (int i = 0; i < yValCoords["productProfile"].Length; ++i)
             {
-                for(int i = 0; i < yValCoords["productProfile"].Length; ++i)
+                yValCoords["productProfile"][i] *= 2000;
+                if (maxY < yValCoords["productProfile"][i])
                 {
-                    yValCoords["productProfile"][i] = Math.Pow(10, yValCoords["productProfile"][i]) * 10000.0 / norming["productProfile"];
+                    argMaxY = xValCoords[i];
+                    maxY = yValCoords["productProfile"][i];
                 }
             }
-            */
             
+            fragmentApex["productProfile"] = argMaxY;
             cartesean.Refresh();
         }
         
@@ -267,7 +188,7 @@ namespace LipidCreator
             double oldCE = cartesean.CEval;
             try
             {
-                cartesean.CEval = Convert.ToDouble(textBoxCurrentCE.Text);
+                cartesean.CEval = Convert.ToDouble(textBoxCurrentCE.Text, CultureInfo.InvariantCulture);
             }
             catch (Exception ee)
             {
@@ -499,19 +420,6 @@ namespace LipidCreator
         {
             return Math.Exp(mu + sq(sigma) / 2.0) * Math.Sqrt(Math.Exp(sq(sigma)) - 1.0);
         }
-        
-        
-        
-        public PointF productDistribution(double mu1, double sigma1, double mu2, double sigma2)
-        {
-            double sigma1sq = sq(sigma1);
-            double sigma2sq = sq(sigma2);
-            PointF p = new PointF();
-            p.X = (float)((sigma2sq * mu1 + sigma1sq * mu2) / (sigma1sq + sigma2sq));
-            p.Y = (float)Math.Sqrt(sigma1sq * sigma2sq / (sigma1sq + sigma2sq));
-            return p;
-        }
-        
         
         
         private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)

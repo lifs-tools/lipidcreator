@@ -855,39 +855,9 @@ namespace LipidCreator
             }
             else 
             {
-                Dictionary<string, Dictionary<string, ArrayList>> fragmentScores = new Dictionary<string, Dictionary<string, ArrayList>>();
-                ArrayList lipidClassNames = new ArrayList();
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, fragmentScores, collisionEnergyHandler, instrument, lipidClassNames);
-                }
-                
-                
-                for (int i = 0; i < transitionList.Rows.Count; ++i)
-                {
-                    DataRow row = transitionList.Rows[i];
-                    string lipidClass = (string)lipidClassNames[i];
-                    string adduct = (string)row[LipidCreator.PRECURSOR_ADDUCT];
-                    
-                    if ((double)fragmentScores[lipidClass][adduct][0] < 0) continue;
-                    
-                    double collisionEnergy = (double)fragmentScores[lipidClass][adduct][2];
-                    
-                    if (collisionEnergy < 0){
-                        int row_i = (int)fragmentScores[lipidClass][adduct][1];
-                        string fragment = (string)transitionList.Rows[row_i][LipidCreator.PRODUCT_NAME];
-                        collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragment);
-                        fragmentScores[lipidClass][adduct][2] = collisionEnergy;
-                    }
-                    
-                    if (collisionEnergy > 0)
-                    {
-                        row[LipidCreator.COLLISION_ENERGY] = collisionEnergy;
-                        
-                        string fragment = (string)transitionList.Rows[i][LipidCreator.PRODUCT_NAME];
-                        double intens = collisionEnergyHandler.getIntensity(instrument, lipidClass, adduct, fragment, collisionEnergy);
-                        row[LipidCreator.NOTE] = intens;
-                    }
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument);
                 }
             }
         }

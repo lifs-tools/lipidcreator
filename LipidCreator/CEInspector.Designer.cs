@@ -52,7 +52,7 @@ namespace LipidCreator
         public int innerHeightPx;
         public double maxXVal = 60;
         public double minXVal = 10;
-        public double maxYVal = 200;
+        public double maxYVal = 120;
         public string highlightName = "";
         public double offset = 2.4;
         public double CEval;

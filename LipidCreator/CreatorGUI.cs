@@ -2781,6 +2781,8 @@ namespace LipidCreator
             int index = ((MenuItem)sender).Index;
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
+            menuCollisionEnergyOpt.Enabled = index > 0 ? true : false;
+            
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
                 item.Checked = item.Index == index;

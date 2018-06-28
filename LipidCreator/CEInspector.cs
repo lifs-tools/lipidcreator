@@ -287,7 +287,6 @@ namespace LipidCreator
                     foreach(KeyValuePair<string, double> kvp3 in kvp2.Value)
                     {
                         string stringCE = String.Format(new CultureInfo("en-US"), "{0:0.00}", kvp3.Value);
-                        Console.WriteLine(stringCE);
                         
                         // foreach fragment
                         foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])

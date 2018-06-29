@@ -81,8 +81,8 @@ namespace LipidCreator
             registeredEvents.Add("HG_LSL_pre_event", HG_LSLPreEvent);
             registeredEvents.Add("HG_DSL_pre_event", HG_DSLPreEvent);
             
-            registeredEvents.Add("HG_CH_pre_event", HG_CHPreEvent);
-            registeredEvents.Add("HG_CHe_pre_event", HG_CHePreEvent);
+            registeredEvents.Add("Ch_pre_event", ChPreEvent);
+            registeredEvents.Add("HG_ChE_pre_event", HG_ChEPreEvent);
             
             registeredEvents.Add("PL_post_event", PLPostEvent);
             registeredEvents.Add("SL_post_event", SLPostEvent);
@@ -447,7 +447,7 @@ namespace LipidCreator
             }
         }
         
-        public void HG_CHPreEvent(Parser.TreeNode node)
+        public void ChPreEvent(Parser.TreeNode node)
         {
             if (lipid != null)
             {
@@ -461,16 +461,13 @@ namespace LipidCreator
         
         
         
-        public void HG_CHePreEvent(Parser.TreeNode node)
+        public void HG_ChEPreEvent(Parser.TreeNode node)
         {
             if (lipid != null)
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
                 ((Cholesterol)lipid).containsEster = true;
-                List<string> keys = new List<string>(((Cholesterol)lipid).fag.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((Cholesterol)lipid).fag.faTypes[faTypeKey] = false;
-                ((Cholesterol)lipid).fag.faTypes["FAx"] = true;
             }
         }
         

@@ -83,10 +83,10 @@ HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2C
 
 
 ## cholesterol lipids
-Cholesterol = CH | CHe
-CH = "Ch"
-CHe = CHe_HG headgroup_separator FA
-CHe_HG = "ChE"
+Cholesterol = Ch | ChE
+Ch = "Ch"
+ChE = HG_ChE headgroup_separator FA
+HG_ChE = "ChE"
 
 
 ## mediator lipids

@@ -879,11 +879,14 @@ namespace LipidCreator
                         while((line = sr.ReadLine()) != null)
                         {
                             parser.parse(line);
-                            parser.raiseEvents();
-                            if (parserEventHandler.lipid != null)
+                            if (parser.wordInGrammer)
                             {
-                                registeredLipids.Add(parserEventHandler.lipid);
-                                ++valid;
+                                parser.raiseEvents();
+                                if (parserEventHandler.lipid != null)
+                                {
+                                    registeredLipids.Add(parserEventHandler.lipid);
+                                    ++valid;
+                                }
                             }
                             
                             ++total;
@@ -1127,9 +1130,9 @@ namespace LipidCreator
         
         public static void analytics(string category, string action)
         {
-            Thread th = new Thread(() => analyticsRequest(category, action));
-            th.Start();
-            
+            // ToDo: uncomment in final release
+            //Thread th = new Thread(() => analyticsRequest(category, action));
+            //th.Start();
         }
         
         

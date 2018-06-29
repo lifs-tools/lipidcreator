@@ -34,7 +34,6 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
-
 using System.Diagnostics;
 
 namespace LipidCreator
@@ -3093,6 +3092,7 @@ namespace LipidCreator
         
         public static void printHelp(string option = "")
         {
+            LipidCreator lc = new LipidCreator(null);
             switch (option)
             {
                 case "transitionlist":
@@ -3107,6 +3107,16 @@ namespace LipidCreator
                     Console.WriteLine("    -h 1:\t\tCompute only heavy labeled isotopes");
                     Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
                     Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
+                    Console.WriteLine("    -c instrument:\tCompute with optimal collision energy (not available for all lipid classes)");
+                    Console.WriteLine("      instruments are:");
+                    foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
+                    {
+                        if ((bool)kvp.Value[1]) 
+                        {
+                            string fullInstrumentName = (string)(kvp.Value[0]);
+                            Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName);
+                        }
+                    }
                     break;
                     
                 default:
@@ -3152,6 +3162,7 @@ namespace LipidCreator
                                 int parameterHeavy = 2;
                                 string inputCSV = args[1];
                                 string outputCSV = args[2];
+                                string instrument = "";
                                 bool split = false;
                                 int p = 3;
                                 while (p < args.Length)
@@ -3170,6 +3181,12 @@ namespace LipidCreator
                                             p += 2;
                                             break;
                                             
+                                        case "-c":
+                                            if (!(p + 1 < args.Length)) printHelp("transitionlist");
+                                            instrument = args[p + 1];
+                                            p += 2;
+                                            break;
+                                            
                                         case "-s":
                                             split = true;
                                             p += 1;
@@ -3183,16 +3200,38 @@ namespace LipidCreator
                                 
                                 
                                 LipidCreator.analytics("lipidcreator-cli", "launch");
-                                LipidCreator lc = new LipidCreator(null);
-                                lc.importLipidList(inputCSV);
                                 
+                                //Stopwatch stopWatch = new Stopwatch();
+                                //stopWatch.Start();
+                                LipidCreator lc = new LipidCreator(null);
+                                
+                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
+                                
+                                
+                                //stopWatch.Stop();
+                                //Console.WriteLine(stopWatch.Elapsed);
+                                
+                                //stopWatch.Start();
+                                lc.importLipidList(inputCSV);
                                 foreach(Lipid lipid in lc.registeredLipids)
                                 {
                                     lipid.onlyPrecursors = parameterPrecursor;
                                     lipid.onlyHeavyLabeled = parameterHeavy;
                                 }
-                                lc.assembleLipids();                                
+                                //stopWatch.Stop();
+                                //Console.WriteLine(stopWatch.Elapsed);
+                                
+                                
+                                //stopWatch.Start();
+                                lc.assembleLipids(instrument);                                
+                                //stopWatch.Stop();
+                                //Console.WriteLine(stopWatch.Elapsed);
+                                
+                                
+                                //stopWatch.Start();
                                 lc.storeTransitionList(",", split, outputCSV, lc.transitionList);
+                                //stopWatch.Stop();
+                                //Console.WriteLine(stopWatch.Elapsed);
                             }
                             break;
                     }

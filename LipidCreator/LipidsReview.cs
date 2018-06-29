@@ -52,29 +52,8 @@ namespace LipidCreator
             creatorGUI = _creatorGUI;
             transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
-            replicates = new ArrayList();
-            transitionListUnique = creatorGUI.lipidCreator.addDataColumns (new DataTable ());
-            Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
-            
-            int i = 0;
-            foreach (DataRow row in currentView.Rows)
-            {
-            string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
-            string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
-                string replicateKey = prec_mass + "/" + prod_mass;
-                if (!replicateKeys.ContainsKey (replicateKey)) {
-                    string note = "replicate of " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
-                    replicateKeys.Add(replicateKey, note);
-                    transitionListUnique.ImportRow (row);
-                }
-                else
-                {
-                    row[LipidCreator.NOTE] = replicateKeys[replicateKey];
-                    replicates.Add(i);
-                }
-                ++i;
-            }
-            
+            replicates = creatorGUI.lipidCreator.replicates;
+            transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             
             InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;

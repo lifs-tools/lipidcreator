@@ -3080,6 +3080,7 @@ namespace LipidCreator
         
         
 
+        
         protected void menuAboutClick(object sender, System.EventArgs e)
         {
             AboutDialog aboutDialog = new AboutDialog ();
@@ -3088,6 +3089,8 @@ namespace LipidCreator
             aboutDialog.ShowDialog ();
             aboutDialog.Dispose ();
         }
+        
+        
         
         
         public static void printHelp(string option = "")
@@ -3107,6 +3110,7 @@ namespace LipidCreator
                     Console.WriteLine("    -h 1:\t\tCompute only heavy labeled isotopes");
                     Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
                     Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
+                    Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
                     Console.WriteLine("    -c instrument:\tCompute with optimal collision energy (not available for all lipid classes)");
                     Console.WriteLine("      instruments are:");
                     foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
@@ -3130,6 +3134,9 @@ namespace LipidCreator
             
             System.Environment.Exit(1);
         }
+        
+        
+        
     
         [STAThread]
         public static void Main(string[] args)
@@ -3163,6 +3170,7 @@ namespace LipidCreator
                                 string inputCSV = args[1];
                                 string outputCSV = args[2];
                                 string instrument = "";
+                                bool deleteReplicates = false;
                                 bool split = false;
                                 int p = 3;
                                 while (p < args.Length)
@@ -3192,6 +3200,11 @@ namespace LipidCreator
                                             p += 1;
                                             break;
                                             
+                                        case "-d":
+                                            deleteReplicates = true;
+                                            p += 1;
+                                            break;
+                                            
                                         default:
                                             printHelp("transitionlist");
                                             break;
@@ -3201,37 +3214,41 @@ namespace LipidCreator
                                 
                                 LipidCreator.analytics("lipidcreator-cli", "launch");
                                 
-                                //Stopwatch stopWatch = new Stopwatch();
-                                //stopWatch.Start();
+                                Stopwatch stopWatch = new Stopwatch();
+                                stopWatch.Start();
                                 LipidCreator lc = new LipidCreator(null);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
                                 
+                                stopWatch.Stop();
+                                Console.WriteLine(stopWatch.Elapsed);
                                 
-                                //stopWatch.Stop();
-                                //Console.WriteLine(stopWatch.Elapsed);
                                 
-                                //stopWatch.Start();
+                                stopWatch.Reset();
+                                stopWatch.Start();
                                 lc.importLipidList(inputCSV);
                                 foreach(Lipid lipid in lc.registeredLipids)
                                 {
                                     lipid.onlyPrecursors = parameterPrecursor;
                                     lipid.onlyHeavyLabeled = parameterHeavy;
                                 }
-                                //stopWatch.Stop();
-                                //Console.WriteLine(stopWatch.Elapsed);
+                                stopWatch.Stop();
+                                Console.WriteLine(stopWatch.Elapsed);
                                 
                                 
-                                //stopWatch.Start();
+                                stopWatch.Reset();
+                                stopWatch.Start();
                                 lc.assembleLipids(instrument);                                
-                                //stopWatch.Stop();
-                                //Console.WriteLine(stopWatch.Elapsed);
+                                stopWatch.Stop();
+                                Console.WriteLine(stopWatch.Elapsed);
                                 
+                                DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                 
-                                //stopWatch.Start();
-                                lc.storeTransitionList(",", split, outputCSV, lc.transitionList);
-                                //stopWatch.Stop();
-                                //Console.WriteLine(stopWatch.Elapsed);
+                                stopWatch.Reset();
+                                stopWatch.Start();
+                                lc.storeTransitionList(",", split, outputCSV, transitionList);
+                                stopWatch.Stop();
+                                Console.WriteLine(stopWatch.Elapsed);
                             }
                             break;
                     }

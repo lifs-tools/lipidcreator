@@ -161,14 +161,24 @@ namespace LipidCreator
             
             
             
-            
+            // drawing the product profile
+            double lastX = 0;
+            double lastY = 0;
+            Pen profilePen = new Pen(ColorTranslator.FromHtml("#aaaaaa"));
+            for (int ii = 0; ii < ceInspector.yValCoords["productProfile"].Length; ++ii)
+            {
+                double valX = ceInspector.xValCoords[ii];
+                double valY = ceInspector.yValCoords["productProfile"][ii];
+                
+                if (ii > 0) g.DrawLine(profilePen, valueToPx(lastX, lastY), valueToPx(valX, valY));
+                lastX = valX;
+                lastY = valY;
+            }
             
             
             
             
             // draw all curves
-            double lastX = 0;
-            double lastY = 0;
             foreach(DataRow row in ceInspector.fragmentsList.Rows)
             {
                 if (!(bool)row["View"]) continue;
@@ -185,18 +195,6 @@ namespace LipidCreator
                     lastX = valX;
                     lastY = valY;
                 }
-            }
-            Pen profilePen = new Pen(Color.Black, 1);
-            lastX = 0;
-            lastY = 0;
-            for (int ii = 0; ii < ceInspector.yValCoords["productProfile"].Length; ++ii)
-            {
-                double valX = ceInspector.xValCoords[ii];
-                double valY = ceInspector.yValCoords["productProfile"][ii];
-                
-                if (ii > 0) g.DrawLine(profilePen, valueToPx(lastX, lastY), valueToPx(valX, valY));
-                lastX = valX;
-                lastY = valY;
             }
             
             // drawing the axes

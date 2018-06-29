@@ -58,6 +58,8 @@ namespace LipidCreator
         public Dictionary<int, ArrayList> categoryToClass;
         public Dictionary<string, Precursor> headgroups;
         public DataTable transitionList;
+        public DataTable transitionListUnique;
+        public ArrayList replicates; // replicate transitions excluded from transitionListUnique
         public ArrayList precursorDataList;
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
@@ -407,6 +409,7 @@ namespace LipidCreator
             collisionEnergyHandler = new CollisionEnergy();
             availableInstruments = new ArrayList();
             availableInstruments.Add("");
+            replicates = new ArrayList();
             readInputFiles();
             
             
@@ -817,7 +820,8 @@ namespace LipidCreator
             }            
             return null;
         }
-
+        
+        
         
         
         
@@ -828,6 +832,7 @@ namespace LipidCreator
             if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
             DATA_COLUMN_KEYS = headerList.ToArray();
             transitionList = addDataColumns(new DataTable ());
+            transitionListUnique = addDataColumns (new DataTable ());
             
             
             
@@ -859,6 +864,30 @@ namespace LipidCreator
                 {
                     Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument);
                 }
+            }
+            
+            
+            
+            
+            Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
+            int i = 0;
+            replicates.Clear();
+            foreach (DataRow row in transitionList.Rows)
+            {
+            string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
+            string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
+                string replicateKey = prec_mass + "/" + prod_mass;
+                if (!replicateKeys.ContainsKey (replicateKey)) {
+                    string note = "replicate of " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
+                    replicateKeys.Add(replicateKey, note);
+                    transitionListUnique.ImportRow (row);
+                }
+                else
+                {
+                    row[LipidCreator.NOTE] = replicateKeys[replicateKey];
+                    if (replicates != null) replicates.Add(i);
+                }
+                ++i;
             }
         }
         

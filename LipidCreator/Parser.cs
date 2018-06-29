@@ -501,7 +501,7 @@ namespace LipidCreator
             }
             else
             {
-                raiseEvents(parseTree);
+                if (parseTree != null) raiseEvents(parseTree);
             }
         }
         

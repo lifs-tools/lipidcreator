@@ -98,7 +98,7 @@ namespace LipidCreator
             positiveFragments = new Dictionary<string, HashSet<string>>();
             negativeFragments = new Dictionary<string, HashSet<string>>();
             representativeFA = false;
-            onlyPrecursors = 0;
+            onlyPrecursors = 2;
             onlyHeavyLabeled = 2;
             headGroupNames = new List<String>();
             lipidCreator.Update += new LipidUpdateEventHandler(this.Update);

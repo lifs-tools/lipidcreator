@@ -44,6 +44,7 @@ namespace LipidCreator
         public const int LABEL_EXTENSION = 5;
         public const int CE_GRAB_MARGIN = 1;
         public const double VAL_DENOMINATOR = 100.0;
+        public const int offsetPX = 5;
         public CEInspector ceInspector;
         public Dictionary<string, string> fragmentToColor;
         public string [] colors = new string[]{"#e6194b", "#3cb44b", "#ffe119", "#0082c8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#d2f53c", "#fabebe", "#008080", "#e6beff", "#aa6e28", "#fffac8", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000080", "#808080"};
@@ -52,9 +53,8 @@ namespace LipidCreator
         public int innerHeightPx;
         public double maxXVal = 60;
         public double minXVal = 10;
-        public double maxYVal = 120;
+        public double maxYVal = 100;
         public string highlightName = "";
-        public double offset = 2.4;
         public double CEval;
         public bool CELineShift = false;
         public bool smooth = true;
@@ -117,13 +117,11 @@ namespace LipidCreator
             if (ClientRectangle.Contains(PointToClient(Control.MousePosition)))
             {
                 double newYVal = maxYVal + 10 * ((e.Delta > 0) ? -1.0 : 1.0);
-                double newOffset = offset + 0.1 * ((e.Delta > 0) ? -1.0 : 1.0);
                 smooth = false;
                 ceInspector.timerSmooth.Enabled = true;
                 if (10 <= newYVal)
                 {
                     maxYVal = newYVal;
-                    offset = newOffset;
                     ceInspector.cartesean_mouseMove(sender, e);
                     Refresh();
                 }
@@ -137,6 +135,7 @@ namespace LipidCreator
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            float[] dashValues = { 5, 10 };
             if (smooth) g.SmoothingMode = SmoothingMode.AntiAlias;
             
             
@@ -149,6 +148,7 @@ namespace LipidCreator
             
             // draw grid in the background
             Pen grayPen = new Pen(ColorTranslator.FromHtml("#dddddd"));
+            grayPen.DashPattern = dashValues;
             for (int i = 0; i < Width; i += innerWidthPx / 5)
             {
                 g.DrawLine(grayPen, new Point(marginLeft + i, Height - marginBottom), new Point(marginLeft + i, 0));
@@ -235,7 +235,6 @@ namespace LipidCreator
             // draw dashed collision energy line
             if (CEval > 0)
             {
-                float[] dashValues = { 5, 10 };
                 Pen bPen = new Pen(Color.Black, 1);
                 bPen.DashPattern = dashValues;
                 int ceX = valueToPx(CEval, 0).X;
@@ -296,7 +295,7 @@ namespace LipidCreator
             this.timerSmooth = new System.Timers.Timer(250);
             this.timerSmooth.Elapsed += this.changeSmooth;
             this.SuspendLayout();
-            this.ClientSize = new System.Drawing.Size(950, 412);
+            this.ClientSize = new System.Drawing.Size(1050, 562);
             
             // 
             // button1
@@ -321,7 +320,7 @@ namespace LipidCreator
             
             
             
-            cartesean = new Cartesean(this, 700, 350);
+            cartesean = new Cartesean(this, 800, 500);
             cartesean.Location = new Point(10, 50);
             cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(cartesean_mouseMove);
             cartesean.MouseDown += new MouseEventHandler(cartesean_mouseDown);
@@ -366,18 +365,18 @@ namespace LipidCreator
             labelCurrentCE.Text = "Current collision energy:";
             labelCurrentCE.Width = 140;
             labelCurrentCE.Height = 16;
-            labelCurrentCE.Location = new Point(720, 304);
+            labelCurrentCE.Location = new Point(820, 454);
             
             
-            textBoxCurrentCE.Location = new Point(720, 320);
+            textBoxCurrentCE.Location = new Point(820, 470);
             textBoxCurrentCE.Width = 140;
             textBoxCurrentCE.Leave += new EventHandler(textBoxCurrentCE_ValueChanged);
             textBoxCurrentCE.KeyDown += new KeyEventHandler(textBoxCurrentCE_Keydown);
             
             
             
-            fragmentsGridView.Location = new Point(720, 50);
-            fragmentsGridView.Size = new Size(216, 240);
+            fragmentsGridView.Location = new Point(820, 50);
+            fragmentsGridView.Size = new Size(216, 390);
             fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;

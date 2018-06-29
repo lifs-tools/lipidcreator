@@ -167,6 +167,11 @@ namespace LipidCreator
                 }
                 DialogResult mbr = MessageBox.Show ("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
                 
+                this.Enabled = false;
+                creatorGUI.lipidCreator.storeTransitionList(separator, (mbr == DialogResult.Yes), Path.GetFullPath (saveFileDialog1.FileName), currentView, mode);
+                this.Enabled = true;
+                MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
+                /*
                 if (mbr == DialogResult.Yes) {
                     this.Enabled = false;
                     using (StreamWriter outputFile = new StreamWriter (Path.GetFullPath (saveFileDialog1.FileName).Replace (mode, "_positive"+mode))) {
@@ -205,34 +210,8 @@ namespace LipidCreator
                     MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
                     this.Enabled = true;
                 }
+                */
             }
-        }
-
-        private string toHeaderLine(string separator, string[] columnKeys) {
-            string quote = "";
-            if(separator==",") {
-                quote = "\"";
-            }
-            return String.Join(separator, columnKeys.ToList().ConvertAll<string>(key => quote+key+quote).ToArray());
-        }
-
-        private string toLine (DataRow row, string[] columnKeys, string separator)
-        {
-            List<string> line = new List<string> ();
-            foreach (String columnKey in columnKeys) {
-                if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
-                    line.Add (((String)row [columnKey]).Replace (",", "."));
-                } else {
-                    //quote strings when we are in csv mode
-                    if (separator == ",")
-                    {
-                        line.Add("\""+((String)row[columnKey])+"\"");
-                    } else { //otherwise just add the plain string
-                        line.Add(((String)row[columnKey]));
-                    }
-                }
-            }
-            return String.Join (separator, line.ToArray ());
         }
 
         private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)

@@ -861,7 +861,118 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        
+        
+        public int[] importLipidList (string lipidListFile)
+        {
+            if (File.Exists(lipidListFile))
+            {
+                int total = 0;
+                int valid = 0;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(lipidListFile))
+                    {
+                        string line;
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            parser.parse(line);
+                            parser.raiseEvents();
+                            if (parserEventHandler.lipid != null)
+                            {
+                                registeredLipids.Add(parserEventHandler.lipid);
+                                ++valid;
+                            }
+                            
+                            ++total;
+                        }
+                    }
+                }
+                
+                catch (Exception ee)
+                {
+                    Console.WriteLine(ee.Message);
+                }
+                return new int[]{valid, total};
+            }
+            else
+            {
+                throw new Exception("Could not read file, " + lipidListFile);
+            }
+        }
+        
+        
+        
+        
+        
+        public void storeTransitionList(string separator, bool split, string filename, DataTable currentView, string mode = ".csv")
+        {
+            if (!filename.EndsWith(mode)) filename += mode;
+            if (split) {
+                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_positive" + mode))) {
+                    outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                    foreach (DataRow row in currentView.Rows) {
+                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2") {
+                            outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                        }
+                    }
+                    outputFile.Dispose ();
+                    outputFile.Close ();
+                }
+                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode))) {
+                    outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                    foreach (DataRow row in currentView.Rows) {
+                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2") {
+                            outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                        }
+                    }
+                    outputFile.Dispose ();
+                    outputFile.Close ();
+                }
+            } else {
+                StreamWriter writer;
+                if ((writer = new StreamWriter (filename)) != null) {
+                    writer.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                    foreach (DataRow row in currentView.Rows) {
+                        writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                    }
+                    writer.Dispose ();
+                    writer.Close ();
+                }
+            }
+        }
+        
 
+        public static string toHeaderLine(string separator, string[] columnKeys) {
+            string quote = "";
+            if(separator==",") {
+                quote = "\"";
+            }
+            return String.Join(separator, columnKeys.ToList().ConvertAll<string>(key => quote+key+quote).ToArray());
+        }
+        
+        
+
+        public static string toLine (DataRow row, string[] columnKeys, string separator)
+        {
+            List<string> line = new List<string> ();
+            foreach (String columnKey in columnKeys) {
+                if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
+                    line.Add (((String)row [columnKey]).Replace (",", "."));
+                } else {
+                    //quote strings when we are in csv mode
+                    if (separator == ",")
+                    {
+                        line.Add("\""+((String)row[columnKey])+"\"");
+                    } else { //otherwise just add the plain string
+                        line.Add(((String)row[columnKey]));
+                    }
+                }
+            }
+            return String.Join (separator, line.ToArray ());
+        }
         
         
         

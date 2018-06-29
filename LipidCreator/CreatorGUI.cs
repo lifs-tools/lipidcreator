@@ -2938,37 +2938,18 @@ namespace LipidCreator
             {
                 if (File.Exists(openFileDialog1.FileName))
                 {
-                    int total = 0;
-                    int valid = 0;
-                    try
-                    {
-                        using (StreamReader sr = new StreamReader(openFileDialog1.FileName))
-                        {
-                            string line;
-                            while((line = sr.ReadLine()) != null)
-                            {
-                                lipidCreator.parser.parse(line);
-                                lipidCreator.parser.raiseEvents();
-                                if (lipidCreator.parserEventHandler.lipid != null)
-                                {
-                                    lipidCreator.registeredLipids.Add(lipidCreator.parserEventHandler.lipid);
-                                    ++valid;
-                                }
-                                
-                                ++total;
-                            }
-                        }
-                    }
-                    
-                    catch (Exception ee)
-                    {
-                        Console.WriteLine(ee.Message);
-                    }
+                    int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName);
                     refreshRegisteredLipidsTable();
-                    MessageBox.Show("Here, " + valid + " of " + total + " lipid names could be successfully imported!", "Lipid list import");
+                    MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
+                }
+                else
+                {
+                    MessageBox.Show("Could not read file, " + openFileDialog1.FileName, "Lipid list import");
                 }
             }
         }
+        
+        
         
         
         protected void menuImportClick(object sender, System.EventArgs e)
@@ -3031,15 +3012,21 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
         protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
         {
             // TODO: after testing, delete this lines
-            CEInspector ceInspector = new CEInspector(this);
+            CEInspector ceInspector = new CEInspector(this, selectedInstrumentForCE);
             ceInspector.Owner = this;
             ceInspector.ShowInTaskbar = false;
             ceInspector.ShowDialog();
             ceInspector.Dispose();
         }
+        
+        
+        
         
         protected void menuExportClick(object sender, System.EventArgs e)
         {
@@ -3102,15 +3089,114 @@ namespace LipidCreator
             aboutDialog.ShowDialog ();
             aboutDialog.Dispose ();
         }
-    
-    
+        
+        
+        public static void printHelp()
+        {
+            Console.WriteLine("usage: LipidCreator.exe (option) (parameters)");
+            Console.WriteLine();
+            Console.WriteLine("options are:");
+            Console.WriteLine(" transitionlist input_csv output_csv [-p X] [-h X]:\tcreating transition list from lipid list");
+            Console.WriteLine("    with:");
+            Console.WriteLine("    -p 0: Compute no precursor transitions");
+            Console.WriteLine("    -p 1: Compute only precursor transitions");
+            Console.WriteLine("    -p 2: Compute with precursor transitions");
+            Console.WriteLine("    -h 0: Compute no heavy labeled isotopes");
+            Console.WriteLine("    -h 1: Compute only heavy labeled isotopes");
+            Console.WriteLine("    -h 2: Compute with heavy labeled isotopes");
+            Console.WriteLine("    -s: Split in positive and negative list");
+            Console.WriteLine();
+            Console.WriteLine(" help:\t\t\t\t\t\t\tprint this help");
+            System.Environment.Exit(1);
+        }
     
         [STAThread]
         public static void Main(string[] args)
         {
-            LipidCreator.analytics("lipidcreator" + ((args.Length > 0) ? "-external" : "-standalone"), "launch");
-            CreatorGUI creatorGUI = new CreatorGUI((args.Length > 0) ? args[0] : null);
-            Application.Run(creatorGUI);
+            if (args.Length > 0)
+            {
+        
+                if ((new HashSet<string>{"external", "help", "transitionlist"}).Contains(args[0]))
+                {
+                    switch (args[0])
+                    {
+                        case "external":
+                            LipidCreator.analytics("lipidcreator-external", "launch");
+                            CreatorGUI creatorGUI = new CreatorGUI(args[1]);
+                            Application.Run(creatorGUI);
+                            break;
+                            
+                        case "help":
+                            printHelp();
+                            break;
+                            
+                        case "transitionlist":
+                            if (args.Length < 3)
+                            {
+                                printHelp();
+                            }
+                            else
+                            {
+                                int parameterPrecursor = 0;
+                                int parameterHeavy = 2;
+                                string inputCSV = args[1];
+                                string outputCSV = args[2];
+                                bool split = false;
+                                int p = 3;
+                                while (p < args.Length)
+                                {
+                                    switch (args[p])
+                                    {
+                                        case "-p":
+                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterPrecursor))) printHelp();
+                                            if (parameterPrecursor < 0 || 2 < parameterPrecursor) printHelp();
+                                            p += 2;
+                                            break;
+                                            
+                                        case "-h":
+                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterHeavy))) printHelp();
+                                            if (parameterHeavy < 0 || 2 < parameterHeavy) printHelp();
+                                            p += 2;
+                                            break;
+                                            
+                                        case "-s":
+                                            split = true;
+                                            p += 1;
+                                            break;
+                                            
+                                        default:
+                                            printHelp();
+                                            break;
+                                    }
+                                }
+                                
+                                
+                                LipidCreator.analytics("lipidcreator-cli", "launch");
+                                LipidCreator lc = new LipidCreator(null);
+                                lc.importLipidList(inputCSV);
+                                
+                                foreach(Lipid lipid in lc.registeredLipids)
+                                {
+                                    lipid.onlyPrecursors = parameterPrecursor;
+                                    lipid.onlyHeavyLabeled = parameterHeavy;
+                                }
+                                lc.assembleLipids();                                
+                                lc.storeTransitionList(",", split, outputCSV, lc.transitionList);
+                            }
+                            break;
+                    }
+                }
+                else 
+                {
+                    printHelp();
+                }
+            }
+            else 
+            {
+                LipidCreator.analytics("lipidcreator-standalone", "launch");
+                CreatorGUI creatorGUI = new CreatorGUI(null);
+                Application.Run(creatorGUI);
+            }
         }
     }
 }

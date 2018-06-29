@@ -25,9 +25,10 @@ namespace LipidCreator
         public bool initialCall = true;
         public HashSet<string> selectedFragments;
         
-        public CEInspector(CreatorGUI _creatorGUI)
+        public CEInspector(CreatorGUI _creatorGUI, string _currentInstrument)
         {
             creatorGUI = _creatorGUI;
+            selectedInstrument = _currentInstrument;
             collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
@@ -67,10 +68,12 @@ namespace LipidCreator
             }
             
             
+            int ii = 0;
             foreach (string instrumentName in collisionEnergies.Keys)
             {
                 instrumentCombobox.Items.Add(instrumentName);
-                instrumentCombobox.SelectedIndex = 0;
+                if (instrumentName == selectedInstrument) instrumentCombobox.SelectedIndex = ii;
+                ++ii;
             }
             
         }
@@ -125,7 +128,7 @@ namespace LipidCreator
                 yValCoords[fragmentName] = new double[cartesean.innerWidthPx + 1];
                 fragmentApex[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getApex(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
                 
-                yValCoords[fragmentName] = CollisionEnergy.computeLogNormalCurve(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName], xValCoords, 1000);
+                yValCoords[fragmentName] = CollisionEnergy.computeLogNormalCurve(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName], xValCoords, 4000);
                 ++k;
             }
             cartesean.Refresh();
@@ -161,7 +164,7 @@ namespace LipidCreator
             double maxY = 0;
             for (int i = 0; i < yValCoords["productProfile"].Length; ++i)
             {
-                yValCoords["productProfile"][i] *= 2000;
+                yValCoords["productProfile"][i] *= 4000;
                 if (maxY < yValCoords["productProfile"][i])
                 {
                     argMaxY = xValCoords[i];
@@ -362,13 +365,15 @@ namespace LipidCreator
                 int pos = Math.Max(0, e.X - cartesean.marginLeft);
                 pos = Math.Min(pos, cartesean.innerWidthPx);
                 string highlightName = "";
-            
+                
+                double offset = (cartesean.pxToValue(0, 100)).Y - (cartesean.pxToValue(0, 100 + Cartesean.offsetPX)).Y;
+                
                 foreach(DataRow row in fragmentsList.Rows)
                 {
                     if ((bool)row["View"])
                     {
                         string fragmentName = (string)row["Fragment name"];
-                        if (vals.Y - cartesean.offset <= yValCoords[fragmentName][pos] && yValCoords[fragmentName][pos] <= vals.Y + cartesean.offset)
+                        if (vals.Y - offset <= yValCoords[fragmentName][pos] && yValCoords[fragmentName][pos] <= vals.Y + offset)
                         {
                             highlightName = fragmentName;
                             break;
@@ -382,7 +387,7 @@ namespace LipidCreator
                 }
                 if (highlightName.Length > 0)
                 {
-                    ToolTip1.SetToolTip(cartesean, highlightName);
+                    ToolTip1.SetToolTip(cartesean, highlightName + ", opt CE at " + String.Format(new CultureInfo("en-US"), "{0:0.00}", fragmentApex[highlightName]));
                 }
                 else
                 {

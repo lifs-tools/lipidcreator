@@ -3091,22 +3091,33 @@ namespace LipidCreator
         }
         
         
-        public static void printHelp()
+        public static void printHelp(string option = "")
         {
-            Console.WriteLine("usage: LipidCreator.exe (option) (parameters)");
-            Console.WriteLine();
-            Console.WriteLine("options are:");
-            Console.WriteLine(" transitionlist input_csv output_csv [-p X] [-h X]:\tcreating transition list from lipid list");
-            Console.WriteLine("    with:");
-            Console.WriteLine("    -p 0: Compute no precursor transitions");
-            Console.WriteLine("    -p 1: Compute only precursor transitions");
-            Console.WriteLine("    -p 2: Compute with precursor transitions");
-            Console.WriteLine("    -h 0: Compute no heavy labeled isotopes");
-            Console.WriteLine("    -h 1: Compute only heavy labeled isotopes");
-            Console.WriteLine("    -h 2: Compute with heavy labeled isotopes");
-            Console.WriteLine("    -s: Split in positive and negative list");
-            Console.WriteLine();
-            Console.WriteLine(" help:\t\t\t\t\t\t\tprint this help");
+            switch (option)
+            {
+                case "transitionlist":
+                    Console.WriteLine("Creating a transition list from a lipid list");
+                    Console.WriteLine();
+                    Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv [opts [opts ...]]");
+                    Console.WriteLine("  opts are:");
+                    Console.WriteLine("    -p 0:\t\tCompute no precursor transitions");
+                    Console.WriteLine("    -p 1:\t\tCompute only precursor transitions");
+                    Console.WriteLine("    -p 2:\t\tCompute with precursor transitions");
+                    Console.WriteLine("    -h 0:\t\tCompute no heavy labeled isotopes");
+                    Console.WriteLine("    -h 1:\t\tCompute only heavy labeled isotopes");
+                    Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
+                    Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
+                    break;
+                    
+                default:
+                    Console.WriteLine("usage: LipidCreator.exe (option)");
+                    Console.WriteLine();
+                    Console.WriteLine("options are:");
+                    Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
+                    Console.WriteLine("  help:\t\t\t\tprint this help");
+                    break;
+            }
+            
             System.Environment.Exit(1);
         }
     
@@ -3133,7 +3144,7 @@ namespace LipidCreator
                         case "transitionlist":
                             if (args.Length < 3)
                             {
-                                printHelp();
+                                printHelp("transitionlist");
                             }
                             else
                             {
@@ -3148,14 +3159,14 @@ namespace LipidCreator
                                     switch (args[p])
                                     {
                                         case "-p":
-                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterPrecursor))) printHelp();
-                                            if (parameterPrecursor < 0 || 2 < parameterPrecursor) printHelp();
+                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterPrecursor))) printHelp("transitionlist");
+                                            if (parameterPrecursor < 0 || 2 < parameterPrecursor) printHelp("transitionlist");
                                             p += 2;
                                             break;
                                             
                                         case "-h":
-                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterHeavy))) printHelp();
-                                            if (parameterHeavy < 0 || 2 < parameterHeavy) printHelp();
+                                            if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterHeavy))) printHelp("transitionlist");
+                                            if (parameterHeavy < 0 || 2 < parameterHeavy) printHelp("transitionlist");
                                             p += 2;
                                             break;
                                             
@@ -3165,7 +3176,7 @@ namespace LipidCreator
                                             break;
                                             
                                         default:
-                                            printHelp();
+                                            printHelp("transitionlist");
                                             break;
                                     }
                                 }

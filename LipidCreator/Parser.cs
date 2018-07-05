@@ -59,12 +59,12 @@ namespace LipidCreator
         // DP stands for dynamic programming
         public class DPNode
         {
-            public int ruleIndex1;
-            public int ruleIndex2;
+            public long ruleIndex1;
+            public long ruleIndex2;
             public DPNode left;
             public DPNode right;
             
-            public DPNode(int _rule1, int _rule2, DPNode _left, DPNode _right)
+            public DPNode(long _rule1, long _rule2, DPNode _left, DPNode _right)
             {
                 ruleIndex1 = _rule1;
                 ruleIndex2 = _rule2;
@@ -139,13 +139,13 @@ namespace LipidCreator
     
         public class TreeNode
         {
-            public int ruleIndex;
+            public long ruleIndex;
             public TreeNode left;
             public TreeNode right;
             public char terminal;
             public bool fireEvent;
             
-            public TreeNode(int _rule, bool _fireEvent)
+            public TreeNode(long _rule, bool _fireEvent)
             {
                 ruleIndex = _rule;
                 left = null;
@@ -166,22 +166,23 @@ namespace LipidCreator
         
         
         public int nextFreeRuleIndex;
-        public Dictionary<char, HashSet<int>> TtoNT;
-        public Dictionary<int, HashSet<int>> NTtoNT;
+        public Dictionary<char, HashSet<long>> TtoNT;
+        public Dictionary<long, HashSet<long>> NTtoNT;
         public char quote;
         public TreeNode parseTree;
         public bool wordInGrammer;
-        public Dictionary<int, string> NTtoRule;
+        public Dictionary<long, string> NTtoRule;
         public BaseParserEventHandler parserEventHandler;
-        public const int SHIFT = 16;
+        public const int SHIFT = 32;
+        public const long MASK = (1L << SHIFT) - 1;
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
         {
             nextFreeRuleIndex = 1;
-            TtoNT = new Dictionary<char, HashSet<int>>();
-            NTtoNT = new Dictionary<int, HashSet<int>>();
-            NTtoRule = new Dictionary<int, string>();
+            TtoNT = new Dictionary<char, HashSet<long>>();
+            NTtoNT = new Dictionary<long, HashSet<long>>();
+            NTtoRule = new Dictionary<long, string>();
             quote = _quote;
             parserEventHandler = _parserEventHandler;
             parseTree = null;
@@ -192,7 +193,7 @@ namespace LipidCreator
             {
                 int lineCounter = 0;
                 
-                Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
+                Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
                 using (StreamReader sr = new StreamReader(grammerFilename))
                 {
                     string line;
@@ -217,7 +218,7 @@ namespace LipidCreator
                         foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
                         
                         if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
-                        int newRuleIndex = ruleToNT[rule];
+                        long newRuleIndex = ruleToNT[rule];
                         
                         if (!NTtoRule.ContainsKey(newRuleIndex)) NTtoRule.Add(newRuleIndex, rule);
                         
@@ -225,7 +226,7 @@ namespace LipidCreator
                         foreach (string product in products)
                         {
                             LinkedList<string> nonTerminals = new LinkedList<string>();
-                            ExtendedLinkedList<int> nonTerminalRules = new ExtendedLinkedList<int>();
+                            ExtendedLinkedList<long> nonTerminalRules = new ExtendedLinkedList<long>();
                             foreach (string NT in splitString(product, ' ', quote))
                             {
                                 string stripedNT = strip(NT, ' ');
@@ -256,7 +257,7 @@ namespace LipidCreator
                             else
                             {
                                 char c = NTFirst[1];
-                                if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<int>();
+                                if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<long>();
                                 TtoNT[c].Add(newRuleIndex);
                             }
                             
@@ -264,12 +265,12 @@ namespace LipidCreator
                             // more than two rules, insert intermediate rule indexes
                             while (nonTerminalRules.Count > 2)
                             {
-                                int ruleIndex2 = nonTerminalRules.PopLast();
-                                int ruleIndex1 = nonTerminalRules.PopLast();
+                                long ruleIndex2 = nonTerminalRules.PopLast();
+                                long ruleIndex1 = nonTerminalRules.PopLast();
                                 
-                                int key = computeRuleKey(ruleIndex1, ruleIndex2);
-                                int nextIndex = getNextFreeRuleIndex();
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                                long key = computeRuleKey(ruleIndex1, ruleIndex2);
+                                long nextIndex = getNextFreeRuleIndex();
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
                                 NTtoNT[key].Add(nextIndex);
                                 nonTerminalRules.AddLast(nextIndex);
                             }    
@@ -278,20 +279,20 @@ namespace LipidCreator
                             // two product rules
                             if (nonTerminalRules.Count == 2)
                             {
-                                int ruleIndex1 = nonTerminalRules.PopFirst();
-                                int ruleIndex2 = nonTerminalRules.PopFirst();
-                                int key = computeRuleKey(ruleIndex1, ruleIndex2);
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                                long ruleIndex1 = nonTerminalRules.PopFirst();
+                                long ruleIndex2 = nonTerminalRules.PopFirst();
+                                long key = computeRuleKey(ruleIndex1, ruleIndex2);
+                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
                                 NTtoNT[key].Add(newRuleIndex);
                                 
                             }
                             // only one product rule
                             else if (nonTerminalRules.Count == 1)
                             {
-                                int ruleIndex1 = nonTerminalRules.First.Value;
+                                long ruleIndex1 = nonTerminalRules.First.Value;
                                 if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
                                 
-                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<int>());
+                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<long>());
                                 NTtoNT[ruleIndex1].Add(newRuleIndex);
                             }
                         }
@@ -307,40 +308,40 @@ namespace LipidCreator
             HashSet<char> keys = new HashSet<char>(TtoNT.Keys);
             foreach(char c in keys)
             {
-                HashSet<int> rules = new HashSet<int>(TtoNT[c]);
+                HashSet<long> rules = new HashSet<long>(TtoNT[c]);
                 TtoNT[c].Clear();
-                foreach(int rule in rules)
+                foreach(long rule in rules)
                 {
-                    foreach (int p in collectBackwards(rule))
+                    foreach (long p in collectBackwards(rule))
                     {
-                        int key = computeRuleKey(p, rule);
+                        long key = computeRuleKey(p, rule);
                         TtoNT[c].Add(key);
                     }
                 }
             }
             
             
-            HashSet<int> keysNT = new HashSet<int>(NTtoNT.Keys);
-            foreach(int r in keysNT)
+            HashSet<long> keysNT = new HashSet<long>(NTtoNT.Keys);
+            foreach(long r in keysNT)
             {
-                HashSet<int> rules = new HashSet<int>(NTtoNT[r]);
-                foreach(int rule in rules)
+                HashSet<long> rules = new HashSet<long>(NTtoNT[r]);
+                foreach(long rule in rules)
                 {
-                    foreach (int p in collectBackwards(rule)) NTtoNT[r].Add(p);
+                    foreach (long p in collectBackwards(rule)) NTtoNT[r].Add(p);
                 }
             }
         }
         
         
-        public int getNextFreeRuleIndex()
+        public long getNextFreeRuleIndex()
         {
-            if (nextFreeRuleIndex < 65536) return nextFreeRuleIndex++;
+            if (nextFreeRuleIndex <= MASK) return nextFreeRuleIndex++;
             throw new Exception("Error: grammer is too big.");
         }
         
         
         
-        public int computeRuleKey(int ruleIndex1, int ruleIndex2)
+        public long computeRuleKey(long ruleIndex1, long ruleIndex2)
         {
             return (ruleIndex1 << SHIFT) | ruleIndex2;
         }
@@ -405,26 +406,26 @@ namespace LipidCreator
         
         
         // splitting the whole terminal in a tree structure where characters of terminal are the leafs and the inner nodes are added non terminal rules
-        public int addTerminal(string text)
+        public long addTerminal(string text)
         {
             text = strip(text, quote);
-            ExtendedLinkedList<int> terminalRules = new ExtendedLinkedList<int>();
+            ExtendedLinkedList<long> terminalRules = new ExtendedLinkedList<long>();
             foreach (char c in text)
             {
-                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new HashSet<int>());
-                int nextIndex = getNextFreeRuleIndex();
+                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new HashSet<long>());
+                long nextIndex = getNextFreeRuleIndex();
                 TtoNT[c].Add(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
             while (terminalRules.Count > 1)
             {
-                int ruleIndex2 = terminalRules.PopLast();
-                int ruleIndex1 = terminalRules.PopLast();
+                long ruleIndex2 = terminalRules.PopLast();
+                long ruleIndex1 = terminalRules.PopLast();
                 
-                int nextIndex = getNextFreeRuleIndex();
+                long nextIndex = getNextFreeRuleIndex();
                 
-                int key = computeRuleKey(ruleIndex1, ruleIndex2);
-                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<int>());
+                long key = computeRuleKey(ruleIndex1, ruleIndex2);
+                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
                 NTtoNT[key].Add(nextIndex);
                 terminalRules.AddLast(nextIndex);
             }
@@ -434,17 +435,17 @@ namespace LipidCreator
         
         
         // expanding singleton rules, e.g. S -> A, A -> B, B -> C
-        public LinkedList<int> collectBackwards(int ruleIndex)
+        public LinkedList<long> collectBackwards(long ruleIndex)
         {
-            LinkedList<int> collection = new LinkedList<int>();
+            LinkedList<long> collection = new LinkedList<long>();
             collection.AddLast(ruleIndex);
-            LinkedListNode<int> current = collection.First;
+            LinkedListNode<long> current = collection.First;
             while (current != null)
             {
-                int currentIndex = current.Value;
+                long currentIndex = current.Value;
                 if (NTtoNT.ContainsKey(currentIndex))
                 {
-                    foreach (int previousIndex in NTtoNT[currentIndex]) collection.AddLast(previousIndex);
+                    foreach (long previousIndex in NTtoNT[currentIndex]) collection.AddLast(previousIndex);
                 }
                 current = current.Next;
             }
@@ -456,16 +457,16 @@ namespace LipidCreator
         
         
         
-        public LinkedList<int> collectBackwards(int childRuleIndex, int parentRuleIndex)
+        public LinkedList<long> collectBackwards(long childRuleIndex, long parentRuleIndex)
         {
             if (!NTtoNT.ContainsKey(childRuleIndex)) return null;
-            LinkedList<int> collection;
+            LinkedList<long> collection;
             
-            foreach (int previousIndex in NTtoNT[childRuleIndex])
+            foreach (long previousIndex in NTtoNT[childRuleIndex])
             {
                 if (previousIndex == parentRuleIndex)
                 {
-                    collection = new LinkedList<int>();
+                    collection = new LinkedList<long>();
                     return collection;
                 }
                 else if (NTtoNT.ContainsKey(previousIndex))
@@ -512,11 +513,11 @@ namespace LipidCreator
         {
            
             // checking and extending nodes for single rule chains
-            int key = (dpNode.left != null) ? computeRuleKey(dpNode.ruleIndex1, dpNode.ruleIndex2) : dpNode.ruleIndex2;
-            LinkedList<int> mergedRules = collectBackwards(key, node.ruleIndex);
+            long key = (dpNode.left != null) ? computeRuleKey(dpNode.ruleIndex1, dpNode.ruleIndex2) : dpNode.ruleIndex2;
+            LinkedList<long> mergedRules = collectBackwards(key, node.ruleIndex);
             if (mergedRules != null)
             {
-                foreach (int ruleIndex in mergedRules)
+                foreach (long ruleIndex in mergedRules)
                 {
                     node.left = new TreeNode(ruleIndex, NTtoRule.ContainsKey(ruleIndex));
                     node = node.left;
@@ -550,7 +551,7 @@ namespace LipidCreator
             parseTree = null;
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
-            Dictionary<int, DPNode>[][] dpTable = new Dictionary<int, DPNode>[n][];
+            Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
             // Ks is a lookup, which fields in the dpTable are filled
             Bitfield[] Ks = new Bitfield[n];
             
@@ -561,9 +562,9 @@ namespace LipidCreator
             //stopWatch.Start();
             for (int i = 0; i < n; ++i)
             {
-                dpTable[i] = new Dictionary<int, DPNode>[n - i];
+                dpTable[i] = new Dictionary<long, DPNode>[n - i];
                 Ks[i] = new Bitfield(n - 1);
-                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<int, DPNode>();
+                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<long, DPNode>();
             }
             
             for (int i = 0; i < n; ++i)
@@ -571,11 +572,11 @@ namespace LipidCreator
                 char c = textToParse[i];
                 if (!TtoNT.ContainsKey(c)) return;
                 
-                foreach (int ruleIndex in TtoNT[c])
+                foreach (long ruleIndex in TtoNT[c])
                 {
-                    int newKey = ruleIndex >> SHIFT;
-                    int oldKey = ruleIndex & 65535;
-                    DPNode dpNode = new DPNode((int)c, oldKey, null, null);
+                    long newKey = ruleIndex >> SHIFT;
+                    long oldKey = ruleIndex & MASK;
+                    DPNode dpNode = new DPNode((long)c, oldKey, null, null);
                     dpTable[i][0][newKey] =  dpNode;
                     Ks[i].set(0);
                 }
@@ -586,8 +587,8 @@ namespace LipidCreator
                 
                 for (int j = 0; j < n - i; ++j)
                 {
-                    Dictionary<int, DPNode>[] D = dpTable[j];
-                    Dictionary<int, DPNode> Di = D[i];
+                    Dictionary<long, DPNode>[] D = dpTable[j];
+                    Dictionary<long, DPNode> Di = D[i];
                     int jp1 = j + 1;
                     int im1 = i - 1;
                     
@@ -596,15 +597,15 @@ namespace LipidCreator
                         if (k >= i) break;
                         if (dpTable[jp1 + k][im1 - k].Count == 0) continue;
                         
-                        foreach (KeyValuePair<int, DPNode> indexPair1 in D[k])
+                        foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
                         {
-                            foreach (KeyValuePair<int, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
+                            foreach (KeyValuePair<long, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
                             {
-                                int key = computeRuleKey(indexPair1.Key, indexPair2.Key);
+                                long key = computeRuleKey(indexPair1.Key, indexPair2.Key);
                                 if (!NTtoNT.ContainsKey(key)) continue;
                                 
                                 DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
-                                foreach (int ruleIndex in NTtoNT[key])
+                                foreach (long ruleIndex in NTtoNT[key])
                                 {
                                     Di[ruleIndex] = content;
                                     Ks[j].set(i);

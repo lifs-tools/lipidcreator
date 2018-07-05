@@ -120,8 +120,6 @@ namespace LipidCreator
                 foreach (string[] unitTestRow in unitTestData)
                 {
                 
-            //try {
-                
                     Console.WriteLine("Testing: " + String.Join(" / ", unitTestRow));
                     
                     
@@ -131,17 +129,12 @@ namespace LipidCreator
                     if (parser.wordInGrammer)
                     {
                         parser.raiseEvents();
-                        if (parserEventHandler.lipid != null)
-                        {
-                            lipid = parserEventHandler.lipid;
-                        }
+                        if (parserEventHandler.lipid != null) lipid = parserEventHandler.lipid;
                     }
-                    
                     if (lipid == null) throw new Exception("Error: '" + unitTestRow[1] + "' could not be parsed");
                     
                     
                     // extract headgroup name
-                    bool positive = !(unitTestRow[5][0] == '-');
                     string headgroup = unitTestRow[1];
                     // exception for PC -_-
                     if (headgroup.IndexOf("PC O") >= 0) headgroup = headgroup.Replace("PC O", "PC O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
@@ -158,9 +151,6 @@ namespace LipidCreator
                             if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: headgroup could not be determined");
                         }
                     }
-                    
-                    
-                    
                     
                     
                     // subtracting adduct from precursor
@@ -184,9 +174,6 @@ namespace LipidCreator
                     lcf.registeredLipids.Add(lipid);
                     lcf.assembleLipids();
                     
-                    //Console.WriteLine(headgroup + " " + ((PrecursorData)lcf.precursorDataList[0]).precursorName);
-                    //Console.WriteLine(lcf.precursorDataList.Count);
-                    
                     // resolve the [adduct] wildcards if present
                     string fragmentName = unitTestRow[6];
                     if (fragmentName.IndexOf("[adduct]") > -1) fragmentName = fragmentName.Replace("[adduct]", adduct);
@@ -195,7 +182,6 @@ namespace LipidCreator
                     int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
-                        //Console.WriteLine(row[LipidCreator.PRODUCT_NAME] + " " + row[LipidCreator.PRODUCT_ADDUCT]);
                         if (row[LipidCreator.PRODUCT_NAME].Equals(fragmentName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
                         {
                             // precursor
@@ -205,6 +191,7 @@ namespace LipidCreator
                             Assert((string)row[LipidCreator.PRECURSOR_ADDUCT], unitTestRow[3], "precursor adduct: ");
                             Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), Convert.ToInt32(unitTestRow[5]), "precursor charge: ");
+                            
                             // product
                             Assert((string)row[LipidCreator.PRODUCT_NAME], fragmentName, "product name: ");
                             Assert((string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA], unitTestRow[7], "product formula: ");
@@ -218,14 +205,6 @@ namespace LipidCreator
                   
                     
                 }
-              /*  
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine();
-                //Environment.Exit(-1);
-            }*/
                 Console.WriteLine("Test passed, no errors found");  
                     
             }
@@ -236,7 +215,6 @@ namespace LipidCreator
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
                 Console.WriteLine();
-                //Environment.Exit(-1);
             }
         }
     }

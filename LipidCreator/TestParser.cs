@@ -90,7 +90,8 @@ namespace LipidCreator
             Parser pp = new Parser(tpeh, grammerFilename, quote);
                         
             
-            //pp.parse("PE 16:2-18:3;1");
+            //pp.parse("ChE 18:3");
+            //Console.WriteLine(pp.wordInGrammer);
             //Environment.Exit(0);
             
             

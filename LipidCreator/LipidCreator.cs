@@ -634,221 +634,29 @@ namespace LipidCreator
         }
         
         
-        public Lipid parseLipidSpecies(string speciesName)
-        {   
-            if (speciesName.IndexOf("PC O") >= 0) speciesName = speciesName.Replace("PC O", "PC O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
-            else if (speciesName.IndexOf("PE O") >= 0) speciesName = speciesName.Replace("PE O", "PE O-" + (speciesName.IndexOf("a") > 0 ? "a" : "p"));
-            
-            
-            string[] speciesToken = speciesName.Split(new char[]{' '});
-            string headgroup = speciesToken[0];
-            int faSeparation = 1;
-            if (speciesToken.Length > 2)
-            {
-                headgroup = speciesToken[0] + " " + speciesToken[1];
-                faSeparation = 2;
-                if (!headgroups.ContainsKey(headgroup))
-                {
-                    headgroup = speciesToken[0];
-                    faSeparation = 1;
-                    if (!headgroups.ContainsKey(headgroup)) return null;
-                }
-            }
-            
-            string acids;
-            string[] faToken;
-            string tokenSeparator;
-            
-            HashSet<string> phosphoLysos = new HashSet<string>();
-            HashSet<string> sphingoLysos = new HashSet<string>();
-            
-            foreach(string hg in categoryToClass[(int)LipidCategory.PhosphoLipid])
-            {
-                if (headgroups[hg].attributes.Contains("lyso")) phosphoLysos.Add(hg);
-            }
-            
-            foreach(string hg in categoryToClass[(int)LipidCategory.SphingoLipid])
-            {
-                if (headgroups[hg].attributes.Contains("lyso")) sphingoLysos.Add(hg);
-            }
-            
-            if (headgroups.ContainsKey(headgroup))
-            {
-                Precursor precursor = headgroups[headgroup];
-                int category = (int)precursor.category;
-                switch(category)
-                {
-                    case (int)LipidCategory.GlyceroLipid:
-                        GLLipid gllipid = new GLLipid(this);
-                        gllipid.headGroupNames.Add(headgroup);
-                        acids = speciesToken[faSeparation];
-                        tokenSeparator = getSeparator(acids);
-                        faToken = acids.Split(tokenSeparator.ToCharArray());
-                        if (headgroup.Equals("MAG") && faToken.Length != 1) return null;
-                        if (headgroup.Equals("DAG") && faToken.Length != 2) return null;
-                        if (headgroup.Equals("TAG") && faToken.Length != 3) return null;
-                        switch(headgroup)
-                        {
-                            case "MAG":
-                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                gllipid.fag2 = parseFattyAcidGroup("", true);
-                                gllipid.fag3 = parseFattyAcidGroup("", true);
-                                if (gllipid.fag1 == null) return null;
-                                break;
-                                
-                            case "MGDG": case "DGDG": case "SQDG":
-                                ((GLLipid)gllipid).containsSugar = true;
-                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                gllipid.fag3 = parseFattyAcidGroup("", true);
-                                if (gllipid.fag1 == null || gllipid.fag2 == null) return null;
-                                break;
-                                
-                            case "DAG":
-                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                gllipid.fag3 = parseFattyAcidGroup("", true);
-                                if (gllipid.fag1 == null || gllipid.fag2 == null) return null;
-                                break;
-                                
-                            case "TAG":
-                                gllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                gllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                gllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
-                                if (gllipid.fag1 == null || gllipid.fag2 == null || gllipid.fag3 == null) return null;
-                                break;
-                        }
-                        return gllipid;
-                        
-                        
-                        
-                    case (int)LipidCategory.PhosphoLipid:
-                        PLLipid pllipid = new PLLipid(this);
-                        pllipid.headGroupNames.Add(headgroup);
-                        acids = speciesToken[faSeparation];
-                        tokenSeparator = getSeparator(acids);
-                        faToken = acids.Split(tokenSeparator.ToCharArray());
-                        switch(headgroup)
-                        {
-                            case "CL":
-                                pllipid.isCL = true;
-                                if (faToken.Length != 4) return null;
-                                pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                pllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
-                                pllipid.fag4 = parseFattyAcidGroup(faToken[3], false);
-                                if (pllipid.fag1 == null || pllipid.fag2 == null || pllipid.fag3 == null || pllipid.fag4 == null) return null;
-                                break;
-                                
-                            case "MLCL":
-                                pllipid.isCL = true;
-                                if (faToken.Length != 3) return null;
-                                pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                pllipid.fag3 = parseFattyAcidGroup(faToken[2], false);
-                                pllipid.fag4 = parseFattyAcidGroup("", true);
-                                if (pllipid.fag1 == null || pllipid.fag2 == null || pllipid.fag3 == null) return null;
-                                break;
-                                
-                            default:
-                                if (phosphoLysos.Contains(headgroup))
-                                {
-                                    if (faToken.Length != 1) return null;
-                                    pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                    pllipid.fag2 = parseFattyAcidGroup("", true);
-                                    pllipid.isLyso = true;
-                                }
-                                else
-                                {
-                                    if (faToken.Length != 2) return null;
-                                    pllipid.fag1 = parseFattyAcidGroup(faToken[0], false);
-                                    pllipid.fag2 = parseFattyAcidGroup(faToken[1], false);
-                                }
-                                if (pllipid.fag1 == null || pllipid.fag2 == null) return null;
-                                break;
-                        }
-                        return pllipid;
-                        
-                        
-                        
-                    case (int)LipidCategory.SphingoLipid:
-                        SLLipid sllipid = new SLLipid(this);
-                        sllipid.headGroupNames.Add(headgroup);
-                        acids = speciesToken[faSeparation];
-                        tokenSeparator = getSeparator(acids);
-                        faToken = acids.Split(tokenSeparator.ToCharArray());
-                        if (faToken.Length > 2 || faToken.Length == 0) return null;
-                        else if (sphingoLysos.Contains(headgroup)){
-                            sllipid.isLyso = true;
-                            sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
-                            if (sllipid.lcb == null) return null;
-                        }
-                        else {
-                            sllipid.lcb = parseFattyAcidGroup(faToken[0], false, true);
-                            sllipid.fag = parseFattyAcidGroup(faToken[1], false);
-                            if (sllipid.lcb == null || sllipid.fag == null) return null;
-                        }
-                        return sllipid;
-                        
-                        
-                        
-                    case (int)LipidCategory.Cholesterol:
-                        Cholesterol chlipid = new Cholesterol(this);
-                        chlipid.headGroupNames.Add(headgroup);
-                        if(precursor.name.Equals("Ch")) return chlipid;
-                        
-                        ((Cholesterol)chlipid).containsEster = true;
-                        acids = speciesToken[faSeparation];
-                        tokenSeparator = getSeparator(acids);
-                        if (tokenSeparator.Length != 0) return null;
-                        faToken = acids.Split(tokenSeparator.ToCharArray());
-                        if (faToken.Length != 1) return null;
-                        chlipid.fag = parseFattyAcidGroup(faToken[0], false);
-                        if (chlipid.fag == null) return null;
-                        return chlipid;
-                        
-                        
-                        
-                    case (int)LipidCategory.Mediator:
-                        Mediator medlipid = new Mediator(this);
-                        medlipid.headGroupNames.Add(headgroup);
-                        return medlipid;
-                        
-                    default:
-                        return null;
-                }
-            }            
-            return null;
-        }
         
         
-        
-        
-        
-        public void assembleLipids(string instrument = "")
+        public void createPrecursorList()
         {
-            List<string> headerList = new List<string>();
-            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
-            if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
-            DATA_COLUMN_KEYS = headerList.ToArray();
-            transitionList = addDataColumns(new DataTable ());
-            transitionListUnique = addDataColumns (new DataTable ());
             
-            
-            
-            List<string> apiList = new List<string>();
-            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
-            if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
-            SKYLINE_API_HEADER = apiList.ToArray();
         
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
+            
+            
             
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
+        }
+        
+        
+        public void createFragmentList(string instrument)
+        {
+            transitionList = addDataColumns(new DataTable ());
+            transitionListUnique = addDataColumns (new DataTable ());
             
             // create fragment list   
             if (instrument.Length == 0)
@@ -889,6 +697,26 @@ namespace LipidCreator
                 }
                 ++i;
             }
+        }
+        
+        
+        
+        public void assembleLipids(string instrument = "")
+        {
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
+            
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
+        
+            createPrecursorList();
+            createFragmentList(instrument);
         }
         
         
@@ -1011,7 +839,7 @@ namespace LipidCreator
         public static string computeChemicalFormula(Dictionary<int, int> elements)
         {
             String chemForm = "";            
-            foreach (int molecule in MS2Fragment.MONOISOTOPE_POSITIONS.Keys)
+            foreach (int molecule in MS2Fragment.MONOISOTOPE_POSITIONS.Keys.OrderBy(x => MS2Fragment.MONOISOTOPE_POSITIONS[x]))
             {
                 int numElements = elements[molecule];
                 foreach (int heavyMolecule in MS2Fragment.HEAVY_DERIVATIVE[molecule])
@@ -1171,7 +999,7 @@ namespace LipidCreator
             try
             {
                 WebRequest request = WebRequest.Create("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
-                request.Timeout = 5000;
+                request.Timeout = 2000;
                 WebResponse response = request.GetResponse();  
                 response.Close();
             }
@@ -1283,6 +1111,10 @@ namespace LipidCreator
         
         public void createBlib(String filename, string instrument)
         {
+        
+            
+            
+        
             if (File.Exists(filename)) File.Delete(filename);
         
             SQLiteConnection mDBConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");

@@ -3123,11 +3123,28 @@ namespace LipidCreator
                     }
                     break;
                     
+                    
+                case "library":
+                    Console.WriteLine("Creating a spectral library in *.blib format from a lipid list");
+                    Console.WriteLine();
+                    Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv instrument");
+                    Console.WriteLine("  available instruments:");
+                    foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
+                    {
+                        if ((bool)kvp.Value[1]) 
+                        {
+                            string fullInstrumentName = (string)(kvp.Value[0]);
+                            Console.WriteLine("    '" + kvp.Key + "': " + fullInstrumentName);
+                        }
+                    }
+                    break;
+                    
                 default:
                     Console.WriteLine("usage: LipidCreator.exe (option)");
                     Console.WriteLine();
                     Console.WriteLine("options are:");
                     Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
+                    Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
                     break;
             }
@@ -3144,7 +3161,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "help", "transitionlist"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "help", "transitionlist", "library"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3249,6 +3266,32 @@ namespace LipidCreator
                                 lc.storeTransitionList(",", split, outputCSV, transitionList);
                                 stopWatch.Stop();
                                 Console.WriteLine(stopWatch.Elapsed);
+                            }
+                            break;
+                            
+                            
+                            
+                        case "library":
+                            if (args.Length < 4)
+                            {
+                                printHelp("library");
+                            }
+                            else
+                            {
+                                string inputCSV = args[1];
+                                string outputCSV = args[2];
+                                string instrument = args[3];
+                                
+                                LipidCreator.analytics("lipidcreator-cli", "launch");
+                                
+                                LipidCreator lc = new LipidCreator(null);
+                                
+                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
+                                
+                                
+                                lc.importLipidList(inputCSV);
+                                lc.createPrecursorList();
+                                lc.createBlib(outputCSV, instrument);
                             }
                             break;
                     }

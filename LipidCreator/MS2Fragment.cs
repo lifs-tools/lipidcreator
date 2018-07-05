@@ -73,8 +73,8 @@ namespace LipidCreator
         public static Dictionary<int, int> MONOISOTOPE_POSITIONS = new Dictionary<int, int>(){
             {(int)Molecules.C, 0},
             {(int)Molecules.H, 1},
-            {(int)Molecules.O, 2},
-            {(int)Molecules.N, 3},
+            {(int)Molecules.N, 2},
+            {(int)Molecules.O, 3},
             {(int)Molecules.P, 4},
             {(int)Molecules.S, 5}
         };
@@ -83,8 +83,8 @@ namespace LipidCreator
         public static Dictionary<int, double> ELEMENT_MASSES = new Dictionary<int, double>(){
             {(int)Molecules.C, 12.0},
             {(int)Molecules.H, 1.007825035},
-            {(int)Molecules.O, 15.99491463},
             {(int)Molecules.N, 14.003074},
+            {(int)Molecules.O, 15.99491463},
             {(int)Molecules.P, 30.973762},
             {(int)Molecules.S, 31.9720707},
             {(int)Molecules.H2, 2.014101779},

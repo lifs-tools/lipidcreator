@@ -53,8 +53,8 @@ namespace LipidCreator
             registeredEvents.Add("HG_PL-O_pre_event", addContext);
             registeredEvents.Add("HG_LSL_pre_event", addContext);
             registeredEvents.Add("HG_DSL_pre_event", addContext);
-            registeredEvents.Add("CH_pre_event", addContext);
-            registeredEvents.Add("CHe_HG_pre_event", addContext);
+            registeredEvents.Add("Ch_pre_event", addContext);
+            registeredEvents.Add("HG_ChE_pre_event", addContext);
             registeredEvents.Add("Mediator_pre_event", addContext);
             registeredEvents.Add("FA_pre_event", addContext);
             registeredEvents.Add("LCB_pre_event", addContext);

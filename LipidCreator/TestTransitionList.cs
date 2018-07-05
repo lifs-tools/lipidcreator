@@ -77,10 +77,16 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
+            string grammerFilename = "data/lipidnames.grammer";
+            char quote = '"';
+            ParserEventHandler parserEventHandler = new ParserEventHandler(lcf);
+            Parser parser = new Parser(parserEventHandler, grammerFilename, quote);
             
             try {
                 int lineCounter = 1;
                 string unitTestFile = "data/unit-test-transition-list.csv";
+                
+                
                 if (File.Exists(unitTestFile))
                 {
                     try
@@ -120,7 +126,17 @@ namespace LipidCreator
                     
                     
                     // parse species identifier
-                    Lipid lipid = lcf.parseLipidSpecies(unitTestRow[1]);
+                    Lipid lipid = null;
+                    parser.parse(unitTestRow[1]);
+                    if (parser.wordInGrammer)
+                    {
+                        parser.raiseEvents();
+                        if (parserEventHandler.lipid != null)
+                        {
+                            lipid = parserEventHandler.lipid;
+                        }
+                    }
+                    
                     if (lipid == null) throw new Exception("Error: '" + unitTestRow[1] + "' could not be parsed");
                     
                     
@@ -159,19 +175,6 @@ namespace LipidCreator
                     lipid.adducts.Keys.CopyTo(keys, 0);
                     foreach (string key in keys) lipid.adducts[key] = false;
                     lipid.adducts[adduct] = true;
-                    foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.positiveFragments) fragments.Value.Clear();
-                    foreach (KeyValuePair<string, HashSet<string>> fragments in lipid.negativeFragments) fragments.Value.Clear();
-                    if (positive)
-                    {
-                        if (!lcf.allFragments[headgroup][true].ContainsKey(unitTestRow[6])) throw new Exception("Error: unknown fragment '" + unitTestRow[6] + "'");
-                        lipid.positiveFragments[headgroup].Add(unitTestRow[6]);
-                    }
-                    else
-                    {
-                        if (!lcf.allFragments[headgroup][false].ContainsKey(unitTestRow[6])) throw new Exception("Error: unknown fragment '" + unitTestRow[6] + "'");
-                        lipid.negativeFragments[headgroup].Add(unitTestRow[6]);
-                    }
-                    
                     
                     if (!lipid.adducts[adduct] || !lcf.headgroups[headgroup].adductRestrictions[adduct]) throw new Exception("Error: combination '" + headgroup + "' and '" + unitTestRow[3] + "' are not valid");
                     
@@ -185,15 +188,15 @@ namespace LipidCreator
                     //Console.WriteLine(lcf.precursorDataList.Count);
                     
                     // resolve the [adduct] wildcards if present
-                    string fragementName = unitTestRow[6];
-                    if (fragementName.IndexOf("[adduct]") > -1) fragementName = fragementName.Replace("[adduct]", adduct);
+                    string fragmentName = unitTestRow[6];
+                    if (fragmentName.IndexOf("[adduct]") > -1) fragmentName = fragmentName.Replace("[adduct]", adduct);
                     
                     if (lcf.transitionList.Rows.Count == 0) throw new Exception("Error: no fragment computed.");
                     int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
                         //Console.WriteLine(row[LipidCreator.PRODUCT_NAME] + " " + row[LipidCreator.PRODUCT_ADDUCT]);
-                        if (row[LipidCreator.PRODUCT_NAME].Equals(fragementName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
+                        if (row[LipidCreator.PRODUCT_NAME].Equals(fragmentName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
                         {
                             // precursor
                             Assert((string)row[LipidCreator.MOLECULE_LIST_NAME], unitTestRow[0], "class: ");
@@ -203,7 +206,7 @@ namespace LipidCreator
                             Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), Convert.ToInt32(unitTestRow[5]), "precursor charge: ");
                             // product
-                            Assert((string)row[LipidCreator.PRODUCT_NAME], fragementName, "product name: ");
+                            Assert((string)row[LipidCreator.PRODUCT_NAME], fragmentName, "product name: ");
                             Assert((string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA], unitTestRow[7], "product formula: ");
                             Assert((string)row[LipidCreator.PRODUCT_ADDUCT], unitTestRow[8], "product adduct: ");
                             Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), Convert.ToDouble(unitTestRow[9], CultureInfo.InvariantCulture), "product mass: ");
@@ -211,7 +214,7 @@ namespace LipidCreator
                             ++cnt;
                         }
                     }
-                    if (cnt != 1) throw new Exception("Error: fragment '" + fragementName + "' with adduct '" + unitTestRow[8] + "' not found.");
+                    if (cnt == 0) throw new Exception("Error: fragment '" + fragmentName + "' with adduct '" + unitTestRow[8] + "' not found.");
                   
                     
                 }

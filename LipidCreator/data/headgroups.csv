@@ -1,6 +1,6 @@
 Category,Precursor,C,H,O,N,P,S,d,File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
-Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,8,
-Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,3,
+Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,8,
+Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,6,
 GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,3,
@@ -145,7 +145,7 @@ SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,
 SL,LCB,0,1,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,+H,5,lyso
 SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,5,lyso
 SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,-H,5,lyso
-SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,No,No,No,No,No,Yes,Yes,+HCOO,5,lyso
+SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+HCOO,5,lyso
 SL,M(IP)2C,18,32,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
 SL,MIPC,12,21,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
 SL,SHexCer,6,10,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,4,

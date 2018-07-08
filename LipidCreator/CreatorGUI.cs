@@ -3148,6 +3148,10 @@ namespace LipidCreator
                     break;
                     
                     
+                case "spymode":
+                    Console.WriteLine("\nUnsaturated fatty acids contain one special bond - James Bond!\n\n");
+                    break;
+                    
                     
                 default:
                     Console.WriteLine("usage: LipidCreator.exe (option)");
@@ -3172,7 +3176,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random", "spymode"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3180,6 +3184,10 @@ namespace LipidCreator
                             LipidCreator.analytics("lipidcreator-external", "launch");
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
                             Application.Run(creatorGUI);
+                            break;
+                            
+                        case "spymode":
+                            printHelp("spymode");
                             break;
                             
                         case "help":

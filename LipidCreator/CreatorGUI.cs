@@ -3139,12 +3139,23 @@ namespace LipidCreator
                     }
                     break;
                     
+                    
+                    
+                case "random":
+                    Console.WriteLine("Generating a random lipid name (not necessarily reasonable in terms of chemistry)");
+                    Console.WriteLine();
+                    Console.WriteLine("usage: LipidCreator.exe random [number]");
+                    break;
+                    
+                    
+                    
                 default:
                     Console.WriteLine("usage: LipidCreator.exe (option)");
                     Console.WriteLine();
                     Console.WriteLine("options are:");
                     Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
+                    Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
                     break;
             }
@@ -3161,7 +3172,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "help", "transitionlist", "library"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3174,6 +3185,14 @@ namespace LipidCreator
                         case "help":
                             printHelp();
                             break;
+                            
+                        case "random":
+                            if (args.Length > 1 && args[1].Equals("help")) printHelp("random");
+                            int num = 1;
+                            if (args.Length > 1) num = int.TryParse(args[1], out num) ? num : 1;
+                            foreach (string lipidName in LipidCreator.createRandomLipidNames(num)) Console.WriteLine(lipidName);
+                            break;
+                            
                             
                         case "transitionlist":
                             if (args.Length < 3)

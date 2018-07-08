@@ -165,7 +165,7 @@ namespace LipidCreator
         
         
         
-        public int nextFreeRuleIndex;
+        public uint nextFreeRuleIndex;
         public Dictionary<char, HashSet<long>> TtoNT;
         public Dictionary<long, HashSet<long>> NTtoNT;
         public char quote;
@@ -174,7 +174,7 @@ namespace LipidCreator
         public Dictionary<long, string> NTtoRule;
         public BaseParserEventHandler parserEventHandler;
         public const int SHIFT = 32;
-        public const long MASK = (1L << SHIFT) - 1;
+        public const long MASK = (1LL << SHIFT) - 1;
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')

@@ -439,7 +439,7 @@ namespace LipidCreator
         
         // parser for reading the csv lines with comma separation and "" quotation (if present)
         // using an Moore automaton based approach
-        public string[] parseLine(string line)
+        public static string[] parseLine(string line)
         {
             List<string> listTokens = new List<string>();
             int start = 0;

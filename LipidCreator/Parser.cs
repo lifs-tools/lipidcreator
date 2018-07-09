@@ -174,7 +174,7 @@ namespace LipidCreator
         public Dictionary<long, string> NTtoRule;
         public BaseParserEventHandler parserEventHandler;
         public const int SHIFT = 32;
-        public const long MASK = (1LL << SHIFT) - 1;
+        public const long MASK = (1L << SHIFT) - 1;
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
@@ -210,7 +210,7 @@ namespace LipidCreator
                         
                         ArrayList tokens_level_1 = new ArrayList();
                         foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer, line " + lineCounter);
 
                         string rule = (string)tokens_level_1[0];
                         

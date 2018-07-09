@@ -2623,7 +2623,7 @@ namespace LipidCreator
                 row["Category"] = "Sphingolipid";
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
                 row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo + "; OH: " + currentSLLipid.lcb.hydroxylCounts.First();
-                if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylInfo;
+                if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylCounts.First();
             }
             
             else if (currentRegisteredLipid is Cholesterol)
@@ -3160,6 +3160,7 @@ namespace LipidCreator
                     Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
+                    Console.WriteLine("  spymode:\t\t\tsecret spy mode");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
                     break;
             }

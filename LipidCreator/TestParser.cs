@@ -96,6 +96,8 @@ namespace LipidCreator
             
             
             // creating a random lipid name generator
+            
+            /*
             if (File.Exists(grammerFilename))
             {
                 int lineCounter = 0;
@@ -186,6 +188,8 @@ namespace LipidCreator
             }
         
             Console.WriteLine("");
+            
+            */
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);

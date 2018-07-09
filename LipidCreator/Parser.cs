@@ -199,7 +199,11 @@ namespace LipidCreator
                     string line;
                     while((line = sr.ReadLine()) != null)
                     {
+                    
                         lineCounter++;
+                        
+                        if (lineCounter % 1000 == 0) Console.WriteLine(lineCounter);
+                        
                         // skip empty lines and comments
                         if (line.Length < 1) continue;
                         line = strip(line, ' ');

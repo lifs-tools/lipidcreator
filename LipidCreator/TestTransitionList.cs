@@ -100,7 +100,7 @@ namespace LipidCreator
                                 if (line.Length < 2) continue;
                                 if (line[0] == '#') continue;
                                 
-                                string[] tokens = lcf.parseLine(line);
+                                string[] tokens = LipidCreator.parseLine(line);
                                 unitTestData.Add(tokens);
                             }
                         }

@@ -439,7 +439,7 @@ namespace LipidCreator
         
         // parser for reading the csv lines with comma separation and "" quotation (if present)
         // using an Moore automaton based approach
-        public static string[] parseLine(string line)
+        public static string[] parseLine(string line, char separator = ',', char quote = '"')
         {
             List<string> listTokens = new List<string>();
             int start = 0;
@@ -449,48 +449,49 @@ namespace LipidCreator
             {
                 switch (state){
                     case 0:
-                        switch (line[i])
+                        if (line[i] == quote)
                         {
-                            case '"':
-                                throw new Exception("invalid line in file");
-                            case ',':
-                                listTokens.Add(line.Substring(start, length));
-                                length = 0;
-                                state = 1;
-                                break;
-                            default:
-                                ++length;
-                                break;
+                            throw new Exception("invalid line in file");
+                        }
+                        else if (line[i] == separator)
+                        {
+                            listTokens.Add(line.Substring(start, length));
+                            length = 0;
+                            state = 1;
+                        }
+                        else
+                        {
+                            ++length;
                         }
                         break;
                         
                     case 1:
-                        switch (line[i])
+                        if (line[i] == quote)
                         {
-                            case '"':
-                                length = 0;
-                                start = i + 1;
-                                state = 2;
-                                break;
-                            case ',':
-                                listTokens.Add("");
-                                length = 0;
-                                break;
-                            default:
-                                length = 1;
-                                start = i;
-                                state = 0;
-                                break;
+                            length = 0;
+                            start = i + 1;
+                            state = 2;
+                        }
+                        else if (line[i] == separator)
+                        {
+                            listTokens.Add("");
+                            length = 0;
+                        }
+                        else
+                        {
+                            length = 1;
+                            start = i;
+                            state = 0;
                         }
                         break;
                         
                     case 2:
-                        if (line[i] != '"') ++length;
+                        if (line[i] != quote) ++length;
                         else state = 3;
                         break;
                         
                     case 3:
-                        if (line[i] == ',')
+                        if (line[i] == separator)
                         {
                             listTokens.Add(line.Substring(start, length));
                             length = 0;
@@ -687,7 +688,7 @@ namespace LipidCreator
             string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
                 string replicateKey = prec_mass + "/" + prod_mass;
                 if (!replicateKeys.ContainsKey (replicateKey)) {
-                    string note = "replicate of " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
+                    string note = "Interference with " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
                     replicateKeys.Add(replicateKey, note);
                     transitionListUnique.ImportRow (row);
                 }

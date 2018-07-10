@@ -199,7 +199,11 @@ namespace LipidCreator
                     string line;
                     while((line = sr.ReadLine()) != null)
                     {
+                    
                         lineCounter++;
+                        
+                        if (lineCounter % 1000 == 0) Console.WriteLine(lineCounter);
+                        
                         // skip empty lines and comments
                         if (line.Length < 1) continue;
                         line = strip(line, ' ');
@@ -210,7 +214,7 @@ namespace LipidCreator
                         
                         ArrayList tokens_level_1 = new ArrayList();
                         foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer, line " + lineCounter);
 
                         string rule = (string)tokens_level_1[0];
                         

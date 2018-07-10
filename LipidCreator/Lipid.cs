@@ -39,7 +39,7 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5};
+    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5, Unsupported = 99};
     
     
     [Serializable]
@@ -778,6 +778,24 @@ namespace LipidCreator
                     Console.WriteLine("Error: " + node.Name.ToString());
                     throw new Exception("Error: " + node.Name.ToString());
             }
+        }
+    }
+    
+    public class UnsupportedLipid : Lipid
+    {
+        public UnsupportedLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Unsupported)
+        {
+        
+        }
+        
+        public override void Update(object sender, EventArgs e)
+        {
+            Updating((int)LipidCategory.Unsupported);
+        }
+        
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList{};
         }
     }
 }

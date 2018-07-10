@@ -41,7 +41,11 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public DataTable lipidNamesList;
     
-    
+        public const string GRAMMER_FILENAME = "data/lipidmaps.grammer";
+        public const char QUOTE = '"';
+            
+        public LipidMapsParserEventHandler lipidMapsParserEventHandler;
+        public Parser parser;
     
         public TranslatorDialog(CreatorGUI _creatorGUI)
         {
@@ -52,6 +56,9 @@ namespace LipidCreator
             lipidNamesList.Columns[1].DataType = typeof(string);
             lipidNamesList.Columns[1].ReadOnly = true;
             creatorGUI = _creatorGUI;
+            
+            lipidMapsParserEventHandler = new LipidMapsParserEventHandler(creatorGUI.lipidCreator);
+            parser = new Parser(lipidMapsParserEventHandler, GRAMMER_FILENAME, QUOTE);
             
             InitializeComponent();
         }

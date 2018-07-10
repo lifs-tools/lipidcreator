@@ -123,6 +123,9 @@ namespace LipidCreator
             this.Text = "Lipid names translation";
             ((System.ComponentModel.ISupportInitialize)(this.lipidNamesGridView)).EndInit();
             this.ResumeLayout(false);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
 
         }
 

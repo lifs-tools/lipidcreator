@@ -1,7 +1,7 @@
 Category,Precursor,C,H,O,N,P,S,d,File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,8,
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
-GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,2,
+GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,6,
 GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,3,
 GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,6,
@@ -102,10 +102,10 @@ Mediator,TXB2,20,34,6,0,0,0,0,images/Precursors/TXB2.png,No,No,No,Yes,No,No,No,-
 Mediator,TXB2/d4,20,30,6,0,0,0,4,images/Precursors/IS/TXB2_d4.png,No,No,No,Yes,No,No,No,-H,8,heavy
 Mediator,TXB3,20,32,6,0,0,0,0,images/Precursors/TXB3.png,No,No,No,Yes,No,No,No,-H,8,
 PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
-PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
+PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,Yes,No,No,-H,6,
 PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-H,0,
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
-PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,No,No,Yes,Yes,No,No,No,-H,7,lyso
+PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,7,lyso
 PL,LPC,8,19,6,1,1,0,0,images/Precursors/LPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso
 PL,LPC O-a,8,19,6,1,1,0,0,images/Precursors/eLPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso;ether
 PL,LPC O-p,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso;ether
@@ -117,7 +117,7 @@ PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,No,No
 PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,7,lyso
 PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,+H,1,
 PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,
-PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,No,No,Yes,Yes,No,No,No,-H,6,
+PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
 PL,PC,8,18,6,1,1,0,0,images/Precursors/PC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,
 PL,PC O-a,8,18,6,1,1,0,0,images/Precursors/ePC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,ether
 PL,PC O-p,8,18,6,1,1,0,0,images/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,ether

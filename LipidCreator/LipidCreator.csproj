@@ -183,6 +183,12 @@
     <Compile Include="SpectralName.Designer.cs">
       <DependentUpon>SpectralName.cs</DependentUpon>
     </Compile>
+    <Compile Include="TranslatorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TranslatorDialog.Designer.cs">
+      <DependentUpon>TranslatorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tutorial.cs" />
     <EmbeddedResource Include="AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
@@ -214,6 +220,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TranslatorDialog.resx">
+      <DependentUpon>TranslatorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="data\headgroups.csv" />
     <None Include="data\ms2fragments.csv" />

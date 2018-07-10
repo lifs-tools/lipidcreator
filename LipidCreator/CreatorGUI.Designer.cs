@@ -295,6 +295,7 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuDash3;
         public System.Windows.Forms.MenuItem menuExit;
         public System.Windows.Forms.MenuItem menuOptions;
+        public System.Windows.Forms.MenuItem menuTranslate;
         public System.Windows.Forms.MenuItem menuCollisionEnergy;
         public System.Windows.Forms.MenuItem menuCollisionEnergyOpt;
         public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
@@ -611,6 +612,7 @@ namespace LipidCreator
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
+            this.menuTranslate = new System.Windows.Forms.MenuItem ();
             this.menuCollisionEnergy = new System.Windows.Forms.MenuItem ();
             this.menuCollisionEnergyOpt = new System.Windows.Forms.MenuItem ();
             this.menuCollisionEnergyNone = new System.Windows.Forms.MenuItem ();
@@ -650,7 +652,13 @@ namespace LipidCreator
             this.menuExit.Click += new System.EventHandler (menuExitClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
+            
+            this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
+            this.menuTranslate.Text = "Tr&anslate";
+            this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
+            
+            
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
@@ -689,8 +697,8 @@ namespace LipidCreator
             this.menuHelp.MenuItems.AddRange(new MenuItem[]{ menuAbout });
 
             
-            this.menuAbout.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
-            this.menuAbout.Text = "&About";
+            this.menuAbout.Shortcut = System.Windows.Forms.Shortcut.CtrlB;
+            this.menuAbout.Text = "A&bout";
             this.menuAbout.Click += new System.EventHandler (menuAboutClick);
 
             this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuOptions, this.menuHelp } );

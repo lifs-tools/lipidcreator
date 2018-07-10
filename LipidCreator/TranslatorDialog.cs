@@ -56,16 +56,17 @@ namespace LipidCreator
             InitializeComponent();
         }
         
-        public void lipidNamesGridViewPasteGridCellContent(object sender, KeyEventArgs e)
+        public void lipidNamesGridViewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
                 int currentCell = lipidNamesGridView.CurrentCell.RowIndex; 
-                //lipidNamesGridView.DataSource = null;
+                Console.WriteLine(currentCell);
                 string[] insertText = Clipboard.GetText().Split('\n');
                 if (insertText.Length > 1){
                     foreach (string insert in insertText)
                     {
+                        Console.WriteLine("'" + insert + "'");
                         if (currentCell < lipidNamesList.Rows.Count)
                         {
                             lipidNamesList.Rows[currentCell]["Old lipid name"] = insert;
@@ -79,23 +80,44 @@ namespace LipidCreator
                         ++currentCell;
                     }
                 }
-                //lipidNamesGridView.DataSource = lipidNamesList;
                 lipidNamesGridView.Refresh();
             }
         }
         
-
+        
+        
+        public void lipidNamesGridViewCellValueChanged(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            e.Control.KeyDown += new KeyEventHandler(lipidNamesGridViewKeyDown);
+        }
+        
+        
+        
+        private void lipidNamesGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+        
+            lipidNamesGridView.Columns[0].Width = lipidNamesGridView.Width >> 1;
+            lipidNamesGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            lipidNamesGridView.AllowUserToResizeColumns = false;
+        }
+        
+        
+        // cancel
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
-
+        
+        
+        // translate
         private void button2_Click(object sender, EventArgs e)
         {
             Close();
 
         }
-
+        
+        
+        // import
         private void button3_Click(object sender, EventArgs e)
         {
             Close();

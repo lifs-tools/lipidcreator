@@ -101,12 +101,14 @@ namespace LipidCreator
             lipidNamesGridView.Name = "lipidNamesGridView";
             lipidNamesGridView.Size = new System.Drawing.Size(774, 340);
             lipidNamesGridView.TabIndex = 3;
-            lipidNamesGridView.AllowUserToResizeColumns = false;
             lipidNamesGridView.AllowUserToAddRows = true;
             lipidNamesGridView.AllowUserToResizeRows = false;
             lipidNamesGridView.MultiSelect = false;
             lipidNamesGridView.RowTemplate.Height = 34;
-            lipidNamesGridView.KeyDown += lipidNamesGridViewPasteGridCellContent;
+            lipidNamesGridView.KeyDown += lipidNamesGridViewKeyDown;
+            lipidNamesGridView.RowHeadersVisible = false;
+            lipidNamesGridView.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(lipidNamesGridViewCellValueChanged);
+            lipidNamesGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidNamesGridViewDataBindingComplete);
             // 
             // TranslatorDialog
             // 

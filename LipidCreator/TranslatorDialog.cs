@@ -25,9 +25,10 @@ SOFTWARE.
 
 
 using System;
+using System.Data;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -40,22 +41,26 @@ namespace LipidCreator
     {
         public CreatorGUI creatorGUI;
         public DataTable lipidNamesList;
+        public ArrayList parsedLipids;
     
         public const string GRAMMER_FILENAME = "data/lipidmaps.grammer";
         public const char QUOTE = '"';
             
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser parser;
+        public const string FIRST_HEADER = "Old lipid name";
+        public const string SECOND_HEADER = "Current lipid name";
     
         public TranslatorDialog(CreatorGUI _creatorGUI)
         {
             lipidNamesList = new DataTable("lipidNamesList");
-            lipidNamesList.Columns.Add(new DataColumn("Old lipid name"));
+            lipidNamesList.Columns.Add(new DataColumn(FIRST_HEADER));
             lipidNamesList.Columns[0].DataType = typeof(string);
-            lipidNamesList.Columns.Add(new DataColumn("Current lipid name"));
+            lipidNamesList.Columns.Add(new DataColumn(SECOND_HEADER));
             lipidNamesList.Columns[1].DataType = typeof(string);
             lipidNamesList.Columns[1].ReadOnly = true;
             creatorGUI = _creatorGUI;
+            parsedLipids = new ArrayList();
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(creatorGUI.lipidCreator);
             parser = new Parser(lipidMapsParserEventHandler, GRAMMER_FILENAME, QUOTE);
@@ -68,20 +73,18 @@ namespace LipidCreator
             if (e.Control && e.KeyCode == Keys.V)
             {
                 int currentCell = lipidNamesGridView.CurrentCell.RowIndex; 
-                Console.WriteLine(currentCell);
                 string[] insertText = Clipboard.GetText().Split('\n');
                 if (insertText.Length > 1){
                     foreach (string insert in insertText)
                     {
-                        Console.WriteLine("'" + insert + "'");
                         if (currentCell < lipidNamesList.Rows.Count)
                         {
-                            lipidNamesList.Rows[currentCell]["Old lipid name"] = insert;
+                            lipidNamesList.Rows[currentCell][FIRST_HEADER] = insert;
                         }
                         else 
                         {
                             DataRow row = lipidNamesList.NewRow();
-                            row["Old lipid name"] = insert;
+                            row[FIRST_HEADER] = insert;
                             lipidNamesList.Rows.Add(row);
                         }
                         ++currentCell;
@@ -100,6 +103,7 @@ namespace LipidCreator
         
         
         
+        
         private void lipidNamesGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
         
@@ -109,6 +113,8 @@ namespace LipidCreator
         }
         
         
+        
+        
         // cancel
         private void button1_Click(object sender, EventArgs e)
         {
@@ -116,12 +122,64 @@ namespace LipidCreator
         }
         
         
+        
+        
         // translate
         private void button2_Click(object sender, EventArgs e)
         {
-            Close();
-
+            lipidNamesList.Columns[1].ReadOnly = false;
+            parsedLipids.Clear();
+            foreach (DataRow row in lipidNamesList.Rows)
+            {
+                Lipid lipid = null;
+                if (row[FIRST_HEADER] is string)
+                {
+                    string oldLipidName = (string)row[FIRST_HEADER];
+                    if (oldLipidName.Length > 0)
+                    {
+                        parser.parse(oldLipidName);
+                        if (parser.wordInGrammer)
+                        {
+                            parser.raiseEvents();
+                            if (lipidMapsParserEventHandler.lipid != null)
+                            {
+                                lipid = lipidMapsParserEventHandler.lipid;
+                            }
+                        }
+                    }
+                }
+                Console.WriteLine(lipid != null);
+                parsedLipids.Add(lipid);
+            }
+            
+            
+            
+            Console.WriteLine(parsedLipids.Count);
+            
+            
+            
+            HashSet<String> usedKeys = new HashSet<String>();
+            ArrayList precursorDataList = new ArrayList();
+            int i = 0;
+            foreach (Lipid currentLipid in parsedLipids)
+            {
+                if (currentLipid != null)
+                {
+                    currentLipid.computePrecursorData(creatorGUI.lipidCreator.headgroups, usedKeys, precursorDataList);
+                    lipidNamesList.Rows[i][SECOND_HEADER] = ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
+                    usedKeys.Clear();
+                }
+                else
+                {
+                    lipidNamesList.Rows[i][SECOND_HEADER] = "Unrecognized lipid";
+                }
+                ++i;
+            }
+            lipidNamesList.Columns[1].ReadOnly = true;
+            lipidNamesGridView.Refresh();
         }
+        
+        
         
         
         // import

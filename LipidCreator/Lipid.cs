@@ -178,9 +178,7 @@ namespace LipidCreator
         }
         
         
-        public virtual void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
-        {
-        }
+        public abstract void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList);
         
         
         
@@ -781,6 +779,9 @@ namespace LipidCreator
         }
     }
     
+    
+    
+    
     public class UnsupportedLipid : Lipid
     {
         public UnsupportedLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Unsupported)
@@ -788,14 +789,39 @@ namespace LipidCreator
         
         }
         
+        
+        
         public override void Update(object sender, EventArgs e)
         {
             Updating((int)LipidCategory.Unsupported);
         }
         
+        
+        
         public override ArrayList getFattyAcidGroupList()
         {
-            return new ArrayList{};
+            return new ArrayList();
+        }
+        
+        
+        
+        public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
+        {
+            PrecursorData precursorData = new PrecursorData();
+            precursorData.lipidCategory = LipidCategory.Unsupported;
+            precursorData.moleculeListName = "Unsupported lipid";
+            precursorData.fullMoleculeListName = "Unsupported lipid";
+            precursorData.lipidClass = "Unsupported lipid";
+            precursorData.precursorName = "Unsupported lipid";
+            precursorData.precursorIonFormula = "Unsupported lipid";
+            precursorData.precursorAdduct = "Unsupported lipid";
+            precursorData.precursorAdductFormula = "Unsupported lipid";
+            precursorData.precursorM_Z = 0;
+            precursorData.precursorCharge = 0;
+            precursorData.atomsCount = null;
+            precursorData.addPrecursor = true;
+            precursorData.fragmentNames = new HashSet<string>();
+            precursorDataList.Add(precursorData);
         }
     }
 }

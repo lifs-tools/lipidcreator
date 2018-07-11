@@ -37,7 +37,7 @@ using System.Diagnostics;
 
 namespace LipidCreator
 {
-    public class TestParser
+    public class TestLipidMaps
     {
     
         [STAThread]
@@ -55,8 +55,10 @@ namespace LipidCreator
             
             
             /*
-            
-            parser.parse("DG(20:0/18:0)");
+            string lipidName = "Sphingosine";
+            HashSet<String> u = new HashSet<String>();
+            ArrayList p = new ArrayList();
+            parser.parse(lipidName);
             Lipid currLipid = null;
             if (parser.wordInGrammer)
             {
@@ -64,7 +66,8 @@ namespace LipidCreator
                 if (lipidMapsParserEventHandler.lipid != null)
                 {
                     currLipid = lipidMapsParserEventHandler.lipid;
-                    //currentLipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
+                    currLipid.computePrecursorData(lipidCreator.headgroups, u, p);
+                    Console.WriteLine(lipidName + " -> " + ((PrecursorData)p[p.Count - 1]).precursorName);
                 }
                 else
                 {
@@ -78,7 +81,6 @@ namespace LipidCreator
             Console.WriteLine("lipid is " + (currLipid != null ? "valid" : "unvalid"));
             
             Environment.Exit(-1);
-            
             */
             
             

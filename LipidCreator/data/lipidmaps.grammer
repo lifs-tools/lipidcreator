@@ -75,13 +75,17 @@ PIP_pos = PIP_pos "," PIP_pos | Number "'"
 
 
 ## sphingolipid rules
-SL = LSL | DSL
-LSL = HG_LSL headgroup_separator LCB
+SL = DSL | SphingoXine
 DSL = HG_DSL round_open_bracket LCB sorted_FA_separator FA round_close_bracket
 
-HG_LSL = "LCB" | "LCBP" | "LHexCer" | "LSM"
-HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
+SphingoXine = SphingoXine_pure | SphingoXine_var
+SphingoXine_pure = Sphingosine_name | Sphinganine_name
+SphingoXine_var = CType headgroup_separator Sphingosine_name | CType headgroup_separator Sphinganine_name
+Sphingosine_name = "Sphingosine" | "Sphingosine-1-phosphate"
+Sphinganine_name = "Sphinganine" | "Sphinganine-1-phosphate"
+CType = "C" Number
 
+HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
 
 
 
@@ -116,7 +120,7 @@ FA = FA_unmod | FA_unmod FA_mod
 FA_unmod = Ether FA_pure | FA_pure
 FA_mod = round_open_bracket modification round_close_bracket
 modification = modification "," modification | Number mod_text | mod_text
-mod_text = mod_text mod_text | square_open_bracket mod_text square_close_bracket | "OH" | "Ke" | "S" | "OOH" | "Me" | "R" | "Br" | "CHO" | "COOH" | "Cp"
+mod_text = mod_text mod_text | square_open_bracket mod_text square_close_bracket | "OH" | "Ke" | "S" | "OOH" | "Me" | "R" | "Br" | "CHO" | "COOH" | "Cp" | "(R)"
 Ether = "P-" | "O-"
 FA_pure = Carbon Carbon_DB_separator DB | Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl
 LCB = Hydroxyl_LCB Carbon Carbon_DB_separator DB

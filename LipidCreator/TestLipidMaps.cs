@@ -86,60 +86,52 @@ namespace LipidCreator
             
             
                         
-            string headgroupsFile = "data/lipidmaps.csv";
+            string headgroupsFile = "test/lipidmaps.csv";
             if (File.Exists(headgroupsFile))
             {
                 lineCounter = 1;
                 try
                 {
-                    int total = 0;
-                    int valid = 0;
                     HashSet<String> usedKeys = new HashSet<String>();
                     ArrayList precursorDataList = new ArrayList();
                     
-                    using (StreamWriter outputFile = new StreamWriter ("parsed.csv"))
+                    using (StreamReader sr = new StreamReader(headgroupsFile))
                     {
-                        using (StreamReader sr = new StreamReader(headgroupsFile))
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
                         {
-                            String line = sr.ReadLine(); // omit titles
-                            while((line = sr.ReadLine()) != null)
-                            {
-                                if (total > 0 && total % 1000 == 0) Console.WriteLine(total);
+                            if (lineCounter % 1000 == 0) Console.WriteLine(lineCounter);
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
                             
-                                lineCounter++;
-                                if (line.Length < 2) continue;
-                                if (line[0] == '#') continue;
-                                
-                                string[] tokens = LipidCreator.parseLine(line);
-                                
-                                parser.parse(tokens[0]);
-                                ++total;
-                                if (parser.wordInGrammer)
+                            string[] tokens = LipidCreator.parseLine(line);
+                            
+                            parser.parse(tokens[0]);
+                            string translatedName = "";
+                            if (parser.wordInGrammer)
+                            {
+                                parser.raiseEvents();
+                                if (lipidMapsParserEventHandler.lipid != null)
                                 {
-                                    parser.raiseEvents();
-                                    if (lipidMapsParserEventHandler.lipid != null)
-                                    {
-                                        ++valid;
-                                        Lipid currentLipid = lipidMapsParserEventHandler.lipid;
-                                        currentLipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
-                                        outputFile.WriteLine("\"" + tokens[0] + "\",\"" + ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName + "\"");
-                                        usedKeys.Clear();
-                                    }
-                                    else
-                                    {
-                                        outputFile.WriteLine("\"" + tokens[0] + "\",\"error during parsing\"");
-                                    }
+                                    Lipid currentLipid = lipidMapsParserEventHandler.lipid;
+                                    currentLipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
+                                    translatedName =  ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
+                                    usedKeys.Clear();
                                 }
-                                else
+                            }
+                            
+                            if (tokens.Length >= 2)
+                            {
+                                if (tokens[1] != translatedName)
                                 {
-                                    outputFile.WriteLine("\"" + tokens[0] + "\",\"not parsed\"");
+                                    Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', got '" + translatedName + "'!");
+                                    Environment.Exit(-1);
                                 }
                             }
                         }
-                        outputFile.Dispose ();
-                        outputFile.Close ();
                     }
-                    Console.WriteLine("Here, " + valid + " of " + total + " lipid names from lipidmaps were recognized.");
+                    Console.WriteLine("All identified 'lipid maps' lipid names successfully translated.");
                 }
                 catch (Exception e)
                 {

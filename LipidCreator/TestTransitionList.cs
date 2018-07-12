@@ -84,7 +84,7 @@ namespace LipidCreator
             
             try {
                 int lineCounter = 1;
-                string unitTestFile = "data/unit-test-transition-list.csv";
+                string unitTestFile = "test/unit-test-transition-list.csv";
                 
                 
                 if (File.Exists(unitTestFile))

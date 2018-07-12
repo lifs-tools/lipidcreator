@@ -113,6 +113,12 @@ namespace LipidCreator
         }
         
         
+        public string FaDbToString()
+        {
+            return Convert.ToString(length) + ":" + Convert.ToString(db);
+        }
+        
+        
         public void updateForHeavyLabeled(Dictionary<int, int> heavyAtomsCount)
         {
             foreach (KeyValuePair<int, int> row in heavyAtomsCount)

@@ -677,8 +677,6 @@ namespace LipidCreator
             }
             
             
-            
-            
             Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
             int i = 0;
             replicates.Clear();

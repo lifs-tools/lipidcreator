@@ -55,7 +55,7 @@ namespace LipidCreator
             
             
             /*
-            string lipidName = "Sphingosine";
+            string lipidName = "5-Oxo-ETE-d7";
             HashSet<String> u = new HashSet<String>();
             ArrayList p = new ArrayList();
             parser.parse(lipidName);

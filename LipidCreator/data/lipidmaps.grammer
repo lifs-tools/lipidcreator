@@ -23,23 +23,22 @@
 # SOFTWARE.
 ##################################################################################
 
-## This is a BNF grammer for lipid subspecies identifiers followed by
-## J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
+## This is a BNF grammer derived from 'lipid maps' lipid nomenclature. 
+## It is not describing all lipid names, but all necessary supported by LipidCreator.
+
 
 # first rule is always start rule
 lipid = lipid_mono | lipid_mono isotope
 lipid_mono = lipid_pure | lipid_pure isoform
 lipid_pure = Pure_FA | GL | PL | SL | Cholesterol | Mediator
 isoform = square_open_bracket "rac" square_close_bracket | square_open_bracket "iso" Number square_close_bracket
-isotope = " " round_open_bracket element Number round_close_bracket
+isotope = " " round_open_bracket element Number round_close_bracket | "-" round_open_bracket element Number round_close_bracket | "-" element Number
 element = "d"
-
 
 
 
 # pure fatty acid
 Pure_FA = FA
-
 
 
 
@@ -64,7 +63,7 @@ CL = HG_CL round_open_bracket "1'-" square_open_bracket FA sorted_FA_separator F
 
 HG_PL = HG_CL | HG_DPL PIP_position | HG_DPL | HG_LPL
 HG_CL = "CL"
-HG_DPL = "BMP" | "CDP-DG" | "DMPE" | "MMPE" | "PA" | "PC" | "PE" | "PEt" | "PG" | "PI" | "PIP" | "PIP2" | "PIP3" | "PS" | "PIM1" | "PIM2" | "PIM3" | "PIM4" | "PIM5" | "PIM6" | "Glc-DG" | "PGP" | "LBPA" | "PE-NMe2" | "AC2SGL" | "DAT" | "PE-NMe" | "PT" | "Glc-GP" | "NAPE"
+HG_DPL = "LBPA" | "CDP-DG" | "DMPE" | "MMPE" | "PA" | "PC" | "PE" | "PEt" | "PG" | "PI" | "PIP" | "PIP2" | "PIP3" | "PS" | "PIM1" | "PIM2" | "PIM3" | "PIM4" | "PIM5" | "PIM6" | "Glc-DG" | "PGP" | "PE-NMe2" | "AC2SGL" | "DAT" | "PE-NMe" | "PT" | "Glc-GP" | "NAPE"
 HG_LPL = "LysoPC" | "LysoPE" | "LPIM1" | "LPIM2" | "LPIM3" | "LPIM4" | "LPIM5" | "LPIM6" | "CPA" | "LPA"
 HG_4PL = "PAT16" | "PAT18"
 PIP_position = square_open_bracket PIP_pos square_close_bracket
@@ -104,12 +103,15 @@ HG_ChE = "Cholesteryl ester"
 
 ## mediator lipids
 Mediator = Mediator_Var | Mediator_Const
-Mediator_Var = Mediator_Number "-" Mediator_Var_Name | "(+/-)-" Mediator_Number "-" Mediator_Var_Name
-Mediator_Number = Mediator_Number Mediator_separator Mediator_Number | Number | Number Mediator_Pos | round_open_bracket Number round_close_bracket
+Mediator_Var = Mediator_Prefix Mediator_Name_separator Mediator_Var_Names | "(+/-)-" Mediator_Prefix Mediator_Name_separator Mediator_Var_Names
+Mediator_Prefix = Mediator_Numbers | Mediator_Prefix Mediator_Prefix
+Mediator_Numbers = Mediator_Numbers Mediator_separator Mediator_Numbers | Mediator_Number_pure | Mediator_Number_pure Mediator_Pos
+Mediator_Number_pure = Number | round_open_bracket Number round_close_bracket
 Mediator_Pos = "R" | "S"
-Mediator_Var_Name = "HHTrE" | "EpOME" | "HODE" | "HOTrE" | "DHET" | "EET" | "EpETE" | "HEPE" | "HETE" | "PGJ2" | "HDoHE" | "HpETE" | "OxoETE" | "DiHETE" | "LXA4"
-Mediator_Const = "AA" | "alpha-LA" | "DHA" | "EPA" | "Linoleic acid" | "LTB4" | "LTC4" | "LTD4" | "Maresin 1" | "Palmitic acid" | "PGB2" | "PGD2" | "PGE2" | "PGF2alpha" | "PGI2" | "Resolvin D1" | "Resolvin D2" | "Resolvin D3" | "Resolvin D5" | "tetranor-12-HETE" | "TXB1" | "TXB2" | "TXB3"
-
+Mediator_Var_Names = Mediator_Var_Name | Mediator_Oxo "-" Mediator_Var_Name
+Mediator_Var_Name = "HHTrE" | "EpOME" | "HODE" | "HOTrE" | "DHET" | "EET" | "EpETE" | "HEPE" | "HETE" | "PGJ2" | "HDoHE" | "HpETE" | "ETE" | "DiHETE" | "LXA4"
+Mediator_Const = "Arachidonic acid" | "Arachidonic Acid" | "alpha-LA" | "DHA" | "EPA" | "Linoleic acid" | "LTB4" | "LTC4" | "LTD4" | "Maresin 1" | "Palmitic acid" | "PGB2" | "PGD2" | "PGE2" | "PGF2alpha" | "PGI2" | "Resolvin D1" | "Resolvin D2" | "Resolvin D3" | "Resolvin D5" | "tetranor-12-HETE" | "TXB1" | "TXB2" | "TXB3"
+Mediator_Oxo = "Oxo" | "oxo"
 
 
 
@@ -120,7 +122,7 @@ FA = FA_unmod | FA_unmod FA_mod
 FA_unmod = Ether FA_pure | FA_pure
 FA_mod = round_open_bracket modification round_close_bracket
 modification = modification "," modification | Number mod_text | mod_text
-mod_text = mod_text mod_text | square_open_bracket mod_text square_close_bracket | "OH" | "Ke" | "S" | "OOH" | "Me" | "R" | "Br" | "CHO" | "COOH" | "Cp" | "(R)"
+mod_text = mod_text mod_text | square_open_bracket mod_text square_close_bracket | "OH" | "Ke" | "S" | "OOH" | "My" | "Me" | "R" | "Br" | "CHO" | "COOH" | "Cp" | "(R)"
 Ether = "P-" | "O-"
 FA_pure = Carbon Carbon_DB_separator DB | Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl
 LCB = Hydroxyl_LCB Carbon Carbon_DB_separator DB
@@ -144,6 +146,7 @@ Carbon_DB_separator = ":"
 DB_hydroxyl_separator = ";"
 DB_position_separator = ","
 Mediator_separator = ","
+Mediator_Name_separator = "-"
 round_open_bracket = "("
 round_close_bracket = ")"
 square_open_bracket = "["

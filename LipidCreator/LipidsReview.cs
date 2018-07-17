@@ -69,6 +69,7 @@ namespace LipidCreator
             buttonStoreSpectralLibrary.Enabled = creatorGUI.selectedInstrumentForCE.Length > 0 && (bool)creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE][1];
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
+            Console.WriteLine("haha");
         }
         
         

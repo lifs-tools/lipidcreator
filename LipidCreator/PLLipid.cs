@@ -493,8 +493,6 @@ namespace LipidCreator
                             }
                             
                             if (usedKeys.Contains(key)) continue;
-                            
-                            
                           
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {

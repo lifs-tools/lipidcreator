@@ -105,6 +105,19 @@ namespace LipidCreator
                 superfield[pos >> 12] |= (ulong)(1UL << ((pos >> 6) & 63));
             }
             
+            
+            public bool isSet(int pos)
+            {
+                return ((field[pos >> 6] >> (pos & 63)) & 1UL) == 1UL;
+            }
+            
+            
+            public bool isNotSet(int pos)
+            {
+                return ((field[pos >> 6] >> (pos & 63)) & 1UL) == 0UL;
+            }
+            
+            
             public System.Collections.Generic.IEnumerable<int> getBitPositions()
             {
                 int spre = 0;
@@ -307,6 +320,7 @@ namespace LipidCreator
             {
                 throw new Exception("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
             }
+            
             
             
             HashSet<char> keys = new HashSet<char>(TtoNT.Keys);
@@ -560,10 +574,6 @@ namespace LipidCreator
             Bitfield[] Ks = new Bitfield[n];
             
             
-            
-            
-            //Stopwatch stopWatch = new Stopwatch();
-            //stopWatch.Start();
             for (int i = 0; i < n; ++i)
             {
                 dpTable[i] = new Dictionary<long, DPNode>[n - i];
@@ -589,17 +599,18 @@ namespace LipidCreator
             for (int i = 1 ; i < n; ++i)
             {
                 
+                int im1 = i - 1;
                 for (int j = 0; j < n - i; ++j)
                 {
                     Dictionary<long, DPNode>[] D = dpTable[j];
                     Dictionary<long, DPNode> Di = D[i];
                     int jp1 = j + 1;
-                    int im1 = i - 1;
                     
                     foreach(int k in Ks[j].getBitPositions())
                     {   
                         if (k >= i) break;
-                        if (dpTable[jp1 + k][im1 - k].Count == 0) continue;
+                        //if (dpTable[jp1 + k][im1 - k].Count == 0) continue;
+                        if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
                         
                         foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
                         {
@@ -609,25 +620,20 @@ namespace LipidCreator
                                 if (!NTtoNT.ContainsKey(key)) continue;
                                 
                                 DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
+                                Ks[j].set(i);
                                 foreach (long ruleIndex in NTtoNT[key])
                                 {
                                     Di[ruleIndex] = content;
-                                    Ks[j].set(i);
                                 }
                             }
                         }
                     }
                 }
             }
-            //stopWatch.Stop();
-            //Console.WriteLine(stopWatch.Elapsed);
             
             
             
-            
-            
-            
-            if (dpTable[0][n - 1].ContainsKey(1)) // 0 => start rule
+            if (dpTable[0][n - 1].ContainsKey(1)) // 1 => start rule
             {
                 wordInGrammer = true;
                 parseTree = new TreeNode(1, NTtoRule.ContainsKey(1));

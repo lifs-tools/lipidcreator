@@ -84,7 +84,7 @@ namespace LipidCreator
             
             try {
                 int lineCounter = 1;
-                string unitTestFile = "data/unit-test-transition-list.csv";
+                string unitTestFile = "test/unit-test-transition-list.csv";
                 
                 
                 if (File.Exists(unitTestFile))
@@ -182,6 +182,7 @@ namespace LipidCreator
                     int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
+                        //Console.WriteLine(row[LipidCreator.PRODUCT_NAME] + " " + row[LipidCreator.PRODUCT_ADDUCT]);
                         if (row[LipidCreator.PRODUCT_NAME].Equals(fragmentName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
                         {
                             // precursor

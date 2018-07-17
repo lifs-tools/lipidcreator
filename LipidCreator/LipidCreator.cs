@@ -677,8 +677,6 @@ namespace LipidCreator
             }
             
             
-            
-            
             Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
             int i = 0;
             replicates.Clear();
@@ -705,6 +703,9 @@ namespace LipidCreator
         
         public void assembleLipids(string instrument = "")
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             List<string> headerList = new List<string>();
             headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
             if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
@@ -719,6 +720,9 @@ namespace LipidCreator
         
             createPrecursorList();
             createFragmentList(instrument);
+            stopWatch.Stop();
+            Console.WriteLine(stopWatch.Elapsed);
+            Console.WriteLine(transitionList.Rows.Count);
         }
         
         
@@ -1223,7 +1227,8 @@ namespace LipidCreator
         public void createBlib(String filename, string instrument)
         {
         
-            
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             
         
             if (File.Exists(filename)) File.Delete(filename);
@@ -1366,6 +1371,9 @@ namespace LipidCreator
             command.CommandText = "CREATE INDEX idxRefIdPeakAnnotations ON RefSpectraPeakAnnotations (RefSpectraID)";
             command.ExecuteNonQuery();
             
+            stopWatch.Stop();
+            Console.WriteLine(stopWatch.Elapsed);
+            Console.WriteLine(precursorDataList.Count);
             
         }
 

@@ -101,7 +101,7 @@ Mediator,TXB1,20,36,6,0,0,0,0,images/Precursors/TXB1.png,No,No,No,Yes,No,No,No,-
 Mediator,TXB2,20,34,6,0,0,0,0,images/Precursors/TXB2.png,No,No,No,Yes,No,No,No,-H,8,
 Mediator,TXB2/d4,20,30,6,0,0,0,4,images/Precursors/IS/TXB2_d4.png,No,No,No,Yes,No,No,No,-H,8,heavy
 Mediator,TXB3,20,32,6,0,0,0,0,images/Precursors/TXB3.png,No,No,No,Yes,No,No,No,-H,8,
-PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
+PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,No,Yes,-H,6,
 PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,Yes,No,No,-H,6,
 PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-H,0,
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
@@ -123,8 +123,8 @@ PL,PC O-a,8,18,6,1,1,0,0,images/Precursors/ePC_neg_pre.png,Yes,No,Yes,No,No,Yes,
 PL,PC O-p,8,18,6,1,1,0,0,images/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,ether
 PL,PE,5,12,6,1,1,0,0,images/Precursors/PE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,
 PL,PE O-a,5,12,6,1,1,0,0,images/Precursors/ePE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,ether
-PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,ether
-PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,6,
+PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,No,Yes,+H,6,ether
+PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,No,Yes,+H,6,
 PL,PG,6,13,8,0,1,0,0,images/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,6,
 PL,PI,9,17,11,0,1,0,0,images/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,6,
 PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,+H,6,

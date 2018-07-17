@@ -39,7 +39,7 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5};
+    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5, Unsupported = 99};
     
     
     [Serializable]
@@ -178,9 +178,7 @@ namespace LipidCreator
         }
         
         
-        public virtual void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
-        {
-        }
+        public abstract void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList);
         
         
         
@@ -296,19 +294,19 @@ namespace LipidCreator
                 }
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
-                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.FaDbToString());
                 }
                 if (fragName.IndexOf("[yy:y]") > -1)
                 {
-                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.FaDbToString());
                 }
                 if (fragName.IndexOf("[zz:z]") > -1)
                 {
-                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.FaDbToString());
                 }
                 if (fragName.IndexOf("[uu:u]") > -1)
                 {
-                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.FaDbToString());
                 }
                 if (fragName.IndexOf("[xx:x;x]") > -1)
                 {
@@ -778,6 +776,52 @@ namespace LipidCreator
                     Console.WriteLine("Error: " + node.Name.ToString());
                     throw new Exception("Error: " + node.Name.ToString());
             }
+        }
+    }
+    
+    
+    
+    
+    public class UnsupportedLipid : Lipid
+    {
+        public UnsupportedLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Unsupported)
+        {
+        
+        }
+        
+        
+        
+        public override void Update(object sender, EventArgs e)
+        {
+            Updating((int)LipidCategory.Unsupported);
+        }
+        
+        
+        
+        public override ArrayList getFattyAcidGroupList()
+        {
+            return new ArrayList();
+        }
+        
+        
+        
+        public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
+        {
+            PrecursorData precursorData = new PrecursorData();
+            precursorData.lipidCategory = LipidCategory.Unsupported;
+            precursorData.moleculeListName = "Unsupported lipid";
+            precursorData.fullMoleculeListName = "Unsupported lipid";
+            precursorData.lipidClass = "Unsupported lipid";
+            precursorData.precursorName = "Unsupported lipid";
+            precursorData.precursorIonFormula = "Unsupported lipid";
+            precursorData.precursorAdduct = "Unsupported lipid";
+            precursorData.precursorAdductFormula = "Unsupported lipid";
+            precursorData.precursorM_Z = 0;
+            precursorData.precursorCharge = 0;
+            precursorData.atomsCount = null;
+            precursorData.addPrecursor = true;
+            precursorData.fragmentNames = new HashSet<string>();
+            precursorDataList.Add(precursorData);
         }
     }
 }

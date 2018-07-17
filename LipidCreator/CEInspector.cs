@@ -243,6 +243,7 @@ namespace LipidCreator
         {
             selectedInstrument = (string)instrumentCombobox.Items[instrumentCombobox.SelectedIndex];
             classCombobox.Items.Clear();
+            cartesean.updateXBoundaries((double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][1], (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2]);
             foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
             {
                 classCombobox.Items.Add(lipidClass);

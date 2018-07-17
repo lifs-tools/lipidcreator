@@ -72,6 +72,14 @@ namespace LipidCreator
         }
         
         
+        public void updateXBoundaries(double minX, double maxX)
+        {
+            minXVal = minX;
+            maxXVal = maxX;
+            CEval = (maxXVal + minXVal) / 2.0;
+        }
+        
+        
         
         
         public Point valueToPx(double valX, double valY)
@@ -210,7 +218,7 @@ namespace LipidCreator
                 g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
                 
                 
-                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width;
+                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width + 2;
                 RectangleF instructionRect = new RectangleF(marginLeft + i - (stringSize >> 1), Height - marginBottom + 5, stringSize, 20);
                 g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
             }
@@ -224,7 +232,7 @@ namespace LipidCreator
                 g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
                 
                 SizeF stringSize = g.MeasureString(Convert.ToString(jj), labelFont, 30);
-                int stringSizeW = (int)stringSize.Width;
+                int stringSizeW = (int)stringSize.Width + 2;
                 int stringSizeH = (int)stringSize.Height;
                 RectangleF instructionRect = new RectangleF(marginLeft - stringSizeW - (LABEL_EXTENSION << 1), Height - marginBottom - i - (stringSizeH >> 1), stringSizeW, 16);
                 g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);

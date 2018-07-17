@@ -3125,7 +3125,7 @@ namespace LipidCreator
                     Console.WriteLine("      instruments are:");
                     foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
                     {
-                        if ((bool)kvp.Value[1]) 
+                        if ((double)kvp.Value[1] > 0 && (double)kvp.Value[2] > 0 && (double)kvp.Value[1] < (double)kvp.Value[2]) 
                         {
                             string fullInstrumentName = (string)(kvp.Value[0]);
                             Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName);

@@ -55,6 +55,7 @@ namespace LipidCreator
             replicates = creatorGUI.lipidCreator.replicates;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             
+            
             InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
@@ -66,9 +67,15 @@ namespace LipidCreator
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
             
-            buttonStoreSpectralLibrary.Enabled = creatorGUI.selectedInstrumentForCE.Length > 0 && (bool)creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE][1];
+            if (creatorGUI.selectedInstrumentForCE.Length > 0)
+            {
+                ArrayList instrumentData = creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE];
+                buttonStoreSpectralLibrary.Enabled = (double)instrumentData[1] > 0 && (double)instrumentData[2] > 0 && (double)instrumentData[1] < (double)instrumentData[2];
+            }
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
+            
+            
         }
         
         

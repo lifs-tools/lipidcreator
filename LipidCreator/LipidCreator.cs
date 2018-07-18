@@ -1349,11 +1349,21 @@ namespace LipidCreator
                 command.ExecuteNonQuery();
             }
             
+            
+            sql = "BEGIN TRANSACTION;";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+            
             // Write the annotated spectra
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
                 Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, instrument);
             }
+            
+            
+            sql = "COMMIT;";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
             
             
             // update numspecs

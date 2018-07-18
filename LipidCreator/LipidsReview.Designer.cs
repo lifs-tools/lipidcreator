@@ -75,9 +75,9 @@ namespace LipidCreator
             this.dataGridViewTransitions.AllowUserToAddRows = false;
             this.dataGridViewTransitions.AllowUserToDeleteRows = false;
             //this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridViewTransitions.AllowUserToResizeRows = false;
             this.dataGridViewTransitions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewTransitions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewTransitions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.None;
+            this.dataGridViewTransitions.AllowUserToResizeRows = false;
             this.dataGridViewTransitions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTransitions.Location = new System.Drawing.Point(12, 12);
             this.dataGridViewTransitions.Name = "dataGridView1";
@@ -87,6 +87,8 @@ namespace LipidCreator
             this.dataGridViewTransitions.Size = new System.Drawing.Size(1055, 409);
             this.dataGridViewTransitions.TabIndex = 0;
             this.dataGridViewTransitions.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(gridviewDataBindingComplete);
+            this.dataGridViewTransitions.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing; 
+            this.dataGridViewTransitions.RowHeadersVisible = false;
             // 
             // button1
             // 

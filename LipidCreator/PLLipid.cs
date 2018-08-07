@@ -198,13 +198,13 @@ namespace LipidCreator
                                         key += fa.suffix;
                                     }
                                 }
-                                if (usedKeys.Contains(key)) continue;
                                 
                                 foreach (KeyValuePair<string, bool> adduct in adducts)
                                 {
                                     if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                    if (usedKeys.Contains(key + adduct.Key)) continue;
                                     
-                                    usedKeys.Add(key);
+                                    usedKeys.Add(key + adduct.Key);
                                     
                                     // adding element counts for all building blocks
                                     Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
@@ -346,13 +346,13 @@ namespace LipidCreator
                             key += fa1.suffix;
                         }
                         
-                        if (usedKeys.Contains(key)) continue;
                         
                         foreach (KeyValuePair<string, bool> adduct in adducts)
                         {
                             if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                            if (usedKeys.Contains(key + adduct.Key)) continue;
                             
-                            usedKeys.Add(key);
+                            usedKeys.Add(key + adduct.Key);
                             
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -492,13 +492,13 @@ namespace LipidCreator
                                 }
                             }
                             
-                            if (usedKeys.Contains(key)) continue;
                           
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                if (usedKeys.Contains(key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key);
+                                usedKeys.Add(key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);

@@ -143,13 +143,13 @@ namespace LipidCreator
                             if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                             
 
-                            if (usedKeys.Contains(key)) continue;
                             
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                if (usedKeys.Contains(key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key);
+                                usedKeys.Add(key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
@@ -237,13 +237,13 @@ namespace LipidCreator
                     {
                         String key = headgroup + " ";
                         key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
-                        if (usedKeys.Contains(key)) continue;
                         
                         foreach (KeyValuePair<string, bool> adduct in adducts)
                         {
                             if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                            if (usedKeys.Contains(key + adduct.Key)) continue;
                             
-                            usedKeys.Add(key);
+                            usedKeys.Add(key + adduct.Key);
                             
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);

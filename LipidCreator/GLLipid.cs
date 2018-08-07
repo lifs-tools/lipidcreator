@@ -181,14 +181,14 @@ namespace LipidCreator
                                 }
                             }
                             
-                            if (usedKeys.Contains(key)) continue;
                             
                             
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                if (usedKeys.Contains(key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key);
+                                usedKeys.Add(key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -319,13 +319,13 @@ namespace LipidCreator
                                 }
                             }
                             
-                            if (usedKeys.Contains(key)) continue;
                             
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                if (usedKeys.Contains(key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key);
+                                usedKeys.Add(key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);

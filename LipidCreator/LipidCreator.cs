@@ -707,8 +707,6 @@ namespace LipidCreator
         
         public void assembleLipids(string instrument = "")
         {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
 
             List<string> headerList = new List<string>();
             headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
@@ -724,9 +722,6 @@ namespace LipidCreator
         
             createPrecursorList();
             createFragmentList(instrument);
-            stopWatch.Stop();
-            Console.WriteLine(stopWatch.Elapsed);
-            Console.WriteLine(transitionList.Rows.Count);
         }
         
         
@@ -1231,10 +1226,6 @@ namespace LipidCreator
         public void createBlib(String filename, string instrument)
         {
         
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            
-        
             if (File.Exists(filename)) File.Delete(filename);
         
             SQLiteConnection mDBConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");
@@ -1385,9 +1376,6 @@ namespace LipidCreator
             command.CommandText = "CREATE INDEX idxRefIdPeakAnnotations ON RefSpectraPeakAnnotations (RefSpectraID)";
             command.ExecuteNonQuery();
             
-            stopWatch.Stop();
-            Console.WriteLine(stopWatch.Elapsed);
-            Console.WriteLine(precursorDataList.Count);
             
         }
 

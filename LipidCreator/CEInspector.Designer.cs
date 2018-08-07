@@ -218,7 +218,7 @@ namespace LipidCreator
                 g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
                 
                 
-                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width + 2;
+                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width + 4;
                 RectangleF instructionRect = new RectangleF(marginLeft + i - (stringSize >> 1), Height - marginBottom + 5, stringSize, 20);
                 g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
             }
@@ -231,11 +231,11 @@ namespace LipidCreator
             {
                 g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
                 
-                SizeF stringSize = g.MeasureString(Convert.ToString(jj), labelFont, 30);
-                int stringSizeW = (int)stringSize.Width + 2;
+                SizeF stringSize = g.MeasureString(Convert.ToString(jj)+ "% ", labelFont, 30);
+                int stringSizeW = (int)stringSize.Width;
                 int stringSizeH = (int)stringSize.Height;
                 RectangleF instructionRect = new RectangleF(marginLeft - stringSizeW - (LABEL_EXTENSION << 1), Height - marginBottom - i - (stringSizeH >> 1), stringSizeW, 16);
-                g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
+                g.DrawString(Convert.ToString(jj)+ "%", labelFont, drawBrush, instructionRect);
             }
             
             // draw dashed collision energy line
@@ -336,18 +336,18 @@ namespace LipidCreator
             
             
             instrumentCombobox.Location = new Point(10, 20);
-            instrumentCombobox.Width = 200;
+            instrumentCombobox.Width = 400;
             instrumentCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             instrumentCombobox.SelectedIndexChanged += new EventHandler(instrumentComboboxChanged);
             
             
-            classCombobox.Location = new Point(210, 20);
+            classCombobox.Location = new Point(410, 20);
             classCombobox.Width = 200;
             classCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             classCombobox.SelectedIndexChanged += new EventHandler(classComboboxChanged);
             
-            adductCombobox.Location = new Point(420, 20);
-            adductCombobox.Width = 200;
+            adductCombobox.Location = new Point(620, 20);
+            adductCombobox.Width = 192;
             adductCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             adductCombobox.SelectedIndexChanged += new EventHandler(adductComboboxChanged);
             
@@ -357,16 +357,16 @@ namespace LipidCreator
             
             labelClass.Text = "Lipid classes:";
             labelClass.Width = 140;
-            labelClass.Location = new Point(210, 4);
+            labelClass.Location = new Point(410, 4);
             
             labelAdduct.Text = "Adducts:";
             labelAdduct.Width = 140;
-            labelAdduct.Location = new Point(420, 4);
+            labelAdduct.Location = new Point(620, 4);
             
             labelFragment.Text = "Fragments:";
             labelFragment.Width = 140;
             labelFragment.Height = 16;
-            labelFragment.Location = new Point(720, 34);
+            labelFragment.Location = new Point(820, 4);
             
             labelCurrentCE.Text = "Current collision energy:";
             labelCurrentCE.Width = 140;
@@ -381,8 +381,8 @@ namespace LipidCreator
             
             
             
-            fragmentsGridView.Location = new Point(820, 50);
-            fragmentsGridView.Size = new Size(216, 390);
+            fragmentsGridView.Location = new Point(820, 20);
+            fragmentsGridView.Size = new Size(216, 410);
             fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;

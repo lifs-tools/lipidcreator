@@ -25,6 +25,7 @@ SOFTWARE.
 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -50,6 +51,7 @@ namespace LipidCreator
         public DataTable fragmentsList;
         public bool initialCall = true;
         public HashSet<string> selectedFragments;
+        public ArrayList indexToInstrument;
         
         public CEInspector(CreatorGUI _creatorGUI, string _currentInstrument)
         {
@@ -58,6 +60,7 @@ namespace LipidCreator
             collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
+            indexToInstrument = new ArrayList();
             
             fragmentsList = new DataTable("fragmentsList");
             fragmentsList.Columns.Add(new DataColumn("View"));
@@ -97,7 +100,8 @@ namespace LipidCreator
             int ii = 0;
             foreach (string instrumentName in collisionEnergies.Keys)
             {
-                instrumentCombobox.Items.Add(instrumentName);
+                indexToInstrument.Add(instrumentName);
+                instrumentCombobox.Items.Add(creatorGUI.lipidCreator.msInstruments[instrumentName][0]);
                 if (instrumentName == selectedInstrument) instrumentCombobox.SelectedIndex = ii;
                 ++ii;
             }
@@ -137,6 +141,8 @@ namespace LipidCreator
             fragmentApex.Clear();
             fragmentApex["productProfile"] = 0;
             
+            double highestIntensity = 0;
+            
             
             // compute x values (a.k.a. collision energies)
             for (int i = 0; i <= cartesean.innerWidthPx; ++i)
@@ -146,16 +152,22 @@ namespace LipidCreator
             
             
             // precompute y values for all fragment model curves
-            int k = 0;
             foreach(DataRow row in fragmentsList.Rows)
             {
                 string fragmentName = (string)row["Fragment name"];
                            
                 yValCoords[fragmentName] = new double[cartesean.innerWidthPx + 1];
                 fragmentApex[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getApex(selectedInstrument, selectedClass, selectedAdduct, fragmentName);
+                double apexIntensity = creatorGUI.lipidCreator.collisionEnergyHandler.getIntensity(selectedInstrument, selectedClass, selectedAdduct, fragmentName, fragmentApex[fragmentName]);
+                if (highestIntensity < apexIntensity) highestIntensity = apexIntensity;
+            }
+            
+            double scale = 100.0 / highestIntensity;
                 
-                yValCoords[fragmentName] = CollisionEnergy.computeLogNormalCurve(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName], xValCoords, 4000);
-                ++k;
+            foreach(DataRow row in fragmentsList.Rows)
+            {
+                string fragmentName = (string)row["Fragment name"];
+                yValCoords[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getIntensityCurve(selectedInstrument, selectedClass, selectedAdduct, fragmentName, xValCoords, scale);
             }
             cartesean.Refresh();
             fragmentSelectionChanged();
@@ -239,9 +251,11 @@ namespace LipidCreator
         }
         
         
+        
+        
         public void instrumentComboboxChanged(Object sender, EventArgs e)
         {
-            selectedInstrument = (string)instrumentCombobox.Items[instrumentCombobox.SelectedIndex];
+            selectedInstrument = (string)indexToInstrument[instrumentCombobox.SelectedIndex];
             classCombobox.Items.Clear();
             cartesean.updateXBoundaries((double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][1], (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2]);
             foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)

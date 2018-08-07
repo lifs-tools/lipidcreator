@@ -216,6 +216,65 @@ namespace LipidCreator
         }
         
         
+        public double[] getIntensityCurve(string instrument, string lipidClass, string adduct, string fragment, double[] xValues, double scale = 1.0)
+        {
+            Func<Dictionary<string, string>, double, double> intensityFunction = null;
+            Dictionary<string, string> parameters = null;
+            double[] curve = new double[xValues.Length];
+            if (instrumentParameters.ContainsKey(instrument))
+            {
+            
+                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
+                if (parLevel1.ContainsKey(lipidClass))
+                {
+                
+                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
+                    if (parLevel2.ContainsKey(adduct))
+                    {
+                        
+                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        if (parLevel3.ContainsKey(fragment))
+                        {
+                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
+                            if (parLevel4.ContainsKey("model"))
+                            {
+                                string model = parLevel4["model"];
+                                if (intensityFunctions.ContainsKey(model))
+                                {
+                                    intensityFunction = intensityFunctions[model];
+                                    parameters = parLevel4;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+            
+            if (parameters != null)
+            {
+                int i = 0;
+                while (i < curve.Length)
+                {
+                    curve[i] = scale * intensityFunction(parameters, xValues[i]);
+                    i++;
+                }
+            }
+            else
+            {
+            int i = 0;
+                while (i < curve.Length)
+                {
+                    curve[i] = MS2Fragment.DEFAULT_INTENSITY;
+                    i++;
+                }
+            }
+            
+            return curve;
+        }
+        
+        
         
         
         
@@ -272,7 +331,7 @@ namespace LipidCreator
         
         
         
-        
+        /*
         public static double[] computeLogNormalCurve(Dictionary<string, string> parameters, double[] xValues, double scale = 1)
         {
             double[] curve = new double[xValues.Length];
@@ -286,7 +345,7 @@ namespace LipidCreator
             
             return curve;
         }
-        
+        */
         
         // assuming both distribution are stored in arrays of same length with same corresponding x values
         public static double[] productTwoDistributions(double[] first, double[] second)

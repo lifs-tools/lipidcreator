@@ -143,7 +143,7 @@ namespace LipidCreator
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            float[] dashValues = { 5, 10 };
+            float[] dashValues = { 15, 10 };
             if (smooth) g.SmoothingMode = SmoothingMode.AntiAlias;
             
             
@@ -155,7 +155,7 @@ namespace LipidCreator
             
             
             // draw grid in the background
-            Pen grayPen = new Pen(ColorTranslator.FromHtml("#dddddd"));
+            Pen grayPen = new Pen(ColorTranslator.FromHtml("#eeeeee"));
             grayPen.DashPattern = dashValues;
             for (int i = 0; i < Width; i += innerWidthPx / 5)
             {
@@ -172,7 +172,7 @@ namespace LipidCreator
             // drawing the product profile
             double lastX = 0;
             double lastY = 0;
-            Pen profilePen = new Pen(ColorTranslator.FromHtml("#aaaaaa"));
+            Pen profilePen = new Pen(ColorTranslator.FromHtml("#000000"), ("productProfile" == highlightName ? 4 : 2));
             for (int ii = 0; ii < ceInspector.yValCoords["productProfile"].Length; ++ii)
             {
                 double valX = ceInspector.xValCoords[ii];
@@ -241,7 +241,7 @@ namespace LipidCreator
             // draw dashed collision energy line
             if (CEval > 0)
             {
-                Pen bPen = new Pen(Color.Black, 1);
+                Pen bPen = new Pen(Color.Black, 2);
                 bPen.DashPattern = dashValues;
                 int ceX = valueToPx(CEval, 0).X;
                 g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
@@ -293,7 +293,10 @@ namespace LipidCreator
             this.labelAdduct = new Label();
             this.labelFragment = new Label();
             this.labelCurrentCE = new Label();
-            this.textBoxCurrentCE = new TextBox();
+            this.labelSelectAll = new Label();
+            this.labelDeselectAll = new Label();
+            this.labelSlash = new Label();
+            this.numericalUpDownCurrentCE = new NumericUpDown();
             this.instrumentCombobox = new ComboBox();
             this.classCombobox = new ComboBox();
             this.adductCombobox = new ComboBox();
@@ -374,10 +377,10 @@ namespace LipidCreator
             labelCurrentCE.Location = new Point(820, 454);
             
             
-            textBoxCurrentCE.Location = new Point(820, 470);
-            textBoxCurrentCE.Width = 140;
-            textBoxCurrentCE.Leave += new EventHandler(textBoxCurrentCE_ValueChanged);
-            textBoxCurrentCE.KeyDown += new KeyEventHandler(textBoxCurrentCE_Keydown);
+            numericalUpDownCurrentCE.Location = new Point(820, 470);
+            numericalUpDownCurrentCE.Width = 140;
+            numericalUpDownCurrentCE.ValueChanged += new EventHandler(textBoxCurrentCE_ValueChanged);
+            //numericalUpDownCurrentCE.KeyDown += new KeyEventHandler(textBoxCurrentCE_Keydown);
             
             
             
@@ -402,6 +405,36 @@ namespace LipidCreator
             
             
             
+            
+            // 
+            // label8 - positive fragments
+            // 170, 316
+            this.labelSelectAll.AutoSize = true;
+            this.labelSelectAll.Location = new System.Drawing.Point(820, 432);
+            this.labelSelectAll.Name = "label8";
+            this.labelSelectAll.TabIndex = 6;
+            this.labelSelectAll.Text = "select all";
+            this.labelSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelSelectAll.Click += new System.EventHandler(checkedListBoxSelectAll);
+            // 
+            // label9 - positive fragments
+            // 
+            this.labelDeselectAll.AutoSize = true;
+            this.labelDeselectAll.Location = new System.Drawing.Point(882, 432);
+            this.labelDeselectAll.Name = "label9";
+            this.labelDeselectAll.TabIndex = 6;
+            this.labelDeselectAll.Text = "deselect all";
+            this.labelDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelDeselectAll.Click += new System.EventHandler(checkedListBoxDeselectAll);
+            // 
+            // label11
+            // 
+            this.labelSlash.AutoSize = true;
+            this.labelSlash.Location = new System.Drawing.Point(875, 432);
+            this.labelSlash.Name = "label11";
+            this.labelSlash.Text = "/";
+            
+            
             // 
             // CEInspector
             // 
@@ -417,8 +450,11 @@ namespace LipidCreator
             this.Controls.Add(this.labelAdduct);
             this.Controls.Add(this.labelFragment);
             this.Controls.Add(this.labelCurrentCE);
-            this.Controls.Add(this.textBoxCurrentCE);
+            this.Controls.Add(this.numericalUpDownCurrentCE);
             this.Controls.Add(this.fragmentsGridView);
+            this.Controls.Add(this.labelSelectAll);
+            this.Controls.Add(this.labelDeselectAll);
+            this.Controls.Add(this.labelSlash);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
@@ -443,7 +479,10 @@ namespace LipidCreator
         public Label labelAdduct;
         public Label labelFragment;
         public Label labelCurrentCE;
-        public TextBox textBoxCurrentCE;
+        public Label labelSelectAll;
+        public Label labelDeselectAll;
+        public Label labelSlash;
+        public NumericUpDown numericalUpDownCurrentCE;
         public DataGridView fragmentsGridView;
         public System.Timers.Timer timerSmooth;
     }

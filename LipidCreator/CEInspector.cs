@@ -40,18 +40,18 @@ namespace LipidCreator
 {
     public partial class CEInspector : Form
     {
-        public CreatorGUI creatorGUI;
-        public double[] xValCoords;
-        public Dictionary<string, double[]> yValCoords;
-        public Dictionary<string, double> fragmentApex;
-        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies;  // for instrument / class / adduct
-        public string selectedInstrument;
-        public string selectedClass;
-        public string selectedAdduct;
-        public DataTable fragmentsList;
+        public CreatorGUI creatorGUI = null;
+        public double[] xValCoords = null;
+        public Dictionary<string, double[]> yValCoords = null;
+        public Dictionary<string, double> fragmentApex = null;
+        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies = null;  // for instrument / class / adduct
+        public string selectedInstrument = "";
+        public string selectedClass = "";
+        public string selectedAdduct = "";
+        public DataTable fragmentsList = null;
         public bool initialCall = true;
-        public HashSet<string> selectedFragments;
-        public ArrayList indexToInstrument;
+        public HashSet<string> selectedFragments = null;
+        public ArrayList indexToInstrument = null;
         
         public CEInspector(CreatorGUI _creatorGUI, string _currentInstrument)
         {
@@ -71,7 +71,7 @@ namespace LipidCreator
             
             
             InitializeComponent();
-            textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
+            numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
             
             // foreach instrument
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
@@ -226,10 +226,12 @@ namespace LipidCreator
         
         public void checkValidTextBoxtCurrentCE()
         {
+            if (selectedInstrument == "" || selectedClass == "" || selectedAdduct == "") return;
+            
             double oldCE = cartesean.CEval;
             try
             {
-                cartesean.CEval = Convert.ToDouble(textBoxCurrentCE.Text, CultureInfo.InvariantCulture);
+                cartesean.CEval = (double)numericalUpDownCurrentCE.Value;
             }
             catch (Exception ee)
             {
@@ -238,7 +240,7 @@ namespace LipidCreator
             if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
             {
                 cartesean.CEval = oldCE;
-                textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
+                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
             }
             collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
             cartesean.Refresh();
@@ -257,7 +259,12 @@ namespace LipidCreator
         {
             selectedInstrument = (string)indexToInstrument[instrumentCombobox.SelectedIndex];
             classCombobox.Items.Clear();
-            cartesean.updateXBoundaries((double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][1], (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2]);
+            double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][1];
+            double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2];
+            numericalUpDownCurrentCE.Minimum = (decimal)minVal;
+            numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
+            
+            cartesean.updateXBoundaries(minVal, maxVal);
             foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
             {
                 classCombobox.Items.Add(lipidClass);
@@ -300,7 +307,7 @@ namespace LipidCreator
             
             
             cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
-            textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
+            numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
          
             fragmentsGridView.Update();
             fragmentsGridView.Refresh();
@@ -393,8 +400,12 @@ namespace LipidCreator
                     }
                 }
                 if (cartesean.highlightName != highlightName) cartesean.highlightName = highlightName;
+                
+                if (vals.X < cartesean.minXVal) vals.X = (float)cartesean.minXVal;
+                if (vals.X > cartesean.maxXVal) vals.X = (float)cartesean.maxXVal;
+                
                 cartesean.CEval = vals.X;
-                textBoxCurrentCE.Text = String.Format(new CultureInfo("en-US"), "{0:0.00}",cartesean.CEval);
+                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 cartesean.Refresh();
             }
@@ -439,10 +450,16 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         private void fragmentsGridView_CellContentClick(object sender, EventArgs e)
         {
             fragmentsGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
+        
+        
+        
         
         
         
@@ -451,20 +468,31 @@ namespace LipidCreator
             fragmentSelectionChanged();
         }
         
+        
+        
+        
         public double sq(double x)
         {
             return x * x;
         }
+        
+        
+        
         
         public double muToE(double mu, double sigma)
         {
             return Math.Exp(mu + sq(sigma) / 2.0);
         }
         
+        
+        
+        
         public double sigmaToS(double mu, double sigma)
         {
             return Math.Exp(mu + sq(sigma) / 2.0) * Math.Sqrt(Math.Exp(sq(sigma)) - 1.0);
         }
+        
+        
         
         
         private void fragmentsGridView_MouseMove(object sender, MouseEventArgs e)
@@ -481,6 +509,30 @@ namespace LipidCreator
                 cartesean.highlightName = highlightName;
                 cartesean.Refresh();
             }
+        }
+        
+        
+        
+        
+        void checkedListBoxSelectAll(object sender, EventArgs e)
+        {
+            foreach(DataRow row in fragmentsList.Rows)
+            {
+                row["View"] = true;
+            }
+            fragmentSelectionChanged();
+        }
+        
+        
+        
+        
+        void checkedListBoxDeselectAll(object sender, EventArgs e)
+        {
+            foreach(DataRow row in fragmentsList.Rows)
+            {
+                row["View"] = false;
+            }
+            fragmentSelectionChanged();
         }
         
     }

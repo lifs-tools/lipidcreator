@@ -169,6 +169,7 @@ namespace LipidCreator
             
             
             
+            
             // drawing the product profile
             double lastX = 0;
             double lastY = 0;
@@ -211,11 +212,12 @@ namespace LipidCreator
             g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
             
+            
+            
             // labels at x-axis
             for (double i = minXVal; i <= maxXVal; i += 10)
             {
                 int x = valueToPx(i, 0).X;
-                Console.WriteLine("ax: " + i + " " + x);
             
                 g.DrawLine(blackPen, new Point(x, Height - marginBottom - LABEL_EXTENSION), new Point(x, Height - marginBottom + LABEL_EXTENSION));
                 
@@ -253,13 +255,11 @@ namespace LipidCreator
                 Pen bPen = new Pen(Color.Black, 2);
                 bPen.DashPattern = dashValues;
                 int ceX = valueToPx(CEval, 0).X;
-                Console.WriteLine("ce: " + CEval + " " + ceX);
                 g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
             }
             
             // draw border
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
-            
             
             base.OnPaint(e);
         }
@@ -381,14 +381,14 @@ namespace LipidCreator
             labelFragment.Height = 16;
             labelFragment.Location = new Point(820, 4);
             
-            labelCurrentCE.Text = "Current collision energy:";
-            labelCurrentCE.Width = 140;
+            labelCurrentCE.Text = "Collision energy:";
+            labelCurrentCE.Width = 100;
             labelCurrentCE.Height = 16;
-            labelCurrentCE.Location = new Point(820, 454);
+            labelCurrentCE.Location = new Point(820, 456);
             
             
-            numericalUpDownCurrentCE.Location = new Point(820, 470);
-            numericalUpDownCurrentCE.Width = 140;
+            numericalUpDownCurrentCE.Location = new Point(924, 454);
+            numericalUpDownCurrentCE.Width = 90;
             numericalUpDownCurrentCE.ValueChanged += new EventHandler(textBoxCurrentCE_ValueChanged);
             numericalUpDownCurrentCE.DecimalPlaces = 2;
             

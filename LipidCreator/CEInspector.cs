@@ -306,12 +306,13 @@ namespace LipidCreator
             }
             
             
-            cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
-            numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
          
             fragmentsGridView.Update();
             fragmentsGridView.Refresh();
             computeCurves();
+            
+            cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
+            numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
         }
         
         
@@ -432,6 +433,16 @@ namespace LipidCreator
                         }
                     }
                 }
+                
+                if (highlightName.Length == 0)
+                {
+                    string fragmentName = "productProfile";
+                    if (vals.Y - offset <= yValCoords[fragmentName][pos] && yValCoords[fragmentName][pos] <= vals.Y + offset)
+                    {
+                        highlightName = fragmentName;
+                    }
+                }
+                
                 if (cartesean.highlightName != highlightName)
                 {
                     cartesean.highlightName = highlightName;

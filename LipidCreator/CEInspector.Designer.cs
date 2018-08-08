@@ -212,30 +212,39 @@ namespace LipidCreator
             g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
             
             // labels at x-axis
-            double jj = minXVal;
-            for (int i = 0; i < Width; i += innerWidthPx / 5, jj += (maxXVal - minXVal) / 5.0)
+            for (double i = minXVal; i <= maxXVal; i += 10)
             {
-                g.DrawLine(blackPen, new Point(marginLeft + i, Height - marginBottom - LABEL_EXTENSION), new Point(marginLeft + i, Height - marginBottom + LABEL_EXTENSION));
+                int x = valueToPx(i, 0).X;
+                Console.WriteLine("ax: " + i + " " + x);
+            
+                g.DrawLine(blackPen, new Point(x, Height - marginBottom - LABEL_EXTENSION), new Point(x, Height - marginBottom + LABEL_EXTENSION));
                 
                 
-                int stringSize = (int)g.MeasureString(Convert.ToString(jj), labelFont, 20).Width + 4;
-                RectangleF instructionRect = new RectangleF(marginLeft + i - (stringSize >> 1), Height - marginBottom + 5, stringSize, 20);
-                g.DrawString(Convert.ToString(jj), labelFont, drawBrush, instructionRect);
+                int stringSize = (int)g.MeasureString(Convert.ToString(i), labelFont, 20).Width;
+                
+                PointF drawPoint = new PointF(x, Height - marginBottom + LABEL_EXTENSION);
+                StringFormat format1 = new StringFormat();
+                format1.Alignment = StringAlignment.Center;
+                format1.LineAlignment = StringAlignment.Near;
+                
+                g.DrawString(Convert.ToString(i), labelFont, drawBrush, drawPoint, format1);
             }
             
             
             
+            int stringSizeH = (int)g.MeasureString("100%", labelFont, 20).Height;
             // labels at y-axis
-            jj = 0;
+            double jj = 0;
             for (int i = 0; i < Height; i += innerHeightPx / 5, jj += maxYVal / 5.0)
             {
                 g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
                 
-                SizeF stringSize = g.MeasureString(Convert.ToString(jj)+ "% ", labelFont, 30);
-                int stringSizeW = (int)stringSize.Width;
-                int stringSizeH = (int)stringSize.Height;
-                RectangleF instructionRect = new RectangleF(marginLeft - stringSizeW - (LABEL_EXTENSION << 1), Height - marginBottom - i - (stringSizeH >> 1), stringSizeW, 16);
-                g.DrawString(Convert.ToString(jj)+ "%", labelFont, drawBrush, instructionRect);
+                int stringSizeW = (int)g.MeasureString(Convert.ToString(jj)+ "% ", labelFont, 20).Width;
+                PointF drawPoint = new PointF(marginLeft - LABEL_EXTENSION, Height - marginBottom - i);
+                StringFormat format1 = new StringFormat();
+                format1.Alignment = StringAlignment.Far;
+                format1.LineAlignment = StringAlignment.Center;
+                g.DrawString(Convert.ToString(jj)+ "%", labelFont, drawBrush, drawPoint, format1);
             }
             
             // draw dashed collision energy line
@@ -244,6 +253,7 @@ namespace LipidCreator
                 Pen bPen = new Pen(Color.Black, 2);
                 bPen.DashPattern = dashValues;
                 int ceX = valueToPx(CEval, 0).X;
+                Console.WriteLine("ce: " + CEval + " " + ceX);
                 g.DrawLine(bPen, new Point(ceX, Height - marginBottom), new Point(ceX, 0));
             }
             
@@ -380,7 +390,7 @@ namespace LipidCreator
             numericalUpDownCurrentCE.Location = new Point(820, 470);
             numericalUpDownCurrentCE.Width = 140;
             numericalUpDownCurrentCE.ValueChanged += new EventHandler(textBoxCurrentCE_ValueChanged);
-            //numericalUpDownCurrentCE.KeyDown += new KeyEventHandler(textBoxCurrentCE_Keydown);
+            numericalUpDownCurrentCE.DecimalPlaces = 2;
             
             
             

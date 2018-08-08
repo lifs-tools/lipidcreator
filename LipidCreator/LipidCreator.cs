@@ -305,7 +305,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length != 4) throw new Exception("invalid line in file, number of columns in line != 4");
+                            if (tokens.Length != 5) throw new Exception("invalid line in file, number of columns in line != 5");
                             
                             ArrayList devData = new ArrayList();
                             
@@ -315,6 +315,7 @@ namespace LipidCreator
                             double.TryParse(tokens[3], out max_CE);
                             devData.Add(min_CE);
                             devData.Add(max_CE);
+                            devData.Add(tokens[4]);
                             
                             msInstruments.Add(tokens[0], devData);
                         }

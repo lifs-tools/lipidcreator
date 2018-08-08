@@ -37,10 +37,10 @@ namespace LipidCreator
 
     public class Cartesean : Control
     {
-        public int marginLeft = 50;
+        public int marginLeft = 80;
         public int marginRight = 10;
         public int marginTop = 10;
-        public int marginBottom = 20;
+        public int marginBottom = 40;
         public const int LABEL_EXTENSION = 5;
         public const int CE_GRAB_MARGIN = 1;
         public const double VAL_DENOMINATOR = 100.0;
@@ -58,6 +58,7 @@ namespace LipidCreator
         public double CEval;
         public bool CELineShift = false;
         public bool smooth = true;
+        public string xAxisLabel = "CE";
         
         public Cartesean(CEInspector _ceInspector, int width, int height)
         {
@@ -209,8 +210,9 @@ namespace LipidCreator
             // drawing the axes
             Font labelFont = new Font("Arial", 8);
             Pen blackPen = new Pen(Color.Black, 2);
-            g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
-            g.DrawLine(blackPen, new Point(marginLeft, Height - marginBottom + LABEL_EXTENSION), new Point(marginLeft, 0));
+            int xAxis = valueToPx(minXVal - 1, 0).X;
+            g.DrawLine(blackPen, new Point(xAxis - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
+            g.DrawLine(blackPen, new Point(xAxis, Height - marginBottom + LABEL_EXTENSION), new Point(xAxis, 0));
             
             
             
@@ -239,10 +241,10 @@ namespace LipidCreator
             double jj = 0;
             for (int i = 0; i < Height; i += innerHeightPx / 5, jj += maxYVal / 5.0)
             {
-                g.DrawLine(blackPen, new Point(marginLeft - LABEL_EXTENSION, Height - marginBottom - i), new Point(marginLeft + LABEL_EXTENSION, Height - marginBottom -i ));
+                g.DrawLine(blackPen, new Point(xAxis - LABEL_EXTENSION, Height - marginBottom - i), new Point(xAxis + LABEL_EXTENSION, Height - marginBottom -i ));
                 
                 int stringSizeW = (int)g.MeasureString(Convert.ToString(jj)+ "% ", labelFont, 20).Width;
-                PointF drawPoint = new PointF(marginLeft - LABEL_EXTENSION, Height - marginBottom - i);
+                PointF drawPoint = new PointF(xAxis - LABEL_EXTENSION, Height - marginBottom - i);
                 StringFormat format1 = new StringFormat();
                 format1.Alignment = StringAlignment.Far;
                 format1.LineAlignment = StringAlignment.Center;
@@ -260,6 +262,27 @@ namespace LipidCreator
             
             // draw border
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
+            
+            // draw axes labels
+            labelFont = new Font("Arial", 12);
+            PointF drawPointLabel = new PointF(marginLeft + (innerWidthPx >> 1), Height - marginBottom + 24);
+            StringFormat formatLabel = new StringFormat();
+            formatLabel.Alignment = StringAlignment.Center;
+            formatLabel.LineAlignment = StringAlignment.Center;
+            g.DrawString(xAxisLabel, labelFont, drawBrush, drawPointLabel, formatLabel);
+            
+            
+            GraphicsState state = g.Save();
+            g.ResetTransform();
+            g.RotateTransform(-90);
+            g.TranslateTransform(16, marginTop + (innerHeightPx >> 1), MatrixOrder.Append);
+            g.DrawString("Relative normalized abundance", labelFont, drawBrush, new PointF(0, 0), formatLabel);
+            g.Restore(state);
+            
+            
+            
+            
+            
             
             base.OnPaint(e);
         }

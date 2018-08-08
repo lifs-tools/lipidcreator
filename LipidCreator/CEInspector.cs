@@ -263,6 +263,7 @@ namespace LipidCreator
             double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2];
             numericalUpDownCurrentCE.Minimum = (decimal)minVal;
             numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
+            cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument][3];
             
             cartesean.updateXBoundaries(minVal, maxVal);
             foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)

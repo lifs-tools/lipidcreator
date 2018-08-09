@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace LipidCreator
 {
     public partial class TranslatorDialog : Form
@@ -42,6 +43,7 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public DataTable lipidNamesList;
         public ArrayList parsedLipids;
+        public Image whiteImage;
     
         public const string GRAMMER_FILENAME = "data/lipidmaps.grammer";
         public const char QUOTE = '"';
@@ -50,31 +52,48 @@ namespace LipidCreator
         public Parser parser;
         public const string FIRST_HEADER = "Old lipid name";
         public const string SECOND_HEADER = "Current lipid name";
+        public const string DELETE_HEADER = "Delete";
 
     
-        public TranslatorDialog()
+        public TranslatorDialog(CreatorGUI _creatorGUI)
         {
+            parsedLipids = new ArrayList();
+            creatorGUI = _creatorGUI;
+            lipidMapsParserEventHandler = new LipidMapsParserEventHandler(creatorGUI.lipidCreator);
+            parser = new Parser(lipidMapsParserEventHandler, GRAMMER_FILENAME, QUOTE);
+            
+            whiteImage = Image.FromFile(creatorGUI.lipidCreator.prefixPath + "images/white.png");
+
             lipidNamesList = new DataTable("lipidNamesList");
             lipidNamesList.Columns.Add(new DataColumn(FIRST_HEADER));
             lipidNamesList.Columns[0].DataType = typeof(string);
             lipidNamesList.Columns.Add(new DataColumn(SECOND_HEADER));
             lipidNamesList.Columns[1].DataType = typeof(string);
             lipidNamesList.Columns[1].ReadOnly = true;
-            DataRow row = lipidNamesList.NewRow();
-            row[FIRST_HEADER] = "";
-            lipidNamesList.Rows.Add(row);
             InitializeComponent();
-            lipidNamesGridView.Refresh();
-            lipidNamesGridView.AllowUserToAddRows = false;
+            disableImport();
         }
         
         
         private void lipidNamesGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-        
+            DataGridViewImageColumn deleteColumn = new DataGridViewImageColumn();  
+            deleteColumn.Name = "Delete";  
+            deleteColumn.HeaderText = "Delete";  
+            deleteColumn.ValuesAreIcons = false;
+            lipidNamesGridView.Columns.Add(deleteColumn);
+            deleteColumn.Width = 40;
             lipidNamesGridView.Columns[0].Width = lipidNamesGridView.Width >> 1;
             lipidNamesGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             lipidNamesGridView.AllowUserToResizeColumns = false;
+            DataRow row = lipidNamesList.NewRow();
+            row[FIRST_HEADER] = "";
+            row[SECOND_HEADER] = "";
+            lipidNamesList.Rows.Add(row);
+            lipidNamesGridView.Rows[0].Cells[DELETE_HEADER].Value = whiteImage;
+            lipidNamesGridView.Update();
+            lipidNamesGridView.Refresh();
+            lipidNamesGridView.AllowUserToAddRows = false;
         }
 
         
@@ -87,18 +106,32 @@ namespace LipidCreator
                 lipidNamesGridView.AllowUserToAddRows = true;
                 DataRow row = lipidNamesList.NewRow();
                 row[FIRST_HEADER] = "";
+                row[SECOND_HEADER] = "";
                 lipidNamesList.Rows.Add(row);
-                lipidNamesGridView.AllowUserToAddRows = false;
+                for (int i = 0; i < lipidNamesList.Rows.Count - 1; ++i)
+                {
+                    lipidNamesGridView.Rows[i].Cells[DELETE_HEADER].Value = creatorGUI.deleteImage;
+                }
+                lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
+                lipidNamesGridView.Update();
                 lipidNamesGridView.Refresh();
+                lipidNamesGridView.AllowUserToAddRows = false;
             }
-            Console.WriteLine("vc: " + lipidNamesList.Rows[lipidNamesGridView.CurrentCell.RowIndex][FIRST_HEADER]);
+            disableImport();
         }
+        
+        
+        
+        public void disableImport()
+        {
+            button3.Enabled = false;
+        }
+        
         
         
         public void lipidNamesGridViewEditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyDown += new KeyEventHandler(lipidNamesGridViewKeyDown);
-            Console.WriteLine("ed: " + lipidNamesList.Rows[lipidNamesGridView.CurrentCell.RowIndex][FIRST_HEADER]);
         }
 
         
@@ -134,9 +167,16 @@ namespace LipidCreator
             {
                 lipidNamesList.Rows.RemoveAt(lipidNamesGridView.CurrentCell.RowIndex);
             }
-            lipidNamesGridView.AllowUserToAddRows = false;
+            for (int i = 0; i < lipidNamesList.Rows.Count - 1; ++i)
+                {
+                    lipidNamesGridView.Rows[i].Cells[DELETE_HEADER].Value = creatorGUI.deleteImage;
+                }
+                lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
+            lipidNamesGridView.Update();
             lipidNamesGridView.Refresh();
-            Console.WriteLine("kd: " + lipidNamesList.Rows[lipidNamesGridView.CurrentCell.RowIndex][FIRST_HEADER]);
+            lipidNamesGridView.AllowUserToAddRows = false;
+            
+            disableImport();
         }
 
         
@@ -153,8 +193,66 @@ namespace LipidCreator
         // translate
         private void button2_Click(object sender, EventArgs e)
         {
-            Close();
+            lipidNamesList.Columns[1].ReadOnly = false;
+            parsedLipids.Clear();
+            int i = 0;
+            foreach (DataRow row in lipidNamesList.Rows)
+            {
+                if (i == lipidNamesList.Rows.Count - 1) break;
+                lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
+                Lipid lipid = null;
+                if (row[FIRST_HEADER] is string)
+                {
+                    string oldLipidName = (string)row[FIRST_HEADER];
+                    if (oldLipidName.Length > 0)
+                    {
+                        parser.parse(oldLipidName);
+                        if (parser.wordInGrammer)
+                        {
+                            parser.raiseEvents();
+                            if (lipidMapsParserEventHandler.lipid != null)
+                            {
+                                lipid = lipidMapsParserEventHandler.lipid;
+                            }
+                        }
+                    }
+                }
+                parsedLipids.Add(lipid);
+                ++i;
+            }
+            
+            
+            HashSet<String> usedKeys = new HashSet<String>();
+            ArrayList precursorDataList = new ArrayList();
+            i = 0;
+            int correctlyParsed = 0;
+            foreach (Lipid currentLipid in parsedLipids)
+            {
+                if (currentLipid != null)
+                {
+                    currentLipid.computePrecursorData(creatorGUI.lipidCreator.headgroups, usedKeys, precursorDataList);
+                    lipidNamesList.Rows[i][SECOND_HEADER] = ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
+                    usedKeys.Clear();
+                    if (!(currentLipid is UnsupportedLipid)) ++correctlyParsed;
+                    else
+                    {
+                        lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
+                    }
+                    
+                }
+                else
+                {
+                    lipidNamesList.Rows[i][SECOND_HEADER] = "Unrecognized lipid";
+                    lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
+                }
+                ++i;
+            }
+            lipidNamesList.Columns[1].ReadOnly = true;
+            lipidNamesGridView.Refresh();
+            
+            if (correctlyParsed == lipidNamesList.Rows.Count - 1) button3.Enabled = true;
         }
+
         
         
         
@@ -162,8 +260,12 @@ namespace LipidCreator
         // import
         private void button3_Click(object sender, EventArgs e)
         {
+            foreach(Lipid currentLipid in parsedLipids)
+            {
+                creatorGUI.lipidCreator.registeredLipids.Add(currentLipid);
+            }
+            creatorGUI.refreshRegisteredLipidsTable();
             Close();
-
         }
     }
 }

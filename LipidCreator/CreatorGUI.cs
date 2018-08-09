@@ -3082,7 +3082,7 @@ namespace LipidCreator
         
         protected void menuTranslateClick(object sender, System.EventArgs e)
         {
-            TranslatorDialog translatorDialog = new TranslatorDialog();
+            TranslatorDialog translatorDialog = new TranslatorDialog(this);
             translatorDialog.Owner = this;
             translatorDialog.ShowInTaskbar = false;
             translatorDialog.ShowDialog ();

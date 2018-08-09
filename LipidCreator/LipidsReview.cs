@@ -75,8 +75,8 @@ namespace LipidCreator
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
             
-            
         }
+        
         
         
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -96,7 +96,7 @@ namespace LipidCreator
             this.Enabled = false;
             
             if (checkBoxCreateSpectralLibrary.Checked) {
-                String[] specName = new String[]{ "" };
+                String[] specName = new String[]{""};
                 SpectralName spectralName = new SpectralName (specName);
                 spectralName.Owner = this;
                 spectralName.ShowInTaskbar = false;
@@ -117,23 +117,27 @@ namespace LipidCreator
 
         
         
+        
         private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked) {            
+            if (((CheckBox)sender).Checked)
+            {            
                 currentView = this.transitionListUnique;
-            } else {
+            }
+            else
+            {
                 currentView = this.transitionList;
             }
-            
-
-
-
             
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
             dataGridViewTransitions.DataSource = currentView;
             dataGridViewTransitions.Update();
             dataGridViewTransitions.Refresh();
         }
+        
+        
+        
+        
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
@@ -159,6 +163,10 @@ namespace LipidCreator
                 MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
             }
         }
+        
+        
+        
+        
 
         private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)
         {

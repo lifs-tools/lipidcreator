@@ -88,7 +88,6 @@ namespace LipidCreator
             this.dataGridViewTransitions.TabIndex = 0;
             this.dataGridViewTransitions.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(gridviewDataBindingComplete);
             this.dataGridViewTransitions.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing; 
-            this.dataGridViewTransitions.RowHeadersVisible = false;
             // 
             // button1
             // 

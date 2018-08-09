@@ -193,6 +193,7 @@ namespace LipidCreator
         
         
         
+        
         public void lipidsGridviewDoubleClick(Object sender, EventArgs e)
         {
             int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
@@ -274,7 +275,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    lipidNamesList.Rows[i][SECOND_HEADER] = "Unrecognized lipid";
+                    lipidNamesList.Rows[i][SECOND_HEADER] = "Unrecognized molecule";
                     lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                 }
                 ++i;

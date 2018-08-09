@@ -66,6 +66,7 @@ namespace LipidCreator
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            infoText = new Label();
             this.lipidNamesGridView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.lipidNamesGridView)).BeginInit();
             this.SuspendLayout();
@@ -101,6 +102,12 @@ namespace LipidCreator
             this.button3.Click += new System.EventHandler(this.button3_Click);
             
             
+            infoText.Text = "Unsupported lipid: lipid is not suppored in the current version" + Environment.NewLine + "Unrecognized molecule: string can not be recognized as lipid name";
+            infoText.Width = 240;
+            infoText.Height = 60;
+            infoText.Location = new Point(12, 358);
+            
+            
             lipidNamesGridView.DataSource = lipidNamesList;
             lipidNamesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             lipidNamesGridView.Location = new System.Drawing.Point(12, 12);
@@ -129,6 +136,7 @@ namespace LipidCreator
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Controls.Add(infoText);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -141,9 +149,10 @@ namespace LipidCreator
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private DataGridView lipidNamesGridView;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button button2;
+        public System.Windows.Forms.Button button3;
+        public Label infoText;
+        public DataGridView lipidNamesGridView;
     }
 }

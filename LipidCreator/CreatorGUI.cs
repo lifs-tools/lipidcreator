@@ -2673,14 +2673,14 @@ namespace LipidCreator
             {
                 registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentRegisteredLipid));
                 
-                for (int i = 0; i < lipidsGridview.Rows.Count; ++i)
-                {
-                    lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
-                    lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
-                }
-                lipidsGridview.Update();
-                lipidsGridview.Refresh();
             }
+            for (int i = 0; i < lipidsGridview.Rows.Count; ++i)
+            {
+                lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
+                lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
+            }
+            lipidsGridview.Update();
+            lipidsGridview.Refresh();
         }
         
         public void lipidsGridviewDoubleClick(Object sender, EventArgs e)

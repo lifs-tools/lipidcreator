@@ -47,6 +47,7 @@ namespace LipidCreator
     
         public const string GRAMMER_FILENAME = "data/lipidmaps.grammer";
         public const char QUOTE = '"';
+        public bool tableInitialized = false;
             
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser parser;
@@ -70,6 +71,7 @@ namespace LipidCreator
             lipidNamesList.Columns.Add(new DataColumn(SECOND_HEADER));
             lipidNamesList.Columns[1].DataType = typeof(string);
             lipidNamesList.Columns[1].ReadOnly = true;
+            
             InitializeComponent();
             disableImport();
         }
@@ -77,20 +79,30 @@ namespace LipidCreator
         
         private void lipidNamesGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            if (tableInitialized) return;
+            tableInitialized = true;
             DataGridViewImageColumn deleteColumn = new DataGridViewImageColumn();  
             deleteColumn.Name = "Delete";  
             deleteColumn.HeaderText = "Delete";  
             deleteColumn.ValuesAreIcons = false;
-            lipidNamesGridView.Columns.Add(deleteColumn);
             deleteColumn.Width = 40;
+            lipidNamesGridView.Columns.Add(deleteColumn);
             lipidNamesGridView.Columns[0].Width = lipidNamesGridView.Width >> 1;
             lipidNamesGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             lipidNamesGridView.AllowUserToResizeColumns = false;
+            
+            
             DataRow row = lipidNamesList.NewRow();
             row[FIRST_HEADER] = "";
             row[SECOND_HEADER] = "";
             lipidNamesList.Rows.Add(row);
+            
             lipidNamesGridView.Rows[0].Cells[DELETE_HEADER].Value = whiteImage;
+            
+            foreach (DataGridViewColumn dgvc in lipidNamesGridView.Columns) {
+                dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            
             lipidNamesGridView.Update();
             lipidNamesGridView.Refresh();
             lipidNamesGridView.AllowUserToAddRows = false;
@@ -103,7 +115,6 @@ namespace LipidCreator
         {
             if (e.RowIndex == lipidNamesList.Rows.Count - 1 && (string)lipidNamesList.Rows[e.RowIndex][FIRST_HEADER] != "")
             {
-                lipidNamesGridView.AllowUserToAddRows = true;
                 DataRow row = lipidNamesList.NewRow();
                 row[FIRST_HEADER] = "";
                 row[SECOND_HEADER] = "";
@@ -115,7 +126,6 @@ namespace LipidCreator
                 lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
                 lipidNamesGridView.Update();
                 lipidNamesGridView.Refresh();
-                lipidNamesGridView.AllowUserToAddRows = false;
             }
             disableImport();
         }
@@ -144,9 +154,11 @@ namespace LipidCreator
             {
                 int currentCell = lipidNamesGridView.CurrentCell.RowIndex; 
                 string[] insertText = Clipboard.GetText().Split('\n');
-                foreach (string insert in insertText)
+                foreach (string ins in insertText)
                 {
-                    if (insert.Length == 0) continue;
+                    string insert = Parser.strip(ins, (char)13);
+                    insert = Parser.strip(insert, (char)10);
+                    if (insert.Length == 0) continue;                    
                     if (currentCell < lipidNamesList.Rows.Count)
                     {
                         lipidNamesList.Rows[currentCell][FIRST_HEADER] = insert;
@@ -187,7 +199,6 @@ namespace LipidCreator
             int colIndex = ((DataGridView)sender).CurrentCell.ColumnIndex;
             if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
             {
-                lipidNamesGridView.AllowUserToAddRows = true;
                 lipidNamesList.Rows.RemoveAt(rowIndex);
                 for (int i = 0; i < lipidNamesList.Rows.Count - 1; ++i)
                 {
@@ -196,7 +207,6 @@ namespace LipidCreator
                 lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
                 lipidNamesGridView.Update();
                 lipidNamesGridView.Refresh();
-                lipidNamesGridView.AllowUserToAddRows = false;
             }
         }
         

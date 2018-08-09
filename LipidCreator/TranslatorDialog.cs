@@ -168,16 +168,38 @@ namespace LipidCreator
                 lipidNamesList.Rows.RemoveAt(lipidNamesGridView.CurrentCell.RowIndex);
             }
             for (int i = 0; i < lipidNamesList.Rows.Count - 1; ++i)
-                {
-                    lipidNamesGridView.Rows[i].Cells[DELETE_HEADER].Value = creatorGUI.deleteImage;
-                }
-                lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
+            {
+                lipidNamesGridView.Rows[i].Cells[DELETE_HEADER].Value = creatorGUI.deleteImage;
+            }
+            lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
             lipidNamesGridView.Update();
             lipidNamesGridView.Refresh();
             lipidNamesGridView.AllowUserToAddRows = false;
             
             disableImport();
         }
+        
+        
+        
+        public void lipidsGridviewDoubleClick(Object sender, EventArgs e)
+        {
+            int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
+            int colIndex = ((DataGridView)sender).CurrentCell.ColumnIndex;
+            if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
+            {
+                lipidNamesGridView.AllowUserToAddRows = true;
+                lipidNamesList.Rows.RemoveAt(rowIndex);
+                for (int i = 0; i < lipidNamesList.Rows.Count - 1; ++i)
+                {
+                    lipidNamesGridView.Rows[i].Cells[DELETE_HEADER].Value = creatorGUI.deleteImage;
+                }
+                lipidNamesGridView.Rows[lipidNamesList.Rows.Count - 1].Cells[DELETE_HEADER].Value = whiteImage;
+                lipidNamesGridView.Update();
+                lipidNamesGridView.Refresh();
+                lipidNamesGridView.AllowUserToAddRows = false;
+            }
+        }
+        
 
         
         

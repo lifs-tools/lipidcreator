@@ -283,7 +283,7 @@ namespace LipidCreator
             lipidNamesList.Columns[1].ReadOnly = true;
             lipidNamesGridView.Refresh();
             
-            if (correctlyParsed == lipidNamesList.Rows.Count - 1) button3.Enabled = true;
+            if (lipidNamesList.Rows.Count > 1 && correctlyParsed == lipidNamesList.Rows.Count - 1) button3.Enabled = true;
         }
 
         

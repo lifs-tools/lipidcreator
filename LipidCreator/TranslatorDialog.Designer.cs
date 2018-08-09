@@ -73,7 +73,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(549, 358);
+            this.button1.Location = new System.Drawing.Point(549, 378);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -83,7 +83,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(630, 358);
+            this.button2.Location = new System.Drawing.Point(630, 378);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -93,7 +93,7 @@ namespace LipidCreator
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(711, 358);
+            this.button3.Location = new System.Drawing.Point(711, 378);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 2;
@@ -103,7 +103,7 @@ namespace LipidCreator
             
             
             infoText.Text = "Unsupported lipid: lipid is not suppored in the current version" + Environment.NewLine + "Unrecognized molecule: string can not be recognized as lipid name";
-            infoText.Width = 240;
+            infoText.Width = 500;
             infoText.Height = 60;
             infoText.Location = new Point(12, 358);
             
@@ -131,7 +131,7 @@ namespace LipidCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(798, 393);
+            this.ClientSize = new System.Drawing.Size(798, 413);
             this.Controls.Add(this.lipidNamesGridView);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);

@@ -293,7 +293,9 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuDash;
         public System.Windows.Forms.MenuItem menuDash2;
         public System.Windows.Forms.MenuItem menuDash3;
+        public System.Windows.Forms.MenuItem menuDash4;
         public System.Windows.Forms.MenuItem menuExit;
+        public System.Windows.Forms.MenuItem menuStatistics;
         public System.Windows.Forms.MenuItem menuOptions;
         public System.Windows.Forms.MenuItem menuTranslate;
         public System.Windows.Forms.MenuItem menuCollisionEnergy;
@@ -608,7 +610,9 @@ namespace LipidCreator
             this.menuDash = new System.Windows.Forms.MenuItem ();
             this.menuDash2 = new System.Windows.Forms.MenuItem ();
             this.menuDash3 = new System.Windows.Forms.MenuItem ();
+            this.menuDash4 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
+            this.menuStatistics = new System.Windows.Forms.MenuItem ();
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
@@ -646,6 +650,7 @@ namespace LipidCreator
             this.menuDash.Text = "-";
             this.menuDash2.Text = "-";
             this.menuDash3.Text = "-";
+            this.menuDash4.Text = "-";
             
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
@@ -658,7 +663,7 @@ namespace LipidCreator
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator});
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
@@ -689,6 +694,10 @@ namespace LipidCreator
             this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.menuResetLipidCreator.Text = "Reset Lipid&Creator";
             this.menuResetLipidCreator.Click += new System.EventHandler (resetLipidCreatorMenu);
+            
+            this.menuStatistics.Text = "Send unpersonilized statistics";
+            this.menuStatistics.Click += new System.EventHandler (statisticsMenu);
+            this.menuStatistics.Checked = lipidCreator.enableAnalytics;
 
             this.menuHelp = new System.Windows.Forms.MenuItem ();
             this.menuHelp.Text = "&Help";

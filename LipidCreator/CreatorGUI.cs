@@ -182,6 +182,20 @@ namespace LipidCreator
         }
         
         
+        public void statisticsMenu(Object sender, EventArgs e)
+        {
+            menuStatistics.Checked = !menuStatistics.Checked;
+            lipidCreator.enableAnalytics = menuStatistics.Checked;
+            string analyticsFile = lipidCreator.prefixPath + "data/analytics.txt";
+            using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+            {
+                outputFile.WriteLine ((lipidCreator.enableAnalytics ? "1" : "0"));
+                outputFile.Dispose ();
+                outputFile.Close ();
+            }
+        }
+        
+        
         public bool resetLipidCreator()
         {
             DialogResult mbr = MessageBox.Show ("You are going to reset LipidCreator. All information and settings will be discarded. Are you sure?", "Reset LipidCreator", MessageBoxButtons.YesNo);
@@ -2885,7 +2899,7 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreator.assembleLipids(selectedInstrumentForCE);
-            LipidCreator.analytics("lipidcreator", "create-transition-list");
+            lipidCreator.analytics("lipidcreator", "create-transition-list");
             lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
@@ -3180,6 +3194,25 @@ namespace LipidCreator
         
         
         
+        
+        public static void checkForAnalytics(bool withPrefix)
+        {
+            string analyticsFile = (withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : "") + "data/analytics.txt";
+            if (!File.Exists(analyticsFile))
+            {
+                DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator. Before you continue, we want to stress that LipidCreator is funded by German national research association. For a continuous funding, we have to raise statistics about the usage of our tools. Would you agree, to support us by allowing to send COMPLETELY UNPERSONILIZED statistics?", "LipidCreator note", MessageBoxButtons.YesNo);
+                
+                using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+                {
+                    outputFile.WriteLine ((mbr == DialogResult.Yes ? "1" : "0"));
+                    outputFile.Dispose ();
+                    outputFile.Close ();
+                }
+            }
+        }
+        
+        
+        
     
         [STAThread]
         public static void Main(string[] args)
@@ -3192,8 +3225,9 @@ namespace LipidCreator
                     switch (args[0])
                     {
                         case "external":
-                            LipidCreator.analytics("lipidcreator-external", "launch");
+                            checkForAnalytics(true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
+                            creatorGUI.lipidCreator.analytics("lipidcreator-external", "launch");
                             Application.Run(creatorGUI);
                             break;
                             
@@ -3267,11 +3301,11 @@ namespace LipidCreator
                                 }
                                 
                                 
-                                LipidCreator.analytics("lipidcreator-cli", "launch");
                                 
                                 Stopwatch stopWatch = new Stopwatch();
                                 stopWatch.Start();
                                 LipidCreator lc = new LipidCreator(null);
+                                lc.analytics("lipidcreator-cli", "launch");
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
                                 
@@ -3320,9 +3354,9 @@ namespace LipidCreator
                                 string outputCSV = args[2];
                                 string instrument = args[3];
                                 
-                                LipidCreator.analytics("lipidcreator-cli", "launch");
                                 
                                 LipidCreator lc = new LipidCreator(null);
+                                lc.analytics("lipidcreator-cli", "launch");
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
                                 
@@ -3341,8 +3375,9 @@ namespace LipidCreator
             }
             else 
             {
-                LipidCreator.analytics("lipidcreator-standalone", "launch");
+                checkForAnalytics(false);
                 CreatorGUI creatorGUI = new CreatorGUI(null);
+                creatorGUI.lipidCreator.analytics("lipidcreator-standalone", "launch");
                 Application.Run(creatorGUI);
             }
         }

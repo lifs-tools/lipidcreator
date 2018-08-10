@@ -71,8 +71,10 @@ namespace LipidCreator
         public CollisionEnergy collisionEnergyHandler;
         public ParserEventHandler parserEventHandler;
         public Parser parser;
+        public bool enableAnalytics = false;
+        public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
+        public string prefixPath = "";
         
-        public string prefixPath = "Tools/LipidCreator/";
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
         public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Molecule Formula";
@@ -395,6 +397,19 @@ namespace LipidCreator
             {
                 Console.WriteLine("Error: file " + ceParametersFile + " does not exist or can not be opened.");
             }
+            
+            string analyticsFile = prefixPath + "data/analytics.txt";
+            if (File.Exists(analyticsFile))
+            {
+                {
+                    using (StreamReader sr = new StreamReader(analyticsFile))
+                    {
+                        // check if first letter in first line is a '1'
+                        String line = sr.ReadLine();
+                        enableAnalytics = line[0] == '1';
+                    }
+                }
+            }
         }
         
 
@@ -403,7 +418,7 @@ namespace LipidCreator
         {
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
-            prefixPath = (openedAsExternal ? prefixPath : "");
+            prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
@@ -1100,11 +1115,14 @@ namespace LipidCreator
         
         
         
-        public static void analytics(string category, string action)
+        public void analytics(string category, string action)
         {
-            // ToDo: uncomment in final release
-            //Thread th = new Thread(() => analyticsRequest(category, action));
-            //th.Start();
+            if (enableAnalytics)
+            {
+                // ToDo: uncomment in final release
+                //Thread th = new Thread(() => analyticsRequest(category, action));
+                //th.Start();
+            }
         }
         
         

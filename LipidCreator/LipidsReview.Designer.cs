@@ -1,8 +1,9 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2017 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
+Copyright (c) 2018 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
                    Bing Peng   -   bing.peng {at} isas.de
+                   Nils Hoffmann  -  nils.hoffmann {at} isas.de
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

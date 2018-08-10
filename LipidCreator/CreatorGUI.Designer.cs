@@ -558,6 +558,7 @@ namespace LipidCreator
         
         
         public int minWindowHeight = 720;
+        public int minWindowHeightDefault = 720;
         public int minWindowHeightExtended = 800;
         public int windowWidth = 1060;
         public int minLipidGridHeight = 180;
@@ -695,7 +696,9 @@ namespace LipidCreator
             this.menuResetLipidCreator.Text = "Reset Lipid&Creator";
             this.menuResetLipidCreator.Click += new System.EventHandler (resetLipidCreatorMenu);
             
-            this.menuStatistics.Text = "Send unpersonilized statistics";
+            
+            this.menuStatistics.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
+            this.menuStatistics.Text = "Send &unpersonilized statistics";
             this.menuStatistics.Click += new System.EventHandler (statisticsMenu);
             this.menuStatistics.Checked = lipidCreator.enableAnalytics;
 

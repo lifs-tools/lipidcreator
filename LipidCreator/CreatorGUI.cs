@@ -3582,6 +3582,14 @@ namespace LipidCreator
                     
                     
                     
+                case "translate":
+                    Console.WriteLine("Translating a list with old lipid names into current nomenclature");
+                    Console.WriteLine();
+                    Console.WriteLine("usage: LipidCreator.exe translate input_csv output_csv");
+                    break;
+                    
+                    
+                    
                 case "random":
                     Console.WriteLine("Generating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine();
@@ -3599,6 +3607,7 @@ namespace LipidCreator
                     Console.WriteLine();
                     Console.WriteLine("options are:");
                     Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
+                    Console.WriteLine("  translate:\t\ttranslating a list with old lipid names into current nomenclature");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine("  spymode:\t\t\tsecret spy mode");
@@ -3637,7 +3646,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random", "spymode"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random", "spymode", "translate"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3648,19 +3657,91 @@ namespace LipidCreator
                             Application.Run(creatorGUI);
                             break;
                             
+                            
                         case "spymode":
                             printHelp("spymode");
                             break;
                             
+                            
                         case "help":
                             printHelp();
                             break;
+                            
                             
                         case "random":
                             if (args.Length > 1 && args[1].Equals("help")) printHelp("random");
                             int num = 1;
                             if (args.Length > 1) num = int.TryParse(args[1], out num) ? num : 1;
                             foreach (string lipidName in LipidCreator.createRandomLipidNames(num)) Console.WriteLine(lipidName);
+                            break;
+                          
+                          
+                        case "translate":
+                            if (args.Length < 3)
+                            {
+                                printHelp("translate");
+                            }
+                            else
+                            {
+                                string inputCSV = args[1];
+                                string outputCSV = args[2];
+                                
+                                if (File.Exists(inputCSV))
+                                {
+                                    int lineCounter = 1;
+                                    ArrayList lipidNames = new ArrayList();
+                                    try
+                                    {
+                                        using (StreamReader sr = new StreamReader(inputCSV))
+                                        {
+                                            string line;
+                                            while((line = sr.ReadLine()) != null)
+                                            {
+                                                lipidNames.Add(line);
+                                                ++lineCounter;
+                                            }
+                                        }
+                                        
+                                        LipidCreator lc = new LipidCreator(null);
+                                        lc.analytics("lipidcreator-cli", "launch");
+                                        
+                                        ArrayList parsedLipids = lc.translate(lipidNames);
+                                        
+                                        
+                                        HashSet<String> usedKeys = new HashSet<String>();
+                                        ArrayList precursorDataList = new ArrayList();
+                                        int i = 0;
+                                            
+                                        using (StreamWriter outputFile = new StreamWriter (outputCSV))
+                                        {
+                                            foreach (Lipid currentLipid in parsedLipids)
+                                            {
+                                                string newLipidName = "";
+                                                if (currentLipid != null)
+                                                {
+                                                    currentLipid.computePrecursorData(lc.headgroups, usedKeys, precursorDataList);
+                                                    newLipidName = ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
+                                                    usedKeys.Clear();
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    newLipidName = "Unrecognized molecule";
+                                                }
+                                                outputFile.WriteLine ("\"" + (string)lipidNames[i] + "\",\"" + newLipidName + "\"");
+                                                
+                                                ++i;
+                                            }
+                                        }
+                                        
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("The file '" + inputCSV + "' in line '" + lineCounter + "' could not be read:");
+                                        Console.WriteLine(e.Message);
+                                    }
+                                }
+                            }
                             break;
                             
                             
@@ -3719,42 +3800,21 @@ namespace LipidCreator
                                 
                                 
                                 
-                                Stopwatch stopWatch = new Stopwatch();
-                                stopWatch.Start();
                                 LipidCreator lc = new LipidCreator(null);
                                 lc.analytics("lipidcreator-cli", "launch");
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
                                 
-                                stopWatch.Stop();
-                                Console.WriteLine(stopWatch.Elapsed);
-                                
-                                
-                                stopWatch.Reset();
-                                stopWatch.Start();
                                 lc.importLipidList(inputCSV);
                                 foreach(Lipid lipid in lc.registeredLipids)
                                 {
                                     lipid.onlyPrecursors = parameterPrecursor;
                                     lipid.onlyHeavyLabeled = parameterHeavy;
                                 }
-                                stopWatch.Stop();
-                                Console.WriteLine(stopWatch.Elapsed);
                                 
-                                
-                                stopWatch.Reset();
-                                stopWatch.Start();
-                                lc.assembleLipids(instrument);                                
-                                stopWatch.Stop();
-                                Console.WriteLine(stopWatch.Elapsed);
-                                
+                                lc.assembleLipids(instrument); 
                                 DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
-                                
-                                stopWatch.Reset();
-                                stopWatch.Start();
                                 lc.storeTransitionList(",", split, outputCSV, transitionList);
-                                stopWatch.Stop();
-                                Console.WriteLine(stopWatch.Elapsed);
                             }
                             break;
                             

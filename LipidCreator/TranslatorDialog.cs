@@ -44,13 +44,8 @@ namespace LipidCreator
         public DataTable lipidNamesList;
         public ArrayList parsedLipids;
         public Image whiteImage;
-    
-        public const string GRAMMER_FILENAME = "data/lipidmaps.grammer";
-        public const char QUOTE = '"';
         public bool tableInitialized = false;
             
-        public LipidMapsParserEventHandler lipidMapsParserEventHandler;
-        public Parser parser;
         public const string FIRST_HEADER = "Old lipid name";
         public const string SECOND_HEADER = "Current lipid name";
         public const string DELETE_HEADER = "Delete";
@@ -60,8 +55,6 @@ namespace LipidCreator
         {
             parsedLipids = new ArrayList();
             creatorGUI = _creatorGUI;
-            lipidMapsParserEventHandler = new LipidMapsParserEventHandler(creatorGUI.lipidCreator);
-            parser = new Parser(lipidMapsParserEventHandler, GRAMMER_FILENAME, QUOTE);
             
             whiteImage = Image.FromFile(creatorGUI.lipidCreator.prefixPath + "images/white.png");
 
@@ -226,35 +219,19 @@ namespace LipidCreator
         // translate
         private void button2_Click(object sender, EventArgs e)
         {
-            lipidNamesList.Columns[1].ReadOnly = false;
-            parsedLipids.Clear();
+            ArrayList lipidNames = new ArrayList();
             int i = 0;
             foreach (DataRow row in lipidNamesList.Rows)
             {
                 if (i == lipidNamesList.Rows.Count - 1) break;
-                lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
-                Lipid lipid = null;
-                if (row[FIRST_HEADER] is string)
-                {
-                    string oldLipidName = (string)row[FIRST_HEADER];
-                    if (oldLipidName.Length > 0)
-                    {
-                        parser.parse(oldLipidName);
-                        if (parser.wordInGrammer)
-                        {
-                            parser.raiseEvents();
-                            if (lipidMapsParserEventHandler.lipid != null)
-                            {
-                                lipid = lipidMapsParserEventHandler.lipid;
-                            }
-                        }
-                    }
-                }
-                parsedLipids.Add(lipid);
-                ++i;
+                lipidNamesGridView.Rows[i++].DefaultCellStyle.BackColor = Color.Empty;
+                lipidNames.Add((string)row[FIRST_HEADER]);
             }
             
+            parsedLipids = creatorGUI.lipidCreator.translate(lipidNames);
             
+            
+            lipidNamesList.Columns[1].ReadOnly = false;
             HashSet<String> usedKeys = new HashSet<String>();
             ArrayList precursorDataList = new ArrayList();
             i = 0;

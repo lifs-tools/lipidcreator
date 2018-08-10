@@ -75,6 +75,11 @@ namespace LipidCreator
         public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
         public string prefixPath = "";
         
+        public LipidMapsParserEventHandler lipidMapsParserEventHandler;
+        public Parser lipidMapsParser;
+        
+        
+        public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
         public const string PRECURSOR_NAME = "Precursor Name";
         public const string PRECURSOR_NEUTRAL_FORMULA = "Precursor Molecule Formula";
@@ -453,13 +458,16 @@ namespace LipidCreator
             }
             
             parserEventHandler = new ParserEventHandler(this);
-            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammer", '"');
+            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammer", QUOTE);
+            
+            lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
+            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammer", QUOTE);
         }
         
         
         // parser for reading the csv lines with comma separation and "" quotation (if present)
         // using an Moore automaton based approach
-        public static string[] parseLine(string line, char separator = ',', char quote = '"')
+        public static string[] parseLine(string line, char separator = ',', char quote = QUOTE)
         {
             List<string> listTokens = new List<string>();
             int start = 0;
@@ -1124,6 +1132,35 @@ namespace LipidCreator
                 //th.Start();
             }
         }
+        
+        
+        
+        
+        
+        public ArrayList translate(ArrayList lipidNamesList)
+        {
+            ArrayList parsedLipids = new ArrayList();
+            foreach (string oldLipidName in lipidNamesList)
+            {
+                Lipid lipid = null;
+                if (oldLipidName.Length > 0)
+                {
+                    lipidMapsParser.parse(oldLipidName);
+                    if (lipidMapsParser.wordInGrammer)
+                    {
+                        lipidMapsParser.raiseEvents();
+                        if (lipidMapsParserEventHandler.lipid != null)
+                        {
+                            lipid = lipidMapsParserEventHandler.lipid;
+                        }
+                    }
+                }
+                parsedLipids.Add(lipid);
+            }
+            return parsedLipids;
+        }
+        
+        
         
         
         

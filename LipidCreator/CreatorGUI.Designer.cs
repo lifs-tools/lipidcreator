@@ -2145,7 +2145,7 @@ namespace LipidCreator
 
             this.Controls.Add(tabControl);
             this.Controls.Add(lipidsGroupbox);
-            this.Text = "LipidCreator v1.0.1";
+            this.Text = "LipidCreator  v" + LipidCreator.LC_VERSION_NUMBER;
             this.MaximizeBox = false;
             this.Padding = new Padding(5);
 

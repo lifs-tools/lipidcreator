@@ -21,8 +21,11 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE. IF YOU VIOLATE THE COPYRIGHT, SMALL YELLOW CAPSULE-SHAPED CREATURES
+WITH BLUE BIBS WILL COME AND SLAP YOU WITH A BANANA.
 */
+
+
 using System;
 using System.Data;
 using System.Collections;
@@ -57,6 +60,8 @@ namespace LipidCreator
         }
         
         
+        
+        
         // DP stands for dynamic programming
         public class DPNode
         {
@@ -73,6 +78,8 @@ namespace LipidCreator
                 right = _right;
             }
         }
+        
+        
         
         
         // this class is dedicated to have an efficient sorted set class storing
@@ -168,6 +175,8 @@ namespace LipidCreator
                 fireEvent = _fireEvent;
             }
             
+            
+            
             public string getText(TreeNode node = null)
             {
                 if (node == null) node = this;
@@ -215,8 +224,6 @@ namespace LipidCreator
                     {
                     
                         lineCounter++;
-                        
-                        if (lineCounter % 1000 == 0) Console.WriteLine(lineCounter);
                         
                         // skip empty lines and comments
                         if (line.Length < 1) continue;
@@ -352,6 +359,8 @@ namespace LipidCreator
         }
         
         
+        
+        
         public long getNextFreeRuleIndex()
         {
             if (nextFreeRuleIndex <= MASK) return nextFreeRuleIndex++;
@@ -360,10 +369,13 @@ namespace LipidCreator
         
         
         
+        
         public long computeRuleKey(long ruleIndex1, long ruleIndex2)
         {
             return (ruleIndex1 << SHIFT) | ruleIndex2;
         }
+        
+        
         
         
         public static ArrayList splitString(string text, char separator, char quote)
@@ -401,12 +413,16 @@ namespace LipidCreator
         }
         
         
+        
+        
         public static string strip(string text, char stripChar)
         {
             while (text.Length > 0 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
             while (text.Length > 0 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
             return text;
         }
+        
+        
         
         
         // checking if string is terminal
@@ -422,6 +438,8 @@ namespace LipidCreator
 
             throw new Exception("Error: corrupted token in grammer");
         }
+        
+        
         
         
         // splitting the whole terminal in a tree structure where characters of terminal are the leafs and the inner nodes are added non terminal rules
@@ -475,7 +493,6 @@ namespace LipidCreator
         
         
         
-        
         public LinkedList<long> collectBackwards(long childRuleIndex, long parentRuleIndex)
         {
             if (!NTtoNT.ContainsKey(childRuleIndex)) return null;
@@ -509,7 +526,8 @@ namespace LipidCreator
         {
             if (node != null)
             {
-                if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_pre_event", node);
+                string nodeRuleName = node.fireEvent ? NTtoRule[node.ruleIndex] : "";
+                if (node.fireEvent) parserEventHandler.handleEvent(nodeRuleName + "_pre_event", node);
                 
                 if (node.terminal == '\0') // node.terminal is != null when node is leaf
                 {
@@ -517,7 +535,7 @@ namespace LipidCreator
                     if (node.right != null) raiseEvents(node.right);
                 }
                     
-                if (node.fireEvent) parserEventHandler.handleEvent(NTtoRule[node.ruleIndex] + "_post_event", node);
+                if (node.fireEvent) parserEventHandler.handleEvent(nodeRuleName + "_post_event", node);
             }
             else
             {
@@ -565,7 +583,6 @@ namespace LipidCreator
         // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
-        
             wordInGrammer = false;
             parseTree = null;
             int n = textToParse.Length;
@@ -573,6 +590,7 @@ namespace LipidCreator
             Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
             // Ks is a lookup, which fields in the dpTable are filled
             Bitfield[] Ks = new Bitfield[n];
+            
             
             
             for (int i = 0; i < n; ++i)
@@ -597,9 +615,8 @@ namespace LipidCreator
                 }
             }
             
-            for (int i = 1 ; i < n; ++i)
+            for (int i = 1; i < n; ++i)
             {
-                
                 int im1 = i - 1;
                 for (int j = 0; j < n - i; ++j)
                 {
@@ -610,7 +627,6 @@ namespace LipidCreator
                     foreach(int k in Ks[j].getBitPositions())
                     {   
                         if (k >= i) break;
-                        //if (dpTable[jp1 + k][im1 - k].Count == 0) continue;
                         if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
                         
                         foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])

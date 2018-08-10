@@ -72,13 +72,13 @@ namespace LipidCreator
             char quote = '"';
             
             TestParserEventHandler tpeh = new TestParserEventHandler();
-            Parser pp = new Parser(tpeh, grammerFilename, quote);
+            Parser pp = new Parser(tpeh, grammerFilename, LipidCreator.QUOTE);
                         
             
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
-            Parser p = new Parser(peh, grammerFilename, quote);
+            Parser p = new Parser(peh, grammerFilename, LipidCreator.QUOTE);
             
             
             

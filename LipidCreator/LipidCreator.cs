@@ -54,7 +54,7 @@ namespace LipidCreator
     {   
     
         public event LipidUpdateEventHandler Update;
-        public const string LC_VERSION_NUMBER = "1.0.0";
+        public static string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
         public Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public Dictionary<int, ArrayList> categoryToClass;
@@ -476,7 +476,8 @@ namespace LipidCreator
             int state = 1;
             for (int i = 0; i < line.Length; ++i)
             {
-                switch (state){
+                switch (state)
+                {
                     case 0:
                         if (line[i] == quote)
                         {
@@ -608,6 +609,9 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public string getSeparator(string list)
         {
             if (list.IndexOf(Lipid.ID_SEPARATOR_SPECIFIC) >= 0 && list.IndexOf(Lipid.ID_SEPARATOR_UNSPECIFIC) == -1) return Lipid.ID_SEPARATOR_SPECIFIC;
@@ -616,65 +620,13 @@ namespace LipidCreator
         }
         
         
-        public FattyAcidGroup parseFattyAcidGroup(string acid, bool faX, bool isLCB = false)
-        {
-            FattyAcidGroup fag = new FattyAcidGroup(isLCB);
-            fag.faTypes["FA"] = false;
-            fag.faTypes["FAp"] = false;
-            fag.faTypes["FAa"] = false;
-            fag.faTypes["FAx"] = false;
-            if (faX)
-            {
-                fag.faTypes["FAx"] = true;
-                return fag;
-            }
-            
-            // determine if plasmanyl or plasmenyl or neither
-            if (acid[acid.Length - 1] == 'a' || acid[acid.Length - 1] == 'p')
-            {
-                fag.faTypes["FA" + acid[acid.Length - 1]] = true;
-                acid = acid.Substring(0, acid.Length - 1);
-            }
-            else fag.faTypes["FA"] = true;
-            
-            if (acid.IndexOf(":") == -1) return null;
-            if (acid.Split(':').Length != 2) return null;
-            string carbonCount = acid.Split(':')[0];
-            string cRest = acid.Split(':')[1];
-            string dbCount;
-            string hydroxylCount = "0";
-            if (cRest.Split(';').Length > 2) return null;
-            if (cRest.Split(';').Length == 2)
-            {
-                dbCount = cRest.Split(';')[0];
-                hydroxylCount = cRest.Split(';')[1];
-            }
-            else dbCount = cRest;
-            
-            try {
-                fag.carbonCounts.Add(Convert.ToInt32(carbonCount));
-                fag.doubleBondCounts.Add(Convert.ToInt32(dbCount));
-                fag.hydroxylCounts.Add(Convert.ToInt32(hydroxylCount));
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-            
-            return fag;
-        }
-        
         
         
         
         public void createPrecursorList()
         {
-            
-        
             HashSet<String> usedKeys = new HashSet<String>();
             precursorDataList.Clear();
-            
-            
             
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
@@ -682,6 +634,8 @@ namespace LipidCreator
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
         }
+        
+        
         
         
         public void createFragmentList(string instrument)
@@ -714,7 +668,8 @@ namespace LipidCreator
             string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
             string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
                 string replicateKey = prec_mass + "/" + prod_mass;
-                if (!replicateKeys.ContainsKey (replicateKey)) {
+                if (!replicateKeys.ContainsKey (replicateKey))
+                {
                     string note = "Interference with " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
                     replicateKeys.Add(replicateKey, note);
                     transitionListUnique.ImportRow (row);
@@ -800,32 +755,43 @@ namespace LipidCreator
         public void storeTransitionList(string separator, bool split, string filename, DataTable currentView, string mode = ".csv")
         {
             if (!filename.EndsWith(mode)) filename += mode;
-            if (split) {
-                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_positive" + mode))) {
+            if (split)
+            {
+                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_positive" + mode)))
+                {
                     outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
-                    foreach (DataRow row in currentView.Rows) {
-                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2") {
+                    foreach (DataRow row in currentView.Rows)
+                    {
+                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2")
+                        {
                             outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }
                     }
                     outputFile.Dispose ();
                     outputFile.Close ();
                 }
-                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode))) {
+                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode)))
+                {
                     outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
-                    foreach (DataRow row in currentView.Rows) {
-                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2") {
+                    foreach (DataRow row in currentView.Rows)
+                    {
+                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2")
+                        {
                             outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }
                     }
                     outputFile.Dispose ();
                     outputFile.Close ();
                 }
-            } else {
+            }
+            else
+            {
                 StreamWriter writer;
-                if ((writer = new StreamWriter (filename)) != null) {
+                if ((writer = new StreamWriter (filename)) != null)
+                {
                     writer.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
-                    foreach (DataRow row in currentView.Rows) {
+                    foreach (DataRow row in currentView.Rows)
+                    {
                         writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                     }
                     writer.Dispose ();
@@ -835,9 +801,11 @@ namespace LipidCreator
         }
         
 
-        public static string toHeaderLine(string separator, string[] columnKeys) {
+        public static string toHeaderLine(string separator, string[] columnKeys)
+        {
             string quote = "";
-            if(separator==",") {
+            if(separator==",")
+            {
                 quote = "\"";
             }
             return String.Join(separator, columnKeys.ToList().ConvertAll<string>(key => quote+key+quote).ToArray());
@@ -849,14 +817,19 @@ namespace LipidCreator
         {
             List<string> line = new List<string> ();
             foreach (String columnKey in columnKeys) {
-                if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ) {
+                if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ)
+                {
                     line.Add (((String)row [columnKey]).Replace (",", "."));
-                } else {
+                }
+                else
+                {
                     //quote strings when we are in csv mode
                     if (separator == ",")
                     {
                         line.Add("\""+((String)row[columnKey])+"\"");
-                    } else { //otherwise just add the plain string
+                    }
+                    else
+                    { //otherwise just add the plain string
                         line.Add(((String)row[columnKey]));
                     }
                 }
@@ -965,7 +938,11 @@ namespace LipidCreator
         }
         
         
+        
+        
         public static RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+    
+    
     
         
         public static ArrayList createRandomLipidNames(int num = 1)
@@ -1052,6 +1029,8 @@ namespace LipidCreator
         }
         
         
+        
+        
         public static LinkedList<string> assembleLipidname(Dictionary<int, ArrayList> rules, Dictionary<int, string> terminals, LinkedList<string> lipidname, int rule, int prevRandom)
         {
             int p = -2;
@@ -1085,7 +1064,6 @@ namespace LipidCreator
                 if (precursor.Value.userDefined)
                 {
                     xml += precursor.Value.serialize();
-                    //if (precursor.Value)
                 }
             }
             

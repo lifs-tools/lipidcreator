@@ -699,7 +699,7 @@ namespace LipidCreator
             
             
             this.menuStatistics.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
-            this.menuStatistics.Text = "Send &unpersonilized statistics";
+            this.menuStatistics.Text = "Send &anonymous statistics";
             this.menuStatistics.Click += new System.EventHandler (statisticsMenu);
             this.menuStatistics.Checked = lipidCreator.enableAnalytics;
 

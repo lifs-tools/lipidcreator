@@ -79,7 +79,7 @@ namespace LipidCreator
             this.linkLabel.Size = new System.Drawing.Size(198, 13);
             this.linkLabel.TabIndex = 2;
             this.linkLabel.TabStop = true;
-            this.linkLabel.Text = "https://lifs.isas.de/index.php/lipidcreator";
+            this.linkLabel.Text = "https://lifs.isas.de/lipidcreator";
             this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
             // 
             // textLibraryName
@@ -121,7 +121,7 @@ namespace LipidCreator
         private string licenseText = Application.ProductName + " " + Application.ProductVersion + "\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
             "MIT License\n\n" +
 
-            "Copyright(c) 2017\n"+
+            "Copyright(c) 2018\n"+
             "Dominik Kopczynski   -   dominik.kopczynski {at} isas.de\n" +
             "Bing Peng   -   bing.peng {at} isas.de\n" +
             "Nils Hoffmann  -  nils.hoffmann {at} isas.de\n\n" +

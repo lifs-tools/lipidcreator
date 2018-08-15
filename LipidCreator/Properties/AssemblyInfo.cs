@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ISAS")]
 [assembly: AssemblyProduct("LipidCreator")]
-[assembly: AssemblyCopyright("Copyright © ISAS 2017")]
+[assembly: AssemblyCopyright("Copyright © ISAS 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

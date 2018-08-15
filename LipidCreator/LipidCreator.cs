@@ -397,7 +397,7 @@ namespace LipidCreator
                     Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
                     Console.WriteLine(e.Message);
                 }
-                collisionEnergyHandler.addCollisionEnergyFields();
+                collisionEnergyHandler.addCollisionEnergyFields(msInstruments);
             }
             else
             {

@@ -299,7 +299,7 @@ namespace LipidCreator
             fragmentsList.Rows.Clear();
             
             
-            foreach(string fragmentName in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys.OrderBy(fragmentName => Convert.ToInt32(creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct][fragmentName]["rank"])))
+            foreach(string fragmentName in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
             {
                 DataRow row = fragmentsList.NewRow();
                 row["View"] = true;

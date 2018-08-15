@@ -36,6 +36,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Threading;
 
 namespace LipidCreator
 {
@@ -161,6 +162,7 @@ namespace LipidCreator
             medNegAdductCheckbox4.Enabled = false;
             changeTab(0);
             
+            menuCollisionEnergy.Enabled = false;
             for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
@@ -173,10 +175,23 @@ namespace LipidCreator
                 }
             }
             
+            Thread th = new Thread(() => waitForCEComputation());
+            th.Start();
         }
         
         
-        
+        // since computation of optimal collision energy takes some time, it runs in background
+        // and this tiny observer checks if computation already passed and enables using 
+        // collision energy
+        public void waitForCEComputation()
+        {
+            while (!lipidCreator.collisionEnergyHandler.fieldsComputed)
+            {
+                Thread.Sleep(100);
+            }
+            menuCollisionEnergy.Enabled = true;
+            Refresh();
+        }
         
         
         

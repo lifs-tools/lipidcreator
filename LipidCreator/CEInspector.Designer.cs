@@ -194,18 +194,19 @@ namespace LipidCreator
             {
                 if (!(bool)row["View"]) continue;
                 string fragmentName = (string)row["Fragment name"];
-                lastX = 0;
-                lastY = 0;
                 Pen colorPen = new Pen(ColorTranslator.FromHtml(fragmentToColor[fragmentName]), (fragmentName == highlightName ? 4 : 2));
-                for (int i = 0; i < ceInspector.yValCoords[fragmentName].Length; ++i)
+                
+                Point[] curvePoints = new Point[ceInspector.xValCoords.Length];
+                
+                
+                for (int i = 0; i < ceInspector.xValCoords.Length; i += 1)
                 {
                     double valX = ceInspector.xValCoords[i];
                     double valY = ceInspector.yValCoords[fragmentName][i];
-                    
-                    if (i > 0) g.DrawLine(colorPen, valueToPx(lastX, lastY), valueToPx(valX, valY));
-                    lastX = valX;
-                    lastY = valY;
+                    curvePoints[i] = valueToPx(valX, valY);
                 }
+                
+                g.DrawLines(colorPen, curvePoints);
             }
             
             // drawing the axes

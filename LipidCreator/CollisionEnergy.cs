@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Globalization;
 
 
@@ -45,7 +46,9 @@ namespace LipidCreator
         // instrument CV term -> class -> fragment -> adduct -> charge -> parameter -> value
         public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
         public Dictionary<string, Func<Dictionary<string, string>, double, double>> intensityFunctions;
+        public Dictionary<string, Func<Dictionary<string, string>, double, double, double, double, double[]>> curveFunctions;
         public Dictionary<string, Func<Dictionary<string, string>, double>> optimalCEFunctions;
+        public volatile bool fieldsComputed = false;
         
         
         public static double square(double x)
@@ -59,6 +62,9 @@ namespace LipidCreator
             intensityFunctions = new Dictionary<string, Func<Dictionary<string, string>, double, double>>();
             intensityFunctions.Add("dlnormPar", intensityLogNormal);
             
+            curveFunctions = new Dictionary<string, Func<Dictionary<string, string>, double, double, double, double, double[]>>();
+            curveFunctions.Add("dlnormPar", computeLogNormalCurve);
+            
             optimalCEFunctions = new Dictionary<string, Func<Dictionary<string, string>, double>>();
             optimalCEFunctions.Add("dlnormPar", optimalCollisionEnergyLogNormal);
         }
@@ -66,10 +72,22 @@ namespace LipidCreator
         
         
         
-        public void addCollisionEnergyFields()
+        public void addCollisionEnergyFields(Dictionary<string, ArrayList> msInstruments)
+        {
+        
+            Thread th = new Thread(() => addCollisionEnergyFieldsThread(msInstruments));
+            th.Start();
+        }
+        
+        
+        
+        
+        public void addCollisionEnergyFieldsThread(Dictionary<string, ArrayList> msInstruments)
         {
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in instrumentParameters)
             {
+                double minX = (double)msInstruments[kvp1.Key][1];
+                double maxX = (double)msInstruments[kvp1.Key][2];
                 // foreach class
                 foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
@@ -84,11 +102,11 @@ namespace LipidCreator
                         {
                             if (product == null)
                             {
-                                product = computeLogNormalCurve(kvp4.Value, 10, 60, 100);
+                                product = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
                             }
                             else
                             {
-                                double[] second = computeLogNormalCurve(kvp4.Value, 10, 60, 100);
+                                double[] second = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
                                 product = productTwoDistributions(product, second);
                             }
                         }
@@ -99,7 +117,7 @@ namespace LipidCreator
                         {
                             if (maxY < product[i])
                             {
-                                argMaxY = 10 + (double)i / 100.0;
+                                argMaxY = minX + (double)i / 100.0;
                                 maxY = product[i];
                             }
                         }
@@ -111,6 +129,7 @@ namespace LipidCreator
                     }
                 }
             }
+            fieldsComputed = true;
         }
         
         
@@ -330,23 +349,6 @@ namespace LipidCreator
         }
         
         
-        
-        
-        /*
-        public static double[] computeLogNormalCurve(Dictionary<string, string> parameters, double[] xValues, double scale = 1)
-        {
-            double[] curve = new double[xValues.Length];
-            int i = 0;
-            
-            while (i < curve.Length)
-            {
-                curve[i] = scale * intensityLogNormal(parameters, xValues[i]);
-                i++;
-            }
-            
-            return curve;
-        }
-        */
         
         // assuming both distribution are stored in arrays of same length with same corresponding x values
         public static double[] productTwoDistributions(double[] first, double[] second)

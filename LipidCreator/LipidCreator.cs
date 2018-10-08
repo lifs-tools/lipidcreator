@@ -79,6 +79,9 @@ namespace LipidCreator
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser lipidMapsParser;
         
+        public ParserEventHandler lipidMapsNewParserEventHandler;
+        public Parser lipidMapsNewParser;
+        
         
         public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -463,6 +466,9 @@ namespace LipidCreator
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
             lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammer", QUOTE);
+            
+            lipidMapsNewParserEventHandler = new ParserEventHandler(this);
+            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidmaps-new.grammer", QUOTE);
         }
         
         
@@ -1131,6 +1137,17 @@ namespace LipidCreator
                         if (lipidMapsParserEventHandler.lipid != null)
                         {
                             lipid = lipidMapsParserEventHandler.lipid;
+                        }
+                    }
+                    else {
+                        lipidMapsNewParser.parse(oldLipidName);
+                        if (lipidMapsNewParser.wordInGrammer)
+                        {
+                            lipidMapsNewParser.raiseEvents();
+                            if (lipidMapsNewParserEventHandler.lipid != null)
+                            {
+                                lipid = lipidMapsNewParserEventHandler.lipid;
+                            }
                         }
                     }
                 }

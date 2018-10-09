@@ -430,7 +430,6 @@ namespace LipidCreator
         public CheckBox plFA2Checkbox1;
         public CheckBox plFA2Checkbox2;
         public CheckBox plFA2Checkbox3;
-        public CheckBox slIsLyso;
         public CheckBox glContainsSugar;
         public CheckBox chContainsEster;
 
@@ -513,6 +512,10 @@ namespace LipidCreator
         public RadioButton plRegular;
         public RadioButton plIsCL;
         public RadioButton plIsLyso;
+        
+        public GroupBox slTypeGroup;
+        public RadioButton slRegular;
+        public RadioButton slIsLyso;
 
         Label clDB3Label;
         Label clDB4Label;
@@ -962,7 +965,6 @@ namespace LipidCreator
             plFA2Checkbox3 = new CheckBox();
             glRepresentativeFA = new CheckBox();
             plRepresentativeFA = new CheckBox();
-            slIsLyso = new CheckBox();
             glContainsSugar = new CheckBox();
             chContainsEster = new CheckBox();
             
@@ -970,6 +972,10 @@ namespace LipidCreator
             plRegular = new RadioButton();
             plIsCL = new RadioButton();
             plIsLyso = new RadioButton();
+            
+            slTypeGroup = new GroupBox();
+            slRegular = new RadioButton();
+            slIsLyso = new RadioButton();
             
             glPositiveAdduct = new GroupBox();
             glNegativeAdduct = new GroupBox();
@@ -1706,7 +1712,7 @@ namespace LipidCreator
             slStep1.Controls.Add(slDB2Textbox);
             slStep1.Controls.Add(slLCBCombobox);
             slStep1.Controls.Add(slFACombobox);
-            slStep1.Controls.Add(slIsLyso);
+            slStep1.Controls.Add(slTypeGroup);
             slStep1.Controls.Add(slDB1Label);
             slStep1.Controls.Add(slDB2Label);
             slStep1.Controls.Add(slHGLabel);
@@ -1733,11 +1739,21 @@ namespace LipidCreator
             slStep1.Height = step1Height;
             slStep1.Text = "Step 1: Precursor selection";
             
+            slTypeGroup.Location = new Point(400, 8);
+            slTypeGroup.Size = new Size(180, 40);
+            slTypeGroup.Text = "Type";
+            slTypeGroup.Controls.Add(slIsLyso);
+            slTypeGroup.Controls.Add(slRegular);
             
-            slIsLyso.Location = new Point(180, 261);
+            slRegular.Location = new Point(10, 14);
+            slRegular.Text = "Regular";
+            slRegular.CheckedChanged += new EventHandler(slIsLysoCheckedChanged);
+            
+            slIsLyso.Location = new Point(90, 14);
             slIsLyso.Text = "Is lyso";
+            slIsLyso.Width = 70;
             slIsLyso.CheckedChanged += new EventHandler(slIsLysoCheckedChanged);
-            slIsLyso.BringToFront();
+            
 
             slFACombobox.BringToFront();
             slFATextbox.BringToFront();

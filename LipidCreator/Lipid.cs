@@ -229,12 +229,11 @@ namespace LipidCreator
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
                 
                 // Exception for lipids with NL(NH3) fragment
-                if (fragment.fragmentName.Equals("NL(NH3)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
+                if (fragment.fragmentName.Equals("-(NH3,17)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
                 
                 
                 // Exception for lipids for NL([adduct]) and +H or -H as adduct
-                if (fragment.fragmentName.Equals("NL([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
-                
+                if (fragment.fragmentName.Equals("-([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
                 
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;

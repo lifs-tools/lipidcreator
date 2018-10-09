@@ -681,6 +681,7 @@ namespace LipidCreator
                     SLLipid currentSLLipid = (SLLipid)currentLipid;
                     
                     slIsLyso.Checked = currentSLLipid.isLyso;
+                    slRegular.Checked = !currentSLLipid.isLyso;
                     slChangeLyso(currentSLLipid.isLyso);
                     
                     settingListbox = true;
@@ -729,6 +730,8 @@ namespace LipidCreator
                     updateRanges(currentSLLipid.fag, slDB1Textbox, 3);
                     slPictureBox.SendToBack();
                     break;
+                    
+                    
                     
                 case LipidCategory.Cholesterol:
                     Cholesterol currentCHLipid = (Cholesterol)currentLipid;
@@ -2464,8 +2467,8 @@ namespace LipidCreator
         
         void slIsLysoCheckedChanged(object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).isLyso = ((CheckBox)sender).Checked;
-            slChangeLyso(((CheckBox)sender).Checked);
+            ((SLLipid)currentLipid).isLyso = slIsLyso.Checked;
+            slChangeLyso(slIsLyso.Checked);
         }
         
         

@@ -169,7 +169,7 @@ namespace LipidCreator
                         
                         foreach (string headgroup in headGroupNames)
                         {
-                            String key = headgroup + " ";
+                            String key = " ";
                             int i = 0;
                             foreach (FattyAcid fa in sortedAcids)
                             {
@@ -187,9 +187,9 @@ namespace LipidCreator
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                                if (usedKeys.Contains(key + adduct.Key)) continue;
+                                if (usedKeys.Contains(headgroup + key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key + adduct.Key);
+                                usedKeys.Add(headgroup + key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -206,7 +206,7 @@ namespace LipidCreator
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.lipidClass = headgroup;
-                                precursorData.precursorName = key;
+                                precursorData.precursorName = headgroup + key;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
                                 precursorData.precursorAdductFormula = adductForm;
@@ -257,7 +257,7 @@ namespace LipidCreator
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.lipidClass = heavyHeadgroup;
-                                    heavyPrecursorData.precursorName = heavyKey;
+                                    heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct.Key;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -308,7 +308,7 @@ namespace LipidCreator
                                     headgroup = "MAG";
                                     break;
                             }
-                            String key = headgroup + " ";
+                            String key = " ";
                             int i = 0;
                             foreach (FattyAcid fa in sortedAcids)
                             {
@@ -324,9 +324,9 @@ namespace LipidCreator
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
                                 if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                                if (usedKeys.Contains(key + adduct.Key)) continue;
+                                if (usedKeys.Contains(headgroup + key + adduct.Key)) continue;
                                 
-                                usedKeys.Add(key + adduct.Key);
+                                usedKeys.Add(headgroup + key + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -344,7 +344,7 @@ namespace LipidCreator
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.lipidClass = headgroup;
-                                precursorData.precursorName = key;
+                                precursorData.precursorName = headgroup + key;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
                                 precursorData.precursorAdductFormula = adductForm;
@@ -400,7 +400,7 @@ namespace LipidCreator
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.lipidClass = heavyHeadgroup;
-                                    heavyPrecursorData.precursorName = heavyKey;
+                                    heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct.Key;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

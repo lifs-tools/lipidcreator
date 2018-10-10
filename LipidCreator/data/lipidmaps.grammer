@@ -45,10 +45,13 @@ Pure_FA = FA
 
 ## glycerolipid rules
 GL = SGL | TGL
-SGL = HG_SGL round_open_bracket FA unsorted_FA_separator FA round_close_bracket | HG_SGL round_open_bracket FA sorted_FA_separator FA round_close_bracket
-TGL = HG_GL round_open_bracket FA unsorted_FA_separator FA unsorted_FA_separator FA round_close_bracket | HG_GL round_open_bracket FA sorted_FA_separator FA sorted_FA_separator FA round_close_bracket
-HG_GL = "MG" | "DG" | "TG"
+SGL = HG_SGLc round_open_bracket FA FA_separator FA round_close_bracket | HG_SGLc FA FA_separator FA
+TGL = HG_GLc round_open_bracket FA FA_separator FA FA_separator FA round_close_bracket | HG_GLc FA FA_separator FA FA_separator FA
+
+HG_SGLc = HG_SGL | HG_SGL " "
 HG_SGL = "MGDG" | "DGDG" | "SQDG" | "SQMG" | "DG"
+HG_GLc = HG_GL | HG_GL " "
+HG_GL = "MG" | "DG" | "TG"
 
 
 
@@ -56,15 +59,20 @@ HG_SGL = "MGDG" | "DGDG" | "SQDG" | "SQMG" | "DG"
 
 ## phospholipid rules
 PL = LPL | DPL | CL | 4PL
-LPL = HG_LPL round_open_bracket FA round_close_bracket
-DPL = HG_PL round_open_bracket FA unsorted_FA_separator FA round_close_bracket | HG_PL round_open_bracket FA sorted_FA_separator FA round_close_bracket
-CL = HG_CL round_open_bracket "1'-" square_open_bracket FA sorted_FA_separator FA square_close_bracket ",3'-" square_open_bracket FA sorted_FA_separator FA square_close_bracket round_close_bracket
-4PL = HG_4PL round_open_bracket FA sorted_FA_separator FA sorted_FA_separator FA sorted_FA_separator FA round_close_bracket
+LPL = HG_LPLc round_open_bracket FA round_close_bracket | HG_LPLc FA
+DPL = HG_PL round_open_bracket FA FA_separator FA round_close_bracket | HG_PL FA FA_separator FA
+CL = HG_CLc round_open_bracket "1'-" square_open_bracket FA FA_separator FA square_close_bracket ",3'-" square_open_bracket FA FA_separator FA square_close_bracket round_close_bracket | HG_CLc "1'-" square_open_bracket FA FA_separator FA square_close_bracket ",3'-" square_open_bracket FA FA_separator FA square_close_bracket
+4PL = HG_4PLc round_open_bracket FA FA_separator FA FA_separator FA FA_separator FA round_close_bracket | HG_4PLc FA FA_separator FA FA_separator FA FA_separator FA
 
-HG_PL = HG_CL | HG_DPL PIP_position | HG_DPL | HG_LPL
+HG_PL = HG_CLc | HG_DPLc PIP_position | HG_DPLc | HG_LPLc
+
+HG_CLc = HG_CL | HG_CL " "
 HG_CL = "CL"
+HG_DPLc = HG_DPL | HG_DPL " "
 HG_DPL = "LBPA" | "CDP-DG" | "DMPE" | "MMPE" | "PA" | "PC" | "PE" | "PEt" | "PG" | "PI" | "PIP" | "PIP2" | "PIP3" | "PS" | "PIM1" | "PIM2" | "PIM3" | "PIM4" | "PIM5" | "PIM6" | "Glc-DG" | "PGP" | "PE-NMe2" | "AC2SGL" | "DAT" | "PE-NMe" | "PT" | "Glc-GP" | "NAPE"
+HG_LPLc = HG_LPL | HG_LPL " "
 HG_LPL = "LysoPC" | "LysoPE" | "LPIM1" | "LPIM2" | "LPIM3" | "LPIM4" | "LPIM5" | "LPIM6" | "CPA" | "LPA"
+HG_4PLc = HG_4PL | HG_4PL " "
 HG_4PL = "PAT16" | "PAT18"
 PIP_position = square_open_bracket PIP_pos square_close_bracket
 PIP_pos = PIP_pos "," PIP_pos | Number "'"
@@ -75,7 +83,7 @@ PIP_pos = PIP_pos "," PIP_pos | Number "'"
 
 ## sphingolipid rules
 SL = DSL | SphingoXine
-DSL = HG_DSL round_open_bracket LCB sorted_FA_separator FA round_close_bracket
+DSL = HG_DSLc round_open_bracket LCB FA_separator FA round_close_bracket | HG_DSLc LCB FA_separator FA
 
 SphingoXine = SphingoXine_pure | SphingoXine_var
 SphingoXine_pure = Sphingosine_name | Sphinganine_name
@@ -84,6 +92,7 @@ Sphingosine_name = "Sphingosine" | "Sphingosine-1-phosphate"
 Sphinganine_name = "Sphinganine" | "Sphinganine-1-phosphate"
 CType = "C" Number
 
+HG_DSLc = HG_DSL | HG_DSL " "
 HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
 
 
@@ -91,8 +100,10 @@ HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2C
 
 
 ## cholesterol lipids
-Cholesterol = Ch | ChE
+Cholesterol = Chc | ChEc
+Chc = Ch | Ch " "
 Ch = "Cholesterol"
+ChEc = ChE | ChE " "
 ChE = FA headgroup_separator HG_ChE
 HG_ChE = "Cholesteryl ester"
 
@@ -139,8 +150,7 @@ Number =  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | Number Num
 
 
 ## separators
-sorted_FA_separator = "/"
-unsorted_FA_separator = "_"
+FA_separator = "_" | "/" | "\" | "-"
 headgroup_separator = " "
 Carbon_DB_separator = ":"
 DB_hydroxyl_separator = ";"

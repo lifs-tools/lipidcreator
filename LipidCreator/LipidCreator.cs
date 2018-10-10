@@ -82,6 +82,9 @@ namespace LipidCreator
         public ParserEventHandler lipidMapsNewParserEventHandler;
         public Parser lipidMapsNewParser;
         
+        public static char HEAVY_LABEL_OPENING_BRACKET = '{';
+        public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
+        
         
         public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -271,7 +274,7 @@ namespace LipidCreator
                             
                             if (headgroup.attributes.Contains("heavy"))
                             {
-                                string monoName = headgroup.name.Split(new char[]{'/'})[0];
+                                string monoName = precursorNameSplit(headgroup.name)[0];
                                 if (headgroups.ContainsKey(monoName))
                                 {
                                     headgroups[monoName].heavyLabeledPrecursors.Add(headgroup);
@@ -884,6 +887,22 @@ namespace LipidCreator
             adductForm += (charge > 0) ? "+" : "-";
             return adductForm;
         }
+        
+        
+        
+        public static string computeHeavyIsotopeLabel(Dictionary<int, int> elements)
+        {
+            string label = "";
+            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE.Keys)
+            {
+                if (elements[molecule] > 0)
+                {
+                    label += MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE[molecule] + Convert.ToString(elements[molecule]);
+                }
+            }
+            if (label.Length > 0) label = "(+" + label + ")";
+            return label;
+        }
 
         
         
@@ -897,8 +916,6 @@ namespace LipidCreator
             }
             return mass - charge * 0.00054857990946;
         }
-        
-        
         
         
         
@@ -1176,6 +1193,20 @@ namespace LipidCreator
         }
         
         
+        public static string[] precursorNameSplit(string precursorName)
+        {
+            string[] names = new string[]{precursorName, ""};
+            int n = precursorName.Length;
+            if (precursorName[n - 1] != HEAVY_LABEL_CLOSING_BRACKET) return names;
+            if (precursorName.IndexOf(HEAVY_LABEL_OPENING_BRACKET) == -1) return names;
+            
+            precursorName = precursorName.Split(HEAVY_LABEL_CLOSING_BRACKET)[0];
+            names[1] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[1];
+            names[0] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[0];
+            return names;
+        }
+        
+        
         
         public void import(XDocument doc, bool onlySettings = false)
         {
@@ -1187,7 +1218,7 @@ namespace LipidCreator
             {
                 Precursor precursor = new Precursor();
                 precursor.import(precursorXML, importVersion);
-                string monoisotopic = precursor.name.Split(new Char[]{'/'})[0];
+                string monoisotopic = precursorNameSplit(precursor.name)[0];
                 if (categoryToClass.ContainsKey((int)precursor.category) && !headgroups.ContainsKey(precursor.name) && headgroups.ContainsKey(monoisotopic))
                 {
                     categoryToClass[(int)precursor.category].Add(precursor.name);

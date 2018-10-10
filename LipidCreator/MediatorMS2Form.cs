@@ -58,11 +58,10 @@ namespace LipidCreator
             {
                 if (creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy"))
                 {
-                    string monoName = lipidClass.Split(new char[]{'/'})[0];
-                    string deuterium = lipidClass.Split(new char[]{'/'})[1];
+                    string[] precNames = LipidCreator.precursorNameSplit(lipidClass);
                     
-                    if (!isotopeDict.ContainsKey(monoName)) isotopeDict.Add(monoName, new ArrayList());
-                    isotopeDict[monoName].Add(deuterium);
+                    if (!isotopeDict.ContainsKey(precNames[0])) isotopeDict.Add(precNames[0], new ArrayList());
+                    isotopeDict[precNames[0]].Add(precNames[1]);
                 }
             }
             senderInterupt = true;
@@ -98,7 +97,7 @@ namespace LipidCreator
             {
                 foreach (string deuterated in isotopeDict[headgroup])
                 {
-                    deuteratedMediatorHeadgroups.Items.Add(headgroup + "/" + deuterated);
+                    deuteratedMediatorHeadgroups.Items.Add(headgroup + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + deuterated + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET);
                 }
                 if (isotopeDict[headgroup].Count > 0) deuteratedMediatorHeadgroups.SelectedIndex = 0;
             }

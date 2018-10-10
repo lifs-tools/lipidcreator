@@ -110,10 +110,10 @@ namespace LipidCreator
             foreach(string headgroupIter in allHeadgroups)
             {   
                 string headgroup = headgroupIter;                
-                String key = headgroup;
-                
-                if (headgroup.IndexOf("/") > -1 && onlyHeavyLabeled == 0) continue;
-                else if (headgroup.IndexOf("/") == -1 && onlyHeavyLabeled == 1) continue;
+                string key = headgroup;
+                string[] precNames = LipidCreator.precursorNameSplit(headgroup);
+                if (precNames[1].Length > 0 && onlyHeavyLabeled == 0) continue;
+                else if (precNames[1].Length == 0 && onlyHeavyLabeled == 1) continue;
                 
                 
                 foreach (KeyValuePair<string, bool> adduct in adducts)
@@ -130,14 +130,16 @@ namespace LipidCreator
                     string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
                     int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
+                                    
+                    string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
                                                         
 
                     PrecursorData precursorData = new PrecursorData();
                     precursorData.lipidCategory = LipidCategory.Mediator;
                     precursorData.fullMoleculeListName = headgroup;
-                    precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
+                    precursorData.moleculeListName = precNames[0];
                     precursorData.lipidClass = headgroup;
-                    precursorData.precursorName = headgroup.Split(new Char[]{'/'})[0];
+                    precursorData.precursorName = newKey;
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct.Key;
                     precursorData.precursorAdductFormula = adductForm;

@@ -70,6 +70,7 @@ namespace LipidCreator
             this.label4 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -105,11 +106,11 @@ namespace LipidCreator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(148, 90);
+            this.label2.Location = new System.Drawing.Point(152, 94);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(10, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "-";
+            this.label2.Text = "{";
             // 
             // label3
             // 
@@ -135,6 +136,15 @@ namespace LipidCreator
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 5;
             this.label4.Text = "Elements";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(268, 94);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(10, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "}";
             // 
             // dataGridView1
             // 
@@ -270,6 +280,7 @@ namespace LipidCreator
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
@@ -300,6 +311,7 @@ namespace LipidCreator
         public System.Windows.Forms.Label label4;
         public System.Windows.Forms.DataGridView dataGridView1;
         public System.Windows.Forms.Label label5;
+        public System.Windows.Forms.Label label6;
         public System.Windows.Forms.ComboBox comboBox2;
         public System.Windows.Forms.ComboBox comboBox3;
         public System.Windows.Forms.Button button1;

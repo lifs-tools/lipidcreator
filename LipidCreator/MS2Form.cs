@@ -106,7 +106,7 @@ namespace LipidCreator
         public string getHeadgroup()
         {
             if (isotopeList.SelectedIndex == 0) return ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
-            return ((string)isotopeList.Items[isotopeList.SelectedIndex]).Replace(Lipid.HEAVY_LABEL_SEPARATOR, "/");
+            return ((string)isotopeList.Items[isotopeList.SelectedIndex]);
         }
         
         
@@ -415,7 +415,7 @@ namespace LipidCreator
             String lipidClass = ((TabPage)tabPages[tabControlFragments.SelectedIndex]).Name;
             foreach(Precursor heavyPrecursor in creatorGUI.lipidCreator.headgroups[lipidClass].heavyLabeledPrecursors)
             {
-                isotopeList.Items.Add(heavyPrecursor.name.Replace("/", Lipid.HEAVY_LABEL_SEPARATOR));
+                isotopeList.Items.Add(heavyPrecursor.name);
             }
             
             loading = false;

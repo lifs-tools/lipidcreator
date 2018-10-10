@@ -199,13 +199,13 @@ namespace LipidCreator
             
             foreach(Precursor heavyPrecursor in precursor.heavyLabeledPrecursors)
             {
-                comboBox3.Items.Add(heavyPrecursor.name.Split(new Char[]{'/'})[1]);
+                comboBox3.Items.Add(LipidCreator.precursorNameSplit(heavyPrecursor.name)[1]);
             }
             if (comboBox3.Items.Count > 0)
             {
                 comboBox3.SelectedIndex = 0;
                 
-                string heaveyHeadgroup = headgroup + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                string heaveyHeadgroup = headgroup + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + (string)comboBox3.Items[comboBox3.SelectedIndex] + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
                 Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heaveyHeadgroup];
                 if (heavyPrecursor.userDefined)
                 {
@@ -326,7 +326,7 @@ namespace LipidCreator
             else if(comboBox3.SelectedIndex >= 0)
             {
                 fillGridContent();
-                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + (string)comboBox3.Items[comboBox3.SelectedIndex] + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 userDefined = precursor.userDefined;
                 comboBox2.Items.Add("Head group");
@@ -513,7 +513,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                    string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + (string)comboBox3.Items[comboBox3.SelectedIndex] + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
                     Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
                     heavyPrecursor.elements = (Dictionary<int, int>)tmp[0];
                     heavyPrecursor.userDefinedFattyAcids.Clear();
@@ -534,7 +534,7 @@ namespace LipidCreator
             
             if (mbr == DialogResult.Yes) {
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
-                string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + "/" + (string)comboBox3.Items[comboBox3.SelectedIndex];
+                string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + (string)comboBox3.Items[comboBox3.SelectedIndex] + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
                 Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
                 
                 creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Remove(heavyHeadgroup);
@@ -562,7 +562,7 @@ namespace LipidCreator
         private void button2_Click(object sender, EventArgs e)
         {
             string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
-            string name = headgroup + "/" + textBox1.Text;
+            string name = headgroup + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + textBox1.Text + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
             
             if (textBox1.Text.Length == 0)
             {

@@ -249,8 +249,6 @@ namespace LipidCreator
                                         
                                         if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                                         
-                                        string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                        string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                     
                                         FattyAcid heavyFA1 = new FattyAcid(fa1);
                                         FattyAcid heavyFA2 = new FattyAcid(fa2);
@@ -277,6 +275,8 @@ namespace LipidCreator
                                         string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                                         int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                                         double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                        
+                                        string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                             
                                         // filling information on MS1 level for heavy cardiolipin
                                         PrecursorData heavyPrecursorData = new PrecursorData();
@@ -394,8 +394,6 @@ namespace LipidCreator
                                 
                                 if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                                 
-                                string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                             
                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
                                 
@@ -408,6 +406,8 @@ namespace LipidCreator
                                 string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                                 int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                
+                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
                                 PrecursorData heavyPrecursorData = new PrecursorData();
@@ -549,9 +549,6 @@ namespace LipidCreator
                                     string heavyHeadgroup = heavyPrecursor.name;
                                     
                                     if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
-                                    
-                                    string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                                    string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                 
                                     FattyAcid heavyFA1 = new FattyAcid(fa1);
                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
@@ -571,6 +568,8 @@ namespace LipidCreator
                                     string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                                     int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                                     double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                    
+                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                         
                                     // filling information on MS1 level for heavy phospholipid
                                     PrecursorData heavyPrecursorData = new PrecursorData();

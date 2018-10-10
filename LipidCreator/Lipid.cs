@@ -238,8 +238,6 @@ namespace LipidCreator
                 // Exception for lipids with NL([adduct]) fragment and +H or -H as adduct
                 if (fragment.fragmentName.Equals("-([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
                 
-                
-                
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
                 lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;

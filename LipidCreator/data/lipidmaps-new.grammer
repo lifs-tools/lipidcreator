@@ -32,7 +32,7 @@ lipid_pure = GL | PL | SL | Cholesterol | Mediator
 
 
 # adduct information
-adductInfo = "[M" adduct "]" charge charge_sign
+adductInfo = "[M" adduct "]" charge charge_sign | adduct_separator "[M" adduct "]" charge charge_sign
 adduct = "+H" | "+2H" | "+NH4" | "-H" | "-2H" | "+HCOO" | "+CH3COO"
 charge = "1" | "2"
 charge_sign = "-" | "+"
@@ -112,6 +112,7 @@ Number =  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | Number Num
 
 ## separators
 sorted_FA_separator = "/" | "\"
+adduct_separator = " "
 unsorted_FA_separator = "-"
 headgroup_separator = " "
 Carbon_DB_separator = ":"

@@ -900,8 +900,6 @@ namespace LipidCreator
         
         
         
-        
-        
         public void sendToSkyline(DataTable dt, string blibName, string blibFile)
         {
             if (skylineToolClient == null) return;

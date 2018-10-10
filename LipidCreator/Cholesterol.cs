@@ -167,7 +167,7 @@ namespace LipidCreator
                             
                             if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                             
-                            string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                            string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
                             string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                             
                             FattyAcid heavyFA1 = new FattyAcid(fa);
@@ -255,8 +255,8 @@ namespace LipidCreator
                         
                         if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                         
-                        string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
-                        string heavyKey = key + "/" + suffix;
+                        string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
+                        string heavyKey = key + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + suffix + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
             
                         Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);

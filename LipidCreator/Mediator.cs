@@ -110,10 +110,10 @@ namespace LipidCreator
             foreach(string headgroupIter in allHeadgroups)
             {   
                 string headgroup = headgroupIter;                
-                String key = headgroup;
-                
-                if (headgroup.IndexOf("/") > -1 && onlyHeavyLabeled == 0) continue;
-                else if (headgroup.IndexOf("/") == -1 && onlyHeavyLabeled == 1) continue;
+                string key = headgroup;
+                string[] precNames = LipidCreator.precursorNameSplit(headgroup);
+                if (precNames[1].Length > 0 && onlyHeavyLabeled == 0) continue;
+                else if (precNames[1].Length == 0 && onlyHeavyLabeled == 1) continue;
                 
                 
                 foreach (KeyValuePair<string, bool> adduct in adducts)
@@ -135,9 +135,9 @@ namespace LipidCreator
                     PrecursorData precursorData = new PrecursorData();
                     precursorData.lipidCategory = LipidCategory.Mediator;
                     precursorData.fullMoleculeListName = headgroup;
-                    precursorData.moleculeListName = headgroup.Split(new Char[]{'/'})[0];
+                    precursorData.moleculeListName = precNames[0];
                     precursorData.lipidClass = headgroup;
-                    precursorData.precursorName = headgroup.Split(new Char[]{'/'})[0];
+                    precursorData.precursorName = precNames[0];
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct.Key;
                     precursorData.precursorAdductFormula = adductForm;

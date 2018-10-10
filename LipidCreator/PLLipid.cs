@@ -249,7 +249,7 @@ namespace LipidCreator
                                         
                                         if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                                         
-                                        string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                                        string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
                                         string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                     
                                         FattyAcid heavyFA1 = new FattyAcid(fa1);
@@ -394,7 +394,7 @@ namespace LipidCreator
                                 
                                 if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                                 
-                                string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                                string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
                                 string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                             
                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
@@ -550,7 +550,7 @@ namespace LipidCreator
                                     
                                     if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                                     
-                                    string suffix = heavyHeadgroup.Split(new Char[]{'/'})[1];
+                                    string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
                                     string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                                 
                                     FattyAcid heavyFA1 = new FattyAcid(fa1);

@@ -222,8 +222,12 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
-                // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond
-                if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("HG") && precursorData.lcb.db > 0) continue;
+                // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
+                if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
+                
+                
+                // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
+                if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.lcb.hydroxyl == 0) continue;
                 
                 
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
@@ -232,8 +236,10 @@ namespace LipidCreator
                 if (fragment.fragmentName.Equals("-(NH3,17)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
                 
                 
-                // Exception for lipids for NL([adduct]) and +H or -H as adduct
+                // Exception for lipids with NL([adduct]) fragment and +H or -H as adduct
                 if (fragment.fragmentName.Equals("-([adduct])") && (precursorData.precursorAdductFormula.Equals("[M+H]1+") || precursorData.precursorAdductFormula.Equals("[M-H]1-"))) continue;
+                
+                
                 
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;

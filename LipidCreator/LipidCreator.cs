@@ -887,6 +887,22 @@ namespace LipidCreator
             adductForm += (charge > 0) ? "+" : "-";
             return adductForm;
         }
+        
+        
+        
+        public static string computeHeavyIsotopeLabel(Dictionary<int, int> elements)
+        {
+            string label = "";
+            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE.Keys)
+            {
+                if (elements[molecule] > 0)
+                {
+                    label += MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE[molecule] + Convert.ToString(elements[molecule]);
+                }
+            }
+            if (label.Length > 0) label = "(+" + label + ")";
+            return label;
+        }
 
         
         

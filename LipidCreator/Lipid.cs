@@ -79,7 +79,6 @@ namespace LipidCreator
         public List<String> headGroupNames;
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
-        public static string HEAVY_LABEL_SEPARATOR = "-";
         public LipidCreator lipidCreator;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
         
@@ -312,6 +311,8 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }
+                
+                
                 
                 
                 

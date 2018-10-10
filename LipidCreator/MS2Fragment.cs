@@ -140,6 +140,18 @@ namespace LipidCreator
             {(int)Molecules.S33, "S33"}
         };
         
+        
+        public static Dictionary<int, string> HEAVY_SHORTCUTS_NOMENCLATURE = new Dictionary<int, string>(){
+            {(int)Molecules.H2, "[2]H"},
+            {(int)Molecules.C13, "[13]C"},
+            {(int)Molecules.N15, "[15]N"},
+            {(int)Molecules.O17, "[17]O"},
+            {(int)Molecules.O18, "[18]O"},
+            {(int)Molecules.P32, "[32]P"},
+            {(int)Molecules.S34, "[34]S"},
+            {(int)Molecules.S33, "[33]S"}
+        };
+        
         public static Dictionary<int, ArrayList> HEAVY_DERIVATIVE = new Dictionary<int, ArrayList>()
         {
             {(int)Molecules.C, new ArrayList(){Molecules.C13}},

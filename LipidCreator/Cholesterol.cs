@@ -167,8 +167,6 @@ namespace LipidCreator
                             
                             if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
                             
-                            string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
-                            string heavyKey = key + HEAVY_LABEL_SEPARATOR + suffix;
                             
                             FattyAcid heavyFA1 = new FattyAcid(fa);
                             heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
@@ -180,6 +178,9 @@ namespace LipidCreator
                             string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                             int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                             double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                            
+                            
+                            string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                 
 
                             PrecursorData heavyPrecursorData = new PrecursorData();
@@ -254,9 +255,6 @@ namespace LipidCreator
                         string heavyHeadgroup = heavyPrecursor.name;
                         
                         if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
-                        
-                        string suffix = LipidCreator.precursorNameSplit(heavyHeadgroup)[1];
-                        string heavyKey = key + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + suffix + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
             
                         Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
@@ -264,6 +262,9 @@ namespace LipidCreator
                         string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
                         int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
                         double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                    
+                        
+                        string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                             
 
                         PrecursorData heavyPrecursorData = new PrecursorData();

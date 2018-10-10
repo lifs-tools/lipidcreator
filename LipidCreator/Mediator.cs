@@ -130,6 +130,8 @@ namespace LipidCreator
                     string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
                     int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
+                                    
+                    string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
                                                         
 
                     PrecursorData precursorData = new PrecursorData();
@@ -137,7 +139,7 @@ namespace LipidCreator
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.moleculeListName = precNames[0];
                     precursorData.lipidClass = headgroup;
-                    precursorData.precursorName = precNames[0];
+                    precursorData.precursorName = newKey;
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct.Key;
                     precursorData.precursorAdductFormula = adductForm;

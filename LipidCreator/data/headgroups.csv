@@ -103,50 +103,50 @@ Mediator,TXB2{d4},20,30,6,0,0,0,4,images/Precursors/IS/TXB2_d4.png,No,No,No,Yes,
 Mediator,TXB3,20,32,6,0,0,0,0,images/Precursors/TXB3.png,No,No,No,Yes,No,No,No,-H,8,
 PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
 PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,Yes,No,No,-H,6,
-PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-H,0,
+PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,0,
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
 PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,7,lyso
 PL,LPC,8,19,6,1,1,0,0,images/Precursors/LPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso
 PL,LPC O-a,8,19,6,1,1,0,0,images/Precursors/eLPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso;ether
 PL,LPC O-p,8,19,6,1,1,0,0,images/Precursors/pLPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,7,lyso;ether
-PL,LPE,5,13,6,1,1,0,0,images/Precursors/LPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,7,lyso
-PL,LPE O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,7,lyso;ether
-PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,7,lyso;ether
-PL,LPG,6,14,8,0,1,0,0,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,7,lyso
-PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,7,lyso
-PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,7,lyso
-PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,+H,1,
-PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,
+PL,LPE,5,13,6,1,1,0,0,images/Precursors/LPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,7,lyso
+PL,LPE O-a,5,13,6,1,1,0,0,images/Precursors/eLPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,7,lyso;ether
+PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,7,lyso;ether
+PL,LPG,6,14,8,0,1,0,0,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,7,lyso
+PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,7,lyso
+PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,7,lyso
+PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,1,
+PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
 PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,-H,6,
 PL,PC,8,18,6,1,1,0,0,images/Precursors/PC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,
 PL,PC O-a,8,18,6,1,1,0,0,images/Precursors/ePC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,ether
 PL,PC O-p,8,18,6,1,1,0,0,images/Precursors/pPC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,6,ether
-PL,PE,5,12,6,1,1,0,0,images/Precursors/PE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,
-PL,PE O-a,5,12,6,1,1,0,0,images/Precursors/ePE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,ether
-PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,ether
-PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,No,Yes,+H,6,
-PL,PG,6,13,8,0,1,0,0,images/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,6,
-PL,PI,9,17,11,0,1,0,0,images/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,+H,6,
-PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,+H,6,
-PL,PIP2,9,19,17,0,3,0,0,images/Precursors/PIP2_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,+H,6,
-PL,PIP3,9,20,20,0,4,0,0,images/Precursors/PIP3_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,+H,6,
-PL,PS,6,12,8,1,1,0,0,images/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,6,
-SL,Cer,0,0,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,-H,4,
-SL,CerP,0,1,3,0,1,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,-H,4,
+PL,PE,5,12,6,1,1,0,0,images/Precursors/PE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
+PL,PE O-a,5,12,6,1,1,0,0,images/Precursors/ePE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,ether
+PL,PE O-p,5,12,6,1,1,0,0,images/Precursors/pPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,ether
+PL,PEt,5,11,6,0,1,0,0,images/Precursors/PEt_neg_pre.png,Yes,No,Yes,Yes,No,No,Yes,-H,6,
+PL,PG,6,13,8,0,1,0,0,images/Precursors/PG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
+PL,PI,9,17,11,0,1,0,0,images/Precursors/PI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,6,
+PL,PIP,9,18,14,0,2,0,0,images/Precursors/PIP_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,-H,6,
+PL,PIP2,9,19,17,0,3,0,0,images/Precursors/PIP2_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,-H,6,
+PL,PIP3,9,20,20,0,4,0,0,images/Precursors/PIP3_neg_pre.png,Yes,No,Yes,Yes,Yes,No,No,-H,6,
+PL,PS,6,12,8,1,1,0,0,images/Precursors/PS_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,6,
+SL,Cer,0,0,0,0,0,0,0,images/Precursors/Cer_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,+H,4,
+SL,CerP,0,1,3,0,1,0,0,images/Precursors/CerP_pos_pre.png,Yes,No,No,Yes,No,Yes,Yes,+H,4,
 SL,EPC,2,6,3,1,1,0,0,images/Precursors/CerPE_pos_pre.png,Yes,No,No,No,No,No,No,+H,4,
 SL,GB3,18,30,15,0,0,0,0,images/Precursors/GB3Cer_pos_pre.png,Yes,No,No,No,No,No,No,+H,4,
 SL,GB4,26,43,20,1,0,0,0,images/Precursors/GB4Cer_pos_pre.png,Yes,No,No,No,No,No,No,+H,4,
-SL,GD3,34,54,26,2,0,0,0,images/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,4,
-SL,GM3,23,37,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,4,
-SL,GM4,17,27,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,+H,4,
+SL,GD3,34,54,26,2,0,0,0,images/Precursors/GD3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,4,
+SL,GM3,23,37,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,4,
+SL,GM4,17,27,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,4,
 SL,Hex2Cer,12,20,10,0,0,0,0,images/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,4,
 SL,HexCer,6,10,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,4,
-SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
+SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,+H,4,
 SL,LCB,0,1,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,+H,5,lyso
-SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,5,lyso
-SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,-H,5,lyso
-SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+HCOO,5,lyso
+SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,+H,5,lyso
+SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,5,lyso
+SL,LSM,5,13,3,1,1,0,0,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,5,lyso
 SL,M(IP)2C,18,32,21,0,2,0,0,images/Precursors/MIP2Cer_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
 SL,MIPC,12,21,13,0,1,0,0,images/Precursors/MIPCer_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
-SL,SHexCer,6,10,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,4,
+SL,SHexCer,6,10,8,0,0,1,0,images/Precursors/HexCerS_pos_pre.png,Yes,No,Yes,Yes,No,No,No,+H,4,
 SL,SM,5,12,3,1,1,0,0,images/Precursors/SM_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,4,

@@ -682,7 +682,7 @@ namespace LipidCreator
             this.menuCollisionEnergyNone.Text = "No computation";
             this.menuCollisionEnergyNone.RadioCheck = true;
             this.menuCollisionEnergyNone.Checked = true;
-            this.menuCollisionEnergyNone.Click += new System.EventHandler (changeInstrumentForCE);
+            this.menuCollisionEnergyNone.Click += new System.EventHandler (unsetInstrument);
             
             this.menuMS2Fragments.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
             this.menuMS2Fragments.Text = "&MS2 fragments";

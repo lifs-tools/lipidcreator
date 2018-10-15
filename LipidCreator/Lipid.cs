@@ -335,6 +335,7 @@ namespace LipidCreator
                     string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = precursorData.precursorAdductFormula;
                     lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragName);
+                    lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, fragName);
                 }
                 
             }

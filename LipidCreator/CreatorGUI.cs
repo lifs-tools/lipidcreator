@@ -64,6 +64,7 @@ namespace LipidCreator
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
         public string selectedInstrumentForCE = "";
+        public string monitoringType = "none";
         
         
         
@@ -169,15 +170,20 @@ namespace LipidCreator
                 if (lipidCreator.msInstruments.ContainsKey(instrument)){
                     MenuItem instrumentItem = new MenuItem();
                     menuCollisionEnergy.MenuItems.Add(instrumentItem);
-                    instrumentItem.Text = (string)lipidCreator.msInstruments[instrument][0];
+                    instrumentItem.Text = (string)lipidCreator.msInstruments[instrument].model;
                     instrumentItem.RadioCheck = true;
-                    instrumentItem.Click += new System.EventHandler (changeInstrumentForCE);
+                    //instrumentItem.Click += new System.EventHandler (changeInstrumentForCE);
+                    
+                    //for 
                 }
             }
             
             Thread th = new Thread(() => waitForCEComputation());
             th.Start();
         }
+        
+        
+        
         
         
         // since computation of optimal collision energy takes some time, it runs in background
@@ -3226,18 +3232,51 @@ namespace LipidCreator
         }
         
         
-        public void changeInstrumentForCE(Object sender, EventArgs e)
+        public void unsetInstrument(Object sender, EventArgs e)
         {
             int index = ((MenuItem)sender).Index;
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
-            menuCollisionEnergyOpt.Enabled = index > 0 ? true : false;
+            menuCollisionEnergyOpt.Enabled = false;
+            monitoringType = "none";
             
+        }
+        
+        
+        public void changeInstrumentForCEtypePRM(Object sender, EventArgs e)
+        {
+            int index = ((MenuItem)sender).Index;
+            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            
+            menuCollisionEnergyOpt.Enabled = true;
+            monitoringType = "PRM";
+            
+            /*
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
                 item.Checked = item.Index == index;
             }
+            */
         }
+        
+        
+        public void changeInstrumentForCEtypeSRM(Object sender, EventArgs e)
+        {
+            int index = ((MenuItem)sender).Index;
+            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            
+            menuCollisionEnergyOpt.Enabled = false;
+            monitoringType = "SRM";
+            
+            /*
+            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
+            {
+                item.Checked = item.Index == index;
+            }
+            */
+        }
+        
+        
         
         
         public void openMS2Form(Object sender, EventArgs e)
@@ -3573,11 +3612,11 @@ namespace LipidCreator
                     Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
                     Console.WriteLine("    -c instrument:\tCompute with optimal collision energy (not available for all lipid classes)");
                     Console.WriteLine("      instruments are:");
-                    foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
+                    foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
-                        if ((double)kvp.Value[1] > 0 && (double)kvp.Value[2] > 0 && (double)kvp.Value[1] < (double)kvp.Value[2]) 
+                        if (kvp.Value.minCE > 0 && kvp.Value.maxCE > 0 && kvp.Value.minCE < kvp.Value.maxCE) 
                         {
-                            string fullInstrumentName = (string)(kvp.Value[0]);
+                            string fullInstrumentName = (string)(kvp.Value.model);
                             Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName);
                         }
                     }
@@ -3589,11 +3628,11 @@ namespace LipidCreator
                     Console.WriteLine();
                     Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv instrument");
                     Console.WriteLine("  available instruments:");
-                    foreach (KeyValuePair<string, ArrayList> kvp in lc.msInstruments)
+                    foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
-                        if ((bool)kvp.Value[1]) 
+                        if (kvp.Value.minCE > 0) 
                         {
-                            string fullInstrumentName = (string)(kvp.Value[0]);
+                            string fullInstrumentName = kvp.Value.model;
                             Console.WriteLine("    '" + kvp.Key + "': " + fullInstrumentName);
                         }
                     }
@@ -3783,25 +3822,25 @@ namespace LipidCreator
                                 {
                                     switch (args[p])
                                     {
-                                        case "-p":
+                                        case "-p": // precursor parameter
                                             if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterPrecursor))) printHelp("transitionlist");
                                             if (parameterPrecursor < 0 || 2 < parameterPrecursor) printHelp("transitionlist");
                                             p += 2;
                                             break;
                                             
-                                        case "-h":
+                                        case "-h": // heavy isotope parameter
                                             if (!(p + 1 < args.Length) || !(int.TryParse(args[p + 1], out parameterHeavy))) printHelp("transitionlist");
                                             if (parameterHeavy < 0 || 2 < parameterHeavy) printHelp("transitionlist");
                                             p += 2;
                                             break;
                                             
-                                        case "-c":
+                                        case "-c": // compute collision optimization parameter
                                             if (!(p + 1 < args.Length)) printHelp("transitionlist");
                                             instrument = args[p + 1];
                                             p += 2;
                                             break;
                                             
-                                        case "-s":
+                                        case "-s": // file split parameter
                                             split = true;
                                             p += 1;
                                             break;
@@ -3819,10 +3858,10 @@ namespace LipidCreator
                                 
                                 
                                 
-                                LipidCreator lc = new LipidCreator(null);
+                                LipidCreator lc = new LipidCreator(null, instrument.Length != 0);
                                 lc.analytics("lipidcreator-cli", "launch");
                                 
-                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
+                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
                                 lc.importLipidList(inputCSV);
                                 foreach(Lipid lipid in lc.registeredLipids)
@@ -3854,7 +3893,7 @@ namespace LipidCreator
                                 LipidCreator lc = new LipidCreator(null);
                                 lc.analytics("lipidcreator-cli", "launch");
                                 
-                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || !((bool)lc.msInstruments[instrument][1]))) printHelp("transitionlist");
+                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
                                 
                                 lc.importLipidList(inputCSV);

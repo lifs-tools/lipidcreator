@@ -67,7 +67,7 @@ namespace LipidCreator
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
         public HashSet<string> lysoPhosphoLipids;
-        public Dictionary<string, ArrayList> msInstruments;
+        public Dictionary<string, InstrumentData> msInstruments;
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
         public ParserEventHandler parserEventHandler;
@@ -319,19 +319,17 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length != 5) throw new Exception("invalid line in file, number of columns in line != 5");
+                            if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
                             
-                            ArrayList devData = new ArrayList();
                             
-                            devData.Add(tokens[1]);
-                            double min_CE = -1, max_CE = -1;
-                            double.TryParse(tokens[2], out min_CE);
-                            double.TryParse(tokens[3], out max_CE);
-                            devData.Add(min_CE);
-                            devData.Add(max_CE);
-                            devData.Add(tokens[4]);
-                            
-                            msInstruments.Add(tokens[0], devData);
+                            InstrumentData instrumentData = new InstrumentData();
+                            instrumentData.CVTerm = tokens[0];
+                            instrumentData.model = tokens[1];
+                            double.TryParse(tokens[2], out instrumentData.minCE);
+                            double.TryParse(tokens[3], out instrumentData.maxCE);
+                            instrumentData.xAxisLabel = tokens[4];
+                            instrumentData.modes = new HashSet<string>(tokens[4].Split(new Char[]{';'}));
+                            msInstruments.Add(instrumentData.CVTerm, instrumentData);
                         }
                     }
                 }
@@ -364,7 +362,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line < 19");
+                            if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
                             
                             string instrument = tokens[0];
                             string lipidClass = tokens[1];
@@ -438,7 +436,7 @@ namespace LipidCreator
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
             lysoPhosphoLipids = new HashSet<string>();
-            msInstruments = new Dictionary<string, ArrayList>();
+            msInstruments = new Dictionary<string, InstrumentData>();
             collisionEnergyHandler = new CollisionEnergy();
             availableInstruments = new ArrayList();
             availableInstruments.Add("");

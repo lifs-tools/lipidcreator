@@ -87,7 +87,7 @@ namespace LipidCreator
         public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {
             lipidCreator = _lipidCreator;
-            adducts = new Dictionary<String, bool>();
+            adducts = new Dictionary<string, bool>();
             adducts.Add("+H", false);
             adducts.Add("+2H", false);
             adducts.Add("+NH4", false);
@@ -221,12 +221,13 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+            
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
                 
                 
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
-                if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.lcb.hydroxyl == 0) continue;
+                if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.fa1.hydroxyl == 0) continue;
                 
                 
                 MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
@@ -315,9 +316,6 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }
-                
-                
-                
                 
                 
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));

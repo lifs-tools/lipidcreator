@@ -350,10 +350,15 @@ namespace LipidCreator
                         
                         foreach (KeyValuePair<string, bool> adduct in adducts)
                         {
-                            if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                            if (usedKeys.Contains(headgroup + key + adduct.Key)) continue;
+                            string completeKey = headgroup;
+                            if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
+                            else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
+                            completeKey += key;
                             
-                            usedKeys.Add(headgroup + key + adduct.Key);
+                            if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                            if (usedKeys.Contains(completeKey + adduct.Key)) continue;
+                            
+                            usedKeys.Add(completeKey + adduct.Key);
                             
                             Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -369,7 +374,7 @@ namespace LipidCreator
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.lipidClass = headgroup;
-                            precursorData.precursorName = headgroup + key;
+                            precursorData.precursorName = completeKey;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct.Key;
                             precursorData.precursorAdductFormula = adductForm;
@@ -439,6 +444,7 @@ namespace LipidCreator
             
             else
             {
+                        
             
                 if (headGroupNames.Count == 0) return;
                 bool isPlamalogen = false;
@@ -478,17 +484,11 @@ namespace LipidCreator
                             }
                             
                             String key = " ";
-                            if (isPlamalogen) key = key.Replace("O-p", "O");
-                            else if (isFAa) key = key.Replace("O-a", "O");
                             int i = 0;
                             foreach (FattyAcid fa in sortedAcids)
                             {
                                 if (fa.length > 0 && fa.suffix != "x"){
                                     if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
-                                    /*
-                                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
-                                    if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
-                                    key += fa.suffix;*/
                                     key += fa.ToString();
                                 }
                             }
@@ -496,10 +496,15 @@ namespace LipidCreator
                           
                             foreach (KeyValuePair<string, bool> adduct in adducts)
                             {
-                                if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                                if (usedKeys.Contains(headgroup + key + adduct.Key)) continue;
+                                string completeKey = headgroup;
+                                if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
+                                else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
+                                completeKey += key;
                                 
-                                usedKeys.Add(headgroup + key + adduct.Key);
+                                if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
+                                if (usedKeys.Contains(completeKey + adduct.Key)) continue;
+                                
+                                usedKeys.Add(completeKey + adduct.Key);
                                 
                                 Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
@@ -516,7 +521,7 @@ namespace LipidCreator
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.lipidClass = headgroup;
-                                precursorData.precursorName = headgroup + key;
+                                precursorData.precursorName = completeKey;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
                                 precursorData.precursorAdductFormula = adductForm;

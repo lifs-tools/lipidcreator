@@ -67,7 +67,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
-        
+            
             string grammerFilename = "data/lipidnames.grammer";
             char quote = '"';
             

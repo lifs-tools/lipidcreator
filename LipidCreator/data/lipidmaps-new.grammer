@@ -33,8 +33,11 @@ lipid_pure = GL | PL | SL | Cholesterol | MediatorC
 
 # adduct information
 adductInfo = "[M" adduct "]" charge charge_sign | adduct_separator "[M" adduct "]" charge charge_sign
-adduct = "+H" | "+2H" | "+NH4" | "-H" | "-2H" | "+HCOO" | "+CH3COO"
-charge = "1" | "2"
+adduct = "+H" | "+2H" | "+NH4" | "-H" | "-2H" | "+HCOO" | "+CH3COO" | adduct4 | adduct4 adduct4
+adduct4 = adduct2 | adduct2 adduct2
+adduct2 = Char | Char Char
+Char = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" |"0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "+" | "-"
+charge = "1" | "2" | "3" | "4"
 charge_sign = "-" | "+"
 
 

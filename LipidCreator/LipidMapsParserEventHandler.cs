@@ -174,11 +174,44 @@ namespace LipidCreator
             {
                 if (lipid.headGroupNames.Count != 0)
                 {
+                    int FAset = 0;
+                    if (!((PLLipid)lipid).fag1.faTypes["FAx"]) FAset += 1;
+                    if (!((PLLipid)lipid).fag2.faTypes["FAx"]) FAset += 1;
+                    if (!((PLLipid)lipid).fag3.faTypes["FAx"]) FAset += 1;
+                    if (!((PLLipid)lipid).fag4.faTypes["FAx"]) FAset += 1;
+                
                     if (((PLLipid)lipid).fag1.faTypes["FAx"])
                     {
                         FattyAcidGroup fag = ((PLLipid)lipid).fag1;
                         ((PLLipid)lipid).fag1 = ((PLLipid)lipid).fag2;
                         ((PLLipid)lipid).fag2 = fag;
+                    }
+                    
+                    if (((PLLipid)lipid).isCL)
+                    {
+                        if (FAset < 3)
+                        {
+                            lipid = null;
+                            return;
+                        }
+                        
+                    }
+                    else if (((PLLipid)lipid).isLyso)
+                    {
+                        if (FAset < 1)
+                        {
+                            lipid = null;
+                            return;
+                        }
+                    
+                    }
+                    else
+                    {
+                        if (FAset < 2)
+                        {
+                            lipid = null;
+                            return;
+                        }
                     }
                 
                     string hg = lipid.headGroupNames[0];
@@ -294,7 +327,7 @@ namespace LipidCreator
         
         
         public void FALCBvalidationCheck()
-        {
+        {            
             // check if created fatty acid is valid
             if (lipid != null && !(lipid is UnsupportedLipid) && fag != null)
             {
@@ -315,6 +348,7 @@ namespace LipidCreator
                         int doubleBondCount = (new List<int>(fag.doubleBondCounts))[0];
                         
                         int maxDoubleBond = Math.Max((carbonLength - 1) >> 1, 0);
+                        
                         if (doubleBondCount > maxDoubleBond)
                         {
                             lipid = null;

@@ -72,7 +72,7 @@ namespace LipidCreator
         public CreatorGUI(string inputParameters)
         {
             this.inputParameters = inputParameters;
-            this.lipidCreator = new LipidCreator(this.inputParameters);
+            this.lipidCreator = new LipidCreator(this.inputParameters, true);
             currentIndex = LipidCategory.NoLipid;
             resetAllLipids();
             

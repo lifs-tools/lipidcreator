@@ -140,7 +140,7 @@ namespace LipidCreator
             if (handler != null) handler(this, e);
         }
         
-        public void readInputFiles()
+        public void readInputFiles(bool withGUI)
         {
             int lineCounter = 1;
             string ms2FragmentsFile = prefixPath + "data/ms2fragments.csv";
@@ -403,7 +403,7 @@ namespace LipidCreator
                     Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
                     Console.WriteLine(e.Message);
                 }
-                collisionEnergyHandler.addCollisionEnergyFields(msInstruments);
+                if (withGUI) collisionEnergyHandler.addCollisionEnergyFields(msInstruments);
             }
             else
             {
@@ -426,7 +426,7 @@ namespace LipidCreator
         
 
         
-        public LipidCreator(String pipe)
+        public LipidCreator(string pipe, bool withGUI = false)
         {
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
@@ -443,7 +443,7 @@ namespace LipidCreator
             availableInstruments = new ArrayList();
             availableInstruments.Add("");
             replicates = new ArrayList();
-            readInputFiles();
+            readInputFiles(withGUI);
             
             
             foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);
@@ -1157,6 +1157,7 @@ namespace LipidCreator
                         }
                     }
                     else {
+                    
                         lipidMapsNewParser.parse(oldLipidName);
                         if (lipidMapsNewParser.wordInGrammer)
                         {

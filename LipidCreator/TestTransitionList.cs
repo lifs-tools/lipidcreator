@@ -194,6 +194,8 @@ namespace LipidCreator
                             Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), Convert.ToInt32(unitTestRow[5]), "precursor charge: ");
                             
+                            //Console.WriteLine(row[LipidCreator.PRECURSOR_NAME] + " " + (string)row[LipidCreator.PRODUCT_NAME]);
+                            
                             // product
                             Assert((string)row[LipidCreator.PRODUCT_NAME], fragmentName, "product name: ");
                             Assert((string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA], unitTestRow[7], "product formula: ");

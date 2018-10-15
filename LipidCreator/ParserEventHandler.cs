@@ -107,7 +107,6 @@ namespace LipidCreator
         
         
         
-        
         // handling all events
         public void lipidPostEvent(Parser.TreeNode node)
         {
@@ -124,13 +123,13 @@ namespace LipidCreator
                 
                 if (charge != 0)
                 {
-                    if (Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    if (lipid.adducts.ContainsKey(adduct) && Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
                     {
                         lipid.adducts[adduct] = true;
                     }
                     else
                     {
-                        lipid = null;
+                        lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
                     }
                 }
                 else

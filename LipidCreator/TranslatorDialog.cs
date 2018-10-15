@@ -242,13 +242,29 @@ namespace LipidCreator
                 if (currentLipid != null)
                 {
                     currentLipid.computePrecursorData(creatorGUI.lipidCreator.headgroups, usedKeys, precursorDataList);
-                    lipidNamesList.Rows[i][SECOND_HEADER] = ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
-                    usedKeys.Clear();
-                    if (!(currentLipid is UnsupportedLipid)) ++correctlyParsed;
+                    string newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
+                    if (!(currentLipid is UnsupportedLipid))
+                    {
+                        string adduct = "";
+                        foreach (string addct in currentLipid.adducts.Keys)
+                        {
+                            if (currentLipid.adducts[addct])
+                            {
+                                adduct = addct;
+                                break;
+                            }
+                        }
+                        int charge = Lipid.adductToCharge[adduct];
+                        newLipidName += LipidCreator.computeAdductFormula(((PrecursorData)precursorDataList[0]).atomsCount, adduct, charge);
+                        ++correctlyParsed;
+                    }
                     else
                     {
                         lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                     }
+                    usedKeys.Clear();
+                    precursorDataList.Clear();
+                    lipidNamesList.Rows[i][SECOND_HEADER] = newLipidName;
                     
                 }
                 else

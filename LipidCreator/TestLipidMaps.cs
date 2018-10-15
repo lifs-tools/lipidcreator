@@ -53,44 +53,11 @@ namespace LipidCreator
             LipidMapsParserEventHandler lipidMapsParserEventHandler = new LipidMapsParserEventHandler(lipidCreator);
             Parser parser = new Parser(lipidMapsParserEventHandler, grammerFilename, quote);
             
-            
-            
-            /*
-            string lipidName = "5-Oxo-ETE-d7";
-            HashSet<String> u = new HashSet<String>();
-            ArrayList p = new ArrayList();
-            parser.parse(lipidName);
-            Lipid currLipid = null;
-            if (parser.wordInGrammer)
-            {
-                parser.raiseEvents();
-                if (lipidMapsParserEventHandler.lipid != null)
-                {
-                    currLipid = lipidMapsParserEventHandler.lipid;
-                    currLipid.computePrecursorData(lipidCreator.headgroups, u, p);
-                    Console.WriteLine(lipidName + " -> " + ((PrecursorData)p[p.Count - 1]).precursorName);
-                }
-                else
-                {
-                    Console.WriteLine("error during event raising");
-                }
-            }
-            else
-            {
-                Console.WriteLine("lipid is not in grammer");
-            }
-            Console.WriteLine("lipid is " + (currLipid != null ? "valid" : "unvalid"));
-            
-            Environment.Exit(-1);
-            */
-            
-            
-            
                         
             string headgroupsFile = "test/lipidmaps.csv";
             if (File.Exists(headgroupsFile))
             {
-                lineCounter = 1;
+                lineCounter = 0;
                 try
                 {
                     HashSet<String> usedKeys = new HashSet<String>();
@@ -98,16 +65,15 @@ namespace LipidCreator
                     
                     using (StreamReader sr = new StreamReader(headgroupsFile))
                     {
-                        String line = sr.ReadLine(); // omit titles
+                        String line;
                         while((line = sr.ReadLine()) != null)
                         {
-                            if (lineCounter % 1000 == 0) Console.WriteLine(lineCounter);
+                            if (lineCounter % 1000 == 0 && lineCounter > 0) Console.WriteLine(lineCounter);
                             lineCounter++;
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             
                             string[] tokens = LipidCreator.parseLine(line);
-                            
                             parser.parse(tokens[0]);
                             string translatedName = "";
                             if (parser.wordInGrammer)
@@ -115,10 +81,17 @@ namespace LipidCreator
                                 parser.raiseEvents();
                                 if (lipidMapsParserEventHandler.lipid != null)
                                 {
+                                
                                     Lipid currentLipid = lipidMapsParserEventHandler.lipid;
                                     currentLipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
-                                    translatedName =  ((PrecursorData)precursorDataList[precursorDataList.Count - 1]).precursorName;
+                                    if (precursorDataList.Count == 0)
+                                    {
+                                        Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', no precursor created!");
+                                        Environment.Exit(-1);
+                                    }
+                                    translatedName =  ((PrecursorData)precursorDataList[0]).precursorName;
                                     usedKeys.Clear();
+                                    precursorDataList.Clear();
                                 }
                             }
                             

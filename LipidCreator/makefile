@@ -24,3 +24,5 @@ run:
 	
 runtest:
 	mono TestTransitionList.exe
+	mono TestParser.exe
+	mono TestLipidMaps.exe

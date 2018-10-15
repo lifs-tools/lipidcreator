@@ -40,6 +40,18 @@ using System.Globalization;
 
 namespace LipidCreator
 {  
+
+    [Serializable]
+    public class InstrumentData
+    {
+        public string CVTerm = "";
+        public string model = "";
+        public double minCE = -1;
+        public double maxCE = -1;
+        public string xAxisLabel = "";
+        public HashSet<string> modes = new HashSet<string>();
+    }
+
     [Serializable]
     public class CollisionEnergy
     { 
@@ -72,7 +84,7 @@ namespace LipidCreator
         
         
         
-        public void addCollisionEnergyFields(Dictionary<string, ArrayList> msInstruments)
+        public void addCollisionEnergyFields(Dictionary<string, InstrumentData> msInstruments)
         {
         
             Thread th = new Thread(() => addCollisionEnergyFieldsThread(msInstruments));
@@ -82,12 +94,12 @@ namespace LipidCreator
         
         
         
-        public void addCollisionEnergyFieldsThread(Dictionary<string, ArrayList> msInstruments)
+        public void addCollisionEnergyFieldsThread(Dictionary<string, InstrumentData> msInstruments)
         {
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in instrumentParameters)
             {
-                double minX = (double)msInstruments[kvp1.Key][1];
-                double maxX = (double)msInstruments[kvp1.Key][2];
+                double minX = (double)msInstruments[kvp1.Key].minCE;
+                double maxX = (double)msInstruments[kvp1.Key].maxCE;
                 // foreach class
                 foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
@@ -147,11 +159,10 @@ namespace LipidCreator
                     Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
-                        
                         Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
                         if (parLevel3.ContainsKey(fragment))
                         {
-                        
+                            Console.WriteLine(fragment);
                             Dictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("CE"))
                             {
@@ -161,6 +172,7 @@ namespace LipidCreator
                     }
                 }
             }
+            Console.WriteLine(instrument + " " + lipidClass + " " + adduct + " " + fragment + " " + energy);
             return energy;
         }
         

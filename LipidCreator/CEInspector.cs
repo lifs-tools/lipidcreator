@@ -102,7 +102,7 @@ namespace LipidCreator
             foreach (string instrumentName in collisionEnergies.Keys)
             {
                 indexToInstrument.Add(instrumentName);
-                instrumentCombobox.Items.Add(creatorGUI.lipidCreator.msInstruments[instrumentName][0]);
+                instrumentCombobox.Items.Add(creatorGUI.lipidCreator.msInstruments[instrumentName].CVTerm);
                 if (instrumentName == selectedInstrument) instrumentCombobox.SelectedIndex = ii;
                 ++ii;
             }
@@ -260,11 +260,11 @@ namespace LipidCreator
         {
             selectedInstrument = (string)indexToInstrument[instrumentCombobox.SelectedIndex];
             classCombobox.Items.Clear();
-            double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][1];
-            double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument][2];
+            double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].minCE;
+            double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].maxCE;
             numericalUpDownCurrentCE.Minimum = (decimal)minVal;
             numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
-            cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument][3];
+            cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument].xAxisLabel;
             
             cartesean.updateXBoundaries(minVal, maxVal);
             foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)

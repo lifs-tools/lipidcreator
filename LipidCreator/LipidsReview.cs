@@ -70,8 +70,8 @@ namespace LipidCreator
             
             if (creatorGUI.selectedInstrumentForCE.Length > 0)
             {
-                ArrayList instrumentData = creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE];
-                buttonStoreSpectralLibrary.Enabled = (double)instrumentData[1] > 0 && (double)instrumentData[2] > 0 && (double)instrumentData[1] < (double)instrumentData[2];
+                InstrumentData instrumentData = creatorGUI.lipidCreator.msInstruments[creatorGUI.selectedInstrumentForCE];
+                buttonStoreSpectralLibrary.Enabled = instrumentData.minCE > 0 && instrumentData.maxCE > 0 && instrumentData.minCE < instrumentData.maxCE;
             }
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;

@@ -162,7 +162,6 @@ namespace LipidCreator
                         Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
                         if (parLevel3.ContainsKey(fragment))
                         {
-                            Console.WriteLine(fragment);
                             Dictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("CE"))
                             {
@@ -172,7 +171,6 @@ namespace LipidCreator
                     }
                 }
             }
-            Console.WriteLine(instrument + " " + lipidClass + " " + adduct + " " + fragment + " " + energy);
             return energy;
         }
         

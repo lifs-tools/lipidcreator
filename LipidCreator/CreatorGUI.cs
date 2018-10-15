@@ -170,11 +170,30 @@ namespace LipidCreator
                 if (lipidCreator.msInstruments.ContainsKey(instrument)){
                     MenuItem instrumentItem = new MenuItem();
                     menuCollisionEnergy.MenuItems.Add(instrumentItem);
-                    instrumentItem.Text = (string)lipidCreator.msInstruments[instrument].model;
+                    instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
                     instrumentItem.RadioCheck = true;
-                    //instrumentItem.Click += new System.EventHandler (changeInstrumentForCE);
                     
-                    //for 
+                    foreach (string instrumentMode in lipidCreator.msInstruments[instrument].modes)
+                    {
+                        MenuItem instrumentModeItem = new MenuItem();
+                        instrumentItem.MenuItems.Add(instrumentModeItem);
+                        instrumentModeItem.Text = instrumentMode;
+                        switch (instrumentMode)
+                        {
+                            case "PRM":
+                                instrumentModeItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
+                                break;
+                                
+                            case "SRM":
+                                instrumentModeItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                break;
+                                
+                            default:
+                                throw new Exception("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
+                                
+                        
+                        }
+                    }
                 }
             }
             
@@ -3240,40 +3259,42 @@ namespace LipidCreator
             menuCollisionEnergyOpt.Enabled = false;
             monitoringType = "none";
             
+            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
+            {
+                item.Checked = item.Index == 0;
+            }
         }
         
         
         public void changeInstrumentForCEtypePRM(Object sender, EventArgs e)
         {
-            int index = ((MenuItem)sender).Index;
+            int index = ((MenuItem)(((MenuItem)sender).Parent)).Index;
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
             menuCollisionEnergyOpt.Enabled = true;
             monitoringType = "PRM";
             
-            /*
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
                 item.Checked = item.Index == index;
             }
-            */
         }
         
         
         public void changeInstrumentForCEtypeSRM(Object sender, EventArgs e)
         {
-            int index = ((MenuItem)sender).Index;
+            int index = ((MenuItem)(((MenuItem)sender).Parent)).Index;
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
             menuCollisionEnergyOpt.Enabled = false;
             monitoringType = "SRM";
             
-            /*
+            
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
                 item.Checked = item.Index == index;
             }
-            */
+            
         }
         
         
@@ -3373,7 +3394,7 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids(selectedInstrumentForCE);
+            lipidCreator.assembleLipids(selectedInstrumentForCE, monitoringType);
             lipidCreator.analytics("lipidcreator", "create-transition-list");
             lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;

@@ -191,8 +191,9 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler = null, string instrument = "")
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler = null, string instrument = "", string monitoringType = "", double minCE = 0, double maxCE = 0)
         {
+            
             
             if (precursorData.addPrecursor){
                 DataRow lipidRowPrecursor = transitionList.NewRow();
@@ -210,11 +211,19 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
                 
-                if (collisionEnergyHandler != null && instrument.Length > 0)
+                if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType.Length > 0)
                 {
                     string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = precursorData.precursorAdductFormula;
-                    lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, "precursor");
+                    if (monitoringType.Equals("PRM"))
+                    {
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, "precursor");
+                    }
+                    else if (monitoringType.Equals("SRM"))
+                    {
+                        double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, "precursor");
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = Math.Max(Math.Min(maxCE, ceValue), minCE);
+                    }
                 }
             }
             
@@ -330,14 +339,20 @@ namespace LipidCreator
                 transitionList.Rows.Add(lipidRow);
                 
                 
-                if (collisionEnergyHandler != null && instrument.Length > 0)
+                if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType.Length > 0)
                 {
                     string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = precursorData.precursorAdductFormula;
-                    lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragName);
-                    lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, fragName);
+                    if (monitoringType.Equals("PRM"))
+                    {
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = collisionEnergyHandler.getCollisionEnergy(instrument, lipidClass, adduct, fragName);
+                    }
+                    else if (monitoringType.Equals("SRM"))
+                    {
+                        double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, fragName);
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = Math.Max(Math.Min(maxCE, ceValue), minCE);
+                    }
                 }
-                
             }
         }
         

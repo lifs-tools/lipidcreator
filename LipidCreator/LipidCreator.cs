@@ -328,7 +328,7 @@ namespace LipidCreator
                             double.TryParse(tokens[2], out instrumentData.minCE);
                             double.TryParse(tokens[3], out instrumentData.maxCE);
                             instrumentData.xAxisLabel = tokens[4];
-                            instrumentData.modes = new HashSet<string>(tokens[4].Split(new Char[]{';'}));
+                            instrumentData.modes = new HashSet<string>(tokens[5].Split(new Char[]{';'}));
                             msInstruments.Add(instrumentData.CVTerm, instrumentData);
                         }
                     }
@@ -645,7 +645,7 @@ namespace LipidCreator
         
         
         
-        public void createFragmentList(string instrument)
+        public void createFragmentList(string instrument, string monitoringType)
         {
             transitionList = addDataColumns(new DataTable ());
             transitionListUnique = addDataColumns (new DataTable ());
@@ -660,9 +660,11 @@ namespace LipidCreator
             }
             else 
             {
+                double minCE = msInstruments[instrument].minCE;
+                double maxCE = msInstruments[instrument].maxCE;
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument);
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument, monitoringType, minCE, maxCE);
                 }
             }
             
@@ -692,7 +694,7 @@ namespace LipidCreator
         
         
         
-        public void assembleLipids(string instrument = "")
+        public void assembleLipids(string instrument = "", string monitoringType = "")
         {
 
             List<string> headerList = new List<string>();
@@ -708,7 +710,7 @@ namespace LipidCreator
             SKYLINE_API_HEADER = apiList.ToArray();
         
             createPrecursorList();
-            createFragmentList(instrument);
+            createFragmentList(instrument, monitoringType);
         }
         
         

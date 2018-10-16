@@ -49,6 +49,8 @@ namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
+    public enum MonitoringTypes {NoMonitoring, SRM, PRMFragments, PRMArbitrary};
+
     [Serializable]
     public class LipidCreator
     {   
@@ -401,7 +403,6 @@ namespace LipidCreator
                     Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
                     Console.WriteLine(e.Message);
                 }
-                if (withGUI) collisionEnergyHandler.addCollisionEnergyFields(msInstruments);
             }
             else
             {
@@ -442,7 +443,7 @@ namespace LipidCreator
             availableInstruments.Add("");
             replicates = new ArrayList();
             readInputFiles(withGUI);
-            
+            collisionEnergyHandler.addCollisionEnergyFields();
             
             foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);
             
@@ -645,7 +646,8 @@ namespace LipidCreator
         
         
         
-        public void createFragmentList(string instrument, string monitoringType)
+        
+        public void createFragmentList(string instrument, MonitoringTypes monitoringType)
         {
             transitionList = addDataColumns(new DataTable ());
             transitionListUnique = addDataColumns (new DataTable ());
@@ -664,7 +666,24 @@ namespace LipidCreator
                 double maxCE = msInstruments[instrument].maxCE;
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument, monitoringType, minCE, maxCE);
+                    double CE = -1;
+                    string precursorName = precursorData.fullMoleculeListName;
+                    string adduct = precursorData.precursorAdductFormula;
+                    if (monitoringType == MonitoringTypes.PRMFragments)
+                    {
+                        collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
+                        CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
+                    }
+                    else if (monitoringType == MonitoringTypes.PRMArbitrary)
+                    {
+                        
+                        if (collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct) == -1)
+                        {
+                            collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
+                        }
+                        CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
+                    }
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
             }
             
@@ -694,7 +713,7 @@ namespace LipidCreator
         
         
         
-        public void assembleLipids(string instrument = "", string monitoringType = "")
+        public void assembleLipids(string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring)
         {
 
             List<string> headerList = new List<string>();
@@ -708,7 +727,8 @@ namespace LipidCreator
             apiList.AddRange(STATIC_SKYLINE_API_HEADER);
             if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
             SKYLINE_API_HEADER = apiList.ToArray();
-        
+            
+            
             createPrecursorList();
             createFragmentList(instrument, monitoringType);
         }
@@ -1432,6 +1452,13 @@ namespace LipidCreator
             // Write the annotated spectra
             foreach (PrecursorData precursorData in this.precursorDataList)
             {
+                string precursorName = precursorData.fullMoleculeListName;
+                string adduct = precursorData.precursorAdductFormula;
+                
+                if (collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct) == -1)
+                {
+                    collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
+                }
                 Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, instrument);
             }
             

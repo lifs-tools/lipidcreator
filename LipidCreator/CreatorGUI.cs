@@ -73,7 +73,7 @@ namespace LipidCreator
         public CreatorGUI(string inputParameters)
         {
             this.inputParameters = inputParameters;
-            this.lipidCreator = new LipidCreator(this.inputParameters, true);
+            this.lipidCreator = new LipidCreator(this.inputParameters);
             currentIndex = LipidCategory.NoLipid;
             resetAllLipids();
             
@@ -3613,14 +3613,21 @@ namespace LipidCreator
                     Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
                     Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
                     Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
-                    Console.WriteLine("    -c instrument:\tCompute with optimal collision energy (not available for all lipid classes)");
-                    Console.WriteLine("      instruments are:");
+                    Console.WriteLine("    -c instrument mode:\tCompute with optimal collision energy (not available for all lipid classes)");
+                    Console.WriteLine("      available instruments and modes:");
                     foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
                         if (kvp.Value.minCE > 0 && kvp.Value.maxCE > 0 && kvp.Value.minCE < kvp.Value.maxCE) 
                         {
                             string fullInstrumentName = (string)(kvp.Value.model);
-                            Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName);
+                            string modes = "(";
+                            foreach (string mode in kvp.Value.modes)
+                            {
+                                if (modes.Length > 1) modes += " / ";
+                                modes += mode;
+                            }
+                            modes += ")";
+                            Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName + " " + modes);
                         }
                     }
                     break;
@@ -3818,6 +3825,7 @@ namespace LipidCreator
                                 string inputCSV = args[1];
                                 string outputCSV = args[2];
                                 string instrument = "";
+                                string mode = "";
                                 bool deleteReplicates = false;
                                 bool split = false;
                                 int p = 3;
@@ -3838,9 +3846,10 @@ namespace LipidCreator
                                             break;
                                             
                                         case "-c": // compute collision optimization parameter
-                                            if (!(p + 1 < args.Length)) printHelp("transitionlist");
+                                            if (!(p + 2 < args.Length)) printHelp("transitionlist");
                                             instrument = args[p + 1];
-                                            p += 2;
+                                            mode = args[p + 2];
+                                            p += 3;
                                             break;
                                             
                                         case "-s": // file split parameter
@@ -3861,10 +3870,12 @@ namespace LipidCreator
                                 
                                 
                                 
-                                LipidCreator lc = new LipidCreator(null, instrument.Length != 0);
+                                LipidCreator lc = new LipidCreator(null);
                                 lc.analytics("lipidcreator-cli", "launch");
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
+                                
+                                if (mode != "" && mode != "PRM" && mode != "SRM") printHelp("transitionlist");
                                 
                                 lc.importLipidList(inputCSV);
                                 foreach(Lipid lipid in lc.registeredLipids)
@@ -3873,7 +3884,11 @@ namespace LipidCreator
                                     lipid.onlyHeavyLabeled = parameterHeavy;
                                 }
                                 
-                                lc.assembleLipids(instrument); 
+                                MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
+                                if (mode == "PRM") monitoringType = MonitoringTypes.PRMFragments;
+                                else if (mode == "SRM") monitoringType = MonitoringTypes.SRM;
+                                
+                                lc.assembleLipids(instrument, monitoringType); 
                                 DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                 lc.storeTransitionList(",", split, outputCSV, transitionList);
                             }

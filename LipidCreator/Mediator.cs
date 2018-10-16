@@ -133,7 +133,6 @@ namespace LipidCreator
                                     
                     string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
                                                         
-
                     PrecursorData precursorData = new PrecursorData();
                     precursorData.lipidCategory = LipidCategory.Mediator;
                     precursorData.fullMoleculeListName = headgroup;

@@ -46,6 +46,7 @@ namespace LipidCreator
         public Dictionary<string, double[]> yValCoords = null;
         public Dictionary<string, double> fragmentApex = null;
         public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies = null;  // for instrument / class / adduct
+        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, bool>>>> fragmentSelections = null;  // for instrument / class / adduct / fragment
         public string selectedInstrument = "";
         public string selectedClass = "";
         public string selectedAdduct = "";
@@ -59,6 +60,7 @@ namespace LipidCreator
             creatorGUI = _creatorGUI;
             selectedInstrument = _currentInstrument;
             collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
+            fragmentSelections = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, bool>>>>();
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
             indexToInstrument = new ArrayList();
@@ -77,22 +79,34 @@ namespace LipidCreator
             // foreach instrument
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
             {
-                Dictionary<string, Dictionary<string, double>> p1 = new Dictionary<string, Dictionary<string, double>>();
-                collisionEnergies.Add(kvp1.Key, p1);
+                Dictionary<string, Dictionary<string, double>> ce1 = new Dictionary<string, Dictionary<string, double>>();
+                collisionEnergies.Add(kvp1.Key, ce1);
+                Dictionary<string, Dictionary<string, Dictionary<string, bool>>> fs1 = new Dictionary<string, Dictionary<string, Dictionary<string, bool>>>();
+                fragmentSelections.Add(kvp1.Key, fs1);
                 
                 // foreach class
                 foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
-                    Dictionary<string, double> p2 = new Dictionary<string, double>();
-                    p1.Add(kvp2.Key, p2);
+                    Dictionary<string, double> ce2 = new Dictionary<string, double>();
+                    ce1.Add(kvp2.Key, ce2);
+                    Dictionary<string, Dictionary<string, bool>> fs2 = new Dictionary<string, Dictionary<string, bool>>();
+                    fs1.Add(kvp2.Key, fs2);
                     
                     // foreach adduct
                     foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        var e = kvp3.Value.Keys.GetEnumerator();
-                        e.MoveNext();
-                        string firstFragment = e.Current;
-                        p2.Add(kvp3.Key, Convert.ToDouble(kvp3.Value[firstFragment]["CE"], CultureInfo.InvariantCulture));
+                    
+                        Dictionary<string, bool> fs3 = new Dictionary<string, bool>();
+                        fs2.Add(kvp3.Key, fs3);
+                        
+                        
+                        ce2.Add(kvp3.Key, creatorGUI.lipidCreator.collisionEnergyHandler.collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]);
+                        
+                        // foreach adduct
+                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
+                        {
+                            fs3.Add(kvp4.Key, kvp4.Value["selected"] == "1");
+                        }
                     }
                 }
             }
@@ -190,13 +204,15 @@ namespace LipidCreator
             //int ii = 0;
             foreach(DataRow row in fragmentsList.Rows)
             {
+                string fragmentName = (string)row["Fragment Name"];
                 if ((bool)row["View"])
                 {
-                    string fragmentName = (string)row["Fragment Name"];
                     selectedFragments.Add(fragmentName);
                     
                     yValCoords["productProfile"] = CollisionEnergy.productTwoDistributions(yValCoords["productProfile"], yValCoords[fragmentName]);
                 }
+                
+                fragmentSelections[selectedInstrument][selectedClass][selectedAdduct][fragmentName] = ((bool)row["View"]);
             }
             
             double argMaxY = 0;
@@ -209,6 +225,11 @@ namespace LipidCreator
                     argMaxY = xValCoords[i];
                     maxY = yValCoords["productProfile"][i];
                 }
+            }
+            
+            if (collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] < 0)
+            {
+                collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = argMaxY;
             }
             
             fragmentApex["productProfile"] = argMaxY;
@@ -299,11 +320,11 @@ namespace LipidCreator
             fragmentsList.Rows.Clear();
             
             
-            foreach(string fragmentName in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[selectedInstrument][selectedClass][selectedAdduct].Keys)
+            foreach(KeyValuePair<string, bool> fragmentPar in fragmentSelections[selectedInstrument][selectedClass][selectedAdduct])
             {
                 DataRow row = fragmentsList.NewRow();
-                row["View"] = true;
-                row["Fragment name"] = fragmentName;
+                row["View"] = fragmentPar.Value;
+                row["Fragment name"] = fragmentPar.Key;
                 fragmentsList.Rows.Add(row);
             }
             
@@ -340,12 +361,12 @@ namespace LipidCreator
                     // foreach adduct
                     foreach(KeyValuePair<string, double> kvp3 in kvp2.Value)
                     {
-                        string stringCE = String.Format(new CultureInfo("en-US"), "{0:0.00}", kvp3.Value);
+                        creatorGUI.lipidCreator.collisionEnergyHandler.collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key] = kvp3.Value;
                         
                         // foreach fragment
                         foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])
                         {
-                            kvp4.Value["CE"] = stringCE;
+                            kvp4.Value["selected"] = fragmentSelections[kvp1.Key][kvp2.Key][kvp3.Key][kvp4.Key] ? "1" : "0";
                         }
                     }
                 }
@@ -480,31 +501,6 @@ namespace LipidCreator
         {
             fragmentSelectionChanged();
         }
-        
-        
-        
-        
-        public double sq(double x)
-        {
-            return x * x;
-        }
-        
-        
-        
-        
-        public double muToE(double mu, double sigma)
-        {
-            return Math.Exp(mu + sq(sigma) / 2.0);
-        }
-        
-        
-        
-        
-        public double sigmaToS(double mu, double sigma)
-        {
-            return Math.Exp(mu + sq(sigma) / 2.0) * Math.Sqrt(Math.Exp(sq(sigma)) - 1.0);
-        }
-        
         
         
         

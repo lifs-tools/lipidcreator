@@ -33,7 +33,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Globalization;
 
 
@@ -57,10 +56,10 @@ namespace LipidCreator
     { 
         // instrument CV term -> class -> fragment -> adduct -> charge -> parameter -> value
         public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
+        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies;
         public Dictionary<string, Func<Dictionary<string, string>, double, double>> intensityFunctions;
         public Dictionary<string, Func<Dictionary<string, string>, double, double, double, double, double[]>> curveFunctions;
         public Dictionary<string, Func<Dictionary<string, string>, double>> optimalCEFunctions;
-        public volatile bool fieldsComputed = false;
         
         
         public static double square(double x)
@@ -79,95 +78,104 @@ namespace LipidCreator
             
             optimalCEFunctions = new Dictionary<string, Func<Dictionary<string, string>, double>>();
             optimalCEFunctions.Add("dlnormPar", optimalCollisionEnergyLogNormal);
+            
+            collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
         }
         
         
         
         
-        public void addCollisionEnergyFields(Dictionary<string, InstrumentData> msInstruments)
-        {
-        
-            Thread th = new Thread(() => addCollisionEnergyFieldsThread(msInstruments));
-            th.Start();
-        }
-        
-        
-        
-        
-        public void addCollisionEnergyFieldsThread(Dictionary<string, InstrumentData> msInstruments)
+        public void addCollisionEnergyFields()
         {
             foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in instrumentParameters)
             {
-                double minX = (double)msInstruments[kvp1.Key].minCE;
-                double maxX = (double)msInstruments[kvp1.Key].maxCE;
+                Dictionary<string, Dictionary<string, double>> ce1 = new Dictionary<string, Dictionary<string, double>>();
+                collisionEnergies.Add(kvp1.Key, ce1);
+            
                 // foreach class
                 foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
+                    Dictionary<string, double> ce2 = new Dictionary<string, double>();
+                    ce1.Add(kvp2.Key, ce2);
+                
                     // foreach adduct
                     foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        
-                        double[] product = null;
+                        ce2.Add(kvp3.Key, -1);
                     
-                        // foreach fragment
                         foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
                         {
-                            if (product == null)
-                            {
-                                product = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
-                            }
-                            else
-                            {
-                                double[] second = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
-                                product = productTwoDistributions(product, second);
-                            }
-                        }
-                        
-                        double argMaxY = 0;
-                        double maxY = 0;
-                        for (int i = 0; i < product.Length; ++i)
-                        {
-                            if (maxY < product[i])
-                            {
-                                argMaxY = minX + (double)i / 100.0;
-                                maxY = product[i];
-                            }
-                        }
-                        
-                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
-                        {
-                            kvp4.Value.Add("CE", String.Format(new CultureInfo("en-US"), "{0:0.00}", argMaxY));
+                            kvp4.Value.Add("selected", "1");
                         }
                     }
                 }
             }
-            fieldsComputed = true;
         }
         
         
         
-        public double getCollisionEnergy(string instrument, string lipidClass, string adduct, string fragment)
+        
+        public void computeDefaultCollisionEnergy(InstrumentData instrumentData, string lipidClass, string adduct)
+        {
+            double minX = instrumentData.minCE;
+            double maxX = instrumentData.maxCE;
+            
+            double[] product = null;
+        
+            if (!instrumentParameters.ContainsKey(instrumentData.CVTerm)) return;
+            if (!instrumentParameters[instrumentData.CVTerm].ContainsKey(lipidClass)) return;
+            if (!instrumentParameters[instrumentData.CVTerm][lipidClass].ContainsKey(adduct)) return;
+                    
+            // foreach fragment
+            foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in instrumentParameters[instrumentData.CVTerm][lipidClass][adduct])
+            {
+                if (kvp4.Value["selected"] != "1") continue;
+                if (product == null)
+                {
+                    product = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
+                }
+                else
+                {
+                    double[] second = curveFunctions[kvp4.Value["model"]](kvp4.Value, minX, maxX, 100, 1);
+                    product = productTwoDistributions(product, second);
+                }
+            }
+                
+            
+            double argMaxY = -1;
+            if (product != null)
+            {
+                double maxY = 0;
+                for (int i = 0; i < product.Length; ++i)
+                {
+                    if (maxY < product[i])
+                    {
+                        argMaxY = minX + (double)i / 100.0;
+                        maxY = product[i];
+                    }
+                }
+            }
+            
+            collisionEnergies[instrumentData.CVTerm][lipidClass][adduct] = argMaxY;
+        }
+        
+        
+        
+        
+        public double getCollisionEnergy(string instrument, string lipidClass, string adduct)
         {
             double energy = -1;
-            if (instrumentParameters.ContainsKey(instrument))
+            if (collisionEnergies.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
+                Dictionary<string, Dictionary<string, double>> parLevel1 = collisionEnergies[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
+                    Dictionary<string, double> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
-                        if (parLevel3.ContainsKey(fragment))
-                        {
-                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
-                            if (parLevel4.ContainsKey("CE"))
-                            {
-                                energy = Convert.ToDouble(parLevel4["CE"], CultureInfo.InvariantCulture);
-                            }
-                        }
+                        energy = parLevel2[adduct];
                     }
                 }
             }

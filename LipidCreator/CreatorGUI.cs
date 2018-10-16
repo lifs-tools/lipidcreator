@@ -64,8 +64,8 @@ namespace LipidCreator
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
         public string selectedInstrumentForCE = "";
-        public string monitoringType = "none";
-        
+        public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
+        public MonitoringTypes PRMMode = MonitoringTypes.PRMArbitrary;
         
         
         
@@ -163,7 +163,6 @@ namespace LipidCreator
             medNegAdductCheckbox4.Enabled = false;
             changeTab(0);
             
-            menuCollisionEnergy.Enabled = false;
             for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
@@ -196,27 +195,10 @@ namespace LipidCreator
                     }
                 }
             }
-            
-            Thread th = new Thread(() => waitForCEComputation());
-            th.Start();
         }
         
         
         
-        
-        
-        // since computation of optimal collision energy takes some time, it runs in background
-        // and this tiny observer checks if computation already passed and enables using 
-        // collision energy
-        public void waitForCEComputation()
-        {
-            while (!lipidCreator.collisionEnergyHandler.fieldsComputed)
-            {
-                Thread.Sleep(100);
-            }
-            menuCollisionEnergy.Enabled = true;
-            Refresh();
-        }
         
         
         
@@ -3257,7 +3239,7 @@ namespace LipidCreator
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
             menuCollisionEnergyOpt.Enabled = false;
-            monitoringType = "none";
+            monitoringType = MonitoringTypes.NoMonitoring;
             
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
@@ -3272,7 +3254,7 @@ namespace LipidCreator
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
             menuCollisionEnergyOpt.Enabled = true;
-            monitoringType = "PRM";
+            monitoringType = PRMMode;
             
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
@@ -3287,7 +3269,7 @@ namespace LipidCreator
             selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
             
             menuCollisionEnergyOpt.Enabled = false;
-            monitoringType = "SRM";
+            monitoringType = MonitoringTypes.SRM;
             
             
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)

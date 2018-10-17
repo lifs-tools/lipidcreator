@@ -54,6 +54,7 @@ namespace LipidCreator
         public bool initialCall = true;
         public HashSet<string> selectedFragments = null;
         public ArrayList indexToInstrument = null;
+        public MonitoringTypes PRMMode;
         
         public CEInspector(CreatorGUI _creatorGUI, string _currentInstrument)
         {
@@ -64,6 +65,7 @@ namespace LipidCreator
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
             indexToInstrument = new ArrayList();
+            PRMMode = creatorGUI.PRMMode;
             
             fragmentsList = new DataTable("fragmentsList");
             fragmentsList.Columns.Add(new DataColumn("View"));
@@ -120,7 +122,15 @@ namespace LipidCreator
                 if (instrumentName == selectedInstrument) instrumentCombobox.SelectedIndex = ii;
                 ++ii;
             }
-            
+            if (PRMMode == MonitoringTypes.PRMFragments)
+            {
+                radioButtonPRMFragments.Checked = true;
+            }
+            else
+            {
+                radioButtonPRMArbitrary.Checked = true;
+            }
+            PRMModeChanged();
         }
         
         
@@ -233,6 +243,13 @@ namespace LipidCreator
             }
             
             fragmentApex["productProfile"] = argMaxY;
+            if (PRMMode == MonitoringTypes.PRMFragments)
+            {
+                cartesean.CEval = argMaxY;
+                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
+                collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
+                cartesean.Refresh();
+            }
             cartesean.Refresh();
         }
         
@@ -296,6 +313,19 @@ namespace LipidCreator
         }
         
         
+        
+        public void PRMModeChanged()
+        {
+            if (PRMMode == MonitoringTypes.PRMFragments)
+            {
+                numericalUpDownCurrentCE.Enabled = false;
+                fragmentSelectionChanged();
+            }
+            else
+            {
+                numericalUpDownCurrentCE.Enabled = true;
+            }
+        }
         
         
         
@@ -371,8 +401,16 @@ namespace LipidCreator
                     }
                 }
             }
-        
+            creatorGUI.PRMMode = PRMMode;
             this.Close();
+        }
+        
+        
+        
+        public void PRMModeCheckedChanged(Object sender, EventArgs e)
+        {
+            PRMMode = radioButtonPRMFragments.Checked ? MonitoringTypes.PRMFragments : PRMMode = MonitoringTypes.PRMArbitrary;
+            PRMModeChanged();
         }
         
         
@@ -391,14 +429,17 @@ namespace LipidCreator
         
         public void cartesean_mouseDown(object sender, MouseEventArgs e)
         {
-            cartesean.CELineShift = cartesean.mouseOverCELine(e);
-            if (cartesean.CELineShift) cartesean.smooth = false;
+            if (PRMMode == MonitoringTypes.PRMArbitrary)
+            {
+                cartesean.CELineShift = cartesean.mouseOverCELine(e);
+                if (cartesean.CELineShift) cartesean.smooth = false;
+            }
         }
         
         
         public void cartesean_mouseMove(object sender, MouseEventArgs e)
         {
-            if (cartesean.mouseOverCELine(e))
+            if (PRMMode == MonitoringTypes.PRMArbitrary && cartesean.mouseOverCELine(e))
             {
                 cartesean.Cursor = Cursors.Hand;
             }

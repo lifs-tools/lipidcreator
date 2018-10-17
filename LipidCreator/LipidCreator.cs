@@ -142,7 +142,7 @@ namespace LipidCreator
             if (handler != null) handler(this, e);
         }
         
-        public void readInputFiles(bool withGUI)
+        public void readInputFiles()
         {
             int lineCounter = 1;
             string ms2FragmentsFile = prefixPath + "data/ms2fragments.csv";
@@ -425,7 +425,7 @@ namespace LipidCreator
         
 
         
-        public LipidCreator(string pipe, bool withGUI = false)
+        public LipidCreator(string pipe)
         {
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
@@ -442,7 +442,7 @@ namespace LipidCreator
             availableInstruments = new ArrayList();
             availableInstruments.Add("");
             replicates = new ArrayList();
-            readInputFiles(withGUI);
+            readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
             foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);

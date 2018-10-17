@@ -330,6 +330,9 @@ namespace LipidCreator
             this.labelCurrentCE = new Label();
             this.labelSelectAll = new Label();
             this.labelDeselectAll = new Label();
+            this.groupBoxPRMMode = new GroupBox();
+            this.radioButtonPRMFragments = new RadioButton();
+            this.radioButtonPRMArbitrary = new RadioButton();
             this.labelSlash = new Label();
             this.numericalUpDownCurrentCE = new NumericUpDown();
             this.instrumentCombobox = new ComboBox();
@@ -339,7 +342,7 @@ namespace LipidCreator
             this.timerSmooth = new System.Timers.Timer(250);
             this.timerSmooth.Elapsed += this.changeSmooth;
             this.SuspendLayout();
-            this.ClientSize = new System.Drawing.Size(1050, 562);
+            this.ClientSize = new System.Drawing.Size(1050, 582);
             
             // 
             // button1
@@ -364,7 +367,7 @@ namespace LipidCreator
             
             
             
-            cartesean = new Cartesean(this, 800, 500);
+            cartesean = new Cartesean(this, 800, 520);
             cartesean.Location = new Point(10, 50);
             cartesean.MouseMove += new System.Windows.Forms.MouseEventHandler(cartesean_mouseMove);
             cartesean.MouseDown += new MouseEventHandler(cartesean_mouseDown);
@@ -416,6 +419,25 @@ namespace LipidCreator
             numericalUpDownCurrentCE.Width = 90;
             numericalUpDownCurrentCE.ValueChanged += new EventHandler(textBoxCurrentCE_ValueChanged);
             numericalUpDownCurrentCE.DecimalPlaces = 2;
+            
+            
+            groupBoxPRMMode.Location = new Point(820, 480);
+            groupBoxPRMMode.Size = new Size(218, 60);
+            groupBoxPRMMode.Text = "PRM Mode";
+            groupBoxPRMMode.Controls.Add(radioButtonPRMFragments);
+            groupBoxPRMMode.Controls.Add(radioButtonPRMArbitrary);
+            
+            
+            radioButtonPRMFragments.Location = new Point(10, 14);
+            radioButtonPRMFragments.Size = new Size(140, 20);
+            radioButtonPRMFragments.Text = "Fragment selection";
+            radioButtonPRMFragments.CheckedChanged += new EventHandler(PRMModeCheckedChanged);
+            
+            
+            radioButtonPRMArbitrary.Location = new Point(10, 34);
+            radioButtonPRMArbitrary.Size = new Size(140, 20);
+            radioButtonPRMArbitrary.Text = "Arbitrary";
+            radioButtonPRMArbitrary.CheckedChanged += new EventHandler(PRMModeCheckedChanged);
             
             
             
@@ -490,6 +512,7 @@ namespace LipidCreator
             this.Controls.Add(this.labelSelectAll);
             this.Controls.Add(this.labelDeselectAll);
             this.Controls.Add(this.labelSlash);
+            this.Controls.Add(this.groupBoxPRMMode);
             this.Name = "CEInspector";
             this.Text = "Collision energy optimization";
             this.ResumeLayout(false);
@@ -517,6 +540,9 @@ namespace LipidCreator
         public Label labelSelectAll;
         public Label labelDeselectAll;
         public Label labelSlash;
+        public GroupBox groupBoxPRMMode;
+        public RadioButton radioButtonPRMFragments;
+        public RadioButton radioButtonPRMArbitrary;
         public NumericUpDown numericalUpDownCurrentCE;
         public DataGridView fragmentsGridView;
         public System.Timers.Timer timerSmooth;

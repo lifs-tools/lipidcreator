@@ -65,7 +65,7 @@ namespace LipidCreator
         public LipidsReview lipidsReview = null;
         public string selectedInstrumentForCE = "";
         public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
-        public MonitoringTypes PRMMode = MonitoringTypes.PRMArbitrary;
+        public MonitoringTypes PRMMode = MonitoringTypes.PRMFragments;
         
         
         

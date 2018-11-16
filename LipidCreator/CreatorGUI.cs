@@ -2203,6 +2203,14 @@ namespace LipidCreator
                     clFA3Checkbox2.Enabled = false;
                     clFA3Checkbox3.Enabled = false;
                     
+                    clFA3Textbox.Text = plFA1Textbox.Text;
+                    clDB3Textbox.Text = plDB1Textbox.Text;
+                    clHydroxyl3Textbox.Text = plHydroxyl1Textbox.Text;
+                    clFA3Combobox.Text = plFA1Combobox.Text;
+                    clFA3Checkbox1.Checked = plFA1Checkbox1.Checked;
+                    clFA3Checkbox2.Checked = plFA1Checkbox2.Checked;
+                    clFA3Checkbox3.Checked = plFA1Checkbox3.Checked;
+                    
                     clFA4Textbox.Enabled = false;
                     clDB4Textbox.Enabled = false;
                     clHydroxyl4Textbox.Enabled = false;
@@ -2210,6 +2218,14 @@ namespace LipidCreator
                     clFA4Checkbox1.Enabled = false;
                     clFA4Checkbox2.Enabled = false;
                     clFA4Checkbox3.Enabled = false;
+                    
+                    clFA4Textbox.Text = plFA1Textbox.Text;
+                    clDB4Textbox.Text = plDB1Textbox.Text;
+                    clHydroxyl4Textbox.Text = plHydroxyl1Textbox.Text;
+                    clFA4Combobox.Text = plFA1Combobox.Text;
+                    clFA4Checkbox1.Checked = plFA1Checkbox1.Checked;
+                    clFA4Checkbox2.Checked = plFA1Checkbox2.Checked;
+                    clFA4Checkbox3.Checked = plFA1Checkbox3.Checked;
                 }
             }
             else

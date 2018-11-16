@@ -347,7 +347,6 @@ namespace LipidCreator
                             key += fa1.suffix;
                         }
                         
-                        
                         foreach (KeyValuePair<string, bool> adduct in adducts)
                         {
                             string completeKey = headgroup;
@@ -451,6 +450,7 @@ namespace LipidCreator
                 bool isFAa = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
+                        
                     switch (fa1.suffix)
                     {
                         case "a": isFAa = true; break;

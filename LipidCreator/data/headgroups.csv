@@ -62,8 +62,8 @@ Mediator,9(10)-EpOME,18,32,3,0,0,0,0,images/Precursors/9(10)-EpOME.png,No,No,No,
 Mediator,9(10)-EpOME{d4},18,28,3,0,0,0,4,images/Precursors/IS/9(10)-EpOME_d4.png,No,No,No,Yes,No,No,No,-H,8,heavy
 Mediator,AA,20,32,2,0,0,0,0,images/Precursors/AA.png,No,No,No,Yes,No,No,No,-H,8,
 Mediator,AA{d8},20,24,2,0,0,0,8,images/Precursors/IS/AA_d8.png,No,No,No,Yes,No,No,No,-H,8,heavy
-Mediator,alpha-LA,18,30,2,0,0,0,0,images/Precursors/alpha-LA.png,No,No,No,Yes,No,No,No,-H,8,
-Mediator,alpha-LA{d14},18,16,2,0,0,0,14,images/Precursors/IS/alpha-LA_d14.png,No,No,No,Yes,No,No,No,-H,8,heavy
+Mediator,ALA,18,30,2,0,0,0,0,images/Precursors/alpha-LA.png,No,No,No,Yes,No,No,No,-H,8,
+Mediator,ALA{d14},18,16,2,0,0,0,14,images/Precursors/IS/alpha-LA_d14.png,No,No,No,Yes,No,No,No,-H,8,heavy
 Mediator,DHA,22,32,2,0,0,0,0,images/Precursors/DHA.png,No,No,No,Yes,No,No,No,-H,8,
 Mediator,DHA{d5},22,27,2,0,0,0,5,images/Precursors/IS/DHA_d5.png,No,No,No,Yes,No,No,No,-H,8,heavy
 Mediator,EPA,20,30,2,0,0,0,0,images/Precursors/EPA.png,No,No,No,Yes,No,No,No,-H,8,

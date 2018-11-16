@@ -722,7 +722,6 @@ namespace LipidCreator
             DATA_COLUMN_KEYS = headerList.ToArray();
             
             
-            
             List<string> apiList = new List<string>();
             apiList.AddRange(STATIC_SKYLINE_API_HEADER);
             if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);

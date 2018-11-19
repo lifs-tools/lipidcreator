@@ -66,6 +66,7 @@ namespace LipidCreator
         public string selectedInstrumentForCE = "";
         public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
         public MonitoringTypes PRMMode = MonitoringTypes.PRMFragments;
+        public FilterDialog filterDialog = null;
         
         
         
@@ -3333,11 +3334,18 @@ namespace LipidCreator
         
         public void openFilterDialog(Object sender, EventArgs e)
         {
-            FilterDialog filterDialog = new FilterDialog((Lipid)currentLipid);
+            filterDialog = new FilterDialog((Lipid)currentLipid);
             filterDialog.Owner = this;
             filterDialog.ShowInTaskbar = false;
-            filterDialog.ShowDialog();
-            filterDialog.Dispose();
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                filterDialog.ShowDialog();
+                filterDialog.Dispose();
+            }
+            else
+            {
+                filterDialog.Show();
+            }
         }
         
         

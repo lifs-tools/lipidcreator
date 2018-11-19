@@ -42,8 +42,11 @@ namespace LipidCreator
 {
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2};
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, AddLipid, OpenReview, StoreList, Finish};
+    
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, ApplyFilter, AddLipid, OpenReview, StoreList, Finish};
+    
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
+    
     public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, AddLipid, OpenReview, StoreList, Finish};
     
 
@@ -110,6 +113,7 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
+            creatorGUI.filtersButton.Click += new EventHandler(buttonInteraction);
             
             
             elementsEnabledState = new ArrayList();
@@ -193,6 +197,20 @@ namespace LipidCreator
         }
         
         
+        public void initFilterDialog()
+        {
+            creatorGUI.filterDialog.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+            creatorGUI.filterDialog.button2.MouseDown += mouseDownInteraction;
+            creatorGUI.filterDialog.button2.Click += buttonInteraction;
+            creatorGUI.filterDialog.radioButton1.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.filterDialog.radioButton2.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.filterDialog.radioButton3.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.filterDialog.radioButton4.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.filterDialog.radioButton5.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.filterDialog.radioButton6.CheckedChanged += new EventHandler(radioButtonInteraction);
+        }
+        
+        
         
         public void initLipidReview()
         {
@@ -270,6 +288,21 @@ namespace LipidCreator
                 }
                 creatorGUI.ms2fragmentsForm.Close();
                 
+            }
+            
+            
+            if (creatorGUI.filterDialog != null)
+            {
+                creatorGUI.filterDialog.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                creatorGUI.filterDialog.button2.MouseDown -= mouseDownInteraction;
+                creatorGUI.filterDialog.button2.Click -= buttonInteraction;
+                creatorGUI.filterDialog.radioButton1.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.radioButton2.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.radioButton3.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.radioButton4.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.radioButton5.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.radioButton6.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.filterDialog.Close();
             }
             
             if (creatorGUI.addHeavyPrecursor != null)
@@ -360,6 +393,12 @@ namespace LipidCreator
             {
                 foreach (Control control in creatorGUI.lipidsReview.controlElements) control.Enabled = false;
                 creatorGUI.lipidsReview.Refresh();
+            }
+            
+            if (creatorGUI.filterDialog != null)
+            {
+                foreach (Control control in creatorGUI.filterDialog.controlElements) control.Enabled = false;
+                creatorGUI.filterDialog.Refresh();
             }
         }
         
@@ -513,6 +552,18 @@ namespace LipidCreator
         
         
         
+        public void radioButtonInteraction(Object sender, EventArgs e)
+        {
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SelectFilter)
+            {
+                nextEnabled = creatorGUI.filterDialog.radioButton2.Checked;
+            }
+            tutorialWindow.Refresh();
+        }
+        
+        
+        
+        
         public void checkBoxInteraction(Object sender, EventArgs e)
         {
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SelectAdduct)
@@ -642,7 +693,7 @@ namespace LipidCreator
         public void buttonInteraction(Object sender, EventArgs e)
         {
             
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.ApplyFilter, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -660,7 +711,7 @@ namespace LipidCreator
         
         public void mouseDownInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.ApplyFilter, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
@@ -849,6 +900,37 @@ namespace LipidCreator
                     adductP1.Enabled = true;
                     break;
                     
+                    
+                    
+                case (int)PRMSteps.OpenFilter: 
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    Button fB = creatorGUI.filtersButton;
+                    fB.Enabled = true;
+                    tutorialArrow.update(new Point(fB.Location.X + (fB.Size.Width >> 1) + creatorGUI.lcStep2.Location.X, fB.Location.Y + creatorGUI.lcStep2.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "LipidCreator offers a set of filters, please click on 'Filters' to set them.", false);
+                    break;
+                
+                
+                
+                case (int)PRMSteps.SelectFilter:
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    
+                    initFilterDialog();
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only precursor transitions'", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected.", false);
+                    
+                    creatorGUI.filterDialog.groupBox1.Enabled = true;
+                    break;
+                
+                
+                
+                case (int)PRMSteps.ApplyFilter:
+                    setTutorialControls(creatorGUI.lcStep2, creatorGUI.phospholipidsTab);
+                    creatorGUI.filterDialog.button2.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Ok'", "To apply the filters and close the dialog, please click on 'Ok'.");
+                    break;
                     
                     
                 case (int)PRMSteps.AddLipid:

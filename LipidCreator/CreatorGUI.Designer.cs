@@ -2220,7 +2220,7 @@ namespace LipidCreator
             
             startSecondTutorialButton = new Button();
             homeTab.Controls.Add(startSecondTutorialButton);
-            startSecondTutorialButton.Text = "Start MRM tutorial";
+            startSecondTutorialButton.Text = "Start SRM tutorial";
             startSecondTutorialButton.Width = 150;
             startSecondTutorialButton.Height = 26;
             startSecondTutorialButton.Location = new Point(240, 380);

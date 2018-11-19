@@ -47,7 +47,7 @@ namespace LipidCreator
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
     
-    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, AddLipid, OpenReview, StoreList, Finish};
+    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
 
     [Serializable]
@@ -557,8 +557,13 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SelectFilter)
             {
                 nextEnabled = creatorGUI.filterDialog.radioButton2.Checked;
+                tutorialWindow.Refresh();
             }
-            tutorialWindow.Refresh();
+            else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SelectFilter)
+            {
+                creatorGUI.filterDialog.button2.Enabled = creatorGUI.filterDialog.radioButton5.Checked;
+                creatorGUI.filterDialog.Refresh();
+            }
         }
         
         
@@ -701,7 +706,7 @@ namespace LipidCreator
             {
                 nextTutorialStep(true);
             }
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.AddLipid, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -719,7 +724,7 @@ namespace LipidCreator
             {
                 continueTutorial = true;
             }
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
@@ -1283,8 +1288,6 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(hli.Location.X + (hli.Size.Width >> 1), hli.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Manage heavy isotopes'", "", false);
-                    
-                    
                     break;
                     
                     
@@ -1489,6 +1492,30 @@ namespace LipidCreator
                     break;
                     
                     
+                    
+                    
+                case (int)HLSteps.OpenFilter: 
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    Button fB = creatorGUI.filtersButton;
+                    fB.Enabled = true;
+                    tutorialArrow.update(new Point(fB.Location.X + (fB.Size.Width >> 1) + creatorGUI.lcStep2.Location.X, fB.Location.Y + creatorGUI.lcStep2.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "Please click on 'Filters' for setting appropriate filters.", false);
+                    break;
+                
+                
+                
+                case (int)HLSteps.SelectFilter:
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    
+                    initFilterDialog();
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only heavy labeled isotopes' and confirm", "", false);
+                    
+                    creatorGUI.filterDialog.groupBox2.Enabled = true;
+                    break;
+                
+                
                     
                 
                 case (int)HLSteps.AddLipid:

@@ -695,8 +695,8 @@ namespace LipidCreator
             }
             if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SelectFragments)
             {
-                 HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG/13C6d30"];
-                 HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG/13C6d30"];
+                 HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG{13C6d30}"];
+                 HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG{13C6d30}"];
                  
                  nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
@@ -1270,7 +1270,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.button2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restart LipidCreator. To use them further, please export lipid setting from 'File'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restart LipidCreator. To use them further, please export lipid settings from 'File'.");
                     
                     break;
                     

@@ -1270,7 +1270,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.button2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restart LipidCreator. To use them further, please export lipid setting from 'File".");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restart LipidCreator. To use them further, please export lipid setting from 'File'.");
                     
                     break;
                     

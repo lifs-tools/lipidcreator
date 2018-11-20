@@ -43,11 +43,13 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2};
     
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, ApplyFilter, AddLipid, OpenReview, StoreList, Finish};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
     
-    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    //public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    
+    public enum HLSteps {Null, Welcome, OpenHeavy, OpenMS2, CloseFragment, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
 
     [Serializable]
@@ -556,8 +558,8 @@ namespace LipidCreator
         {
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SelectFilter)
             {
-                nextEnabled = creatorGUI.filterDialog.radioButton2.Checked;
-                tutorialWindow.Refresh();
+                creatorGUI.filterDialog.button2.Enabled = creatorGUI.filterDialog.radioButton2.Checked;
+                creatorGUI.filterDialog.Refresh();
             }
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SelectFilter)
             {
@@ -698,7 +700,7 @@ namespace LipidCreator
         public void buttonInteraction(Object sender, EventArgs e)
         {
             
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.ApplyFilter, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -716,7 +718,7 @@ namespace LipidCreator
         
         public void mouseDownInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.ApplyFilter, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.SelectFilter, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
@@ -923,18 +925,9 @@ namespace LipidCreator
                     
                     initFilterDialog();
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only precursor transitions'", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected.", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only precursor transitions' and click on 'Ok'", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Apply the filters by clicking on 'Ok'.", false);
                     
                     creatorGUI.filterDialog.groupBox1.Enabled = true;
-                    break;
-                
-                
-                
-                case (int)PRMSteps.ApplyFilter:
-                    setTutorialControls(creatorGUI.lcStep2, creatorGUI.phospholipidsTab);
-                    creatorGUI.filterDialog.button2.Enabled = true;
-                    
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Ok'", "To apply the filters and close the dialog, please click on 'Ok'.");
                     break;
                     
                     
@@ -1288,6 +1281,7 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(hli.Location.X + (hli.Size.Width >> 1), hli.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Manage heavy isotopes'", "", false);
+                    nextEnabled = true;
                     break;
                     
                     

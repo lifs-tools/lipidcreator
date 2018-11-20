@@ -59,8 +59,8 @@ namespace LipidCreator
             dataGridViewElements.ColumnCount = 3;
             dataGridViewElements.Columns[0].Name = "Element";
             dataGridViewElements.Columns[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewElements.Columns[1].Name = "Count";
-            dataGridViewElements.Columns[2].Name = "Isotope count";
+            dataGridViewElements.Columns[1].Name = "Count (Monoisotopic)";
+            dataGridViewElements.Columns[2].Name = "Count (Isotopic)";
             DataGridViewComboBoxColumn combo1 = new DataGridViewComboBoxColumn();
             dataGridViewElements.Columns.Add(combo1);
             dataGridViewElements.Columns[0].Width = (dataGridViewElements.Width - 2) / 4;

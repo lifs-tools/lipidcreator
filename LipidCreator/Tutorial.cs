@@ -47,9 +47,7 @@ namespace LipidCreator
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
     
-    //public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
-    
-    public enum HLSteps {Null, Welcome, OpenHeavy, OpenMS2, CloseFragment, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
 
     [Serializable]
@@ -1281,7 +1279,6 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(hli.Location.X + (hli.Size.Width >> 1), hli.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Manage heavy isotopes'", "", false);
-                    nextEnabled = true;
                     break;
                     
                     
@@ -1476,11 +1473,11 @@ namespace LipidCreator
                     
                     
                 case (int)HLSteps.CloseFragment:
-                    setTutorialControls(creatorGUI.ms2fragmentsForm);
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
                     Button b_2 = creatorGUI.ms2fragmentsForm.buttonOK;
                     b_2.Enabled = true;
-                    tutorialArrow.update(new Point(b_2.Location.X + (b_2.Size.Width >> 1), b_2.Location.Y), "rb");
+                    tutorialArrow.update(new Point(b_2.Location.X + (b_2.Size.Width >> 1) - 20, ((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex]).Height), "rb");
                     tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click on'OK'", "", false);
                     
                     break;

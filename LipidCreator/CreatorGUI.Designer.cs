@@ -1750,7 +1750,7 @@ namespace LipidCreator
             slRegular.CheckedChanged += new EventHandler(slIsLysoCheckedChanged);
             
             slIsLyso.Location = new Point(90, 14);
-            slIsLyso.Text = "Is lyso";
+            slIsLyso.Text = "Lyso";
             slIsLyso.Width = 70;
             slIsLyso.CheckedChanged += new EventHandler(slIsLysoCheckedChanged);
             

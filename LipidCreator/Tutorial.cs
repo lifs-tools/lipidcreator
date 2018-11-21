@@ -913,7 +913,7 @@ namespace LipidCreator
                     fB.Enabled = true;
                     tutorialArrow.update(new Point(fB.Location.X + (fB.Size.Width >> 1) + creatorGUI.lcStep2.Location.X, fB.Location.Y + creatorGUI.lcStep2.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "LipidCreator offers a set of filters, please click on 'Filters' to set them.", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "", false);
                     break;
                 
                 
@@ -923,7 +923,7 @@ namespace LipidCreator
                     
                     initFilterDialog();
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only precursor transitions' and click on 'Ok'", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected. Apply the filters by clicking on 'Ok'.", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only precursor transitions' and click on 'Ok'", "", false);
                     
                     creatorGUI.filterDialog.groupBox1.Enabled = true;
                     break;
@@ -1491,7 +1491,7 @@ namespace LipidCreator
                     fB.Enabled = true;
                     tutorialArrow.update(new Point(fB.Location.X + (fB.Size.Width >> 1) + creatorGUI.lcStep2.Location.X, fB.Location.Y + creatorGUI.lcStep2.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "Please click on 'Filters' for setting appropriate filters.", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Click on 'Filters'", "", false);
                     break;
                 
                 
@@ -1501,7 +1501,7 @@ namespace LipidCreator
                     
                     initFilterDialog();
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only heavy labeled isotopes' and confirm", "", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Select 'Compute only heavy labeled isotopes' and click on 'Ok'", "", false);
                     
                     creatorGUI.filterDialog.groupBox2.Enabled = true;
                     break;
@@ -1516,7 +1516,7 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(alb.Location.X + 20 + creatorGUI.lcStep3.Location.X, alb.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
                     alb.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "To put the complete lipid assembly into the basket, click on 'Add phospholipid'.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Add phospholipid", "Add the complete lipid assembly into the basket.", false);
                     break;
                     
                     
@@ -1528,7 +1528,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "To create the final transition list, including all precursor and fragment information, click on 'Review lipids'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "Here is for creating the final transition list, including all precursors and fragment information.");
                     
                     break;
                     

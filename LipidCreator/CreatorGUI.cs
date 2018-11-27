@@ -67,7 +67,7 @@ namespace LipidCreator
         public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
         public MonitoringTypes PRMMode = MonitoringTypes.PRMFragments;
         public FilterDialog filterDialog = null;
-        
+        public MenuItem lastCEInstrumentChecked = null;
         
         
         
@@ -168,34 +168,33 @@ namespace LipidCreator
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
                 if (lipidCreator.msInstruments.ContainsKey(instrument)){
-                    ToolStripMenuItem instrumentItem = new ToolStripMenuItem();
-                    menuCollisionEnergy.MenuItems.Add(instrumentItem);
-                    instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
-                    instrumentItem.RadioCheck = true;
                     
                     foreach (string instrumentMode in lipidCreator.msInstruments[instrument].modes)
                     {
-                        MenuItem instrumentModeItem = new MenuItem();
-                        instrumentItem.MenuItems.Add(instrumentModeItem);
-                        instrumentModeItem.Text = instrumentMode;
+                        MenuItem instrumentItem = new MenuItem();
+                        instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
+                        instrumentItem.RadioCheck = true;
+                        
                         switch (instrumentMode)
                         {
                             case "PRM":
-                                instrumentModeItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
+                                instrumentItem.Text += " (PRM)";
+                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
                                 break;
                                 
                             case "SRM":
-                                instrumentModeItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                instrumentItem.Text += " (SRM)";
+                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
                                 break;
                                 
                             default:
                                 throw new Exception("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
-                                
-                        
                         }
+                        menuCollisionEnergy.MenuItems.Add(instrumentItem);
                     }
                 }
             }
+            lastCEInstrumentChecked = menuCollisionEnergyNone;
         }
         
         
@@ -3257,11 +3256,9 @@ namespace LipidCreator
             
             menuCollisionEnergyOpt.Enabled = false;
             monitoringType = MonitoringTypes.NoMonitoring;
-            
-            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
-            {
-                item.Checked = item.Index == 0;
-            }
+            lastCEInstrumentChecked.Checked = false;
+            lastCEInstrumentChecked = (MenuItem)sender;
+            lastCEInstrumentChecked.Checked = true;
         }
         
         
@@ -3272,11 +3269,9 @@ namespace LipidCreator
             
             menuCollisionEnergyOpt.Enabled = true;
             monitoringType = PRMMode;
-            
-            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
-            {
-                item.BackColor = (item.Index == index) ? Color.White : Color.FromKnownColor(KnownColor.Control);
-            }
+            lastCEInstrumentChecked.Checked = false;
+            lastCEInstrumentChecked = (MenuItem)sender;
+            lastCEInstrumentChecked.Checked = true;
         }
         
         
@@ -3287,13 +3282,9 @@ namespace LipidCreator
             
             menuCollisionEnergyOpt.Enabled = false;
             monitoringType = MonitoringTypes.SRM;
-            
-            
-            foreach (MenuItem item in menuCollisionEnergy.MenuItems)
-            {
-                item.Checked = item.Index == index;
-            }
-            
+            lastCEInstrumentChecked.Checked = false;
+            lastCEInstrumentChecked = (MenuItem)sender;
+            lastCEInstrumentChecked.Checked = true;
         }
         
         

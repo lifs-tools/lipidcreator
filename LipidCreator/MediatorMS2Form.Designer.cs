@@ -255,7 +255,7 @@ namespace LipidCreator
             buttonAddFragment.TabIndex = 9;
             buttonAddFragment.Text = "Add fragment";
             buttonAddFragment.UseVisualStyleBackColor = true;
-            //buttonAddFragment.Click += new System.EventHandler(this.addFragmentClick);
+            buttonAddFragment.Click += new System.EventHandler(this.addFragmentClick);
             this.Controls.Add(buttonAddFragment);
             
             // 

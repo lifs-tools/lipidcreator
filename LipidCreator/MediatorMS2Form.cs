@@ -243,16 +243,14 @@ namespace LipidCreator
             this.Close();
         }
         
-        /*
+        
         private void addFragmentClick(object sender, EventArgs e)
         {
-            NewFragment newPositiveFragment = new NewFragment(this);
-            newPositiveFragment.Owner = this;
-            newPositiveFragment.ShowInTaskbar = false;
-            newPositiveFragment.ShowDialog();
-            newPositiveFragment.Dispose();
-            tabChange(tabControlFragments.SelectedIndex);
+            NewMediatorFragment newMediatorFragment = new NewMediatorFragment();
+            newMediatorFragment.Owner = this;
+            newMediatorFragment.ShowInTaskbar = false;
+            newMediatorFragment.ShowDialog();
+            newMediatorFragment.Dispose();
         }
-        */
     }
 }

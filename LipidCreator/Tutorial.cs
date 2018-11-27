@@ -817,7 +817,7 @@ namespace LipidCreator
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
                     tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select solely 'PG' headgroup", "The user can multiply select different headgroup. The according adducts are highlighted when hovering above the headgroups.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select solely 'PG' headgroup", "The user can multiple select different headgroup. The according adducts are highlighted when hovering above the headgroups.", false);
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -1132,7 +1132,7 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.Enabled = true;
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "A constant set of elements can be defined which will be added to the fragment. When fixed base is selected, element numbers can only be positive, otherwise negative counts are also allowed.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "A constant set of elements can be defined which will be added to the fragment. When 'fixed' base is selected, element numbers can only be positive, otherwise negative counts are also allowed.");
                     
                     break;
                     

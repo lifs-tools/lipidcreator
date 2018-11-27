@@ -168,7 +168,7 @@ namespace LipidCreator
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
                 if (lipidCreator.msInstruments.ContainsKey(instrument)){
-                    MenuItem instrumentItem = new MenuItem();
+                    ToolStripMenuItem instrumentItem = new ToolStripMenuItem();
                     menuCollisionEnergy.MenuItems.Add(instrumentItem);
                     instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
                     instrumentItem.RadioCheck = true;
@@ -3275,7 +3275,7 @@ namespace LipidCreator
             
             foreach (MenuItem item in menuCollisionEnergy.MenuItems)
             {
-                item.Checked = item.Index == index;
+                item.BackColor = (item.Index == index) ? Color.White : Color.FromKnownColor(KnownColor.Control);
             }
         }
         

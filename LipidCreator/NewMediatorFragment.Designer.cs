@@ -123,9 +123,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(514, 256);
+            this.button2.Location = new System.Drawing.Point(514, 258);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(104, 35);
+            this.button2.Size = new System.Drawing.Size(104, 24);
             this.button2.TabIndex = 4;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
@@ -133,7 +133,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(404, 267);
+            this.button1.Location = new System.Drawing.Point(404, 258);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(104, 24);
             this.button1.TabIndex = 5;
@@ -171,7 +171,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 301);
+            this.ClientSize = new System.Drawing.Size(628, 291);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBox1);

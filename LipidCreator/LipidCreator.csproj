@@ -140,6 +140,12 @@
     <Compile Include="CEInspector.Designer.cs">
       <DependentUpon>CEInspector.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewMediatorFragment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewMediatorFragment.Designer.cs">
+      <DependentUpon>NewMediatorFragment.cs</DependentUpon>
+    </Compile>
     <Compile Include="GLLipid.cs" />
     <Compile Include="CollisionEnergy.cs" />
     <Compile Include="Lipid.cs" />
@@ -211,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CEInspector.resx">
       <DependentUpon>CEInspector.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewMediatorFragment.resx">
+      <DependentUpon>NewMediatorFragment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

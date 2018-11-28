@@ -168,6 +168,7 @@ namespace LipidCreator
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
                 if (lipidCreator.msInstruments.ContainsKey(instrument)){
+                    int numModes = lipidCreator.msInstruments[instrument].modes.Count;
                     
                     foreach (string instrumentMode in lipidCreator.msInstruments[instrument].modes)
                     {
@@ -179,12 +180,17 @@ namespace LipidCreator
                         switch (instrumentMode)
                         {
                             case "PRM":
-                                instrumentItem.Text += " (PRM)";
+                                if (numModes > 1) instrumentItem.Text += " (PRM)";
                                 instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
                                 break;
                                 
                             case "SRM":
-                                instrumentItem.Text += " (SRM)";
+                                if (numModes > 1) instrumentItem.Text += " (SRM)";
+                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                break;
+                            
+                            case "SIM/SRM":
+                                if (numModes > 1) instrumentItem.Text += " (SIM/SRM)";
                                 instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
                                 break;
                                 
@@ -3252,16 +3258,12 @@ namespace LipidCreator
         
         public void unsetInstrument(Object sender, EventArgs e)
         {
-            if(((MenuItem)sender).Tag != null) {
-                string instrument = (string)((MenuItem)sender).Tag;
-                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
-            
-                menuCollisionEnergyOpt.Enabled = false;
-                monitoringType = MonitoringTypes.NoMonitoring;
-                lastCEInstrumentChecked.Checked = false;
-                lastCEInstrumentChecked = (MenuItem)sender;
-                lastCEInstrumentChecked.Checked = true;
-            }
+            selectedInstrumentForCE = "";
+            menuCollisionEnergyOpt.Enabled = false;
+            monitoringType = MonitoringTypes.NoMonitoring;
+            lastCEInstrumentChecked.Checked = false;
+            lastCEInstrumentChecked = (MenuItem)sender;
+            lastCEInstrumentChecked.Checked = true;
         }
         
         

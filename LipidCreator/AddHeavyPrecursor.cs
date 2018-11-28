@@ -136,7 +136,7 @@ namespace LipidCreator
         
         
         
-        public Dictionary<string, object[]> createGridData(Dictionary<int, int> input)
+        public static Dictionary<string, object[]> createGridData(Dictionary<int, int> input)
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
             
@@ -165,7 +165,7 @@ namespace LipidCreator
         }
         
         
-        public Dictionary<int, int> createElementData(Dictionary<string, object[]> input)
+        public static Dictionary<int, int> createElementData(Dictionary<string, object[]> input)
         {
             Dictionary<int, int> elements = MS2Fragment.createEmptyElementDict();
             foreach (KeyValuePair<string, object[]> row in input)

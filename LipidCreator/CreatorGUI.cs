@@ -3716,7 +3716,7 @@ namespace LipidCreator
             string analyticsFile = (withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : "") + "data/analytics.txt";
             if (!File.Exists(analyticsFile))
             {
-                DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator. Before you continue we want to stress that LipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative. We have to report usage statistics for our tools to the project administration to ensure continued funding. By clicking 'Yes' you agree to support us and the further development of LipidCreator by allowing us to collect ANONYMIZED usage statistics.", "LipidCreator note", MessageBoxButtons.YesNo);
+                DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\nLipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative. It’s mandatory to report ANONYMIZED usage statistics for this tool to the project administration to ensure continued funding.\n\nUsage statistics include:\n - Count for LipidCreator launches\n - Count for generated transition lists\n\nNOT include:\n - IP address, operating system or any information that may trace back to the user\n\nBy clicking ‘Yes’, you agree to allow us to collect ANONYMIZED usage statistics. We would highly appreciate  your support to us and to further development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
                 
                 using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                 {

@@ -183,8 +183,14 @@ namespace LipidCreator
                     dataGridViewElements.Rows[l].Cells[2].Value = row.Value[1];
                     dataGridViewElements.Rows[l].Cells[3].Value = row.Value[2];
                 }
-                
-                
+            }
+            
+            if (ms2form.isotopeList.SelectedIndex == 0)
+            {
+                dataGridViewElements.Columns[2].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridViewElements.Columns[2].ReadOnly = true;
+                dataGridViewElements.Columns[3].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridViewElements.Columns[3].ReadOnly = true;
             }
         }
         

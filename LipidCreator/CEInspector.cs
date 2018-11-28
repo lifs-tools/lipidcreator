@@ -120,8 +120,7 @@ namespace LipidCreator
             instrumentCombobox.DataSource = new BindingSource(indexToInstrument, null);
             instrumentCombobox.DisplayMember = "Value";
             instrumentCombobox.ValueMember = "Key";
-            instrumentCombobox.SelectedItem = indexToInstrument[selectedInstrument];
-//            instrumentCombobox.SelectedValue = indexToInstrument[selectedInstrument];
+            instrumentCombobox.SelectedValue = selectedInstrument; // select by CVTerm string value, e.g.: MS:1002791
             if (PRMMode == MonitoringTypes.PRMFragments)
             {
                 radioButtonPRMFragments.Checked = true;
@@ -230,10 +229,12 @@ namespace LipidCreator
             }
             
             double argMaxY = 0;
+            double maxYProductProfile = yValCoords["productProfile"].Max();
             double maxY = 0;
             for (int i = 0; i < yValCoords["productProfile"].Length; ++i)
             {
-                yValCoords["productProfile"][i] /= maxYCurves;
+                yValCoords["productProfile"][i] /= maxYProductProfile;
+                yValCoords["productProfile"][i] *= maxYCurves;
                 if (maxY < yValCoords["productProfile"][i])
                 {
                     argMaxY = xValCoords[i];
@@ -295,6 +296,12 @@ namespace LipidCreator
             if (e.KeyCode == Keys.Enter) checkValidTextBoxtCurrentCE();
         }
         
+        /**
+         * Refreshes the cartesean grid of the curve plot control.
+         * 
+         * Refresh should check whether it needs to be performed in the thread that created the form element.
+         * See https://docs.microsoft.com/de-de/dotnet/framework/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls for reference.
+         */
         private void refreshCartesan() {
             if(this.cartesean.InvokeRequired) {
                 this.cartesean.Invoke(new Action(() => {this.cartesean.Refresh();}));
@@ -390,7 +397,12 @@ namespace LipidCreator
             numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
         }
         
-        
+        /**
+         * Refreshes the fragment grid view of the curve plot control.
+         * 
+         * Refresh should check whether it needs to be performed in the thread that created the form element.
+         * See https://docs.microsoft.com/de-de/dotnet/framework/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls for reference.
+         */
         private void refreshFragmentsGridView()
         {
             if(this.fragmentsGridView.InvokeRequired) {

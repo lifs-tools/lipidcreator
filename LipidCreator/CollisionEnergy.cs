@@ -341,9 +341,9 @@ namespace LipidCreator
                 double sft = Convert.ToDouble(parameters["shift"], CultureInfo.InvariantCulture);
                 collisionEnergy += sft;
                 
-                if (collisionEnergy < 0) return -1;
+                if (collisionEnergy <= 0) return 0;
                 
-                return scl / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-square(Math.Log(collisionEnergy) - m) / (2 * square(sd)));
+                return (scl / (collisionEnergy * sd * Math.Sqrt(2 * Math.PI)) * Math.Exp(-square(Math.Log(collisionEnergy) - m) / (2 * square(sd))));
             }
             return -1;
         }

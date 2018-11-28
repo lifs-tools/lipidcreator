@@ -198,7 +198,7 @@ MS:1002419,Thermo Scientific TSQ Endura,,,,
 MS:1002444,Agilent 6420 Triple Quadrupole LC/MS,,,,
 MS:1002445,Agilent 6460 Triple Quadrupole LC/MS,,,,
 MS:1002446,Agilent 6490 Triple Quadrupole LC/MS,,,,
-MS:1002523,Thermo Scientific Q Exactive HF,0,60,Normalized Collision Energy,PRM;SRM
+MS:1002523,Thermo Scientific Q Exactive HF,10,60,Normalized Collision Energy,PRM;SRM
 MS:1002525,Thermo Scientific TSQ 8000 Evo,,,,
 MS:1002526,Thermo Scientific Exactive Plus,,,,
 MS:1002533,SCIEX TripleTOF 6600,,,,
@@ -239,7 +239,7 @@ MS:1002787,Agilent 6530B Q-TOF LC/MS,,,,
 MS:1002788,Agilent 6538 Q-TOF LC/MS,,,,
 MS:1002789,Agilent 6540 Q-TOF LC/MS,,,,
 MS:1002790,Agilent 6542 Q-TOF LC/MS,,,,
-MS:1002791,Agilent 6545 Q-TOF LC/MS,0,100,Collision Energy,PRM;SRM
+MS:1002791,Agilent 6545 Q-TOF LC/MS,10,100,Collision Energy,PRM;SRM
 MS:1002792,Agilent 6560 Q-TOF LC/MS,,,,
 MS:1002793,Agilent 6570 Q-TOF LC/MS,,,,
 MS:1002794,Agilent 6120B Quadrupole LC/MS,,,,

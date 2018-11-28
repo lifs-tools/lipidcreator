@@ -43,28 +43,28 @@ namespace LipidCreator
     {
         public CreatorGUI creatorGUI = null;
         public double[] xValCoords = null;
-        public Dictionary<string, double[]> yValCoords = null;
-        public Dictionary<string, double> fragmentApex = null;
-        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies = null;  // for instrument / class / adduct
-        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, bool>>>> fragmentSelections = null;  // for instrument / class / adduct / fragment
+        public IDictionary<string, double[]> yValCoords = null;
+        public IDictionary<string, double> fragmentApex = null;
+        public IDictionary<string, IDictionary<string, IDictionary<string, double>>> collisionEnergies = null;  // for instrument / class / adduct
+        public IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, bool>>>> fragmentSelections = null;  // for instrument / class / adduct / fragment
         public string selectedInstrument = "";
         public string selectedClass = "";
         public string selectedAdduct = "";
         public DataTable fragmentsList = null;
         public bool initialCall = true;
         public HashSet<string> selectedFragments = null;
-        public ArrayList indexToInstrument = null;
+        public IDictionary<string, string> indexToInstrument = null;
         public MonitoringTypes PRMMode;
         
         public CEInspector(CreatorGUI _creatorGUI, string _currentInstrument)
         {
             creatorGUI = _creatorGUI;
             selectedInstrument = _currentInstrument;
-            collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
-            fragmentSelections = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, bool>>>>();
+            collisionEnergies = new Dictionary<string, IDictionary<string, IDictionary<string, double>>>();
+            fragmentSelections = new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, bool>>>>();
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
-            indexToInstrument = new ArrayList();
+            indexToInstrument = new Dictionary<string, string>();
             PRMMode = creatorGUI.PRMMode;
             
             fragmentsList = new DataTable("fragmentsList");
@@ -79,23 +79,23 @@ namespace LipidCreator
             numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
             
             // foreach instrument
-            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
+            foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
             {
-                Dictionary<string, Dictionary<string, double>> ce1 = new Dictionary<string, Dictionary<string, double>>();
+                IDictionary<string, IDictionary<string, double>> ce1 = new Dictionary<string, IDictionary<string, double>>();
                 collisionEnergies.Add(kvp1.Key, ce1);
-                Dictionary<string, Dictionary<string, Dictionary<string, bool>>> fs1 = new Dictionary<string, Dictionary<string, Dictionary<string, bool>>>();
+                IDictionary<string, IDictionary<string, IDictionary<string, bool>>> fs1 = new Dictionary<string, IDictionary<string, IDictionary<string, bool>>>();
                 fragmentSelections.Add(kvp1.Key, fs1);
                 
                 // foreach class
-                foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
+                foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
                     Dictionary<string, double> ce2 = new Dictionary<string, double>();
                     ce1.Add(kvp2.Key, ce2);
-                    Dictionary<string, Dictionary<string, bool>> fs2 = new Dictionary<string, Dictionary<string, bool>>();
+                    Dictionary<string, IDictionary<string, bool>> fs2 = new Dictionary<string, IDictionary<string, bool>>();
                     fs1.Add(kvp2.Key, fs2);
                     
                     // foreach adduct
-                    foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
+                    foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
                     {
                     
                         Dictionary<string, bool> fs3 = new Dictionary<string, bool>();
@@ -105,7 +105,7 @@ namespace LipidCreator
                         ce2.Add(kvp3.Key, creatorGUI.lipidCreator.collisionEnergyHandler.collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]);
                         
                         // foreach adduct
-                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
+                        foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
                         {
                             fs3.Add(kvp4.Key, kvp4.Value["selected"] == "1");
                         }
@@ -114,14 +114,14 @@ namespace LipidCreator
             }
             
             
-            int ii = 0;
-            foreach (string instrumentName in collisionEnergies.Keys)
-            {
-                indexToInstrument.Add(instrumentName);
-                instrumentCombobox.Items.Add(creatorGUI.lipidCreator.msInstruments[instrumentName].CVTerm);
-                if (instrumentName == selectedInstrument) instrumentCombobox.SelectedIndex = ii;
-                ++ii;
-            }
+
+            indexToInstrument.Clear();
+            indexToInstrument.Add(creatorGUI.lipidCreator.msInstruments[selectedInstrument].CVTerm, creatorGUI.lipidCreator.msInstruments[selectedInstrument].model+" ["+creatorGUI.lipidCreator.msInstruments[selectedInstrument].CVTerm+"]");
+            instrumentCombobox.DataSource = new BindingSource(indexToInstrument, null);
+            instrumentCombobox.DisplayMember = "Value";
+            instrumentCombobox.ValueMember = "Key";
+            instrumentCombobox.SelectedItem = indexToInstrument[selectedInstrument];
+//            instrumentCombobox.SelectedValue = indexToInstrument[selectedInstrument];
             if (PRMMode == MonitoringTypes.PRMFragments)
             {
                 radioButtonPRMFragments.Checked = true;
@@ -296,20 +296,32 @@ namespace LipidCreator
         
         public void instrumentComboboxChanged(Object sender, EventArgs e)
         {
-            selectedInstrument = (string)indexToInstrument[instrumentCombobox.SelectedIndex];
-            classCombobox.Items.Clear();
-            double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].minCE;
-            double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].maxCE;
-            numericalUpDownCurrentCE.Minimum = (decimal)minVal;
-            numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
-            cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument].xAxisLabel;
+            if(instrumentCombobox.SelectedItem!=null) {
+                string key = (string)((System.Collections.Generic.KeyValuePair<string,string>)instrumentCombobox.SelectedItem).Key;
+                //KeyValuePair<string,string> kvp = indexToInstrument[key];
+                selectedInstrument = key;//(string)indexToInstrument[instrumentCombobox.SelectedValue];
+                if(classCombobox.SelectedIndex >-1) {
+                    selectedClass = (string)classCombobox.Items[classCombobox.SelectedIndex];
+                }
+                classCombobox.Items.Clear();
+                double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].minCE;
+                double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].maxCE;
+                numericalUpDownCurrentCE.Minimum = (decimal)minVal;
+                numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
+                cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument].xAxisLabel;
             
-            cartesean.updateXBoundaries(minVal, maxVal);
-            foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
-            {
-                classCombobox.Items.Add(lipidClass);
+                cartesean.updateXBoundaries(minVal, maxVal);
+                foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
+                {
+                    classCombobox.Items.Add(lipidClass);
+                }
+                //
+                if(selectedClass != null) {
+                    classCombobox.SelectedIndex = classCombobox.FindString(selectedClass);
+                } else {
+                    classCombobox.SelectedIndex = 0;
+                }
             }
-            classCombobox.SelectedIndex = 0;
         }
         
         
@@ -383,10 +395,10 @@ namespace LipidCreator
         
         public void applyClick(object sender, EventArgs e)
         {
-            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, double>>> kvp1 in collisionEnergies)
+            foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, double>>> kvp1 in collisionEnergies)
             {
                 // foreach class
-                foreach(KeyValuePair<string, Dictionary<string, double>> kvp2 in kvp1.Value)
+                foreach(KeyValuePair<string, IDictionary<string, double>> kvp2 in kvp1.Value)
                 {
                     // foreach adduct
                     foreach(KeyValuePair<string, double> kvp3 in kvp2.Value)
@@ -394,7 +406,7 @@ namespace LipidCreator
                         creatorGUI.lipidCreator.collisionEnergyHandler.collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key] = kvp3.Value;
                         
                         // foreach fragment
-                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])
+                        foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters[kvp1.Key][kvp2.Key][kvp3.Key])
                         {
                             kvp4.Value["selected"] = fragmentSelections[kvp1.Key][kvp2.Key][kvp3.Key][kvp4.Key] ? "1" : "0";
                         }

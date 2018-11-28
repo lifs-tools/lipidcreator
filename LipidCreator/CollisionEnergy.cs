@@ -55,11 +55,11 @@ namespace LipidCreator
     public class CollisionEnergy
     { 
         // instrument CV term -> class -> fragment -> adduct -> charge -> parameter -> value
-        public Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> instrumentParameters;
-        public Dictionary<string, Dictionary<string, Dictionary<string, double>>> collisionEnergies;
-        public Dictionary<string, Func<Dictionary<string, string>, double, double>> intensityFunctions;
-        public Dictionary<string, Func<Dictionary<string, string>, double, double, double, double, double[]>> curveFunctions;
-        public Dictionary<string, Func<Dictionary<string, string>, double>> optimalCEFunctions;
+        public IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> instrumentParameters;
+        public IDictionary<string, IDictionary<string, IDictionary<string, double>>> collisionEnergies;
+        public IDictionary<string, Func<IDictionary<string, string>, double, double>> intensityFunctions;
+        public IDictionary<string, Func<IDictionary<string, string>, double, double, double, double, double[]>> curveFunctions;
+        public IDictionary<string, Func<IDictionary<string, string>, double>> optimalCEFunctions;
         
         
         public static double square(double x)
@@ -69,17 +69,17 @@ namespace LipidCreator
         
         public CollisionEnergy()
         {
-            instrumentParameters = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>>();
-            intensityFunctions = new Dictionary<string, Func<Dictionary<string, string>, double, double>>();
+            instrumentParameters = new SortedList<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>>();
+            intensityFunctions = new Dictionary<string, Func<IDictionary<string, string>, double, double>>();
             intensityFunctions.Add("dlnormPar", intensityLogNormal);
             
-            curveFunctions = new Dictionary<string, Func<Dictionary<string, string>, double, double, double, double, double[]>>();
+            curveFunctions = new Dictionary<string, Func<IDictionary<string, string>, double, double, double, double, double[]>>();
             curveFunctions.Add("dlnormPar", computeLogNormalCurve);
             
-            optimalCEFunctions = new Dictionary<string, Func<Dictionary<string, string>, double>>();
+            optimalCEFunctions = new Dictionary<string, Func<IDictionary<string, string>, double>>();
             optimalCEFunctions.Add("dlnormPar", optimalCollisionEnergyLogNormal);
             
-            collisionEnergies = new Dictionary<string, Dictionary<string, Dictionary<string, double>>>();
+            collisionEnergies = new SortedList<string, IDictionary<string, IDictionary<string, double>>>();
         }
         
         
@@ -87,23 +87,23 @@ namespace LipidCreator
         
         public void addCollisionEnergyFields()
         {
-            foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>> kvp1 in instrumentParameters)
+            foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> kvp1 in instrumentParameters)
             {
-                Dictionary<string, Dictionary<string, double>> ce1 = new Dictionary<string, Dictionary<string, double>>();
+                IDictionary<string, IDictionary<string, double>> ce1 = new Dictionary<string, IDictionary<string, double>>();
                 collisionEnergies.Add(kvp1.Key, ce1);
             
                 // foreach class
-                foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> kvp2 in kvp1.Value)
+                foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
-                    Dictionary<string, double> ce2 = new Dictionary<string, double>();
+                    IDictionary<string, double> ce2 = new SortedList<string, double>();
                     ce1.Add(kvp2.Key, ce2);
                 
                     // foreach adduct
-                    foreach(KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> kvp3 in kvp2.Value)
+                    foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
                     {
                         ce2.Add(kvp3.Key, -1);
                     
-                        foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in kvp3.Value)
+                        foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
                         {
                             kvp4.Value.Add("selected", "1");
                         }
@@ -127,7 +127,7 @@ namespace LipidCreator
             if (!instrumentParameters[instrumentData.CVTerm][lipidClass].ContainsKey(adduct)) return;
                     
             // foreach fragment
-            foreach(KeyValuePair<string, Dictionary<string, string>> kvp4 in instrumentParameters[instrumentData.CVTerm][lipidClass][adduct])
+            foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in instrumentParameters[instrumentData.CVTerm][lipidClass][adduct])
             {
                 if (kvp4.Value["selected"] != "1") continue;
                 if (product == null)
@@ -168,11 +168,11 @@ namespace LipidCreator
             if (collisionEnergies.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, double>> parLevel1 = collisionEnergies[instrument];
+                IDictionary<string, IDictionary<string, double>> parLevel1 = collisionEnergies[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, double> parLevel2 = parLevel1[lipidClass];
+                    IDictionary<string, double> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
                         energy = parLevel2[adduct];
@@ -190,19 +190,19 @@ namespace LipidCreator
             if (instrumentParameters.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
+                IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
+                    IDictionary<string, IDictionary<string, IDictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
                         
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        IDictionary<string, IDictionary<string, string>> parLevel3 = parLevel2[adduct];
                         if (parLevel3.ContainsKey(fragment))
                         {
                         
-                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
+                            IDictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("model"))
                             {
                             
@@ -226,18 +226,18 @@ namespace LipidCreator
             if (instrumentParameters.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
+                IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
+                    IDictionary<string, IDictionary<string, IDictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
                         
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        IDictionary<string, IDictionary<string, string>> parLevel3 = parLevel2[adduct];
                         if (parLevel3.ContainsKey(fragment))
                         {
-                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
+                            IDictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("model"))
                             {
                                 string model = parLevel4["model"];
@@ -256,24 +256,24 @@ namespace LipidCreator
         
         public double[] getIntensityCurve(string instrument, string lipidClass, string adduct, string fragment, double[] xValues, double scale = 1.0)
         {
-            Func<Dictionary<string, string>, double, double> intensityFunction = null;
-            Dictionary<string, string> parameters = null;
+            Func<IDictionary<string, string>, double, double> intensityFunction = null;
+            IDictionary<string, string> parameters = null;
             double[] curve = new double[xValues.Length];
             if (instrumentParameters.ContainsKey(instrument))
             {
             
-                Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
+                IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
                 
-                    Dictionary<string, Dictionary<string, Dictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
+                    IDictionary<string, IDictionary<string, IDictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {
                         
-                        Dictionary<string, Dictionary<string, string>> parLevel3 = parLevel2[adduct];
+                        IDictionary<string, IDictionary<string, string>> parLevel3 = parLevel2[adduct];
                         if (parLevel3.ContainsKey(fragment))
                         {
-                            Dictionary<string, string> parLevel4 = parLevel3[fragment];
+                            IDictionary<string, string> parLevel4 = parLevel3[fragment];
                             if (parLevel4.ContainsKey("model"))
                             {
                                 string model = parLevel4["model"];
@@ -316,7 +316,7 @@ namespace LipidCreator
         
         
         
-        public static double optimalCollisionEnergyLogNormal(Dictionary<string, string> parameters)
+        public static double optimalCollisionEnergyLogNormal(IDictionary<string, string> parameters)
         {
         
             if (parameters.ContainsKey("meanlog") && parameters.ContainsKey("sdlog") && parameters.ContainsKey("shift"))
@@ -331,7 +331,7 @@ namespace LipidCreator
         
         
         
-        public static double intensityLogNormal(Dictionary<string, string> parameters, double collisionEnergy)
+        public static double intensityLogNormal(IDictionary<string, string> parameters, double collisionEnergy)
         {
             if (parameters.ContainsKey("meanlog") && parameters.ContainsKey("sdlog") && parameters.ContainsKey("shift") && parameters.ContainsKey("scale"))
             {
@@ -350,7 +350,7 @@ namespace LipidCreator
         
         
         
-        public static double[] computeLogNormalCurve(Dictionary<string, string> parameters, double start, double end, double stepsPerUnit, double scale = 1)
+        public static double[] computeLogNormalCurve(IDictionary<string, string> parameters, double start, double end, double stepsPerUnit, double scale = 1)
         {
             double[] curve = new double[(int)((end - start) * stepsPerUnit + 1)];
             double x = start;

@@ -174,6 +174,7 @@ namespace LipidCreator
                         MenuItem instrumentItem = new MenuItem();
                         instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
                         instrumentItem.RadioCheck = true;
+                        instrumentItem.Tag = instrument;
                         
                         switch (instrumentMode)
                         {
@@ -3251,40 +3252,46 @@ namespace LipidCreator
         
         public void unsetInstrument(Object sender, EventArgs e)
         {
-            int index = ((MenuItem)sender).Index;
-            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            if(((MenuItem)sender).Tag != null) {
+                string instrument = (string)((MenuItem)sender).Tag;
+                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-            menuCollisionEnergyOpt.Enabled = false;
-            monitoringType = MonitoringTypes.NoMonitoring;
-            lastCEInstrumentChecked.Checked = false;
-            lastCEInstrumentChecked = (MenuItem)sender;
-            lastCEInstrumentChecked.Checked = true;
+                menuCollisionEnergyOpt.Enabled = false;
+                monitoringType = MonitoringTypes.NoMonitoring;
+                lastCEInstrumentChecked.Checked = false;
+                lastCEInstrumentChecked = (MenuItem)sender;
+                lastCEInstrumentChecked.Checked = true;
+            }
         }
         
         
         public void changeInstrumentForCEtypePRM(Object sender, EventArgs e)
         {
-            int index = ((MenuItem)(((MenuItem)sender).Parent)).Index;
-            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            if(((MenuItem)sender).Tag != null) {
+                string instrument = (string)((MenuItem)sender).Tag;
+                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-            menuCollisionEnergyOpt.Enabled = true;
-            monitoringType = PRMMode;
-            lastCEInstrumentChecked.Checked = false;
-            lastCEInstrumentChecked = (MenuItem)sender;
-            lastCEInstrumentChecked.Checked = true;
+                menuCollisionEnergyOpt.Enabled = true;
+                monitoringType = PRMMode;
+                lastCEInstrumentChecked.Checked = false;
+                lastCEInstrumentChecked = (MenuItem)sender;
+                lastCEInstrumentChecked.Checked = true;
+            }
         }
         
         
         public void changeInstrumentForCEtypeSRM(Object sender, EventArgs e)
         {
-            int index = ((MenuItem)(((MenuItem)sender).Parent)).Index;
-            selectedInstrumentForCE = (string)lipidCreator.availableInstruments[index];
+            if(((MenuItem)sender).Tag != null) {
+                string instrument = (string)((MenuItem)sender).Tag;
+                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-            menuCollisionEnergyOpt.Enabled = false;
-            monitoringType = MonitoringTypes.SRM;
-            lastCEInstrumentChecked.Checked = false;
-            lastCEInstrumentChecked = (MenuItem)sender;
-            lastCEInstrumentChecked.Checked = true;
+                menuCollisionEnergyOpt.Enabled = false;
+                monitoringType = MonitoringTypes.SRM;
+                lastCEInstrumentChecked.Checked = false;
+                lastCEInstrumentChecked = (MenuItem)sender;
+                lastCEInstrumentChecked.Checked = true;
+            }
         }
         
         

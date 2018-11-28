@@ -44,15 +44,16 @@ namespace LipidCreator
     public partial class NewMediatorFragment : Form
     {
     
-        public CreatorGUI creatorGUI;
-        public string headgroup;
+        public MediatorMS2Form mediatorMS2Form = null;
+        public string headgroup = "";
+        public string fragmentName = "";
         public bool allowToAdd = false;
         public bool updating = false;
         public Dictionary<string, object[]> elementDict = null;
         
-        public NewMediatorFragment(CreatorGUI _creatorGUI, string _headgroup)
+        public NewMediatorFragment(MediatorMS2Form _mediatorMS2Form, string _headgroup)
         {
-            creatorGUI = _creatorGUI;
+            mediatorMS2Form = _mediatorMS2Form;
             headgroup = _headgroup;
         
             InitializeComponent();
@@ -98,7 +99,7 @@ namespace LipidCreator
             
             comboBox1.Items.Add("Monoisotopic");
             comboBox1.SelectedIndex = 0;
-            foreach(Precursor heavyPrecursor in creatorGUI.lipidCreator.headgroups[headgroup].heavyLabeledPrecursors)
+            foreach(Precursor heavyPrecursor in mediatorMS2Form.creatorGUI.lipidCreator.headgroups[headgroup].heavyLabeledPrecursors)
             {
                 comboBox1.Items.Add(heavyPrecursor.name);
             }
@@ -108,8 +109,49 @@ namespace LipidCreator
         // Add
         private void button1_Click(object sender, EventArgs e)
         {
+            string lipidClass = (comboBox1.SelectedIndex == 0) ? headgroup : (string)comboBox1.Items[comboBox1.SelectedIndex];
+            
+            if (mediatorMS2Form.creatorGUI.lipidCreator.allFragments[lipidClass][false].ContainsKey(fragmentName))
+            {
+                MessageBox.Show("Negative fragment '" + fragmentName + "' already registered for lipid class '" + lipidClass + "'");
+                return;
+            }
             
             
+            Dictionary<int, int> newElements = AddHeavyPrecursor.createElementData(elementDict);
+            MS2Fragment newFragment = new MS2Fragment(fragmentName, fragmentName, -1, null, newElements, "HG");
+            newFragment.userDefined = true;
+            
+            mediatorMS2Form.creatorGUI.lipidCreator.allFragments[lipidClass][false].Add(fragmentName, newFragment);
+            
+            if (comboBox1.SelectedIndex == 0)
+            {
+                mediatorMS2Form.checkedListBoxMonoIsotopicFragments.Items.Add(fragmentName);
+                mediatorMS2Form.checkedListBoxMonoIsotopicFragments.SetItemChecked(mediatorMS2Form.checkedListBoxMonoIsotopicFragments.Items.Count - 1, false);
+            }
+            else if ((string)mediatorMS2Form.deuteratedMediatorHeadgroups.Items[mediatorMS2Form.deuteratedMediatorHeadgroups.SelectedIndex] == lipidClass)
+            {
+                mediatorMS2Form.checkedListBoxDeuteratedFragments.Items.Add(fragmentName);
+                mediatorMS2Form.checkedListBoxDeuteratedFragments.SetItemChecked(mediatorMS2Form.checkedListBoxDeuteratedFragments.Items.Count - 1, false);
+            }
+                /*
+            if (!edit)
+            {
+                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, newFragment);
+                if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
+                {
+                    ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);
+                }
+                else
+                {
+                    ms2form.checkedListBoxNegativeFragments.Items.Add(textBoxFragmentName.Text);
+                }
+            }
+            else {
+                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0][textBoxFragmentName.Text] = newFragment;
+            }
+            */
+            this.Close();
         }
 
         // Cancel
@@ -121,19 +163,19 @@ namespace LipidCreator
         
         public void makePreview()
         {
-            string fragmentName = "";
+            fragmentName = "";
             allowToAdd = true;
             
             if (tabControl1.SelectedIndex == 0)
             {
                 try {
-                    double.Parse(textBox1.Text, System.Globalization.CultureInfo.InvariantCulture);
+                    double fragmentMass = double.Parse(textBox1.Text, System.Globalization.CultureInfo.InvariantCulture);
+                    fragmentName = String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
                 }
                 catch (Exception e)
                 {
                     allowToAdd = false;
                 }
-                fragmentName = textBox1.Text;
             }
             else {
                 double fragmentMass = LipidCreator.computeMass(AddHeavyPrecursor.createElementData(elementDict), -1);
@@ -145,7 +187,7 @@ namespace LipidCreator
                     allowToAdd = false;
                 }
             }
-            allowToAdd &= !creatorGUI.lipidCreator.allFragments[headgroup][false].ContainsKey(fragmentName);
+            allowToAdd &= !mediatorMS2Form.creatorGUI.lipidCreator.allFragments[headgroup][false].ContainsKey(fragmentName);
             label4.Text = fragmentName;
             label4.ForeColor = allowToAdd ? Color.FromArgb(0, 0, 0) : Color.FromArgb(255, 0, 0);
             if (label4.Text.Length > 0) label4.Text += "-";

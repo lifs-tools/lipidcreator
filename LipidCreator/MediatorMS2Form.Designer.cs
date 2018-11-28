@@ -162,7 +162,7 @@ namespace LipidCreator
             labelDeuteratedFragments.AutoSize = true;
             labelDeuteratedFragments.Location = new System.Drawing.Point(360, 6);
             labelDeuteratedFragments.Name = "label3";
-            labelDeuteratedFragments.Text = "Deuterated Fragments";
+            labelDeuteratedFragments.Text = "Isotopic Fragments";
             this.Controls.Add(labelDeuteratedFragments);
             
             

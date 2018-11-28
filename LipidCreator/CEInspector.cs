@@ -132,13 +132,12 @@ namespace LipidCreator
             }
             PRMModeChanged();
         }
-        
-        
+
         
         public void changeSmooth(object sender, System.Timers.ElapsedEventArgs e)
         {
             cartesean.smooth = true;
-            cartesean.Refresh();
+            refreshCartesan();
             timerSmooth.Enabled = false;
         }
         
@@ -194,7 +193,10 @@ namespace LipidCreator
                 string fragmentName = (string)row["Fragment name"];
                 yValCoords[fragmentName] = creatorGUI.lipidCreator.collisionEnergyHandler.getIntensityCurve(selectedInstrument, selectedClass, selectedAdduct, fragmentName, xValCoords, scale);
             }
-            cartesean.Refresh();
+            if(this.cartesean.InvokeRequired) {
+            } else {
+                refreshCartesan();
+            }
             fragmentSelectionChanged();
         }
         
@@ -211,6 +213,7 @@ namespace LipidCreator
             
             for (int i = 0; i < yValCoords["productProfile"].Length; ++i) yValCoords["productProfile"][i] = 1;
             
+            double maxYCurves = 0;
             //int ii = 0;
             foreach(DataRow row in fragmentsList.Rows)
             {
@@ -220,6 +223,7 @@ namespace LipidCreator
                     selectedFragments.Add(fragmentName);
                     
                     yValCoords["productProfile"] = CollisionEnergy.productTwoDistributions(yValCoords["productProfile"], yValCoords[fragmentName]);
+                    maxYCurves = Math.Max(maxYCurves, yValCoords[fragmentName].Max());
                 }
                 
                 fragmentSelections[selectedInstrument][selectedClass][selectedAdduct][fragmentName] = ((bool)row["View"]);
@@ -229,7 +233,7 @@ namespace LipidCreator
             double maxY = 0;
             for (int i = 0; i < yValCoords["productProfile"].Length; ++i)
             {
-                yValCoords["productProfile"][i] *= 4000;
+                yValCoords["productProfile"][i] /= maxYCurves;
                 if (maxY < yValCoords["productProfile"][i])
                 {
                     argMaxY = xValCoords[i];
@@ -248,9 +252,9 @@ namespace LipidCreator
                 cartesean.CEval = argMaxY;
                 numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
-                cartesean.Refresh();
+                refreshCartesan();
             }
-            cartesean.Refresh();
+            refreshCartesan();
         }
         
         
@@ -282,7 +286,7 @@ namespace LipidCreator
                 numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
             }
             collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
-            cartesean.Refresh();
+            refreshCartesan();
         }
         
         
@@ -291,7 +295,13 @@ namespace LipidCreator
             if (e.KeyCode == Keys.Enter) checkValidTextBoxtCurrentCE();
         }
         
-        
+        private void refreshCartesan() {
+            if(this.cartesean.InvokeRequired) {
+                this.cartesean.Invoke(new Action(() => {this.cartesean.Refresh();}));
+            } else {
+                this.cartesean.Refresh();
+            }
+        }
         
         
         public void instrumentComboboxChanged(Object sender, EventArgs e)
@@ -373,7 +383,7 @@ namespace LipidCreator
             
          
             fragmentsGridView.Update();
-            fragmentsGridView.Refresh();
+            refreshFragmentsGridView();
             computeCurves();
             
             cartesean.CEval = collisionEnergies[selectedInstrument][selectedClass][selectedAdduct];
@@ -381,7 +391,14 @@ namespace LipidCreator
         }
         
         
-        
+        private void refreshFragmentsGridView()
+        {
+            if(this.fragmentsGridView.InvokeRequired) {
+                this.fragmentsGridView.Invoke(new Action(() => {this.fragmentsGridView.Refresh();}));
+            } else {
+                this.fragmentsGridView.Refresh();
+            }
+        }
         
         
         
@@ -434,7 +451,7 @@ namespace LipidCreator
             {
                 cartesean.CELineShift = false;
                 cartesean.smooth = true;
-                cartesean.Refresh();
+                refreshCartesan();
             }
         }
         
@@ -484,7 +501,7 @@ namespace LipidCreator
                 cartesean.CEval = vals.X;
                 numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
-                cartesean.Refresh();
+                refreshCartesan();
             }
         
             else if (cartesean.marginLeft <= e.X && e.X <= cartesean.Width - cartesean.marginRight)
@@ -522,7 +539,7 @@ namespace LipidCreator
                 if (cartesean.highlightName != highlightName)
                 {
                     cartesean.highlightName = highlightName;
-                    cartesean.Refresh();
+                    refreshCartesan();
                 }
                 if (highlightName.Length > 0)
                 {
@@ -569,7 +586,7 @@ namespace LipidCreator
             if (cartesean.highlightName != highlightName)
             {
                 cartesean.highlightName = highlightName;
-                cartesean.Refresh();
+                refreshCartesan();
             }
         }
         

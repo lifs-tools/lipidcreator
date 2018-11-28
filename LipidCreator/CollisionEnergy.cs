@@ -381,7 +381,10 @@ namespace LipidCreator
             
             if (norm > 0)
             {
-                for (int i = 0; i < first.Length; ++i) product[i] /= norm;
+                for (int i = 0; i < first.Length; ++i) 
+                { 
+                    product[i] /= norm;
+                }
             }
             
             return product;

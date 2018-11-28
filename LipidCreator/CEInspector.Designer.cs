@@ -412,31 +412,33 @@ namespace LipidCreator
             labelCurrentCE.Text = "Collision energy:";
             labelCurrentCE.Width = 100;
             labelCurrentCE.Height = 16;
-            labelCurrentCE.Location = new Point(820, 456);
+            labelCurrentCE.Location = new Point(26, 60);
             
             
-            numericalUpDownCurrentCE.Location = new Point(924, 454);
-            numericalUpDownCurrentCE.Width = 90;
+            numericalUpDownCurrentCE.Location = new Point(130, 58);
+            numericalUpDownCurrentCE.Width = 80;
             numericalUpDownCurrentCE.ValueChanged += new EventHandler(textBoxCurrentCE_ValueChanged);
             numericalUpDownCurrentCE.DecimalPlaces = 2;
             
             
-            groupBoxPRMMode.Location = new Point(820, 480);
-            groupBoxPRMMode.Size = new Size(218, 60);
-            groupBoxPRMMode.Text = "PRM Mode";
+            groupBoxPRMMode.Location = new Point(820, 454);
+            groupBoxPRMMode.Size = new Size(218, 86);
+            groupBoxPRMMode.Text = "Profile Mode";
             groupBoxPRMMode.Controls.Add(radioButtonPRMFragments);
             groupBoxPRMMode.Controls.Add(radioButtonPRMArbitrary);
+            groupBoxPRMMode.Controls.Add(labelCurrentCE);
+            groupBoxPRMMode.Controls.Add(numericalUpDownCurrentCE);
             
             
             radioButtonPRMFragments.Location = new Point(10, 14);
             radioButtonPRMFragments.Size = new Size(140, 20);
-            radioButtonPRMFragments.Text = "Fragment selection";
+            radioButtonPRMFragments.Text = "Automatically";
             radioButtonPRMFragments.CheckedChanged += new EventHandler(PRMModeCheckedChanged);
             
             
             radioButtonPRMArbitrary.Location = new Point(10, 34);
             radioButtonPRMArbitrary.Size = new Size(140, 20);
-            radioButtonPRMArbitrary.Text = "Arbitrary";
+            radioButtonPRMArbitrary.Text = "Manually";
             radioButtonPRMArbitrary.CheckedChanged += new EventHandler(PRMModeCheckedChanged);
             
             
@@ -506,8 +508,6 @@ namespace LipidCreator
             this.Controls.Add(this.labelClass);
             this.Controls.Add(this.labelAdduct);
             this.Controls.Add(this.labelFragment);
-            this.Controls.Add(this.labelCurrentCE);
-            this.Controls.Add(this.numericalUpDownCurrentCE);
             this.Controls.Add(this.fragmentsGridView);
             this.Controls.Add(this.labelSelectAll);
             this.Controls.Add(this.labelDeselectAll);

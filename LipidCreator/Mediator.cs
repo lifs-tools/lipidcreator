@@ -95,7 +95,7 @@ namespace LipidCreator
         }
         
         
-        public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
+        public override void computePrecursorData(IDictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
             ArrayList allHeadgroups = new ArrayList();
             foreach(string headgroup in headGroupNames)

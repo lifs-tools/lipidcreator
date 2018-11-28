@@ -179,7 +179,7 @@ namespace LipidCreator
             for (int ii = 0; ii < ceInspector.yValCoords["productProfile"].Length; ++ii)
             {
                 double valX = ceInspector.xValCoords[ii];
-                double valY = ceInspector.yValCoords["productProfile"][ii];
+                double valY = Math.Max(0, ceInspector.yValCoords["productProfile"][ii]);
                 
                 if (ii > 0) g.DrawLine(profilePen, valueToPx(lastX, lastY), valueToPx(valX, valY));
                 lastX = valX;
@@ -202,7 +202,7 @@ namespace LipidCreator
                 for (int i = 0; i < ceInspector.xValCoords.Length; i += 1)
                 {
                     double valX = ceInspector.xValCoords[i];
-                    double valY = ceInspector.yValCoords[fragmentName][i];
+                    double valY = Math.Max(0, ceInspector.yValCoords[fragmentName][i]);
                     curvePoints[i] = valueToPx(valX, valY);
                 }
                 

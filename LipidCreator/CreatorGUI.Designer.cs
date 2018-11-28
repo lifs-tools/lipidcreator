@@ -664,7 +664,7 @@ namespace LipidCreator
             
             
             this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
-            this.menuTranslate.Text = "Tr&anslate";
+            this.menuTranslate.Text = "Lipid name tr&anslator";
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
             
             
@@ -675,7 +675,7 @@ namespace LipidCreator
             this.menuCollisionEnergy.Text = "Collision Energy computation";
             
             this.menuCollisionEnergyOpt.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
-            this.menuCollisionEnergyOpt.Text = "Collision Energy &optimization (PRM)";
+            this.menuCollisionEnergyOpt.Text = "Collision Energy &optimization";
             this.menuCollisionEnergyOpt.Click += new System.EventHandler (menuCollisionEnergyOptClick);
             this.menuCollisionEnergyOpt.Enabled = false;
             

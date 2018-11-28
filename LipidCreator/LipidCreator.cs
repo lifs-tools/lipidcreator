@@ -58,9 +58,9 @@ namespace LipidCreator
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
-        public Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
-        public Dictionary<int, ArrayList> categoryToClass;
-        public Dictionary<string, Precursor> headgroups;
+        public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
+        public IDictionary<int, ArrayList> categoryToClass;
+        public IDictionary<string, Precursor> headgroups;
         public DataTable transitionList;
         public DataTable transitionListUnique;
         public ArrayList replicates; // replicate transitions excluded from transitionListUnique
@@ -69,7 +69,7 @@ namespace LipidCreator
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
         public HashSet<string> lysoPhosphoLipids;
-        public Dictionary<string, InstrumentData> msInstruments;
+        public IDictionary<string, InstrumentData> msInstruments;
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
         public ParserEventHandler parserEventHandler;
@@ -163,7 +163,7 @@ namespace LipidCreator
                             
                             if (!allFragments.ContainsKey(tokens[0]))
                             {
-                                allFragments.Add(tokens[0], new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                                allFragments.Add(tokens[0], new Dictionary<bool, IDictionary<string, MS2Fragment>>());
                                 allFragments[tokens[0]].Add(false, new Dictionary<string, MS2Fragment>());
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
@@ -376,17 +376,17 @@ namespace LipidCreator
                             
                             if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
                             {
-                                collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, string>>>>());
+                                collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
                             }
                             
                             if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
                             {
-                                collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, Dictionary<string, Dictionary<string, string>>>());
+                                collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
                             }
                             
                             if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
                             {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, Dictionary<string, string>>());
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
                             }
                             
                             if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
@@ -432,7 +432,7 @@ namespace LipidCreator
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
-            allFragments = new Dictionary<string, Dictionary<bool, Dictionary<string, MS2Fragment>>>();
+            allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
             lysoSphingoLipids = new HashSet<string>();
@@ -445,7 +445,9 @@ namespace LipidCreator
             readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
-            foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) availableInstruments.Add(instrument);
+            foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) {
+                availableInstruments.Add(instrument);
+            }
             
             foreach(string lipidClass in allFragments.Keys)
             {
@@ -688,7 +690,7 @@ namespace LipidCreator
             }
             
             
-            Dictionary<String, String> replicateKeys = new Dictionary<String, String> ();
+            IDictionary<String, String> replicateKeys = new Dictionary<String, String> ();
             int i = 0;
             replicates.Clear();
             foreach (DataRow row in transitionList.Rows)
@@ -867,7 +869,7 @@ namespace LipidCreator
         
         
         
-        public static string computeChemicalFormula(Dictionary<int, int> elements)
+        public static string computeChemicalFormula(IDictionary<int, int> elements)
         {
             String chemForm = "";            
             foreach (int molecule in MS2Fragment.MONOISOTOPE_POSITIONS.Keys.OrderBy(x => MS2Fragment.MONOISOTOPE_POSITIONS[x]))
@@ -889,7 +891,7 @@ namespace LipidCreator
         
         
         
-        public static string computeAdductFormula(Dictionary<int, int> elements, string adduct, int charge = 0)
+        public static string computeAdductFormula(IDictionary<int, int> elements, string adduct, int charge = 0)
         {
             if (charge == 0) charge = Lipid.adductToCharge[adduct];
             
@@ -909,7 +911,7 @@ namespace LipidCreator
         
         
         
-        public static string computeHeavyIsotopeLabel(Dictionary<int, int> elements)
+        public static string computeHeavyIsotopeLabel(IDictionary<int, int> elements)
         {
             string label = "";
             foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE.Keys)
@@ -926,7 +928,7 @@ namespace LipidCreator
         
         
         
-        public static double computeMass(Dictionary<int, int> elements, double charge)
+        public static double computeMass(IDictionary<int, int> elements, double charge)
         {
             double mass = 0;
             foreach (KeyValuePair<int, int> row in elements)
@@ -997,9 +999,9 @@ namespace LipidCreator
             {
                 int lineCounter = 0;
                 int ruleNum = 1;
-                Dictionary<int, ArrayList> rules = new Dictionary<int, ArrayList>();
-                Dictionary<int, string> terminals = new Dictionary<int, string>();
-                Dictionary<string, int> ruleToNT = new Dictionary<string, int>();
+                IDictionary<int, ArrayList> rules = new Dictionary<int, ArrayList>();
+                IDictionary<int, string> terminals = new Dictionary<int, string>();
+                IDictionary<string, int> ruleToNT = new Dictionary<string, int>();
                 using (StreamReader sr = new StreamReader(grammerFilename))
                 {
                     string line;
@@ -1073,7 +1075,7 @@ namespace LipidCreator
         
         
         
-        public static LinkedList<string> assembleLipidname(Dictionary<int, ArrayList> rules, Dictionary<int, string> terminals, LinkedList<string> lipidname, int rule, int prevRandom)
+        public static LinkedList<string> assembleLipidname(IDictionary<int, ArrayList> rules, IDictionary<int, string> terminals, LinkedList<string> lipidname, int rule, int prevRandom)
         {
             int p = -2;
             byte[] byteArray = new byte[4];
@@ -1109,7 +1111,7 @@ namespace LipidCreator
                 }
             }
             
-            foreach (KeyValuePair<string, Dictionary<bool, Dictionary<string, MS2Fragment>>> headgroup in allFragments)
+            foreach (KeyValuePair<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> headgroup in allFragments)
             {
                 foreach (KeyValuePair<string, MS2Fragment> fragment in allFragments[headgroup.Key][true])
                 {
@@ -1262,7 +1264,7 @@ namespace LipidCreator
                 string headgroup = userDefinedFragment.Attribute("headgroup").Value;
                 if (!allFragments.ContainsKey(headgroup))
                 {
-                    allFragments.Add(headgroup, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                    allFragments.Add(headgroup, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
                     allFragments[headgroup].Add(true, new Dictionary<string, MS2Fragment>());
                     allFragments[headgroup].Add(false, new Dictionary<string, MS2Fragment>());
                 }

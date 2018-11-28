@@ -137,7 +137,7 @@ namespace LipidCreator
         }
         
         
-        public override void computePrecursorData(Dictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
+        public override void computePrecursorData(IDictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
             // check if more than one fatty acids are 0:0
             int checkFattyAcids = 0;

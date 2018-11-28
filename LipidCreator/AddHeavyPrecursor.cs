@@ -609,7 +609,7 @@ namespace LipidCreator
                     creatorGUI.lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
                     
                     // copy all MS2Fragments
-                    creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, Dictionary<string, MS2Fragment>>());
+                    creatorGUI.lipidCreator.allFragments.Add(name, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
                     creatorGUI.lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
                     creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
                     

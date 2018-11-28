@@ -1,4 +1,34 @@
-﻿namespace LipidCreator
+﻿/*
+MIT License
+
+Copyright (c) 2018 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
+                   Bing Peng   -   bing.peng {at} isas.de
+                   Nils Hoffmann  -  nils.hoffmann {at} isas.de
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+using System;
+using System.Windows.Forms;
+
+namespace LipidCreator
 {
     partial class NewMediatorFragment
     {
@@ -55,6 +85,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(606, 235);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
             // 
             // tabPage1
             // 
@@ -83,6 +114,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(98, 20);
             this.textBox1.TabIndex = 0;
+            this.textBox1.TextChanged += new EventHandler(textBox1TextChanged);
             // 
             // tabPage2
             // 
@@ -97,11 +129,21 @@
             // 
             // dataGridView1
             // 
+            
+            
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(709, 209);
+            this.dataGridView1.Size = new System.Drawing.Size(604, 209);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1CellValueChanged);
+            
             // 
             // label1
             // 
@@ -139,6 +181,8 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(142, 21);
             this.comboBox1.TabIndex = 6;
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBox1.SelectedIndexChanged += new EventHandler(comboBox1ValueChanged);
             // 
             // label3
             // 

@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace LipidCreator
 {
@@ -175,6 +176,7 @@ namespace LipidCreator
             // 
             this.selectBaseCombobox.Location = new System.Drawing.Point(110, 24);
             this.selectBaseCombobox.Size = new System.Drawing.Size(180, 20);
+            selectBaseCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             selectBaseCombobox.SelectedIndexChanged += new System.EventHandler(this.selectBaseComboboxValueChanged);
 
             // 

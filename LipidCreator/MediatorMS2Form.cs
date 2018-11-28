@@ -246,7 +246,9 @@ namespace LipidCreator
         
         private void addFragmentClick(object sender, EventArgs e)
         {
-            NewMediatorFragment newMediatorFragment = new NewMediatorFragment();
+        
+            string headgroup = medHgListbox.SelectedItem.ToString();
+            NewMediatorFragment newMediatorFragment = new NewMediatorFragment(creatorGUI, headgroup);
             newMediatorFragment.Owner = this;
             newMediatorFragment.ShowInTaskbar = false;
             newMediatorFragment.ShowDialog();

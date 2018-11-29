@@ -715,7 +715,7 @@ namespace LipidCreator
         
         
         
-        public void assembleLipids(string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring)
+        public void assembleLipids(bool asDeveloper, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring)
         {
 
             List<string> headerList = new List<string>();
@@ -731,6 +731,17 @@ namespace LipidCreator
             
             
             createPrecursorList();
+            
+            if (asDeveloper)
+            {
+                Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                foreach (PrecursorData precursorData in precursorDataList)
+                {
+                    precursorData.precursorName = precursorData.lipidClass;
+                    precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
+                }
+            }
+            
             createFragmentList(instrument, monitoringType);
         }
         

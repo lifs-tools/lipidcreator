@@ -68,6 +68,7 @@ namespace LipidCreator
         public MonitoringTypes PRMMode = MonitoringTypes.PRMFragments;
         public FilterDialog filterDialog = null;
         public MenuItem lastCEInstrumentChecked = null;
+        public bool asDeveloper = false;
         
         
         
@@ -3400,7 +3401,7 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids(selectedInstrumentForCE, monitoringType);
+            lipidCreator.assembleLipids(asDeveloper, selectedInstrumentForCE, monitoringType);
             lipidCreator.analytics("lipidcreator", "create-transition-list");
             lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;
@@ -3636,6 +3637,7 @@ namespace LipidCreator
                     Console.WriteLine("    -h 1:\t\tCompute only heavy labeled isotopes");
                     Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
                     Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
+                    Console.WriteLine("    -x:\t\t\tDeveloper or Xpert mode");
                     Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
                     Console.WriteLine("    -c instrument mode:\tCompute with optimal collision energy (not available for all lipid classes)");
                     Console.WriteLine("      available instruments and modes:");
@@ -3698,8 +3700,9 @@ namespace LipidCreator
                     Console.WriteLine("usage: LipidCreator.exe (option)");
                     Console.WriteLine();
                     Console.WriteLine("options are:");
+                    Console.WriteLine("  dev:\t\t\t\tlaunching LipidCreator as developer");
                     Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
-                    Console.WriteLine("  translate:\t\ttranslating a list with old lipid names into current nomenclature");
+                    Console.WriteLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine("  spymode:\t\t\tsecret spy mode");
@@ -3738,10 +3741,20 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "help", "transitionlist", "library", "random", "spymode", "translate"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "spymode", "translate"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
+                        
+                        case "dev":
+                            checkForAnalytics(false);
+                            CreatorGUI creatorGUIDev = new CreatorGUI(null);
+                            creatorGUIDev.asDeveloper = true;
+                            creatorGUIDev.lipidCreator.analytics("lipidcreator", "launch");
+                            Application.Run(creatorGUIDev);
+                            break;
+                            
+                        
                         case "external":
                             checkForAnalytics(true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
@@ -3852,6 +3865,7 @@ namespace LipidCreator
                                 string mode = "";
                                 bool deleteReplicates = false;
                                 bool split = false;
+                                bool asDeveloper = false;
                                 int p = 3;
                                 while (p < args.Length)
                                 {
@@ -3886,6 +3900,10 @@ namespace LipidCreator
                                             p += 1;
                                             break;
                                             
+                                        case "-x":
+                                            asDeveloper = true;
+                                            break;
+                                            
                                         default:
                                             printHelp("transitionlist");
                                             break;
@@ -3912,7 +3930,7 @@ namespace LipidCreator
                                 if (mode == "PRM") monitoringType = MonitoringTypes.PRMFragments;
                                 else if (mode == "SRM") monitoringType = MonitoringTypes.SRM;
                                 
-                                lc.assembleLipids(instrument, monitoringType); 
+                                lc.assembleLipids(asDeveloper, instrument, monitoringType); 
                                 DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                 lc.storeTransitionList(",", split, outputCSV, transitionList);
                             }

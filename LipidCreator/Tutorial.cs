@@ -792,7 +792,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.homeTab);
                     
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Welcome to the PRM tutorial (transition for precursors) of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create a targeted assay.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Welcome to the PRM tutorial (transitions for precursors) of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create a targeted assay.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -804,7 +804,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Phosholipids' tab", "LipidCreator offers computation for five lipid categories, namely glycerolipids, phopholipids, sphingolipids, cholesterols and mediators.");
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Phosholipids' tab", "LipidCreator offers computation for five lipid categories, namely glycerolipids, phospholipids, sphingolipids, cholesterols and mediators.");
                     
                     break;
                     
@@ -817,7 +817,7 @@ namespace LipidCreator
                     for (; plHGpg < plHG.Items.Count; ++plHGpg) if (plHG.Items[plHGpg].ToString().Equals("PG")) break;
                     tutorialArrow.update(new Point(plHG.Location.X + plHG.Size.Width, plHG.Location.Y + (int)((plHGpg + 0.5) * plHG.ItemHeight)), "tl");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select solely 'PG' headgroup", "The user can multiple select different headgroup. The according adducts are highlighted when hovering above the headgroups.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select the 'PG' headgroup", "The user can select multiple different headgroups. The according adducts are highlighted when hovering above a headgroup.", false);
                     
                     creatorGUI.plHgListbox.SelectedItems.Clear();
                     creatorGUI.plHgListbox.Enabled = true;
@@ -830,7 +830,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set first fatty acid carbon lengths to '14-18, 20'", "LipidCreator was designed to describe a set of fatty acids (FAs) instead of FA separately.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the first fatty acid carbon chain lengths to '14-18, 20'", "LipidCreator allows to describe a set of different fatty acids (FAs) concisely instead of describing each FA separately.");
                                       
                     
                     plFA1.Text = "12-15";
@@ -845,7 +845,7 @@ namespace LipidCreator
                     TextBox plDB1 = creatorGUI.plDB1Textbox;
                     tutorialArrow.update(new Point(plDB1.Location.X + plDB1.Size.Width, plDB1.Location.Y + (plDB1.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Set first double bond occurrences to '0-1'", "Here, one can specify the number of double bonds (DBs) for first FA.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Set the number of double bonds for first FA to '0-1'", "Here, one can specify the number of double bonds (DBs) for the first FA.");
                                       
                     
                     plDB1.Text = "0";
@@ -858,7 +858,7 @@ namespace LipidCreator
                     TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "The number of hydroxyl groups can be adjusted to FAs. Here, we stick to zero.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "The number of hydroxyl groups can be adjusted for each FA specification. Here, we stick with zero.");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -882,7 +882,7 @@ namespace LipidCreator
                     TextBox plFA2 = creatorGUI.plFA2Textbox;
                     tutorialArrow.update(new Point(plFA2.Location.X, plFA2.Location.Y + (plFA2.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set second FA carbon lengths to '8-10' and DB to '2'", "");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the second FA carbon chain lengths to '8-10' and number of DBs to '2'", "");
                     
                     plFA2.Text = "12 - 15";
                     plFA2.Enabled = true;
@@ -897,7 +897,7 @@ namespace LipidCreator
                     GroupBox P1 = creatorGUI.plPositiveAdduct;
                     tutorialArrow.update(new Point(P1.Location.X, P1.Location.Y + (P1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Select +H(+) adduct", "Several adducts are possible for selection. By default, for PG only the negative adduct -H(-) is selected.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Select +H(+) adduct", "Several adducts are possible for selection. For PG, only the negative adduct -H(-) is selected by default.");
                     
                     
                     adductP1.Checked = false;
@@ -950,7 +950,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "Here is for creating the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
                     
                     break;
                     
@@ -964,7 +964,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' is for storing the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly insert to Skyline by click on 'Send to Skyline'.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' stores the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly transfered to Skyline by clicking on 'Send to Skyline'.", false);
                     
                     break;
                     
@@ -972,7 +972,7 @@ namespace LipidCreator
                 case (int)PRMSteps.Finish:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished the first tutorial. If you need more information, please use the further tutorials. Have fun with LipidCreator.");
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished the first tutorial. If you need more information, please use the other tutorials. Have fun with LipidCreator!");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -995,7 +995,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.homeTab);
                     
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Welcome to the SRM tutorial(transition for fragments)of LipidCreator. This tutorial builds on the first tutorial.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Welcome to the SRM tutorial (transitions for fragments) of LipidCreator. This tutorial builds upon the first tutorial.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1015,7 +1015,7 @@ namespace LipidCreator
                     creatorGUI.changeTab(2);
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "the selection from tutorial one is already present. We can smoothly continue.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "The selection from tutorial one is already present. We can continue immediately.", false);
                     nextEnabled = true;
                     tutorialWindow.Refresh();
                     
@@ -1030,7 +1030,7 @@ namespace LipidCreator
                     Button ms2 = creatorGUI.MS2fragmentsLipidButton;
                     tutorialArrow.update(new Point(ms2.Location.X + (ms2.Size.Width >> 1), ms2.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Open MS2 fragments dialog", "");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Open the MS2 fragments dialog", "");
                     
                     ms2.Enabled = true;
                     break;
@@ -1040,7 +1040,7 @@ namespace LipidCreator
                     initMS2Form();
                     setTutorialControls(creatorGUI.ms2fragmentsForm);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Click on 'Continue'", "Here you can have a deeper look into all predefined MS2 fragments for corresponding category.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Click on 'Continue'", "Here you can have a deeper look into all predefined MS2 fragments for each lipid category.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1053,7 +1053,7 @@ namespace LipidCreator
                     TabControl ms2tc2 = creatorGUI.ms2fragmentsForm.tabControlFragments;
                     tutorialArrow.update(new Point((int)(ms2tc2.ItemSize.Width * ((pgIndex % 16) + 0.5)), 0), "lt");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select 'PG' tab", "", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select the 'PG' tab", "", false);
                     
                     break;
                     
@@ -1064,7 +1064,7 @@ namespace LipidCreator
                     CheckedListBox negCLB = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
                     tutorialArrow.update(new Point(negCLB.Location.X + negCLB.Size.Width, negCLB.Location.Y + (negCLB.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Select only -HG(PG,172)+, FA1(+O)- and HG(PG,171)- fragments", "When hovering over the fragments, a structure of the fragment is displayed.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Select only the -HG(PG,172)+, FA1(+O)- and HG(PG,171)- fragments", "When hovering over the fragments, a structure of the fragment is displayed.");
                     
                     creatorGUI.ms2fragmentsForm.labelPositiveDeselectAll.Enabled = true;
                     creatorGUI.ms2fragmentsForm.labelPositiveSelectAll.Enabled = true;
@@ -1084,7 +1084,7 @@ namespace LipidCreator
                     ms2fragButton.Enabled = true;
                     tutorialArrow.update(new Point(ms2fragButton.Location.X + (ms2fragButton.Size.Width >> 1) - creatorGUI.ms2fragmentsForm.tabControlFragments.Left, creatorGUI.ms2fragmentsForm.tabControlFragments.Height - 46), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Open 'Add fragment' dialog", "Here you can define new fragments.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Open the 'Add fragment' dialog", "Here you can define new fragments.");
                     
                     
                     break;
@@ -1095,7 +1095,7 @@ namespace LipidCreator
                     
                     initAddFragmentForm();
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on 'Continue'", "This form enables to define own fragments. The definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on 'Continue'", "This form allows you to define your own fragments. The definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1110,7 +1110,7 @@ namespace LipidCreator
                     
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Name 'testFrag', choose 'FA1' from Select base", "The fragment can either be fixed or dependent on building blocks.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Enter the name 'testFrag', choose 'FA1' from Select base", "The fragment can either be fixed or dependent on its building blocks.");
                     
                     break;
                     
@@ -1132,7 +1132,7 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.Enabled = true;
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen to 3 and oxygen to 2", "A constant set of elements can be defined which will be added to the fragment. When 'fixed' base is selected, element numbers can only be positive, otherwise negative counts are also allowed.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Set hydrogen count to 3 and oxygen to 2", "A constant set of elements can be defined which will be added to the fragment. When a 'fixed' base is selected, element numbers can only be positive, otherwise negative counts are also allowed.");
                     
                     break;
                     
@@ -1142,7 +1142,7 @@ namespace LipidCreator
                     
                     creatorGUI.ms2fragmentsForm.newFragment.addButton.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on the 'Add' button to add fragment", "");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on the 'Add' button to add the fragment", "");
                     
                     break;
                     
@@ -1155,7 +1155,7 @@ namespace LipidCreator
                     posCLB.Enabled = true;
                     tutorialArrow.update(new Point(posCLB.Location.X + posCLB.Size.Width, posCLB.Location.Y + (posCLB.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Select new fragment", "By right click you can either edit or delete the fragment. Only user defined fragments are allowed to be updated or deleted.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Select new fragment", "By right clicking, you can either edit or delete the fragment. Only user defined fragments are allowed to be updated or deleted.", false);
                     
                     break;
                     
@@ -1168,7 +1168,7 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(b.Location.X + (b.Size.Width >> 1) - creatorGUI.ms2fragmentsForm.tabControlFragments.Left, creatorGUI.ms2fragmentsForm.tabControlFragments.Height - 46), "rb");
                     
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click OK", "Please confirm the fragment selection.");
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click on 'OK'", "Please confirm the fragment selection.");
                     
                     break;
                     
@@ -1194,7 +1194,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "Here is for creating the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
                     
                     break;
                     
@@ -1208,7 +1208,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' is for storing the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly insert to Skyline by click on 'Send to Skyline'.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' stores the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly transfered to Skyline by clicking on 'Send to Skyline'.", false);
                     
                     break;
                     
@@ -1216,7 +1216,7 @@ namespace LipidCreator
                 case (int)SRMSteps.Finish:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please use further tutorials. Have fun with LipidCreator.");
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please use the other tutorials. Have fun with LipidCreator!");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1238,7 +1238,7 @@ namespace LipidCreator
                 case (int)HLSteps.Welcome:
                     setTutorialControls(creatorGUI.homeTab);
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "This tutorial will provide an introduction in the creation of heavy labelled lipids.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "This tutorial will provide an introduction to the creation of heavy labelled lipids.", false);
                     nextEnabled = true;
                     break;
                     
@@ -1286,7 +1286,7 @@ namespace LipidCreator
                     initHeavyLabeled();
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "The mode can be selected either adding a new or edit a user defined heavy isotopes.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "The mode can be selected either by adding new or editing existing user defined heavy isotopes.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1299,7 +1299,7 @@ namespace LipidCreator
                     creatorGUI.addHeavyPrecursor.comboBox1.Enabled = true;
                     creatorGUI.addHeavyPrecursor.textBox1.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Select PG and name it '13C6d30'", "Please select the current lipid class PG and name it with the suffix '13C6d30'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Select PG and name it '13C6d30'", "Please select the current lipid class PG and set its isotope suffix to '13C6d30'.");
                     
                     break;
                     
@@ -1307,7 +1307,7 @@ namespace LipidCreator
                 case (int)HLSteps.OptionsExplain:
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "In 'Building block', the head group and two fatty acids can be edited for PG. First to edit the head group.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "In 'Building block', the head group and two fatty acids can be edited for PG. We will start with the head group.");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1319,7 +1319,7 @@ namespace LipidCreator
                     
                     creatorGUI.addHeavyPrecursor.dataGridView1.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set count of 13C to 6", "Press Enter after type in the number.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set the isotopic count of 13C to 6", "Press Enter after typing in the number.");
                     
                     break;
                     
@@ -1337,7 +1337,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.dataGridView1.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set 2H to 30", "The heavy labelled elements numbers act as an upper limit for the element, since the fatty acid building block has a variable number of elements depending e.g. on the carbon chain length.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set the isotopic count of 2H to 30", "The heavy labelled element numbers act as an upper limit for the element, since the fatty acid building block has a variable number of elements depending e.g. on the carbon chain length.");
                     
                     break;
                     
@@ -1346,7 +1346,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.button2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restart LipidCreator. To use them further, please export lipid settings from 'File'.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Add isotope'", "The user defined isotopes will be reset when restarting LipidCreator. To use them further, please export lipid settings from the 'File' menu.");
                     
                     break;
                     
@@ -1376,7 +1376,7 @@ namespace LipidCreator
                     Button ms2_2 = creatorGUI.MS2fragmentsLipidButton;
                     tutorialArrow.update(new Point(ms2_2.Location.X + (ms2_2.Size.Width >> 1), ms2_2.Location.Y + creatorGUI.lcStep2.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Open MS2 fragments dialog", "", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Open the MS2 fragments dialog", "", false);
                     
                     ms2_2.Enabled = true;
                     
@@ -1390,7 +1390,7 @@ namespace LipidCreator
                     TabControl ms2tc2_2 = creatorGUI.ms2fragmentsForm.tabControlFragments;
                     tutorialArrow.update(new Point((int)(ms2tc2_2.ItemSize.Width * ((pgIndex % 16) + 0.5)), 0), "lt");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select 'PG' tab", "", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select the 'PG' tab", "", false);
                     
                     break;
                     
@@ -1429,7 +1429,7 @@ namespace LipidCreator
                 case (int)HLSteps.CheckFragment:
                     setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Click on 'Continue'", "It's necessary to check if precursor modification satisfy the fragment modification.");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Click on 'Continue'", "It is necessary to check if precursor modification satisfies the fragment modification.");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1456,7 +1456,7 @@ namespace LipidCreator
                     initAddFragmentForm();
                     
                     creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.Enabled = true;
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Set 2H to 1 and H to 0", "", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Set isotopic count of 2H to 1 and count of H to 0", "", false);
                     
                     break;
                     
@@ -1528,7 +1528,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review lipids'", "Here is for creating the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors and fragment information.");
                     
                     break;
                     
@@ -1542,7 +1542,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' is for storing the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly insert to Skyline by click on 'Send to Skyline'.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' stores  the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly transfered to Skyline by clicking on 'Send to Skyline'.", false);
                     
                     break;
                     
@@ -1550,7 +1550,7 @@ namespace LipidCreator
                 case (int)HLSteps.Finish:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please read the documentation. Have fun with LipidCreator.");
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please read the documentation. Have fun with LipidCreator!");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();

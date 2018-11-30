@@ -65,7 +65,7 @@ namespace LipidCreator
             fragmentApex = new Dictionary<string, double>();
             selectedFragments = new HashSet<string>();
             indexToInstrument = new Dictionary<string, string>();
-            PRMMode = creatorGUI.PRMMode;
+            PRMMode = creatorGUI.lipidCreator.PRMMode;
             
             fragmentsList = new DataTable("fragmentsList");
             fragmentsList.Columns.Add(new DataColumn("View"));
@@ -121,7 +121,7 @@ namespace LipidCreator
             instrumentCombobox.DisplayMember = "Value";
             instrumentCombobox.ValueMember = "Key";
             instrumentCombobox.SelectedValue = selectedInstrument; // select by CVTerm string value, e.g.: MS:1002791
-            if (PRMMode == MonitoringTypes.PRMFragments)
+            if (PRMMode == MonitoringTypes.PRMAutomatically)
             {
                 radioButtonPRMFragments.Checked = true;
             }
@@ -248,7 +248,7 @@ namespace LipidCreator
             }
             
             fragmentApex["productProfile"] = argMaxY;
-            if (PRMMode == MonitoringTypes.PRMFragments)
+            if (PRMMode == MonitoringTypes.PRMAutomatically)
             {
                 cartesean.CEval = argMaxY;
                 numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
@@ -345,7 +345,7 @@ namespace LipidCreator
         
         public void PRMModeChanged()
         {
-            if (PRMMode == MonitoringTypes.PRMFragments)
+            if (PRMMode == MonitoringTypes.PRMAutomatically)
             {
                 numericalUpDownCurrentCE.Enabled = false;
                 fragmentSelectionChanged();
@@ -442,7 +442,7 @@ namespace LipidCreator
                     }
                 }
             }
-            creatorGUI.PRMMode = PRMMode;
+            creatorGUI.lipidCreator.PRMMode = PRMMode;
             this.Close();
         }
         
@@ -450,7 +450,7 @@ namespace LipidCreator
         
         public void PRMModeCheckedChanged(Object sender, EventArgs e)
         {
-            PRMMode = radioButtonPRMFragments.Checked ? MonitoringTypes.PRMFragments : PRMMode = MonitoringTypes.PRMArbitrary;
+            PRMMode = radioButtonPRMFragments.Checked ? MonitoringTypes.PRMAutomatically : PRMMode = MonitoringTypes.PRMManually;
             PRMModeChanged();
         }
         
@@ -470,7 +470,7 @@ namespace LipidCreator
         
         public void cartesean_mouseDown(object sender, MouseEventArgs e)
         {
-            if (PRMMode == MonitoringTypes.PRMArbitrary)
+            if (PRMMode == MonitoringTypes.PRMManually)
             {
                 cartesean.CELineShift = cartesean.mouseOverCELine(e);
                 if (cartesean.CELineShift) cartesean.smooth = false;
@@ -480,7 +480,7 @@ namespace LipidCreator
         
         public void cartesean_mouseMove(object sender, MouseEventArgs e)
         {
-            if (PRMMode == MonitoringTypes.PRMArbitrary && cartesean.mouseOverCELine(e))
+            if (PRMMode == MonitoringTypes.PRMManually && cartesean.mouseOverCELine(e))
             {
                 cartesean.Cursor = Cursors.Hand;
             }

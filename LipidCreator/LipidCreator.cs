@@ -49,7 +49,7 @@ namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
-    public enum MonitoringTypes {NoMonitoring, SRM, PRMFragments, PRMArbitrary};
+    public enum MonitoringTypes {NoMonitoring, SRM, PRMAutomatically, PRMManually};
 
     [Serializable]
     public class LipidCreator
@@ -77,6 +77,11 @@ namespace LipidCreator
         public bool enableAnalytics = false;
         public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
         public string prefixPath = "";
+        
+        // collision energy parameters
+        public string selectedInstrumentForCE = "";
+        public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
+        public MonitoringTypes PRMMode = MonitoringTypes.PRMManually;
         
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser lipidMapsParser;
@@ -671,12 +676,12 @@ namespace LipidCreator
                     double CE = -1;
                     string precursorName = precursorData.fullMoleculeListName;
                     string adduct = precursorData.precursorAdductFormula;
-                    if (monitoringType == MonitoringTypes.PRMFragments)
+                    if (monitoringType == MonitoringTypes.PRMAutomatically)
                     {
                         collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
                         CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
                     }
-                    else if (monitoringType == MonitoringTypes.PRMArbitrary)
+                    else if (monitoringType == MonitoringTypes.PRMManually)
                     {
                         
                         if (collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct) == -1)
@@ -715,18 +720,18 @@ namespace LipidCreator
         
         
         
-        public void assembleLipids(bool asDeveloper, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring)
+        public void assembleLipids(bool asDeveloper)
         {
 
             List<string> headerList = new List<string>();
             headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
-            if (instrument.Length > 0) headerList.Add(COLLISION_ENERGY);
+            if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
             DATA_COLUMN_KEYS = headerList.ToArray();
             
             
             List<string> apiList = new List<string>();
             apiList.AddRange(STATIC_SKYLINE_API_HEADER);
-            if (instrument.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
             SKYLINE_API_HEADER = apiList.ToArray();
             
             
@@ -742,7 +747,7 @@ namespace LipidCreator
                 }
             }
             
-            createFragmentList(instrument, monitoringType);
+            createFragmentList(selectedInstrumentForCE, monitoringType);
         }
         
         
@@ -1339,7 +1344,7 @@ namespace LipidCreator
         }
         
         
-        public void createBlib(String filename, string instrument)
+        public void createBlib(String filename)
         {
         
             if (File.Exists(filename)) File.Delete(filename);
@@ -1467,11 +1472,11 @@ namespace LipidCreator
                 string precursorName = precursorData.fullMoleculeListName;
                 string adduct = precursorData.precursorAdductFormula;
                 
-                if (collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct) == -1)
+                if (collisionEnergyHandler.getCollisionEnergy(selectedInstrumentForCE, precursorName, adduct) == -1)
                 {
-                    collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
+                    collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[selectedInstrumentForCE], precursorName, adduct);
                 }
-                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, instrument);
+                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, selectedInstrumentForCE);
             }
             
             

@@ -63,9 +63,6 @@ namespace LipidCreator
         public MediatorMS2Form mediatorMS2fragmentsForm = null;
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
-        public string selectedInstrumentForCE = "";
-        public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
-        public MonitoringTypes PRMMode = MonitoringTypes.PRMFragments;
         public FilterDialog filterDialog = null;
         public MenuItem lastCEInstrumentChecked = null;
         public bool asDeveloper = false;
@@ -3259,9 +3256,9 @@ namespace LipidCreator
         
         public void unsetInstrument(Object sender, EventArgs e)
         {
-            selectedInstrumentForCE = "";
+            lipidCreator.selectedInstrumentForCE = "";
             menuCollisionEnergyOpt.Enabled = false;
-            monitoringType = MonitoringTypes.NoMonitoring;
+            lipidCreator.monitoringType = MonitoringTypes.NoMonitoring;
             lastCEInstrumentChecked.Checked = false;
             lastCEInstrumentChecked = (MenuItem)sender;
             lastCEInstrumentChecked.Checked = true;
@@ -3272,10 +3269,10 @@ namespace LipidCreator
         {
             if(((MenuItem)sender).Tag != null) {
                 string instrument = (string)((MenuItem)sender).Tag;
-                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
+                lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
                 menuCollisionEnergyOpt.Enabled = true;
-                monitoringType = PRMMode;
+                lipidCreator.monitoringType = lipidCreator.PRMMode;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
                 lastCEInstrumentChecked.Checked = true;
@@ -3287,10 +3284,10 @@ namespace LipidCreator
         {
             if(((MenuItem)sender).Tag != null) {
                 string instrument = (string)((MenuItem)sender).Tag;
-                selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
+                lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
                 menuCollisionEnergyOpt.Enabled = false;
-                monitoringType = MonitoringTypes.SRM;
+                lipidCreator.monitoringType = MonitoringTypes.SRM;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
                 lastCEInstrumentChecked.Checked = true;
@@ -3401,7 +3398,7 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids(asDeveloper, selectedInstrumentForCE, monitoringType);
+            lipidCreator.assembleLipids(asDeveloper);
             lipidCreator.analytics("lipidcreator", "create-transition-list");
             lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;
@@ -3534,7 +3531,7 @@ namespace LipidCreator
         protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
         {
             // TODO: after testing, delete this lines
-            CEInspector ceInspector = new CEInspector(this, selectedInstrumentForCE);
+            CEInspector ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
             ceInspector.Owner = this;
             ceInspector.ShowInTaskbar = false;
             ceInspector.ShowDialog();
@@ -3927,10 +3924,12 @@ namespace LipidCreator
                                 }
                                 
                                 MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
-                                if (mode == "PRM") monitoringType = MonitoringTypes.PRMFragments;
+                                if (mode == "PRM") monitoringType = MonitoringTypes.PRMAutomatically;
                                 else if (mode == "SRM") monitoringType = MonitoringTypes.SRM;
                                 
-                                lc.assembleLipids(asDeveloper, instrument, monitoringType); 
+                                lc.selectedInstrumentForCE = instrument;
+                                lc.monitoringType = monitoringType;
+                                lc.assembleLipids(asDeveloper); 
                                 DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                 lc.storeTransitionList(",", split, outputCSV, transitionList);
                             }
@@ -3955,10 +3954,10 @@ namespace LipidCreator
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
-                                
+                                lc.selectedInstrumentForCE = instrument;
                                 lc.importLipidList(inputCSV);
                                 lc.createPrecursorList();
-                                lc.createBlib(outputCSV, instrument);
+                                lc.createBlib(outputCSV);
                             }
                             break;
                     }

@@ -198,7 +198,7 @@ MS:1002419,Thermo Scientific TSQ Endura,,,,
 MS:1002444,Agilent 6420 Triple Quadrupole LC/MS,,,,
 MS:1002445,Agilent 6460 Triple Quadrupole LC/MS,,,,
 MS:1002446,Agilent 6490 Triple Quadrupole LC/MS,,,,
-MS:1002523,Thermo Scientific Q Exactive HF,10,60,Normalized Collision Energy,PRM;SIM/SRM
+MS:1002523,Thermo Scientific Q Exactive HF,10,60,Normalized Collision Energy,PRM
 MS:1002525,Thermo Scientific TSQ 8000 Evo,,,,
 MS:1002526,Thermo Scientific Exactive Plus,,,,
 MS:1002533,SCIEX TripleTOF 6600,,,,

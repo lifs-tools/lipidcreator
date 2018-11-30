@@ -213,8 +213,8 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.fullMoleculeListName;
-                    string adduct = precursorData.precursorAdductFormula;
+                    string lipidClass = precursorData.lipidClass;
+                    string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRMAutomatically || monitoringType == MonitoringTypes.PRMManually)
                     {
                         lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = CE;
@@ -341,8 +341,9 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.fullMoleculeListName;
-                    string adduct = precursorData.precursorAdductFormula;
+                    string lipidClass = precursorData.lipidClass;
+                    string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
+                    //Console.WriteLine(precursorData.lipidClass + " " + adduct);
                     if (monitoringType == MonitoringTypes.PRMAutomatically || monitoringType == MonitoringTypes.PRMManually)
                     {
                         lipidRow[LipidCreator.COLLISION_ENERGY] = CE;

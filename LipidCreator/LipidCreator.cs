@@ -674,8 +674,8 @@ namespace LipidCreator
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
                     double CE = -1;
-                    string precursorName = precursorData.fullMoleculeListName;
-                    string adduct = precursorData.precursorAdductFormula;
+                    string precursorName = precursorData.lipidClass;
+                    string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRMAutomatically)
                     {
                         collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
@@ -912,11 +912,14 @@ namespace LipidCreator
             if (charge == 0) charge = Lipid.adductToCharge[adduct];
             
             String adductForm = "[M";
-            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
+            if (elements != null)
             {
-                if (elements[molecule] > 0)
+                foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
                 {
-                    adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
+                    if (elements[molecule] > 0)
+                    {
+                        adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
+                    }
                 }
             }
             adductForm += adduct + "]";
@@ -1117,7 +1120,7 @@ namespace LipidCreator
         public string serialize(bool onlySettings = false)
         {
         
-            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\">\n";
+            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\">\n";
             
             foreach (KeyValuePair<string, Precursor> precursor in headgroups)
             {

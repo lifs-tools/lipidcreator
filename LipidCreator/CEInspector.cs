@@ -81,7 +81,7 @@ namespace LipidCreator
             // foreach instrument
             foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> kvp1 in creatorGUI.lipidCreator.collisionEnergyHandler.instrumentParameters)
             {
-                IDictionary<string, IDictionary<string, double>> ce1 = new Dictionary<string, IDictionary<string, double>>();
+                IDictionary<string, IDictionary<string, double>> ce1 = new SortedList<string, IDictionary<string, double>>();
                 collisionEnergies.Add(kvp1.Key, ce1);
                 IDictionary<string, IDictionary<string, IDictionary<string, bool>>> fs1 = new Dictionary<string, IDictionary<string, IDictionary<string, bool>>>();
                 fragmentSelections.Add(kvp1.Key, fs1);

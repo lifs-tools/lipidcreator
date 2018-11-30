@@ -173,23 +173,26 @@ namespace LipidCreator
                         MenuItem instrumentItem = new MenuItem();
                         instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
                         instrumentItem.RadioCheck = true;
-                        instrumentItem.Tag = instrument;
+                        instrumentItem.Tag = new string[]{instrument, ""};
                         
                         switch (instrumentMode)
                         {
                             case "PRM":
                                 if (numModes > 1) instrumentItem.Text += " (PRM)";
                                 instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
+                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.PRM.ToString();
                                 break;
                                 
                             case "SRM":
                                 if (numModes > 1) instrumentItem.Text += " (SRM)";
                                 instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
                                 break;
                             
                             case "SIM/SRM":
                                 if (numModes > 1) instrumentItem.Text += " (SIM/SRM)";
                                 instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
                                 break;
                                 
                             default:
@@ -248,7 +251,35 @@ namespace LipidCreator
         }
         
         
-        
+        public void updateCECondition()
+        {
+            if (lipidCreator.selectedInstrumentForCE == "")
+            {
+                unsetInstrument((Object)menuCollisionEnergyNone, null);
+            }
+            else {
+                bool unsetTheInstrument = true; 
+                foreach (MenuItem menuItem in menuCollisionEnergy.MenuItems)
+                {
+                    if (menuItem.Tag == null) continue;
+                    string menuInstrument = ((string[])menuItem.Tag)[0];
+                    string menuMode = ((string[])menuItem.Tag)[1];
+                    if (menuInstrument == lipidCreator.selectedInstrumentForCE && menuMode == lipidCreator.monitoringType.ToString())
+                    {    
+                        if (menuMode == MonitoringTypes.PRM.ToString())
+                        {
+                            changeInstrumentForCEtypePRM(menuItem, null);
+                        }
+                        else {
+                            changeInstrumentForCEtypeSRM(menuItem, null);
+                        }
+                        unsetTheInstrument = false;
+                        break;
+                    }
+                }
+                if (unsetTheInstrument) unsetInstrument((Object)menuCollisionEnergyNone, null);
+            }
+        }
         
         
         public void resetAllLipids()
@@ -3268,11 +3299,11 @@ namespace LipidCreator
         public void changeInstrumentForCEtypePRM(Object sender, EventArgs e)
         {
             if(((MenuItem)sender).Tag != null) {
-                string instrument = (string)((MenuItem)sender).Tag;
+                string instrument = ((string[])((MenuItem)sender).Tag)[0];
                 lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
                 menuCollisionEnergyOpt.Enabled = true;
-                lipidCreator.monitoringType = lipidCreator.PRMMode;
+                lipidCreator.monitoringType = MonitoringTypes.PRM;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
                 lastCEInstrumentChecked.Checked = true;
@@ -3283,7 +3314,7 @@ namespace LipidCreator
         public void changeInstrumentForCEtypeSRM(Object sender, EventArgs e)
         {
             if(((MenuItem)sender).Tag != null) {
-                string instrument = (string)((MenuItem)sender).Tag;
+                string instrument = ((string[])((MenuItem)sender).Tag)[0];
                 lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
                 menuCollisionEnergyOpt.Enabled = false;
@@ -3483,6 +3514,7 @@ namespace LipidCreator
                     doc = XDocument.Load(openFileDialog1.FileName);
                     lipidCreator.import(doc);
                     resetAllLipids();
+                    updateCECondition();
                     changeTab((int)currentIndex);
                     refreshRegisteredLipidsTable();
                 }
@@ -3514,6 +3546,7 @@ namespace LipidCreator
                     doc = XDocument.Load(openFileDialog1.FileName);
                     lipidCreator.import(doc, true);
                     resetAllLipids();
+                    updateCECondition();
                     changeTab((int)currentIndex);
                     refreshRegisteredLipidsTable();
                 }
@@ -3924,7 +3957,7 @@ namespace LipidCreator
                                 }
                                 
                                 MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
-                                if (mode == "PRM") monitoringType = MonitoringTypes.PRMAutomatically;
+                                if (mode == "PRM") monitoringType = MonitoringTypes.PRM;
                                 else if (mode == "SRM") monitoringType = MonitoringTypes.SRM;
                                 
                                 lc.selectedInstrumentForCE = instrument;

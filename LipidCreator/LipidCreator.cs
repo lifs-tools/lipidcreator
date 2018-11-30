@@ -49,7 +49,8 @@ namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
-    public enum MonitoringTypes {NoMonitoring, SRM, PRMAutomatically, PRMManually};
+    public enum MonitoringTypes {NoMonitoring, SRM, PRM};
+    public enum PRMTypes {PRMAutomatically, PRMManually};
 
     [Serializable]
     public class LipidCreator
@@ -81,7 +82,7 @@ namespace LipidCreator
         // collision energy parameters
         public string selectedInstrumentForCE = "";
         public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
-        public MonitoringTypes PRMMode = MonitoringTypes.PRMManually;
+        public PRMTypes PRMMode = PRMTypes.PRMAutomatically;
         
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser lipidMapsParser;
@@ -676,12 +677,12 @@ namespace LipidCreator
                     double CE = -1;
                     string precursorName = precursorData.lipidClass;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
-                    if (monitoringType == MonitoringTypes.PRMAutomatically)
+                    if (PRMMode == PRMTypes.PRMAutomatically)
                     {
                         collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[instrument], precursorName, adduct);
                         CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
                     }
-                    else if (monitoringType == MonitoringTypes.PRMManually)
+                    else if (PRMMode == PRMTypes.PRMManually)
                     {
                         
                         if (collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct) == -1)
@@ -1120,7 +1121,7 @@ namespace LipidCreator
         public string serialize(bool onlySettings = false)
         {
         
-            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\">\n";
+            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n";
             
             foreach (KeyValuePair<string, Precursor> precursor in headgroups)
             {
@@ -1252,6 +1253,19 @@ namespace LipidCreator
         public void import(XDocument doc, bool onlySettings = false)
         {
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
+            
+            // CE information
+            string instrument = doc.Element("LipidCreator").Attribute("CEinstrument").Value;
+            //Console.WriteLine("line: " + doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString());
+            monitoringType = (MonitoringTypes)Enum.Parse(typeof(MonitoringTypes), doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString(), true);
+            PRMMode = (PRMTypes)Enum.Parse(typeof(PRMTypes), doc.Element("LipidCreator").Attribute("PRMMode").Value.ToString(), true);
+            
+            if (instrument == "" || (instrument != "" && msInstruments.ContainsKey(instrument)))
+            {
+                selectedInstrumentForCE = instrument;
+            }
+            
+            
             
             var precursors = doc.Descendants("Precursor");
             bool precursorImportIgnored = false;

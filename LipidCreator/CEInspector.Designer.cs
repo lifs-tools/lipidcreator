@@ -45,7 +45,7 @@ namespace LipidCreator
         public const int LABEL_EXTENSION = 5;
         public const int CE_GRAB_MARGIN = 1;
         public const double VAL_DENOMINATOR = 100.0;
-        public const int offsetPX = 5;
+        public const int offsetPX = 10;
         public CEInspector ceInspector;
         public Dictionary<string, string> fragmentToColor;
         public string [] colors = new string[]{"#e6194b", "#3cb44b", "#ffe119", "#0082c8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#d2f53c", "#fabebe", "#008080", "#e6beff", "#aa6e28", "#fffac8", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000080", "#808080"};

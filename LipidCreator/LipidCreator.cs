@@ -1123,6 +1123,8 @@ namespace LipidCreator
         
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n";
             
+            xml += collisionEnergyHandler.serialize();
+            
             foreach (KeyValuePair<string, Precursor> precursor in headgroups)
             {
                 if (precursor.Value.userDefined)
@@ -1256,13 +1258,18 @@ namespace LipidCreator
             
             // CE information
             string instrument = doc.Element("LipidCreator").Attribute("CEinstrument").Value;
-            //Console.WriteLine("line: " + doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString());
             monitoringType = (MonitoringTypes)Enum.Parse(typeof(MonitoringTypes), doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString(), true);
             PRMMode = (PRMTypes)Enum.Parse(typeof(PRMTypes), doc.Element("LipidCreator").Attribute("PRMMode").Value.ToString(), true);
             
             if (instrument == "" || (instrument != "" && msInstruments.ContainsKey(instrument)))
             {
                 selectedInstrumentForCE = instrument;
+            }
+            
+            var CESettings = doc.Descendants("CE");
+            foreach ( var ceXML in CESettings )
+            {
+                collisionEnergyHandler.import(ceXML, importVersion);
             }
             
             

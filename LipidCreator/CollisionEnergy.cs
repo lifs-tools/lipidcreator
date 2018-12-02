@@ -33,6 +33,9 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using System.Globalization;
 
 
@@ -82,6 +85,81 @@ namespace LipidCreator
             collisionEnergies = new SortedList<string, IDictionary<string, IDictionary<string, double>>>();
         }
         
+        
+        public void import(XElement node, string importVersion)
+        {
+            foreach (var instrumentXML in node.Descendants("ins"))
+            {
+                
+                string instrumentType = instrumentXML.Attribute("type").Value;
+                if (!instrumentParameters.ContainsKey(instrumentType)) continue;
+                IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> d1 = instrumentParameters[instrumentType];
+                
+                foreach (var lipidClassXML in instrumentXML.Descendants("lCl"))
+                {
+                    string lipidClassType = lipidClassXML.Attribute("type").Value;
+                    if (!d1.ContainsKey(lipidClassType)) continue;
+                    IDictionary<string, IDictionary<string, IDictionary<string, string>>> d2 = d1[lipidClassType];
+                
+                    foreach (var adductXML in lipidClassXML.Descendants("adt"))
+                    {
+                        string adductType = adductXML.Attribute("type").Value;
+                        if (!d2.ContainsKey(adductType)) continue;
+                        IDictionary<string, IDictionary<string, string>> d3 = d2[adductType];
+                                                
+                        foreach (var fragmentXML in adductXML.Descendants("fr"))
+                        {
+                            string fragmentType = fragmentXML.Attribute("type").Value;
+                            if (!d3.ContainsKey(fragmentType)) continue;
+                            IDictionary<string, string> d4 = d3[fragmentType];
+                            
+                            string fragmentSelected = fragmentXML.Attribute("sel").Value;
+                            if (!d4.ContainsKey("selected"))
+                            {
+                                d4.Add("selected", fragmentSelected);
+                            }
+                            else 
+                            {
+                                d4["selected"] = fragmentSelected;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
+        public string serialize()
+        {
+            string xml = "<CE>\n";
+            foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> kvp1 in instrumentParameters)
+            {
+                xml += "<ins type=\"" + kvp1.Key + "\">\n";
+                
+            
+                // foreach class
+                foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> kvp2 in kvp1.Value)
+                {
+                    xml += "<lCl type=\"" + kvp2.Key + "\">\n";
+                
+                    // foreach adduct
+                    foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
+                    {
+                        xml += "<adt type=\"" + kvp3.Key + "\">\n";
+                    
+                        foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
+                        {
+                            xml += "<fr type=\"" + kvp4.Key + "\" sel=\"" + kvp4.Value["selected"] + "\" />\n";
+                        }
+                        xml += "</adt>\n";
+                    }
+                    xml += "</lCl>\n";
+                }
+                xml += "</ins>\n";
+            }
+            return xml + "</CE>\n";
+        }
         
         
         

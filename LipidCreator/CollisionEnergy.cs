@@ -95,17 +95,24 @@ namespace LipidCreator
                 if (!instrumentParameters.ContainsKey(instrumentType)) continue;
                 IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> d1 = instrumentParameters[instrumentType];
                 
+                IDictionary<string, IDictionary<string, double>> ce1 = null;
+                if (collisionEnergies.ContainsKey(instrumentType)) ce1 = collisionEnergies[instrumentType];
+                
                 foreach (var lipidClassXML in instrumentXML.Descendants("lCl"))
                 {
                     string lipidClassType = lipidClassXML.Attribute("type").Value;
                     if (!d1.ContainsKey(lipidClassType)) continue;
                     IDictionary<string, IDictionary<string, IDictionary<string, string>>> d2 = d1[lipidClassType];
+                    IDictionary<string, double> ce2 = null;
+                    if (ce1.ContainsKey(lipidClassType)) ce2 = ce1[lipidClassType];
                 
                     foreach (var adductXML in lipidClassXML.Descendants("adt"))
                     {
                         string adductType = adductXML.Attribute("type").Value;
                         if (!d2.ContainsKey(adductType)) continue;
                         IDictionary<string, IDictionary<string, string>> d3 = d2[adductType];
+                        double ce = Convert.ToDouble(adductXML.Attribute("ce").Value, CultureInfo.InvariantCulture);
+                        if (ce2.ContainsKey(adductType)) ce2[adductType] = ce;
                                                 
                         foreach (var fragmentXML in adductXML.Descendants("fr"))
                         {
@@ -146,7 +153,7 @@ namespace LipidCreator
                     // foreach adduct
                     foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        xml += "<adt type=\"" + kvp3.Key + "\">\n";
+                        xml += "<adt type=\"" + kvp3.Key + "\" ce=\""+ string.Format(new CultureInfo("en-US"), "{0:0.000}", collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]) + "\">\n";
                     
                         foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
                         {

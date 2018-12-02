@@ -314,7 +314,6 @@ namespace LipidCreator
                 IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> parLevel1 = instrumentParameters[instrument];
                 if (parLevel1.ContainsKey(lipidClass))
                 {
-                
                     IDictionary<string, IDictionary<string, IDictionary<string, string>>> parLevel2 = parLevel1[lipidClass];
                     if (parLevel2.ContainsKey(adduct))
                     {

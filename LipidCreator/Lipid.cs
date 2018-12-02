@@ -501,11 +501,13 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        
                 
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
-            if (precursorData.fragmentNames.Count == 0) return;
-            string precursorAdduct = precursorData.precursorAdductFormula;  
+            if (precursorData.fragmentNames.Count == 0) return; 
             
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
@@ -562,9 +564,8 @@ namespace LipidCreator
                 
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture);
                     chemFormFragment = "";
-                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
@@ -610,13 +611,14 @@ namespace LipidCreator
                     precursorData.precursorIonFormula,
                     "precursor")));
                     
-            
+            string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
             
             foreach (Peak peak in peaks)
             {
                 string fragment = peak.Annotation.Name;
-                double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, precursorAdduct);
-                peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, precursorAdduct, fragment, collisionEnergy);
+                double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, adduct);
+                peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, adduct, fragment, collisionEnergy);
+                
             }
             
             // Commit to .blib

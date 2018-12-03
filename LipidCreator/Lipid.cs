@@ -80,6 +80,7 @@ namespace LipidCreator
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
+        public static int MEDIATOR_PREFIX_LENGTH = 4;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
         
         public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
@@ -297,7 +298,7 @@ namespace LipidCreator
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
                     chemFormFragment = "";
                     //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
@@ -564,7 +565,7 @@ namespace LipidCreator
                 
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture);
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
                 }
                 if (fragName.IndexOf("[adduct]") > -1)

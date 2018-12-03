@@ -47,6 +47,8 @@ namespace LipidCreator
         public Button buttonCancel;
         public Button buttonOK;
         public Button buttonAddFragment;
+        public MenuItem menuFragmentItem1;
+        public ContextMenu contextMenuFragment;
         
         public Label labelFragmentDescriptionBlack;
         public Label labelFragmentDescriptionRed;
@@ -84,6 +86,8 @@ namespace LipidCreator
             buttonOK = new System.Windows.Forms.Button();
             buttonAddFragment = new System.Windows.Forms.Button();
             deuteratedMediatorHeadgroups = new System.Windows.Forms.ComboBox();
+            this.menuFragmentItem1 = new System.Windows.Forms.MenuItem();
+            this.contextMenuFragment = new System.Windows.Forms.ContextMenu();
             this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             
@@ -141,6 +145,15 @@ namespace LipidCreator
             checkedListBoxDeuteratedFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(checkedListBoxDeuteratedeMouseHover);
             this.Controls.Add(checkedListBoxDeuteratedFragments);
             
+            
+            this.contextMenuFragment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {this.menuFragmentItem1});
+            this.contextMenuFragment.Popup += new System.EventHandler(contextMenuFragmentPopup);
+            // 
+            // menuItem1
+            // 
+            this.menuFragmentItem1.Index = 0;
+            this.menuFragmentItem1.Text = "Delete fragment";
+            this.menuFragmentItem1.Click += new System.EventHandler(deleteFragment);
             
             // label1
             labelMediators.AutoSize = true;

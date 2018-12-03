@@ -232,7 +232,6 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
-            
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
                 
@@ -435,7 +434,8 @@ namespace LipidCreator
                 ", @precursorAdduct, '-', '-', 0, " + numFragments +
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
-            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorName);
+            string precursorName = LipidCreator.precursorNameSplit(precursorData.precursorName)[0];
+            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorName);
             SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
             command.Parameters.Add(parameterPrecursorName);

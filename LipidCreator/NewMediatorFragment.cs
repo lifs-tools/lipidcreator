@@ -134,23 +134,6 @@ namespace LipidCreator
                 mediatorMS2Form.checkedListBoxDeuteratedFragments.Items.Add(fragmentName);
                 mediatorMS2Form.checkedListBoxDeuteratedFragments.SetItemChecked(mediatorMS2Form.checkedListBoxDeuteratedFragments.Items.Count - 1, false);
             }
-                /*
-            if (!edit)
-            {
-                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0].Add(textBoxFragmentName.Text, newFragment);
-                if (Convert.ToInt32(numericUpDownCharge.Value) > 0)
-                {
-                    ms2form.checkedListBoxPositiveFragments.Items.Add(textBoxFragmentName.Text);
-                }
-                else
-                {
-                    ms2form.checkedListBoxNegativeFragments.Items.Add(textBoxFragmentName.Text);
-                }
-            }
-            else {
-                ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0][textBoxFragmentName.Text] = newFragment;
-            }
-            */
             this.Close();
         }
 
@@ -163,14 +146,14 @@ namespace LipidCreator
         
         public void makePreview()
         {
-            fragmentName = "";
+            fragmentName = "m/z ";
             allowToAdd = true;
             
             if (tabControl1.SelectedIndex == 0)
             {
                 try {
                     double fragmentMass = double.Parse(textBox1.Text, System.Globalization.CultureInfo.InvariantCulture);
-                    fragmentName = String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
+                    fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
                 }
                 catch (Exception e)
                 {
@@ -181,7 +164,7 @@ namespace LipidCreator
                 double fragmentMass = LipidCreator.computeMass(AddHeavyPrecursor.createElementData(elementDict), -1);
                 if (fragmentMass > MS2Fragment.ELEMENT_MASSES[(int)Molecules.H])
                 {
-                    fragmentName = String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
+                    fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
                 }
                 else {
                     allowToAdd = false;
@@ -190,7 +173,7 @@ namespace LipidCreator
             allowToAdd &= !mediatorMS2Form.creatorGUI.lipidCreator.allFragments[headgroup][false].ContainsKey(fragmentName);
             label4.Text = fragmentName;
             label4.ForeColor = allowToAdd ? Color.FromArgb(0, 0, 0) : Color.FromArgb(255, 0, 0);
-            if (label4.Text.Length > 0) label4.Text += "-";
+            if (label4.Text.Length > Lipid.MEDIATOR_PREFIX_LENGTH) label4.Text += "-";
             label4.Text = "Result name: " + label4.Text;
             button1.Enabled = allowToAdd;
         }

@@ -225,11 +225,17 @@ namespace LipidCreator
             menuStatistics.Checked = !menuStatistics.Checked;
             lipidCreator.enableAnalytics = menuStatistics.Checked;
             string analyticsFile = lipidCreator.prefixPath + "data/analytics.txt";
-            using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+            try {
+                using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+                {
+                    outputFile.WriteLine ((lipidCreator.enableAnalytics ? "1" : "0"));
+                    outputFile.Dispose ();
+                    outputFile.Close ();
+                }
+            }
+            catch (Exception ex)
             {
-                outputFile.WriteLine ((lipidCreator.enableAnalytics ? "1" : "0"));
-                outputFile.Dispose ();
-                outputFile.Close ();
+            
             }
         }
         
@@ -3749,16 +3755,47 @@ namespace LipidCreator
         public static void checkForAnalytics(bool withPrefix)
         {
             string analyticsFile = (withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : "") + "data/analytics.txt";
-            if (!File.Exists(analyticsFile))
-            {
-                DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\nLipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative. It’s mandatory to report ANONYMIZED usage statistics for this tool to the project administration to ensure continued funding.\n\nUsage statistics include:\n - Count for LipidCreator launches\n - Count for generated transition lists\n\nNOT include:\n - IP address, operating system or any information that may trace back to the user\n\nBy clicking ‘Yes’, you agree to allow us to collect ANONYMIZED usage statistics. We would highly appreciate  your support to us and to further development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
-                
-                using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+            try {
+                if (!File.Exists(analyticsFile))
                 {
-                    outputFile.WriteLine ((mbr == DialogResult.Yes ? "1" : "0"));
-                    outputFile.Dispose ();
-                    outputFile.Close ();
+                    using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+                    {
+                        outputFile.WriteLine ("-1");
+                        outputFile.Dispose ();
+                        outputFile.Close ();
+                    }
                 }
+            }
+            catch(Exception e) {
+                
+            }
+            
+            try {
+                if (File.Exists(analyticsFile))
+                {
+                    string analyticsContent = "";
+                    using (StreamReader sr = new StreamReader(analyticsFile))
+                    {
+                        // check if first letter in first line is a '1'
+                        String line = sr.ReadLine();
+                        analyticsContent = line;
+                    }
+                    
+                    if (analyticsContent == "-1")
+                    {
+                        DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\nLipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative. We have to report ANONYMIZED usage statistics for this tool to the project administration to ensure continued funding.\n\nUsage statistics include:\n - Count for LipidCreator launches\n - Count for generated transition lists\n\nNOT include:\n - IP address, operating system or any information that may trace back to the user\n\nBy clicking 'Yes', you agree to allow us to collect ANONYMIZED usage statistics. When clicking 'No', no data will be send, you can use LipidCreator without any restrictions. However, we would highly appreciate to support us and for a continued development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
+                        
+                        using (StreamWriter outputFile = new StreamWriter (analyticsFile))
+                        {
+                            outputFile.WriteLine ((mbr == DialogResult.Yes ? "1" : "0"));
+                            outputFile.Dispose ();
+                            outputFile.Close ();
+                        }
+                    }
+                }
+            }
+            catch(Exception e) {
+                
             }
         }
         

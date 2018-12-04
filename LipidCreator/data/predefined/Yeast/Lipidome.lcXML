@@ -1,4 +1,4 @@
-<LipidCreator version="1.0.0.0" CEinstrument="" monitoringType="NoMonitoring"  PRMMode="PRMAutomatically">
+<LipidCreator version="0.0.0.0" CEinstrument="" monitoringType="NoMonitoring"  PRMMode="PRMAutomatically">
 <CE>
 <ins type="MS:1002523">
 <lCl type="10-HDoHE">
@@ -11,7 +11,7 @@
 <fr type="m/z 281.2273" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -24,7 +24,7 @@
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -37,7 +37,7 @@
 <fr type="m/z 214.2494" sel="1" />
 <fr type="m/z 268.2963" sel="1" />
 <fr type="m/z 312.2862" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -72,7 +72,7 @@
 <fr type="m/z 281.2273" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 95.0502" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -85,7 +85,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2173" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -95,7 +95,7 @@
 <fr type="m/z 183.1389" sel="1" />
 <fr type="m/z 195.1390" sel="1" />
 <fr type="m/z 277.2168" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -105,7 +105,7 @@
 <fr type="m/z 185.1515" sel="1" />
 <fr type="m/z 198.1578" sel="1" />
 <fr type="m/z 281.2419" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -119,7 +119,7 @@
 <fr type="m/z 255.2117" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 299.2014" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -133,7 +133,7 @@
 <fr type="m/z 257.2272" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -147,7 +147,7 @@
 <fr type="m/z 265.2774" sel="1" />
 <fr type="m/z 283.2879" sel="1" />
 <fr type="m/z 309.2674" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -161,7 +161,7 @@
 <fr type="m/z 217.1959" sel="1" />
 <fr type="m/z 235.2066" sel="1" />
 <fr type="m/z 261.1858" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -175,7 +175,7 @@
 <fr type="m/z 219.1753" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 299.2016" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -185,7 +185,7 @@
 <fr type="m/z 195.1388" sel="1" />
 <fr type="m/z 276.2106" sel="1" />
 <fr type="m/z 277.2169" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -195,7 +195,7 @@
 <fr type="m/z 198.1576" sel="1" />
 <fr type="m/z 280.2357" sel="1" />
 <fr type="m/z 281.2420" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -208,7 +208,7 @@
 <fr type="m/z 225.1496" sel="1" />
 <fr type="m/z 256.1315" sel="1" />
 <fr type="m/z 275.2014" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -222,7 +222,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2378" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -236,7 +236,7 @@
 <fr type="m/z 268.2963" sel="1" />
 <fr type="m/z 286.3068" sel="1" />
 <fr type="m/z 312.2862" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -250,7 +250,7 @@
 <fr type="m/z 255.2116" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 299.2015" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -261,7 +261,7 @@
 <fr type="m/z 207.1392" sel="1" />
 <fr type="m/z 257.2277" sel="1" />
 <fr type="m/z 319.2280" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 99.0816" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -274,7 +274,7 @@
 <fr type="m/z 207.1392" sel="1" />
 <fr type="m/z 268.2967" sel="1" />
 <fr type="m/z 330.2970" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -285,7 +285,7 @@
 <fr type="m/z 243.1752" sel="1" />
 <fr type="m/z 271.2067" sel="1" />
 <fr type="m/z 297.1859" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -296,7 +296,7 @@
 <fr type="m/z 245.1878" sel="1" />
 <fr type="m/z 275.2318" sel="1" />
 <fr type="m/z 301.2110" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -310,7 +310,7 @@
 <fr type="m/z 248.1419" sel="1" />
 <fr type="m/z 255.2119" sel="1" />
 <fr type="m/z 299.2017" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -323,7 +323,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2378" sel="1" />
 <fr type="m/z 301.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -336,7 +336,7 @@
 <fr type="m/z 265.2775" sel="1" />
 <fr type="m/z 283.2880" sel="1" />
 <fr type="m/z 309.2673" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -350,7 +350,7 @@
 <fr type="m/z 281.2274" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -363,7 +363,7 @@
 <fr type="m/z 259.1704" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 299.2018" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0501" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -377,7 +377,7 @@
 <fr type="m/z 219.1755" sel="1" />
 <fr type="m/z 257.2277" sel="1" />
 <fr type="m/z 301.2174" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 83.0503" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -391,7 +391,7 @@
 <fr type="m/z 230.2445" sel="1" />
 <fr type="m/z 268.2967" sel="1" />
 <fr type="m/z 312.2864" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 83.0503" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -405,7 +405,7 @@
 <fr type="m/z 195.1025" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0136" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -419,7 +419,7 @@
 <fr type="m/z 219.1753" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 69.0342" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -432,7 +432,7 @@
 <fr type="m/z 201.1651" sel="1" />
 <fr type="m/z 255.2119" sel="1" />
 <fr type="m/z 299.2017" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="m/z 93.0711" sel="1" />
 <fr type="precursor" sel="1" />
@@ -444,7 +444,7 @@
 <fr type="m/z 203.1807" sel="1" />
 <fr type="m/z 257.2275" sel="1" />
 <fr type="m/z 301.2173" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -454,7 +454,7 @@
 <fr type="m/z 210.2246" sel="1" />
 <fr type="m/z 265.2777" sel="1" />
 <fr type="m/z 309.2675" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -468,7 +468,7 @@
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 299.2016" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -479,7 +479,7 @@
 <fr type="m/z 203.1806" sel="1" />
 <fr type="m/z 245.1911" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -491,7 +491,7 @@
 <fr type="m/z 210.2245" sel="1" />
 <fr type="m/z 252.2350" sel="1" />
 <fr type="m/z 280.2662" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -576,7 +576,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -587,7 +587,7 @@
 <fr type="m/z 195.1391" sel="1" />
 <fr type="m/z 276.2106" sel="1" />
 <fr type="m/z 277.2167" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -598,7 +598,7 @@
 <fr type="m/z 198.1579" sel="1" />
 <fr type="m/z 280.2357" sel="1" />
 <fr type="m/z 281.2418" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -612,7 +612,7 @@
 <fr type="m/z 177.1284" sel="1" />
 <fr type="m/z 255.2117" sel="1" />
 <fr type="m/z 299.2014" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -626,7 +626,7 @@
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2275" sel="1" />
 <fr type="m/z 301.2170" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -636,7 +636,7 @@
 <fr type="m/z 171.1025" sel="1" />
 <fr type="m/z 233.2274" sel="1" />
 <fr type="m/z 277.2169" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -648,7 +648,7 @@
 <fr type="m/z 185.1184" sel="1" />
 <fr type="m/z 231.2119" sel="1" />
 <fr type="m/z 275.2018" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -658,7 +658,7 @@
 <fr type="m/z 205.1961" sel="1" />
 <fr type="m/z 231.2116" sel="1" />
 <fr type="m/z 259.2427" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -668,7 +668,7 @@
 <fr type="m/z 212.240" sel="1" />
 <fr type="m/z 239.2618" sel="1" />
 <fr type="m/z 267.2929" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -679,7 +679,7 @@
 <fr type="m/z 205.1966" sel="1" />
 <fr type="m/z 233.2276" sel="1" />
 <fr type="m/z 259.2066" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -701,7 +701,7 @@
 <fr type="m/z 255.2115" sel="1" />
 <fr type="m/z 283.2430" sel="1" />
 <fr type="m/z 309.2224" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -712,7 +712,7 @@
 <fr type="m/z 260.2429" sel="1" />
 <fr type="m/z 288.2744" sel="1" />
 <fr type="m/z 314.2538" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -720,7 +720,7 @@
 <adt type="[M-H]1-" ce="-1.000">
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2272" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -728,7 +728,7 @@
 <adt type="[M-H]1-" ce="-1.000">
 <fr type="m/z 208.2118" sel="1" />
 <fr type="m/z 262.2586" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -740,7 +740,7 @@
 <fr type="m/z 195.1025" sel="1" />
 <fr type="m/z 273.2221" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -752,7 +752,7 @@
 <fr type="m/z 197.1151" sel="1" />
 <fr type="m/z 277.2472" sel="1" />
 <fr type="m/z 321.2370" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -822,7 +822,7 @@
 <fr type="m/z 250.1210" sel="1" />
 <fr type="m/z 297.2223" sel="1" />
 <fr type="m/z 341.2121" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -914,7 +914,7 @@
 <fr type="m/z 280.2630" sel="1" />
 <fr type="m/z 324.2529" sel="1" />
 <fr type="m/z 342.2631" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -928,7 +928,7 @@
 <fr type="m/z 247.2069" sel="1" />
 <fr type="m/z 291.1967" sel="1" />
 <fr type="m/z 309.2073" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -942,7 +942,7 @@
 <fr type="m/z 251.2320" sel="1" />
 <fr type="m/z 295.2218" sel="1" />
 <fr type="m/z 313.2324" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -970,7 +970,7 @@
 <fr type="m/z 233.1545" sel="1" />
 <fr type="m/z 277.1443" sel="1" />
 <fr type="m/z 357.2066" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -984,7 +984,7 @@
 <fr type="m/z 238.1859" sel="1" />
 <fr type="m/z 277.1443" sel="1" />
 <fr type="m/z 362.2380" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -998,7 +998,7 @@
 <fr type="m/z 215.1442" sel="1" />
 <fr type="m/z 259.1340" sel="1" />
 <fr type="m/z 277.1446" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1012,7 +1012,7 @@
 <fr type="m/z 215.1442" sel="1" />
 <fr type="m/z 259.1340" sel="1" />
 <fr type="m/z 277.1446" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1038,7 +1038,7 @@
 <fr type="m/z 279.2119" sel="1" />
 <fr type="m/z 297.2225" sel="1" />
 <fr type="m/z 341.2122" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1062,7 +1062,7 @@
 <fr type="m/z 291.1966" sel="1" />
 <fr type="m/z 309.2072" sel="1" />
 <fr type="m/z 327.2176" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1120,7 +1120,7 @@
 <fr type="m/z 281.2273" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1133,7 +1133,7 @@
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1146,7 +1146,7 @@
 <fr type="m/z 214.2494" sel="1" />
 <fr type="m/z 268.2963" sel="1" />
 <fr type="m/z 312.2862" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1181,7 +1181,7 @@
 <fr type="m/z 281.2273" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 95.0502" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1194,7 +1194,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2173" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1204,7 +1204,7 @@
 <fr type="m/z 183.1389" sel="1" />
 <fr type="m/z 195.1390" sel="1" />
 <fr type="m/z 277.2168" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1214,7 +1214,7 @@
 <fr type="m/z 185.1515" sel="1" />
 <fr type="m/z 198.1578" sel="1" />
 <fr type="m/z 281.2419" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1228,7 +1228,7 @@
 <fr type="m/z 255.2117" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 299.2014" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1242,7 +1242,7 @@
 <fr type="m/z 257.2272" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1256,7 +1256,7 @@
 <fr type="m/z 265.2774" sel="1" />
 <fr type="m/z 283.2879" sel="1" />
 <fr type="m/z 309.2674" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1270,7 +1270,7 @@
 <fr type="m/z 217.1959" sel="1" />
 <fr type="m/z 235.2066" sel="1" />
 <fr type="m/z 261.1858" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1284,7 +1284,7 @@
 <fr type="m/z 219.1753" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 299.2016" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1294,7 +1294,7 @@
 <fr type="m/z 195.1388" sel="1" />
 <fr type="m/z 276.2106" sel="1" />
 <fr type="m/z 277.2169" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1304,7 +1304,7 @@
 <fr type="m/z 198.1576" sel="1" />
 <fr type="m/z 280.2357" sel="1" />
 <fr type="m/z 281.2420" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1330,7 +1330,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2378" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1344,7 +1344,7 @@
 <fr type="m/z 268.2963" sel="1" />
 <fr type="m/z 286.3068" sel="1" />
 <fr type="m/z 312.2862" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1358,7 +1358,7 @@
 <fr type="m/z 255.2116" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
 <fr type="m/z 299.2015" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1369,7 +1369,7 @@
 <fr type="m/z 207.1392" sel="1" />
 <fr type="m/z 257.2277" sel="1" />
 <fr type="m/z 319.2280" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 99.0816" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1382,7 +1382,7 @@
 <fr type="m/z 207.1392" sel="1" />
 <fr type="m/z 268.2967" sel="1" />
 <fr type="m/z 330.2970" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1393,7 +1393,7 @@
 <fr type="m/z 243.1752" sel="1" />
 <fr type="m/z 271.2067" sel="1" />
 <fr type="m/z 297.1859" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1404,7 +1404,7 @@
 <fr type="m/z 245.1878" sel="1" />
 <fr type="m/z 275.2318" sel="1" />
 <fr type="m/z 301.2110" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1418,7 +1418,7 @@
 <fr type="m/z 248.1419" sel="1" />
 <fr type="m/z 255.2119" sel="1" />
 <fr type="m/z 299.2017" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1431,7 +1431,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2378" sel="1" />
 <fr type="m/z 301.2171" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1444,7 +1444,7 @@
 <fr type="m/z 265.2775" sel="1" />
 <fr type="m/z 283.2880" sel="1" />
 <fr type="m/z 309.2673" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1458,7 +1458,7 @@
 <fr type="m/z 281.2274" sel="1" />
 <fr type="m/z 299.2378" sel="1" />
 <fr type="m/z 325.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1471,7 +1471,7 @@
 <fr type="m/z 259.1704" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 299.2018" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0501" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1485,7 +1485,7 @@
 <fr type="m/z 219.1755" sel="1" />
 <fr type="m/z 257.2277" sel="1" />
 <fr type="m/z 301.2174" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 83.0503" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1499,7 +1499,7 @@
 <fr type="m/z 230.2445" sel="1" />
 <fr type="m/z 268.2967" sel="1" />
 <fr type="m/z 312.2864" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 83.0503" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1513,7 +1513,7 @@
 <fr type="m/z 219.1753" sel="1" />
 <fr type="m/z 273.2224" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 69.0342" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1526,7 +1526,7 @@
 <fr type="m/z 201.1651" sel="1" />
 <fr type="m/z 255.2119" sel="1" />
 <fr type="m/z 299.2017" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="m/z 93.0711" sel="1" />
 <fr type="precursor" sel="1" />
@@ -1538,7 +1538,7 @@
 <fr type="m/z 203.1807" sel="1" />
 <fr type="m/z 257.2275" sel="1" />
 <fr type="m/z 301.2173" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1548,7 +1548,7 @@
 <fr type="m/z 210.2246" sel="1" />
 <fr type="m/z 265.2777" sel="1" />
 <fr type="m/z 309.2675" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1559,7 +1559,7 @@
 <fr type="m/z 203.1806" sel="1" />
 <fr type="m/z 245.1911" sel="1" />
 <fr type="m/z 273.2223" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1571,7 +1571,7 @@
 <fr type="m/z 210.2245" sel="1" />
 <fr type="m/z 252.2350" sel="1" />
 <fr type="m/z 280.2662" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="m/z 71.0137" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
@@ -1656,7 +1656,7 @@
 <fr type="m/z 257.2273" sel="1" />
 <fr type="m/z 275.2377" sel="1" />
 <fr type="m/z 301.2172" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1667,7 +1667,7 @@
 <fr type="m/z 195.1391" sel="1" />
 <fr type="m/z 276.2106" sel="1" />
 <fr type="m/z 277.2167" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1678,7 +1678,7 @@
 <fr type="m/z 198.1579" sel="1" />
 <fr type="m/z 280.2357" sel="1" />
 <fr type="m/z 281.2418" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1692,7 +1692,7 @@
 <fr type="m/z 177.1284" sel="1" />
 <fr type="m/z 255.2117" sel="1" />
 <fr type="m/z 299.2014" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1706,7 +1706,7 @@
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2275" sel="1" />
 <fr type="m/z 301.2170" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1716,7 +1716,7 @@
 <fr type="m/z 171.1025" sel="1" />
 <fr type="m/z 233.2274" sel="1" />
 <fr type="m/z 277.2169" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1728,7 +1728,7 @@
 <fr type="m/z 185.1184" sel="1" />
 <fr type="m/z 231.2119" sel="1" />
 <fr type="m/z 275.2018" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1738,7 +1738,7 @@
 <fr type="m/z 205.1961" sel="1" />
 <fr type="m/z 231.2116" sel="1" />
 <fr type="m/z 259.2427" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1748,7 +1748,7 @@
 <fr type="m/z 212.240" sel="1" />
 <fr type="m/z 239.2618" sel="1" />
 <fr type="m/z 267.2929" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1759,7 +1759,7 @@
 <fr type="m/z 205.1966" sel="1" />
 <fr type="m/z 233.2276" sel="1" />
 <fr type="m/z 259.2066" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1781,7 +1781,7 @@
 <fr type="m/z 255.2115" sel="1" />
 <fr type="m/z 283.2430" sel="1" />
 <fr type="m/z 309.2224" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1792,7 +1792,7 @@
 <fr type="m/z 260.2429" sel="1" />
 <fr type="m/z 288.2744" sel="1" />
 <fr type="m/z 314.2538" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1800,7 +1800,7 @@
 <adt type="[M-H]1-" ce="-1.000">
 <fr type="m/z 203.1804" sel="1" />
 <fr type="m/z 257.2272" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1808,7 +1808,7 @@
 <adt type="[M-H]1-" ce="-1.000">
 <fr type="m/z 208.2118" sel="1" />
 <fr type="m/z 262.2586" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1820,7 +1820,7 @@
 <fr type="m/z 195.1025" sel="1" />
 <fr type="m/z 273.2221" sel="1" />
 <fr type="m/z 317.2119" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1832,7 +1832,7 @@
 <fr type="m/z 197.1151" sel="1" />
 <fr type="m/z 277.2472" sel="1" />
 <fr type="m/z 321.2370" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1980,7 +1980,7 @@
 <fr type="m/z 280.2630" sel="1" />
 <fr type="m/z 324.2529" sel="1" />
 <fr type="m/z 342.2631" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -1994,7 +1994,7 @@
 <fr type="m/z 247.2069" sel="1" />
 <fr type="m/z 291.1967" sel="1" />
 <fr type="m/z 309.2073" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2008,7 +2008,7 @@
 <fr type="m/z 251.2320" sel="1" />
 <fr type="m/z 295.2218" sel="1" />
 <fr type="m/z 313.2324" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2036,7 +2036,7 @@
 <fr type="m/z 233.1545" sel="1" />
 <fr type="m/z 277.1443" sel="1" />
 <fr type="m/z 357.2066" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2050,7 +2050,7 @@
 <fr type="m/z 238.1859" sel="1" />
 <fr type="m/z 277.1443" sel="1" />
 <fr type="m/z 362.2380" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2064,7 +2064,7 @@
 <fr type="m/z 215.1442" sel="1" />
 <fr type="m/z 259.1340" sel="1" />
 <fr type="m/z 277.1446" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2078,7 +2078,7 @@
 <fr type="m/z 215.1442" sel="1" />
 <fr type="m/z 259.1340" sel="1" />
 <fr type="m/z 277.1446" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2104,7 +2104,7 @@
 <fr type="m/z 279.2119" sel="1" />
 <fr type="m/z 297.2225" sel="1" />
 <fr type="m/z 341.2122" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>
@@ -2128,7 +2128,7 @@
 <fr type="m/z 291.1966" sel="1" />
 <fr type="m/z 309.2072" sel="1" />
 <fr type="m/z 327.2176" sel="1" />
-<fr type="m/z 59.0135" sel="1" />
+<fr type="m/z 59.0139" sel="1" />
 <fr type="precursor" sel="1" />
 </adt>
 </lCl>

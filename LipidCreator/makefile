@@ -11,11 +11,16 @@ tests:
 	
 	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs TestLipidMaps.cs TestParserEventHandler.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs -out:TestLipidMaps.exe
 
-complete: main
-	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+complete: main predefined zip
 
 zip:
 	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+	
+predefined:
+	mono LipidCreator.exe transitionlist data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
+	mono LipidCreator.exe transitionlist data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
+	mono LipidCreator.exe transitionlist data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
+	mono LipidCreator.exe transitionlist data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
 	rm LipidCreator.exe && rm -r obj/

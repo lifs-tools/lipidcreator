@@ -416,16 +416,22 @@ namespace LipidCreator
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";
-            if (File.Exists(analyticsFile))
-            {
+            try {
+                if (File.Exists(analyticsFile))
                 {
-                    using (StreamReader sr = new StreamReader(analyticsFile))
                     {
-                        // check if first letter in first line is a '1'
-                        String line = sr.ReadLine();
-                        enableAnalytics = line[0] == '1';
+                        using (StreamReader sr = new StreamReader(analyticsFile))
+                        {
+                            // check if first letter in first line is a '1'
+                            String line = sr.ReadLine();
+                            enableAnalytics = line[0] == '1';
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+            
             }
         }
         
@@ -1422,6 +1428,8 @@ namespace LipidCreator
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
+            
+            
             string[] ionMobilityType = { "none", "driftTime(msec)", "inverseK0(Vsec/cm^2)"};
             for(int i=0; i < ionMobilityType.Length; ++i){
                 sql = "INSERT INTO IonMobilityTypes(id, ionMobilityType) VALUES(" + i + ", '" + ionMobilityType[i] + "')";
@@ -1449,11 +1457,9 @@ namespace LipidCreator
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
-            /*
-            sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, ionMobilityValue REAL, ionMobilityType INTEGER, ionMobilityHighEnergyDriftTimeOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
+            sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, driftTimeMsec REAL, collisionalCrossSectionSqA REAL, driftTimeHighEnergyOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            */
             
             Tuple<string, string>[] scoreType = 
             {
@@ -1491,7 +1497,7 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             
             // Write the annotated spectra
-            foreach (PrecursorData precursorData in this.precursorDataList)
+            foreach (PrecursorData precursorData in precursorDataList)
             {
                 string precursorName = precursorData.fullMoleculeListName;
                 string adduct = precursorData.precursorAdductFormula;

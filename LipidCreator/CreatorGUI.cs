@@ -3792,7 +3792,13 @@ namespace LipidCreator
                     
                     if (analyticsContent == "-1")
                     {
-                        DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\nLipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative. We have to report ANONYMIZED usage statistics for this tool to the project administration to ensure continued funding.\n\nUsage statistics include:\n - Count for LipidCreator launches\n - Count for generated transition lists\n\nNOT include:\n - IP address, operating system or any information that may trace back to the user\n\nBy clicking 'Yes', you agree to allow us to collect ANONYMIZED usage statistics. When clicking 'No', no data will be sent, but you can still use LipidCreator without any restrictions. However, we would highly appreciate your help to secure further funding for the continued development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
+                        DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\n"+
+                                                            "LipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative.\nThe project administration requires us to report ANONYMIZED usage statistics for this tool to evaluate its usefulness for the community.\n\n" +
+                                                            "With your permission, we collect the following ANONYMIZED statistics:\n - # of LipidCreator launches\n - # of generated transition lists\n\n" + 
+                                                            "We do NOT collect any of the following statistics:\n - IP address\n - operating system\n - any information that may traced back to the user\n\n" +
+                                                            "When you click 'Yes':\n - you agree to allow us to collect ANONYMIZED usage statistics.\n\n" + 
+                                                            "When you click 'No':\n - no data will be sent\n - you can use LipidCreator without any restrictions.\n\n" + 
+                                                            "We would highly appreciate your help to secure further funding for the continued development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
                         
                         using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                         {

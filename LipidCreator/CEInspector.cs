@@ -509,8 +509,8 @@ namespace LipidCreator
                 
                 if (vals.X < cartesean.minXVal) vals.X = (float)cartesean.minXVal;
                 if (vals.X > cartesean.maxXVal) vals.X = (float)cartesean.maxXVal;
-                
-                cartesean.CEval = vals.X;
+
+                cartesean.CEval = Math.Max(cartesean.minCEVal, vals.X);
                 numericalUpDownCurrentCE.Value = (decimal)Math.Max(cartesean.minCEVal, cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 refreshCartesan();

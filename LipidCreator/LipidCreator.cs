@@ -1186,9 +1186,8 @@ namespace LipidCreator
         {
             if (enableAnalytics)
             {
-                // ToDo: uncomment in final release
-                //Thread th = new Thread(() => analyticsRequest(category, action));
-                //th.Start();
+                Thread th = new Thread(() => analyticsRequest(category, action));
+                th.Start();
             }
         }
         

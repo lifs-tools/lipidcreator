@@ -3683,6 +3683,7 @@ namespace LipidCreator
                     Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
                     Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
                     Console.WriteLine("    -x:\t\t\tDeveloper or Xpert mode");
+                    Console.WriteLine("    -l:\t\t\tCreate LipidCreator project file instead of transition list");
                     Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
                     Console.WriteLine("    -c instrument mode:\tCompute with optimal collision energy (not available for all lipid classes)");
                     Console.WriteLine("      available instruments and modes:");
@@ -3948,6 +3949,7 @@ namespace LipidCreator
                                 bool deleteReplicates = false;
                                 bool split = false;
                                 bool asDeveloper = false;
+                                bool createXMLFile = false;
                                 int p = 3;
                                 while (p < args.Length)
                                 {
@@ -3984,6 +3986,12 @@ namespace LipidCreator
                                             
                                         case "-x":
                                             asDeveloper = true;
+                                            p += 1;
+                                            break;
+                                            
+                                        case "-l":
+                                            createXMLFile = true;
+                                            p += 1;
                                             break;
                                             
                                         default:
@@ -4001,12 +4009,7 @@ namespace LipidCreator
                                 
                                 if (mode != "" && mode != "PRM" && mode != "SRM") printHelp("transitionlist");
                                 
-                                lc.importLipidList(inputCSV);
-                                foreach(Lipid lipid in lc.registeredLipids)
-                                {
-                                    lipid.onlyPrecursors = parameterPrecursor;
-                                    lipid.onlyHeavyLabeled = parameterHeavy;
-                                }
+                                lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
                                 
                                 MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
                                 if (mode == "PRM") monitoringType = MonitoringTypes.PRM;
@@ -4014,9 +4017,22 @@ namespace LipidCreator
                                 
                                 lc.selectedInstrumentForCE = instrument;
                                 lc.monitoringType = monitoringType;
-                                lc.assembleLipids(asDeveloper); 
-                                DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
-                                lc.storeTransitionList(",", split, outputCSV, transitionList);
+                                
+                                if (!createXMLFile)
+                                {
+                                    lc.assembleLipids(asDeveloper); 
+                                    DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
+                                    lc.storeTransitionList(",", split, outputCSV, transitionList);
+                                }
+                                else
+                                {
+                                    using (StreamWriter writer = new StreamWriter (outputCSV))
+                                    {
+                                        writer.Write(lc.serialize());
+                                        writer.Dispose();
+                                        writer.Close();
+                                    }
+                                }
                             }
                             break;
                             

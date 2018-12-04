@@ -232,6 +232,8 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+                if (!allFragments.ContainsKey(precursorData.lipidClass) || !allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0].ContainsKey(fragmentName)) continue;
+            
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
                 
@@ -297,9 +299,8 @@ namespace LipidCreator
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
-                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 
                 if (fragName.IndexOf("[adduct]") > -1)
@@ -343,7 +344,6 @@ namespace LipidCreator
                 {
                     string lipidClass = precursorData.lipidClass;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
-                    //Console.WriteLine(precursorData.lipidClass + " " + adduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
                         lipidRow[LipidCreator.COLLISION_ENERGY] = CE;
@@ -509,7 +509,7 @@ namespace LipidCreator
                 
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
-            if (precursorData.fragmentNames.Count == 0) return; 
+            if (precursorData.fragmentNames.Count == 0 || !allFragments.ContainsKey(precursorData.lipidClass)) return;
             
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])

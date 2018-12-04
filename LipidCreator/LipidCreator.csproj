@@ -878,9 +878,8 @@
     <Content Include="System.Data.SQLite.dll" />
   </ItemGroup> -->
   <ItemGroup>
-    <DataFiles Include="$(ProjectDir)data\*" />
+    <DataFiles Include="$(ProjectDir)data\**\*.*" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
-    <PredefinedFiles Include="$(ProjectDir)predefined\*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
   </ItemGroup>
   <ItemGroup>
@@ -896,17 +895,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!--  <PropertyGroup>
-    <PostBuildEvent>cd $(TargetDir)
-$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>xcopy /s /y /e /i "$(ProjectDir)data" "$(TargetDir)data"
-xcopy /s /y /e /i "$(ProjectDir)images" "$(TargetDir)images"
-xcopy /s /y /e /i "$(ProjectDir)predefined" "$(TargetDir)predefined"
-xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
-</PreBuildEvent>
-  </PropertyGroup>-->
 <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
   <PropertyGroup>
     <!-- temp file for the git version (lives in "obj" folder)-->
@@ -960,9 +948,8 @@ xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
   <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
 </Target>
   <Target Name="BeforeBuild">
-    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data" />
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data\%(RecursiveDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
-    <Copy SourceFiles="@(PredefinedFiles)" DestinationFolder="$(TargetDir)predefined" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
   </Target>
   <Target Name="AfterBuild">

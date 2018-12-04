@@ -65,6 +65,8 @@ namespace LipidCreator
             parameters = _parameters;
             InitializeComponent();
             button1.Enabled = false;
+            radioButton3.Checked = true;
+            radioButton6.Checked = true;
         }
         
         

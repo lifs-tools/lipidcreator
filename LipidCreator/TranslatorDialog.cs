@@ -287,8 +287,17 @@ namespace LipidCreator
         // import
         private void button3_Click(object sender, EventArgs e)
         {
+            int[] filterParameters = {2, 2};
+            FilterDialog importFilterDialog = new FilterDialog(filterParameters);
+            importFilterDialog.Owner = this;
+            importFilterDialog.ShowInTaskbar = false;
+            importFilterDialog.ShowDialog();
+            importFilterDialog.Dispose();
+        
             foreach(Lipid currentLipid in parsedLipids)
             {
+                currentLipid.onlyPrecursors = filterParameters[0];
+                currentLipid.onlyHeavyLabeled = filterParameters[1];
                 creatorGUI.lipidCreator.registeredLipids.Add(currentLipid);
             }
             creatorGUI.refreshRegisteredLipidsTable();

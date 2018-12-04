@@ -3489,15 +3489,12 @@ namespace LipidCreator
             {
                 if (File.Exists(openFileDialog1.FileName))
                 {
-                    
-                    // TODO: insert filter dialog
                     int[] filterParameters = {2, 2};
                     FilterDialog importFilterDialog = new FilterDialog(filterParameters);
                     importFilterDialog.Owner = this;
                     importFilterDialog.ShowInTaskbar = false;
                     importFilterDialog.ShowDialog();
                     importFilterDialog.Dispose();
-                    
                     
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();

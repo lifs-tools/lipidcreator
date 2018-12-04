@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Version;Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,6 +10,7 @@
     <RootNamespace>LipidCreator</RootNamespace>
     <AssemblyName>LipidCreator</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <Today>$([System.DateTime]::Now.tostring("u"))</Today>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -255,6 +256,7 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -905,10 +907,59 @@ xcopy /s /y /e /i "$(ProjectDir)predefined" "$(TargetDir)predefined"
 xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
 </PreBuildEvent>
   </PropertyGroup>-->
+<Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
+  <PropertyGroup>
+    <!-- temp file for the git version (lives in "obj" folder)-->
+    <VerFile>$(IntermediateOutputPath)gitver</VerFile>
+    <BranchFile>$(IntermediateOutputPath)gitbranch</BranchFile>
+  </PropertyGroup>
+
+  <!-- write the hash to the temp file.-->
+  <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" />
+  <Exec Command="git rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" />
+  <!-- read the version into the GitVersion itemGroup-->
+  <ReadLinesFromFile File="$(VerFile)">
+    <Output TaskParameter="Lines" ItemName="GitVersion" />
+  </ReadLinesFromFile>
+  <!-- read the branch into the GitBranch itemGroup-->
+  <ReadLinesFromFile File="$(BranchFile)">
+    <Output TaskParameter="Lines" ItemName="GitBranch" />
+  </ReadLinesFromFile>
+  <!-- Set the BuildHash property to contain the GitVersion, if it wasn't already set.-->
+  <PropertyGroup>
+    <BuildHash>@(GitVersion)</BuildHash>
+    <BuildBranch>@(GitBranch)</BuildBranch>
+  </PropertyGroup>
+</Target>
+
+<Target Name="WriteGitHash" BeforeTargets="CoreCompile">
+  <!-- names the obj/.../CustomAssemblyInfo.cs file -->
+  <PropertyGroup>
+    <CustomAssemblyInfoFile>$(IntermediateOutputPath)CustomAssemblyInfo.cs</CustomAssemblyInfoFile>
+  </PropertyGroup>
+  <!-- includes the CustomAssemblyInfo for compilation into your project -->
+  <ItemGroup>
+    <Compile Include="$(CustomAssemblyInfoFile)" />
+  </ItemGroup>
+  <!-- defines the AssemblyMetadata attribute that will be written -->
+  <ItemGroup>
+    <AssemblyAttributes Include="AssemblyMetadata">
+      <_Parameter1>GitHash</_Parameter1>
+      <_Parameter2>$(BuildHash)</_Parameter2>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyMetadata">
+      <_Parameter1>BuildTime</_Parameter1>
+      <_Parameter2>$(Today)</_Parameter2>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyMetadata">
+      <_Parameter1>GitBranch</_Parameter1>
+      <_Parameter2>$(BuildBranch)</_Parameter2>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <!-- writes the attribute to the customAssemblyInfo file -->
+  <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
+</Target>
   <Target Name="BeforeBuild">
-    <Message Text="Using version $(VersionNumber) in AssemblyInfo"></Message>
-    <Message Text="Writing to AssemblyInfo files in $(SolutionRoot)"></Message>
-    <Message Text="Writing to AssemblyInfo files in $(SolutionRoot)"></Message>
     <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(PredefinedFiles)" DestinationFolder="$(TargetDir)predefined" />

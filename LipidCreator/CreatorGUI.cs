@@ -249,6 +249,7 @@ namespace LipidCreator
             if (mbr == DialogResult.Yes) {
                 lipidCreator = new LipidCreator(inputParameters);
                 resetAllLipids();
+                updateCECondition();
                 refreshRegisteredLipidsTable();
                 changeTab((int)currentIndex);
                 return true;
@@ -3488,7 +3489,14 @@ namespace LipidCreator
             {
                 if (File.Exists(openFileDialog1.FileName))
                 {
-                    int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName);
+                    int[] filterParameters = {2, 2};
+                    FilterDialog importFilterDialog = new FilterDialog(filterParameters);
+                    importFilterDialog.Owner = this;
+                    importFilterDialog.ShowInTaskbar = false;
+                    importFilterDialog.ShowDialog();
+                    importFilterDialog.Dispose();
+                    
+                    int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();
                     MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
                 }

@@ -246,7 +246,6 @@ namespace LipidCreator
         
         
         
-        
         public double getCollisionEnergy(string instrument, string lipidClass, string adduct)
         {
             double energy = -1;

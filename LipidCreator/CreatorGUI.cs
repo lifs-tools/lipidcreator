@@ -90,12 +90,13 @@ namespace LipidCreator
             
             lipidModifications = Enumerable.Repeat(-1, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
-            if(Directory.Exists("predefined")) 
+            string predefinedFolder = lipidCreator.prefixPath + "predefined";
+            if(Directory.Exists(predefinedFolder)) 
             {
-                string [] subdirectoryEntries = Directory.GetDirectories("predefined");
+                string [] subdirectoryEntries = Directory.GetDirectories(predefinedFolder);
                 foreach (string subdirectoryEntry in subdirectoryEntries)
                 {
-                    string subEntry = subdirectoryEntry.Replace("predefined" + Path.DirectorySeparatorChar, "");   
+                    string subEntry = subdirectoryEntry.Replace(predefinedFolder + Path.DirectorySeparatorChar, "");   
                     System.Windows.Forms.MenuItem predefFolder = new System.Windows.Forms.MenuItem();
                     predefFolder.Text = subEntry;
                     menuImportPredefined.MenuItems.Add(predefFolder);

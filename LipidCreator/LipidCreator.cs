@@ -774,19 +774,22 @@ namespace LipidCreator
                         string line;
                         while((line = sr.ReadLine()) != null)
                         {
-                            parser.parse(line);
-                            if (parser.wordInGrammer)
+                            foreach (string lipidName in parseLine(line))
                             {
-                                parser.raiseEvents();
-                                if (parserEventHandler.lipid != null)
+                                parser.parse(lipidName);
+                                if (parser.wordInGrammer)
                                 {
-                                    if (filterParameters != null)
+                                    parser.raiseEvents();
+                                    if (parserEventHandler.lipid != null)
                                     {
-                                        parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
-                                        parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
+                                        if (filterParameters != null)
+                                        {
+                                            parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
+                                            parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
+                                        }
+                                        registeredLipids.Add(parserEventHandler.lipid);
+                                        ++valid;
                                     }
-                                    registeredLipids.Add(parserEventHandler.lipid);
-                                    ++valid;
                                 }
                             }
                             

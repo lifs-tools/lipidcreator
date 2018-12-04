@@ -251,7 +251,7 @@ namespace LipidCreator
             if (PRMMode == PRMTypes.PRMAutomatically)
             {
                 cartesean.CEval = argMaxY;
-                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
+                numericalUpDownCurrentCE.Value = (decimal)Math.Max(cartesean.minCEVal, cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 refreshCartesan();
             }
@@ -511,7 +511,7 @@ namespace LipidCreator
                 if (vals.X > cartesean.maxXVal) vals.X = (float)cartesean.maxXVal;
                 
                 cartesean.CEval = vals.X;
-                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
+                numericalUpDownCurrentCE.Value = (decimal)Math.Max(cartesean.minCEVal, cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 refreshCartesan();
             }

@@ -442,6 +442,7 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
+            LC_VERSION_NUMBER = Application.ProductVersion;
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
@@ -760,7 +761,7 @@ namespace LipidCreator
         
         
         
-        public int[] importLipidList (string lipidListFile)
+        public int[] importLipidList (string lipidListFile, int[] filterParameters = null)
         {
             if (File.Exists(lipidListFile))
             {
@@ -779,6 +780,11 @@ namespace LipidCreator
                                 parser.raiseEvents();
                                 if (parserEventHandler.lipid != null)
                                 {
+                                    if (filterParameters != null)
+                                    {
+                                        parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
+                                        parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
+                                    }
                                     registeredLipids.Add(parserEventHandler.lipid);
                                     ++valid;
                                 }
@@ -1126,7 +1132,6 @@ namespace LipidCreator
         
         public string serialize(bool onlySettings = false)
         {
-        
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n";
             
             xml += collisionEnergyHandler.serialize();

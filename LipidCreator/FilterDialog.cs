@@ -38,7 +38,8 @@ namespace LipidCreator
 {
     public partial class FilterDialog : Form
     {
-        Lipid lipid;
+        Lipid lipid = null;
+        int[] parameters = null;
         public FilterDialog(Lipid _lipid)
         {
             lipid = _lipid;
@@ -58,6 +59,15 @@ namespace LipidCreator
             }
         }
         
+        
+        public FilterDialog(int[] _parameters)
+        {
+            parameters = _parameters;
+            InitializeComponent();
+            button1.Enabled = false;
+        }
+        
+        
         private void cancelClick(object sender, EventArgs e)
         {
             this.Close();
@@ -65,14 +75,24 @@ namespace LipidCreator
         
         private void applyClick(object sender, EventArgs e)
         {
-            if (radioButton1.Checked) lipid.onlyPrecursors = 0;
-            else if (radioButton2.Checked) lipid.onlyPrecursors = 1;
-            else if (radioButton3.Checked) lipid.onlyPrecursors = 2;
-            
-            if (radioButton4.Checked) lipid.onlyHeavyLabeled = 0;
-            else if (radioButton5.Checked) lipid.onlyHeavyLabeled = 1;
-            else if (radioButton6.Checked) lipid.onlyHeavyLabeled = 2;
-            
+            if (lipid != null){
+                if (radioButton1.Checked) lipid.onlyPrecursors = 0;
+                else if (radioButton2.Checked) lipid.onlyPrecursors = 1;
+                else if (radioButton3.Checked) lipid.onlyPrecursors = 2;
+                
+                if (radioButton4.Checked) lipid.onlyHeavyLabeled = 0;
+                else if (radioButton5.Checked) lipid.onlyHeavyLabeled = 1;
+                else if (radioButton6.Checked) lipid.onlyHeavyLabeled = 2;
+            }
+            else {
+                if (radioButton1.Checked) parameters[0] = 0;
+                else if (radioButton2.Checked) parameters[0] = 1;
+                else if (radioButton3.Checked) parameters[0] = 2;
+                
+                if (radioButton4.Checked) parameters[1] = 0;
+                else if (radioButton5.Checked) parameters[1] = 1;
+                else if (radioButton6.Checked) parameters[1] = 2;
+            }
             this.Close();
         }
     }

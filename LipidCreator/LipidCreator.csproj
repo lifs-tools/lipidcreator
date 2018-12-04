@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Version;Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -28,6 +28,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>anycpu</PlatformTarget>
@@ -59,7 +60,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -904,6 +906,9 @@ xcopy /s /y /e /i "$(ProjectDir)tool-inf" "$(TargetDir)tool-inf"
 </PreBuildEvent>
   </PropertyGroup>-->
   <Target Name="BeforeBuild">
+    <Message Text="Using version $(VersionNumber) in AssemblyInfo"></Message>
+    <Message Text="Writing to AssemblyInfo files in $(SolutionRoot)"></Message>
+    <Message Text="Writing to AssemblyInfo files in $(SolutionRoot)"></Message>
     <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(PredefinedFiles)" DestinationFolder="$(TargetDir)predefined" />

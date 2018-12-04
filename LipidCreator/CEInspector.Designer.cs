@@ -53,7 +53,8 @@ namespace LipidCreator
         public int innerWidthPx;
         public int innerHeightPx;
         public double maxXVal = 60;
-        public double minXVal = 10;
+        public double minXVal = 0;
+        public double minCEVal = 0;
         public double maxYVal = 100;
         public string highlightName = "";
         public double CEval;
@@ -74,10 +75,11 @@ namespace LipidCreator
         }
         
         
-        public void updateXBoundaries(double minX, double maxX)
+        public void updateXBoundaries(double minX, double maxX, double minCe, double maxCe)
         {
-            minXVal = minX;
-            maxXVal = maxX;
+            this.minCEVal = minCe;
+            minXVal = Math.Min(minX, minCe);
+            maxXVal = Math.Max(maxX, maxCe);
             CEval = (maxXVal + minXVal) / 2.0;
         }
         
@@ -86,7 +88,7 @@ namespace LipidCreator
         
         public Point valueToPx(double valX, double valY)
         {
-            return new Point((int)(marginLeft + (valX - minXVal) * innerWidthPx / (maxXVal - minXVal)), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
+			return new Point((int)(marginLeft + (valX - minXVal) * innerWidthPx / (maxXVal - minXVal)), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
         
         
@@ -169,9 +171,6 @@ namespace LipidCreator
             }
             
             
-            
-            
-            
             // drawing the product profile
             double lastX = 0;
             double lastY = 0;
@@ -208,6 +207,11 @@ namespace LipidCreator
                 
                 g.DrawLines(colorPen, curvePoints);
             }
+
+            Brush bbBrush = new SolidBrush(ColorTranslator.FromHtml("#aaaaaa99"));
+            Point bbStart = valueToPx(minXVal, maxYVal);
+            Point bbEnd = valueToPx(minCEVal, 0);
+            g.FillRectangle(bbBrush, bbStart.X, bbStart.Y, bbEnd.X - bbStart.X + 1, bbEnd.Y - bbStart.Y);
             
             // drawing the axes
             Font labelFont = new Font("Arial", 8);

@@ -761,7 +761,7 @@ namespace LipidCreator
         
         
         
-        public int[] importLipidList (string lipidListFile)
+        public int[] importLipidList (string lipidListFile, int[] filterParameters = null)
         {
             if (File.Exists(lipidListFile))
             {
@@ -780,6 +780,11 @@ namespace LipidCreator
                                 parser.raiseEvents();
                                 if (parserEventHandler.lipid != null)
                                 {
+                                    if (filterParameters != null)
+                                    {
+                                        parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
+                                        parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
+                                    }
                                     registeredLipids.Add(parserEventHandler.lipid);
                                     ++valid;
                                 }

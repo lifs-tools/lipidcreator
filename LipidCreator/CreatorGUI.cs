@@ -90,7 +90,7 @@ namespace LipidCreator
             
             lipidModifications = Enumerable.Repeat(-1, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
-            string predefinedFolder = lipidCreator.prefixPath + "predefined";
+            string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
             if(Directory.Exists(predefinedFolder)) 
             {
                 string [] subdirectoryEntries = Directory.GetDirectories(predefinedFolder);

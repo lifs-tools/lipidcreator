@@ -341,8 +341,19 @@
   <Target Name="AfterBuild">
     <Exec Command="echo -1 &gt; $(TargetDir)data\analytics.txt" />
     <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />-->
+    <!-- create resources on Windows -->
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined/Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined/Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined/Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined/Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
+    <!-- create resources on Linux / OSX -->
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined/Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined/Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined/Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined/Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <!-- create zip distribution on Windows -->
     <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
-    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />-->
+    <!-- create zip distribution on Linux / OSX -->
     <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

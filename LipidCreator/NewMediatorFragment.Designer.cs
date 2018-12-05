@@ -27,6 +27,8 @@ SOFTWARE.
 
 using System;
 using System.Windows.Forms;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -203,9 +205,10 @@ namespace LipidCreator
             this.label4.Text = "preview";
             // 
             // NewMediatorFragment
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(628, 308);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);

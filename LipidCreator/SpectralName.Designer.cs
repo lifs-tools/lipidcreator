@@ -24,6 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System.Drawing;
+using Microsoft.Win32;
+
 namespace LipidCreator
 {
     partial class SpectralName
@@ -99,7 +102,7 @@ namespace LipidCreator
             // SpectralName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(249, 117);
             this.Controls.Add(this.textLibraryName);
             this.Controls.Add(this.labelProvideName);

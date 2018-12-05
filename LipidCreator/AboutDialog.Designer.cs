@@ -25,6 +25,8 @@ SOFTWARE.
 */
 
 using System.Windows.Forms;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -91,9 +93,10 @@ namespace LipidCreator
             this.textLibraryName.Text = "";
             // 
             // AboutDialog
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(480, 320);
             this.Controls.Add(this.textLibraryName);
             this.Controls.Add(this.linkLabel);

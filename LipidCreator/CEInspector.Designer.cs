@@ -32,6 +32,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -500,8 +501,9 @@ namespace LipidCreator
             
             // 
             // CEInspector
-            // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.cartesean);

@@ -32,6 +32,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -596,7 +597,8 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Font = SystemFonts.IconTitleFont;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Text = "LipidCreator";
             
             this.timerEasterEgg = new System.Timers.Timer(15);
@@ -1060,7 +1062,7 @@ namespace LipidCreator
             tabControl.Controls.Add(mediatorlipidsTab);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
-            Font tabFont = new Font(tabControl.Font.FontFamily, 16);
+            Font tabFont = new Font(tabControl.Font.FontFamily, this.Font.Size+2);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
             //tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
@@ -2189,7 +2191,7 @@ namespace LipidCreator
             " • Full integration with new small molecule support in Skyline.";
             homeText.BackColor = Color.Transparent;
             homeText.ForeColor = Color.White;
-            homeText.Font = new Font(homeTab.Font.FontFamily, 12);
+            homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size+1);
             
             homeText2.Width = 560;
             homeText2.Height = 40;
@@ -2197,15 +2199,16 @@ namespace LipidCreator
             homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
             homeText2.BackColor = Color.Transparent;
             homeText2.ForeColor = Color.White;
-            homeText2.Font = new Font(homeTab.Font.FontFamily, 12);
+            homeText2.Font = new Font(homeTab.Font.FontFamily, this.Font.Size+1);
             
             
             homeText3.Width = 560;
             homeText3.Height = 80;
             homeText3.Location = new Point(60, 320);
-            homeText3.Text = "LipidCreator version 1.0.1" + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
+            homeText3.Text = "LipidCreator version " + Application.ProductVersion + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
             homeText3.BackColor = Color.Transparent;
             homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
+            homeText3.ForeColor = Color.White;
             homeText3.Visible = false;
             
             

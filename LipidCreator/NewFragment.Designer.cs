@@ -27,6 +27,8 @@ SOFTWARE.
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -196,9 +198,10 @@ namespace LipidCreator
             this.dataGridViewElements.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1CellValueChanged);
             // 
             // NewFragment
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(526, 283);
             this.Controls.Add(this.dataGridViewElements);
             this.Controls.Add(this.labelFragmentName);

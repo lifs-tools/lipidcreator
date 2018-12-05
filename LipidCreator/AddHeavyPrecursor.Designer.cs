@@ -31,6 +31,7 @@ using System.Data;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Generic;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -267,9 +268,10 @@ namespace LipidCreator
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
             // 
             // AddHeavyPrecursor
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(397, 549);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button4);

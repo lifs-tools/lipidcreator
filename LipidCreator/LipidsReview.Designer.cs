@@ -30,6 +30,7 @@ using System.Windows.Forms;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -153,9 +154,10 @@ namespace LipidCreator
             this.labelNumberOfTransitions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LipidsReview
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1079, 494);
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);

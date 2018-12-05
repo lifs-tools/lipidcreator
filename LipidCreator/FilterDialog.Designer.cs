@@ -27,6 +27,8 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -184,8 +186,9 @@ namespace LipidCreator
             // 
             // FilterDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Font = SystemFonts.IconTitleFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(285, 266);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

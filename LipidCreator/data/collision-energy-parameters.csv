@@ -6394,206 +6394,206 @@ MS:1002791,PGI2,[M-H]1-,precursor,model,dlnormPar
 MS:1002791,PGI2,[M-H]1-,precursor,scale,0.234719377
 MS:1002791,PGI2,[M-H]1-,precursor,sdlog,0.491807602
 MS:1002791,PGI2,[M-H]1-,precursor,shift,-4.545620691
-MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,meanlog,4.273511533
+MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,meanlog,4.52506124607121
 MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,scale,0.449573432
-MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,sdlog,0.442762439
-MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,shift,-1.769841143
-MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,meanlog,4.509786072
+MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,scale,0.258966445657622
+MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,sdlog,0.185460743651297
+MS:1002523,Resolvin D1,[M-H]1-,m/z 121.0658,shift,47.9240750711686
+MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,meanlog,3.26481200448859
 MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,scale,0.256269937
-MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,sdlog,0.187048713
-MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,shift,46.59828722
-MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,meanlog,3.840851599
+MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,scale,0.0916933223648427
+MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,sdlog,0.399253711639634
+MS:1002791,Resolvin D1,[M-H]1-,m/z 121.0658,shift,3.68690572948495
+MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,meanlog,2.8637297827641
 MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,scale,0.095288008
-MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,sdlog,0.258079203
-MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,shift,14.24055241
-MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,meanlog,3.531493908
+MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,scale,0.318333848983782
+MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,sdlog,0.39764810871241
+MS:1002523,Resolvin D1,[M-H]1-,m/z 135.0814,shift,2.359198412686
+MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,meanlog,5.62099934660271
 MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,scale,0.086197883
-MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,sdlog,0.276923511
-MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,shift,12.70775633
-MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,meanlog,3.866119925
+MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,scale,0.0101949755814244
+MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,sdlog,0.0503606464811738
+MS:1002791,Resolvin D1,[M-H]1-,m/z 135.0814,shift,250
+MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,meanlog,3.9407344570382
 MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,scale,0.358489729
-MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,sdlog,0.202221742
-MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,shift,25.39738209
-MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,meanlog,2.958430876
+MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,scale,0.159208190530029
+MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,sdlog,0.161087274947243
+MS:1002523,Resolvin D1,[M-H]1-,m/z 141.0557,shift,29.9621015969589
+MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,meanlog,2.71531705251651
 MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,scale,0.330269203
-MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,sdlog,0.370853788
-MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,shift,4.257115494
-MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,meanlog,3.973922709
+MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,scale,0.0953801935945103
+MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,sdlog,0.376488173389608
+MS:1002791,Resolvin D1,[M-H]1-,m/z 141.0557,shift,0.796752172321039
+MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,meanlog,2.33206705257453
 MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,scale,0.033660235
-MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,sdlog,0.15734112
-MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,shift,26.28185221
-MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,meanlog,7.890841756
+MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,scale,0.0113955230138829
+MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,sdlog,1.41885142904935
+MS:1002523,Resolvin D1,[M-H]1-,m/z 163.0764,shift,-8.03146727586983
+MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,meanlog,2.2181737558358
 MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,scale,2
-MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,sdlog,0.590238853
-MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,shift,250
-MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,meanlog,4.507734005
+MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,scale,0.00488491776877639
+MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,sdlog,0.603790364823345
+MS:1002791,Resolvin D1,[M-H]1-,m/z 163.0764,shift,-3.30615826081804
+MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,meanlog,4.27155234108199
 MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,scale,0.17536884
-MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,sdlog,0.109774082
-MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,shift,59.16982557
-MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,meanlog,5.40909125
+MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,scale,0.261294725591443
+MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,sdlog,0.58316487359911
+MS:1002523,Resolvin D1,[M-H]1-,m/z 215.1439,shift,0.300380713401879
+MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,meanlog,4.52506124607121
 MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,scale,0.156589941
-MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,sdlog,0.037076265
-MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,shift,202.549715
-MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,meanlog,5.136693022
+MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,scale,0.258966445657622
+MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,sdlog,0.185460743651297
+MS:1002791,Resolvin D1,[M-H]1-,m/z 215.1439,shift,47.9240750711686
+MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,meanlog,3.26481200448859
 MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,scale,0.119620634
-MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,sdlog,0.046381581
-MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,shift,149.7075885
-MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,meanlog,3.509868376
+MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,scale,0.0916933223648427
+MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,sdlog,0.399253711639634
+MS:1002523,Resolvin D1,[M-H]1-,m/z 233.1545,shift,3.68690572948495
+MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,meanlog,2.8637297827641
 MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,scale,0.097887813
-MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,sdlog,0.172389244
-MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,shift,19.8860088
-MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,meanlog,5.577080759
+MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,scale,0.318333848983782
+MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,sdlog,0.39764810871241
+MS:1002791,Resolvin D1,[M-H]1-,m/z 233.1545,shift,2.359198412686
+MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,meanlog,5.62099934660271
 MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,scale,0.015597887
-MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,sdlog,0.024641302
+MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,scale,0.0101949755814244
+MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,sdlog,0.0503606464811738
 MS:1002523,Resolvin D1,[M-H]1-,m/z 277.1443,shift,250
-MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,meanlog,7.687066903
+MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,meanlog,3.9407344570382
 MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,scale,0.057504765
-MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,sdlog,3.827970608
-MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,shift,-10.99999895
-MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,meanlog,5.521562816
+MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,scale,0.159208190530029
+MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,sdlog,0.161087274947243
+MS:1002791,Resolvin D1,[M-H]1-,m/z 277.1443,shift,29.9621015969589
+MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,meanlog,2.71531705251651
 MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,scale,0.006421345
-MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,sdlog,0.026634389
-MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,shift,233.086614
-MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,meanlog,2.261738889
+MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,scale,0.0953801935945103
+MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,sdlog,0.376488173389608
+MS:1002523,Resolvin D1,[M-H]1-,m/z 357.2066,shift,0.796752172321039
+MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,meanlog,2.33206705257453
 MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,scale,0.004661547
-MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,sdlog,0.618159957
-MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,shift,-6.192732557
-MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,meanlog,4.461358368
+MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,scale,0.0113955230138829
+MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,sdlog,1.41885142904935
+MS:1002791,Resolvin D1,[M-H]1-,m/z 357.2066,shift,-8.03146727586983
+MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,meanlog,2.2181737558358
 MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,scale,0.17553313
-MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,sdlog,0.370952618
-MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,shift,7.863695487
-MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,meanlog,4.195963225
+MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,scale,0.00488491776877639
+MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,sdlog,0.603790364823345
+MS:1002523,Resolvin D1,[M-H]1-,m/z 59.0139,shift,-3.30615826081804
+MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,meanlog,4.27155234108199
 MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,scale,0.274714359
-MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,sdlog,0.577687486
-MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,shift,-1.843036164
-MS:1002523,Resolvin D1,[M-H]1-,precursor,meanlog,3.566624299
+MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,scale,0.261294725591443
+MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,sdlog,0.58316487359911
+MS:1002791,Resolvin D1,[M-H]1-,m/z 59.0139,shift,0.300380713401879
+MS:1002523,Resolvin D1,[M-H]1-,precursor,meanlog,3.20945928264423
 MS:1002523,Resolvin D1,[M-H]1-,precursor,model,dlnormPar
-MS:1002523,Resolvin D1,[M-H]1-,precursor,scale,0.614715993
-MS:1002523,Resolvin D1,[M-H]1-,precursor,sdlog,0.122606837
-MS:1002523,Resolvin D1,[M-H]1-,precursor,shift,23.48430469
-MS:1002791,Resolvin D1,[M-H]1-,precursor,meanlog,5.535992722
+MS:1002523,Resolvin D1,[M-H]1-,precursor,scale,0.563479453033576
+MS:1002523,Resolvin D1,[M-H]1-,precursor,sdlog,0.140433682902935
+MS:1002523,Resolvin D1,[M-H]1-,precursor,shift,17.8926410269028
+MS:1002791,Resolvin D1,[M-H]1-,precursor,meanlog,3.20945928264423
 MS:1002791,Resolvin D1,[M-H]1-,precursor,model,dlnormPar
-MS:1002791,Resolvin D1,[M-H]1-,precursor,scale,2
-MS:1002791,Resolvin D1,[M-H]1-,precursor,sdlog,0.019140169
-MS:1002791,Resolvin D1,[M-H]1-,precursor,shift,250
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,meanlog,4.273511533
+MS:1002791,Resolvin D1,[M-H]1-,precursor,scale,0.563479453033576
+MS:1002791,Resolvin D1,[M-H]1-,precursor,sdlog,0.140433682902935
+MS:1002791,Resolvin D1,[M-H]1-,precursor,shift,17.8926410269028
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,meanlog,4.52506124607121
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,scale,0.449573432
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,sdlog,0.442762439
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,shift,-1.769841143
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,meanlog,4.509786072
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,scale,0.258966445657622
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,sdlog,0.185460743651297
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 121.0658,shift,47.9240750711686
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,meanlog,3.26481200448859
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,scale,0.256269937
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,sdlog,0.187048713
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,shift,46.59828722
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,meanlog,3.840851599
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,scale,0.0916933223648427
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,sdlog,0.399253711639634
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 121.0658,shift,3.68690572948495
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,meanlog,2.8637297827641
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,scale,0.095288008
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,sdlog,0.258079203
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,shift,14.24055241
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,meanlog,3.531493908
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,scale,0.318333848983782
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,sdlog,0.39764810871241
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 135.0814,shift,2.359198412686
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,meanlog,5.62099934660271
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,scale,0.086197883
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,sdlog,0.276923511
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,shift,12.70775633
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,meanlog,3.866119925
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,scale,0.0101949755814244
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,sdlog,0.0503606464811738
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 135.0814,shift,250
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,meanlog,3.9407344570382
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,scale,0.358489729
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,sdlog,0.202221742
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,shift,25.39738209
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,meanlog,2.958430876
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,scale,0.159208190530029
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,sdlog,0.161087274947243
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 141.0557,shift,29.9621015969589
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,meanlog,2.71531705251651
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,scale,0.330269203
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,sdlog,0.370853788
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,shift,4.257115494
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,meanlog,3.973922709
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,scale,0.0953801935945103
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,sdlog,0.376488173389608
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 141.0557,shift,0.796752172321039
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,meanlog,2.33206705257453
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,scale,0.033660235
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,sdlog,0.15734112
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,shift,26.28185221
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,meanlog,7.890841756
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,scale,0.0113955230138829
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,sdlog,1.41885142904935
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 163.0764,shift,-8.03146727586983
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,meanlog,2.2181737558358
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,scale,2
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,sdlog,0.590238853
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,shift,250
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,meanlog,4.507734005
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,scale,0.00488491776877639
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,sdlog,0.603790364823345
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 163.0764,shift,-3.30615826081804
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,meanlog,4.27155234108199
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,scale,0.17536884
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,sdlog,0.109774082
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,shift,59.16982557
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,meanlog,5.40909125
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,scale,0.261294725591443
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,sdlog,0.58316487359911
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 220.1753,shift,0.300380713401879
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,meanlog,4.52506124607121
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,scale,0.156589941
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,sdlog,0.037076265
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,shift,202.549715
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,meanlog,5.136693022
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,scale,0.258966445657622
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,sdlog,0.185460743651297
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 220.1753,shift,47.9240750711686
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,meanlog,3.26481200448859
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,scale,0.119620634
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,sdlog,0.046381581
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,shift,149.7075885
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,meanlog,3.509868376
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,scale,0.0916933223648427
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,sdlog,0.399253711639634
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 238.1859,shift,3.68690572948495
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,meanlog,2.8637297827641
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,scale,0.097887813
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,sdlog,0.172389244
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,shift,19.8860088
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,meanlog,5.577080759
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,scale,0.318333848983782
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,sdlog,0.39764810871241
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 238.1859,shift,2.359198412686
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,meanlog,5.62099934660271
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,scale,0.015597887
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,sdlog,0.024641302
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,scale,0.0101949755814244
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,sdlog,0.0503606464811738
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 277.1443,shift,250
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,meanlog,7.687066903
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,meanlog,3.9407344570382
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,scale,0.057504765
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,sdlog,3.827970608
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,shift,-10.99999895
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,meanlog,5.521562816
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,scale,0.159208190530029
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,sdlog,0.161087274947243
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 277.1443,shift,29.9621015969589
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,meanlog,2.71531705251651
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,scale,0.006421345
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,sdlog,0.026634389
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,shift,233.086614
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,meanlog,2.261738889
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,scale,0.0953801935945103
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,sdlog,0.376488173389608
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 362.2380,shift,0.796752172321039
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,meanlog,2.33206705257453
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,scale,0.004661547
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,sdlog,0.618159957
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,shift,-6.192732557
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,meanlog,4.461358368
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,scale,0.0113955230138829
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,sdlog,1.41885142904935
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 362.2380,shift,-8.03146727586983
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,meanlog,2.2181737558358
 MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,scale,0.17553313
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,sdlog,0.370952618
-MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,shift,7.863695487
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,meanlog,4.195963225
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,scale,0.00488491776877639
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,sdlog,0.603790364823345
+MS:1002523,Resolvin D1{d5},[M-H]1-,m/z 59.0139,shift,-3.30615826081804
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,meanlog,4.27155234108199
 MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,scale,0.274714359
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,sdlog,0.577687486
-MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,shift,-1.843036164
-MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,meanlog,3.566624299
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,scale,0.261294725591443
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,sdlog,0.58316487359911
+MS:1002791,Resolvin D1{d5},[M-H]1-,m/z 59.0139,shift,0.300380713401879
+MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,meanlog,3.20945928264423
 MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,model,dlnormPar
-MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,scale,0.614715993
-MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,sdlog,0.122606837
-MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,shift,23.48430469
-MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,meanlog,5.535992722
+MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,scale,0.563479453033576
+MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,sdlog,0.140433682902935
+MS:1002523,Resolvin D1{d5},[M-H]1-,precursor,shift,17.8926410269028
+MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,meanlog,3.20945928264423
 MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,model,dlnormPar
-MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,scale,2
-MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,sdlog,0.019140169
-MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,shift,250
+MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,scale,0.563479453033576
+MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,sdlog,0.140433682902935
+MS:1002791,Resolvin D1{d5},[M-H]1-,precursor,shift,17.8926410269028
 MS:1002523,Resolvin D2,[M-H]1-,m/z 69.0344,meanlog,6.079395939
 MS:1002523,Resolvin D2,[M-H]1-,m/z 69.0344,model,dlnormPar
 MS:1002523,Resolvin D2,[M-H]1-,m/z 69.0344,scale,2

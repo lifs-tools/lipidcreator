@@ -126,8 +126,8 @@ namespace LipidCreator
             // 
             // label3
             // 
-            this.labelFragmentDescriptionBlack.Size = new Size(162, 13);
-            this.labelFragmentDescriptionBlack.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlack.Width, 280);
+            this.labelFragmentDescriptionBlack.Size = new Size(162, 20);
+            this.labelFragmentDescriptionBlack.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlack.Width, 270);
             this.labelFragmentDescriptionBlack.Name = "label3";
             this.labelFragmentDescriptionBlack.TabIndex = 5;
             this.labelFragmentDescriptionBlack.Text = "black: unspecific";
@@ -135,8 +135,8 @@ namespace LipidCreator
             // 
             // label4
             // 
-            this.labelFragmentDescriptionRed.Size = new Size(162, 13);
-            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 295);
+            this.labelFragmentDescriptionRed.Size = new Size(162, 20);
+            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 290);
             this.labelFragmentDescriptionRed.Name = "label4";
             this.labelFragmentDescriptionRed.TabIndex = 5;
             this.labelFragmentDescriptionRed.Text = "red: specific for lipid category";
@@ -145,7 +145,7 @@ namespace LipidCreator
             // 
             // label5
             // 
-            this.labelFragmentDescriptionBlue.Size = new Size(162, 13);
+            this.labelFragmentDescriptionBlue.Size = new Size(162, 20);
             this.labelFragmentDescriptionBlue.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlue.Width, 310);
             this.labelFragmentDescriptionBlue.Name = "label5";
             this.labelFragmentDescriptionBlue.TabIndex = 5;

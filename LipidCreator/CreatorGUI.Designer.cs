@@ -1401,7 +1401,7 @@ namespace LipidCreator
             
             glHGLabel.Location = new Point(glHgListbox.Left, glHgListbox.Top - sep);
             glHGLabel.Text = "Sugar head";
-            glHGLabel.DoubleClick += new EventHandler(sugarHeady);
+//            glHGLabel.DoubleClick += new EventHandler(sugarHeady);
             glHGLabel.Visible = false;
             
 

@@ -1547,12 +1547,12 @@ namespace LipidCreator
         
         
         
-        
+        /*
         public void sugarHeady(Object sender, EventArgs e)
         {
             MessageBox.Show("Who is your sugar heady?");
         }
-        
+        */
         
         
         
@@ -3704,7 +3704,7 @@ namespace LipidCreator
                 case "library":
                     Console.WriteLine("Creating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv instrument");
+                    Console.WriteLine("usage: LipidCreator.exe library input_csv output_blib instrument");
                     Console.WriteLine("  available instruments:");
                     foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
@@ -3733,8 +3733,8 @@ namespace LipidCreator
                     break;
                     
                     
-                case "spymode":
-                    Console.WriteLine("\nUnsaturated fatty acids contain one special bond - James Bond!\n\n");
+                case "agentmode":
+                    Console.WriteLine("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
                     break;
                     
                     
@@ -3747,7 +3747,7 @@ namespace LipidCreator
                     Console.WriteLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
-                    Console.WriteLine("  spymode:\t\t\tsecret spy mode");
+                    Console.WriteLine("  agentmode:\t\t\tsecret agent mode");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
                     break;
             }
@@ -3822,7 +3822,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "spymode", "translate"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "agentmode", "translate"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3844,8 +3844,8 @@ namespace LipidCreator
                             break;
                             
                             
-                        case "spymode":
-                            printHelp("spymode");
+                        case "agentmode":
+                            printHelp("agentmode");
                             break;
                             
                             

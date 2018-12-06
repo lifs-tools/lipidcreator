@@ -332,6 +332,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
+                    Console.WriteLine(ee.ToString());
                     n = 0;
                 }
                 if (selectBaseCombobox.SelectedIndex == 0) n = Math.Max(n, 0);

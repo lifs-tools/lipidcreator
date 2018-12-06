@@ -279,7 +279,7 @@ namespace LipidCreator
             }
             catch (Exception ee)
             {
-                
+                Console.WriteLine(ee.ToString());
             }
             if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
             {

@@ -157,6 +157,7 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.ToString());
                     allowToAdd = false;
                 }
             }
@@ -192,6 +193,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
+                    Console.WriteLine(ee.ToString());
                     n = 0;
                 }
                 n = Math.Max(n, 0);

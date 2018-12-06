@@ -25,10 +25,8 @@ SOFTWARE.
 */
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using Microsoft.Win32;
 
 namespace LipidCreator
 {

@@ -499,7 +499,7 @@ namespace LipidCreator
             // 
             // CEInspector
             //
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DialogFont;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);

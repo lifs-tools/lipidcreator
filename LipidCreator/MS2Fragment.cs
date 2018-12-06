@@ -28,12 +28,7 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Linq;
 
 namespace LipidCreator
 {

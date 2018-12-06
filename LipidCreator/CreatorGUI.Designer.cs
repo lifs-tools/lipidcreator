@@ -593,7 +593,7 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DefaultFont;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Text = "LipidCreator";
             

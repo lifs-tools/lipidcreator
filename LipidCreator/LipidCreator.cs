@@ -25,22 +25,17 @@ SOFTWARE.
 */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
 using System.Data.SQLite;
 //using Mono.Data.SqliteClient;
 using Ionic.Zlib;
-using System.Diagnostics;
 
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using SkylineTool;
 using System.Net;
 using System.Threading;
@@ -776,10 +771,8 @@ namespace LipidCreator
                         string line;
                         while((line = sr.ReadLine()) != null)
                         {
-                            Console.WriteLine(line);
                             foreach (string lipidName in parseLine(line))
                             {
-                                Console.WriteLine(lipidName);
                                 parser.parse(lipidName);
                                 if (parser.wordInGrammer)
                                 {

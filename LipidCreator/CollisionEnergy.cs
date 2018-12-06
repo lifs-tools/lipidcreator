@@ -25,17 +25,8 @@ SOFTWARE.
 */
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.IO;
-using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Globalization;
 
 

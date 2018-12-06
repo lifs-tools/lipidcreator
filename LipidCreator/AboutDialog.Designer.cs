@@ -93,7 +93,7 @@ namespace LipidCreator
             // 
             // AboutDialog
             //
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DialogFont;
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(480, 320);

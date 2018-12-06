@@ -3708,7 +3708,7 @@ namespace LipidCreator
                 case "library":
                     Console.WriteLine("Creating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv instrument");
+                    Console.WriteLine("usage: LipidCreator.exe library input_csv output_blib instrument");
                     Console.WriteLine("  available instruments:");
                     foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {

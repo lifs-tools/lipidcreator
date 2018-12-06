@@ -3753,6 +3753,14 @@ namespace LipidCreator
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine("  spymode:\t\t\tsecret spy mode");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
+if (Environment.OSVersion.Platform == PlatformID.Win32Windows ||  Environment.OSVersion.Platform == PlatformID.Win32NT)
+{
+    Console.WriteLine("Windows");
+}
+else 
+{
+    Console.WriteLine("Linux");
+}
                     break;
             }
             

@@ -1551,12 +1551,12 @@ namespace LipidCreator
         
         
         
-        
+        /*
         public void sugarHeady(Object sender, EventArgs e)
         {
             MessageBox.Show("Who is your sugar heady?");
         }
-        
+        */
         
         
         
@@ -3737,8 +3737,8 @@ namespace LipidCreator
                     break;
                     
                     
-                case "spymode":
-                    Console.WriteLine("\nUnsaturated fatty acids contain one special bond - James Bond!\n\n");
+                case "agentmode":
+                    Console.WriteLine("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
                     break;
                     
                     
@@ -3751,7 +3751,7 @@ namespace LipidCreator
                     Console.WriteLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature");
                     Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
-                    Console.WriteLine("  spymode:\t\t\tsecret spy mode");
+                    Console.WriteLine("  agentmode:\t\t\tsecret agent mode");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
 if (Environment.OSVersion.Platform == PlatformID.Win32Windows ||  Environment.OSVersion.Platform == PlatformID.Win32NT)
 {
@@ -3832,7 +3832,7 @@ else
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "spymode", "translate"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "agentmode", "translate"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -3854,8 +3854,8 @@ else
                             break;
                             
                             
-                        case "spymode":
-                            printHelp("spymode");
+                        case "agentmode":
+                            printHelp("agentmode");
                             break;
                             
                             

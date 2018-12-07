@@ -140,7 +140,7 @@ namespace LipidCreator
                         {
                             // algorithm for getting least significant bit position
                             ulong v1 = (ulong)((long)v & -(long)v);
-                            yield return (pos << 6) + positions[(ulong)(v1 * multiplicator) >> 58];
+                            yield return unchecked(pos << 6) + positions[(v1 * multiplicator) >> 58];
                             v &= v - 1;
                         }
                         

@@ -141,7 +141,7 @@ SL,GM3,23,37,18,1,0,0,0,images/Precursors/GM3Cer_neg_pre.png,Yes,No,No,Yes,No,No
 SL,GM4,17,27,13,1,0,0,0,images/Precursors/GM4Cer_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,4,
 SL,Hex2Cer,12,20,10,0,0,0,0,images/Precursors/LacCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,4,
 SL,HexCer,6,10,5,0,0,0,0,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,4,
-SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,+H,4,
+SL,IPC,6,11,8,0,1,0,0,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
 SL,LCB,0,1,0,0,0,0,0,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,+H,5,lyso
 SL,LCBP,0,2,3,0,1,0,0,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,+H,5,lyso
 SL,LHexCer,6,11,5,0,0,0,0,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,5,lyso

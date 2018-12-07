@@ -1547,15 +1547,6 @@ namespace LipidCreator
         
         
         
-        /*
-        public void sugarHeady(Object sender, EventArgs e)
-        {
-            MessageBox.Show("Who is your sugar heady?");
-        }
-        */
-        
-        
-        
         private void timerEasterEggTick(object sender, System.Timers.ElapsedEventArgs e)
         {
             long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -3749,6 +3740,14 @@ namespace LipidCreator
                     Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
                     Console.WriteLine("  agentmode:\t\t\tsecret agent mode");
                     Console.WriteLine("  help:\t\t\t\tprint this help");
+if (Environment.OSVersion.Platform == PlatformID.Win32Windows ||  Environment.OSVersion.Platform == PlatformID.Win32NT)
+{
+    Console.WriteLine("Windows");
+}
+else 
+{
+    Console.WriteLine("Linux");
+}
                     break;
             }
             
@@ -3807,7 +3806,8 @@ namespace LipidCreator
                     }
                 }
             }
-            catch(Exception e) {
+            catch(Exception e)
+            {
                 Console.WriteLine("Warning: Analytics file could not be opened. LipidCreator will continue without analytics enabled!");
                 Console.WriteLine(e.Message);
             }
@@ -4007,7 +4007,18 @@ namespace LipidCreator
                                 
                                 if (mode != "" && mode != "PRM" && mode != "SRM") printHelp("transitionlist");
                                 
-                                lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                
+                                XDocument doc;
+                                try 
+                                {
+                                    doc = XDocument.Load(inputCSV);
+                                    lc.import(doc);
+                                }
+                                catch (Exception ex)
+                                {
+                                    lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                }
+                                
                                 
                                 MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
                                 if (mode == "PRM") monitoringType = MonitoringTypes.PRM;

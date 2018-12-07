@@ -1,8 +1,7 @@
 CC = x86_64-w64-mingw32-g++
 
-main:
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs CreatorGUI.cs CreatorGUI.Designer.cs MS2Form.cs MS2Form.Designer.cs LipidsReview.cs LipidsReview.Designer.cs NewMediatorFragment.cs NewMediatorFragment.Designer.cs NewFragment.cs NewFragment.Designer.cs SpectralName.cs SpectralName.Designer.cs AboutDialog.cs AboutDialog.Designer.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs AssemblyInfo.cs Cholesterol.cs Mediator.cs MediatorMS2Form.cs MediatorMS2Form.Designer.cs AddHeavyPrecursor.cs AddHeavyPrecursor.Designer.cs Precursor.cs Tutorial.cs FilterDialog.cs FilterDialog.Designer.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs TranslatorDialog.cs TranslatorDialog.Designer.cs CEInspector.cs CEInspector.Designer.cs  -out:LipidCreator.exe
-	echo -1 > data/analytics.txt
+main: setup
+	mcs -pkg:dotnet -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs CreatorGUI.cs CreatorGUI.Designer.cs MS2Form.cs MS2Form.Designer.cs LipidsReview.cs LipidsReview.Designer.cs NewMediatorFragment.cs NewMediatorFragment.Designer.cs NewFragment.cs NewFragment.Designer.cs SpectralName.cs SpectralName.Designer.cs AboutDialog.cs AboutDialog.Designer.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs AssemblyInfo.cs Cholesterol.cs Mediator.cs MediatorMS2Form.cs MediatorMS2Form.Designer.cs AddHeavyPrecursor.cs AddHeavyPrecursor.Designer.cs Precursor.cs Tutorial.cs FilterDialog.cs FilterDialog.Designer.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs TranslatorDialog.cs TranslatorDialog.Designer.cs CEInspector.cs CEInspector.Designer.cs  -out:bin/make/LipidCreator.exe
 
 tests:
 	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs TestTransitionList.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs BaseParserEventHandler.cs ParserEventHandler.cs LipidMapsParserEventHandler.cs Parser.cs CollisionEnergy.cs -out:TestTransitionList.exe
@@ -12,24 +11,34 @@ tests:
 	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs TestLipidMaps.cs TestParserEventHandler.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs -out:TestLipidMaps.exe
 
 complete:
+	$(MAKE) setup
 	$(MAKE) main
 	$(MAKE) predefined
 	$(MAKE) zip
 
 zip:
-	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+	cd bin/make && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+	
+setup: 
+	if [ ! -d "bin/make" ];then \
+		mkdir -p bin; \
+		mkdir -p bin/make; \
+		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf bin/make; \
+		echo -1 > bin/make/data/analytics.txt; \
+	fi
+	
 	
 predefined:
-	mono LipidCreator.exe transitionlist data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
-	rm LipidCreator.exe && rm -r obj/
+	rm -r bin && rm -r obj/
 
 run:
-	mono LipidCreator.exe &
+	mono bin/make/LipidCreator.exe &
 	
 runtest:
 	mono TestTransitionList.exe

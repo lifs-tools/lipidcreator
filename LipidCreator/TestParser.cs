@@ -102,7 +102,7 @@ namespace LipidCreator
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
                             lcf.registeredLipids.Add(peh.lipid);
-                            lcf.assembleLipids();
+                            lcf.assembleLipids(false);
                             
                             DataRow row = lcf.transitionList.Rows[0];
                             if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))

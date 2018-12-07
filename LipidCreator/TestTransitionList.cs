@@ -173,7 +173,7 @@ namespace LipidCreator
                     // create transition
                     lcf.registeredLipids.Clear();
                     lcf.registeredLipids.Add(lipid);
-                    lcf.assembleLipids();
+                    lcf.assembleLipids(false);
                     
                     // resolve the [adduct] wildcards if present
                     string fragmentName = unitTestRow[6];

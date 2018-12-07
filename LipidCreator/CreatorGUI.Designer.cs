@@ -27,12 +27,8 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -597,7 +593,7 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DefaultFont;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Text = "LipidCreator";
             
@@ -1405,8 +1401,8 @@ namespace LipidCreator
             
             glHGLabel.Location = new Point(glHgListbox.Left, glHgListbox.Top - sep);
             glHGLabel.Text = "Sugar head";
-//            glHGLabel.DoubleClick += new EventHandler(sugarHeady);
             glHGLabel.Visible = false;
+            
             
 
             glPositiveAdduct.Width = 120;

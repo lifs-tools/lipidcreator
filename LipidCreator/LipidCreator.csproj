@@ -104,7 +104,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="Microsoft.Win32" />
     <Reference Include="System.Xml" />
     <Reference Include="Ionic.Zip">
       <HintPath>Ionic.Zip.dll</HintPath>

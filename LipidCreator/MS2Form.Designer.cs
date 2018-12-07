@@ -27,11 +27,7 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -284,7 +280,7 @@ namespace LipidCreator
             // 
             // MS2Form
             //
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DialogFont;
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1184, 440);

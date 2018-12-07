@@ -27,12 +27,9 @@ WITH BLUE BIBS WILL COME AND SLAP YOU WITH BANANAS.
 
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace LipidCreator
 {    

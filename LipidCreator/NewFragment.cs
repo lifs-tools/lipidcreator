@@ -27,11 +27,8 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace LipidCreator
@@ -332,6 +329,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
+                    Console.WriteLine(ee.ToString());
                     n = 0;
                 }
                 if (selectBaseCombobox.SelectedIndex == 0) n = Math.Max(n, 0);

@@ -25,22 +25,17 @@ SOFTWARE.
 */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
 using System.Data.SQLite;
 //using Mono.Data.SqliteClient;
 using Ionic.Zlib;
-using System.Diagnostics;
 
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using SkylineTool;
 using System.Net;
 using System.Threading;
@@ -432,7 +427,8 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-            
+                Console.WriteLine("Error: analytics file " + analyticsFile + " does not exist or can not be opened. ");
+                Console.WriteLine(e.Message);
             }
         }
         
@@ -801,7 +797,8 @@ namespace LipidCreator
                 
                 catch (Exception ee)
                 {
-                    Console.WriteLine(ee.Message);
+                    Console.WriteLine("Error: Reading lipids from file " + lipidListFile + " failed on line " + total);
+                    Console.WriteLine(ee.ToString());
                 }
                 return new int[]{valid, total};
             }
@@ -1014,6 +1011,7 @@ namespace LipidCreator
             catch (Exception e)
             {
                 MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
+                Console.WriteLine(e.ToString());
             }
         }
         
@@ -1239,14 +1237,14 @@ namespace LipidCreator
         {
             try
             {
-                WebRequest request = WebRequest.Create("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
+                HttpWebRequest request = WebRequest.CreateHttp("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
                 request.Timeout = 2000;
-                WebResponse response = request.GetResponse();  
-                response.Close();
-            }
-            catch (Exception e)
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()){}
+            } 
+            catch (WebException ex) 
             {
-            
+                Console.WriteLine("Warning: Failed to contact analytics endpoint!");
+                Console.WriteLine(ex.Message);
             }
         }
         
@@ -1263,6 +1261,7 @@ namespace LipidCreator
             names[0] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[0];
             return names;
         }
+        
         
         
         

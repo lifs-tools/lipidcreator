@@ -777,15 +777,6 @@ namespace LipidCreator
             }
             glHgList.Sort();
             
-            /*
-            List<String> plHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
-            {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
-            }
-            plHgList.Sort();
-            */
-            
             List<String> medHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
             {
@@ -1058,10 +1049,9 @@ namespace LipidCreator
             tabControl.Controls.Add(mediatorlipidsTab);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
-            Font tabFont = new Font(tabControl.Font.FontFamily, this.Font.Size+2);
+            Font tabFont = new Font(tabControl.Font.FontFamily, this.Font.Size + 7);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
-            //tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
             tabControl.ItemSize = new Size(160, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
@@ -2187,7 +2177,7 @@ namespace LipidCreator
             " • Full integration with new small molecule support in Skyline.";
             homeText.BackColor = Color.Transparent;
             homeText.ForeColor = Color.White;
-            homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size+1);
+            homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
             homeText2.Width = 560;
             homeText2.Height = 40;
@@ -2195,7 +2185,7 @@ namespace LipidCreator
             homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
             homeText2.BackColor = Color.Transparent;
             homeText2.ForeColor = Color.White;
-            homeText2.Font = new Font(homeTab.Font.FontFamily, this.Font.Size+1);
+            homeText2.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
             
             homeText3.Width = 560;

@@ -28,12 +28,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
     public class PLLipid : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewMediatorFragment));
         public FattyAcidGroup fag1;
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;
@@ -116,8 +118,8 @@ namespace LipidCreator
                             fag4.import(child, importVersion);
                         }
                         else
-                        {   
-                            Console.WriteLine("Error, fatty acid");
+                        {
+                            log.Error("A phospholipid can have at most 4 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception("Error, fatty acid");
                         }
                         ++fattyAcidCounter;

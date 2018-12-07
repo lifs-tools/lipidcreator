@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
-
+using log4net;
 
 
 namespace LipidCreator
@@ -39,6 +39,7 @@ namespace LipidCreator
     public partial class NewMediatorFragment : Form
     {
     
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewMediatorFragment));
         public MediatorMS2Form mediatorMS2Form = null;
         public string headgroup = "";
         public string fragmentName = "";
@@ -152,7 +153,7 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    log.Error("Caught exception while parsing string values as fragment masses.", e);
                     allowToAdd = false;
                 }
             }
@@ -188,7 +189,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
-                    Console.WriteLine(ee.ToString());
+                    log.Error("Conversion error while updating cell value to int32: " + val, ee);
                     n = 0;
                 }
                 n = Math.Max(n, 0);

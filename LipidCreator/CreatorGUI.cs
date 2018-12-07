@@ -31,8 +31,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using log4net;
 
 namespace LipidCreator
 {
@@ -40,6 +42,7 @@ namespace LipidCreator
     [Serializable]
     public partial class CreatorGUI : Form
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(CreatorGUI));
         public bool changingTabForced;
         public ArrayList lipidTabList;
         public int currentTabIndex = 1;
@@ -232,7 +235,7 @@ namespace LipidCreator
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                log.Warn("Could not write to data/analytics.txt:", ex);
             }
         }
         
@@ -3458,7 +3461,7 @@ namespace LipidCreator
             catch (Exception ex)
             {
                 MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
-                Console.WriteLine(ex.StackTrace);
+                log.Error("Could not read file " + filePath + ":", ex);
             }
         }
         
@@ -3523,7 +3526,7 @@ namespace LipidCreator
                 catch (Exception ex)
                 {
                     MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
-                    Console.WriteLine(ex.StackTrace);
+                    log.Error("Could not read file " + openFileDialog1.FileName + ":", ex);
                 }
             }
         }
@@ -3555,7 +3558,7 @@ namespace LipidCreator
                 catch (Exception ex)
                 {
                     MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
-                    Console.WriteLine(ex.StackTrace);
+                    log.Error("Could not read file " + openFileDialog1.FileName + ":", ex);
                 }
             }
         }
@@ -3655,25 +3658,26 @@ namespace LipidCreator
         public static void printHelp(string option = "")
         {
             LipidCreator lc = new LipidCreator(null);
+            StringBuilder b;
             switch (option)
             {
                 case "transitionlist":
-                    Console.WriteLine("Creating a transition list from a lipid list");
-                    Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe transitionlist input_csv output_csv [opts [opts ...]]");
-                    Console.WriteLine("  opts are:");
-                    Console.WriteLine("    -p 0:\t\tCompute no precursor transitions");
-                    Console.WriteLine("    -p 1:\t\tCompute only precursor transitions");
-                    Console.WriteLine("    -p 2:\t\tCompute with precursor transitions");
-                    Console.WriteLine("    -h 0:\t\tCompute no heavy labeled isotopes");
-                    Console.WriteLine("    -h 1:\t\tCompute only heavy labeled isotopes");
-                    Console.WriteLine("    -h 2:\t\tCompute with heavy labeled isotopes");
-                    Console.WriteLine("    -s:\t\t\tSplit in positive and negative list");
-                    Console.WriteLine("    -x:\t\t\tDeveloper or Xpert mode");
-                    Console.WriteLine("    -l:\t\t\tCreate LipidCreator project file instead of transition list");
-                    Console.WriteLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)");
-                    Console.WriteLine("    -c instrument mode:\tCompute with optimal collision energy (not available for all lipid classes)");
-                    Console.WriteLine("      available instruments and modes:");
+                    b = new StringBuilder("Creating a transition list from a lipid list");
+                    b.AppendLine().
+                    AppendLine("usage: LipidCreator.exe transitionlist input_csv output_csv [opts [opts ...]]").
+                     AppendLine("  opts are:").
+                     AppendLine("    -p 0:\t\tCompute no precursor transitions").
+                     AppendLine("    -p 1:\t\tCompute only precursor transitions").
+                     AppendLine("    -p 2:\t\tCompute with precursor transitions").
+                     AppendLine("    -h 0:\t\tCompute no heavy labeled isotopes").
+                     AppendLine("    -h 1:\t\tCompute only heavy labeled isotopes").
+                     AppendLine("    -h 2:\t\tCompute with heavy labeled isotopes").
+                     AppendLine("    -s:\t\t\tSplit in positive and negative list").
+                     AppendLine("    -x:\t\t\tDeveloper or Xpert mode").
+                     AppendLine("    -l:\t\t\tCreate LipidCreator project file instead of transition list").
+                     AppendLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)").
+                     AppendLine("    -c instrument mode:\tCompute with optimal collision energy (not available for all lipid classes)").
+                     AppendLine("      available instruments and modes:");
                     foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
                         if (kvp.Value.minCE > 0 && kvp.Value.maxCE > 0 && kvp.Value.minCE < kvp.Value.maxCE) 
@@ -3686,68 +3690,66 @@ namespace LipidCreator
                                 modes += mode;
                             }
                             modes += ")";
-                            Console.WriteLine("        '" + kvp.Key + "': " + fullInstrumentName + " " + modes);
+                            b.AppendLine("        '" + kvp.Key + "': " + fullInstrumentName + " " + modes);
                         }
                     }
+                    Console.Write(b.ToString());
                     break;
                     
                     
                 case "library":
-                    Console.WriteLine("Creating a spectral library in *.blib format from a lipid list");
-                    Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe library input_csv output_blib instrument");
-                    Console.WriteLine("  available instruments:");
+                    b = new StringBuilder("Creating a spectral library in *.blib format from a lipid list").
+                    AppendLine().
+                    AppendLine("usage: LipidCreator.exe library input_csv output_blib instrument").
+                    AppendLine("  available instruments:");
                     foreach (KeyValuePair<string, InstrumentData> kvp in lc.msInstruments)
                     {
                         if (kvp.Value.minCE > 0) 
                         {
                             string fullInstrumentName = kvp.Value.model;
-                            Console.WriteLine("    '" + kvp.Key + "': " + fullInstrumentName);
+                            b.AppendLine("    '" + kvp.Key + "': " + fullInstrumentName);
                         }
                     }
+                    Console.Write(b.ToString());
                     break;
                     
                     
                     
                 case "translate":
-                    Console.WriteLine("Translating a list with old lipid names into current nomenclature");
-                    Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe translate input_csv output_csv");
+                    b = new StringBuilder("Translating a list with old lipid names into current nomenclature").
+                    AppendLine().
+                    AppendLine("usage: LipidCreator.exe translate input_csv output_csv");
+                    Console.WriteLine(b.ToString());
                     break;
                     
                     
                     
                 case "random":
-                    Console.WriteLine("Generating a random lipid name (not necessarily reasonable in terms of chemistry)");
-                    Console.WriteLine();
-                    Console.WriteLine("usage: LipidCreator.exe random [number]");
+                    b = new StringBuilder("Generating a random lipid name (not necessarily reasonable in terms of chemistry)").
+                    AppendLine().
+                    AppendLine("usage: LipidCreator.exe random [number]");
+                    Console.Write(b.ToString());
                     break;
                     
                     
                 case "agentmode":
-                    Console.WriteLine("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
+                    b = new StringBuilder("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
+                    Console.Write(b.ToString());
                     break;
                     
                     
                 default:
-                    Console.WriteLine("usage: LipidCreator.exe (option)");
-                    Console.WriteLine();
-                    Console.WriteLine("options are:");
-                    Console.WriteLine("  dev:\t\t\t\tlaunching LipidCreator as developer");
-                    Console.WriteLine("  transitionlist:\t\tcreating transition list from lipid list");
-                    Console.WriteLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature");
-                    Console.WriteLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list");
-                    Console.WriteLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)");
-                    Console.WriteLine("  agentmode:\t\t\tsecret agent mode");
-                    Console.WriteLine("  help:\t\t\t\tprint this help");
-if (Environment.OSVersion.Platform == PlatformID.Win32Windows ||  Environment.OSVersion.Platform == PlatformID.Win32NT)
-{
-    Console.WriteLine("Windows");
-}
-else 
-{
-    Console.WriteLine("Linux");
-}
+                    b = new StringBuilder("usage: LipidCreator.exe (option)").
+                    AppendLine().
+                    AppendLine("options are:").
+                    AppendLine("  dev:\t\t\t\tlaunching LipidCreator as developer").
+                    AppendLine("  transitionlist:\t\tcreating transition list from lipid list").
+                    AppendLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature").
+                    AppendLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list").
+                    AppendLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)").
+                    AppendLine("  agentmode:\t\t\tsecret agent mode").
+                    AppendLine("  help:\t\t\t\tprint this help");
+                    Console.Write(b.ToString());
                     break;
             }
             
@@ -3772,8 +3774,7 @@ else
                 }
             }
             catch(Exception e) {
-                Console.WriteLine("Warning: Analytics file could not be opened for writing. LipidCreator will continue without analytics enabled!");
-                Console.WriteLine(e.Message);
+                log.Warn("Warning: Analytics file could not be opened for writing at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
             
             try {
@@ -3808,8 +3809,7 @@ else
             }
             catch(Exception e)
             {
-                Console.WriteLine("Warning: Analytics file could not be opened. LipidCreator will continue without analytics enabled!");
-                Console.WriteLine(e.Message);
+                log.Warn("Warning: Analytics file could not be opened at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
         }
         

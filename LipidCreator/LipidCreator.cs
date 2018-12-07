@@ -58,6 +58,7 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
+        public static string LC_OS = "unknown OS";
         public ArrayList registeredLipids;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
@@ -431,8 +432,7 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: analytics file " + analyticsFile + " does not exist or can not be opened. ");
-                Console.WriteLine(e.Message);
+                log.Warn("Warning: Analytics file could not be opened at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
         }
         
@@ -445,7 +445,8 @@ namespace LipidCreator
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
-            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient==null?"standalone":"skyline tool") + " mode.");
+            LC_OS = Environment.OSVersion.Platform.ToString();
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient==null?"standalone":"skyline tool") + " mode on "+LC_OS);
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
@@ -469,7 +470,7 @@ namespace LipidCreator
             {
                 if (!headgroups.ContainsKey(lipidClass))
                 {
-                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
+                    log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
                 }
             }
             
@@ -477,7 +478,7 @@ namespace LipidCreator
             {
                 if (!allFragments.ContainsKey(lipidClass))
                 {
-                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
+                    log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
                 }
             }
             
@@ -803,8 +804,7 @@ namespace LipidCreator
                 
                 catch (Exception ee)
                 {
-                    Console.WriteLine("Error: Reading lipids from file " + lipidListFile + " failed on line " + total);
-                    Console.WriteLine(ee.ToString());
+                    log.Error("Reading lipids from file " + lipidListFile + " failed on line " + total, ee);
                 }
                 return new int[]{valid, total};
             }
@@ -1016,8 +1016,8 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
-                Console.WriteLine(e.ToString());
+                MessageBox.Show("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
+                log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.", e);
             }
         }
         
@@ -1249,8 +1249,7 @@ namespace LipidCreator
             } 
             catch (WebException ex) 
             {
-                Console.WriteLine("Warning: Failed to contact analytics endpoint!");
-                Console.WriteLine(ex.Message);
+                log.Warn("Failed to contact analytics endpoint!", ex);
             }
         }
         
@@ -1379,8 +1378,8 @@ namespace LipidCreator
                         break;
                         
                     default:
-                        Console.WriteLine("Error global import");
-                        throw new Exception("Error global import");
+                        log.Error("Encountered unknown lipid type '"+lipidType+"' during global import!");
+                        throw new Exception("Encountered unknown lipid type '" + lipidType + "' during global import!");
                 }
             }
             OnUpdate(new EventArgs());

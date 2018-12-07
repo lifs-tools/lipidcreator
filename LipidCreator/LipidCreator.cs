@@ -41,6 +41,9 @@ using System.Net;
 using System.Threading;
 using System.Security.Cryptography;
 
+using log4net;
+using log4net.Config;
+
 namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
@@ -50,8 +53,9 @@ namespace LipidCreator
 
     [Serializable]
     public class LipidCreator
-    {   
-    
+    {
+        [NonSerialized]
+        private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
         public ArrayList registeredLipids;
@@ -439,7 +443,9 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
+            XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient==null?"standalone":"skyline tool") + " mode.");
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();

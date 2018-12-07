@@ -3798,7 +3798,8 @@ namespace LipidCreator
                     }
                 }
             }
-            catch(Exception e) {
+            catch(Exception e)
+            {
                 Console.WriteLine("Warning: Analytics file could not be opened. LipidCreator will continue without analytics enabled!");
                 Console.WriteLine(e.Message);
             }
@@ -3998,7 +3999,18 @@ namespace LipidCreator
                                 
                                 if (mode != "" && mode != "PRM" && mode != "SRM") printHelp("transitionlist");
                                 
-                                lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                
+                                XDocument doc;
+                                try 
+                                {
+                                    doc = XDocument.Load(inputCSV);
+                                    lc.import(doc);
+                                }
+                                catch (Exception ex)
+                                {
+                                    lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                }
+                                
                                 
                                 MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
                                 if (mode == "PRM") monitoringType = MonitoringTypes.PRM;

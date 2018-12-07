@@ -1264,6 +1264,7 @@ namespace LipidCreator
         
         
         
+        
         public void import(XDocument doc, bool onlySettings = false)
         {
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;

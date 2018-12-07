@@ -17,7 +17,7 @@ complete:
 	$(MAKE) zip
 
 zip:
-	zip -r LipidCreator.zip bin/make/LipidCreator.exe bin/make/data bin/make/images bin/make/SkylineTool.dll bin/make/Ionic.Zip.dll bin/make/System.Data.SQLite.dll bin/make/tool-inf
+	cd bin/make && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
 	
 setup: 
 	if [ ! -d "bin/make" ];then \

@@ -1551,15 +1551,6 @@ namespace LipidCreator
         
         
         
-        /*
-        public void sugarHeady(Object sender, EventArgs e)
-        {
-            MessageBox.Show("Who is your sugar heady?");
-        }
-        */
-        
-        
-        
         private void timerEasterEggTick(object sender, System.Timers.ElapsedEventArgs e)
         {
             long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;

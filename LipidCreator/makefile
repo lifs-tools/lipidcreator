@@ -19,11 +19,13 @@ complete:
 zip:
 	zip -r LipidCreator.zip bin/make/LipidCreator.exe bin/make/data bin/make/images bin/make/SkylineTool.dll bin/make/Ionic.Zip.dll bin/make/System.Data.SQLite.dll bin/make/tool-inf
 	
-setup:
-	mkdir -p bin
-	mkdir -p bin/make
-	cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf bin/make
-	echo -1 > bin/make/data/analytics.txt
+setup: 
+	if [ ! -d "bin/make" ];then \
+		mkdir -p bin; \
+		mkdir -p bin/make; \
+		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf bin/make; \
+		echo -1 > bin/make/data/analytics.txt; \
+	fi
 	
 	
 predefined:

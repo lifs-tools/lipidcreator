@@ -29,13 +29,13 @@ setup:
 	
 	
 predefined:
-	mono LipidCreator.exe transitionlist bin/make/data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
-	mono LipidCreator.exe transitionlist bin/make/data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
+	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
-	rm LipidCreator.exe && rm -r obj/
+	rm -r bin && rm -r obj/
 
 run:
 	mono bin/make/LipidCreator.exe &

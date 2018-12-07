@@ -24,11 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -186,7 +183,7 @@ namespace LipidCreator
             // 
             // FilterDialog
             // 
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DialogFont;
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(285, 266);
@@ -201,6 +198,7 @@ namespace LipidCreator
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+			this.PerformLayout();
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

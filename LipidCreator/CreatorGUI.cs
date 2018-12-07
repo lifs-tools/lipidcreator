@@ -27,16 +27,12 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Diagnostics;
-using System.Threading;
 
 namespace LipidCreator
 {
@@ -236,7 +232,7 @@ namespace LipidCreator
             }
             catch (Exception ex)
             {
-            
+                Console.WriteLine(ex.ToString());
             }
         }
         
@@ -322,7 +318,7 @@ namespace LipidCreator
                 foreach (DataGridViewColumn col in lipidsGridview.Columns)
                 {
                     col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                    col.Width = w;
+                    col.Width = Math.Max(col.MinimumWidth, w);
                 }
                 lipidsGridview.Columns[0].Width = 80;
                 editColumn.Width = 40;
@@ -3768,7 +3764,8 @@ namespace LipidCreator
                 }
             }
             catch(Exception e) {
-                
+                Console.WriteLine("Warning: Analytics file could not be opened for writing. LipidCreator will continue without analytics enabled!");
+                Console.WriteLine(e.Message);
             }
             
             try {
@@ -3802,7 +3799,8 @@ namespace LipidCreator
                 }
             }
             catch(Exception e) {
-                
+                Console.WriteLine("Warning: Analytics file could not be opened. LipidCreator will continue without analytics enabled!");
+                Console.WriteLine(e.Message);
             }
         }
         

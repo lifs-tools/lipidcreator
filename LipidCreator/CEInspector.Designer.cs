@@ -28,11 +28,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
-using System.Collections;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
-using Microsoft.Win32;
 
 namespace LipidCreator
 {
@@ -502,7 +499,7 @@ namespace LipidCreator
             // 
             // CEInspector
             //
-            this.Font = SystemFonts.IconTitleFont;
+            this.Font = SystemFonts.DialogFont;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);

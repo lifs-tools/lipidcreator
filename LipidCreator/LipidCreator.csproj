@@ -79,6 +79,9 @@
   <PropertyGroup>
     <ManifestCertificateThumbprint>3468CDD17A6C14FC1B62CF1BE0F14AB62B880737</ManifestCertificateThumbprint>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>lipidcreator.ico</ApplicationIcon>
+  </PropertyGroup>
   <!--  <PropertyGroup>
     <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
@@ -286,6 +289,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\lipidcreator.ico" />
+    <Content Include="lipidcreator-logo-no-text.ico" />
+    <Content Include="lipidcreator.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>
@@ -293,7 +301,6 @@
       <VerFile>$(IntermediateOutputPath)gitver</VerFile>
       <BranchFile>$(IntermediateOutputPath)gitbranch</BranchFile>
     </PropertyGroup>
-  
     <!-- write the hash to the temp file.-->
     <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" />
     <Exec Command="git rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" />
@@ -311,7 +318,6 @@
       <BuildBranch>@(GitBranch)</BuildBranch>
     </PropertyGroup>
   </Target>
-
   <Target Name="WriteGitHash" BeforeTargets="CoreCompile">
     <!-- names the obj/.../CustomAssemblyInfo.cs file -->
     <PropertyGroup>
@@ -357,7 +363,7 @@
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined\Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined\Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Delete Files="$(TargetDir)data\lipidcreator.log"/>
+    <Delete Files="$(TargetDir)data\lipidcreator.log" />
     <!-- create zip distribution on Windows -->
     <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create zip distribution on Linux / OSX -->

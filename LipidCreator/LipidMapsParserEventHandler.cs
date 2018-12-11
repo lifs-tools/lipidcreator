@@ -152,8 +152,8 @@ namespace LipidCreator
         
         public void GLPreEvent(Parser.TreeNode node)
         {
-            lipid = new GLLipid(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((GLLipid)lipid);
+            lipid = new Glycerolipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
         }
         
         
@@ -490,10 +490,10 @@ namespace LipidCreator
                 string headgroup = node.getText();
                 if (headgroup != "SQMG"){
                     lipid.headGroupNames.Add(headgroup);
-                    List<string> keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
-                    foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
-                    ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
-                    if (headgroup != "DG") ((GLLipid)lipid).containsSugar = true;
+                    List<string> keys = new List<string>(((Glycerolipid)lipid).fag3.faTypes.Keys);
+                    foreach(string faTypeKey in keys) ((Glycerolipid)lipid).fag3.faTypes[faTypeKey] = false;
+                    ((Glycerolipid)lipid).fag3.faTypes["FAx"] = true;
+                    if (headgroup != "DG") ((Glycerolipid)lipid).containsSugar = true;
                 }
                 else
                 {

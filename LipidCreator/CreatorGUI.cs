@@ -300,7 +300,7 @@ namespace LipidCreator
         public void resetAllLipids()
         {
             lipidTabList = new ArrayList(new Lipid[] {null,
-                                                      new GLLipid(lipidCreator),
+                                                      new Glycerolipid(lipidCreator),
                                                       new Phospholipid(lipidCreator),
                                                       new Sphingolipid(lipidCreator),
                                                       new Cholesterol(lipidCreator),
@@ -454,13 +454,13 @@ namespace LipidCreator
             switch((LipidCategory)index)
             {
                 case LipidCategory.GlyceroLipid:
-                    GLLipid currentGLLipid = (GLLipid)currentLipid;
+                    Glycerolipid currentGlycerolipid = (Glycerolipid)currentLipid;
                     settingListbox = true;
                     for (int i = 0; i < glHgListbox.Items.Count; ++i)
                     {
                         glHgListbox.SetSelected(i, false);
                     }
-                    foreach (string headgroup in currentGLLipid.headGroupNames)
+                    foreach (string headgroup in currentGlycerolipid.headGroupNames)
                     {
                         var i = 0;
                         foreach (var item in glHgListbox.Items)
@@ -476,53 +476,53 @@ namespace LipidCreator
                     settingListbox = false;
                     
                     
-                    glFA1Textbox.Text = currentGLLipid.fag1.lengthInfo;
-                    glDB1Textbox.Text = currentGLLipid.fag1.dbInfo;
-                    glHydroxyl1Textbox.Text = currentGLLipid.fag1.hydroxylInfo;
-                    glFA1Combobox.SelectedIndex = currentGLLipid.fag1.chainType;
-                    glFA1Checkbox1.Checked = currentGLLipid.fag1.faTypes["FA"];
-                    glFA1Checkbox2.Checked = currentGLLipid.fag1.faTypes["FAp"];
-                    glFA1Checkbox3.Checked = currentGLLipid.fag1.faTypes["FAa"];
+                    glFA1Textbox.Text = currentGlycerolipid.fag1.lengthInfo;
+                    glDB1Textbox.Text = currentGlycerolipid.fag1.dbInfo;
+                    glHydroxyl1Textbox.Text = currentGlycerolipid.fag1.hydroxylInfo;
+                    glFA1Combobox.SelectedIndex = currentGlycerolipid.fag1.chainType;
+                    glFA1Checkbox1.Checked = currentGlycerolipid.fag1.faTypes["FA"];
+                    glFA1Checkbox2.Checked = currentGlycerolipid.fag1.faTypes["FAp"];
+                    glFA1Checkbox3.Checked = currentGlycerolipid.fag1.faTypes["FAa"];
                     
-                    glFA2Textbox.Text = currentGLLipid.fag2.lengthInfo;
-                    glDB2Textbox.Text = currentGLLipid.fag2.dbInfo;
-                    glHydroxyl2Textbox.Text = currentGLLipid.fag2.hydroxylInfo;
-                    glFA2Combobox.SelectedIndex = currentGLLipid.fag2.chainType;
-                    glFA2Checkbox1.Checked = currentGLLipid.fag2.faTypes["FA"];
-                    glFA2Checkbox2.Checked = currentGLLipid.fag2.faTypes["FAp"];
-                    glFA2Checkbox3.Checked = currentGLLipid.fag2.faTypes["FAa"];
+                    glFA2Textbox.Text = currentGlycerolipid.fag2.lengthInfo;
+                    glDB2Textbox.Text = currentGlycerolipid.fag2.dbInfo;
+                    glHydroxyl2Textbox.Text = currentGlycerolipid.fag2.hydroxylInfo;
+                    glFA2Combobox.SelectedIndex = currentGlycerolipid.fag2.chainType;
+                    glFA2Checkbox1.Checked = currentGlycerolipid.fag2.faTypes["FA"];
+                    glFA2Checkbox2.Checked = currentGlycerolipid.fag2.faTypes["FAp"];
+                    glFA2Checkbox3.Checked = currentGlycerolipid.fag2.faTypes["FAa"];
                     
-                    glFA3Textbox.Text = currentGLLipid.fag3.lengthInfo;
-                    glDB3Textbox.Text = currentGLLipid.fag3.dbInfo;
-                    glHydroxyl3Textbox.Text = currentGLLipid.fag3.hydroxylInfo;
-                    glFA3Combobox.SelectedIndex = currentGLLipid.fag3.chainType;
-                    glFA3Checkbox1.Checked = currentGLLipid.fag3.faTypes["FA"];
-                    glFA3Checkbox2.Checked = currentGLLipid.fag3.faTypes["FAp"];
-                    glFA3Checkbox3.Checked = currentGLLipid.fag3.faTypes["FAa"];
+                    glFA3Textbox.Text = currentGlycerolipid.fag3.lengthInfo;
+                    glDB3Textbox.Text = currentGlycerolipid.fag3.dbInfo;
+                    glHydroxyl3Textbox.Text = currentGlycerolipid.fag3.hydroxylInfo;
+                    glFA3Combobox.SelectedIndex = currentGlycerolipid.fag3.chainType;
+                    glFA3Checkbox1.Checked = currentGlycerolipid.fag3.faTypes["FA"];
+                    glFA3Checkbox2.Checked = currentGlycerolipid.fag3.faTypes["FAp"];
+                    glFA3Checkbox3.Checked = currentGlycerolipid.fag3.faTypes["FAa"];
                     
-                    glPosAdductCheckbox1.Checked = currentGLLipid.adducts["+H"];
-                    glPosAdductCheckbox2.Checked = currentGLLipid.adducts["+2H"];
-                    glPosAdductCheckbox3.Checked = currentGLLipid.adducts["+NH4"];
-                    glNegAdductCheckbox1.Checked = currentGLLipid.adducts["-H"];
-                    glNegAdductCheckbox2.Checked = currentGLLipid.adducts["-2H"];
-                    glNegAdductCheckbox3.Checked = currentGLLipid.adducts["+HCOO"];
-                    glNegAdductCheckbox4.Checked = currentGLLipid.adducts["+CH3COO"];
+                    glPosAdductCheckbox1.Checked = currentGlycerolipid.adducts["+H"];
+                    glPosAdductCheckbox2.Checked = currentGlycerolipid.adducts["+2H"];
+                    glPosAdductCheckbox3.Checked = currentGlycerolipid.adducts["+NH4"];
+                    glNegAdductCheckbox1.Checked = currentGlycerolipid.adducts["-H"];
+                    glNegAdductCheckbox2.Checked = currentGlycerolipid.adducts["-2H"];
+                    glNegAdductCheckbox3.Checked = currentGlycerolipid.adducts["+HCOO"];
+                    glNegAdductCheckbox4.Checked = currentGlycerolipid.adducts["+CH3COO"];
                     addLipidButton.Text = "Add glycerolipids";
                     
-                    glContainsSugar.Checked = currentGLLipid.containsSugar;
+                    glContainsSugar.Checked = currentGlycerolipid.containsSugar;
                     
                     
-                    updateRanges(currentGLLipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
-                    updateRanges(currentGLLipid.fag1, glDB1Textbox, 3);
-                    updateRanges(currentGLLipid.fag1, glHydroxyl1Textbox, 4);
-                    updateRanges(currentGLLipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
-                    updateRanges(currentGLLipid.fag2, glDB2Textbox, 3);
-                    updateRanges(currentGLLipid.fag2, glHydroxyl2Textbox, 4);
-                    updateRanges(currentGLLipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-                    updateRanges(currentGLLipid.fag3, glDB3Textbox, 3);
-                    updateRanges(currentGLLipid.fag3, glHydroxyl3Textbox, 4);
+                    updateRanges(currentGlycerolipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
+                    updateRanges(currentGlycerolipid.fag1, glDB1Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag1, glHydroxyl1Textbox, 4);
+                    updateRanges(currentGlycerolipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
+                    updateRanges(currentGlycerolipid.fag2, glDB2Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag2, glHydroxyl2Textbox, 4);
+                    updateRanges(currentGlycerolipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
+                    updateRanges(currentGlycerolipid.fag3, glDB3Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag3, glHydroxyl3Textbox, 4);
                     
-                    glRepresentativeFA.Checked = currentGLLipid.representativeFA;
+                    glRepresentativeFA.Checked = currentGlycerolipid.representativeFA;
                     glPictureBox.SendToBack();
                     break;
                     
@@ -863,7 +863,7 @@ namespace LipidCreator
             switch (index)
             {
                 case (int)LipidCategory.GlyceroLipid:
-                    newLipid = new GLLipid(lipidCreator);
+                    newLipid = new Glycerolipid(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.PhosphoLipid:
@@ -1254,9 +1254,9 @@ namespace LipidCreator
         
         public void glFA1ComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((GLLipid)currentLipid).fag1, glFA1Textbox, ((ComboBox)sender).SelectedIndex);
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Glycerolipid)currentLipid).fag1, glFA1Textbox, ((ComboBox)sender).SelectedIndex);
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
                 glFA2Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
                 glFA3Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
@@ -1269,8 +1269,8 @@ namespace LipidCreator
         
         public void glFA2ComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((GLLipid)currentLipid).fag2, glFA2Textbox, ((ComboBox)sender).SelectedIndex);
+            ((Glycerolipid)currentLipid).fag2.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Glycerolipid)currentLipid).fag2, glFA2Textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         
@@ -1279,8 +1279,8 @@ namespace LipidCreator
         
         public void glFA3ComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((GLLipid)currentLipid).fag3, glFA3Textbox, ((ComboBox)sender).SelectedIndex);
+            ((Glycerolipid)currentLipid).fag3.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Glycerolipid)currentLipid).fag3, glFA3Textbox, ((ComboBox)sender).SelectedIndex);
         }
         
         
@@ -1289,9 +1289,9 @@ namespace LipidCreator
         
         public void glFA1TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag1, (TextBox)sender, glFA1Combobox.SelectedIndex);
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, glFA1Combobox.SelectedIndex);
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
                 glFA2Textbox.Text = ((TextBox)sender).Text;
                 glFA3Textbox.Text = ((TextBox)sender).Text;
@@ -1299,8 +1299,8 @@ namespace LipidCreator
         }
         public void glFA2TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag2, (TextBox)sender, glFA2Combobox.SelectedIndex);
+            ((Glycerolipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag2, (TextBox)sender, glFA2Combobox.SelectedIndex);
         }
         
         
@@ -1309,8 +1309,8 @@ namespace LipidCreator
         
         public void glFA3TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag3, (TextBox)sender, glFA3Combobox.SelectedIndex);
+            ((Glycerolipid)currentLipid).fag3.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag3, (TextBox)sender, glFA3Combobox.SelectedIndex);
         }
         
         
@@ -1318,9 +1318,9 @@ namespace LipidCreator
         
         public void glDB1TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag1, (TextBox)sender, 3);
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, 3);
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
                 glDB2Textbox.Text = ((TextBox)sender).Text;
                 glDB3Textbox.Text = ((TextBox)sender).Text;
@@ -1332,8 +1332,8 @@ namespace LipidCreator
         
         public void glDB2TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag2, (TextBox)sender, 3);
+            ((Glycerolipid)currentLipid).fag2.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag2, (TextBox)sender, 3);
         }
         
         
@@ -1341,8 +1341,8 @@ namespace LipidCreator
         
         public void glDB3TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag3, (TextBox)sender, 3);
+            ((Glycerolipid)currentLipid).fag3.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag3, (TextBox)sender, 3);
         }
         
         
@@ -1351,7 +1351,7 @@ namespace LipidCreator
         
         public void glPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1360,7 +1360,7 @@ namespace LipidCreator
         
         public void glPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1368,7 +1368,7 @@ namespace LipidCreator
         
         public void glPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1376,7 +1376,7 @@ namespace LipidCreator
         
         public void glNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1384,7 +1384,7 @@ namespace LipidCreator
         
         public void glNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1392,7 +1392,7 @@ namespace LipidCreator
         
         public void glNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1400,7 +1400,7 @@ namespace LipidCreator
         
         public void glNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
         }
         
         
@@ -1408,12 +1408,12 @@ namespace LipidCreator
         
         public void glFA1Checkbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked =  ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked =  ((CheckBox)sender).Checked;
             }
         }
         
@@ -1422,12 +1422,12 @@ namespace LipidCreator
         
         public void glFA1Checkbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = ((CheckBox)sender).Checked;
             }
         }
         
@@ -1437,12 +1437,12 @@ namespace LipidCreator
         
         public void glFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag1.faTypes["FAx"] = !((GLLipid)currentLipid).fag1.anyFAChecked();
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = ((CheckBox)sender).Checked;
             }
         }
         
@@ -1451,8 +1451,8 @@ namespace LipidCreator
         
         public void glFA2Checkbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag2.faTypes["FAx"] = !((GLLipid)currentLipid).fag2.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
         }
         
         
@@ -1461,8 +1461,8 @@ namespace LipidCreator
         
         public void glFA2Checkbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag2.faTypes["FAx"] = !((GLLipid)currentLipid).fag2.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
         }
         
         
@@ -1470,8 +1470,8 @@ namespace LipidCreator
         
         public void glFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag2.faTypes["FAx"] = !((GLLipid)currentLipid).fag2.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
         }
         
         
@@ -1480,8 +1480,8 @@ namespace LipidCreator
         
         public void glFA3Checkbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag3.faTypes["FAx"] = !((GLLipid)currentLipid).fag3.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
         }
         
         
@@ -1489,8 +1489,8 @@ namespace LipidCreator
         
         public void glFA3Checkbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag3.faTypes["FAx"] = !((GLLipid)currentLipid).fag3.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
         }
         
         
@@ -1498,8 +1498,8 @@ namespace LipidCreator
         
         public void glFA3Checkbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((GLLipid)currentLipid).fag3.faTypes["FAx"] = !((GLLipid)currentLipid).fag3.anyFAChecked();
+            ((Glycerolipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
         }
         
         
@@ -1507,9 +1507,9 @@ namespace LipidCreator
         
         public void glHydroxyl1TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag1, (TextBox)sender, 4);
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, 4);
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
                 glHydroxyl2Textbox.Text = ((TextBox)sender).Text;
                 glHydroxyl3Textbox.Text = ((TextBox)sender).Text;
@@ -1521,8 +1521,8 @@ namespace LipidCreator
         
         public void glHydroxyl2TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag2, (TextBox)sender, 4);
+            ((Glycerolipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag2, (TextBox)sender, 4);
         }
         
         
@@ -1530,8 +1530,8 @@ namespace LipidCreator
         
         public void glHydroxyl3TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).fag3.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(((GLLipid)currentLipid).fag3, (TextBox)sender, 4);
+            ((Glycerolipid)currentLipid).fag3.hydroxylInfo = ((TextBox)sender).Text;
+            updateRanges(((Glycerolipid)currentLipid).fag3, (TextBox)sender, 4);
         }
         
         
@@ -1688,10 +1688,10 @@ namespace LipidCreator
         
         public void glContainsSugarCheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).containsSugar = ((CheckBox)sender).Checked;
+            ((Glycerolipid)currentLipid).containsSugar = ((CheckBox)sender).Checked;
             
             glPictureBox.Visible = false;
-            if (((GLLipid)currentLipid).containsSugar)
+            if (((Glycerolipid)currentLipid).containsSugar)
             {
                 glFA3Textbox.Visible = false;
                 glDB3Textbox.Visible = false;
@@ -1765,8 +1765,8 @@ namespace LipidCreator
         
         public void glRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
-            ((GLLipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
-            if (((GLLipid)currentLipid).representativeFA)
+            ((Glycerolipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
+            if (((Glycerolipid)currentLipid).representativeFA)
             {
                 glFA2Textbox.Enabled = false;
                 glDB2Textbox.Enabled = false;
@@ -1791,12 +1791,12 @@ namespace LipidCreator
                 glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
                 glFA2Combobox.Text = glFA1Combobox.Text;
                 glFA3Combobox.Text = glFA1Combobox.Text;
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
-                if (((GLLipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
-                if (((GLLipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
                 
                 
             }
@@ -1817,12 +1817,12 @@ namespace LipidCreator
                 glFA3Checkbox2.Enabled = true;
                 glFA3Checkbox3.Enabled = true;
             }
-            updateRanges(((GLLipid)currentLipid).fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
-            updateRanges(((GLLipid)currentLipid).fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-            updateRanges(((GLLipid)currentLipid).fag2, glDB2Textbox, 3);
-            updateRanges(((GLLipid)currentLipid).fag3, glDB3Textbox, 3);
-            updateRanges(((GLLipid)currentLipid).fag2, glHydroxyl2Textbox, 4);
-            updateRanges(((GLLipid)currentLipid).fag3, glHydroxyl3Textbox, 4);
+            updateRanges(((Glycerolipid)currentLipid).fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
+            updateRanges(((Glycerolipid)currentLipid).fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
+            updateRanges(((Glycerolipid)currentLipid).fag2, glDB2Textbox, 3);
+            updateRanges(((Glycerolipid)currentLipid).fag3, glDB3Textbox, 3);
+            updateRanges(((Glycerolipid)currentLipid).fag2, glHydroxyl2Textbox, 4);
+            updateRanges(((Glycerolipid)currentLipid).fag3, glHydroxyl3Textbox, 4);
         }
         
         
@@ -2707,14 +2707,14 @@ namespace LipidCreator
                 return  LipidCategory.NoLipid;
             }
             
-            if (currentLipid is GLLipid)
+            if (currentLipid is Glycerolipid)
             {
-                if (((GLLipid)currentLipid).fag1.faTypes["FAx"])
+                if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"])
                 {
                     MessageBox.Show("Please always select the top fatty acid!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
-                else if (((GLLipid)currentLipid).fag2.faTypes["FAx"] && !((GLLipid)currentLipid).fag3.faTypes["FAx"])
+                else if (((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && !((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                 {
                     MessageBox.Show("Please select the middle fatty acid for DG!", "Not registrable");
                     return  LipidCategory.NoLipid;
@@ -2750,14 +2750,14 @@ namespace LipidCreator
                     MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
-                if (((GLLipid)currentLipid).containsSugar)
+                if (((Glycerolipid)currentLipid).containsSugar)
                 {
                     if (currentLipid.headGroupNames.Count == 0)
                     {
                         MessageBox.Show("No head group selected!", "Not registrable");
                         return  LipidCategory.NoLipid;                    
                     }
-                    if (((GLLipid)currentLipid).fag1.faTypes["FAx"] || ((GLLipid)currentLipid).fag2.faTypes["FAx"])
+                    if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"] || ((Glycerolipid)currentLipid).fag2.faTypes["FAx"])
                     {
                         MessageBox.Show("Both fatty acids must be selected!", "Not registrable");
                         return  LipidCategory.NoLipid;
@@ -2765,7 +2765,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    if (((GLLipid)currentLipid).fag1.faTypes["FAx"] && ((GLLipid)currentLipid).fag2.faTypes["FAx"] && ((GLLipid)currentLipid).fag3.faTypes["FAx"])
+                    if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"] && ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && ((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                     {
                         MessageBox.Show("No fatty acid selected!", "Not registrable");
                         return  LipidCategory.NoLipid;
@@ -2982,7 +2982,7 @@ namespace LipidCreator
             switch (result)
             {
                 case LipidCategory.GlyceroLipid:
-                    lipidCreator.registeredLipids[rowIndex] = new GLLipid((GLLipid)currentLipid);
+                    lipidCreator.registeredLipids[rowIndex] = new Glycerolipid((Glycerolipid)currentLipid);
                     break;
                 case LipidCategory.PhosphoLipid:
                     lipidCreator.registeredLipids[rowIndex] = new Phospholipid((Phospholipid)currentLipid);
@@ -3021,7 +3021,7 @@ namespace LipidCreator
             switch (result)
             {
                 case LipidCategory.GlyceroLipid:
-                    lipidCreator.registeredLipids.Add(new GLLipid((GLLipid)currentLipid));
+                    lipidCreator.registeredLipids.Add(new Glycerolipid((Glycerolipid)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     tabIndex = (int)LipidCategory.GlyceroLipid;
                     break;
@@ -3092,19 +3092,19 @@ namespace LipidCreator
         public DataRow createLipidsGridviewRow(Lipid currentRegisteredLipid)
         {
             DataRow row = registeredLipidsDatatable.NewRow();
-            if (currentRegisteredLipid is GLLipid)
+            if (currentRegisteredLipid is Glycerolipid)
             {
-                GLLipid currentGLLipid = (GLLipid)currentRegisteredLipid;
+                Glycerolipid currentGlycerolipid = (Glycerolipid)currentRegisteredLipid;
                 row["Category"] = "Glycerolipid";
-                row["Building Block 1"] = FARepresentation(currentGLLipid.fag1) + currentGLLipid.fag1.lengthInfo + "; DB: " + currentGLLipid.fag1.dbInfo + "; OH: " + currentGLLipid.fag1.hydroxylInfo;
-                if (!currentGLLipid.fag2.faTypes["FAx"]) row["Building Block 2"] = FARepresentation(currentGLLipid.fag2) + currentGLLipid.fag2.lengthInfo + "; DB: " + currentGLLipid.fag2.dbInfo + "; OH: " + currentGLLipid.fag2.hydroxylInfo;
-                if (currentGLLipid.containsSugar)
+                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + "; OH: " + currentGlycerolipid.fag1.hydroxylInfo;
+                if (!currentGlycerolipid.fag2.faTypes["FAx"]) row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                if (currentGlycerolipid.containsSugar)
                 {
-                    row["Building Block 3"] = "HG: " + String.Join(", ", currentGLLipid.headGroupNames);
+                    row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
                 }
                 else
                 {
-                    if (!currentGLLipid.fag3.faTypes["FAx"]) row["Building Block 3"] = FARepresentation(currentGLLipid.fag3) + currentGLLipid.fag3.lengthInfo + "; DB: " + currentGLLipid.fag3.dbInfo + "; OH: " + currentGLLipid.fag3.hydroxylInfo;
+                    if (!currentGlycerolipid.fag3.faTypes["FAx"]) row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
                 }
             }
             else if (currentRegisteredLipid is Phospholipid)
@@ -3202,10 +3202,10 @@ namespace LipidCreator
                 Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
                 int tabIndex = 0;
                 for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
-                if (currentRegisteredLipid is GLLipid)
+                if (currentRegisteredLipid is Glycerolipid)
                 {
                     tabIndex = (int)LipidCategory.GlyceroLipid;
-                    lipidTabList[tabIndex] = new GLLipid((GLLipid)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new Glycerolipid((Glycerolipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Phospholipid)
                 {
@@ -3254,7 +3254,7 @@ namespace LipidCreator
         {
             Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
             int tabIndex = 0;
-            if (currentRegisteredLipid is GLLipid) tabIndex = (int)LipidCategory.GlyceroLipid;
+            if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.GlyceroLipid;
             else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.PhosphoLipid;
             else if (currentRegisteredLipid is Sphingolipid) tabIndex = (int)LipidCategory.SphingoLipid;
             else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Cholesterol;

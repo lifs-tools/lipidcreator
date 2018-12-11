@@ -53,8 +53,8 @@ namespace LipidCreator
             Lipid currentLipidTmp = creatorGUI.currentLipid;
             
             
-            if (currentLipidTmp is GLLipid){
-                this.currentLipid = new GLLipid((GLLipid)currentLipidTmp);
+            if (currentLipidTmp is Glycerolipid){
+                this.currentLipid = new Glycerolipid((Glycerolipid)currentLipidTmp);
             }
             else if (currentLipidTmp is Phospholipid)
             {
@@ -453,9 +453,9 @@ namespace LipidCreator
         
         private void okClick(object sender, EventArgs e)
         {
-            if (currentLipid is GLLipid)
+            if (currentLipid is Glycerolipid)
             {
-                creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid] = new GLLipid((GLLipid)currentLipid);
+                creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid] = new Glycerolipid((Glycerolipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid];
             }
             else if (currentLipid is Phospholipid)

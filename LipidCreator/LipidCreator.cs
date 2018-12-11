@@ -1356,7 +1356,7 @@ namespace LipidCreator
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(this);
+                        Phospholipid pll = new Phospholipid(this);
                         pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;

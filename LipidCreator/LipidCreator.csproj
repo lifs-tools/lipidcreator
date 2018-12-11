@@ -195,7 +195,7 @@
     <Compile Include="NewFragment.Designer.cs">
       <DependentUpon>NewFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="PLLipid.cs" />
+    <Compile Include="Phospholipid.cs" />
     <Compile Include="LipidCreator.cs" />
     <Compile Include="Precursor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

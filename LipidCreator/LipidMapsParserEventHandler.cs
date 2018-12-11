@@ -160,8 +160,8 @@ namespace LipidCreator
         
         public void PLPreEvent(Parser.TreeNode node)
         {
-            lipid = new PLLipid(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((PLLipid)lipid);
+            lipid = new Phospholipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
         }
         
         
@@ -173,19 +173,19 @@ namespace LipidCreator
                 if (lipid.headGroupNames.Count != 0)
                 {
                     int FAset = 0;
-                    if (!((PLLipid)lipid).fag1.faTypes["FAx"]) FAset += 1;
-                    if (!((PLLipid)lipid).fag2.faTypes["FAx"]) FAset += 1;
-                    if (!((PLLipid)lipid).fag3.faTypes["FAx"]) FAset += 1;
-                    if (!((PLLipid)lipid).fag4.faTypes["FAx"]) FAset += 1;
+                    if (!((Phospholipid)lipid).fag1.faTypes["FAx"]) FAset += 1;
+                    if (!((Phospholipid)lipid).fag2.faTypes["FAx"]) FAset += 1;
+                    if (!((Phospholipid)lipid).fag3.faTypes["FAx"]) FAset += 1;
+                    if (!((Phospholipid)lipid).fag4.faTypes["FAx"]) FAset += 1;
                 
-                    if (((PLLipid)lipid).fag1.faTypes["FAx"])
+                    if (((Phospholipid)lipid).fag1.faTypes["FAx"])
                     {
-                        FattyAcidGroup fag = ((PLLipid)lipid).fag1;
-                        ((PLLipid)lipid).fag1 = ((PLLipid)lipid).fag2;
-                        ((PLLipid)lipid).fag2 = fag;
+                        FattyAcidGroup fag = ((Phospholipid)lipid).fag1;
+                        ((Phospholipid)lipid).fag1 = ((Phospholipid)lipid).fag2;
+                        ((Phospholipid)lipid).fag2 = fag;
                     }
                     
-                    if (((PLLipid)lipid).isCL)
+                    if (((Phospholipid)lipid).isCL)
                     {
                         if (FAset < 3)
                         {
@@ -194,7 +194,7 @@ namespace LipidCreator
                         }
                         
                     }
-                    else if (((PLLipid)lipid).isLyso)
+                    else if (((Phospholipid)lipid).isLyso)
                     {
                         if (FAset < 1)
                         {
@@ -213,15 +213,15 @@ namespace LipidCreator
                     }
                 
                     string hg = lipid.headGroupNames[0];
-                    if (((PLLipid)lipid).fag2.faTypes["FAx"] && (new HashSet<string>{"PA", "PC", "PE", "PI", "PS"}).Contains(hg))
+                    if (((Phospholipid)lipid).fag2.faTypes["FAx"] && (new HashSet<string>{"PA", "PC", "PE", "PI", "PS"}).Contains(hg))
                     {
                         lipid.headGroupNames[0] = "L" + lipid.headGroupNames[0];
                     }
                     
                     if ((new HashSet<string>{"LPC", "PC", "LPE", "PE"}).Contains(hg))
                     {
-                        if (((PLLipid)lipid).fag1.faTypes["FAa"] || ((PLLipid)lipid).fag2.faTypes["FAa"]) lipid.headGroupNames[0] += " O-a";
-                        else if (((PLLipid)lipid).fag1.faTypes["FAp"] || ((PLLipid)lipid).fag2.faTypes["FAp"]) lipid.headGroupNames[0] += " O-p";
+                        if (((Phospholipid)lipid).fag1.faTypes["FAa"] || ((Phospholipid)lipid).fag2.faTypes["FAa"]) lipid.headGroupNames[0] += " O-a";
+                        else if (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag2.faTypes["FAp"]) lipid.headGroupNames[0] += " O-p";
                     }
                  }
                 else
@@ -603,7 +603,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isCL = true;
+                ((Phospholipid)lipid).isCL = true;
             }
         }
         
@@ -646,7 +646,7 @@ namespace LipidCreator
                     if ("LysoPC".Equals(headgroup)) headgroup = "LPC";
                     else if ("LysoPE".Equals(headgroup)) headgroup = "LPE";
                     lipid.headGroupNames.Add(headgroup);
-                    ((PLLipid)lipid).isLyso = true;
+                    ((Phospholipid)lipid).isLyso = true;
                 }
             }
         }

@@ -148,8 +148,8 @@ namespace LipidCreator
         
         public void PLPreEvent(Parser.TreeNode node)
         {
-            lipid = new PLLipid(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((PLLipid)lipid);
+            lipid = new Phospholipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
         }
         
         public void PL_OPostEvent(Parser.TreeNode node)
@@ -371,7 +371,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isCL = true;
+                ((Phospholipid)lipid).isCL = true;
             }
         }
         
@@ -381,10 +381,10 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isCL = true;
-                List<string> keys = new List<string>(((PLLipid)lipid).fag4.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((PLLipid)lipid).fag4.faTypes[faTypeKey] = false;
-                ((PLLipid)lipid).fag4.faTypes["FAx"] = true;
+                ((Phospholipid)lipid).isCL = true;
+                List<string> keys = new List<string>(((Phospholipid)lipid).fag4.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Phospholipid)lipid).fag4.faTypes[faTypeKey] = false;
+                ((Phospholipid)lipid).fag4.faTypes["FAx"] = true;
             }
         }
         
@@ -403,7 +403,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isLyso = true;
+                ((Phospholipid)lipid).isLyso = true;
             }
         }
         
@@ -422,7 +422,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup + "-");
-                ((PLLipid)lipid).isLyso = true;
+                ((Phospholipid)lipid).isLyso = true;
             }
         }
         

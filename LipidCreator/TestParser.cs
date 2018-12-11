@@ -68,17 +68,17 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             
-            string grammerFilename = "data/lipidnames.grammer";
+            string grammarFilename = "data/lipidnames.grammar";
             char quote = '"';
             
             TestParserEventHandler tpeh = new TestParserEventHandler();
-            Parser pp = new Parser(tpeh, grammerFilename, LipidCreator.QUOTE);
+            Parser pp = new Parser(tpeh, grammarFilename, LipidCreator.QUOTE);
                         
             
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
-            Parser p = new Parser(peh, grammerFilename, LipidCreator.QUOTE);
+            Parser p = new Parser(peh, grammarFilename, LipidCreator.QUOTE);
             
             
             

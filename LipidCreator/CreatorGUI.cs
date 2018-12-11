@@ -3454,6 +3454,7 @@ namespace LipidCreator
             string[] returnMessage = new string[]{""};
             LCMessageBox lcmb = new LCMessageBox(returnMessage);
             lcmb.Owner = this;
+            lcmb.StartPosition = FormStartPosition.CenterParent;
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
@@ -3524,6 +3525,7 @@ namespace LipidCreator
                 string[] returnMessage = new string[]{""};
                 LCMessageBox lcmb = new LCMessageBox(returnMessage);
                 lcmb.Owner = this;
+                lcmb.StartPosition = FormStartPosition.CenterParent;
                 lcmb.ShowInTaskbar = false;
                 lcmb.ShowDialog();
                 lcmb.Dispose();
@@ -3563,6 +3565,7 @@ namespace LipidCreator
                 string[] returnMessage = new string[]{""};
                 LCMessageBox lcmb = new LCMessageBox(returnMessage);
                 lcmb.Owner = this;
+                lcmb.StartPosition = FormStartPosition.CenterParent;
                 lcmb.ShowInTaskbar = false;
                 lcmb.ShowDialog();
                 lcmb.Dispose();

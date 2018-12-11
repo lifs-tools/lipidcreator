@@ -20,6 +20,7 @@
     <AppCopyright>Copyright © 2018</AppCopyright>
     <AppCulture></AppCulture>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFramework>net452</TargetFramework>
     <Today>$([System.DateTime]::Now.tostring("u"))</Today>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

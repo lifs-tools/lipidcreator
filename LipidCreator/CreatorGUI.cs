@@ -320,7 +320,7 @@ namespace LipidCreator
                     col.SortMode = DataGridViewColumnSortMode.NotSortable;
                     col.Width = Math.Max(col.MinimumWidth, w);
                 }
-                lipidsGridview.Columns[0].Width = 80;
+                lipidsGridview.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 editColumn.Width = 40;
                 deleteColumn.Width = 40;
                 initialCall = false;

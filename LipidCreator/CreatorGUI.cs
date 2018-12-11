@@ -241,6 +241,12 @@ namespace LipidCreator
         
         
         
+        public void clearLipidList(Object sender, EventArgs e)
+        {
+            lipidCreator.registeredLipids.Clear();
+            registeredLipidsDatatable.Rows.Clear();
+            refreshRegisteredLipidsTable();
+        }
         
         
         public bool resetLipidCreator()
@@ -366,9 +372,6 @@ namespace LipidCreator
         {
         
             Color color = (e.Index == (int)currentIndex) ? Color.White : TabControl.DefaultBackColor;
-            //Color color = (e.Index == (int)currentIndex) ? Color.White :  Color.FromArgb(199, 223, 237);
-            //Color color = (e.Index == (int)currentIndex) ? Color.White :  Color.FromArgb(180, 209, 228);
-            //Brush brush = (e.Index == (int)currentIndex) ? Brushes.Black :  Brushes.White;
             Brush brush = (e.Index == (int)currentIndex) ? Brushes.Black :  Brushes.Black;
             using (Brush br = new SolidBrush (color))
             {
@@ -386,12 +389,8 @@ namespace LipidCreator
         
         
         
-        
-        
         public void changeTabElements(int index)
         {
-            //this.Refresh();
-        
             // enable all adduct checkboxes
             foreach (KeyValuePair<string, Precursor> row in lipidCreator.headgroups)
             {
@@ -3502,8 +3501,7 @@ namespace LipidCreator
         
         
         protected void menuImportClick(object sender, System.EventArgs e)
-        {
-        
+        {        
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.InitialDirectory = "c:\\";

@@ -301,6 +301,7 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
         public System.Windows.Forms.MenuItem menuMS2Fragments;
         public System.Windows.Forms.MenuItem menuIsotopes;
+        public System.Windows.Forms.MenuItem menuClearLipidList;
         public System.Windows.Forms.MenuItem menuResetCategory;
         public System.Windows.Forms.MenuItem menuResetLipidCreator;
         public System.Windows.Forms.MenuItem menuHelp;
@@ -617,6 +618,7 @@ namespace LipidCreator
             this.menuDash4 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
             this.menuStatistics = new System.Windows.Forms.MenuItem ();
+            this.menuClearLipidList = new System.Windows.Forms.MenuItem ();
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
@@ -667,7 +669,7 @@ namespace LipidCreator
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
@@ -690,6 +692,10 @@ namespace LipidCreator
             this.menuIsotopes.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
             this.menuIsotopes.Text = "Manage &heavy isotopes";
             this.menuIsotopes.Click += new System.EventHandler (openHeavyIsotopeForm);
+            
+            this.menuClearLipidList.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.menuClearLipidList.Text = "&Clear lipid list";
+            this.menuClearLipidList.Click += new System.EventHandler (clearLipidList);
             
             this.menuResetCategory.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
             this.menuResetCategory.Text = "Reset &lipid category";

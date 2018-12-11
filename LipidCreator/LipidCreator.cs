@@ -36,6 +36,7 @@ using System.Data.SQLite;
 using Ionic.Zlib;
 
 using System.Xml.Linq;
+using System.Text;
 using SkylineTool;
 using System.Net;
 using System.Threading;
@@ -984,33 +985,34 @@ namespace LipidCreator
             if (skylineToolClient == null) return;
             
             string header = string.Join(",", SKYLINE_API_HEADER);
-            
-            string pipeString = header + "\n";
+
+            StringBuilder sb = new StringBuilder(header, header.Length);
+            sb.AppendLine();
             double maxMass = 0;
             bool withCE = SKYLINE_API_HEADER[SKYLINE_API_HEADER.Length - 1].Equals(SKYLINE_API_COLLISION_ENERGY);
             
             foreach (DataRow entry in dt.Rows)
             {
                 // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                pipeString += "\"" + entry[LipidCreator.MOLECULE_LIST_NAME] + "\","; // listname
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NAME] + "\","; // preName
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "\","; // PreFormula
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_ADDUCT] + "\","; // preAdduct
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_MZ] + "\","; // preMz
+                sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname
+                sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NAME]).Append("\","); // preName
+                sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
+                sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
+                sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz
                 maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_CHARGE] + "\","; // preCharge
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_NAME] + "\","; // prodName
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + "\","; // ProdFormula, no prodAdduct
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_ADDUCT] + "\","; // preAdduct
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_MZ] + "\","; // prodMz
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_CHARGE] + "\","; // prodCharge
-                pipeString += "\"" + entry[LipidCreator.NOTE] + "\""; // note
-                if (withCE) pipeString += ",\"" + entry[LipidCreator.COLLISION_ENERGY] + "\""; // note
-                pipeString += "\n";
+                sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append("\","); // preCharge
+                sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\","); // prodName
+                sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\","); // ProdFormula, no prodAdduct
+                sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\","); // preAdduct
+                sb.Append("\"").Append(entry[LipidCreator.PRODUCT_MZ]).Append("\","); // prodMz
+                sb.Append("\"").Append(entry[LipidCreator.PRODUCT_CHARGE]).Append("\","); // prodCharge
+                sb.Append("\"").Append(entry[LipidCreator.NOTE]).Append("\""); // note
+                if (withCE) sb.Append(",\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
+                sb.AppendLine();
             }
             try
             {
-                skylineToolClient.InsertSmallMoleculeTransitionList(pipeString);
+                skylineToolClient.InsertSmallMoleculeTransitionList(sb.ToString());
                 if (blibName.Length > 0 && blibFile.Length > 0) skylineToolClient.AddSpectralLibrary(blibName, blibFile);
                 skylineToolClient.Dispose();
             }

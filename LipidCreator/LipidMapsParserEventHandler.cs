@@ -234,10 +234,10 @@ namespace LipidCreator
         
         public void SLPreEvent(Parser.TreeNode node)
         {
-            lipid = new SLLipid(lipidCreator);
-            ((SLLipid)lipid).lcb.hydroxylCounts.Clear();
-            ((SLLipid)lipid).fag.hydroxylCounts.Clear();
-            fagEnum = new FattyAcidGroupEnumerator((SLLipid)lipid);
+            lipid = new Sphingolipid(lipidCreator);
+            ((Sphingolipid)lipid).lcb.hydroxylCounts.Clear();
+            ((Sphingolipid)lipid).fag.hydroxylCounts.Clear();
+            fagEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
         }
         
         
@@ -262,7 +262,7 @@ namespace LipidCreator
         {
             if (lipid != null && !(lipid is UnsupportedLipid))
             {
-                fag = ((SLLipid)lipid).lcb;
+                fag = ((Sphingolipid)lipid).lcb;
             }
         }
         
@@ -430,8 +430,8 @@ namespace LipidCreator
                 string hydroxylCount = node.getText();
                 int hydroxylCountInt = Convert.ToInt32(hydroxylCount);
                 if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if ((lipid is SLLipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if (!(lipid is SLLipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if ((lipid is Sphingolipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if (!(lipid is Sphingolipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
                 else fag = null;
             }
         }
@@ -454,8 +454,8 @@ namespace LipidCreator
                     if (hydroxylCount == "d") hydroxylCountInt = 2;
                     else if (hydroxylCount == "t") hydroxylCountInt = 3;
                     if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                    else if ((lipid is SLLipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                    else if (!(lipid is SLLipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                    else if ((lipid is Sphingolipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
+                    else if (!(lipid is Sphingolipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
                     else fag = null;
                 }
             }
@@ -520,8 +520,8 @@ namespace LipidCreator
         {
             if (lipid != null && !(lipid is UnsupportedLipid))
             {
-                ((SLLipid)lipid).isLyso = true;
-                fag = ((SLLipid)lipid).lcb;
+                ((Sphingolipid)lipid).isLyso = true;
+                fag = ((Sphingolipid)lipid).lcb;
                 fag.hydroxylCounts.Add(2);
             }
         }

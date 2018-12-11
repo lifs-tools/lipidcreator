@@ -302,7 +302,7 @@ namespace LipidCreator
             lipidTabList = new ArrayList(new Lipid[] {null,
                                                       new GLLipid(lipidCreator),
                                                       new Phospholipid(lipidCreator),
-                                                      new SLLipid(lipidCreator),
+                                                      new Sphingolipid(lipidCreator),
                                                       new Cholesterol(lipidCreator),
                                                       new Mediator(lipidCreator)});
         }
@@ -729,18 +729,18 @@ namespace LipidCreator
                     break;
                     
                 case LipidCategory.SphingoLipid:
-                    SLLipid currentSLLipid = (SLLipid)currentLipid;
+                    Sphingolipid currentSphingolipid = (Sphingolipid)currentLipid;
                     
-                    slIsLyso.Checked = currentSLLipid.isLyso;
-                    slRegular.Checked = !currentSLLipid.isLyso;
-                    slChangeLyso(currentSLLipid.isLyso);
+                    slIsLyso.Checked = currentSphingolipid.isLyso;
+                    slRegular.Checked = !currentSphingolipid.isLyso;
+                    slChangeLyso(currentSphingolipid.isLyso);
                     
                     settingListbox = true;
                     for (int i = 0; i < slHgListbox.Items.Count; ++i)
                     {
                         slHgListbox.SetSelected(i, false);
                     }
-                    foreach (string headgroup in currentSLLipid.headGroupNames)
+                    foreach (string headgroup in currentSphingolipid.headGroupNames)
                     {
                         var i = 0;
                         foreach (var item in slHgListbox.Items)
@@ -756,29 +756,29 @@ namespace LipidCreator
                     settingListbox = false;
                     
                     
-                    slLCBTextbox.Text = currentSLLipid.lcb.lengthInfo;
-                    slDB2Textbox.Text = currentSLLipid.lcb.dbInfo;
-                    slLCBCombobox.SelectedIndex = currentSLLipid.lcb.chainType;
-                    slLCBHydroxyCombobox.SelectedIndex = currentSLLipid.lcb.hydroxylCounts.First() - 2;
-                    if (!currentSLLipid.isLyso) slFAHydroxyCombobox.SelectedIndex = currentSLLipid.fag.hydroxylCounts.First();
+                    slLCBTextbox.Text = currentSphingolipid.lcb.lengthInfo;
+                    slDB2Textbox.Text = currentSphingolipid.lcb.dbInfo;
+                    slLCBCombobox.SelectedIndex = currentSphingolipid.lcb.chainType;
+                    slLCBHydroxyCombobox.SelectedIndex = currentSphingolipid.lcb.hydroxylCounts.First() - 2;
+                    if (!currentSphingolipid.isLyso) slFAHydroxyCombobox.SelectedIndex = currentSphingolipid.fag.hydroxylCounts.First();
                     
-                    slFATextbox.Text = currentSLLipid.fag.lengthInfo;
-                    slDB1Textbox.Text = currentSLLipid.fag.dbInfo;
-                    slFACombobox.SelectedIndex = currentSLLipid.fag.chainType;
+                    slFATextbox.Text = currentSphingolipid.fag.lengthInfo;
+                    slDB1Textbox.Text = currentSphingolipid.fag.dbInfo;
+                    slFACombobox.SelectedIndex = currentSphingolipid.fag.chainType;
                     
-                    slPosAdductCheckbox1.Checked = currentSLLipid.adducts["+H"];
-                    slPosAdductCheckbox2.Checked = currentSLLipid.adducts["+2H"];
-                    slPosAdductCheckbox3.Checked = currentSLLipid.adducts["+NH4"];
-                    slNegAdductCheckbox1.Checked = currentSLLipid.adducts["-H"];
-                    slNegAdductCheckbox2.Checked = currentSLLipid.adducts["-2H"];
-                    slNegAdductCheckbox3.Checked = currentSLLipid.adducts["+HCOO"];
-                    slNegAdductCheckbox4.Checked = currentSLLipid.adducts["+CH3COO"];
+                    slPosAdductCheckbox1.Checked = currentSphingolipid.adducts["+H"];
+                    slPosAdductCheckbox2.Checked = currentSphingolipid.adducts["+2H"];
+                    slPosAdductCheckbox3.Checked = currentSphingolipid.adducts["+NH4"];
+                    slNegAdductCheckbox1.Checked = currentSphingolipid.adducts["-H"];
+                    slNegAdductCheckbox2.Checked = currentSphingolipid.adducts["-2H"];
+                    slNegAdductCheckbox3.Checked = currentSphingolipid.adducts["+HCOO"];
+                    slNegAdductCheckbox4.Checked = currentSphingolipid.adducts["+CH3COO"];
                     addLipidButton.Text = "Add sphingolipids";
                     
-                    updateRanges(currentSLLipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
-                    updateRanges(currentSLLipid.lcb, slDB2Textbox, 3);
-                    updateRanges(currentSLLipid.fag, slFATextbox, slFACombobox.SelectedIndex);
-                    updateRanges(currentSLLipid.fag, slDB1Textbox, 3);
+                    updateRanges(currentSphingolipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
+                    updateRanges(currentSphingolipid.lcb, slDB2Textbox, 3);
+                    updateRanges(currentSphingolipid.fag, slFATextbox, slFACombobox.SelectedIndex);
+                    updateRanges(currentSphingolipid.fag, slDB1Textbox, 3);
                     slPictureBox.SendToBack();
                     break;
                     
@@ -872,7 +872,7 @@ namespace LipidCreator
                     break;
                     
                 case (int)LipidCategory.SphingoLipid:
-                    newLipid = new SLLipid(lipidCreator);
+                    newLipid = new Sphingolipid(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.Cholesterol:
@@ -2396,78 +2396,78 @@ namespace LipidCreator
         
         public void slPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
         }
         public void slPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
         }
         public void slPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
         }
         public void slNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
         }
         public void slNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
         }
         public void slNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
         }
         public void slNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
+            ((Sphingolipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
         }
         
         public void slDB1TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).fag.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((SLLipid)currentLipid).fag, (TextBox)sender, 3);
+            ((Sphingolipid)currentLipid).fag.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Sphingolipid)currentLipid).fag, (TextBox)sender, 3);
         }
         public void slDB2TextboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).lcb.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((SLLipid)currentLipid).lcb, (TextBox)sender, 3);
+            ((Sphingolipid)currentLipid).lcb.dbInfo = ((TextBox)sender).Text;
+            updateRanges(((Sphingolipid)currentLipid).lcb, (TextBox)sender, 3);
         }
         
         public void slFATextboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).fag.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((SLLipid)currentLipid).fag, (TextBox)sender, slFACombobox.SelectedIndex);
+            ((Sphingolipid)currentLipid).fag.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Sphingolipid)currentLipid).fag, (TextBox)sender, slFACombobox.SelectedIndex);
         }
         public void slLCBTextboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).lcb.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((SLLipid)currentLipid).lcb, (TextBox)sender, slLCBCombobox.SelectedIndex, true);
+            ((Sphingolipid)currentLipid).lcb.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(((Sphingolipid)currentLipid).lcb, (TextBox)sender, slLCBCombobox.SelectedIndex, true);
         }
         
         
         public void slFAComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).fag.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((SLLipid)currentLipid).fag, slFATextbox, ((ComboBox)sender).SelectedIndex);
+            ((Sphingolipid)currentLipid).fag.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Sphingolipid)currentLipid).fag, slFATextbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void slLCBComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).lcb.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((SLLipid)currentLipid).lcb, slLCBTextbox, ((ComboBox)sender).SelectedIndex);
+            ((Sphingolipid)currentLipid).lcb.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(((Sphingolipid)currentLipid).lcb, slLCBTextbox, ((ComboBox)sender).SelectedIndex);
         }
         
         public void slLCBHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).lcb.hydroxylCounts.Clear();
-            ((SLLipid)currentLipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
+            ((Sphingolipid)currentLipid).lcb.hydroxylCounts.Clear();
+            ((Sphingolipid)currentLipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
         }
         
         public void slFAHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).fag.hydroxylCounts.Clear();
-            ((SLLipid)currentLipid).fag.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex);
+            ((Sphingolipid)currentLipid).fag.hydroxylCounts.Clear();
+            ((Sphingolipid)currentLipid).fag.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex);
         }
         
         private void slHGListboxSelectedValueChanged(object sender, System.EventArgs e)
@@ -2525,7 +2525,7 @@ namespace LipidCreator
         
         void slIsLysoCheckedChanged(object sender, EventArgs e)
         {
-            ((SLLipid)currentLipid).isLyso = slIsLyso.Checked;
+            ((Sphingolipid)currentLipid).isLyso = slIsLyso.Checked;
             slChangeLyso(slIsLyso.Checked);
         }
         
@@ -2910,7 +2910,7 @@ namespace LipidCreator
             }
             
             
-            else if (currentLipid is SLLipid)
+            else if (currentLipid is Sphingolipid)
             {
                 if (currentLipid.headGroupNames.Count == 0)
                 {
@@ -2989,7 +2989,7 @@ namespace LipidCreator
                     break;
                     
                 case LipidCategory.SphingoLipid:
-                    lipidCreator.registeredLipids[rowIndex] = new SLLipid((SLLipid)currentLipid);
+                    lipidCreator.registeredLipids[rowIndex] = new Sphingolipid((Sphingolipid)currentLipid);
                     break;
                     
                 case LipidCategory.Cholesterol:
@@ -3033,7 +3033,7 @@ namespace LipidCreator
                     break;
                     
                 case LipidCategory.SphingoLipid:
-                    lipidCreator.registeredLipids.Add(new SLLipid((SLLipid)currentLipid));
+                    lipidCreator.registeredLipids.Add(new Sphingolipid((Sphingolipid)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                     tabIndex = (int)LipidCategory.SphingoLipid;
                     break;
@@ -3126,13 +3126,13 @@ namespace LipidCreator
                     if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
                 }
             }
-            else if (currentRegisteredLipid is SLLipid)
+            else if (currentRegisteredLipid is Sphingolipid)
             {
-                SLLipid currentSLLipid = (SLLipid)currentRegisteredLipid;
+                Sphingolipid currentSphingolipid = (Sphingolipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
-                row["Building Block 1"] = "HG: " + String.Join(", ", currentSLLipid.headGroupNames);
-                row["Building Block 2"] = "LCB: " + currentSLLipid.lcb.lengthInfo + "; DB: " + currentSLLipid.lcb.dbInfo + "; OH: " + currentSLLipid.lcb.hydroxylCounts.First();
-                if (!currentSLLipid.isLyso) row["Building Block 3"] = "FA: " + currentSLLipid.fag.lengthInfo + "; DB: " + currentSLLipid.fag.dbInfo + "; OH: " + currentSLLipid.fag.hydroxylCounts.First();
+                row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
+                row["Building Block 2"] = "LCB: " + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
+                if (!currentSphingolipid.isLyso) row["Building Block 3"] = "FA: " + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
             }
             
             else if (currentRegisteredLipid is Cholesterol)
@@ -3212,10 +3212,10 @@ namespace LipidCreator
                     tabIndex = (int)LipidCategory.PhosphoLipid;
                     lipidTabList[tabIndex] = new Phospholipid((Phospholipid)currentRegisteredLipid);
                 }
-                else if (currentRegisteredLipid is SLLipid)
+                else if (currentRegisteredLipid is Sphingolipid)
                 {
                     tabIndex = (int)LipidCategory.SphingoLipid;
-                    lipidTabList[tabIndex] = new SLLipid((SLLipid)currentRegisteredLipid);
+                    lipidTabList[tabIndex] = new Sphingolipid((Sphingolipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Cholesterol)
                 {
@@ -3256,7 +3256,7 @@ namespace LipidCreator
             int tabIndex = 0;
             if (currentRegisteredLipid is GLLipid) tabIndex = (int)LipidCategory.GlyceroLipid;
             else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.PhosphoLipid;
-            else if (currentRegisteredLipid is SLLipid) tabIndex = (int)LipidCategory.SphingoLipid;
+            else if (currentRegisteredLipid is Sphingolipid) tabIndex = (int)LipidCategory.SphingoLipid;
             else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Cholesterol;
             else if (currentRegisteredLipid is Mediator) tabIndex = (int)LipidCategory.Mediator;
             

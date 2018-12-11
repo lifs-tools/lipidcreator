@@ -1362,7 +1362,7 @@ namespace LipidCreator
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(this);
+                        Sphingolipid sll = new Sphingolipid(this);
                         sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;

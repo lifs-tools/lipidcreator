@@ -60,9 +60,9 @@ namespace LipidCreator
             {
                 this.currentLipid = new Phospholipid((Phospholipid)currentLipidTmp);
             }
-            else if (currentLipidTmp is SLLipid)
+            else if (currentLipidTmp is Sphingolipid)
             {
-                this.currentLipid = new SLLipid((SLLipid)currentLipidTmp);
+                this.currentLipid = new Sphingolipid((Sphingolipid)currentLipidTmp);
             }
             else if (currentLipidTmp is Cholesterol)
             {
@@ -463,9 +463,9 @@ namespace LipidCreator
                 creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid] = new Phospholipid((Phospholipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid];
             }
-            else if (currentLipid is SLLipid)
+            else if (currentLipid is Sphingolipid)
             {
-                creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid] = new SLLipid((SLLipid)currentLipid);
+                creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid] = new Sphingolipid((Sphingolipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid];
             }
             else if (currentLipid is Cholesterol)

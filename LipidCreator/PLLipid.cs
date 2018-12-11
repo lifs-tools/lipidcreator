@@ -35,7 +35,7 @@ namespace LipidCreator
     [Serializable]
     public class PLLipid : Lipid
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NewMediatorFragment));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PLLipid));
         public FattyAcidGroup fag1;
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;

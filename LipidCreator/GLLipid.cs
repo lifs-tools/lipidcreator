@@ -28,12 +28,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
     public class GLLipid : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(GLLipid));
         public FattyAcidGroup fag1;
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;
@@ -110,7 +112,7 @@ namespace LipidCreator
                         }
                         else
                         {   
-                            Console.WriteLine("Error, fatty acid");
+                            log.Error("A Glycerolipid can have at most 3 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception();
                         }
                         ++fattyAcidCounter;

@@ -249,10 +249,12 @@ namespace LipidCreator
         }
         
         
-        public bool resetLipidCreator()
+        public bool resetLipidCreator(bool verify = true)
         {
-            DialogResult mbr = MessageBox.Show ("You are going to reset LipidCreator. All information and settings will be discarded. Are you sure?", "Reset LipidCreator", MessageBoxButtons.YesNo);
-            if (mbr == DialogResult.Yes) {
+            DialogResult mbr = DialogResult.Yes;
+            if (verify) mbr = MessageBox.Show ("You are going to reset LipidCreator. All information and settings will be discarded. Are you sure?", "Reset LipidCreator", MessageBoxButtons.YesNo);
+            if (!verify || (verify && mbr == DialogResult.Yes))
+            {
                 lipidCreator = new LipidCreator(inputParameters);
                 resetAllLipids();
                 updateCECondition();
@@ -3448,6 +3450,15 @@ namespace LipidCreator
         
         protected void menuImportPredefinedClick(object sender, System.EventArgs e)
         {
+        
+            string[] returnMessage = new string[]{""};
+            LCMessageBox lcmb = new LCMessageBox(returnMessage);
+            lcmb.Owner = this;
+            lcmb.ShowInTaskbar = false;
+            lcmb.ShowDialog();
+            lcmb.Dispose();
+            if (returnMessage[0] == "replace") resetLipidCreator(false);
+        
             System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
             string filePath = (string)PredefItem.Tag;
             XDocument doc;
@@ -3501,9 +3512,8 @@ namespace LipidCreator
         
         
         protected void menuImportClick(object sender, System.EventArgs e)
-        {        
+        {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
             openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 0;
@@ -3511,6 +3521,14 @@ namespace LipidCreator
 
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                string[] returnMessage = new string[]{""};
+                LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                lcmb.Owner = this;
+                lcmb.ShowInTaskbar = false;
+                lcmb.ShowDialog();
+                lcmb.Dispose();
+                if (returnMessage[0] == "replace") resetLipidCreator(false);
+                
                 XDocument doc;
                 try 
                 {
@@ -3535,7 +3553,6 @@ namespace LipidCreator
         {
         
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
             openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 0;
@@ -3543,6 +3560,14 @@ namespace LipidCreator
 
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                string[] returnMessage = new string[]{""};
+                LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                lcmb.Owner = this;
+                lcmb.ShowInTaskbar = false;
+                lcmb.ShowDialog();
+                lcmb.Dispose();
+                if (returnMessage[0] == "replace") resetLipidCreator(false);
+            
                 XDocument doc;
                 try 
                 {
@@ -3566,7 +3591,6 @@ namespace LipidCreator
         
         protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
         {
-            // TODO: after testing, delete this lines
             CEInspector ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
             ceInspector.Owner = this;
             ceInspector.ShowInTaskbar = false;
@@ -3580,7 +3604,6 @@ namespace LipidCreator
         protected void menuExportClick(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            
             saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 0;
@@ -3603,7 +3626,6 @@ namespace LipidCreator
         protected void menuExportSettingsClick(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            
             saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "lcXML files (*.lcXML)|*.lcXML|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 0;

@@ -12,9 +12,24 @@ namespace LipidCreator
 {
     public partial class LCMessageBox : Form
     {
-        public LCMessageBox()
+        public string[] returnMessage = null;
+        
+        public LCMessageBox(string[] _returnMessage)
         {
+            returnMessage = _returnMessage;
             InitializeComponent();
+        }
+        
+        protected void mergeClick(object sender, System.EventArgs e)
+        {
+            returnMessage[0] = "merge";
+            Close();        
+        }
+        
+        protected void replaceClick(object sender, System.EventArgs e)
+        {
+            returnMessage[0] = "replace";
+            Close();
         }
     }
 }

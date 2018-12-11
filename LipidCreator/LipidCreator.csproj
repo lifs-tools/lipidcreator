@@ -23,7 +23,6 @@
     <AppCopyright>Copyright © 2018</AppCopyright>
     <AppCulture></AppCulture>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetFramework>net452</TargetFramework>
     <Today>$([System.DateTime]::Now.tostring("u"))</Today>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,7 +46,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <CodePage>65001</CodePage>
     <PackageId>C82A580E-D9D9-40A6-8890-D93211920552</PackageId>
-    <!--    <PackageVersion>$(AppVersion)</PackageVersion> -->
     <NeutralLanguage>en-US</NeutralLanguage>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
@@ -335,7 +333,7 @@
     <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(AppProvider)" />
     <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(AppCompany)" />
     <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" />
-  </Target>	
+  </Target>
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>
       <!-- temp file for the git version (lives in "obj" folder)-->

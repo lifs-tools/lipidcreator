@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using log4net;
 
 
 namespace LipidCreator
@@ -35,6 +36,7 @@ namespace LipidCreator
     [Serializable]
     public class Cholesterol : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Cholesterol));
         public bool containsEster;
         public FattyAcidGroup fag;
     
@@ -92,7 +94,7 @@ namespace LipidCreator
                         }
                         else
                         {   
-                            Console.WriteLine("Error, fatty acid");
+                            log.Error("A Cholesterol can have at most 1 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception();
                         }
                         ++fattyAcidCounter;

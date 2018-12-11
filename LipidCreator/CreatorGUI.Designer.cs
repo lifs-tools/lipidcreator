@@ -594,6 +594,7 @@ namespace LipidCreator
         private void InitializeComponent()
         {
             this.Font = SystemFonts.DefaultFont;
+            this.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Text = "LipidCreator";
             

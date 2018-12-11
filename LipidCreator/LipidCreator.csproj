@@ -298,8 +298,8 @@
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>
       <!-- temp file for the git version (lives in "obj" folder)-->
-      <VerFile>$(IntermediateOutputPath)gitver</VerFile>
-      <BranchFile>$(IntermediateOutputPath)gitbranch</BranchFile>
+      <VerFile>$(ProjectDir)$(IntermediateOutputPath)gitver</VerFile>
+      <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
     <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" />

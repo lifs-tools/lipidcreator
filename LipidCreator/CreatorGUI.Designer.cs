@@ -701,8 +701,8 @@ namespace LipidCreator
             this.menuResetCategory.Text = "Reset &lipid category";
             this.menuResetCategory.Click += new System.EventHandler (resetLipid);
             
-            this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.menuResetLipidCreator.Text = "Reset Lipid&Creator";
+            this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
+            this.menuResetLipidCreator.Text = "&Reset LipidCreator";
             this.menuResetLipidCreator.Click += new System.EventHandler (resetLipidCreatorMenu);
             
             

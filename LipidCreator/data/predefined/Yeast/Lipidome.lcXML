@@ -7973,10 +7973,10 @@
 <representativeFA>0</representativeFA>
 <onlyPrecursors>0</onlyPrecursors>
 <onlyHeavyLabeled>0</onlyHeavyLabeled>
-<adduct type="+H">1</adduct>
+<adduct type="+H">0</adduct>
 <adduct type="+2H">0</adduct>
 <adduct type="+NH4">0</adduct>
-<adduct type="-H">0</adduct>
+<adduct type="-H">1</adduct>
 <adduct type="-2H">0</adduct>
 <adduct type="+HCOO">0</adduct>
 <adduct type="+CH3COO">0</adduct>
@@ -8014,10 +8014,10 @@
 <representativeFA>0</representativeFA>
 <onlyPrecursors>0</onlyPrecursors>
 <onlyHeavyLabeled>0</onlyHeavyLabeled>
-<adduct type="+H">1</adduct>
+<adduct type="+H">0</adduct>
 <adduct type="+2H">0</adduct>
 <adduct type="+NH4">0</adduct>
-<adduct type="-H">0</adduct>
+<adduct type="-H">1</adduct>
 <adduct type="-2H">0</adduct>
 <adduct type="+HCOO">0</adduct>
 <adduct type="+CH3COO">0</adduct>
@@ -8055,10 +8055,10 @@
 <representativeFA>0</representativeFA>
 <onlyPrecursors>0</onlyPrecursors>
 <onlyHeavyLabeled>0</onlyHeavyLabeled>
-<adduct type="+H">1</adduct>
+<adduct type="+H">0</adduct>
 <adduct type="+2H">0</adduct>
 <adduct type="+NH4">0</adduct>
-<adduct type="-H">0</adduct>
+<adduct type="-H">1</adduct>
 <adduct type="-2H">0</adduct>
 <adduct type="+HCOO">0</adduct>
 <adduct type="+CH3COO">0</adduct>
@@ -8096,10 +8096,10 @@
 <representativeFA>0</representativeFA>
 <onlyPrecursors>0</onlyPrecursors>
 <onlyHeavyLabeled>0</onlyHeavyLabeled>
-<adduct type="+H">1</adduct>
+<adduct type="+H">0</adduct>
 <adduct type="+2H">0</adduct>
 <adduct type="+NH4">0</adduct>
-<adduct type="-H">0</adduct>
+<adduct type="-H">1</adduct>
 <adduct type="-2H">0</adduct>
 <adduct type="+HCOO">0</adduct>
 <adduct type="+CH3COO">0</adduct>

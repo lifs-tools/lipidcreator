@@ -78,10 +78,10 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
-            string grammerFilename = "data/lipidnames.grammer";
+            string grammarFilename = "data/lipidnames.grammar";
             char quote = '"';
             ParserEventHandler parserEventHandler = new ParserEventHandler(lcf);
-            Parser parser = new Parser(parserEventHandler, grammerFilename, quote);
+            Parser parser = new Parser(parserEventHandler, grammarFilename, quote);
             
             try {
                 int lineCounter = 1;

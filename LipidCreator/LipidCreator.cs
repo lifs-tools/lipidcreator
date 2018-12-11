@@ -484,13 +484,13 @@ namespace LipidCreator
             }
             
             parserEventHandler = new ParserEventHandler(this);
-            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammer", QUOTE);
+            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammer", QUOTE);
+            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
             
             lipidMapsNewParserEventHandler = new ParserEventHandler(this);
-            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidmaps-new.grammer", QUOTE);
+            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidnames-lenient.grammar", QUOTE);
         }
         
         
@@ -1034,17 +1034,17 @@ namespace LipidCreator
         public static ArrayList createRandomLipidNames(int num = 1)
         {
         
-            string grammerFilename = "data/lipidnames.grammer";
+            string grammarFilename = "data/lipidnames.grammar";
             char quote = '"';
             ArrayList lipidNames = new ArrayList();
-            if (File.Exists(grammerFilename))
+            if (File.Exists(grammarFilename))
             {
                 int lineCounter = 0;
                 int ruleNum = 1;
                 IDictionary<int, ArrayList> rules = new Dictionary<int, ArrayList>();
                 IDictionary<int, string> terminals = new Dictionary<int, string>();
                 IDictionary<string, int> ruleToNT = new Dictionary<string, int>();
-                using (StreamReader sr = new StreamReader(grammerFilename))
+                using (StreamReader sr = new StreamReader(grammarFilename))
                 {
                     string line;
                     while((line = sr.ReadLine()) != null)
@@ -1059,7 +1059,7 @@ namespace LipidCreator
                         
                         ArrayList tokens_level_1 = new ArrayList();
                         foreach (string t in Parser.splitString(line, '=', quote)) tokens_level_1.Add(Parser.strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar");
 
                         string rule = (string)tokens_level_1[0];
                         

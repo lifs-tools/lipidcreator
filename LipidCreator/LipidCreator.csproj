@@ -166,6 +166,12 @@
     <Compile Include="CEInspector.Designer.cs">
       <DependentUpon>CEInspector.cs</DependentUpon>
     </Compile>
+    <Compile Include="LCMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LCMessageBox.Designer.cs">
+      <DependentUpon>LCMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewMediatorFragment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LCMessageBox.resx">
+      <DependentUpon>LCMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LipidsReview.resx">
       <DependentUpon>LipidsReview.cs</DependentUpon>
@@ -318,8 +327,8 @@
       <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" />
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" />
+    <Exec Command="git -C $(ProjectDir) describe --long --always &gt; &quot;$(VerFile)&quot;" />
+    <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -412,5 +421,4 @@
     <!-- create zip distribution on Linux / OSX -->
     <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.0\build\NuGet.Build.Packaging.targets" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.0\build\NuGet.Build.Packaging.targets')" />
 </Project>

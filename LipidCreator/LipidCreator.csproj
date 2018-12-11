@@ -8,7 +8,7 @@
     <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Guid>C82A580E-D9D9-40A6-8890-D93211920552</Guid>
-    <ProjectGuid>{$(Guid)}</ProjectGuid>
+    <ProjectGuid>{C82A580E-D9D9-40A6-8890-D93211920552}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LipidCreator</RootNamespace>
@@ -47,7 +47,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <CodePage>65001</CodePage>
     <PackageId>C82A580E-D9D9-40A6-8890-D93211920552</PackageId>
-    <PackageVersion>$(AppVersion)</PackageVersion>
+    <!--    <PackageVersion>$(AppVersion)</PackageVersion> -->
     <NeutralLanguage>en-US</NeutralLanguage>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>

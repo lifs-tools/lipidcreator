@@ -302,8 +302,8 @@
       <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
-    <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" />
-    <Exec Command="git rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />

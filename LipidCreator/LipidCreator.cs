@@ -1350,19 +1350,19 @@ namespace LipidCreator
                 switch (lipidType)
                 {
                     case "GL":
-                        GLLipid gll = new GLLipid(this);
+                        Glycerolipid gll = new Glycerolipid(this);
                         gll.import(lipid, importVersion);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(this);
+                        Phospholipid pll = new Phospholipid(this);
                         pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(this);
+                        Sphingolipid sll = new Sphingolipid(this);
                         sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;

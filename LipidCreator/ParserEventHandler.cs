@@ -142,14 +142,14 @@ namespace LipidCreator
         
         public void GLPreEvent(Parser.TreeNode node)
         {
-            lipid = new GLLipid(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((GLLipid)lipid);
+            lipid = new Glycerolipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
         }
         
         public void PLPreEvent(Parser.TreeNode node)
         {
-            lipid = new PLLipid(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((PLLipid)lipid);
+            lipid = new Phospholipid(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
         }
         
         public void PL_OPostEvent(Parser.TreeNode node)
@@ -174,10 +174,10 @@ namespace LipidCreator
         
         public void SLPreEvent(Parser.TreeNode node)
         {
-            lipid = new SLLipid(lipidCreator);
-            ((SLLipid)lipid).lcb.hydroxylCounts.Clear();
-            ((SLLipid)lipid).fag.hydroxylCounts.Clear();
-            fagEnum = new FattyAcidGroupEnumerator((SLLipid)lipid);
+            lipid = new Sphingolipid(lipidCreator);
+            ((Sphingolipid)lipid).lcb.hydroxylCounts.Clear();
+            ((Sphingolipid)lipid).fag.hydroxylCounts.Clear();
+            fagEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
         }
         
         public void CholesterolPreEvent(Parser.TreeNode node)
@@ -196,7 +196,7 @@ namespace LipidCreator
         
         public void LCBPreEvent(Parser.TreeNode node)
         {
-            fag = ((SLLipid)lipid).lcb;
+            fag = ((Sphingolipid)lipid).lcb;
         }
         
         
@@ -294,8 +294,8 @@ namespace LipidCreator
                 string hydroxylCount = node.getText();
                 int hydroxylCountInt = Convert.ToInt32(hydroxylCount);
                 if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if ((lipid is SLLipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if (!(lipid is SLLipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if ((lipid is Sphingolipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if (!(lipid is Sphingolipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
                 else fag = null;
             }
         }
@@ -322,12 +322,12 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                List<string> keys = new List<string>(((GLLipid)lipid).fag2.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag2.faTypes[faTypeKey] = false;
-                ((GLLipid)lipid).fag2.faTypes["FAx"] = true;
-                keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
-                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
+                List<string> keys = new List<string>(((Glycerolipid)lipid).fag2.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Glycerolipid)lipid).fag2.faTypes[faTypeKey] = false;
+                ((Glycerolipid)lipid).fag2.faTypes["FAx"] = true;
+                keys = new List<string>(((Glycerolipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Glycerolipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((Glycerolipid)lipid).fag3.faTypes["FAx"] = true;
             }
         }
         
@@ -337,9 +337,9 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                List<string> keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
-                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
+                List<string> keys = new List<string>(((Glycerolipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Glycerolipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((Glycerolipid)lipid).fag3.faTypes["FAx"] = true;
             }
         }
         
@@ -349,10 +349,10 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                List<string> keys = new List<string>(((GLLipid)lipid).fag3.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((GLLipid)lipid).fag3.faTypes[faTypeKey] = false;
-                ((GLLipid)lipid).fag3.faTypes["FAx"] = true;
-                ((GLLipid)lipid).containsSugar = true;
+                List<string> keys = new List<string>(((Glycerolipid)lipid).fag3.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Glycerolipid)lipid).fag3.faTypes[faTypeKey] = false;
+                ((Glycerolipid)lipid).fag3.faTypes["FAx"] = true;
+                ((Glycerolipid)lipid).containsSugar = true;
             }
         }
         
@@ -371,7 +371,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isCL = true;
+                ((Phospholipid)lipid).isCL = true;
             }
         }
         
@@ -381,10 +381,10 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isCL = true;
-                List<string> keys = new List<string>(((PLLipid)lipid).fag4.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((PLLipid)lipid).fag4.faTypes[faTypeKey] = false;
-                ((PLLipid)lipid).fag4.faTypes["FAx"] = true;
+                ((Phospholipid)lipid).isCL = true;
+                List<string> keys = new List<string>(((Phospholipid)lipid).fag4.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Phospholipid)lipid).fag4.faTypes[faTypeKey] = false;
+                ((Phospholipid)lipid).fag4.faTypes["FAx"] = true;
             }
         }
         
@@ -403,7 +403,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((PLLipid)lipid).isLyso = true;
+                ((Phospholipid)lipid).isLyso = true;
             }
         }
         
@@ -422,7 +422,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup + "-");
-                ((PLLipid)lipid).isLyso = true;
+                ((Phospholipid)lipid).isLyso = true;
             }
         }
         
@@ -432,7 +432,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((SLLipid)lipid).isLyso = true;
+                ((Sphingolipid)lipid).isLyso = true;
             }
         }
         

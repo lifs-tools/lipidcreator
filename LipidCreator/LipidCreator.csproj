@@ -179,7 +179,7 @@
     <Compile Include="NewMediatorFragment.Designer.cs">
       <DependentUpon>NewMediatorFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="GLLipid.cs" />
+    <Compile Include="Glycerolipid.cs" />
     <Compile Include="CollisionEnergy.cs" />
     <Compile Include="Lipid.cs" />
     <Compile Include="LipidsReview.cs">
@@ -212,11 +212,10 @@
     <Compile Include="NewFragment.Designer.cs">
       <DependentUpon>NewFragment.cs</DependentUpon>
     </Compile>
-    <Compile Include="PLLipid.cs" />
+    <Compile Include="Phospholipid.cs" />
     <Compile Include="LipidCreator.cs" />
     <Compile Include="Precursor.cs" />
-    <!--    <Compile Include="Properties\AssemblyInfo.cs" />-->
-    <Compile Include="SLLipid.cs" />
+    <Compile Include="Sphingolipid.cs" />
     <Compile Include="SpectralName.cs">
       <SubType>Form</SubType>
     </Compile>

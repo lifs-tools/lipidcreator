@@ -509,13 +509,13 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetFA)
             {
                 HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
-                HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
+                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetDB)
             {
                 HashSet<int> expected = new HashSet<int>(){0, 1};
-                HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.doubleBondCounts;
+                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.doubleBondCounts;
                 nextEnabled = doubleBondCounts != null && doubleBondCounts.Intersect(expected).Count() == 2;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SecondFADB)
@@ -523,11 +523,11 @@ namespace LipidCreator
                 nextEnabled = true;
                 
                 HashSet<int> expectedFA = new HashSet<int>(){8, 9, 10};
-                HashSet<int> carbonCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.carbonCounts;
+                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expectedFA).Count() == 3;
                 
                 HashSet<int> expectedDB = new HashSet<int>(){2};
-                HashSet<int> doubleBondCounts = ((PLLipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
+                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
                 nextEnabled = nextEnabled && doubleBondCounts != null && doubleBondCounts.Intersect(expectedDB).Count() == 1;
             }
             else if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.NameFragment)
@@ -1001,10 +1001,10 @@ namespace LipidCreator
                     // set MS1 data from tutorial one
                     ((Lipid)creatorGUI.lipidTabList[2]).headGroupNames.Add("PG");
                     ((Lipid)creatorGUI.lipidTabList[2]).adducts["+H"] = true;
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.lengthInfo = "14-18, 20";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.dbInfo = "0, 1";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.lengthInfo = "8-10";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag1.lengthInfo = "14-18, 20";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag1.dbInfo = "0, 1";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag2.lengthInfo = "8-10";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
                     
                     currentTabIndex = 2;
                     creatorGUI.changeTab(2);
@@ -1244,10 +1244,10 @@ namespace LipidCreator
                     // set MS1 data from tutorial one
                     ((Lipid)creatorGUI.lipidTabList[2]).headGroupNames.Add("PG");
                     ((Lipid)creatorGUI.lipidTabList[2]).adducts["+H"] = true;
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.lengthInfo = "14-18, 20";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag1.dbInfo = "0, 1";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.lengthInfo = "8-10";
-                    ((PLLipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag1.lengthInfo = "14-18, 20";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag1.dbInfo = "0, 1";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag2.lengthInfo = "8-10";
+                    ((Phospholipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
                     
                     // set MS2 data from tutorial two
                     Dictionary<int, int> newElements = MS2Fragment.createEmptyElementDict();

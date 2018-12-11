@@ -33,14 +33,14 @@ using log4net;
 namespace LipidCreator
 {
     [Serializable]
-    public class SLLipid : Lipid
+    public class Sphingolipid : Lipid
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(SLLipid));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Sphingolipid));
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
         public bool isLyso;
     
-        public SLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
+        public Sphingolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
         {
             lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
@@ -51,7 +51,7 @@ namespace LipidCreator
             adducts["-H"] = false;
         }
     
-        public SLLipid(SLLipid copy) : base((Lipid)copy)
+        public Sphingolipid(Sphingolipid copy) : base((Lipid)copy)
         {
             lcb = new FattyAcidGroup(copy.lcb);
             fag = new FattyAcidGroup(copy.fag);

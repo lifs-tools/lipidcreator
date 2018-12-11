@@ -33,9 +33,9 @@ using log4net;
 namespace LipidCreator
 {
     [Serializable]
-    public class GLLipid : Lipid
+    public class Glycerolipid : Lipid
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(GLLipid));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Glycerolipid));
         public FattyAcidGroup fag1;
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;
@@ -43,7 +43,7 @@ namespace LipidCreator
         
     
     
-        public GLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.GlyceroLipid)
+        public Glycerolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.GlyceroLipid)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -53,7 +53,7 @@ namespace LipidCreator
             adducts["-H"] = false;
         }
     
-        public GLLipid(GLLipid copy) : base((Lipid)copy) 
+        public Glycerolipid(Glycerolipid copy) : base((Lipid)copy) 
         {
             fag1 = new FattyAcidGroup(copy.fag1);
             fag2 = new FattyAcidGroup(copy.fag2);

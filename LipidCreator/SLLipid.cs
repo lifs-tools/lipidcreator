@@ -28,12 +28,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
     public class SLLipid : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewMediatorFragment));
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
         public bool isLyso;
@@ -102,7 +104,7 @@ namespace LipidCreator
                         }
                         else
                         {   
-                            Console.WriteLine("Error, fatty acid");
+                            log.Error("A sphingolipid can have at most 2 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception();
                         }
                         ++fattyAcidCounter;

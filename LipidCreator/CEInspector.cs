@@ -33,10 +33,13 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Globalization;
 
+using log4net;
+
 namespace LipidCreator
 {
     public partial class CEInspector : Form
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(CEInspector));
         public CreatorGUI creatorGUI = null;
         public double[] xValCoords = null;
         public IDictionary<string, double[]> yValCoords = null;
@@ -275,7 +278,7 @@ namespace LipidCreator
             }
             catch (Exception ee)
             {
-                Console.WriteLine(ee.ToString());
+                log.Error(ee.Message);
             }
             if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
             {

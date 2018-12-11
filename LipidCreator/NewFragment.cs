@@ -30,13 +30,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
     public partial class NewFragment : Form
     {
-
+        
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewFragment));
         public Dictionary<string, object[]> elements;
         public MS2Form ms2form = null;
         public string[] buildingBlocks;
@@ -329,7 +331,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
-                    Console.WriteLine(ee.ToString());
+                    log.Error("Conversion error while updating cell value to int32: " + val, ee);
                     n = 0;
                 }
                 if (selectBaseCombobox.SelectedIndex == 0) n = Math.Max(n, 0);

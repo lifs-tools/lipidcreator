@@ -14,8 +14,11 @@
     <RootNamespace>LipidCreator</RootNamespace>
     <AssemblyName>LipidCreator</AssemblyName>
     <AppTitle>$(AssemblyName)</AppTitle>
-    <AppDescription></AppDescription>
+    <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
     <AppCompany>Leibniz-Institut für Analytische Wissenschaften – ISAS – e.V.</AppCompany>
+    <AppAuthor>Dominik Kopczynski, Nils Hoffmann, Bing Peng</AppAuthor>
+    <AppProvider>https://lifs.isas.de</AppProvider>
+    <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
     <AppProduct>$(AssemblyName)</AppProduct>
     <AppCopyright>Copyright © 2018</AppCopyright>
     <AppCulture></AppCulture>
@@ -320,6 +323,19 @@
     <Content Include="lipidcreator.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="WriteSkylineInfoProperties" AfterTargets="WriteGitHash">
+    <PropertyGroup>
+      <InfoPropertiesFile>$(TargetDir)tool-inf\info.properties</InfoPropertiesFile>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Name = $(AppTitle)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Version = $(AppVersion)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Author = $(AppAuthor)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Description = $(AppDescription)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(AppProvider)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(AppCompany)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" />
+  </Target>	
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>
       <!-- temp file for the git version (lives in "obj" folder)-->

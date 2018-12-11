@@ -150,6 +150,12 @@
     <Compile Include="CEInspector.Designer.cs">
       <DependentUpon>CEInspector.cs</DependentUpon>
     </Compile>
+    <Compile Include="LCMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LCMessageBox.Designer.cs">
+      <DependentUpon>LCMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewMediatorFragment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,6 +221,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LCMessageBox.resx">
+      <DependentUpon>LCMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LipidsReview.resx">
       <DependentUpon>LipidsReview.cs</DependentUpon>

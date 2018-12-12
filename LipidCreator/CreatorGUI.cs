@@ -3416,6 +3416,13 @@ namespace LipidCreator
         
         
         
+        public void startFourthTutorial(Object sender, EventArgs e)
+        {
+            tutorial.startTutorial(Tutorials.TutorialCE);
+        }
+        
+        
+        
         public void openHeavyIsotopeForm(Object sender, EventArgs e)
         {
             if (currentIndex == LipidCategory.NoLipid) return;
@@ -3842,6 +3849,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
+        
             if (args.Length > 0)
             {
         

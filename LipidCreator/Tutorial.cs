@@ -36,13 +36,15 @@ using System.Windows.Forms;
 namespace LipidCreator
 {
     
-    public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2};
+    public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2, TutorialCE = 3};
     
     public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
     
     public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    
+    public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
     
 
     [Serializable]
@@ -77,7 +79,8 @@ namespace LipidCreator
                 {(int)Tutorials.NoTutorial, 0},
                 {(int)Tutorials.TutorialPRM, Enum.GetNames(typeof(PRMSteps)).Length - 1},
                 {(int)Tutorials.TutorialSRM, Enum.GetNames(typeof(SRMSteps)).Length - 1},
-                {(int)Tutorials.TutorialHL, Enum.GetNames(typeof(HLSteps)).Length - 1}
+                {(int)Tutorials.TutorialHL, Enum.GetNames(typeof(HLSteps)).Length - 1},
+                {(int)Tutorials.TutorialCE, Enum.GetNames(typeof(CESteps)).Length - 1}
             };
             tutorialArrow = new Overlay(creatorGUI.lipidCreator.prefixPath);
             tutorialWindow = new TutorialWindow(this, creatorGUI.lipidCreator.prefixPath);
@@ -91,8 +94,8 @@ namespace LipidCreator
         
         public void startTutorial(Tutorials t)
         {
-        
-            if (!creatorGUI.resetLipidCreator()) return;
+            // TODO: uncomment when finished adding fourth tutorial
+            //if (!creatorGUI.resetLipidCreator()) return;
             
             tutorial = t;
             tutorialStep = 0;
@@ -224,6 +227,7 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialPRM) TutorialPRMStep();
             else if (tutorial == Tutorials.TutorialSRM) TutorialSRMStep();
             else if (tutorial == Tutorials.TutorialHL) TutorialHLStep();
+            else if (tutorial == Tutorials.TutorialCE) TutorialCEStep();
             else quitTutorial(true);
         }
         
@@ -1555,6 +1559,72 @@ namespace LipidCreator
                     break;
                     
                     
+                    
+                default:
+                    quitTutorial();
+                    break;
+            }
+        }
+        
+        
+        public void TutorialCEStep()
+        {
+        
+            prepareStep();
+            switch(tutorialStep)
+            {   
+                case (int)CESteps.Welcome:
+                    setTutorialControls(creatorGUI.homeTab);
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible to estimate or set an optimal collision energy either for a complete lipid species (PRM) or for each fragment individually (SRM).", false);
+                    nextEnabled = true;
+                    break;
+                    
+                case (int)CESteps.ActivateCE:
+                    setTutorialControls(creatorGUI.homeTab);
+                    creatorGUI.menuOptions.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy computation' > 'Thermo Scientific Q Exactive HF'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible to estimate or set an optimal collision energy either for a complete lipid species (PRM) or for each fragment individually (SRM).");
+                    break;
+                    
+                case (int)CESteps.OpenCEDialog:
+                    break;
+                    
+                case (int)CESteps.SelectTXB2:
+                    break;
+                    
+                case (int)CESteps.ExplainBlackCurve:
+                    break;
+                    
+                case (int)CESteps.ChangeManually:
+                    break;
+                    
+                case (int)CESteps.CEto20:
+                    break;
+                    
+                case (int)CESteps.SameForD4:
+                    break;
+                    
+                case (int)CESteps.CloseCE:
+                    break;
+                    
+                case (int)CESteps.ChangeToMediators:
+                    break;
+                    
+                case (int)CESteps.SelectTXB2HG:
+                    break;
+                    
+                case (int)CESteps.ReviewLipids:
+                    break;
+                    
+                case (int)CESteps.ExplainLCasExternal:
+                    break;
+                    
+                case (int)CESteps.StoreBlib:
+                    break;
+                    
+                case (int)CESteps.Finish:
+                    break;
                     
                 default:
                     quitTutorial();

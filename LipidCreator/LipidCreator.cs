@@ -185,7 +185,7 @@ namespace LipidCreator
                             string fragmentFile = prefixPath + tokens[3];
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
-                                Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
+                                log.Error("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
                             int charge = Convert.ToInt32(tokens[4]);
@@ -202,13 +202,12 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
+                log.Error("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
             
             
@@ -301,13 +300,12 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+                log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
             }
             
             
@@ -345,13 +343,12 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + instrumentsFile + " does not exist or can not be opened.");
+                log.Error("Error: file " + instrumentsFile + " does not exist or can not be opened.");
             }
             
             
@@ -408,13 +405,12 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + ceParametersFile + " does not exist or can not be opened.");
+                log.Error("Error: file " + ceParametersFile + " does not exist or can not be opened.");
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";

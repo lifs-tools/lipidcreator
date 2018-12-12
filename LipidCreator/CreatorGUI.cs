@@ -3953,8 +3953,8 @@ namespace LipidCreator
                                     }
                                     catch (Exception e)
                                     {
-                                        Console.WriteLine("The file '" + inputCSV + "' in line '" + lineCounter + "' could not be read:");
-                                        Console.WriteLine(e.Message);
+                                        log.Error("The file '" + inputCSV + "' in line '" + lineCounter + "' could not be read:", e);
+                                        //Console.WriteLine(e.Message);
                                     }
                                 }
                             }

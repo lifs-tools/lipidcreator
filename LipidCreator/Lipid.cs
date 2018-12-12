@@ -32,6 +32,7 @@ using System.Xml.Linq;
 using System.Data.SQLite;
 using System.Globalization;
 using System.Linq;
+using log4net;
 
 // For the benefit of Skyline developer systems configured to not allow nonlocalized strings
 // ReSharper disable NonLocalizedString
@@ -68,6 +69,7 @@ namespace LipidCreator
     [Serializable]
     public abstract class Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Lipid));
         public Dictionary<string, HashSet<string>> positiveFragments;
         public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
@@ -795,7 +797,7 @@ namespace LipidCreator
                     break;
                     
                 default:
-                    Console.WriteLine("Error: " + node.Name.ToString());
+                    log.Error("Error: " + node.Name.ToString());
                     throw new Exception("Error: " + node.Name.ToString());
             }
         }

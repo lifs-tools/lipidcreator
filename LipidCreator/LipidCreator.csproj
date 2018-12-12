@@ -420,6 +420,10 @@
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="echo -1 &gt; $(TargetDir)data\analytics.txt" />
+    <MakeDir Directories="$(TargetDir)data\predefined\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Human\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Mouse\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Yeast\" />
     <!-- create resources on Windows -->
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined\Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />

@@ -3,8 +3,17 @@ CORE_FILES = LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid
 
 GUI_FILES = CreatorGUI.cs CreatorGUI.Designer.cs MS2Form.cs MS2Form.Designer.cs LipidsReview.cs LipidsReview.Designer.cs NewMediatorFragment.cs NewMediatorFragment.Designer.cs NewFragment.cs NewFragment.Designer.cs SpectralName.cs SpectralName.Designer.cs AboutDialog.cs AboutDialog.Designer.cs AssemblyInfo.cs MediatorMS2Form.cs MediatorMS2Form.Designer.cs AddHeavyPrecursor.cs AddHeavyPrecursor.Designer.cs Tutorial.cs FilterDialog.cs FilterDialog.Designer.cs TranslatorDialog.cs TranslatorDialog.Designer.cs CEInspector.cs CEInspector.Designer.cs LCMessageBox.cs LCMessageBox.Designer.cs
 
+DIR = ${CURDIR}
+BUILD_DIR = $(DIR)/bin/make
+
+RESX_FILES = AboutDialog.resx,$(BUILD_DIR)/LipidCreator.AboutDialog.resources AddHeavyPrecursor.resx,$(BUILD_DIR)/LipidCreator.AddHeavyPrecursor.resources CEInspector.resx,$(BUILD_DIR)/LipidCreator.CEInspector.resources FilterDialog.resx,$(BUILD_DIR)/LipidCreator.FilterDialog.resources LCMessageBox.resx,$(BUILD_DIR)/LipidCreator.LCMessageBox.resources LipidsReview.resx,$(BUILD_DIR)/LipidCreator.LipidsReview.resources MS2Form.resx,$(BUILD_DIR)/LipidCreator.MS2Form.resources NewFragment.resx,$(BUILD_DIR)/LipidCreator.NewFragment.resources NewMediatorFragment.resx,$(BUILD_DIR)/LipidCreator.NewMediator.resources TranslatorDialog.resx,$(BUILD_DIR)/LipidCreator.TranslatorDialog.resources
+
+RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:$(BUILD_DIR)/LipidCreator.AddHeavyPrecursor.resources -resource:$(BUILD_DIR)/LipidCreator.CEInspector.resources -resource:$(BUILD_DIR)/LipidCreator.FilterDialog.resources -resource:$(BUILD_DIR)/LipidCreator.LCMessageBox.resources -resource:$(BUILD_DIR)/LipidCreator.LipidsReview.resources -resource:$(BUILD_DIR)/LipidCreator.MS2Form.resources -resource:$(BUILD_DIR)/LipidCreator.NewFragment.resources -resource:$(BUILD_DIR)/LipidCreator.NewMediator.resources -resource:$(BUILD_DIR)/LipidCreator.TranslatorDialog.resources
+
 main: setup
-	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:bin/make/LipidCreator.exe
+	resgen2 -compile $(RESX_FILES)
+
+	mcs $(RES_FILES) -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:bin/make/LipidCreator.exe
 
 tests: setup
 	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:bin/make/TestTransitionList.exe

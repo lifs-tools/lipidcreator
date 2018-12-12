@@ -618,7 +618,6 @@ namespace LipidCreator
                 string fragment = peak.Annotation.Name;
                 double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, adduct);
                 peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, adduct, fragment, collisionEnergy);
-                
             }
             
             // Commit to .blib

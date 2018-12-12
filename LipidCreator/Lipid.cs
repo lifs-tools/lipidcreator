@@ -48,7 +48,7 @@ namespace LipidCreator
         public LipidCategory lipidCategory;
         public string moleculeListName;
         public string fullMoleculeListName; // including heavy labeled suffix
-        public string lipidClass;
+        public string precursorExportName;
         public string precursorName;
         public string precursorIonFormula;
         public string precursorAdduct;
@@ -63,6 +63,21 @@ namespace LipidCreator
         public FattyAcid fa4;
         public FattyAcid lcb;
         public HashSet<string> fragmentNames;
+        
+        /*
+        public override string ToString()
+        {
+            string str = "molecularListName: " + moleculeListName + "\n";
+            str += "fullMoleculeListName: " + fullMoleculeListName + "\n";
+            str += "lipidClass: " + lipidClass + "\n";
+            str += "precursorName: " + precursorName + "\n";
+            str += "precursorIonFormula: " + precursorIonFormula + "\n";
+            str += "precursorAdduct: " + precursorAdduct + "\n";
+            str += "precursorAdductFormula: " + precursorAdductFormula + "\n";
+            str += "precursorCharge: " + precursorCharge + "\n";
+            return str;
+        }
+        */
     }
     
     
@@ -214,7 +229,7 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.lipidClass;
+                    string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
@@ -232,7 +247,7 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
-                if (!allFragments.ContainsKey(precursorData.lipidClass) || !allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0].ContainsKey(fragmentName)) continue;
+                if (!allFragments.ContainsKey(precursorData.fullMoleculeListName) || !allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0].ContainsKey(fragmentName)) continue;
             
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
@@ -242,7 +257,7 @@ namespace LipidCreator
                 if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.fa1.hydroxyl == 0) continue;
                 
                 
-                MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
+                MS2Fragment fragment = allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0][fragmentName];
                 
                 // Exception for lipids with NL(NH3) fragment
                 if (fragment.fragmentName.Equals("-(NH3,17)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
@@ -342,7 +357,7 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.lipidClass;
+                    string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
@@ -435,7 +450,6 @@ namespace LipidCreator
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
             string precursorName = LipidCreator.precursorNameSplit(precursorData.precursorName)[0];
-            Console.WriteLine(precursorName);
             SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorName);
             SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
@@ -509,10 +523,10 @@ namespace LipidCreator
                 
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
-            if (precursorData.fragmentNames.Count == 0 || !allFragments.ContainsKey(precursorData.lipidClass)) return;
+            if (precursorData.fragmentNames.Count == 0 || !allFragments.ContainsKey(precursorData.fullMoleculeListName)) return;
             
             var peaks = new List<Peak>();
-            foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
+            foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0])
             {
             
                 MS2Fragment fragment = fragmentPair.Value;
@@ -835,7 +849,7 @@ namespace LipidCreator
             precursorData.lipidCategory = LipidCategory.Unsupported;
             precursorData.moleculeListName = "Unsupported lipid";
             precursorData.fullMoleculeListName = "Unsupported lipid";
-            precursorData.lipidClass = "Unsupported lipid";
+            precursorData.precursorExportName = "Unsupported lipid";
             precursorData.precursorName = "Unsupported lipid";
             precursorData.precursorIonFormula = "Unsupported lipid";
             precursorData.precursorAdduct = "Unsupported lipid";

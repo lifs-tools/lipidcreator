@@ -681,7 +681,7 @@ namespace LipidCreator
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
                     double CE = -1;
-                    string precursorName = precursorData.lipidClass;
+                    string precursorName = precursorData.fullMoleculeListName;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
                     if (PRMMode == PRMTypes.PRMAutomatically)
                     {
@@ -749,7 +749,7 @@ namespace LipidCreator
                 Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
                 foreach (PrecursorData precursorData in precursorDataList)
                 {
-                    precursorData.precursorName = precursorData.lipidClass;
+                    precursorData.precursorName = precursorData.fullMoleculeListName;
                     precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
                 }
             }

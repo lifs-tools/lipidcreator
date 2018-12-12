@@ -222,7 +222,7 @@ namespace LipidCreator
                                     precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     precursorData.moleculeListName = headgroup;
                                     precursorData.fullMoleculeListName = headgroup;
-                                    precursorData.lipidClass = headgroup;
+                                    precursorData.precursorExportName = headgroup + key;
                                     precursorData.precursorName = headgroup + key;
                                     precursorData.precursorIonFormula = chemForm;
                                     precursorData.precursorAdduct = adduct.Key;
@@ -281,7 +281,7 @@ namespace LipidCreator
                                         heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                         heavyPrecursorData.moleculeListName = headgroup;
                                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                        heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                        heavyPrecursorData.precursorExportName = headgroup + key;
                                         heavyPrecursorData.precursorName = heavyKey + key;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                         heavyPrecursorData.precursorAdduct = adduct.Key;
@@ -370,7 +370,7 @@ namespace LipidCreator
                             precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
-                            precursorData.lipidClass = headgroup;
+                            precursorData.precursorExportName = completeKey;
                             precursorData.precursorName = completeKey;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct.Key;
@@ -416,7 +416,7 @@ namespace LipidCreator
                                 heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                heavyPrecursorData.precursorExportName = completeKey;
                                 heavyPrecursorData.precursorName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct.Key;
@@ -518,7 +518,7 @@ namespace LipidCreator
                                 precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.lipidClass = headgroup;
+                                precursorData.precursorExportName = completeKey;
                                 precursorData.precursorName = completeKey;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
@@ -579,7 +579,7 @@ namespace LipidCreator
                                     heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                    heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                    heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct.Key;

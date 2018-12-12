@@ -572,7 +572,7 @@ namespace LipidCreator
             foreach (char c in text)
             {
                 int ic = (int)c;
-                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || (48 <= ic && ic < 58)))
+                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || ('0' <= ic && ic < '9')))
                 {
                     return null;
                 }

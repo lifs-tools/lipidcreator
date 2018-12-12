@@ -435,7 +435,6 @@ namespace LipidCreator
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
             string precursorName = LipidCreator.precursorNameSplit(precursorData.precursorName)[0];
-            log.Info(precursorName);
             SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorName);
             SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);

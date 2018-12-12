@@ -302,31 +302,56 @@ namespace LipidCreator
 
         #endregion
 
+        [NonSerialized]
         public CustomPictureBox pictureBoxFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxPositiveFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxNegativeFragments;
+        [NonSerialized]
         public Label labelPositiveFragments;
+        [NonSerialized]
         public Label labelNegativeFragments;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlack;
+        [NonSerialized]
         public Label labelFragmentDescriptionRed;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlue;
+        [NonSerialized]
         public Label labelPositiveSelectAll;
+        [NonSerialized]
         public Label labelPositiveDeselectAll;
+        [NonSerialized]
         public Label labelNegativeSelectAll;
+        [NonSerialized]
         public Label labelNegativeDeselectAll;
+        [NonSerialized]
         public Label labelSlashPositive;
+        [NonSerialized]
         public Label labelSlashNegative;
+        [NonSerialized]
         public Button buttonCancel;
+        [NonSerialized]
         public Button buttonOK;
+        [NonSerialized]
         public Button buttonAddFragment;
+        [NonSerialized]
         public TabControl tabControlFragments;
+        [NonSerialized]
         public ArrayList tabPages;
+        [NonSerialized]
         public ToolTip toolTip1;
+        [NonSerialized]
         public ComboBox isotopeList;
+        [NonSerialized]
         public ArrayList controlElements;
-        
+
+        [NonSerialized]
         public ContextMenu contextMenuFragment;
+        [NonSerialized]
         public MenuItem menuFragmentItem1;
+        [NonSerialized]
         public MenuItem menuFragmentItem2;
     }
 }

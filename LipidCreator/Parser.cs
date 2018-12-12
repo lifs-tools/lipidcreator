@@ -37,6 +37,7 @@ namespace LipidCreator
     [Serializable]
     public class Parser
     {
+        [Serializable]
         public class ExtendedLinkedList<T> : LinkedList<T>
         {
             public T PopFirst()
@@ -189,6 +190,7 @@ namespace LipidCreator
         public Dictionary<char, HashSet<long>> TtoNT;
         public Dictionary<long, HashSet<long>> NTtoNT;
         public char quote;
+        [NonSerialized]
         public TreeNode parseTree;
         public bool wordInGrammer;
         public Dictionary<long, string> NTtoRule;

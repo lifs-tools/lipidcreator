@@ -35,6 +35,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using log4net;
+using System.ComponentModel;
 
 namespace LipidCreator
 {
@@ -47,6 +48,7 @@ namespace LipidCreator
         public ArrayList lipidTabList;
         public int currentTabIndex = 1;
         public LipidCreator lipidCreator;
+        [NonSerialized]
         public AboutDialog aboutDialog;
         public Lipid currentLipid;
         public DataTable registeredLipidsDatatable;
@@ -60,9 +62,12 @@ namespace LipidCreator
         public Tutorial tutorial;
         public MS2Form ms2fragmentsForm = null;
         public MediatorMS2Form mediatorMS2fragmentsForm = null;
+        [NonSerialized]
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
+        [NonSerialized]
         public FilterDialog filterDialog = null;
+        [NonSerialized]
         public MenuItem lastCEInstrumentChecked = null;
         public bool asDeveloper = false;
         
@@ -229,8 +234,6 @@ namespace LipidCreator
                 using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                 {
                     outputFile.WriteLine ((lipidCreator.enableAnalytics ? "1" : "0"));
-                    outputFile.Dispose ();
-                    outputFile.Close ();
                 }
             }
             catch (Exception ex)
@@ -3376,7 +3379,14 @@ namespace LipidCreator
             }
         }
         
-        
+        public void windowOnClosing(Object sender, FormClosingEventArgs e)
+        {
+            if (this.lipidCreator!=null)
+            {
+                log.Info("Closing LipidCreator!");
+                this.lipidCreator.Dispose();
+            }
+        }
         
         public void windowSizeChanged(Object sender, EventArgs e)
         {
@@ -3614,12 +3624,9 @@ namespace LipidCreator
 
             if(saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                StreamWriter writer;
-                if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.OpenFile()))
                 {
                     writer.Write(lipidCreator.serialize());
-                    writer.Dispose();
-                    writer.Close();
                 }
             }
         }
@@ -3636,12 +3643,9 @@ namespace LipidCreator
 
             if(saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                StreamWriter writer;
-                if((writer = new StreamWriter(saveFileDialog1.OpenFile())) != null)
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.OpenFile()))
                 {
                     writer.Write(lipidCreator.serialize(true));
-                    writer.Dispose();
-                    writer.Close();
                 }
             }
         }
@@ -3791,8 +3795,6 @@ namespace LipidCreator
                     using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                     {
                         outputFile.WriteLine ("-1");
-                        outputFile.Dispose ();
-                        outputFile.Close ();
                     }
                 }
             }
@@ -3824,8 +3826,6 @@ namespace LipidCreator
                         using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                         {
                             outputFile.WriteLine ((mbr == DialogResult.Yes ? "1" : "0"));
-                            outputFile.Dispose ();
-                            outputFile.Close ();
                         }
                     }
                 }
@@ -4061,8 +4061,6 @@ namespace LipidCreator
                                     using (StreamWriter writer = new StreamWriter (outputCSV))
                                     {
                                         writer.Write(lc.serialize());
-                                        writer.Dispose();
-                                        writer.Close();
                                     }
                                 }
                             }

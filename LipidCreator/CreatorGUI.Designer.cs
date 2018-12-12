@@ -29,6 +29,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace LipidCreator
 {
@@ -278,55 +279,101 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        
+
+        [NonSerialized]
         public System.Timers.Timer timerEasterEgg;
+        [NonSerialized]
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuFile;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImport;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportList;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportSettings;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportPredefined;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExport;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExportSettings;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash2;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash3;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash4;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExit;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuStatistics;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuOptions;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuTranslate;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergy;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergyOpt;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuMS2Fragments;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuIsotopes;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuClearLipidList;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuResetCategory;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuResetLipidCreator;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuHelp;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuAbout;
-        
-        
+
+
+        [NonSerialized]
         public TabControl tabControl = new TabControl();
+        [NonSerialized]
         public TabPage homeTab;
+        [NonSerialized]
         public TabPage glycerolipidsTab;
+        [NonSerialized]
         public TabPage phospholipidsTab;
+        [NonSerialized]
         public TabPage sphingolipidsTab;
+        [NonSerialized]
         public TabPage cholesterollipidsTab;
+        [NonSerialized]
         public TabPage mediatorlipidsTab;
+        [NonSerialized]
         public GroupBox lipidsGroupbox;
+        [NonSerialized]
         public int DefaultCheckboxBGR;
+        [NonSerialized]
         public int DefaultCheckboxBGG;
+        [NonSerialized]
         public int DefaultCheckboxBGB;
 
+        [NonSerialized]
         public Button addLipidButton;
+        [NonSerialized]
         public Button modifyLipidButton;
+        [NonSerialized]
         public Button MS2fragmentsLipidButton;
+        [NonSerialized]
         public Button addHeavyIsotopeButton;
+        [NonSerialized]
         public Button filtersButton;
+        [NonSerialized]
         public Button startFirstTutorialButton;
+        [NonSerialized]
         public Button startSecondTutorialButton;
+        [NonSerialized]
         public Button startThirdTutorialButton;
         
         
@@ -371,189 +418,347 @@ namespace LipidCreator
         Image sphingoLysoBackboneImage;
         Image cholesterolBackboneImage;
         Image cholesterolEsterBackboneImage;
-        
 
+        [NonSerialized]
         public PictureBox glPictureBox;
+        [NonSerialized]
         public CustomPictureBox plPictureBox;
+        [NonSerialized]
         public PictureBox slPictureBox;
+        [NonSerialized]
         public PictureBox chPictureBox;
+        [NonSerialized]
         public PictureBox medPictureBox;
-        
+
+        [NonSerialized]
         public ListBox glHgListbox;
+        [NonSerialized]
         public ListBox plHgListbox;
+        [NonSerialized]
         public ListBox slHgListbox;
+        [NonSerialized]
         public ListBox medHgListbox;
 
+        [NonSerialized]
         public TextBox clFA3Textbox;
+        [NonSerialized]
         public TextBox clFA4Textbox;
+        [NonSerialized]
         public TextBox glFA1Textbox;
+        [NonSerialized]
         public TextBox glFA2Textbox;
+        [NonSerialized]
         public TextBox glFA3Textbox;
+        [NonSerialized]
         public TextBox plFA1Textbox;
+        [NonSerialized]
         public TextBox plFA2Textbox;
+        [NonSerialized]
         public TextBox slLCBTextbox;
+        [NonSerialized]
         public TextBox slFATextbox;
+        [NonSerialized]
         public TextBox chFATextbox;
 
+        [NonSerialized]
         public ComboBox clFA3Combobox;
+        [NonSerialized]
         public ComboBox clFA4Combobox;
+        [NonSerialized]
         public ComboBox glFA1Combobox;
+        [NonSerialized]
         public ComboBox glFA2Combobox;
+        [NonSerialized]
         public ComboBox glFA3Combobox;
+        [NonSerialized]
         public ComboBox plFA1Combobox;
+        [NonSerialized]
         public ComboBox plFA2Combobox;
+        [NonSerialized]
         public ComboBox slLCBCombobox;
+        [NonSerialized]
         public ComboBox slFACombobox;
+        [NonSerialized]
         public ComboBox chFACombobox;
 
-
+        [NonSerialized]
         public CheckBox clFA3Checkbox1;
+        [NonSerialized]
         public CheckBox clFA3Checkbox2;
+        [NonSerialized]
         public CheckBox clFA3Checkbox3;
+        [NonSerialized]
         public CheckBox clFA4Checkbox1;
+        [NonSerialized]
         public CheckBox clFA4Checkbox2;
+        [NonSerialized]
         public CheckBox clFA4Checkbox3;
+        [NonSerialized]
         public CheckBox glFA1Checkbox1;
+        [NonSerialized]
         public CheckBox glFA1Checkbox2;
+        [NonSerialized]
         public CheckBox glFA1Checkbox3;
+        [NonSerialized]
         public CheckBox glFA2Checkbox1;
+        [NonSerialized]
         public CheckBox glFA2Checkbox2;
+        [NonSerialized]
         public CheckBox glFA2Checkbox3;
+        [NonSerialized]
         public CheckBox glFA3Checkbox1;
+        [NonSerialized]
         public CheckBox glFA3Checkbox2;
+        [NonSerialized]
         public CheckBox glFA3Checkbox3;
+        [NonSerialized]
         public CheckBox plFA1Checkbox1;
+        [NonSerialized]
         public CheckBox plFA1Checkbox2;
+        [NonSerialized]
         public CheckBox plFA1Checkbox3;
+        [NonSerialized]
         public CheckBox plFA2Checkbox1;
+        [NonSerialized]
         public CheckBox plFA2Checkbox2;
+        [NonSerialized]
         public CheckBox plFA2Checkbox3;
+        [NonSerialized]
         public CheckBox glContainsSugar;
+        [NonSerialized]
         public CheckBox chContainsEster;
 
+        [NonSerialized]
         public GroupBox glPositiveAdduct;
+        [NonSerialized]
         public GroupBox glNegativeAdduct;
+        [NonSerialized]
         public GroupBox plPositiveAdduct;
+        [NonSerialized]
         public GroupBox plNegativeAdduct;
+        [NonSerialized]
         public GroupBox slPositiveAdduct;
+        [NonSerialized]
         public GroupBox slNegativeAdduct;
+        [NonSerialized]
         public GroupBox chPositiveAdduct;
+        [NonSerialized]
         public GroupBox chNegativeAdduct;
+        [NonSerialized]
         public GroupBox medNegativeAdduct;
-        
+
+        [NonSerialized]
         public GroupBox glStep1;
+        [NonSerialized]
         public GroupBox plStep1;
+        [NonSerialized]
         public GroupBox slStep1;
+        [NonSerialized]
         public GroupBox chStep1;
+        [NonSerialized]
         public GroupBox medStep1;
+        [NonSerialized]
         public GroupBox lcStep2;
+        [NonSerialized]
         public GroupBox lcStep3;
 
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox4;
-        
+        [NonSerialized]
         public CheckBox glRepresentativeFA;
+        [NonSerialized]
         public CheckBox plRepresentativeFA;
         Color highlightedCheckboxColor;
 
+        [NonSerialized]
         public TextBox clDB3Textbox;
+        [NonSerialized]
         public TextBox clDB4Textbox;
+        [NonSerialized]
         public TextBox glDB1Textbox;
+        [NonSerialized]
         public TextBox glDB2Textbox;
+        [NonSerialized]
         public TextBox glDB3Textbox;
+        [NonSerialized]
         public TextBox plDB1Textbox;
+        [NonSerialized]
         public TextBox plDB2Textbox;
+        [NonSerialized]
         public TextBox slDB1Textbox;
+        [NonSerialized]
         public TextBox slDB2Textbox;
+        [NonSerialized]
         public TextBox chDBTextbox;
-        
+
+        [NonSerialized]
         public TextBox clHydroxyl3Textbox;
+        [NonSerialized]
         public TextBox clHydroxyl4Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl1Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl2Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl3Textbox;
+        [NonSerialized]
         public TextBox plHydroxyl1Textbox;
+        [NonSerialized]
         public TextBox plHydroxyl2Textbox;
+        [NonSerialized]
         public TextBox chHydroxylTextbox;
-        
+
+        [NonSerialized]
         public GroupBox plTypeGroup;
+        [NonSerialized]
         public RadioButton plRegular;
+        [NonSerialized]
         public RadioButton plIsCL;
+        [NonSerialized]
         public RadioButton plIsLyso;
-        
+
+        [NonSerialized]
         public GroupBox slTypeGroup;
+        [NonSerialized]
         public RadioButton slRegular;
+        [NonSerialized]
         public RadioButton slIsLyso;
 
+        [NonSerialized]
         Label clDB3Label;
+        [NonSerialized]
         Label clDB4Label;
+        [NonSerialized]
         Label glDB1Label;
+        [NonSerialized]
         Label glDB2Label;
+        [NonSerialized]
         Label glDB3Label;
+        [NonSerialized]
         Label plDB1Label;
+        [NonSerialized]
         Label plDB2Label;
+        [NonSerialized]
         Label slDB1Label;
+        [NonSerialized]
         Label slDB2Label;
+        [NonSerialized]
         Label chDBLabel;
+        [NonSerialized]
         Label slLCBHydroxyLabel;
+        [NonSerialized]
         Label slFAHydroxyLabel;
+        [NonSerialized]
         Label clHydroxyl3Label;
+        [NonSerialized]
         Label clHydroxyl4Label;
+        [NonSerialized]
         Label glHydroxyl1Label;
+        [NonSerialized]
         Label glHydroxyl2Label;
+        [NonSerialized]
         Label glHydroxyl3Label;
+        [NonSerialized]
         Label plHydroxyl1Label;
+        [NonSerialized]
         Label plHydroxyl2Label;
+        [NonSerialized]
         Label chFAHydroxyLabel;
-        
+
+        [NonSerialized]
         Label homeText;
+        [NonSerialized]
         Label homeText2;
+        [NonSerialized]
         Label homeText3;
-        
+
+        [NonSerialized]
         PictureBox glArrow;
+        [NonSerialized]
         Image glArrowImage;
+        [NonSerialized]
         Label easterText;
 
+        [NonSerialized]
         Label glHGLabel;
+        [NonSerialized]
         Label plHGLabel;
+        [NonSerialized]
         Label slHGLabel;
-        
+
+        [NonSerialized]
         public ComboBox slLCBHydroxyCombobox;
+        [NonSerialized]
         public ComboBox slFAHydroxyCombobox;
 
+        [NonSerialized]
         ToolTip toolTip;
 
+        [NonSerialized]
         DataGridView lipidsGridview;
+        [NonSerialized]
         public Button openReviewFormButton;
         
         public ArrayList controlElements;
@@ -2234,7 +2439,7 @@ namespace LipidCreator
             startThirdTutorialButton.Click += startThirdTutorial;
             
             this.SizeChanged += new EventHandler(windowSizeChanged);
-            
+            this.FormClosing += new FormClosingEventHandler(windowOnClosing);
             
             controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
             

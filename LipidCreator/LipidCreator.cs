@@ -354,64 +354,70 @@ namespace LipidCreator
             
             
             
-            string ceParametersFile = prefixPath + "data/collision-energy-parameters.csv";
-            if (File.Exists(ceParametersFile))
+            string ceParametersDir = prefixPath + "data/ce-parameters";
+            string[] ceFilePaths = Directory.GetFiles(prefixPath + "data/ce-parameters/", "*.csv", SearchOption.TopDirectoryOnly);
+            if (Directory.Exists(ceParametersDir))
             {
-                lineCounter = 1;
-                try
+                foreach(string ceParametersFile in ceFilePaths)
                 {
-                    using (StreamReader sr = new StreamReader(ceParametersFile))
+                    lineCounter = 1;
+                    try
                     {
-                        String line = sr.ReadLine(); // omit titles
-                        while((line = sr.ReadLine()) != null)
+                        using (StreamReader sr = new StreamReader(ceParametersFile))
                         {
-                            lineCounter++;
-                            if (line.Length < 2) continue;
-                            if (line[0] == '#') continue;
-                            
-                            string[] tokens = parseLine(line);
-                            if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
-                            
-                            string instrument = tokens[0];
-                            string lipidClass = tokens[1];
-                            string adduct = tokens[2];
-                            string fragment = tokens[3];
-                            string paramKey = tokens[4];
-                            string paramValue = tokens[5];
-                            
-                            
-                            if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                            String line = sr.ReadLine(); // omit titles
+                            while((line = sr.ReadLine()) != null)
                             {
-                                collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
-                            }
+                                lineCounter++;
+                                if (line.Length < 2) continue;
+                                if (line[0] == '#') continue;
                             
-                            if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
-                            }
+                                string[] tokens = parseLine(line);
+                                if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
                             
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
-                            }
+                                string instrument = tokens[0];
+                                string lipidClass = tokens[1];
+                                string adduct = tokens[2];
+                                string fragment = tokens[3];
+                                string paramKey = tokens[4];
+                                string paramValue = tokens[5];
                             
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
-                            }
                             
-                            collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
+                                if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                                {
+                                    collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
+                                }
+                            
+                                if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
+                                {
+                                    collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
+                                }
+                            
+                                if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
+                                {
+                                    collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
+                                }
+                            
+                                if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
+                                {
+                                    collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
+                                }
+                            
+                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
+                            }
                         }
+
+                    
                     }
-                }
-                catch (Exception e)
-                {
-                    log.Error("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    catch (Exception e)
+                    {
+                        log.Error("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    }
                 }
             }
             else
             {
-                log.Error("Error: file " + ceParametersFile + " does not exist or can not be opened.");
+                log.Error("Error: directory " + ceParametersDir + " does not exist or can not be opened.");
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";

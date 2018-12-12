@@ -157,7 +157,7 @@ namespace LipidCreator
                     // subtracting adduct from precursor
                     string adduct = unitTestRow[3];
                     adduct = adduct.Substring(2, adduct.Length - 2);
-                    adduct = adduct.Split(']')[0];
+                    adduct = adduct.Split(new char[]{']'})[0];
 
                     if (!lipid.adducts.ContainsKey(adduct)) throw new Exception("Error: unknown precursor adduct '" + unitTestRow[3] + "'");
                     

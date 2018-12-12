@@ -13,7 +13,7 @@ RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:
 main: setup
 	resgen2 -compile $(RESX_FILES)
 
-	mcs $(RES_FILES) -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:bin/make/LipidCreator.exe
+	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:bin/make/LipidCreator.exe
 
 tests: setup
 	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:bin/make/TestTransitionList.exe

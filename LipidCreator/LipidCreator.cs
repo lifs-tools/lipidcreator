@@ -336,7 +336,7 @@ namespace LipidCreator
                             double.TryParse(tokens[2], out instrumentData.minCE);
                             double.TryParse(tokens[3], out instrumentData.maxCE);
                             instrumentData.xAxisLabel = tokens[4];
-                            instrumentData.modes = new HashSet<string>(tokens[5].Split(new Char[]{';'}));
+                            instrumentData.modes = new HashSet<string>(tokens[5].Split(new char[]{';'}));
                             msInstruments.Add(instrumentData.CVTerm, instrumentData);
                         }
                     }
@@ -577,17 +577,15 @@ namespace LipidCreator
                     return null;
                 }
             }
-        
-            string[] delimitors = new string[] { "," };
-            string[] delimitorsRange = new string[] { "-" };
-            string[] tokens = text.Split(delimitors, StringSplitOptions.None);
+            
+            string[] tokens = text.Split(new char[]{','}, StringSplitOptions.None);
             
             HashSet<int> carbonCounts = new HashSet<int>();
             
             for (int i = 0; i < tokens.Length; ++i)
             {
                 if (tokens[i].Length == 0) return null;
-                string[] rangeBoundaries = tokens[i].Split(delimitorsRange, StringSplitOptions.None);
+                string[] rangeBoundaries = tokens[i].Split(new char[]{'-'}, StringSplitOptions.None);
                 if (rangeBoundaries.Length == 1)
                 {
                     int rangeStart = 0;
@@ -1259,9 +1257,9 @@ namespace LipidCreator
             if (precursorName[n - 1] != HEAVY_LABEL_CLOSING_BRACKET) return names;
             if (precursorName.IndexOf(HEAVY_LABEL_OPENING_BRACKET) == -1) return names;
             
-            precursorName = precursorName.Split(HEAVY_LABEL_CLOSING_BRACKET)[0];
-            names[1] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[1];
-            names[0] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[0];
+            precursorName = precursorName.Split(new char[]{HEAVY_LABEL_CLOSING_BRACKET})[0];
+            names[1] = precursorName.Split(new char[]{HEAVY_LABEL_OPENING_BRACKET})[1];
+            names[0] = precursorName.Split(new char[]{HEAVY_LABEL_OPENING_BRACKET})[0];
             return names;
         }
         

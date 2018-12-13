@@ -21,7 +21,8 @@
     <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
     <AppProduct>$(AssemblyName)</AppProduct>
     <AppCopyright>Copyright © 2018</AppCopyright>
-    <AppCulture></AppCulture>
+    <AppCulture>
+    </AppCulture>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <Today>$([System.DateTime]::Now.tostring("u"))</Today>
     <FileAlignment>512</FileAlignment>
@@ -86,7 +87,8 @@
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -380,33 +382,33 @@
         <_Parameter1>GitBranch</_Parameter1>
         <_Parameter2>$(BuildBranch)</_Parameter2>
       </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyTitle">
+      <AssemblyAttributes Include="AssemblyTitle">
         <_Parameter1>$(AppTitle)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyDescription">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyDescription">
         <_Parameter1>$(AppDescription)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyCompany">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyCompany">
         <_Parameter1>$(AppCompany)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyProduct">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyProduct">
         <_Parameter1>$(AppProduct)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyCopyright">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyCopyright">
         <_Parameter1>$(AppCopyright)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyCulture">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyCulture">
         <_Parameter1>$(AppCulture)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyVersion">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyVersion">
         <_Parameter1>$(AppVersion)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="AssemblyFileVersion">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyFileVersion">
         <_Parameter1>$(AppVersion)</_Parameter1>
-     </AssemblyAttributes>
-     <AssemblyAttributes Include="System.Runtime.InteropServices.Guid">
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="System.Runtime.InteropServices.Guid">
         <_Parameter1>$(Guid)</_Parameter1>
-     </AssemblyAttributes>
+      </AssemblyAttributes>
     </ItemGroup>
     <!-- writes the attribute to the customAssemblyInfo file -->
     <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
@@ -418,7 +420,10 @@
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="echo -1 &gt; $(TargetDir)data\analytics.txt" />
-    <!--<Exec Command="cd $(TargetDir)" Condition=" '$(OS)' == 'Windows_NT' " />-->
+    <MakeDir Directories="$(TargetDir)data\predefined\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Human\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Mouse\" />
+    <MakeDir Directories="$(TargetDir)data\predefined\Yeast\" />
     <!-- create resources on Windows -->
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined\Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
@@ -429,7 +434,9 @@
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined\Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined\Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <!-- remove generated log file and predefined template directory -->
     <Delete Files="$(TargetDir)data\lipidcreator.log" />
+    <RemoveDir Directories="$(TargetDir)data\predefined-lists" />
     <!-- create zip distribution on Windows -->
     <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create zip distribution on Linux / OSX -->

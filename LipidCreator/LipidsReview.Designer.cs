@@ -27,6 +27,7 @@ SOFTWARE.
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections;
+using System;
 
 namespace LipidCreator
 {
@@ -176,12 +177,19 @@ namespace LipidCreator
 
         #endregion
 
+        [NonSerialized]
         public System.Windows.Forms.DataGridView dataGridViewTransitions;
+        [NonSerialized]
         public System.Windows.Forms.Button buttonSendToSkyline;
+        [NonSerialized]
         public Button buttonStoreTransitionList;
+        [NonSerialized]
         public CheckBox checkBoxHideReplicates;
+        [NonSerialized]
         public CheckBox checkBoxCreateSpectralLibrary;
+        [NonSerialized]
         public Button buttonStoreSpectralLibrary;
+        [NonSerialized]
         public Label labelNumberOfTransitions;
         public ArrayList controlElements;
     }

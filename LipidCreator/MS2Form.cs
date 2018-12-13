@@ -41,6 +41,7 @@ namespace LipidCreator
         public bool loading;
         public NewFragment newFragment;
         public CreatorGUI creatorGUI;
+        [NonSerialized]
         public CheckedListBox editDeletePositive;
         public int editDeleteIndex;
         public int hoveredIndex;

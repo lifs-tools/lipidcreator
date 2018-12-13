@@ -43,6 +43,7 @@ namespace LipidCreator
         public bool senderInterupt;
         Dictionary<string, ArrayList> isotopeDict;
         public CreatorGUI creatorGUI;
+        [NonSerialized]
         public CheckedListBox deleteList;
         public int deleteIndex;
         

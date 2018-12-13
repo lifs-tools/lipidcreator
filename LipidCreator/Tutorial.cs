@@ -58,8 +58,11 @@ namespace LipidCreator
         public bool nextEnabled;
         public int pgIndex = 0;
         public int currentTabIndex = 0;
+        [NonSerialized]
         public Overlay tutorialArrow;
+        [NonSerialized]
         public TutorialWindow tutorialWindow;
+        [NonSerialized]
         public System.Timers.Timer timer;
         public ArrayList creatorGUIEventHandlers;
         public bool continueTutorial = false;

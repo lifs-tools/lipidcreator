@@ -27,6 +27,7 @@ SOFTWARE.
 using System.Collections;
 using System.Windows.Forms;
 using System.Drawing;
+using System;
 
 namespace LipidCreator
 {
@@ -226,17 +227,28 @@ namespace LipidCreator
 
         #endregion
 
+        [NonSerialized]
         public System.Windows.Forms.Button cancelButton;
+        [NonSerialized]
         public System.Windows.Forms.Button addButton;
+        [NonSerialized]
         public System.Windows.Forms.Label labelMass;
+        [NonSerialized]
         public MyNumericUpDown numericUpDownCharge;
+        [NonSerialized]
         public System.Windows.Forms.TextBox textBoxFragmentName;
+        [NonSerialized]
         public System.Windows.Forms.Label labelCharge;
+        [NonSerialized]
         public System.Windows.Forms.Label labelFragmentName;
+        [NonSerialized]
         public System.Windows.Forms.Label labelSelectBase;
+        [NonSerialized]
         public System.Windows.Forms.DataGridView dataGridViewElements;
+        [NonSerialized]
         public System.Windows.Forms.ComboBox selectBaseCombobox;
         public ArrayList controlElements;
+        [NonSerialized]
         public Overlay tutorialArrow;
     }
 }

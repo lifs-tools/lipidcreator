@@ -33,33 +33,59 @@ namespace LipidCreator
 {
     partial class MediatorMS2Form
     {
+        [NonSerialized]
         public PictureBox pictureBoxFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxMonoIsotopicFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxDeuteratedFragments;
+        [NonSerialized]
         public Label labelMediators;
+        [NonSerialized]
         public Label labelMonoIsotopicFragments;
+        [NonSerialized]
         public Label labelDeuteratedFragments;
+        [NonSerialized]
         public Label labelSlashMonoisotope;
+        [NonSerialized]
         public Label labelSlashDeuterated;
+        [NonSerialized]
         public Button buttonCancel;
+        [NonSerialized]
         public Button buttonOK;
+        [NonSerialized]
         public Button buttonAddFragment;
+        [NonSerialized]
         public MenuItem menuFragmentItem1;
+        [NonSerialized]
         public ContextMenu contextMenuFragment;
-        
+
+        [NonSerialized]
         public Label labelFragmentDescriptionBlack;
+        [NonSerialized]
         public Label labelFragmentDescriptionRed;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlue;
+        [NonSerialized]
         public Label labelMonoisotopeSelectAll;
+        [NonSerialized]
         public Label labelMonoisotopeDeselectAll;
+        [NonSerialized]
         public Label labelDeuteratedSelectAll;
+        [NonSerialized]
         public Label labelDeuteratedDeselectAll;
+        [NonSerialized]
         public Label labelSlashPositive;
+        [NonSerialized]
         public Label labelSlashNegative;
+        [NonSerialized]
         public TabControl tabControlFragments;
         public ArrayList tabPages;
+        [NonSerialized]
         public ToolTip toolTip1;
+        [NonSerialized]
         public ListBox medHgListbox;
+        [NonSerialized]
         public ComboBox deuteratedMediatorHeadgroups;
         
         private void InitializeComponent()

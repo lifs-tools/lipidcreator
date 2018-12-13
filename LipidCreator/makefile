@@ -13,14 +13,14 @@ RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:
 main: setup
 	resgen2 -compile $(RESX_FILES)
 
-	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:bin/make/LipidCreator.exe
+	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
 
 tests: setup
-	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:bin/make/TestTransitionList.exe
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:bin/make/TestParser.exe
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:bin/make/TestLipidMaps.exe
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 
 complete:
 	$(MAKE) setup
@@ -29,30 +29,30 @@ complete:
 	$(MAKE) zip
 
 zip:
-	cd bin/make && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll log4net.dll log4net.xml tool-inf
+	cd $(BUILD_DIR) && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll log4net.dll log4net.xml tool-inf
 	
 setup: 
-	if [ ! -d "bin/make" ];then \
+	if [ ! -d "$(BUILD_DIR)" ];then \
 		mkdir -p bin; \
-		mkdir -p bin/make; \
-		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.xml tool-inf bin/make; \
-		echo -1 > bin/make/data/analytics.txt; \
+		mkdir -p $(BUILD_DIR); \
+		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.xml tool-inf $(BUILD_DIR); \
+		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
 	fi
 	
 	
 predefined:
-	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/human-platelet.csv data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
-	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-platelet.csv data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
-	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/mouse-brain.csv data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
-	mono bin/make/LipidCreator.exe transitionlist bin/make/data/predefined-lists/yeast-lipidome.csv data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/human-platelet.csv $(BUILD_DIR)/data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-platelet.csv $(BUILD_DIR)/data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-brain.csv $(BUILD_DIR)/data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/yeast-lipidome.csv $(BUILD_DIR)/data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
 	rm -r bin && rm -r obj/
 
 run:
-	mono bin/make/LipidCreator.exe &
+	mono $(BUILD_DIR)/LipidCreator.exe &
 	
 runtest:
-	mono bin/make/TestTransitionList.exe
-	mono bin/make/TestParser.exe
-	mono bin/make/TestLipidMaps.exe
+	mono $(BUILD_DIR)/TestTransitionList.exe
+	mono $(BUILD_DIR)/TestParser.exe
+	mono $(BUILD_DIR)/TestLipidMaps.exe

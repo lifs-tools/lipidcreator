@@ -101,22 +101,19 @@ namespace LipidCreator
             // 4 -> fixed, LCB, FA, HG, LCB + FA, LCB + HG, FA + HG, HG
             // 5 -> fixed, LCB, HG
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, HG
-            // 7 -> fixed, FA1, HG
-            // 8 -> fixed, HG
+            // 7 -> fixed, HG
             string lipidClass = ms2form.getHeadgroup();
             int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
             
             
-            String[][] buildingBlockList = new String[9][];
+            String[][] buildingBlockList = new String[7][];
             buildingBlockList[0] = new String[]{"FA1", "FA2", "FA3", "FA4", "HG"};
             buildingBlockList[1] = new String[]{"FA1", "FA2", "FA3", "HG"};
             buildingBlockList[2] = new String[]{"FA1", "FA2", "HG"};
             buildingBlockList[3] = new String[]{"FA", "HG"};
             buildingBlockList[4] = new String[]{"LCB", "FA", "HG"};
             buildingBlockList[5] = new String[]{"LCB", "HG"};
-            buildingBlockList[6] = new String[]{"FA1", "FA2", "HG"};
-            buildingBlockList[7] = new String[]{"FA", "HG"};
-            buildingBlockList[8] = new String[]{"HG"};
+            buildingBlockList[6] = new String[]{"HG"};
             
             
             selectBaseCombobox.Items.Add("fixed");

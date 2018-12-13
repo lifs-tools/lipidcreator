@@ -51,7 +51,7 @@ clean:
 	rm -rf bin && rm -rf obj/
 
 run:
-	mono $(BUILD_DIR)/LipidCreator.exe &
+	cd $(BUILD_DIR) && mono LipidCreator.exe &
 	
 runtest:
 	mono $(BUILD_DIR)/TestTransitionList.exe

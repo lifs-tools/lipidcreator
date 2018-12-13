@@ -309,16 +309,14 @@ namespace LipidCreator
                 log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
             }
             
-            HashSet<string>[] buildingBlockSets = new HashSet<string>[9];
+            HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
             buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
             buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
             buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
             buildingBlockSets[3] = new HashSet<string>{"FA", "HG"};
             buildingBlockSets[4] = new HashSet<string>{"LCB", "FA", "HG"};
             buildingBlockSets[5] = new HashSet<string>{"LCB", "HG"};
-            buildingBlockSets[6] = new HashSet<string>{"FA1", "FA2", "HG"};
-            buildingBlockSets[7] = new HashSet<string>{"FA", "HG"};
-            buildingBlockSets[8] = new HashSet<string>{"HG"};
+            buildingBlockSets[6] = new HashSet<string>{"HG"};
             
             // check fragment building block list against precursor type
             foreach (KeyValuePair<string, Precursor> kvpHeadgroups in headgroups)

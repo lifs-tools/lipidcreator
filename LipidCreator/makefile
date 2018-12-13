@@ -38,6 +38,7 @@ setup:
 		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.xml tool-inf $(BUILD_DIR); \
 		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
 	fi
+	mkdir -p $(BUILD_DIR)/data/predefined
 	
 	
 predefined:
@@ -47,7 +48,7 @@ predefined:
 	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/yeast-lipidome.csv $(BUILD_DIR)/data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
-	rm -r bin && rm -r obj/
+	rm -rf bin && rm -rf obj/
 
 run:
 	mono $(BUILD_DIR)/LipidCreator.exe &

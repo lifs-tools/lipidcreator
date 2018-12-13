@@ -822,6 +822,9 @@ namespace LipidCreator
         
         public void storeTransitionList(string separator, bool split, string filename, DataTable currentView, string mode = ".csv")
         {
+        
+            string outputDir = System.IO.Path.GetDirectoryName(filename);
+            System.IO.Directory.CreateDirectory(outputDir);
             if (!filename.EndsWith(mode)) filename += mode;
             if (split)
             {
@@ -1404,6 +1407,8 @@ namespace LipidCreator
         
         public void createBlib(String filename)
         {
+            string outputDir = System.IO.Path.GetDirectoryName(filename);
+            System.IO.Directory.CreateDirectory(outputDir);
             if (File.Exists(filename)) File.Delete(filename);
         
             SQLiteConnection mDBConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");

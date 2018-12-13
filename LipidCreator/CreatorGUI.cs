@@ -3849,6 +3849,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
+
         
             if (args.Length > 0)
             {
@@ -4066,6 +4067,8 @@ namespace LipidCreator
                                 }
                                 else
                                 {
+                                    string outputDir = System.IO.Path.GetDirectoryName(outputCSV);
+                                    System.IO.Directory.CreateDirectory(outputDir);
                                     using (StreamWriter writer = new StreamWriter (outputCSV))
                                     {
                                         writer.Write(lc.serialize());

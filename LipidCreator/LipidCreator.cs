@@ -1000,7 +1000,7 @@ namespace LipidCreator
             {
                 try
                 {
-                    string exportName = nameToExportName[entry[LipidCreator.PRECURSOR_NAME]];
+                    string exportName = nameToExportName[(string)entry[LipidCreator.PRECURSOR_NAME]];
                     // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname
                     sb.Append("\"").Append(exportName).Append("\","); // preName

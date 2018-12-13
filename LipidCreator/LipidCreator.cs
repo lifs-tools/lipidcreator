@@ -978,6 +978,17 @@ namespace LipidCreator
         {
             if (skylineToolClient == null) return;
             
+            
+            Dictionary<string, string> nameToExportName = new Dictionary<string, string>();
+            foreach (PrecursorData precursorData in precursorDataList)
+            {
+                nameToExportName.Add(precursorData.precursorName, precursorData.precursorExportName);
+            }            
+            
+
+
+            
+            
             string header = string.Join(",", SKYLINE_API_HEADER);
 
             StringBuilder sb = new StringBuilder(header, header.Length);
@@ -989,9 +1000,10 @@ namespace LipidCreator
             {
                 try
                 {
+                    string exportName = nameToExportName[entry[LipidCreator.PRECURSOR_NAME]];
                     // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NAME]).Append("\","); // preName
+                    sb.Append("\"").Append(exportName).Append("\","); // preName
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz

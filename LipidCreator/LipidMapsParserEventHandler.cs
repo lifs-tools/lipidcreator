@@ -401,7 +401,8 @@ namespace LipidCreator
             {
                 string carbonCount = node.getText();
                 int carbonCountInt = Convert.ToInt32(carbonCount);
-                if (0 <= carbonCountInt && carbonCountInt <= 30) fag.carbonCounts.Add(carbonCountInt);
+                // 0 is allowed here, because for instance TG 12:0/0:0/0:0 is also allowed
+                if (0 <= carbonCountInt && carbonCountInt <= LipidCreator.MAX_CARBON_LENGTH) fag.carbonCounts.Add(carbonCountInt);
                 else fag = null;
             }
         }
@@ -415,7 +416,7 @@ namespace LipidCreator
             {
                 string doubleBondCount = node.getText();
                 int doubleBondCountInt = Convert.ToInt32(doubleBondCount);
-                if (0 <= doubleBondCountInt && doubleBondCountInt <= 6) fag.doubleBondCounts.Add(doubleBondCountInt);
+                if (LipidCreator.MIN_DB_LENGTH <= doubleBondCountInt && doubleBondCountInt <= LipidCreator.MAX_DB_LENGTH) fag.doubleBondCounts.Add(doubleBondCountInt);
                 else fag = null;
             }
         }
@@ -429,9 +430,9 @@ namespace LipidCreator
             {
                 string hydroxylCount = node.getText();
                 int hydroxylCountInt = Convert.ToInt32(hydroxylCount);
-                if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if ((lipid is Sphingolipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                else if (!(lipid is Sphingolipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                if (fag.isLCB && LipidCreator.MIN_LCB_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_LCB_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if ((lipid is Sphingolipid) && !fag.isLCB && LipidCreator.MIN_SPHINGO_FA_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_SPHINGO_FA_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
+                else if (!(lipid is Sphingolipid) && LipidCreator.MIN_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
                 else fag = null;
             }
         }
@@ -451,11 +452,11 @@ namespace LipidCreator
                     lipid = new UnsupportedLipid(lipidCreator);
                 }
                 else {
-                    if (hydroxylCount == "d") hydroxylCountInt = 2;
-                    else if (hydroxylCount == "t") hydroxylCountInt = 3;
-                    if (fag.isLCB && 2 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                    else if ((lipid is Sphingolipid) && !fag.isLCB && 0 <= hydroxylCountInt && hydroxylCountInt <= 3) fag.hydroxylCounts.Add(hydroxylCountInt);
-                    else if (!(lipid is Sphingolipid) && 0 <= hydroxylCountInt && hydroxylCountInt <= 6) fag.hydroxylCounts.Add(hydroxylCountInt);
+                    if (hydroxylCount == "d") hydroxylCountInt = LipidCreator.MIN_LCB_HYDROXY_LENGTH;
+                    else if (hydroxylCount == "t") hydroxylCountInt = LipidCreator.MAX_LCB_HYDROXY_LENGTH;
+                    if (fag.isLCB && LipidCreator.MIN_LCB_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_LCB_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
+                    else if ((lipid is Sphingolipid) && !fag.isLCB && LipidCreator.MIN_SPHINGO_FA_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_SPHINGO_FA_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
+                    else if (!(lipid is Sphingolipid) && LipidCreator.MIN_HYDROXY_LENGTH <= hydroxylCountInt && hydroxylCountInt <= LipidCreator.MAX_HYDROXY_LENGTH) fag.hydroxylCounts.Add(hydroxylCountInt);
                     else fag = null;
                 }
             }
@@ -576,7 +577,7 @@ namespace LipidCreator
             {
                 string carbonCount = node.right.getText(); // omit the C e.g. for C16
                 int carbonCountInt = Convert.ToInt32(carbonCount);
-                if (0 <= carbonCountInt && carbonCountInt <= 30) fag.carbonCounts.Add(carbonCountInt);
+                if (0 <= carbonCountInt && carbonCountInt <= LipidCreator.MAX_CARBON_LENGTH) fag.carbonCounts.Add(carbonCountInt);
                 else fag = null;
             }
         }

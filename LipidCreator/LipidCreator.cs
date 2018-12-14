@@ -96,6 +96,16 @@ namespace LipidCreator
         public static char HEAVY_LABEL_OPENING_BRACKET = '{';
         public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
         
+        public static int MIN_CARBON_LENGTH = 2;
+        public static int MAX_CARBON_LENGTH = 30;
+        public static int MIN_DB_LENGTH = 0;
+        public static int MAX_DB_LENGTH = 6;
+        public static int MIN_HYDROXY_LENGTH = 0;
+        public static int MAX_HYDROXY_LENGTH = 10;
+        public static int MIN_LCB_HYDROXY_LENGTH = 2;
+        public static int MAX_LCB_HYDROXY_LENGTH = 3;
+        public static int MIN_SPHINGO_FA_HYDROXY_LENGTH = 0;
+        public static int MAX_SPHINGO_FA_HYDROXY_LENGTH = 3;
         
         public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";

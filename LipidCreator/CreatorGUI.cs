@@ -934,12 +934,23 @@ namespace LipidCreator
         // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
         public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectType, bool isLCB)
         {
-            int maxRange = 30;
-            int minRange = 0;
-            if (objectType < 3) minRange = 2;
-            if (objectType == 3) maxRange = 6;
-            else if (objectType == 4) maxRange = 29;
-            if (isLCB) minRange = 8;
+            int minRange = 0, maxRange = 0;
+            if (objectType <= 2)
+            {
+                minRange = LipidCreator.MIN_CARBON_LENGTH;
+                maxRange = LipidCreator.MAX_CARBON_LENGTH;
+            }
+            else if (objectType == 3)
+            {
+                minRange = LipidCreator.MIN_DB_LENGTH;
+                maxRange = LipidCreator.MAX_DB_LENGTH;
+            }
+            else if (objectType == 4)
+            {
+                minRange = LipidCreator.MIN_HYDROXY_LENGTH;
+                maxRange = LipidCreator.MAX_HYDROXY_LENGTH;
+            }
+            
             HashSet<int> lengths = lipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
             if (objectType <= 2)
             {

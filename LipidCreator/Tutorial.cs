@@ -1622,6 +1622,11 @@ namespace LipidCreator
                     break;
                     
                 case (int)CESteps.OpenCEDialog:
+                    setTutorialControls(creatorGUI.homeTab);
+                    creatorGUI.menuOptions.Enabled = true;
+                    creatorGUI.menuCollisionEnergyOpt.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy optimization'", "You activated now system wide the CE optimization independant of the assembled lipids. Open the 'Collision Energy optimization window' to proceed.");
                     break;
                     
                 case (int)CESteps.SelectTXB2:

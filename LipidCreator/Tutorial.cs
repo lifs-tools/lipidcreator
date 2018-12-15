@@ -31,6 +31,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+using log4net;
+using log4net.Config;
+
 
 
 namespace LipidCreator
@@ -67,6 +70,7 @@ namespace LipidCreator
         public ArrayList creatorGUIEventHandlers;
         public bool continueTutorial = false;
         public bool passTabChange = false;
+        private static readonly ILog log = LogManager.GetLogger(typeof(Tutorial));
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -115,6 +119,10 @@ namespace LipidCreator
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.filtersButton.Click += new EventHandler(buttonInteraction);
+            foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
+            {
+                menuItem.Click += new EventHandler(buttonInteraction);
+            }
             
             
             elementsEnabledState = new ArrayList();
@@ -258,6 +266,10 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click -= new EventHandler(buttonInteraction);
+            foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
+            {
+                menuItem.Click -= new EventHandler(buttonInteraction);
+            }
             
             if (creatorGUI.lipidsReview != null)
             {
@@ -712,7 +724,11 @@ namespace LipidCreator
             {
                 nextTutorialStep(true);
             }
-            
+            else if (tutorial == Tutorials.TutorialCE && (int)CESteps.ActivateCE == tutorialStep)
+            {
+                nextEnabled = (sender is MenuItem) && ((string[])((MenuItem)sender).Tag != null) && (((string[])((MenuItem)sender).Tag)[0] == "MS:1002523");
+                tutorialWindow.Refresh();
+            }
         }
         
         
@@ -1583,6 +1599,24 @@ namespace LipidCreator
                 case (int)CESteps.ActivateCE:
                     setTutorialControls(creatorGUI.homeTab);
                     creatorGUI.menuOptions.Enabled = true;
+                    creatorGUI.menuCollisionEnergy.Enabled = true;
+                    
+                    bool found = false;
+                    foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
+                    {
+                        if (menuItem.Tag == null) continue;
+                        if (((string[])menuItem.Tag)[0] == "MS:1002523")
+                        {
+                            found = true;
+                            menuItem.Enabled = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        log.Error("Could not find 'MS:1002523' device in CE instrument selection.");
+                        quitTutorial();
+                    }
                     
                     tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy computation' > 'Thermo Scientific Q Exactive HF'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible to estimate or set an optimal collision energy either for a complete lipid species (PRM) or for each fragment individually (SRM).");
                     break;

@@ -28,6 +28,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 
@@ -522,7 +523,7 @@ namespace LipidCreator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            
+            controlElements = new ArrayList(){button1, button2, instrumentCombobox, classCombobox, adductCombobox, fragmentsGridView, labelSelectAll, labelDeselectAll, radioButtonPRMFragments, radioButtonPRMArbitrary, numericalUpDownCurrentCE};
         }
         
         
@@ -549,5 +550,6 @@ namespace LipidCreator
         public NumericUpDown numericalUpDownCurrentCE;
         public DataGridView fragmentsGridView;
         public System.Timers.Timer timerSmooth;
+        public ArrayList controlElements;
     }
 }

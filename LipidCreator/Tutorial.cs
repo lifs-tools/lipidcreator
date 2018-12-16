@@ -119,6 +119,7 @@ namespace LipidCreator
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.filtersButton.Click += new EventHandler(buttonInteraction);
+            creatorGUI.menuCollisionEnergyOpt.Click += new EventHandler(buttonInteraction);
             foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
             {
                 menuItem.Click += new EventHandler(buttonInteraction);
@@ -228,6 +229,17 @@ namespace LipidCreator
         }
         
         
+        public void initCEInspector()
+        {
+            creatorGUI.ceInspector.fragmentsGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
+            creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged += new EventHandler(radioButtonInteraction);
+            creatorGUI.ceInspector.button2.Click += buttonInteraction;
+            creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged += new EventHandler(textBoxInteraction);
+            creatorGUI.ceInspector.classCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
+            creatorGUI.ceInspector.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);            
+        }
+        
+        
         
         public void nextTutorialStep(bool forward)
         {
@@ -266,6 +278,7 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click -= new EventHandler(buttonInteraction);
+            creatorGUI.menuCollisionEnergyOpt.Click -= new EventHandler(buttonInteraction);
             foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
             {
                 menuItem.Click -= new EventHandler(buttonInteraction);
@@ -304,6 +317,15 @@ namespace LipidCreator
                 
             }
             
+            if (creatorGUI.ceInspector != null)
+            {
+                creatorGUI.ceInspector.fragmentsGridView.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
+                creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged -= new EventHandler(radioButtonInteraction);
+                creatorGUI.ceInspector.button2.Click -= buttonInteraction;
+                creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged -= new EventHandler(textBoxInteraction);
+                creatorGUI.ceInspector.classCombobox.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
+                creatorGUI.ceInspector.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction); 
+            }
             
             if (creatorGUI.filterDialog != null)
             {
@@ -407,6 +429,12 @@ namespace LipidCreator
             {
                 foreach (Control control in creatorGUI.lipidsReview.controlElements) control.Enabled = false;
                 creatorGUI.lipidsReview.Refresh();
+            }
+            
+            if (creatorGUI.ceInspector != null)
+            {
+                foreach (Control control in creatorGUI.ceInspector.controlElements) control.Enabled = false;
+                creatorGUI.ceInspector.Refresh();
             }
             
             if (creatorGUI.filterDialog != null)
@@ -578,6 +606,11 @@ namespace LipidCreator
                 creatorGUI.filterDialog.button2.Enabled = creatorGUI.filterDialog.radioButton5.Checked;
                 creatorGUI.filterDialog.Refresh();
             }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.ChangeManually)
+            {
+                nextEnabled = creatorGUI.ceInspector.radioButtonPRMArbitrary.Checked;
+                tutorialWindow.Refresh();
+            }
         }
         
         
@@ -598,6 +631,7 @@ namespace LipidCreator
         
         public void comboBoxInteraction(Object sender, EventArgs e)
         {
+        Console.WriteLine("catch");
             if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.NameFragment)
             {
                 nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text == "testFrag") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
@@ -614,6 +648,11 @@ namespace LipidCreator
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SelectHeavy)
             {
                 nextEnabled = creatorGUI.ms2fragmentsForm.isotopeList.SelectedIndex == 1;
+            }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2)
+            {
+            Console.WriteLine((string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex]);
+                nextEnabled = (string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex] == "TXB2";
             }
             tutorialWindow.Refresh();
         }
@@ -728,6 +767,10 @@ namespace LipidCreator
             {
                 nextEnabled = (sender is MenuItem) && ((string[])((MenuItem)sender).Tag != null) && (((string[])((MenuItem)sender).Tag)[0] == "MS:1002523");
                 tutorialWindow.Refresh();
+            }
+            else if (tutorial == Tutorials.TutorialCE && (int)CESteps.OpenCEDialog == tutorialStep)
+            {
+                nextTutorialStep(true);
             }
         }
         
@@ -1626,16 +1669,41 @@ namespace LipidCreator
                     creatorGUI.menuOptions.Enabled = true;
                     creatorGUI.menuCollisionEnergyOpt.Enabled = true;
                     
-                    tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy optimization'", "You activated now system wide the CE optimization independant of the assembled lipids. Open the 'Collision Energy optimization window' to proceed.");
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy optimization'", "You activated now system wide the CE optimization independant of the assembled lipids. Open the 'Collision Energy optimization window' to proceed.");
                     break;
                     
                 case (int)CESteps.SelectTXB2:
+                    setTutorialControls(creatorGUI.ceInspector);
+                    initCEInspector();
+                    
+                    ComboBox cbClass = creatorGUI.ceInspector.classCombobox;
+                    cbClass.Enabled = true;
+                    
+                    tutorialArrow.update(new Point(cbClass.Location.X + cbClass.Width, cbClass.Location.Y + (cbClass.Height >> 1)), "tl");
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2", "Please select 'TXB2' class.", false);
                     break;
                     
                 case (int)CESteps.ExplainBlackCurve:
+                    setTutorialControls(creatorGUI.ceInspector);
+                    
+                    tutorialArrow.update(new Point(340, 400), "bl");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 350), "Continue", "The black curve is very awesome.");
+                    nextEnabled = true;
+                    
                     break;
                     
                 case (int)CESteps.ChangeManually:
+                    setTutorialControls(creatorGUI.ceInspector);
+                    
+                    creatorGUI.ceInspector.radioButtonPRMFragments.Enabled = true;
+                    RadioButton rbManually = creatorGUI.ceInspector.radioButtonPRMArbitrary;
+                    GroupBox gbCE = creatorGUI.ceInspector.groupBoxPRMMode;
+                    
+                    rbManually.Enabled = true;
+                    
+                    tutorialArrow.update(new Point(rbManually.Location.X + gbCE.Location.X, rbManually.Location.Y + gbCE.Location.Y + (rbManually.Height >> 1)), "br");
+                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Select 'Manually'", "Just do it.");
                     break;
                     
                 case (int)CESteps.CEto20:

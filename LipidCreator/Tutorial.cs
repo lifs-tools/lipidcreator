@@ -586,6 +586,10 @@ namespace LipidCreator
                 string lipidClass = (string)creatorGUI.addHeavyPrecursor.comboBox1.Items[creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex];
                 nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "13C6d30") && (lipidClass == "PG");
             }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.CEto20)
+            {
+                nextEnabled = Convert.ToDouble(creatorGUI.ceInspector.numericalUpDownCurrentCE.Text) == 20.0;
+            }
             tutorialWindow.Refresh();
         }
         
@@ -1707,6 +1711,14 @@ namespace LipidCreator
                     break;
                     
                 case (int)CESteps.CEto20:
+                    setTutorialControls(creatorGUI.ceInspector);
+                    
+                    NumericUpDown nudCE = creatorGUI.ceInspector.numericalUpDownCurrentCE;
+                    nudCE.Enabled = true;
+                    GroupBox gbCE2 = creatorGUI.ceInspector.groupBoxPRMMode;
+                    
+                    tutorialArrow.update(new Point(nudCE.Location.X + gbCE2.Location.X, nudCE.Location.Y + gbCE2.Location.Y + (nudCE.Height >> 1)), "br");
+                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Set optimal CE to '20'", "Just do it.");
                     break;
                     
                 case (int)CESteps.SameForD4:

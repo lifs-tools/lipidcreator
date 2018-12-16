@@ -1734,15 +1734,44 @@ namespace LipidCreator
                     break;
                     
                 case (int)CESteps.ReviewLipids:
+                    setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
+                    
+                    
+                    Button orfb = creatorGUI.openReviewFormButton;
+                    orfb.Enabled = true;
+                    tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors and fragment information.");
                     break;
                     
                 case (int)CESteps.ExplainLCasExternal:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "LipidCreator as external!");
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please read the documentation. Have fun with LipidCreator!");
                     break;
                     
                 case (int)CESteps.StoreBlib:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    initLipidReview();
+                    
+                    Button bssl = creatorGUI.lipidsReview.buttonStoreSpectralLibrary;
+                    bssl.Enabled = true;
+                    
+                    tutorialArrow.update(new Point(bssl.Location.X + (bssl.Size.Width >> 1), bssl.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store blib'", "Just do it.", false);
                     break;
                     
                 case (int)CESteps.Finish:
+                    setTutorialControls(creatorGUI.lipidsReview);
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please read the documentation. Have fun with LipidCreator!");
+                    
+                    nextEnabled = true;
+                    tutorialWindow.Refresh();
                     break;
                     
                 default:

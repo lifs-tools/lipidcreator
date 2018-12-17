@@ -272,7 +272,7 @@ namespace LipidCreator
             {
                 string carbonCount = node.getText();
                 int carbonCountInt = Convert.ToInt32(carbonCount);
-                if (2 <= carbonCountInt && carbonCountInt <= 30) fag.carbonCounts.Add(carbonCountInt);
+                if (LipidCreator.MIN_CARBON_LENGTH <= carbonCountInt && carbonCountInt <= LipidCreator.MAX_CARBON_LENGTH) fag.carbonCounts.Add(carbonCountInt);
                 else fag = null;
             }
         }
@@ -283,7 +283,7 @@ namespace LipidCreator
             {
                 string doubleBondCount = node.getText();
                 int doubleBondCountInt = Convert.ToInt32(doubleBondCount);
-                if (0 <= doubleBondCountInt && doubleBondCountInt <= 6) fag.doubleBondCounts.Add(doubleBondCountInt);
+                if (LipidCreator.MIN_DB_LENGTH <= doubleBondCountInt && doubleBondCountInt <= LipidCreator.MAX_DB_LENGTH) fag.doubleBondCounts.Add(doubleBondCountInt);
                 else fag = null;
             }
         }

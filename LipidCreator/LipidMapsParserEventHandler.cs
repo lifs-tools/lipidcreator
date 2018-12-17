@@ -548,8 +548,8 @@ namespace LipidCreator
                 fag.doubleBondCounts.Add(1);
                 string headgroup = node.getText();
                 if (headgroup.Equals("Sphingosine")) lipid.headGroupNames.Add("LCB");
-                else if (headgroup.Equals("So")) headgroup = "LCB";
-                else if (headgroup.Equals("Sphingosine-1-phosphate")) headgroup = "LCBP";
+                else if (headgroup.Equals("So")) lipid.headGroupNames.Add("LCB");
+                else if (headgroup.Equals("Sphingosine-1-phosphate")) lipid.headGroupNames.Add("LCBP");
                 else lipid = null;
             }
         }
@@ -563,9 +563,10 @@ namespace LipidCreator
             {
                 fag.doubleBondCounts.Add(0);
                 string headgroup = node.getText();
-                if (headgroup.Equals("Sphinganine")) headgroup = "LCB";
-                else if (headgroup.Equals("Sphinganine-1-phosphate")) headgroup = "LCBP";
-                lipid.headGroupNames.Add(headgroup);
+                if (headgroup.Equals("Sphinganine")) lipid.headGroupNames.Add("LCB");
+                if (headgroup.Equals("Sa")) lipid.headGroupNames.Add("LCB");
+                else if (headgroup.Equals("Sphinganine-1-phosphate")) lipid.headGroupNames.Add("LCBP");
+                else lipid = null;
             }
         }
         

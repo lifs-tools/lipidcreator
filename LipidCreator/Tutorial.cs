@@ -98,13 +98,13 @@ namespace LipidCreator
         
         public void startTutorial(Tutorials t)
         {
-            // TODO: uncomment when finished adding fourth tutorial
-            //if (!creatorGUI.resetLipidCreator()) return;
+            if (!creatorGUI.resetLipidCreator()) return;
             
             tutorial = t;
             tutorialStep = 0;
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
+            creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
             creatorGUI.tabControl.MouseMove += new MouseEventHandler(dragInteraction);
             creatorGUI.tabControl.SelectedIndexChanged += new EventHandler(tabSelectedInteraction);
@@ -234,6 +234,7 @@ namespace LipidCreator
             creatorGUI.ceInspector.fragmentsGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
             creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged += new EventHandler(radioButtonInteraction);
             creatorGUI.ceInspector.button2.Click += buttonInteraction;
+            creatorGUI.ceInspector.button2.MouseDown += mouseDownInteraction;
             creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.ceInspector.classCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.ceInspector.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);            
@@ -265,6 +266,7 @@ namespace LipidCreator
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             
             creatorGUI.plHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
+            creatorGUI.medHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.MouseMove -= new MouseEventHandler(dragInteraction);
             creatorGUI.tabControl.Deselecting -= new TabControlCancelEventHandler(tabDeselectingInteraction);
             creatorGUI.tabControl.SelectedIndexChanged -= new EventHandler(tabSelectedInteraction);
@@ -322,6 +324,7 @@ namespace LipidCreator
                 creatorGUI.ceInspector.fragmentsGridView.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
                 creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged -= new EventHandler(radioButtonInteraction);
                 creatorGUI.ceInspector.button2.Click -= buttonInteraction;
+                creatorGUI.ceInspector.button2.MouseDown -= mouseDownInteraction;
                 creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged -= new EventHandler(textBoxInteraction);
                 creatorGUI.ceInspector.classCombobox.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
                 creatorGUI.ceInspector.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction); 
@@ -459,8 +462,18 @@ namespace LipidCreator
         public void listBoxInteraction(object sender, System.EventArgs e)
         {
             ListBox box = (ListBox)sender;
-            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PGheadgroup && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("PG")) nextEnabled = true;
-            else nextEnabled = false;
+            if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PGheadgroup && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("PG"))
+            {
+                nextEnabled = true;
+            }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG && box.SelectedItems.Count == 1 && box.SelectedItems[0].ToString().Equals("TXB2"))
+            {
+                nextEnabled = true;
+            }
+            else
+            {
+                nextEnabled = false;
+            }
             tutorialWindow.Refresh();
         }
         
@@ -519,6 +532,10 @@ namespace LipidCreator
                 {
                     return;
                 }
+                else if (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.ChangeToMediators)
+                {
+                    return;
+                }
                 else
                 {
                     e.Cancel = true;
@@ -542,7 +559,7 @@ namespace LipidCreator
         
         public void tabSelectedInteraction(Object sender,  EventArgs e)
         {
-            if ((currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialSRM || tutorialStep != (int)SRMSteps.PhosphoTab) && (currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialHL || tutorialStep != (int)HLSteps.OpenHeavy))
+            if ((currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialSRM || tutorialStep != (int)SRMSteps.PhosphoTab) && (currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialHL || tutorialStep != (int)HLSteps.OpenHeavy || tutorialStep != (int)CESteps.SelectTXB2HG))
             {
                 nextTutorialStep(true);
             }
@@ -635,7 +652,6 @@ namespace LipidCreator
         
         public void comboBoxInteraction(Object sender, EventArgs e)
         {
-        Console.WriteLine("catch");
             if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.NameFragment)
             {
                 nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text == "testFrag") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
@@ -655,8 +671,11 @@ namespace LipidCreator
             }
             else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2)
             {
-            Console.WriteLine((string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex]);
                 nextEnabled = (string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex] == "TXB2";
+            }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SameForD4)
+            {
+                creatorGUI.ceInspector.numericalUpDownCurrentCE.Enabled = (string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex] == "TXB2{d4}";
             }
             tutorialWindow.Refresh();
         }
@@ -772,7 +791,7 @@ namespace LipidCreator
                 nextEnabled = (sender is MenuItem) && ((string[])((MenuItem)sender).Tag != null) && (((string[])((MenuItem)sender).Tag)[0] == "MS:1002523");
                 tutorialWindow.Refresh();
             }
-            else if (tutorial == Tutorials.TutorialCE && (int)CESteps.OpenCEDialog == tutorialStep)
+            else if (tutorial == Tutorials.TutorialCE && (new HashSet<int>(new int[]{(int)CESteps.OpenCEDialog, (int)CESteps.CloseCE, (int)CESteps.ReviewLipids})).Contains(tutorialStep))
             {
                 nextTutorialStep(true);
             }
@@ -790,6 +809,10 @@ namespace LipidCreator
                 continueTutorial = true;
             }
             else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
+            {
+                continueTutorial = true;
+            }
+            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.CloseCE)
             {
                 continueTutorial = true;
             }
@@ -1722,20 +1745,41 @@ namespace LipidCreator
                     break;
                     
                 case (int)CESteps.SameForD4:
-                    /*ComboBox cbClass = creatorGUI.ceInspector.classCombobox;
-                    cbClass.Enabled = true;
+                    setTutorialControls(creatorGUI.ceInspector);
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2{d4}", "Please select 'TXB2{d4}' class and set CE to 20, too.", false);
-                    */
+                    ComboBox cbClass2 = creatorGUI.ceInspector.classCombobox;
+                    cbClass2.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2{d4}", "Please select 'TXB2{d4}' class and set CE to 20, too.");
                     break;
                     
                 case (int)CESteps.CloseCE:
+                    setTutorialControls(creatorGUI.ceInspector);
+                    
+                    Button buttonOK = creatorGUI.ceInspector.button2;
+                    buttonOK.Enabled = true;
+                    tutorialArrow.update(new Point(buttonOK.Location.X + (buttonOK.Width >> 1), buttonOK.Location.Y ), "rb");
+                    
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Click 'Ok'", "Confirm your changes by clicking 'Ok'");
                     break;
                     
                 case (int)CESteps.ChangeToMediators:
+                    setTutorialControls(creatorGUI.homeTab);
+                    
+                    tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 5.5), 0), "rt");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Mediators' tab", "Do what the title said.", false);
+                    setTutorialControls(creatorGUI.homeTab);
                     break;
                     
                 case (int)CESteps.SelectTXB2HG:
+                    setTutorialControls(creatorGUI.medStep1, creatorGUI.mediatorlipidsTab);
+                    
+                    ListBox medHG = creatorGUI.medHgListbox;
+                    
+                    tutorialArrow.update(new Point(medHG.Location.X + medHG.Size.Width, medHG.Location.Y + (medHG.Height >> 1)), "tl");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select the 'TBX2' headgroup", "What are you waiting for?");
                     break;
                     
                 case (int)CESteps.ReviewLipids:
@@ -1752,10 +1796,8 @@ namespace LipidCreator
                 case (int)CESteps.ExplainLCasExternal:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "LipidCreator as external!");
-                    setTutorialControls(creatorGUI.lipidsReview);
-                    
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "End", "Congratulations, you finished this tutorial. If you need more information, please read the documentation. Have fun with LipidCreator!");
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "LipidCreator as external!", false);
+                    nextEnabled = true;
                     break;
                     
                 case (int)CESteps.StoreBlib:
@@ -1767,7 +1809,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bssl.Location.X + (bssl.Size.Width >> 1), bssl.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store blib'", "Just do it.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store blib'", "Just do it.");
                     break;
                     
                 case (int)CESteps.Finish:

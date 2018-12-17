@@ -586,7 +586,7 @@ namespace LipidCreator
                 string lipidClass = (string)creatorGUI.addHeavyPrecursor.comboBox1.Items[creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndex];
                 nextEnabled = (creatorGUI.addHeavyPrecursor.textBox1.Text == "13C6d30") && (lipidClass == "PG");
             }
-            else if (tutorial == Tutorials.TutorialCE && (tutorialStep == (int)CESteps.CEto20 || tutorialStep == (int)CESteps.CEto20SameForD4))
+            else if (tutorial == Tutorials.TutorialCE && (tutorialStep == (int)CESteps.CEto20 || tutorialStep == (int)CESteps.SameForD4))
             {
                 nextEnabled = Convert.ToDouble(creatorGUI.ceInspector.numericalUpDownCurrentCE.Text) == 20.0;
             }
@@ -1722,10 +1722,11 @@ namespace LipidCreator
                     break;
                     
                 case (int)CESteps.SameForD4:
-                    ComboBox cbClass = creatorGUI.ceInspector.classCombobox;
+                    /*ComboBox cbClass = creatorGUI.ceInspector.classCombobox;
                     cbClass.Enabled = true;
                     
                     tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2{d4}", "Please select 'TXB2{d4}' class and set CE to 20, too.", false);
+                    */
                     break;
                     
                 case (int)CESteps.CloseCE:

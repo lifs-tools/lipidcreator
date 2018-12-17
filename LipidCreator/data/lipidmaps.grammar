@@ -82,20 +82,22 @@ PIP_pos = PIP_pos "," PIP_pos | Number "'"
 
 
 ## sphingolipid rules
-SL = DSL | SphingoXine
+SL = LDL | DSL | SphingoXine
+LSL = HG_LSLc round_open_bracket LCB round_close_bracket | HG_LSLc LCB
 DSL = HG_DSLc round_open_bracket LCB FA_separator FA round_close_bracket | HG_DSLc LCB FA_separator FA
 
 SphingoXine = SphingoXine_pure | SphingoXine_var
 SphingoXine_pure = Sphingosine_name | Sphinganine_name
 SphingoXine_var = CType headgroup_separator Sphingosine_name | CType headgroup_separator Sphinganine_name
-Sphingosine_name = "Sphingosine" | "Sphingosine-1-phosphate"
-Sphinganine_name = "Sphinganine" | "Sphinganine-1-phosphate"
+Sphingosine_name = "Sphingosine" | "So" | "Sphingosine-1-phosphate"
+Sphinganine_name = "Sphinganine" | "Sa" | "Sphinganine-1-phosphate"
 CType = "C" Number
 
 HG_DSLc = HG_DSL | HG_DSL " "
 HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
 
-
+HG_LSLc = HG_LSL | HG_LSL " "
+HG_LSL = "SPH" | "S1P" | "HexSph" | "SPC"
 
 
 

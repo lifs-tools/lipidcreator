@@ -78,6 +78,7 @@ namespace LipidCreator
             registeredEvents.Add("HG_4PL_pre_event", HG_4PLPreEvent);
             
             registeredEvents.Add("HG_DSL_pre_event", HG_DSLPreEvent);
+            registeredEvents.Add("HG_LSL_pre_event", HG_LSLPreEvent);
             registeredEvents.Add("SL_post_event", SLPostEvent);
             registeredEvents.Add("SphingoXine_pre_event", SphingoXinePreEvent);
             registeredEvents.Add("SphingoXine_post_event", SphingoXinePostEvent);
@@ -546,9 +547,10 @@ namespace LipidCreator
             {
                 fag.doubleBondCounts.Add(1);
                 string headgroup = node.getText();
-                if (headgroup.Equals("Sphingosine")) headgroup = "LCB";
+                if (headgroup.Equals("Sphingosine")) lipid.headGroupNames.Add("LCB");
+                else if (headgroup.Equals("So")) headgroup = "LCB";
                 else if (headgroup.Equals("Sphingosine-1-phosphate")) headgroup = "LCBP";
-                lipid.headGroupNames.Add(headgroup);
+                else lipid = null;
             }
         }
         
@@ -661,6 +663,21 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public void HG_LSLPreEvent(Parser.TreeNode node)
+        {
+            if (lipid != null && !(lipid is UnsupportedLipid))
+            {
+                string headgroup = node.getText();
+                ((Sphingolipid)lipid).isLyso = true;
+                if (headgroup.Equals("SPH")) headgroup = "LCB";
+                else if (headgroup.Equals("S1P")) headgroup = "LCBP";
+                else if (headgroup.Equals("HexSph")) headgroup = "LHexCer";
+                else if (headgroup.Equals("SPC")) headgroup = "LSM";
+                lipid.headGroupNames.Add(headgroup);
+            }
+        }
         
         
         

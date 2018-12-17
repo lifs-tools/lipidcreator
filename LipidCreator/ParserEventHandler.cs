@@ -56,6 +56,7 @@ namespace LipidCreator
             registeredEvents.Add("Carbon_pre_event", CarbonPreEvent);
             registeredEvents.Add("DB_count_pre_event", DB_countPreEvent);
             registeredEvents.Add("Hydroxyl_pre_event", HydroxylPreEvent);
+            registeredEvents.Add("Old_Hydroxyl_pre_event", OldHydroxylPreEvent);
             registeredEvents.Add("Ether_pre_event", EtherPreEvent);
             
             registeredEvents.Add("GL_pre_event", GLPreEvent);
@@ -283,6 +284,17 @@ namespace LipidCreator
                 string doubleBondCount = node.getText();
                 int doubleBondCountInt = Convert.ToInt32(doubleBondCount);
                 if (0 <= doubleBondCountInt && doubleBondCountInt <= 6) fag.doubleBondCounts.Add(doubleBondCountInt);
+                else fag = null;
+            }
+        }
+        
+        public void OldHydroxylPreEvent(Parser.TreeNode node)
+        {
+            if (fag != null)
+            {
+                string hydroxylCount = node.getText();
+                if (hydroxylCount == "d") fag.hydroxylCounts.Add(2);
+                else if (hydroxylCount == "t") fag.hydroxylCounts.Add(3);
                 else fag = null;
             }
         }

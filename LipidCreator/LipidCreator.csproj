@@ -343,8 +343,10 @@
       <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" />
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" />
+    <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -434,6 +436,7 @@
     <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\human-platelet.csv&quot; &quot;$(TargetDir)data\predefined\Human\Platelet.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-platelet.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Platelet.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-brain.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Brain.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-heart.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Heart.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\yeast-lipidome.csv&quot; &quot;$(TargetDir)data\predefined\Yeast\Lipidome.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <!-- remove generated log file and predefined template directory -->
     <Delete Files="$(TargetDir)data\lipidcreator.log" />

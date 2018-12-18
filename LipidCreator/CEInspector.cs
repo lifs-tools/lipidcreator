@@ -351,7 +351,7 @@ namespace LipidCreator
             }
             else
             {
-                numericalUpDownCurrentCE.Enabled = true;
+                numericalUpDownCurrentCE.Enabled = creatorGUI.tutorial.tutorial == Tutorials.NoTutorial;
             }
         }
         
@@ -449,7 +449,7 @@ namespace LipidCreator
         
         public void PRMModeCheckedChanged(Object sender, EventArgs e)
         {
-            PRMMode = radioButtonPRMFragments.Checked ? PRMTypes.PRMAutomatically : PRMMode = PRMTypes.PRMManually;
+            PRMMode = radioButtonPRMFragments.Checked ? PRMTypes.PRMAutomatically : PRMTypes.PRMManually;
             PRMModeChanged();
         }
         

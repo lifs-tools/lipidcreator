@@ -61,6 +61,7 @@ namespace LipidCreator
         public string inputParameters;
         public Tutorial tutorial;
         public MS2Form ms2fragmentsForm = null;
+        public CEInspector ceInspector = null;
         public MediatorMS2Form mediatorMS2fragmentsForm = null;
         [NonSerialized]
         public AddHeavyPrecursor addHeavyPrecursor = null;
@@ -91,7 +92,7 @@ namespace LipidCreator
             registeredLipidsDatatable.Columns.Add(new DataColumn("Filters"));
             InitializeComponent();
             
-            
+            // add predefined menu
             lipidModifications = Enumerable.Repeat(-1, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
             string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
@@ -167,6 +168,7 @@ namespace LipidCreator
             medNegAdductCheckbox4.Enabled = false;
             changeTab(0);
             
+            // add instruments into menu for collision energy optimization
             for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
             {
                 string instrument = (string)lipidCreator.availableInstruments[i];
@@ -3315,7 +3317,7 @@ namespace LipidCreator
                 string instrument = ((string[])((MenuItem)sender).Tag)[0];
                 lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-                menuCollisionEnergyOpt.Enabled = true;
+                menuCollisionEnergyOpt.Enabled = tutorial.tutorial == Tutorials.NoTutorial;
                 lipidCreator.monitoringType = MonitoringTypes.PRM;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
@@ -3622,11 +3624,18 @@ namespace LipidCreator
         
         protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
         {
-            CEInspector ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
+            ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
             ceInspector.Owner = this;
             ceInspector.ShowInTaskbar = false;
-            ceInspector.ShowDialog();
-            ceInspector.Dispose();
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                ceInspector.ShowDialog();
+                ceInspector.Dispose();
+            }
+            else
+            {
+                ceInspector.Show();
+            }
         }
         
         

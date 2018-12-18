@@ -66,13 +66,13 @@ CL = HG_CLc round_open_bracket "1'-" square_open_bracket FA FA_separator FA squa
 
 HG_PL = HG_CLc | HG_DPLc PIP_position | HG_DPLc | HG_LPLc
 
-HG_CLc = HG_CL | HG_CL " "
+HG_CLc = HG_CL | HG_CL headgroup_separator
 HG_CL = "CL"
-HG_DPLc = HG_DPL | HG_DPL " "
+HG_DPLc = HG_DPL | HG_DPL headgroup_separator
 HG_DPL = "LBPA" | "CDP-DG" | "DMPE" | "MMPE" | "PA" | "PC" | "PE" | "PEt" | "PG" | "PI" | "PIP" | "PIP2" | "PIP3" | "PS" | "PIM1" | "PIM2" | "PIM3" | "PIM4" | "PIM5" | "PIM6" | "Glc-DG" | "PGP" | "PE-NMe2" | "AC2SGL" | "DAT" | "PE-NMe" | "PT" | "Glc-GP" | "NAPE"
-HG_LPLc = HG_LPL | HG_LPL " "
+HG_LPLc = HG_LPL | HG_LPL headgroup_separator
 HG_LPL = "LysoPC" | "LysoPE" | "LPIM1" | "LPIM2" | "LPIM3" | "LPIM4" | "LPIM5" | "LPIM6" | "CPA" | "LPA"
-HG_4PLc = HG_4PL | HG_4PL " "
+HG_4PLc = HG_4PL | HG_4PL headgroup_separator
 HG_4PL = "PAT16" | "PAT18"
 PIP_position = square_open_bracket PIP_pos square_close_bracket
 PIP_pos = PIP_pos "," PIP_pos | Number "'"
@@ -82,28 +82,30 @@ PIP_pos = PIP_pos "," PIP_pos | Number "'"
 
 
 ## sphingolipid rules
-SL = DSL | SphingoXine
+SL = LSL | DSL | SphingoXine
+LSL = HG_LSLc round_open_bracket LCB round_close_bracket | HG_LSLc LCB
 DSL = HG_DSLc round_open_bracket LCB FA_separator FA round_close_bracket | HG_DSLc LCB FA_separator FA
 
 SphingoXine = SphingoXine_pure | SphingoXine_var
 SphingoXine_pure = Sphingosine_name | Sphinganine_name
 SphingoXine_var = CType headgroup_separator Sphingosine_name | CType headgroup_separator Sphinganine_name
-Sphingosine_name = "Sphingosine" | "Sphingosine-1-phosphate"
-Sphinganine_name = "Sphinganine" | "Sphinganine-1-phosphate"
+Sphingosine_name = "Sphingosine" | "So" | "Sphingosine-1-phosphate"
+Sphinganine_name = "Sphinganine" | "Sa" | "Sphinganine-1-phosphate"
 CType = "C" Number
 
-HG_DSLc = HG_DSL | HG_DSL " "
+HG_DSLc = HG_DSL | HG_DSL headgroup_separator
 HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
 
-
+HG_LSLc = HG_LSL | HG_LSL headgroup_separator
+HG_LSL = "SPH" | "S1P" | "HexSph" | "SPC"
 
 
 
 ## cholesterol lipids
 Cholesterol = Chc | ChEc
-Chc = Ch | Ch " "
+Chc = Ch | Ch headgroup_separator
 Ch = "Cholesterol"
-ChEc = ChE | ChE " "
+ChEc = ChE | ChE headgroup_separator
 ChE = FA headgroup_separator HG_ChE
 HG_ChE = "Cholesteryl ester"
 

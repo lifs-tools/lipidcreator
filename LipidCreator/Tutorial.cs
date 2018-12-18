@@ -627,7 +627,11 @@ namespace LipidCreator
             }
             else if (tutorial == Tutorials.TutorialCE && (tutorialStep == (int)CESteps.CEto20 || tutorialStep == (int)CESteps.SameForD4))
             {
-                nextEnabled = Convert.ToDouble(creatorGUI.ceInspector.numericalUpDownCurrentCE.Text) == 20.0;
+                string ceValue = creatorGUI.ceInspector.numericalUpDownCurrentCE.Text;
+                if (ceValue != "")
+                {
+                    nextEnabled = Convert.ToDouble(ceValue) == 20.0;
+                }
             }
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
@@ -1779,9 +1783,10 @@ namespace LipidCreator
                     NumericUpDown nudCE = creatorGUI.ceInspector.numericalUpDownCurrentCE;
                     nudCE.Enabled = true;
                     GroupBox gbCE2 = creatorGUI.ceInspector.groupBoxPRMMode;
-                    
-                    tutorialArrow.update(new Point(nudCE.Location.X + gbCE2.Location.X, nudCE.Location.Y + gbCE2.Location.Y + (nudCE.Height >> 1)), "br");
+
                     tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Set optimal CE to '20'", "Just do it.");
+                    tutorialArrow.update(new Point(nudCE.Location.X + gbCE2.Location.X, nudCE.Location.Y + gbCE2.Location.Y + (nudCE.Height >> 1)), "br");
+                    tutorialArrow.Refresh();
                     break;
                     
                 case (int)CESteps.SameForD4:
@@ -1809,7 +1814,8 @@ namespace LipidCreator
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 5.5), 0), "rt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Mediators' tab", "Do what the title said.", false);
-                    setTutorialControls(creatorGUI.homeTab);
+                    //setTutorialControls(creatorGUI.homeTab);
+                    tutorialWindow.Refresh();
                     break;
                     
                 case (int)CESteps.SelectTXB2HG:

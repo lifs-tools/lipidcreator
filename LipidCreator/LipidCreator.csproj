@@ -17,7 +17,7 @@
     <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
     <AppCompany>Leibniz-Institut für Analytische Wissenschaften – ISAS – e.V.</AppCompany>
     <AppAuthor>Dominik Kopczynski, Nils Hoffmann, Bing Peng</AppAuthor>
-    <AppProvider>https://lifs.isas.de</AppProvider>
+    <AppProvider>https://lifs.isas.de/lipidcreator</AppProvider>
     <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
     <AppProduct>$(AssemblyName)</AppProduct>
     <AppCopyright>Copyright © 2018</AppCopyright>
@@ -428,11 +428,13 @@
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined\Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined\Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-heart.csv $(TargetDir)data\predefined\Mouse\Heart.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined\Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create resources on Linux / OSX -->
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined\Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined\Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-heart.csv $(TargetDir)data\predefined\Mouse\Heart.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="mono $(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined\Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
     <!-- remove generated log file and predefined template directory -->
     <Delete Files="$(TargetDir)data\lipidcreator.log" />

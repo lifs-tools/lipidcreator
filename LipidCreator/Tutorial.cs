@@ -47,9 +47,7 @@ namespace LipidCreator
     
     public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
-    //public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
-    
-    public enum CESteps {Null, Welcome, ChangeToMediators, SelectTXB2HG, AddLipid, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE};
+    public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
     
 
     [Serializable]
@@ -243,7 +241,7 @@ namespace LipidCreator
             creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged += new EventHandler(radioButtonInteraction);
             creatorGUI.ceInspector.button2.Click += buttonInteraction;
             creatorGUI.ceInspector.button2.MouseDown += mouseDownInteraction;
-            //creatorGUI.ceInspector.cartesean.MouseMove += new EventHandler(mouseHoverInteraction);
+            creatorGUI.ceInspector.cartesean.MouseMove += new MouseEventHandler(mouseHoverInteraction);
             creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.ceInspector.classCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.ceInspector.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);            
@@ -485,6 +483,7 @@ namespace LipidCreator
             {
                 nextEnabled = false;
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -501,6 +500,8 @@ namespace LipidCreator
                 creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = true;
             }
             creatorGUI.ms2fragmentsForm.Refresh();
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -514,6 +515,7 @@ namespace LipidCreator
             {
                 nextEnabled = numericUpDown.Value == 1;
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -552,6 +554,8 @@ namespace LipidCreator
                     e.Cancel = true;
                 }
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         public void dragInteraction(object sender, MouseEventArgs e)
@@ -564,16 +568,23 @@ namespace LipidCreator
                     break;
                 }
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
         
         public void tabSelectedInteraction(Object sender,  EventArgs e)
-        {
-            if ((currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialSRM || tutorialStep != (int)SRMSteps.PhosphoTab) && (currentTabIndex != (int)LipidCategory.PhosphoLipid || tutorial != Tutorials.TutorialHL || tutorialStep != (int)HLSteps.OpenHeavy || tutorialStep != (int)CESteps.SelectTXB2HG))
+        {            
+            if ((currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PhosphoTab) ||
+               (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy) ||
+               (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG))
             {
-                nextTutorialStep(true);
+                return;
             }
+            nextTutorialStep(true);
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -618,6 +629,7 @@ namespace LipidCreator
             {
                 nextEnabled = Convert.ToDouble(creatorGUI.ceInspector.numericalUpDownCurrentCE.Text) == 20.0;
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -643,6 +655,8 @@ namespace LipidCreator
                 nextEnabled = creatorGUI.ceInspector.radioButtonPRMArbitrary.Checked;
                 tutorialWindow.Refresh();
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -654,6 +668,7 @@ namespace LipidCreator
             {
                 nextEnabled = creatorGUI.plPosAdductCheckbox1.Checked && !creatorGUI.plPosAdductCheckbox3.Checked;
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -688,6 +703,7 @@ namespace LipidCreator
             {
                 creatorGUI.ceInspector.numericalUpDownCurrentCE.Enabled = (string)creatorGUI.ceInspector.classCombobox.Items[creatorGUI.ceInspector.classCombobox.SelectedIndex] == "TXB2{d4}";
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -774,6 +790,7 @@ namespace LipidCreator
                 }
                 creatorGUI.ms2fragmentsForm.Refresh();
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -784,7 +801,6 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
@@ -806,6 +822,8 @@ namespace LipidCreator
             {
                 nextTutorialStep(true);
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -827,6 +845,8 @@ namespace LipidCreator
             {
                 continueTutorial = true;
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         
@@ -855,6 +875,7 @@ namespace LipidCreator
                  
                  nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
+            tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
@@ -871,6 +892,8 @@ namespace LipidCreator
             {
                 quitTutorial(true);
             }
+            tutorialArrow.Refresh();
+            tutorialWindow.Refresh();
         }
         
         

@@ -1769,7 +1769,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.ceInspector);
                     
                     tutorialArrow.update(new Point(340, 400), "bl");
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 350), "Continue", "The black curve is automatically calculated from total intensity over all selected fragments from the list.");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 350), "Continue", "The black curve is the automatically calculated product distribution over all selected fragment distributions from the list. Its mode indicates the optimal collision energy over all selected fragments.");
                     nextEnabled = true;
                     
                     break;

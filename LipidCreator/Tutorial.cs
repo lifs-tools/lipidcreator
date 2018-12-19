@@ -956,7 +956,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the first fatty acid carbon chain lengths to '14-18, 20'", "LipidCreator allows to describe a set of different fatty acids (FAs) concisely instead of describing each FA separately.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the first fatty acyl chain lengths to '14-18, 20'", "LipidCreator allows to describe a set of different fatty acyls (FAs) concisely instead of describing each FA separately.");
                                       
                     
                     plFA1.Text = "12-15";
@@ -996,7 +996,7 @@ namespace LipidCreator
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Click on 'Continue'", "Ester or ether linked fatty acids (fatty acyl, plasmenyl or plasmanyl) can be created here.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Click on 'Continue'", "Ester or ether linked fatty acyls (fatty acyl, plasmenyl or plasmanyl) can be created here.");
                     nextEnabled = true;
                     tutorialWindow.Refresh();
                     
@@ -1437,7 +1437,7 @@ namespace LipidCreator
                 case (int)HLSteps.OptionsExplain:
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "In 'Building block', the head group and two fatty acids can be edited for PG. We will start with the head group.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Continue'", "In 'Building block', the head group and two fatty acyls can be edited for PG. We will start with the head group.");
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();
@@ -1458,7 +1458,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.comboBox2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Change building block to 'Fatty acid 1'", "");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Change building block to 'Fatty acyl 1'", "");
                     
                     break;
                     
@@ -1467,7 +1467,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     creatorGUI.addHeavyPrecursor.dataGridView1.Enabled = true;
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set the isotopic count of 2H to 30", "The heavy labelled element numbers act as an upper limit for the element, since the fatty acid building block has a variable number of elements depending e.g. on the carbon chain length.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Set the isotopic count of 2H to 30", "The heavy labelled element numbers act as an upper limit for the element, since the fatty acyl building block has a variable number of elements depending e.g. on the carbon chain length.");
                     
                     break;
                     
@@ -1706,7 +1706,7 @@ namespace LipidCreator
                 case (int)CESteps.Welcome:
                     setTutorialControls(creatorGUI.homeTab);
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible to estimate or set an optimal collision energy either for a complete lipid species (PRM) or for each fragment individually (SRM).", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible set an optimal collision energy for a lipid species.", false);
                     nextEnabled = true;
                     break;
                     
@@ -1732,7 +1732,7 @@ namespace LipidCreator
                         quitTutorial();
                     }
                     
-                    tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy computation' > 'Thermo Scientific Q Exactive HF'", "Another feature of LipidCreator is the collision energy optization module. With this module it is possible to estimate or set an optimal collision energy either for a complete lipid species (PRM) or for each fragment individually (SRM).");
+                    tutorialWindow.update(new Size(640, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy computation' > 'Thermo Scientific Q Exactive HF'", " ");
                     break;
                     
                 case (int)CESteps.OpenCEDialog:
@@ -1741,7 +1741,7 @@ namespace LipidCreator
                     creatorGUI.menuCollisionEnergyOpt.Enabled = true;
                     
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy optimization'", "You activated now system wide the CE optimization independant of the assembled lipids. Open the 'Collision Energy optimization window' to proceed.");
+                    tutorialWindow.update(new Size(440, 200), new Point(140, 200), "Select 'Options' > 'Collision Energy optimization'", "You activated now system wide the CE optimization independant of the assembled lipids. ");
                     break;
                     
                 case (int)CESteps.SelectTXB2:
@@ -1752,14 +1752,14 @@ namespace LipidCreator
                     cbClass.Enabled = true;
                     
                     tutorialArrow.update(new Point(cbClass.Location.X + cbClass.Width, cbClass.Location.Y + (cbClass.Height >> 1)), "tl");
-                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2", "Please select 'TXB2' class.", false);
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2", "", false);
                     break;
                     
                 case (int)CESteps.ExplainBlackCurve:
                     setTutorialControls(creatorGUI.ceInspector);
                     
                     tutorialArrow.update(new Point(340, 400), "bl");
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 350), "Continue", "The black curve is very awesome.");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 350), "Continue", "The black curve is automatically calculated from total intensity over all selected fragments from the list.");
                     nextEnabled = true;
                     
                     break;
@@ -1774,7 +1774,7 @@ namespace LipidCreator
                     rbManually.Enabled = true;
                     
                     tutorialArrow.update(new Point(rbManually.Location.X + gbCE.Location.X, rbManually.Location.Y + gbCE.Location.Y + (rbManually.Height >> 1)), "br");
-                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Select 'Manually'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Select 'Manually'", "To adjust CE manually.");
                     break;
                     
                 case (int)CESteps.CEto20:
@@ -1784,7 +1784,7 @@ namespace LipidCreator
                     nudCE.Enabled = true;
                     GroupBox gbCE2 = creatorGUI.ceInspector.groupBoxPRMMode;
 
-                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Set optimal CE to '20'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 200), new Point(100, 350), "Set optimal CE to '20'", "Type in number or move dashed line.");
                     tutorialArrow.update(new Point(nudCE.Location.X + gbCE2.Location.X, nudCE.Location.Y + gbCE2.Location.Y + (nudCE.Height >> 1)), "br");
                     tutorialArrow.Refresh();
                     break;
@@ -1795,7 +1795,7 @@ namespace LipidCreator
                     ComboBox cbClass2 = creatorGUI.ceInspector.classCombobox;
                     cbClass2.Enabled = true;
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2{d4}", "Please select 'TXB2{d4}' class and set CE to 20, too.");
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Select TXB2{d4} and set CE to 20", "");
                     break;
                     
                 case (int)CESteps.CloseCE:
@@ -1805,7 +1805,7 @@ namespace LipidCreator
                     buttonOK.Enabled = true;
                     tutorialArrow.update(new Point(buttonOK.Location.X + (buttonOK.Width >> 1), buttonOK.Location.Y ), "rb");
                     
-                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Click 'Ok'", "Confirm your changes by clicking 'Ok'");
+                    tutorialWindow.update(new Size(440, 200), new Point(100, 300), "Click on 'Ok' to confirm your changes", "");
                     break;
                     
                 case (int)CESteps.ChangeToMediators:
@@ -1813,7 +1813,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 5.5), 0), "rt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Mediators' tab", "Do what the title said.", false);
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Mediators' tab", "", false);
                     //setTutorialControls(creatorGUI.homeTab);
                     tutorialWindow.Refresh();
                     break;
@@ -1825,7 +1825,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(medHG.Location.X + medHG.Size.Width, medHG.Location.Y + (medHG.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select the 'TBX2' headgroup", "What are you waiting for?");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select 'TXB2'", "");
                     break;
                     
                     
@@ -1847,14 +1847,14 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors, fragments and CE information.");
                     break;
                     
                     
                 case (int)CESteps.ExplainLCasExternal:
                     setTutorialControls(creatorGUI.lipidsReview);
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "LipidCreator as external!", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(40, 34), "Continue", "When use LipidCreator as external tool in Skyline, the checkbox of 'Create Spectral library' and 'Send to Skyline' are valid to use.", false);
                     nextEnabled = true;
                     break;
                     
@@ -1868,7 +1868,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bssl.Location.X + (bssl.Size.Width >> 1), bssl.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store blib'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store spectral library'", "Save the spectral library in *.blib format");
                     break;
                     
                     

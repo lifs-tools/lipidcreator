@@ -676,6 +676,7 @@ namespace LipidCreator
                 else if (headgroup.Equals("S1P")) headgroup = "LCBP";
                 else if (headgroup.Equals("HexSph")) headgroup = "LHexCer";
                 else if (headgroup.Equals("SPC")) headgroup = "LSM";
+                else if (headgroup.Equals("SPH-P")) headgroup = "LCBP";
                 lipid.headGroupNames.Add(headgroup);
             }
         }

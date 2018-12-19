@@ -97,7 +97,7 @@ HG_DSLc = HG_DSL | HG_DSL headgroup_separator
 HG_DSL = "Cer" | "CerP" | "EPC" | "GB3" | "GB4" | "GD3" | "GM3" | "GM4" | "Hex2Cer" | "HexCer" | "IPC" | "M(IP)2C" | "MIPC" | "SHexCer" | "SM" | "PE-Cer" | "PI-Cer" | "GlcCer" | "FMC-5" | "FMC-6" | "LacCer" | "GalCer" | "(3'-sulfo)Galbeta-Cer"
 
 HG_LSLc = HG_LSL | HG_LSL headgroup_separator
-HG_LSL = "SPH" | "S1P" | "HexSph" | "SPC"
+HG_LSL = "SPH" | "S1P" | "HexSph" | "SPC" | "SPH-P"
 
 
 

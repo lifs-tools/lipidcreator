@@ -488,7 +488,7 @@ namespace LipidCreator
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
             LC_OS = Environment.OSVersion.Platform.ToString();
-            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient==null?"standalone":"skyline tool") + " mode on "+LC_OS);
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS);
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();

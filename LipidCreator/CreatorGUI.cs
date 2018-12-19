@@ -3863,13 +3863,10 @@ namespace LipidCreator
             }
         }
         
-        
-        
     
         [STAThread]
         public static void Main(string[] args)
         {
-        
             if (args.Length > 0)
             {
         
@@ -3975,7 +3972,6 @@ namespace LipidCreator
                                     catch (Exception e)
                                     {
                                         log.Error("The file '" + inputCSV + "' in line '" + lineCounter + "' could not be read:", e);
-                                        //Console.WriteLine(e.Message);
                                     }
                                 }
                             }

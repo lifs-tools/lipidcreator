@@ -143,7 +143,7 @@ namespace LipidCreator
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
             {
                 int currentCell = lipidNamesGridView.CurrentCell.RowIndex; 
-                string[] insertText = Clipboard.GetText().Split('\n');
+                string[] insertText = Clipboard.GetText().Split(new char[]{'\n'});
                 foreach (string ins in insertText)
                 {
                     string insert = Parser.strip(ins, (char)13);

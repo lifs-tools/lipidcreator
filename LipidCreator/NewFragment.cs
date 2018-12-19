@@ -135,7 +135,7 @@ namespace LipidCreator
                 HashSet<string> fragmentBB = new HashSet<string>(  (String[]) ms2Fragment.fragmentBase.ToArray( typeof( string ) ));
                 for (int i = 1; i < buildingBlocksArray.Count; ++i)
                 {
-                    HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(';'));
+                    HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(new char[]{';'}));
                     int intersect = fragmentBB.Intersect(currentBB).Count();
                     if (intersect == fragmentBB.Count() && intersect == currentBB.Count())
                     {

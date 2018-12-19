@@ -495,6 +495,9 @@ namespace LipidCreator
         {
             creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = false;
             creatorGUI.ms2fragmentsForm.menuFragmentItem2.Enabled = false;
+            Console.WriteLine(tutorial == Tutorials.TutorialHL);
+            Console.WriteLine((tutorialStep == (int)HLSteps.EditFragment) + " " + (int)HLSteps.EditFragment);
+            Console.WriteLine((creatorGUI.ms2fragmentsForm.editDeleteIndex == 0) + " " + creatorGUI.ms2fragmentsForm.editDeleteIndex);
             if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.EditFragment && creatorGUI.ms2fragmentsForm.editDeleteIndex == 0)
             {
                 creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = true;
@@ -575,10 +578,13 @@ namespace LipidCreator
         
         
         public void tabSelectedInteraction(Object sender,  EventArgs e)
-        {            
-            if ((currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PhosphoTab) ||
-               (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy) ||
-               (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG))
+        {
+            // these exceptions should only be executed, when the tabs are being changed by the tutorial and not by the user clicking at a certain tab
+            if (
+                (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.PhosphoTab) ||
+                (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy) ||
+                (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG)
+                )
             {
                 return;
             }

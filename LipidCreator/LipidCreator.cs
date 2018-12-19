@@ -786,10 +786,7 @@ namespace LipidCreator
             if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
             SKYLINE_API_HEADER = apiList.ToArray();
             
-            Console.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now));
             createPrecursorList();
-            
-            Console.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now));
             if (asDeveloper)
             {
                 Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
@@ -801,9 +798,6 @@ namespace LipidCreator
             }
             
             createFragmentList(selectedInstrumentForCE, monitoringType);
-            
-            Console.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now));
-            Console.WriteLine(transitionList.Rows.Count);
         }
         
         

@@ -143,7 +143,7 @@ namespace LipidCreator
             // label1
             // 
             this.labelNumberOfTransitions.AutoSize = true;
-            this.labelNumberOfTransitions.Location = new System.Drawing.Point(166, 426);
+            this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 426);
             this.labelNumberOfTransitions.Name = "label1";
             this.labelNumberOfTransitions.Size = new System.Drawing.Size(109, 13);
             this.labelNumberOfTransitions.TabIndex = 5;

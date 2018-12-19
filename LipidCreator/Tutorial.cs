@@ -70,6 +70,7 @@ namespace LipidCreator
         public ArrayList creatorGUIEventHandlers;
         public bool continueTutorial = false;
         public bool passTabChange = false;
+        public bool quitting = false;
         private static readonly ILog log = LogManager.GetLogger(typeof(Tutorial));
         
         public Tutorial(CreatorGUI creatorGUI)
@@ -102,6 +103,7 @@ namespace LipidCreator
             
             tutorial = t;
             tutorialStep = 0;
+            quitting = false;
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
@@ -263,7 +265,8 @@ namespace LipidCreator
         
         public void quitTutorial(bool userDefined = false)
         {
-        
+            if (quitting) return;
+            quitting = true;
             tutorial = Tutorials.NoTutorial;
             tutorialStep = 0;
             tutorialArrow.Visible = false;
@@ -391,6 +394,7 @@ namespace LipidCreator
                 creatorGUI.lipidsReview.Close();
             }
             creatorGUI.Enabled = true;
+            quitting = false;
         }
         
         

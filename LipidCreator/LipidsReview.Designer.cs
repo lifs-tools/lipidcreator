@@ -115,7 +115,7 @@ namespace LipidCreator
             this.checkBoxHideReplicates.Name = "checkBox1";
             this.checkBoxHideReplicates.Size = new System.Drawing.Size(96, 17);
             this.checkBoxHideReplicates.TabIndex = 3;
-            this.checkBoxHideReplicates.Text = "Show unique products only";
+            this.checkBoxHideReplicates.Text = "Only show unique transtions";
             this.checkBoxHideReplicates.UseVisualStyleBackColor = true;
             this.checkBoxHideReplicates.CheckedChanged += new System.EventHandler(this.checkBoxCheckedChanged);
             // 

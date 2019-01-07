@@ -1442,7 +1442,7 @@ namespace LipidCreator
             glStep1.Controls.Add(glPositiveAdduct);
             glStep1.Controls.Add(glNegativeAdduct);
             glycerolipidsTab.Parent = tabControl;
-            glycerolipidsTab.Text = "Glycerolipids";
+            glycerolipidsTab.Text = "GL";
             glycerolipidsTab.Location = new Point(0, 0);
             glycerolipidsTab.Size = this.Size;
             glycerolipidsTab.AutoSize = true;
@@ -1706,7 +1706,7 @@ namespace LipidCreator
             plStep1.Controls.Add(plNegativeAdduct);
             plStep1.Controls.Add(easterText);
             phospholipidsTab.Parent = tabControl;
-            phospholipidsTab.Text = "Phospholipids";
+            phospholipidsTab.Text = "GP";
             phospholipidsTab.Location = new Point(0, 0);
             phospholipidsTab.Size = this.Size;
             phospholipidsTab.AutoSize = true;
@@ -1924,7 +1924,7 @@ namespace LipidCreator
             slStep1.Controls.Add(slPositiveAdduct);
             slStep1.Controls.Add(slNegativeAdduct);
             sphingolipidsTab.Parent = tabControl;
-            sphingolipidsTab.Text = "Sphingolipids";
+            sphingolipidsTab.Text = "SP";
             sphingolipidsTab.Location = new Point(0, 0);
             sphingolipidsTab.Size = this.Size;
             sphingolipidsTab.AutoSize = true;
@@ -2088,7 +2088,9 @@ namespace LipidCreator
             chStep1.Controls.Add(chHydroxylTextbox);
             chStep1.Controls.Add(chFAHydroxyLabel);
             
-            cholesterollipidsTab.Text = "Cholesterols";
+            cholesterollipidsTab.Text = "ST";
+            toolTip.SetToolTip(cholesterollipidsTab, "Cholesterols");
+            cholesterollipidsTab.ToolTipText = "fofofo";
             cholesterollipidsTab.Location = new Point(0, 0);
             cholesterollipidsTab.Size = this.Size;
             cholesterollipidsTab.AutoSize = true;
@@ -2203,7 +2205,7 @@ namespace LipidCreator
             medStep1.Controls.Add(medHgListbox);
             medStep1.Controls.Add(medPictureBox);
             
-            mediatorlipidsTab.Text = "Mediators";
+            mediatorlipidsTab.Text = "LM";
             mediatorlipidsTab.Location = new Point(0, 0);
             mediatorlipidsTab.Size = this.Size;
             mediatorlipidsTab.AutoSize = true;

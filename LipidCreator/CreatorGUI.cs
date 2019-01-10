@@ -336,7 +336,7 @@ namespace LipidCreator
                     col.SortMode = DataGridViewColumnSortMode.NotSortable;
                     col.Width = Math.Max(col.MinimumWidth, w);
                 }
-                lipidsGridview.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 editColumn.Width = 40;
                 deleteColumn.Width = 40;
                 initialCall = false;
@@ -3136,7 +3136,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    row["Category"] = "Phospholipid";
+                    row["Category"] = "Glycerophospholipid";
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPhospholipid.headGroupNames);
                     row["Building Block 2"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + "; OH: " + currentPhospholipid.fag1.hydroxylInfo;
                     if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
@@ -3154,7 +3154,7 @@ namespace LipidCreator
             else if (currentRegisteredLipid is Cholesterol)
             {
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
-                row["Category"] = "Cholesterol";
+                row["Category"] = "Sterol lipid";
                 if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             

@@ -398,50 +398,76 @@ namespace LipidCreator
             {
                 foreach(string ceParametersFile in ceFilePaths)
                 {
-                    lineCounter = 1;
+                    lineCounter = 0;
                     try
                     {
                         using (StreamReader sr = new StreamReader(ceParametersFile))
                         {
-                            String line = sr.ReadLine(); // omit titles
+                            String line = null;
+                            Dictionary<String, int> columnKeys = null;
+                            int nTokens = -1;
                             while((line = sr.ReadLine()) != null)
                             {
                                 lineCounter++;
                                 if (line.Length < 2) continue;
                                 if (line[0] == '#') continue;
-                            
                                 string[] tokens = parseLine(line);
-                                if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
-                            
-                                string instrument = tokens[0];
-                                string lipidClass = tokens[1];
-                                string adduct = tokens[2];
-                                string fragment = tokens[3];
-                                string paramKey = tokens[4];
-                                string paramValue = tokens[5];
-                            
-                            
-                                if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                                //initialize column header key lookup
+                                if (columnKeys == null)
                                 {
-                                    collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
+                                    nTokens = tokens.Length;
+                                    log.Debug("Parsing line " + lineCounter + " " + line);
+                                    log.Debug("CE Parameter file header: " + string.Join(", ", tokens) + " for file " + ceParametersFile);
+                                    columnKeys = tokens.Select((value, index) => new { value, index })
+                                        .ToDictionary(pair => pair.value, pair => pair.index);
+                                    log.Debug("Column Keys: " + string.Join(", ", columnKeys));
                                 }
-                            
-                                if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
+                                else
                                 {
-                                    collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
+
+                                    if (tokens.Length != nTokens)
+                                    {
+                                        log.Error("Mismatch on line " + lineCounter + "! Should have " + nTokens + " columns, but had " + tokens.Length);
+                                        throw new Exception("Invalid line in file, number of columns in line must equal number of columns in header!");
+                                    }
+
+                                    string instrument = tokens[columnKeys["instrument"]];
+                                    string lipidClass = tokens[columnKeys["class"]];
+                                    string adduct = tokens[columnKeys["adduct"]];
+                                    string fragment = tokens[columnKeys["fragment"]];
+                                    string paramKey = tokens[columnKeys["ParKey"]];
+                                    string paramValue = tokens[columnKeys["ParValue"]];
+
+
+                                    if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey(paramKey))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("ParamKey for " + instrument + " " + lipidClass + " " + adduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
+                                    }
                                 }
-                            
-                                if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
-                                {
-                                    collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
-                                }
-                            
-                                if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
-                                {
-                                    collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
-                                }
-                            
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
                             }
                         }
 
@@ -449,7 +475,7 @@ namespace LipidCreator
                     }
                     catch (Exception e)
                     {
-                        log.Error("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:", e);
+                        log.Error("Encountered an error in file '" + ceParametersFile + "' on line '" + lineCounter + "':", e);
                     }
                 }
             }

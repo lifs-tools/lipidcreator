@@ -444,20 +444,22 @@ namespace LipidCreator
                         
             
                 if (headGroupNames.Count == 0) return;
-                bool isPlamalogen = false;
-                bool isFAa = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
+                    bool isPlamalogen1 = false;
+                    bool isFAa1 = false;
                         
                     switch (fa1.suffix)
                     {
-                        case "a": isFAa = true; break;
-                        case "p": isPlamalogen = true; break;
+                        case "a": isFAa1 = true; break;
+                        case "p": isPlamalogen1 = true; break;
                         default: break;
                     }
                     
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
+                        bool isPlamalogen = isPlamalogen1;
+                        bool isFAa = isFAa1;
                         switch (fa2.suffix)
                         {
                             case "a": isFAa = true; break;

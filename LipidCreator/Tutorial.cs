@@ -41,7 +41,7 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2, TutorialCE = 3};
     
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, RepresentitativeFA, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
     
@@ -931,7 +931,6 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Continue'", "Welcome to the PRM tutorial (transitions for precursors) of LipidCreator. It will guide you interactively through this tool by showing you all necessary steps to create a targeted assay.", false);
                     
                     nextEnabled = true;
-                    tutorialWindow.Refresh();
                     break;
                     
                     
@@ -997,7 +996,18 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "The number of hydroxyl groups can be adjusted for each FA specification. Here, we stick with zero.");
                     
                     nextEnabled = true;
-                    tutorialWindow.Refresh();
+                    break;
+                    
+                    
+                case (int)PRMSteps.RepresentitativeFA:
+                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
+                    
+                    CheckBox plRep = creatorGUI.plRepresentativeFA;
+                    tutorialArrow.update(new Point(plRep.Location.X, plRep.Location.Y + (plRep.Size.Height >> 1)), "tr");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "Using this check box, all fatty acyl parameters will be copied to the remaining FAs.");
+                    
+                    nextEnabled = true;
                     break;
                     
                     
@@ -1008,7 +1018,6 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Click on 'Continue'", "Ester or ether linked fatty acyls (fatty acyl, plasmenyl or plasmanyl) can be created here.");
                     nextEnabled = true;
-                    tutorialWindow.Refresh();
                     
                     break;
                     

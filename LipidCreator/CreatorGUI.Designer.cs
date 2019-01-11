@@ -1251,6 +1251,7 @@ namespace LipidCreator
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
             string FApInformation = "Plasmenyl fatty acids need at least one double bond";
+            string repFAText = "All fatty acyl parameters will be copied from the first FA to the remaining FAs";
 
 
             tabControl.Controls.Add(homeTab);
@@ -1673,6 +1674,7 @@ namespace LipidCreator
             glRepresentativeFA.Location = new Point(glHydroxyl1Textbox.Left + glHydroxyl1Textbox.Width + sep, glHydroxyl1Textbox.Top);
             glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
+            toolTip.SetToolTip(glRepresentativeFA, repFAText);
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
             glRepresentativeFA.SendToBack();
 
@@ -1901,6 +1903,7 @@ namespace LipidCreator
             plRepresentativeFA.Location = new Point(plHydroxyl1Textbox.Left + plHydroxyl1Textbox.Width + sep, plHydroxyl1Textbox.Top);
             plRepresentativeFA.Width = 150;
             plRepresentativeFA.Text = "First FA representative";
+            toolTip.SetToolTip(plRepresentativeFA, repFAText);
             plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
             plRepresentativeFA.SendToBack();
 

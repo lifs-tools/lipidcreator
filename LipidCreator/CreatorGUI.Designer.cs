@@ -1251,7 +1251,7 @@ namespace LipidCreator
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
             string FApInformation = "Plasmenyl fatty acids need at least one double bond";
-            string repFAText = "All fatty acyl parameters will be copied from the first FA to the remaining FAs";
+            string repFAText = "All fatty acyl parameters will be copied from the first FA to all remaining FAs";
 
 
             tabControl.Controls.Add(homeTab);

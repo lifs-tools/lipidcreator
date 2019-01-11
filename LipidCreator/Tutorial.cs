@@ -1005,7 +1005,7 @@ namespace LipidCreator
                     CheckBox plRep = creatorGUI.plRepresentativeFA;
                     tutorialArrow.update(new Point(plRep.Location.X, plRep.Location.Y + (plRep.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "Using this check box, all fatty acyl parameters will be copied to the remaining FAs.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
                     
                     nextEnabled = true;
                     break;

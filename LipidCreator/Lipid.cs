@@ -343,7 +343,6 @@ namespace LipidCreator
                 {
                     string lipidClass = precursorData.lipidClass;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
-                    //Console.WriteLine(precursorData.lipidClass + " " + adduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
                         lipidRow[LipidCreator.COLLISION_ENERGY] = CE;

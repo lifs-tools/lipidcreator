@@ -50,6 +50,7 @@ namespace LipidCreator
         {
             senderInterupt = false;
             loading = false;
+            hoveredIndex = -1;
             this.creatorGUI = creatorGUI;
             Lipid currentLipidTmp = creatorGUI.currentLipid;
             
@@ -110,6 +111,7 @@ namespace LipidCreator
         void checkedListBoxMouseLeave(object sender, EventArgs e)
         {
             pictureBoxFragments.Image = fragmentComplete;
+            hoveredIndex = -1;
         }
         
         
@@ -224,6 +226,7 @@ namespace LipidCreator
             {
                 this.checkedListBoxPositiveFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
+                hoveredIndex = -1;
             }
         }
         
@@ -285,6 +288,7 @@ namespace LipidCreator
             {
                 this.checkedListBoxNegativeFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
+                hoveredIndex = -1;
             }
         }
         

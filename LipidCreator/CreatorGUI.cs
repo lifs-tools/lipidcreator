@@ -3155,7 +3155,8 @@ namespace LipidCreator
             {
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
-                if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+                row["Building Block 1"] = "Ch" + (currentCHLipid.containsEster ? "E" : "");
+                if (currentCHLipid.containsEster) row["Building Block 2"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             
             else if (currentRegisteredLipid is Mediator)

@@ -467,29 +467,56 @@ namespace LipidCreator
                             default: break;
                         }        
                         List<FattyAcid> sortedAcids = new List<FattyAcid>();
+                        List<FattyAcid> unsortedAcids = new List<FattyAcid>();
                         sortedAcids.Add(fa1);
                         sortedAcids.Add(fa2);
+                        unsortedAcids.Add(fa1);
+                        unsortedAcids.Add(fa2);
                         sortedAcids.Sort();
                         
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;
+                            bool isSorted = true;
+                            
+                            
                             if (headgroup.Equals("PA") || headgroup.Equals("PC") || headgroup.Equals("PE") || headgroup.Equals("PG") || headgroup.Equals("PI") || headgroup.Equals("PS"))
                             {
                                 if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                                 {
-                                    if (isPlamalogen) headgroup = headgroup + " O-p";
-                                    else if (isFAa) headgroup = headgroup + " O-a";
+                                    if (isPlamalogen)
+                                    {
+                                        headgroup = headgroup + " O-p";
+                                        isSorted = false;
+                                    }
+                                    else if (isFAa)
+                                    {
+                                        headgroup = headgroup + " O-a";
+                                        isSorted = false;
+                                    }
                                 }
                             }
                             
+                            
                             String key = " ";
                             int i = 0;
-                            foreach (FattyAcid fa in sortedAcids)
+                            if (isSorted){
+                                foreach (FattyAcid fa in sortedAcids)
+                                {
+                                    if (fa.length > 0 && fa.suffix != "x"){
+                                        if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
+                                        key += fa.ToString();
+                                    }
+                                }
+                            }
+                            else
                             {
-                                if (fa.length > 0 && fa.suffix != "x"){
-                                    if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
-                                    key += fa.ToString();
+                                foreach (FattyAcid fa in unsortedAcids)
+                                {
+                                    if (fa.length > 0 && fa.suffix != "x"){
+                                        if (i++ > 0) key += ID_SEPARATOR_SPECIFIC;
+                                        key += fa.ToString();
+                                    }
                                 }
                             }
                             
@@ -529,7 +556,7 @@ namespace LipidCreator
                                 precursorData.precursorCharge = charge;
                                 precursorData.atomsCount = headgroups[headgroup].elements;
                                 
-                                if (isFAa || isPlamalogen)
+                                if (!isSorted)
                                 {
                                     precursorData.fa1 = fa1;
                                     precursorData.fa2 = fa2;

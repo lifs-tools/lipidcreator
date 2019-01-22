@@ -25,6 +25,7 @@ SOFTWARE.
 */
 
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace LipidCreator
 {
@@ -91,9 +92,10 @@ namespace LipidCreator
             this.textLibraryName.Text = "";
             // 
             // AboutDialog
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.DialogFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(480, 320);
             this.Controls.Add(this.textLibraryName);
             this.Controls.Add(this.linkLabel);
@@ -118,7 +120,7 @@ namespace LipidCreator
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.LinkLabel linkLabel;
         private System.Windows.Forms.RichTextBox textLibraryName;
-        private string licenseText = Application.ProductName + " " + Application.ProductVersion + "\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
+        private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
             "MIT License\n\n" +
 
             "Copyright(c) 2018\n"+

@@ -25,14 +25,9 @@ SOFTWARE.
 */
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Data.SQLite;
-using System.Globalization;
 
 namespace LipidCreator
 {    

@@ -24,12 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.Collections.Generic;
+using System;
 
 namespace LipidCreator
 {
@@ -117,7 +115,7 @@ namespace LipidCreator
             this.checkBoxHideReplicates.Name = "checkBox1";
             this.checkBoxHideReplicates.Size = new System.Drawing.Size(96, 17);
             this.checkBoxHideReplicates.TabIndex = 3;
-            this.checkBoxHideReplicates.Text = "Show unique products only";
+            this.checkBoxHideReplicates.Text = "Only show unique transtions";
             this.checkBoxHideReplicates.UseVisualStyleBackColor = true;
             this.checkBoxHideReplicates.CheckedChanged += new System.EventHandler(this.checkBoxCheckedChanged);
             // 
@@ -140,11 +138,12 @@ namespace LipidCreator
             this.buttonStoreSpectralLibrary.Text = "Store spectral library";
             this.buttonStoreSpectralLibrary.UseVisualStyleBackColor = true;
             this.buttonStoreSpectralLibrary.Click += new System.EventHandler(this.buttonStoreSpectralLibraryClick);
+            this.buttonStoreSpectralLibrary.Enabled = false;
             // 
             // label1
             // 
             this.labelNumberOfTransitions.AutoSize = true;
-            this.labelNumberOfTransitions.Location = new System.Drawing.Point(166, 426);
+            this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 426);
             this.labelNumberOfTransitions.Name = "label1";
             this.labelNumberOfTransitions.Size = new System.Drawing.Size(109, 13);
             this.labelNumberOfTransitions.TabIndex = 5;
@@ -152,9 +151,10 @@ namespace LipidCreator
             this.labelNumberOfTransitions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LipidsReview
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.DialogFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1079, 494);
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);
@@ -172,17 +172,24 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){buttonSendToSkyline, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
+            controlElements = new ArrayList(){buttonSendToSkyline, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
         }
 
         #endregion
 
+        [NonSerialized]
         public System.Windows.Forms.DataGridView dataGridViewTransitions;
+        [NonSerialized]
         public System.Windows.Forms.Button buttonSendToSkyline;
+        [NonSerialized]
         public Button buttonStoreTransitionList;
+        [NonSerialized]
         public CheckBox checkBoxHideReplicates;
+        [NonSerialized]
         public CheckBox checkBoxCreateSpectralLibrary;
+        [NonSerialized]
         public Button buttonStoreSpectralLibrary;
+        [NonSerialized]
         public Label labelNumberOfTransitions;
         public ArrayList controlElements;
     }

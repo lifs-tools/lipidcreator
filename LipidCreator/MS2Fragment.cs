@@ -28,12 +28,7 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Linq;
 
 namespace LipidCreator
 {
@@ -42,8 +37,8 @@ namespace LipidCreator
     [Serializable]
     public class MS2Fragment
     {
-        public String fragmentName;
-        public String fragmentOutputName;
+        public string fragmentName;
+        public string fragmentOutputName;
         public int fragmentCharge;
         public String fragmentFile;
         public Dictionary<int, int> fragmentElements;

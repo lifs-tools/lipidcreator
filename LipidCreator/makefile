@@ -1,28 +1,64 @@
 CC = x86_64-w64-mingw32-g++
+CORE_FILES = LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs Glycerolipid.cs Phospholipid.cs Sphingolipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs
 
-main:
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs CreatorGUI.cs CreatorGUI.Designer.cs MS2Form.cs MS2Form.Designer.cs LipidsReview.cs LipidsReview.Designer.cs NewMediatorFragment.cs NewMediatorFragment.Designer.cs NewFragment.cs NewFragment.Designer.cs SpectralName.cs SpectralName.Designer.cs AboutDialog.cs AboutDialog.Designer.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs MediatorMS2Form.cs MediatorMS2Form.Designer.cs AddHeavyPrecursor.cs AddHeavyPrecursor.Designer.cs Precursor.cs Tutorial.cs FilterDialog.cs FilterDialog.Designer.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs TranslatorDialog.cs TranslatorDialog.Designer.cs CEInspector.cs CEInspector.Designer.cs  -out:LipidCreator.exe
+GUI_FILES = CreatorGUI.cs CreatorGUI.Designer.cs MS2Form.cs MS2Form.Designer.cs LipidsReview.cs LipidsReview.Designer.cs NewMediatorFragment.cs NewMediatorFragment.Designer.cs NewFragment.cs NewFragment.Designer.cs SpectralName.cs SpectralName.Designer.cs AboutDialog.cs AboutDialog.Designer.cs AssemblyInfo.cs MediatorMS2Form.cs MediatorMS2Form.Designer.cs AddHeavyPrecursor.cs AddHeavyPrecursor.Designer.cs Tutorial.cs FilterDialog.cs FilterDialog.Designer.cs TranslatorDialog.cs TranslatorDialog.Designer.cs CEInspector.cs CEInspector.Designer.cs LCMessageBox.cs LCMessageBox.Designer.cs
 
-tests:
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs TestTransitionList.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs BaseParserEventHandler.cs ParserEventHandler.cs LipidMapsParserEventHandler.cs Parser.cs CollisionEnergy.cs -out:TestTransitionList.exe
+DIR = ${CURDIR}
+BUILD_DIR = $(DIR)/bin/make
+
+RESX_FILES = AboutDialog.resx,$(BUILD_DIR)/LipidCreator.AboutDialog.resources AddHeavyPrecursor.resx,$(BUILD_DIR)/LipidCreator.AddHeavyPrecursor.resources CEInspector.resx,$(BUILD_DIR)/LipidCreator.CEInspector.resources FilterDialog.resx,$(BUILD_DIR)/LipidCreator.FilterDialog.resources LCMessageBox.resx,$(BUILD_DIR)/LipidCreator.LCMessageBox.resources LipidsReview.resx,$(BUILD_DIR)/LipidCreator.LipidsReview.resources MS2Form.resx,$(BUILD_DIR)/LipidCreator.MS2Form.resources NewFragment.resx,$(BUILD_DIR)/LipidCreator.NewFragment.resources NewMediatorFragment.resx,$(BUILD_DIR)/LipidCreator.NewMediator.resources TranslatorDialog.resx,$(BUILD_DIR)/LipidCreator.TranslatorDialog.resources
+
+RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:$(BUILD_DIR)/LipidCreator.AddHeavyPrecursor.resources -resource:$(BUILD_DIR)/LipidCreator.CEInspector.resources -resource:$(BUILD_DIR)/LipidCreator.FilterDialog.resources -resource:$(BUILD_DIR)/LipidCreator.LCMessageBox.resources -resource:$(BUILD_DIR)/LipidCreator.LipidsReview.resources -resource:$(BUILD_DIR)/LipidCreator.MS2Form.resources -resource:$(BUILD_DIR)/LipidCreator.NewFragment.resources -resource:$(BUILD_DIR)/LipidCreator.NewMediator.resources -resource:$(BUILD_DIR)/LipidCreator.TranslatorDialog.resources
+
+
+
+
+
+main: setup
+	resgen2 -compile $(RESX_FILES)
+
+	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
+
+tests: setup
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs TestParser.cs TestParserEventHandler.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs -out:TestParser.exe
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	mcs -pkg:dotnet -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs GLLipid.cs PLLipid.cs SLLipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs TestLipidMaps.cs TestParserEventHandler.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs ParserEventHandler.cs Parser.cs -out:TestLipidMaps.exe
+	mcs -pkg:dotnet -r:../packages/log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 
-complete: main
-	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+complete:
+	$(MAKE) setup
+	$(MAKE) main
+	$(MAKE) predefined
+	$(MAKE) zip
 
 zip:
-	zip -r LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll tool-inf
+	cd $(BUILD_DIR) && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll log4net.dll log4net.xml tool-inf
+	
+setup:
+	if [ ! -d "$(BUILD_DIR)" ];then \
+		mkdir -p bin; \
+		mkdir -p $(BUILD_DIR); \
+		cp -r data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.dll ../packages/log4net.2.0.8/lib/net45-full/log4net.xml tool-inf $(BUILD_DIR); \
+		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
+	fi
+	mkdir -p $(BUILD_DIR)/data/predefined
+	
+	
+predefined:
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/human-platelet.csv $(BUILD_DIR)/data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-platelet.csv $(BUILD_DIR)/data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-heart.csv $(BUILD_DIR)/data/predefined/Mouse/Heart.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-brain.csv $(BUILD_DIR)/data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
+	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/yeast-lipidome.csv $(BUILD_DIR)/data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
-	rm LipidCreator.exe && rm -r obj/
+	rm -rf bin && rm -rf obj/
 
 run:
-	mono LipidCreator.exe &
+	cd $(BUILD_DIR) && mono LipidCreator.exe &
 	
 runtest:
-	mono TestTransitionList.exe
-	mono TestParser.exe
-	mono TestLipidMaps.exe
+	mono $(BUILD_DIR)/TestTransitionList.exe
+	mono $(BUILD_DIR)/TestParser.exe
+	mono $(BUILD_DIR)/TestLipidMaps.exe

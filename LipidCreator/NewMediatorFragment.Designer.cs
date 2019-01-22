@@ -27,6 +27,7 @@ SOFTWARE.
 
 using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace LipidCreator
 {
@@ -102,11 +103,11 @@ namespace LipidCreator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(178, 101);
+            this.label2.Location = new System.Drawing.Point(148, 101);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Ionized fragment mass";
+            this.label2.Text = "Ionized fragment mass:  m/z ";
             // 
             // textBox1
             // 
@@ -203,9 +204,10 @@ namespace LipidCreator
             this.label4.Text = "preview";
             // 
             // NewMediatorFragment
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.DialogFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(628, 308);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);

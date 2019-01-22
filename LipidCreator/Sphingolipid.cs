@@ -25,24 +25,22 @@ SOFTWARE.
 */
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
-    public class SLLipid : Lipid
+    public class Sphingolipid : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Sphingolipid));
         public FattyAcidGroup fag;
         public FattyAcidGroup lcb;
         public bool isLyso;
     
-        public SLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
+        public Sphingolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
         {
             lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
@@ -53,7 +51,7 @@ namespace LipidCreator
             adducts["-H"] = false;
         }
     
-        public SLLipid(SLLipid copy) : base((Lipid)copy)
+        public Sphingolipid(Sphingolipid copy) : base((Lipid)copy)
         {
             lcb = new FattyAcidGroup(copy.lcb);
             fag = new FattyAcidGroup(copy.fag);
@@ -106,7 +104,7 @@ namespace LipidCreator
                         }
                         else
                         {   
-                            Console.WriteLine("Error, fatty acid");
+                            log.Error("A sphingolipid can have at most 2 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception();
                         }
                         ++fattyAcidCounter;
@@ -166,7 +164,7 @@ namespace LipidCreator
                                 precursorData.lipidCategory = LipidCategory.SphingoLipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.lipidClass = headgroup;
+                                precursorData.precursorExportName = headgroup + key;
                                 precursorData.precursorName = headgroup + key;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
@@ -213,7 +211,7 @@ namespace LipidCreator
                                     heavyPrecursorData.lipidCategory = LipidCategory.SphingoLipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                    heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                    heavyPrecursorData.precursorExportName = headgroup + key;
                                     heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct.Key;
@@ -260,7 +258,7 @@ namespace LipidCreator
                             precursorData.lipidCategory = LipidCategory.SphingoLipid;
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
-                            precursorData.lipidClass = headgroup;
+                            precursorData.precursorExportName = headgroup + key;
                             precursorData.precursorName = headgroup + key;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct.Key;
@@ -306,7 +304,7 @@ namespace LipidCreator
                                 heavyPrecursorData.lipidCategory = LipidCategory.SphingoLipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                heavyPrecursorData.precursorExportName = headgroup + key;
                                 heavyPrecursorData.precursorName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct.Key;

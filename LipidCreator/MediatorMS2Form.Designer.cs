@@ -27,40 +27,65 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 
 namespace LipidCreator
 {
     partial class MediatorMS2Form
     {
+        [NonSerialized]
         public PictureBox pictureBoxFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxMonoIsotopicFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxDeuteratedFragments;
+        [NonSerialized]
         public Label labelMediators;
+        [NonSerialized]
         public Label labelMonoIsotopicFragments;
+        [NonSerialized]
         public Label labelDeuteratedFragments;
+        [NonSerialized]
         public Label labelSlashMonoisotope;
+        [NonSerialized]
         public Label labelSlashDeuterated;
+        [NonSerialized]
         public Button buttonCancel;
+        [NonSerialized]
         public Button buttonOK;
+        [NonSerialized]
         public Button buttonAddFragment;
-        
+        [NonSerialized]
+        public MenuItem menuFragmentItem1;
+        [NonSerialized]
+        public ContextMenu contextMenuFragment;
+
+        [NonSerialized]
         public Label labelFragmentDescriptionBlack;
+        [NonSerialized]
         public Label labelFragmentDescriptionRed;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlue;
+        [NonSerialized]
         public Label labelMonoisotopeSelectAll;
+        [NonSerialized]
         public Label labelMonoisotopeDeselectAll;
+        [NonSerialized]
         public Label labelDeuteratedSelectAll;
+        [NonSerialized]
         public Label labelDeuteratedDeselectAll;
+        [NonSerialized]
         public Label labelSlashPositive;
+        [NonSerialized]
         public Label labelSlashNegative;
+        [NonSerialized]
         public TabControl tabControlFragments;
         public ArrayList tabPages;
+        [NonSerialized]
         public ToolTip toolTip1;
+        [NonSerialized]
         public ListBox medHgListbox;
+        [NonSerialized]
         public ComboBox deuteratedMediatorHeadgroups;
         
         private void InitializeComponent()
@@ -84,6 +109,8 @@ namespace LipidCreator
             buttonOK = new System.Windows.Forms.Button();
             buttonAddFragment = new System.Windows.Forms.Button();
             deuteratedMediatorHeadgroups = new System.Windows.Forms.ComboBox();
+            this.menuFragmentItem1 = new System.Windows.Forms.MenuItem();
+            this.contextMenuFragment = new System.Windows.Forms.ContextMenu();
             this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             
@@ -141,6 +168,15 @@ namespace LipidCreator
             checkedListBoxDeuteratedFragments.MouseMove += new System.Windows.Forms.MouseEventHandler(checkedListBoxDeuteratedeMouseHover);
             this.Controls.Add(checkedListBoxDeuteratedFragments);
             
+            
+            this.contextMenuFragment.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {this.menuFragmentItem1});
+            this.contextMenuFragment.Popup += new System.EventHandler(contextMenuFragmentPopup);
+            // 
+            // menuItem1
+            // 
+            this.menuFragmentItem1.Index = 0;
+            this.menuFragmentItem1.Text = "Delete fragment";
+            this.menuFragmentItem1.Click += new System.EventHandler(deleteFragment);
             
             // label1
             labelMediators.AutoSize = true;
@@ -261,8 +297,8 @@ namespace LipidCreator
             // 
             // MediatorMS2Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1168, 420);
             this.Controls.Add(this.tabControlFragments);
             this.Controls.Add(this.buttonCancel);

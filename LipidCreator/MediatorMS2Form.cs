@@ -26,12 +26,8 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Collections;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace LipidCreator
@@ -47,6 +43,9 @@ namespace LipidCreator
         public bool senderInterupt;
         Dictionary<string, ArrayList> isotopeDict;
         public CreatorGUI creatorGUI;
+        [NonSerialized]
+        public CheckedListBox deleteList;
+        public int deleteIndex;
         
         public MediatorMS2Form(CreatorGUI creatorGUI, Mediator currentLipid)
         {
@@ -160,6 +159,7 @@ namespace LipidCreator
         private void checkedListBoxMonoIsotopicMouseHover(object sender, MouseEventArgs e)
         {
             string headgroup = medHgListbox.SelectedItem.ToString();
+            this.checkedListBoxMonoIsotopicFragments.ContextMenu = this.contextMenuFragment;
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
             {
                 string mediatorFile = creatorGUI.lipidCreator.headgroups[headgroup].pathToImage;
@@ -170,9 +170,25 @@ namespace LipidCreator
         }
         
         
+        public void contextMenuFragmentPopup(Object sender, EventArgs e)
+        {
+            deleteList = (CheckedListBox)((ContextMenu)sender).SourceControl;
+            Point point = deleteList.PointToClient(Cursor.Position);
+            deleteIndex = deleteList.IndexFromPoint(point);
+            
+            /*
+            string lipidClass = deleteList.Name.Equals("checkedListBoxMonoIsotopicFragments") ? medHgListbox.SelectedItem.ToString() : deuteratedMediatorHeadgroups.SelectedItem.ToString();
+            string fragmentName = (string)deleteList.Items[deleteIndex];
+            
+            menuFragmentItem1.Enabled = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName].userDefined;
+            */
+        }
+        
+        
         private void checkedListBoxDeuteratedeMouseHover(object sender, MouseEventArgs e)
         {
             if (deuteratedMediatorHeadgroups.SelectedIndex == -1) return;
+            this.checkedListBoxDeuteratedFragments.ContextMenu = this.contextMenuFragment;
             string headgroup = deuteratedMediatorHeadgroups.Items[deuteratedMediatorHeadgroups.SelectedIndex].ToString();
             
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
@@ -183,6 +199,30 @@ namespace LipidCreator
                 senderInterupt = false;
             }
         }
+        
+        
+        public void deleteFragment(Object sender, EventArgs e)
+        {
+            /*
+            string lipidClass = deleteList.Name.Equals("checkedListBoxMonoIsotopicFragments") ? medHgListbox.SelectedItem.ToString() : deuteratedMediatorHeadgroups.SelectedItem.ToString();
+            string fragmentName = (string)deleteList.Items[deleteIndex];
+            bool userDefined = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName].userDefined;
+            Console.WriteLine(lipidClass + " " + fragmentName);
+            if (userDefined){
+                if (isMonoisotopic){
+                    currentLipid.positiveFragments[lipidClass].Remove(fragmentName);
+                    checkedListBoxPositiveFragments.Items.RemoveAt(editDeleteIndex);
+                }
+                else {
+                    currentLipid.negativeFragments[lipidClass].Remove(fragmentName);
+                    checkedListBoxNegativeFragments.Items.RemoveAt(editDeleteIndex);
+                }
+                creatorGUI.lipidCreator.allFragments[lipidClass][false].Remove(fragmentName);
+            }
+            deleteList.Refresh();
+            */
+        }
+        
         
         
         void checkedListBoxMonoisotopicSelectAll(object sender, EventArgs e)

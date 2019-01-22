@@ -27,12 +27,9 @@ WITH BLUE BIBS WILL COME AND SLAP YOU WITH BANANAS.
 
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace LipidCreator
 {    
@@ -40,6 +37,7 @@ namespace LipidCreator
     [Serializable]
     public class Parser
     {
+        [Serializable]
         public class ExtendedLinkedList<T> : LinkedList<T>
         {
             public T PopFirst()
@@ -143,7 +141,7 @@ namespace LipidCreator
                         {
                             // algorithm for getting least significant bit position
                             ulong v1 = (ulong)((long)v & -(long)v);
-                            yield return (pos << 6) + positions[(ulong)(v1 * multiplicator) >> 58];
+                            yield return unchecked(pos << 6) + positions[unchecked((v1 * multiplicator) >> 58)];
                             v &= v - 1;
                         }
                         
@@ -192,6 +190,7 @@ namespace LipidCreator
         public Dictionary<char, HashSet<long>> TtoNT;
         public Dictionary<long, HashSet<long>> NTtoNT;
         public char quote;
+        [NonSerialized]
         public TreeNode parseTree;
         public bool wordInGrammer;
         public Dictionary<long, string> NTtoRule;
@@ -200,7 +199,7 @@ namespace LipidCreator
         public const long MASK = (1L << SHIFT) - 1;
     
     
-        public Parser(BaseParserEventHandler _parserEventHandler, string grammerFilename, char _quote = '"')
+        public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
         {
             nextFreeRuleIndex = 1;
             TtoNT = new Dictionary<char, HashSet<long>>();
@@ -212,12 +211,12 @@ namespace LipidCreator
             wordInGrammer = false;
             
             
-            if (File.Exists(grammerFilename))
+            if (File.Exists(grammarFilename))
             {
                 int lineCounter = 0;
                 
                 Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
-                using (StreamReader sr = new StreamReader(grammerFilename))
+                using (StreamReader sr = new StreamReader(grammarFilename))
                 {
                     string line;
                     while((line = sr.ReadLine()) != null)
@@ -235,7 +234,7 @@ namespace LipidCreator
                         
                         ArrayList tokens_level_1 = new ArrayList();
                         foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer, line " + lineCounter);
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar, line " + lineCounter);
 
                         string rule = (string)tokens_level_1[0];
                         
@@ -315,7 +314,7 @@ namespace LipidCreator
                             else if (nonTerminalRules.Count == 1)
                             {
                                 long ruleIndex1 = nonTerminalRules.First.Value;
-                                if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammer: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                                if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
                                 
                                 if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<long>());
                                 NTtoNT[ruleIndex1].Add(newRuleIndex);
@@ -326,7 +325,7 @@ namespace LipidCreator
             }
             else
             {
-                throw new Exception("Error: file '" + grammerFilename + "' does not exist or can not be opened.");
+                throw new Exception("Error: file '" + grammarFilename + "' does not exist or can not be opened.");
             }
             
             
@@ -364,7 +363,7 @@ namespace LipidCreator
         public long getNextFreeRuleIndex()
         {
             if (nextFreeRuleIndex <= MASK) return nextFreeRuleIndex++;
-            throw new Exception("Error: grammer is too big.");
+            throw new Exception("Error: grammar is too big.");
         }
         
         
@@ -407,7 +406,7 @@ namespace LipidCreator
             }
                     
             if (token.Length > 0) tokens.Add(token);
-            if (inQuote) throw new Exception("Error: corrupted token in grammer");
+            if (inQuote) throw new Exception("Error: corrupted token in grammar");
             
             return tokens;
         }
@@ -430,13 +429,13 @@ namespace LipidCreator
         {
             int cnt = 0;
             foreach(char c in productToken) cnt += (c == quote) ? 1 : 0;
-            if (cnt != 0 && cnt != 2) throw new Exception("Error: corrupted token in grammer");
+            if (cnt != 0 && cnt != 2) throw new Exception("Error: corrupted token in grammar");
             
             if (cnt == 0) return false;
         
             if (productToken[0] == quote && productToken[productToken.Length - 1] == quote && productToken.Length > 2) return true;
 
-            throw new Exception("Error: corrupted token in grammer");
+            throw new Exception("Error: corrupted token in grammar");
         }
         
         

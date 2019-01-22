@@ -98,8 +98,8 @@ namespace LipidCreator
             // 
             // SpectralName
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(249, 117);
             this.Controls.Add(this.textLibraryName);
             this.Controls.Add(this.labelProvideName);

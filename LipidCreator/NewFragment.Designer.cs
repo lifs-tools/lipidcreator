@@ -25,8 +25,9 @@ SOFTWARE.
 */
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
+using System;
 
 namespace LipidCreator
 {
@@ -196,9 +197,10 @@ namespace LipidCreator
             this.dataGridViewElements.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1CellValueChanged);
             // 
             // NewFragment
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.DialogFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(526, 283);
             this.Controls.Add(this.dataGridViewElements);
             this.Controls.Add(this.labelFragmentName);
@@ -225,17 +227,28 @@ namespace LipidCreator
 
         #endregion
 
+        [NonSerialized]
         public System.Windows.Forms.Button cancelButton;
+        [NonSerialized]
         public System.Windows.Forms.Button addButton;
+        [NonSerialized]
         public System.Windows.Forms.Label labelMass;
+        [NonSerialized]
         public MyNumericUpDown numericUpDownCharge;
+        [NonSerialized]
         public System.Windows.Forms.TextBox textBoxFragmentName;
+        [NonSerialized]
         public System.Windows.Forms.Label labelCharge;
+        [NonSerialized]
         public System.Windows.Forms.Label labelFragmentName;
+        [NonSerialized]
         public System.Windows.Forms.Label labelSelectBase;
+        [NonSerialized]
         public System.Windows.Forms.DataGridView dataGridViewElements;
+        [NonSerialized]
         public System.Windows.Forms.ComboBox selectBaseCombobox;
         public ArrayList controlElements;
+        [NonSerialized]
         public Overlay tutorialArrow;
     }
 }

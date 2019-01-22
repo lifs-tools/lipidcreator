@@ -27,11 +27,9 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
+using System.ComponentModel;
 
 namespace LipidCreator
 {
@@ -281,56 +279,103 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
-        
+
+        [NonSerialized]
         public System.Timers.Timer timerEasterEgg;
+        [NonSerialized]
         public System.Windows.Forms.MainMenu mainMenuLipidCreator;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuFile;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImport;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportList;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportSettings;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuImportPredefined;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExport;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExportSettings;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash2;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash3;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash4;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExit;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuStatistics;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuOptions;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuTranslate;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergy;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergyOpt;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuCollisionEnergyNone;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuMS2Fragments;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuIsotopes;
+        [NonSerialized]
+        public System.Windows.Forms.MenuItem menuClearLipidList;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuResetCategory;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuResetLipidCreator;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuHelp;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuAbout;
-        
-        
+
+
+        [NonSerialized]
         public TabControl tabControl = new TabControl();
+        [NonSerialized]
         public TabPage homeTab;
+        [NonSerialized]
         public TabPage glycerolipidsTab;
+        [NonSerialized]
         public TabPage phospholipidsTab;
+        [NonSerialized]
         public TabPage sphingolipidsTab;
+        [NonSerialized]
         public TabPage cholesterollipidsTab;
+        [NonSerialized]
         public TabPage mediatorlipidsTab;
+        [NonSerialized]
         public GroupBox lipidsGroupbox;
+        [NonSerialized]
         public int DefaultCheckboxBGR;
+        [NonSerialized]
         public int DefaultCheckboxBGG;
+        [NonSerialized]
         public int DefaultCheckboxBGB;
 
+        [NonSerialized]
         public Button addLipidButton;
+        [NonSerialized]
         public Button modifyLipidButton;
+        [NonSerialized]
         public Button MS2fragmentsLipidButton;
+        [NonSerialized]
         public Button addHeavyIsotopeButton;
+        [NonSerialized]
         public Button filtersButton;
+        [NonSerialized]
         public Button startFirstTutorialButton;
+        [NonSerialized]
         public Button startSecondTutorialButton;
+        [NonSerialized]
         public Button startThirdTutorialButton;
-        
+        public Button startFourthTutorialButton;
         
 
         Image cardioBackboneImage;
@@ -373,189 +418,347 @@ namespace LipidCreator
         Image sphingoLysoBackboneImage;
         Image cholesterolBackboneImage;
         Image cholesterolEsterBackboneImage;
-        
 
+        [NonSerialized]
         public PictureBox glPictureBox;
+        [NonSerialized]
         public CustomPictureBox plPictureBox;
+        [NonSerialized]
         public PictureBox slPictureBox;
+        [NonSerialized]
         public PictureBox chPictureBox;
-        public PictureBox medPictureBox;
-        
+        [NonSerialized]
+        public CustomPictureBox medPictureBox;
+
+        [NonSerialized]
         public ListBox glHgListbox;
+        [NonSerialized]
         public ListBox plHgListbox;
+        [NonSerialized]
         public ListBox slHgListbox;
+        [NonSerialized]
         public ListBox medHgListbox;
 
+        [NonSerialized]
         public TextBox clFA3Textbox;
+        [NonSerialized]
         public TextBox clFA4Textbox;
+        [NonSerialized]
         public TextBox glFA1Textbox;
+        [NonSerialized]
         public TextBox glFA2Textbox;
+        [NonSerialized]
         public TextBox glFA3Textbox;
+        [NonSerialized]
         public TextBox plFA1Textbox;
+        [NonSerialized]
         public TextBox plFA2Textbox;
+        [NonSerialized]
         public TextBox slLCBTextbox;
+        [NonSerialized]
         public TextBox slFATextbox;
+        [NonSerialized]
         public TextBox chFATextbox;
 
+        [NonSerialized]
         public ComboBox clFA3Combobox;
+        [NonSerialized]
         public ComboBox clFA4Combobox;
+        [NonSerialized]
         public ComboBox glFA1Combobox;
+        [NonSerialized]
         public ComboBox glFA2Combobox;
+        [NonSerialized]
         public ComboBox glFA3Combobox;
+        [NonSerialized]
         public ComboBox plFA1Combobox;
+        [NonSerialized]
         public ComboBox plFA2Combobox;
+        [NonSerialized]
         public ComboBox slLCBCombobox;
+        [NonSerialized]
         public ComboBox slFACombobox;
+        [NonSerialized]
         public ComboBox chFACombobox;
 
-
+        [NonSerialized]
         public CheckBox clFA3Checkbox1;
+        [NonSerialized]
         public CheckBox clFA3Checkbox2;
+        [NonSerialized]
         public CheckBox clFA3Checkbox3;
+        [NonSerialized]
         public CheckBox clFA4Checkbox1;
+        [NonSerialized]
         public CheckBox clFA4Checkbox2;
+        [NonSerialized]
         public CheckBox clFA4Checkbox3;
+        [NonSerialized]
         public CheckBox glFA1Checkbox1;
+        [NonSerialized]
         public CheckBox glFA1Checkbox2;
+        [NonSerialized]
         public CheckBox glFA1Checkbox3;
+        [NonSerialized]
         public CheckBox glFA2Checkbox1;
+        [NonSerialized]
         public CheckBox glFA2Checkbox2;
+        [NonSerialized]
         public CheckBox glFA2Checkbox3;
+        [NonSerialized]
         public CheckBox glFA3Checkbox1;
+        [NonSerialized]
         public CheckBox glFA3Checkbox2;
+        [NonSerialized]
         public CheckBox glFA3Checkbox3;
+        [NonSerialized]
         public CheckBox plFA1Checkbox1;
+        [NonSerialized]
         public CheckBox plFA1Checkbox2;
+        [NonSerialized]
         public CheckBox plFA1Checkbox3;
+        [NonSerialized]
         public CheckBox plFA2Checkbox1;
+        [NonSerialized]
         public CheckBox plFA2Checkbox2;
+        [NonSerialized]
         public CheckBox plFA2Checkbox3;
+        [NonSerialized]
         public CheckBox glContainsSugar;
+        [NonSerialized]
         public CheckBox chContainsEster;
 
+        [NonSerialized]
         public GroupBox glPositiveAdduct;
+        [NonSerialized]
         public GroupBox glNegativeAdduct;
+        [NonSerialized]
         public GroupBox plPositiveAdduct;
+        [NonSerialized]
         public GroupBox plNegativeAdduct;
+        [NonSerialized]
         public GroupBox slPositiveAdduct;
+        [NonSerialized]
         public GroupBox slNegativeAdduct;
+        [NonSerialized]
         public GroupBox chPositiveAdduct;
+        [NonSerialized]
         public GroupBox chNegativeAdduct;
+        [NonSerialized]
         public GroupBox medNegativeAdduct;
-        
+
+        [NonSerialized]
         public GroupBox glStep1;
+        [NonSerialized]
         public GroupBox plStep1;
+        [NonSerialized]
         public GroupBox slStep1;
+        [NonSerialized]
         public GroupBox chStep1;
+        [NonSerialized]
         public GroupBox medStep1;
+        [NonSerialized]
         public GroupBox lcStep2;
+        [NonSerialized]
         public GroupBox lcStep3;
 
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox glPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox glNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox plPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox plNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox slPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox slNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox1;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox2;
+        [NonSerialized]
         public CheckBox chPosAdductCheckbox3;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox chNegAdductCheckbox4;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox1;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox2;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox3;
+        [NonSerialized]
         public CheckBox medNegAdductCheckbox4;
-        
+        [NonSerialized]
         public CheckBox glRepresentativeFA;
+        [NonSerialized]
         public CheckBox plRepresentativeFA;
         Color highlightedCheckboxColor;
 
+        [NonSerialized]
         public TextBox clDB3Textbox;
+        [NonSerialized]
         public TextBox clDB4Textbox;
+        [NonSerialized]
         public TextBox glDB1Textbox;
+        [NonSerialized]
         public TextBox glDB2Textbox;
+        [NonSerialized]
         public TextBox glDB3Textbox;
+        [NonSerialized]
         public TextBox plDB1Textbox;
+        [NonSerialized]
         public TextBox plDB2Textbox;
+        [NonSerialized]
         public TextBox slDB1Textbox;
+        [NonSerialized]
         public TextBox slDB2Textbox;
+        [NonSerialized]
         public TextBox chDBTextbox;
-        
+
+        [NonSerialized]
         public TextBox clHydroxyl3Textbox;
+        [NonSerialized]
         public TextBox clHydroxyl4Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl1Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl2Textbox;
+        [NonSerialized]
         public TextBox glHydroxyl3Textbox;
+        [NonSerialized]
         public TextBox plHydroxyl1Textbox;
+        [NonSerialized]
         public TextBox plHydroxyl2Textbox;
+        [NonSerialized]
         public TextBox chHydroxylTextbox;
-        
+
+        [NonSerialized]
         public GroupBox plTypeGroup;
+        [NonSerialized]
         public RadioButton plRegular;
+        [NonSerialized]
         public RadioButton plIsCL;
+        [NonSerialized]
         public RadioButton plIsLyso;
-        
+
+        [NonSerialized]
         public GroupBox slTypeGroup;
+        [NonSerialized]
         public RadioButton slRegular;
+        [NonSerialized]
         public RadioButton slIsLyso;
 
+        [NonSerialized]
         Label clDB3Label;
+        [NonSerialized]
         Label clDB4Label;
+        [NonSerialized]
         Label glDB1Label;
+        [NonSerialized]
         Label glDB2Label;
+        [NonSerialized]
         Label glDB3Label;
+        [NonSerialized]
         Label plDB1Label;
+        [NonSerialized]
         Label plDB2Label;
+        [NonSerialized]
         Label slDB1Label;
+        [NonSerialized]
         Label slDB2Label;
+        [NonSerialized]
         Label chDBLabel;
+        [NonSerialized]
         Label slLCBHydroxyLabel;
+        [NonSerialized]
         Label slFAHydroxyLabel;
+        [NonSerialized]
         Label clHydroxyl3Label;
+        [NonSerialized]
         Label clHydroxyl4Label;
+        [NonSerialized]
         Label glHydroxyl1Label;
+        [NonSerialized]
         Label glHydroxyl2Label;
+        [NonSerialized]
         Label glHydroxyl3Label;
+        [NonSerialized]
         Label plHydroxyl1Label;
+        [NonSerialized]
         Label plHydroxyl2Label;
+        [NonSerialized]
         Label chFAHydroxyLabel;
-        
+
+        [NonSerialized]
         Label homeText;
+        [NonSerialized]
         Label homeText2;
+        [NonSerialized]
         Label homeText3;
-        
+
+        [NonSerialized]
         PictureBox glArrow;
+        [NonSerialized]
         Image glArrowImage;
+        [NonSerialized]
         Label easterText;
 
+        [NonSerialized]
         Label glHGLabel;
+        [NonSerialized]
         Label plHGLabel;
+        [NonSerialized]
         Label slHGLabel;
-        
+
+        [NonSerialized]
         public ComboBox slLCBHydroxyCombobox;
+        [NonSerialized]
         public ComboBox slFAHydroxyCombobox;
 
+        [NonSerialized]
         ToolTip toolTip;
 
+        [NonSerialized]
         DataGridView lipidsGridview;
+        [NonSerialized]
         public Button openReviewFormButton;
         
         public ArrayList controlElements;
@@ -596,7 +799,9 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Font = SystemFonts.DefaultFont;
+            this.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Text = "LipidCreator";
             
             this.timerEasterEgg = new System.Timers.Timer(15);
@@ -618,6 +823,7 @@ namespace LipidCreator
             this.menuDash4 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
             this.menuStatistics = new System.Windows.Forms.MenuItem ();
+            this.menuClearLipidList = new System.Windows.Forms.MenuItem ();
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
             this.menuOptions = new System.Windows.Forms.MenuItem ();
@@ -668,7 +874,7 @@ namespace LipidCreator
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
             
             
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
@@ -692,12 +898,16 @@ namespace LipidCreator
             this.menuIsotopes.Text = "Manage &heavy isotopes";
             this.menuIsotopes.Click += new System.EventHandler (openHeavyIsotopeForm);
             
+            this.menuClearLipidList.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.menuClearLipidList.Text = "&Clear lipid list";
+            this.menuClearLipidList.Click += new System.EventHandler (clearLipidList);
+            
             this.menuResetCategory.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
             this.menuResetCategory.Text = "Reset &lipid category";
             this.menuResetCategory.Click += new System.EventHandler (resetLipid);
             
-            this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
-            this.menuResetLipidCreator.Text = "Reset Lipid&Creator";
+            this.menuResetLipidCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
+            this.menuResetLipidCreator.Text = "&Reset LipidCreator";
             this.menuResetLipidCreator.Click += new System.EventHandler (resetLipidCreatorMenu);
             
             
@@ -749,11 +959,11 @@ namespace LipidCreator
             plPictureBox = new CustomPictureBox();
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
-            medPictureBox = new PictureBox();
+            medPictureBox = new CustomPictureBox();
             glArrow = new PictureBox();
             
             String dbText = "No. DB";
-            String hydroxylText = "Hydroxy No.";
+            String hydroxylText = "No. Hydroxy";
             int dbLength = 70;
             int sep = 15;
             int sepText = 20;
@@ -778,15 +988,6 @@ namespace LipidCreator
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && headgroup.Length > 3) glHgList.Add(headgroup);
             }
             glHgList.Sort();
-            
-            /*
-            List<String> plHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
-            {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
-            }
-            plHgList.Sort();
-            */
             
             List<String> medHgList = new List<String>();
             foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
@@ -849,13 +1050,13 @@ namespace LipidCreator
             clFA3Textbox = new TextBox();
             clFA4Textbox = new TextBox();
             clFA3Combobox = new ComboBox();
-            clFA3Combobox.Items.Add("Fatty acid chain");
-            clFA3Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            clFA3Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            clFA3Combobox.Items.Add("Fatty acyl chain");
+            clFA3Combobox.Items.Add("Fatty acyl chain - odd");
+            clFA3Combobox.Items.Add("Fatty acyl chain - even");
             clFA4Combobox = new ComboBox();
-            clFA4Combobox.Items.Add("Fatty acid chain");
-            clFA4Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            clFA4Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            clFA4Combobox.Items.Add("Fatty acyl chain");
+            clFA4Combobox.Items.Add("Fatty acyl chain - odd");
+            clFA4Combobox.Items.Add("Fatty acyl chain - even");
             clDB3Textbox = new TextBox();
             clDB4Textbox = new TextBox();
             clHydroxyl3Textbox = new TextBox();
@@ -868,17 +1069,17 @@ namespace LipidCreator
             glFA2Textbox = new TextBox();
             glFA3Textbox = new TextBox();
             glFA1Combobox = new ComboBox();
-            glFA1Combobox.Items.Add("Fatty acid chain");
-            glFA1Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            glFA1Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            glFA1Combobox.Items.Add("Fatty acyl chain");
+            glFA1Combobox.Items.Add("Fatty acyl chain - odd");
+            glFA1Combobox.Items.Add("Fatty acyl chain - even");
             glFA2Combobox = new ComboBox();
-            glFA2Combobox.Items.Add("Fatty acid chain");
-            glFA2Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            glFA2Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            glFA2Combobox.Items.Add("Fatty acyl chain");
+            glFA2Combobox.Items.Add("Fatty acyl chain - odd");
+            glFA2Combobox.Items.Add("Fatty acyl chain - even");
             glFA3Combobox = new ComboBox();
-            glFA3Combobox.Items.Add("Fatty acid chain");
-            glFA3Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            glFA3Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            glFA3Combobox.Items.Add("Fatty acyl chain");
+            glFA3Combobox.Items.Add("Fatty acyl chain - odd");
+            glFA3Combobox.Items.Add("Fatty acyl chain - even");
             glDB1Textbox = new TextBox();
             glDB2Textbox = new TextBox();
             glDB3Textbox = new TextBox();
@@ -895,13 +1096,13 @@ namespace LipidCreator
             plFA1Textbox = new TextBox();
             plFA2Textbox = new TextBox();
             plFA1Combobox = new ComboBox();
-            plFA1Combobox.Items.Add("Fatty acid chain");
-            plFA1Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            plFA1Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            plFA1Combobox.Items.Add("Fatty acyl chain");
+            plFA1Combobox.Items.Add("Fatty acyl chain - odd");
+            plFA1Combobox.Items.Add("Fatty acyl chain - even");
             plFA2Combobox = new ComboBox();
-            plFA2Combobox.Items.Add("Fatty acid chain");
-            plFA2Combobox.Items.Add("Fatty acid chain - odd carbon no.");
-            plFA2Combobox.Items.Add("Fatty acid chain - even carbon no.");
+            plFA2Combobox.Items.Add("Fatty acyl chain");
+            plFA2Combobox.Items.Add("Fatty acyl chain - odd");
+            plFA2Combobox.Items.Add("Fatty acyl chain - even");
             plDB1Textbox = new TextBox();
             plDB2Textbox = new TextBox();
             plHydroxyl1Textbox = new TextBox();
@@ -915,12 +1116,12 @@ namespace LipidCreator
             slFATextbox = new TextBox();
             slLCBCombobox = new ComboBox();
             slLCBCombobox.Items.Add("Long chain base");
-            slLCBCombobox.Items.Add("Long chain base - odd carbon no.");
-            slLCBCombobox.Items.Add("Long chain base - even carbon no.");
+            slLCBCombobox.Items.Add("Long chain base - odd");
+            slLCBCombobox.Items.Add("Long chain base - even");
             slFACombobox = new ComboBox();
-            slFACombobox.Items.Add("Fatty acid chain");
-            slFACombobox.Items.Add("Fatty acid chain - odd carbon no.");
-            slFACombobox.Items.Add("Fatty acid chain - even carbon no.");
+            slFACombobox.Items.Add("Fatty acyl chain");
+            slFACombobox.Items.Add("Fatty acyl chain - odd");
+            slFACombobox.Items.Add("Fatty acyl chain - even");
             slDB1Textbox = new TextBox();
             slDB2Textbox = new TextBox();
             slDB1Label = new Label();
@@ -930,9 +1131,9 @@ namespace LipidCreator
             slFAHydroxyLabel = new Label();
             easterText = new Label();
             chFACombobox = new ComboBox();
-            chFACombobox.Items.Add("Fatty acid chain");
-            chFACombobox.Items.Add("Fatty acid chain - odd carbon no.");
-            chFACombobox.Items.Add("Fatty acid chain - even carbon no.");
+            chFACombobox.Items.Add("Fatty acyl chain");
+            chFACombobox.Items.Add("Fatty acyl chain - odd");
+            chFACombobox.Items.Add("Fatty acyl chain - even");
             chFATextbox = new TextBox();
             chDBLabel = new Label();
             chDBTextbox = new TextBox();
@@ -1050,6 +1251,7 @@ namespace LipidCreator
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
             string FApInformation = "Plasmenyl fatty acids need at least one double bond";
+            string repFAText = "All fatty acyl parameters will be copied from the first FA to all remaining FAs";
 
 
             tabControl.Controls.Add(homeTab);
@@ -1058,13 +1260,13 @@ namespace LipidCreator
             tabControl.Controls.Add(sphingolipidsTab);
             tabControl.Controls.Add(cholesterollipidsTab);
             tabControl.Controls.Add(mediatorlipidsTab);
+            tabControl.ShowToolTips = true;
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
-            Font tabFont = new Font(tabControl.Font.FontFamily, 16);
+            Font tabFont = new Font(tabControl.Font.FontFamily, this.Font.Size + 5);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
-            //tabControl.SelectedIndexChanged += new EventHandler(tabIndexChanged);
-            tabControl.ItemSize = new Size(160, 50);
+            tabControl.ItemSize = new Size(170, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
             
@@ -1243,6 +1445,7 @@ namespace LipidCreator
             glStep1.Controls.Add(glNegativeAdduct);
             glycerolipidsTab.Parent = tabControl;
             glycerolipidsTab.Text = "Glycerolipids";
+            //glycerolipidsTab.ToolTipText = "Glycerolipids";
             glycerolipidsTab.Location = new Point(0, 0);
             glycerolipidsTab.Size = this.Size;
             glycerolipidsTab.AutoSize = true;
@@ -1269,7 +1472,7 @@ namespace LipidCreator
             toolTip.SetToolTip(glFA1Textbox, formattingFA);
             glFA1Combobox.Location = new Point(glFA1Textbox.Left, glFA1Textbox.Top - sepText);
             glFA1Combobox.Width = faLength;
-            glFA1Combobox.SelectedItem = "Fatty acid chain";
+            glFA1Combobox.SelectedItem = "Fatty acyl chain";
             glFA1Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
             glFA1Combobox.SelectedIndexChanged += new EventHandler(glFA1ComboboxValueChanged);
             glDB1Textbox.Location = new Point(glFA1Textbox.Left + glFA1Textbox.Width + sep, glFA1Textbox.Top);
@@ -1313,7 +1516,7 @@ namespace LipidCreator
             toolTip.SetToolTip(glFA2Textbox, formattingFA);
             glFA2Combobox.Location = new Point(glFA2Textbox.Left, glFA2Textbox.Top - sepText);
             glFA2Combobox.Width = faLength;
-            glFA2Combobox.SelectedItem = "Fatty acid chain";
+            glFA2Combobox.SelectedItem = "Fatty acyl chain";
             glFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
             glFA2Combobox.SelectedIndexChanged += new EventHandler(glFA2ComboboxValueChanged);
             glDB2Textbox.Location = new Point(glFA2Textbox.Left + glFA2Textbox.Width + sep, glFA2Textbox.Top);
@@ -1357,7 +1560,7 @@ namespace LipidCreator
             toolTip.SetToolTip(glFA3Textbox, formattingFA);
             glFA3Combobox.Location = new Point(glFA3Textbox.Left, glFA3Textbox.Top - sepText);
             glFA3Combobox.Width = faLength;
-            glFA3Combobox.SelectedItem = "Fatty acid chain";
+            glFA3Combobox.SelectedItem = "Fatty acyl chain";
             glFA3Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
             glFA3Combobox.SelectedIndexChanged += new EventHandler(glFA3ComboboxValueChanged);
             glDB3Textbox.Location = new Point(glFA3Textbox.Left + glFA3Textbox.Width + sep, glFA3Textbox.Top);
@@ -1403,8 +1606,8 @@ namespace LipidCreator
             
             glHGLabel.Location = new Point(glHgListbox.Left, glHgListbox.Top - sep);
             glHGLabel.Text = "Sugar head";
-            glHGLabel.DoubleClick += new EventHandler(sugarHeady);
             glHGLabel.Visible = false;
+            
             
 
             glPositiveAdduct.Width = 120;
@@ -1471,6 +1674,7 @@ namespace LipidCreator
             glRepresentativeFA.Location = new Point(glHydroxyl1Textbox.Left + glHydroxyl1Textbox.Width + sep, glHydroxyl1Textbox.Top);
             glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
+            toolTip.SetToolTip(glRepresentativeFA, repFAText);
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
             glRepresentativeFA.SendToBack();
 
@@ -1506,7 +1710,8 @@ namespace LipidCreator
             plStep1.Controls.Add(plNegativeAdduct);
             plStep1.Controls.Add(easterText);
             phospholipidsTab.Parent = tabControl;
-            phospholipidsTab.Text = "Phospholipids";
+            phospholipidsTab.Text = "    Glycero-\nphospholipids";
+            //phospholipidsTab.ToolTipText = "Glycerophospholipids";
             phospholipidsTab.Location = new Point(0, 0);
             phospholipidsTab.Size = this.Size;
             phospholipidsTab.AutoSize = true;
@@ -1528,7 +1733,7 @@ namespace LipidCreator
             toolTip.SetToolTip(plFA1Textbox, formattingFA);
             plFA1Combobox.Location = new Point(plFA1Textbox.Left, plFA1Textbox.Top - sepText);
             plFA1Combobox.Width = faLength;
-            plFA1Combobox.SelectedItem = "Fatty acid chain";
+            plFA1Combobox.SelectedItem = "Fatty acyl chain";
             plFA1Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
             plFA1Combobox.SelectedIndexChanged += new EventHandler(plFA1ComboboxValueChanged);
             plDB1Textbox.Location = new Point(plFA1Textbox.Left + plFA1Textbox.Width + sep, plFA1Textbox.Top);
@@ -1572,7 +1777,7 @@ namespace LipidCreator
             toolTip.SetToolTip(plFA2Textbox, formattingFA);
             plFA2Combobox.Location = new Point(plFA2Textbox.Left, plFA2Textbox.Top - sepText);
             plFA2Combobox.Width = faLength;
-            plFA2Combobox.SelectedItem = "Fatty acid chain";
+            plFA2Combobox.SelectedItem = "Fatty acyl chain";
             plFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
             plFA2Combobox.SelectedIndexChanged += new EventHandler(plFA2ComboboxValueChanged);
             plDB2Textbox.Location = new Point(plFA2Textbox.Left + plFA2Textbox.Width + sep, plFA2Textbox.Top);
@@ -1698,6 +1903,7 @@ namespace LipidCreator
             plRepresentativeFA.Location = new Point(plHydroxyl1Textbox.Left + plHydroxyl1Textbox.Width + sep, plHydroxyl1Textbox.Top);
             plRepresentativeFA.Width = 150;
             plRepresentativeFA.Text = "First FA representative";
+            toolTip.SetToolTip(plRepresentativeFA, repFAText);
             plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
             plRepresentativeFA.SendToBack();
 
@@ -1725,6 +1931,7 @@ namespace LipidCreator
             slStep1.Controls.Add(slNegativeAdduct);
             sphingolipidsTab.Parent = tabControl;
             sphingolipidsTab.Text = "Sphingolipids";
+            //sphingolipidsTab.ToolTipText = "Sphingolipids";
             sphingolipidsTab.Location = new Point(0, 0);
             sphingolipidsTab.Size = this.Size;
             sphingolipidsTab.AutoSize = true;
@@ -1764,7 +1971,7 @@ namespace LipidCreator
             toolTip.SetToolTip(slFATextbox, formattingFA);
             slFACombobox.Location = new Point(slFATextbox.Left, slFATextbox.Top - sepText);
             slFACombobox.Width = faLength;
-            slFACombobox.SelectedItem = "Fatty acid chain";
+            slFACombobox.SelectedItem = "Fatty acyl chain";
             slFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             slFACombobox.SelectedIndexChanged += new EventHandler(slFAComboboxValueChanged);
             slDB1Textbox.Location = new Point(slFATextbox.Left + slFATextbox.Width + sep, slFATextbox.Top);
@@ -1888,7 +2095,8 @@ namespace LipidCreator
             chStep1.Controls.Add(chHydroxylTextbox);
             chStep1.Controls.Add(chFAHydroxyLabel);
             
-            cholesterollipidsTab.Text = "Cholesterols";
+            cholesterollipidsTab.Text = "Sterol lipids";
+            //cholesterollipidsTab.ToolTipText = "Sterol lipids";
             cholesterollipidsTab.Location = new Point(0, 0);
             cholesterollipidsTab.Size = this.Size;
             cholesterollipidsTab.AutoSize = true;
@@ -1967,7 +2175,7 @@ namespace LipidCreator
             toolTip.SetToolTip(chFATextbox, formattingFA);
             chFACombobox.Location = new Point(chFATextbox.Left, chFATextbox.Top - sepText);
             chFACombobox.Width = faLength;
-            chFACombobox.SelectedItem = "Fatty acid chain";
+            chFACombobox.SelectedItem = "Fatty acyl chain";
             chFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             chFACombobox.SelectedIndexChanged += new EventHandler(chFAComboboxValueChanged);
             chDBTextbox.Location = new Point(chFATextbox.Left + chFATextbox.Width + sep, chFATextbox.Top);
@@ -2003,7 +2211,8 @@ namespace LipidCreator
             medStep1.Controls.Add(medHgListbox);
             medStep1.Controls.Add(medPictureBox);
             
-            mediatorlipidsTab.Text = "Mediators";
+            mediatorlipidsTab.Text = "Lipid Mediators";
+            //mediatorlipidsTab.ToolTipText = "Lipid Mediators";
             mediatorlipidsTab.Location = new Point(0, 0);
             mediatorlipidsTab.Size = this.Size;
             mediatorlipidsTab.AutoSize = true;
@@ -2179,51 +2388,52 @@ namespace LipidCreator
             homeTab.Controls.Add(homeText3);
             
             homeText.Width = 560;
-            homeText.Height = 120;
+            homeText.Height = 90;
             homeText.Location = new Point(60, 210);
             homeText.Text = "Targeted assays development based on lipid building blocks:" + Environment.NewLine +
             " • Lipid fragmentation prediction" + Environment.NewLine +
             " • Generation of class specific target lists" + Environment.NewLine +
             " • In-silico spectral library generator" + Environment.NewLine +
-            " • Latest lipid nomenclature" + Environment.NewLine +
+            //" • Latest lipid nomenclature" + Environment.NewLine +
             " • Full integration with new small molecule support in Skyline.";
             homeText.BackColor = Color.Transparent;
             homeText.ForeColor = Color.White;
-            homeText.Font = new Font(homeTab.Font.FontFamily, 12);
+            homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
             homeText2.Width = 560;
             homeText2.Height = 40;
-            homeText2.Location = new Point(60, 330);
+            homeText2.Location = new Point(60, 300);
             homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
             homeText2.BackColor = Color.Transparent;
             homeText2.ForeColor = Color.White;
-            homeText2.Font = new Font(homeTab.Font.FontFamily, 12);
+            homeText2.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
             
             homeText3.Width = 560;
             homeText3.Height = 80;
             homeText3.Location = new Point(60, 320);
-            homeText3.Text = "LipidCreator version 1.0.1" + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
+            homeText3.Text = "LipidCreator version " + Application.ProductVersion + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
             homeText3.BackColor = Color.Transparent;
             homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
+            homeText3.ForeColor = Color.White;
             homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();
             homeTab.Controls.Add(startFirstTutorialButton);
             startFirstTutorialButton.Text = "Start PRM tutorial";
-            startFirstTutorialButton.Width = 150;
+            startFirstTutorialButton.Width = 200;
             startFirstTutorialButton.Height = 26;
-            startFirstTutorialButton.Location = new Point(60, 380);
+            startFirstTutorialButton.Location = new Point(60, 346);
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
             startSecondTutorialButton = new Button();
             homeTab.Controls.Add(startSecondTutorialButton);
             startSecondTutorialButton.Text = "Start SRM tutorial";
-            startSecondTutorialButton.Width = 150;
+            startSecondTutorialButton.Width = 200;
             startSecondTutorialButton.Height = 26;
-            startSecondTutorialButton.Location = new Point(240, 380);
+            startSecondTutorialButton.Location = new Point(300, 346);
             startSecondTutorialButton.BackColor = SystemColors.Control;
             startSecondTutorialButton.Click += startSecondTutorial;
             
@@ -2231,16 +2441,26 @@ namespace LipidCreator
             startThirdTutorialButton = new Button();
             homeTab.Controls.Add(startThirdTutorialButton);
             startThirdTutorialButton.Text = "Start heavy isotope tutorial";
-            startThirdTutorialButton.Width = 170;
+            startThirdTutorialButton.Width = 200;
             startThirdTutorialButton.Height = 26;
-            startThirdTutorialButton.Location = new Point(420, 380);
+            startThirdTutorialButton.Location = new Point(60, 380);
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             
+            
+            startFourthTutorialButton = new Button();
+            homeTab.Controls.Add(startFourthTutorialButton);
+            startFourthTutorialButton.Text = "Start collision energy tutorial";
+            startFourthTutorialButton.Width = 200;
+            startFourthTutorialButton.Height = 26;
+            startFourthTutorialButton.Location = new Point(300, 380);
+            startFourthTutorialButton.BackColor = SystemColors.Control;
+            startFourthTutorialButton.Click += startFourthTutorial;
+            
             this.SizeChanged += new EventHandler(windowSizeChanged);
+            this.FormClosing += new FormClosingEventHandler(windowOnClosing);
             
-            
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, lipidsGridview};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics};
             
             
             

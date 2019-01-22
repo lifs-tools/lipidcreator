@@ -28,11 +28,6 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
-using System.Collections;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 
 namespace LipidCreator
 {
@@ -130,8 +125,8 @@ namespace LipidCreator
             // 
             // TranslatorDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(798, 413);
             this.Controls.Add(this.lipidNamesGridView);
             this.Controls.Add(this.button3);

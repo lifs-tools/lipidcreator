@@ -3,5 +3,9 @@
 ################################################################################
 
 /.vs
+/LipidCreator/bin
 /LipidCreator/bin/x64
 /LipidCreator/obj
+LipidCreator.userprefs
+/LipidCreator/bin/Debug
+/LipidCreator/LipidCreator.csproj.user

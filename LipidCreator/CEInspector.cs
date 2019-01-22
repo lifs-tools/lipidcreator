@@ -26,21 +26,20 @@ SOFTWARE.
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+
+using log4net;
 
 namespace LipidCreator
 {
     public partial class CEInspector : Form
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(CEInspector));
         public CreatorGUI creatorGUI = null;
         public double[] xValCoords = null;
         public IDictionary<string, double[]> yValCoords = null;
@@ -251,7 +250,7 @@ namespace LipidCreator
             if (PRMMode == PRMTypes.PRMAutomatically)
             {
                 cartesean.CEval = argMaxY;
-                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
+                numericalUpDownCurrentCE.Value = (decimal)Math.Max(cartesean.minCEVal, cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 refreshCartesan();
             }
@@ -279,7 +278,7 @@ namespace LipidCreator
             }
             catch (Exception ee)
             {
-                
+                log.Error(ee.Message);
             }
             if (cartesean.CEval < cartesean.minXVal || cartesean.maxXVal < cartesean.CEval)
             {
@@ -327,7 +326,7 @@ namespace LipidCreator
                 numericalUpDownCurrentCE.Maximum = (decimal)maxVal;
                 cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument].xAxisLabel;
             
-                cartesean.updateXBoundaries(minVal, maxVal);
+                cartesean.updateXBoundaries(0, maxVal, minVal, maxVal);
                 foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
                 {
                     classCombobox.Items.Add(lipidClass);
@@ -352,7 +351,7 @@ namespace LipidCreator
             }
             else
             {
-                numericalUpDownCurrentCE.Enabled = true;
+                numericalUpDownCurrentCE.Enabled = creatorGUI.tutorial.tutorial == Tutorials.NoTutorial;
             }
         }
         
@@ -450,7 +449,7 @@ namespace LipidCreator
         
         public void PRMModeCheckedChanged(Object sender, EventArgs e)
         {
-            PRMMode = radioButtonPRMFragments.Checked ? PRMTypes.PRMAutomatically : PRMMode = PRMTypes.PRMManually;
+            PRMMode = radioButtonPRMFragments.Checked ? PRMTypes.PRMAutomatically : PRMTypes.PRMManually;
             PRMModeChanged();
         }
         
@@ -509,9 +508,9 @@ namespace LipidCreator
                 
                 if (vals.X < cartesean.minXVal) vals.X = (float)cartesean.minXVal;
                 if (vals.X > cartesean.maxXVal) vals.X = (float)cartesean.maxXVal;
-                
-                cartesean.CEval = vals.X;
-                numericalUpDownCurrentCE.Value = (decimal)cartesean.CEval;
+
+                cartesean.CEval = Math.Max(cartesean.minCEVal, vals.X);
+                numericalUpDownCurrentCE.Value = (decimal)Math.Max(cartesean.minCEVal, cartesean.CEval);
                 collisionEnergies[selectedInstrument][selectedClass][selectedAdduct] = cartesean.CEval;
                 refreshCartesan();
             }

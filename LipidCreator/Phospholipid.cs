@@ -25,19 +25,17 @@ SOFTWARE.
 */
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
-    public class PLLipid : Lipid
+    public class Phospholipid : Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Phospholipid));
         public FattyAcidGroup fag1;
         public FattyAcidGroup fag2;
         public FattyAcidGroup fag3;
@@ -45,7 +43,7 @@ namespace LipidCreator
         public bool isCL;
         public bool isLyso;
     
-        public PLLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.PhosphoLipid)
+        public Phospholipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.PhosphoLipid)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -55,7 +53,7 @@ namespace LipidCreator
             isLyso = false;
         }
     
-        public PLLipid(PLLipid copy) : base((Lipid)copy)
+        public Phospholipid(Phospholipid copy) : base((Lipid)copy)
         {
             fag1 = new FattyAcidGroup(copy.fag1);
             fag2 = new FattyAcidGroup(copy.fag2);
@@ -120,8 +118,8 @@ namespace LipidCreator
                             fag4.import(child, importVersion);
                         }
                         else
-                        {   
-                            Console.WriteLine("Error, fatty acid");
+                        {
+                            log.Error("A phospholipid can have at most 4 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception("Error, fatty acid");
                         }
                         ++fattyAcidCounter;
@@ -224,7 +222,7 @@ namespace LipidCreator
                                     precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     precursorData.moleculeListName = headgroup;
                                     precursorData.fullMoleculeListName = headgroup;
-                                    precursorData.lipidClass = headgroup;
+                                    precursorData.precursorExportName = headgroup + key;
                                     precursorData.precursorName = headgroup + key;
                                     precursorData.precursorIonFormula = chemForm;
                                     precursorData.precursorAdduct = adduct.Key;
@@ -283,7 +281,7 @@ namespace LipidCreator
                                         heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                         heavyPrecursorData.moleculeListName = headgroup;
                                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                        heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                        heavyPrecursorData.precursorExportName = headgroup + key;
                                         heavyPrecursorData.precursorName = heavyKey + key;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                         heavyPrecursorData.precursorAdduct = adduct.Key;
@@ -372,7 +370,7 @@ namespace LipidCreator
                             precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
-                            precursorData.lipidClass = headgroup;
+                            precursorData.precursorExportName = completeKey;
                             precursorData.precursorName = completeKey;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct.Key;
@@ -418,7 +416,7 @@ namespace LipidCreator
                                 heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                heavyPrecursorData.precursorExportName = completeKey;
                                 heavyPrecursorData.precursorName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct.Key;
@@ -446,20 +444,22 @@ namespace LipidCreator
                         
             
                 if (headGroupNames.Count == 0) return;
-                bool isPlamalogen = false;
-                bool isFAa = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
+                    bool isPlamalogen1 = false;
+                    bool isFAa1 = false;
                         
                     switch (fa1.suffix)
                     {
-                        case "a": isFAa = true; break;
-                        case "p": isPlamalogen = true; break;
+                        case "a": isFAa1 = true; break;
+                        case "p": isPlamalogen1 = true; break;
                         default: break;
                     }
                     
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
+                        bool isPlamalogen = isPlamalogen1;
+                        bool isFAa = isFAa1;
                         switch (fa2.suffix)
                         {
                             case "a": isFAa = true; break;
@@ -520,7 +520,7 @@ namespace LipidCreator
                                 precursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.lipidClass = headgroup;
+                                precursorData.precursorExportName = completeKey;
                                 precursorData.precursorName = completeKey;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct.Key;
@@ -581,7 +581,7 @@ namespace LipidCreator
                                     heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                    heavyPrecursorData.lipidClass = heavyHeadgroup;
+                                    heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct.Key;

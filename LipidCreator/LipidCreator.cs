@@ -25,25 +25,25 @@ SOFTWARE.
 */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.IO;
 using System.Linq;
 using System.Data.SQLite;
+//using Mono.Data.SqliteClient;
 using Ionic.Zlib;
-using System.Diagnostics;
 
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using System.Text;
 using SkylineTool;
 using System.Net;
 using System.Threading;
 using System.Security.Cryptography;
+
+using log4net;
+using log4net.Config;
 
 namespace LipidCreator
 {   
@@ -53,11 +53,13 @@ namespace LipidCreator
     public enum PRMTypes {PRMAutomatically, PRMManually};
 
     [Serializable]
-    public class LipidCreator
-    {   
-    
+    public class LipidCreator : IDisposable
+    {
+        [NonSerialized]
+        private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
+        public static string LC_OS = "unknown OS";
         public ArrayList registeredLipids;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
@@ -66,6 +68,7 @@ namespace LipidCreator
         public DataTable transitionListUnique;
         public ArrayList replicates; // replicate transitions excluded from transitionListUnique
         public ArrayList precursorDataList;
+        [NonSerialized]
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
         public HashSet<string> lysoSphingoLipids;
@@ -93,6 +96,16 @@ namespace LipidCreator
         public static char HEAVY_LABEL_OPENING_BRACKET = '{';
         public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
         
+        public static int MIN_CARBON_LENGTH = 2;
+        public static int MAX_CARBON_LENGTH = 30;
+        public static int MIN_DB_LENGTH = 0;
+        public static int MAX_DB_LENGTH = 6;
+        public static int MIN_HYDROXY_LENGTH = 0;
+        public static int MAX_HYDROXY_LENGTH = 10;
+        public static int MIN_LCB_HYDROXY_LENGTH = 2;
+        public static int MAX_LCB_HYDROXY_LENGTH = 3;
+        public static int MIN_SPHINGO_FA_HYDROXY_LENGTH = 0;
+        public static int MAX_SPHINGO_FA_HYDROXY_LENGTH = 3;
         
         public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -183,7 +196,7 @@ namespace LipidCreator
                             string fragmentFile = prefixPath + tokens[3];
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
-                                Console.WriteLine("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
+                                log.Error("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
                             
                             int charge = Convert.ToInt32(tokens[4]);
@@ -200,13 +213,12 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
+                log.Error("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
             }
             
             
@@ -299,13 +311,40 @@ namespace LipidCreator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+                log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+            }
+            
+            HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
+            buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
+            buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
+            buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
+            buildingBlockSets[3] = new HashSet<string>{"FA", "HG"};
+            buildingBlockSets[4] = new HashSet<string>{"LCB", "FA", "HG"};
+            buildingBlockSets[5] = new HashSet<string>{"LCB", "HG"};
+            buildingBlockSets[6] = new HashSet<string>{"HG"};
+            
+            // check fragment building block list against precursor type
+            foreach (KeyValuePair<string, Precursor> kvpHeadgroups in headgroups)
+            {
+                int headgroupType = kvpHeadgroups.Value.buildingBlockType;
+                string headgroupName = kvpHeadgroups.Value.name;
+                if (!allFragments.ContainsKey(headgroupName)) continue;
+                
+                foreach (MS2Fragment ms2fragment in allFragments[headgroupName][true].Values)
+                {
+                    HashSet<string> blocks = new HashSet<string>();
+                    foreach (string fragmentBase in ms2fragment.fragmentBase) blocks.Add(fragmentBase);
+                    blocks.ExceptWith(buildingBlockSets[headgroupType]);
+                    if (blocks.Count > 0)
+                    {
+                        log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
+                    }
+                }
             }
             
             
@@ -336,96 +375,132 @@ namespace LipidCreator
                             double.TryParse(tokens[2], out instrumentData.minCE);
                             double.TryParse(tokens[3], out instrumentData.maxCE);
                             instrumentData.xAxisLabel = tokens[4];
-                            instrumentData.modes = new HashSet<string>(tokens[5].Split(new Char[]{';'}));
+                            instrumentData.modes = new HashSet<string>(tokens[5].Split(new char[]{';'}));
                             msInstruments.Add(instrumentData.CVTerm, instrumentData);
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
+                    log.Error("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:", e);
                 }
             }
             else
             {
-                Console.WriteLine("Error: file " + instrumentsFile + " does not exist or can not be opened.");
+                log.Error("Error: file " + instrumentsFile + " does not exist or can not be opened.");
             }
             
             
             
-            string ceParametersFile = prefixPath + "data/collision-energy-parameters.csv";
-            if (File.Exists(ceParametersFile))
+            string ceParametersDir = prefixPath + "data/ce-parameters";
+            string[] ceFilePaths = Directory.GetFiles(prefixPath + "data/ce-parameters/", "*.csv", SearchOption.TopDirectoryOnly);
+            if (Directory.Exists(ceParametersDir))
             {
-                lineCounter = 1;
-                try
+                foreach(string ceParametersFile in ceFilePaths)
                 {
-                    using (StreamReader sr = new StreamReader(ceParametersFile))
+                    lineCounter = 0;
+                    try
                     {
-                        String line = sr.ReadLine(); // omit titles
-                        while((line = sr.ReadLine()) != null)
+                        using (StreamReader sr = new StreamReader(ceParametersFile))
                         {
-                            lineCounter++;
-                            if (line.Length < 2) continue;
-                            if (line[0] == '#') continue;
-                            
-                            string[] tokens = parseLine(line);
-                            if (tokens.Length != 6) throw new Exception("invalid line in file, number of columns in line != 6");
-                            
-                            string instrument = tokens[0];
-                            string lipidClass = tokens[1];
-                            string adduct = tokens[2];
-                            string fragment = tokens[3];
-                            string paramKey = tokens[4];
-                            string paramValue = tokens[5];
-                            
-                            
-                            if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                            String line = null;
+                            Dictionary<String, int> columnKeys = null;
+                            int nTokens = -1;
+                            while((line = sr.ReadLine()) != null)
                             {
-                                collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
+                                lineCounter++;
+                                if (line.Length < 2) continue;
+                                if (line[0] == '#') continue;
+                                string[] tokens = parseLine(line);
+                                //initialize column header key lookup
+                                if (columnKeys == null)
+                                {
+                                    nTokens = tokens.Length;
+                                    log.Debug("Parsing line " + lineCounter + " " + line);
+                                    log.Debug("CE Parameter file header: " + string.Join(", ", tokens) + " for file " + ceParametersFile);
+                                    columnKeys = tokens.Select((value, index) => new { value, index })
+                                        .ToDictionary(pair => pair.value, pair => pair.index);
+                                    log.Debug("Column Keys: " + string.Join(", ", columnKeys));
+                                }
+                                else
+                                {
+
+                                    if (tokens.Length != nTokens)
+                                    {
+                                        log.Error("Mismatch on line " + lineCounter + "! Should have " + nTokens + " columns, but had " + tokens.Length);
+                                        throw new Exception("Invalid line in file, number of columns in line must equal number of columns in header!");
+                                    }
+
+                                    string instrument = tokens[columnKeys["instrument"]];
+                                    string lipidClass = tokens[columnKeys["class"]];
+                                    string adduct = tokens[columnKeys["adduct"]];
+                                    string fragment = tokens[columnKeys["fragment"]];
+                                    string paramKey = tokens[columnKeys["ParKey"]];
+                                    string paramValue = tokens[columnKeys["ParValue"]];
+
+
+                                    if (!collisionEnergyHandler.instrumentParameters.ContainsKey(instrument))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters.Add(instrument, new Dictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
+                                    }
+
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey(paramKey))
+                                    {
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("ParamKey for " + instrument + " " + lipidClass + " " + adduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
+                                    }
+                                }
                             }
-                            
-                            if (!collisionEnergyHandler.instrumentParameters[instrument].ContainsKey(lipidClass))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
-                            }
-                            
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
-                            }
-                            
-                            if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
-                            {
-                                collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
-                            }
-                            
-                            collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
                         }
+
+                    
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("Encountered an error in file '" + ceParametersFile + "' on line '" + lineCounter + "':", e);
                     }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("The file '" + ceParametersFile + "' in line '" + lineCounter + "' could not be read:");
-                    Console.WriteLine(e.Message);
-                }
             }
             else
             {
-                Console.WriteLine("Error: file " + ceParametersFile + " does not exist or can not be opened.");
+                log.Error("Error: directory " + ceParametersDir + " does not exist or can not be opened.");
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";
-            if (File.Exists(analyticsFile))
-            {
+            try {
+                if (File.Exists(analyticsFile))
                 {
-                    using (StreamReader sr = new StreamReader(analyticsFile))
                     {
-                        // check if first letter in first line is a '1'
-                        String line = sr.ReadLine();
-                        enableAnalytics = line[0] == '1';
+                        using (StreamReader sr = new StreamReader(analyticsFile))
+                        {
+                            // check if first letter in first line is a '1'
+                            String line = sr.ReadLine();
+                            enableAnalytics = line[0] == '1';
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                log.Warn("Warning: Analytics file could not be opened at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
         }
         
@@ -436,6 +511,10 @@ namespace LipidCreator
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
+            XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
+            LC_VERSION_NUMBER = Application.ProductVersion;
+            LC_OS = Environment.OSVersion.Platform.ToString();
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS);
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
@@ -459,7 +538,7 @@ namespace LipidCreator
             {
                 if (!headgroups.ContainsKey(lipidClass))
                 {
-                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
+                    log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
                 }
             }
             
@@ -467,18 +546,18 @@ namespace LipidCreator
             {
                 if (!allFragments.ContainsKey(lipidClass))
                 {
-                    Console.WriteLine("Error: inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
+                    log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
                 }
             }
             
             parserEventHandler = new ParserEventHandler(this);
-            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammer", QUOTE);
+            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammer", QUOTE);
+            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
             
             lipidMapsNewParserEventHandler = new ParserEventHandler(this);
-            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidmaps-new.grammer", QUOTE);
+            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidnames-lenient.grammar", QUOTE);
         }
         
         
@@ -564,22 +643,20 @@ namespace LipidCreator
             foreach (char c in text)
             {
                 int ic = (int)c;
-                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || (48 <= ic && ic < 58)))
+                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || ('0' <= ic && ic < '9')))
                 {
                     return null;
                 }
             }
-        
-            string[] delimitors = new string[] { "," };
-            string[] delimitorsRange = new string[] { "-" };
-            string[] tokens = text.Split(delimitors, StringSplitOptions.None);
+            
+            string[] tokens = text.Split(new char[]{','}, StringSplitOptions.None);
             
             HashSet<int> carbonCounts = new HashSet<int>();
             
             for (int i = 0; i < tokens.Length; ++i)
             {
                 if (tokens[i].Length == 0) return null;
-                string[] rangeBoundaries = tokens[i].Split(delimitorsRange, StringSplitOptions.None);
+                string[] rangeBoundaries = tokens[i].Split(new char[]{'-'}, StringSplitOptions.None);
                 if (rangeBoundaries.Length == 1)
                 {
                     int rangeStart = 0;
@@ -675,7 +752,7 @@ namespace LipidCreator
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
                     double CE = -1;
-                    string precursorName = precursorData.lipidClass;
+                    string precursorName = precursorData.fullMoleculeListName;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
                     if (PRMMode == PRMTypes.PRMAutomatically)
                     {
@@ -735,15 +812,13 @@ namespace LipidCreator
             if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
             SKYLINE_API_HEADER = apiList.ToArray();
             
-            
             createPrecursorList();
-            
             if (asDeveloper)
             {
                 Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
                 foreach (PrecursorData precursorData in precursorDataList)
                 {
-                    precursorData.precursorName = precursorData.lipidClass;
+                    precursorData.precursorName = precursorData.fullMoleculeListName;
                     precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
                 }
             }
@@ -754,7 +829,7 @@ namespace LipidCreator
         
         
         
-        public int[] importLipidList (string lipidListFile)
+        public int[] importLipidList (string lipidListFile, int[] filterParameters = null)
         {
             if (File.Exists(lipidListFile))
             {
@@ -767,14 +842,22 @@ namespace LipidCreator
                         string line;
                         while((line = sr.ReadLine()) != null)
                         {
-                            parser.parse(line);
-                            if (parser.wordInGrammer)
+                            foreach (string lipidName in parseLine(line))
                             {
-                                parser.raiseEvents();
-                                if (parserEventHandler.lipid != null)
+                                parser.parse(lipidName);
+                                if (parser.wordInGrammer)
                                 {
-                                    registeredLipids.Add(parserEventHandler.lipid);
-                                    ++valid;
+                                    parser.raiseEvents();
+                                    if (parserEventHandler.lipid != null)
+                                    {
+                                        if (filterParameters != null)
+                                        {
+                                            parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
+                                            parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
+                                        }
+                                        registeredLipids.Add(parserEventHandler.lipid);
+                                        ++valid;
+                                    }
                                 }
                             }
                             
@@ -785,7 +868,7 @@ namespace LipidCreator
                 
                 catch (Exception ee)
                 {
-                    Console.WriteLine(ee.Message);
+                    log.Error("Reading lipids from file " + lipidListFile + " failed on line " + total, ee);
                 }
                 return new int[]{valid, total};
             }
@@ -801,6 +884,9 @@ namespace LipidCreator
         
         public void storeTransitionList(string separator, bool split, string filename, DataTable currentView, string mode = ".csv")
         {
+        
+            string outputDir = System.IO.Path.GetDirectoryName(filename);
+            System.IO.Directory.CreateDirectory(outputDir);
             if (!filename.EndsWith(mode)) filename += mode;
             if (split)
             {
@@ -814,8 +900,6 @@ namespace LipidCreator
                             outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }
                     }
-                    outputFile.Dispose ();
-                    outputFile.Close ();
                 }
                 using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode)))
                 {
@@ -827,22 +911,17 @@ namespace LipidCreator
                             outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
                         }
                     }
-                    outputFile.Dispose ();
-                    outputFile.Close ();
                 }
             }
             else
             {
-                StreamWriter writer;
-                if ((writer = new StreamWriter (filename)) != null)
+                using (StreamWriter writer = new StreamWriter(filename))
                 {
-                    writer.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                    writer.WriteLine(toHeaderLine(separator, LipidCreator.SKYLINE_API_HEADER));
                     foreach (DataRow row in currentView.Rows)
                     {
-                        writer.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                        writer.WriteLine(toLine(row, LipidCreator.DATA_COLUMN_KEYS, separator));
                     }
-                    writer.Dispose ();
-                    writer.Close ();
                 }
             }
         }
@@ -964,40 +1043,61 @@ namespace LipidCreator
         {
             if (skylineToolClient == null) return;
             
-            string header = string.Join(",", SKYLINE_API_HEADER);
             
-            string pipeString = header + "\n";
+            Dictionary<string, string> nameToExportName = new Dictionary<string, string>();
+            foreach (PrecursorData precursorData in precursorDataList)
+            {
+                nameToExportName.Add(precursorData.precursorName, precursorData.precursorExportName);
+            }            
+            
+
+
+            
+            
+            string header = string.Join(",", SKYLINE_API_HEADER);
+
+            StringBuilder sb = new StringBuilder(header, header.Length);
+            sb.AppendLine();
             double maxMass = 0;
             bool withCE = SKYLINE_API_HEADER[SKYLINE_API_HEADER.Length - 1].Equals(SKYLINE_API_COLLISION_ENERGY);
             
             foreach (DataRow entry in dt.Rows)
             {
-                // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                pipeString += "\"" + entry[LipidCreator.MOLECULE_LIST_NAME] + "\","; // listname
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NAME] + "\","; // preName
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] + "\","; // PreFormula
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_ADDUCT] + "\","; // preAdduct
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_MZ] + "\","; // preMz
-                maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
-                pipeString += "\"" + entry[LipidCreator.PRECURSOR_CHARGE] + "\","; // preCharge
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_NAME] + "\","; // prodName
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA] + "\","; // ProdFormula, no prodAdduct
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_ADDUCT] + "\","; // preAdduct
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_MZ] + "\","; // prodMz
-                pipeString += "\"" + entry[LipidCreator.PRODUCT_CHARGE] + "\","; // prodCharge
-                pipeString += "\"" + entry[LipidCreator.NOTE] + "\""; // note
-                if (withCE) pipeString += ",\"" + entry[LipidCreator.COLLISION_ENERGY] + "\""; // note
-                pipeString += "\n";
+                try
+                {
+                    string exportName = nameToExportName[(string)entry[LipidCreator.PRECURSOR_NAME]];
+                    // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
+                    sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname
+                    sb.Append("\"").Append(exportName).Append("\","); // preName
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz
+                    maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append("\","); // preCharge
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\","); // prodName
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\","); // ProdFormula, no prodAdduct
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\","); // preAdduct
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_MZ]).Append("\","); // prodMz
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_CHARGE]).Append("\","); // prodCharge
+                    sb.Append("\"").Append(entry[LipidCreator.NOTE]).Append("\""); // note
+                    if (withCE) sb.Append(",\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
+                    sb.AppendLine();
+                } 
+                catch(Exception e)
+                {
+                    MessageBox.Show("An error occured during creation of the transition list!");
+                    log.Error("An error occured during creation of the transition list: ", e);
+                }
             }
             try
             {
-                skylineToolClient.InsertSmallMoleculeTransitionList(pipeString);
+                skylineToolClient.InsertSmallMoleculeTransitionList(sb.ToString());
                 if (blibName.Length > 0 && blibFile.Length > 0) skylineToolClient.AddSpectralLibrary(blibName, blibFile);
-                skylineToolClient.Dispose();
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occured, data could not be send to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
+                MessageBox.Show("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
+                log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.", e);
             }
         }
         
@@ -1012,17 +1112,17 @@ namespace LipidCreator
         public static ArrayList createRandomLipidNames(int num = 1)
         {
         
-            string grammerFilename = "data/lipidnames.grammer";
+            string grammarFilename = "data/lipidnames.grammar";
             char quote = '"';
             ArrayList lipidNames = new ArrayList();
-            if (File.Exists(grammerFilename))
+            if (File.Exists(grammarFilename))
             {
                 int lineCounter = 0;
                 int ruleNum = 1;
                 IDictionary<int, ArrayList> rules = new Dictionary<int, ArrayList>();
                 IDictionary<int, string> terminals = new Dictionary<int, string>();
                 IDictionary<string, int> ruleToNT = new Dictionary<string, int>();
-                using (StreamReader sr = new StreamReader(grammerFilename))
+                using (StreamReader sr = new StreamReader(grammarFilename))
                 {
                     string line;
                     while((line = sr.ReadLine()) != null)
@@ -1037,7 +1137,7 @@ namespace LipidCreator
                         
                         ArrayList tokens_level_1 = new ArrayList();
                         foreach (string t in Parser.splitString(line, '=', quote)) tokens_level_1.Add(Parser.strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammer");
+                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar");
 
                         string rule = (string)tokens_level_1[0];
                         
@@ -1120,7 +1220,6 @@ namespace LipidCreator
         
         public string serialize(bool onlySettings = false)
         {
-        
             string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n";
             
             xml += collisionEnergyHandler.serialize();
@@ -1172,9 +1271,8 @@ namespace LipidCreator
         {
             if (enableAnalytics)
             {
-                // ToDo: uncomment in final release
-                //Thread th = new Thread(() => analyticsRequest(category, action));
-                //th.Start();
+                Thread th = new Thread(() => analyticsRequest(category, action));
+                th.Start();
             }
         }
         
@@ -1225,14 +1323,13 @@ namespace LipidCreator
         {
             try
             {
-                WebRequest request = WebRequest.Create("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
+                HttpWebRequest request = WebRequest.CreateHttp("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
                 request.Timeout = 2000;
-                WebResponse response = request.GetResponse();  
-                response.Close();
-            }
-            catch (Exception e)
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()){}
+            } 
+            catch (WebException ex) 
             {
-            
+                log.Warn("Failed to contact analytics endpoint!", ex);
             }
         }
         
@@ -1244,11 +1341,12 @@ namespace LipidCreator
             if (precursorName[n - 1] != HEAVY_LABEL_CLOSING_BRACKET) return names;
             if (precursorName.IndexOf(HEAVY_LABEL_OPENING_BRACKET) == -1) return names;
             
-            precursorName = precursorName.Split(HEAVY_LABEL_CLOSING_BRACKET)[0];
-            names[1] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[1];
-            names[0] = precursorName.Split(HEAVY_LABEL_OPENING_BRACKET)[0];
+            precursorName = precursorName.Split(new char[]{HEAVY_LABEL_CLOSING_BRACKET})[0];
+            names[1] = precursorName.Split(new char[]{HEAVY_LABEL_OPENING_BRACKET})[1];
+            names[0] = precursorName.Split(new char[]{HEAVY_LABEL_OPENING_BRACKET})[0];
             return names;
         }
+        
         
         
         
@@ -1330,19 +1428,19 @@ namespace LipidCreator
                 switch (lipidType)
                 {
                     case "GL":
-                        GLLipid gll = new GLLipid(this);
+                        Glycerolipid gll = new Glycerolipid(this);
                         gll.import(lipid, importVersion);
                         registeredLipids.Add(gll);
                         break;
                         
                     case "PL":
-                        PLLipid pll = new PLLipid(this);
+                        Phospholipid pll = new Phospholipid(this);
                         pll.import(lipid, importVersion);
                         registeredLipids.Add(pll);
                         break;
                         
                     case "SL":
-                        SLLipid sll = new SLLipid(this);
+                        Sphingolipid sll = new Sphingolipid(this);
                         sll.import(lipid, importVersion);
                         registeredLipids.Add(sll);
                         break;
@@ -1360,17 +1458,19 @@ namespace LipidCreator
                         break;
                         
                     default:
-                        Console.WriteLine("Error global import");
-                        throw new Exception("Error global import");
+                        log.Error("Encountered unknown lipid type '"+lipidType+"' during global import!");
+                        throw new Exception("Encountered unknown lipid type '" + lipidType + "' during global import!");
                 }
             }
             OnUpdate(new EventArgs());
         }
         
         
+        
         public void createBlib(String filename)
         {
-        
+            string outputDir = System.IO.Path.GetDirectoryName(filename);
+            System.IO.Directory.CreateDirectory(outputDir);
             if (File.Exists(filename)) File.Delete(filename);
         
             SQLiteConnection mDBConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");
@@ -1422,6 +1522,8 @@ namespace LipidCreator
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
+            
+            
             string[] ionMobilityType = { "none", "driftTime(msec)", "inverseK0(Vsec/cm^2)"};
             for(int i=0; i < ionMobilityType.Length; ++i){
                 sql = "INSERT INTO IonMobilityTypes(id, ionMobilityType) VALUES(" + i + ", '" + ionMobilityType[i] + "')";
@@ -1449,11 +1551,9 @@ namespace LipidCreator
             command.CommandText = sql;
             command.ExecuteNonQuery();
             
-            /*
-            sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, ionMobilityValue REAL, ionMobilityType INTEGER, ionMobilityHighEnergyDriftTimeOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
+            sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, driftTimeMsec REAL, collisionalCrossSectionSqA REAL, driftTimeHighEnergyOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            */
             
             Tuple<string, string>[] scoreType = 
             {
@@ -1491,7 +1591,7 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             
             // Write the annotated spectra
-            foreach (PrecursorData precursorData in this.precursorDataList)
+            foreach (PrecursorData precursorData in precursorDataList)
             {
                 string precursorName = precursorData.fullMoleculeListName;
                 string adduct = precursorData.precursorAdductFormula;
@@ -1500,7 +1600,14 @@ namespace LipidCreator
                 {
                     collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[selectedInstrumentForCE], precursorName, adduct);
                 }
-                Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, selectedInstrumentForCE);
+                try
+                {
+                    Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, selectedInstrumentForCE);
+                }
+                catch(Exception e)
+                {
+                    log.Error("Caught exception while trying to add spectra for " + precursorName + " " + adduct + ":", e);
+                }
             }
             
             
@@ -1537,6 +1644,22 @@ namespace LipidCreator
                 dataTable.Columns.Add (columnKey);
             }
             return dataTable;
+        }
+
+        public void Dispose()
+        {
+            if (skylineToolClient != null)
+            {
+                log.Info("Disposing SkylineToolClient!");
+                try
+                {
+                    ((IDisposable)skylineToolClient).Dispose();
+                }
+                catch (System.TimeoutException e)
+                {
+                    log.Warn("Disposing SkylineToolClient timed out!");
+                }
+            }
         }
     }
     

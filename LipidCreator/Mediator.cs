@@ -25,13 +25,9 @@ SOFTWARE.
 */
 
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 
 
 namespace LipidCreator
@@ -137,7 +133,7 @@ namespace LipidCreator
                     precursorData.lipidCategory = LipidCategory.Mediator;
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.moleculeListName = precNames[0];
-                    precursorData.lipidClass = headgroup;
+                    precursorData.precursorExportName = precNames[0];
                     precursorData.precursorName = newKey;
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct.Key;

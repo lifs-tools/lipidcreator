@@ -28,12 +28,11 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Data.SQLite;
 using System.Globalization;
 using System.Linq;
+using log4net;
 
 // For the benefit of Skyline developer systems configured to not allow nonlocalized strings
 // ReSharper disable NonLocalizedString
@@ -49,7 +48,7 @@ namespace LipidCreator
         public LipidCategory lipidCategory;
         public string moleculeListName;
         public string fullMoleculeListName; // including heavy labeled suffix
-        public string lipidClass;
+        public string precursorExportName;
         public string precursorName;
         public string precursorIonFormula;
         public string precursorAdduct;
@@ -64,12 +63,28 @@ namespace LipidCreator
         public FattyAcid fa4;
         public FattyAcid lcb;
         public HashSet<string> fragmentNames;
+        
+        /*
+        public override string ToString()
+        {
+            string str = "molecularListName: " + moleculeListName + "\n";
+            str += "fullMoleculeListName: " + fullMoleculeListName + "\n";
+            str += "lipidClass: " + lipidClass + "\n";
+            str += "precursorName: " + precursorName + "\n";
+            str += "precursorIonFormula: " + precursorIonFormula + "\n";
+            str += "precursorAdduct: " + precursorAdduct + "\n";
+            str += "precursorAdductFormula: " + precursorAdductFormula + "\n";
+            str += "precursorCharge: " + precursorCharge + "\n";
+            return str;
+        }
+        */
     }
     
     
     [Serializable]
     public abstract class Lipid
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Lipid));
         public Dictionary<string, HashSet<string>> positiveFragments;
         public Dictionary<string, HashSet<string>> negativeFragments;
         public Dictionary<String, bool> adducts;
@@ -80,6 +95,7 @@ namespace LipidCreator
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
+        public static int MEDIATOR_PREFIX_LENGTH = 4;
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
         
         public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
@@ -213,7 +229,7 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.lipidClass;
+                    string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
@@ -231,6 +247,7 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+                if (!allFragments.ContainsKey(precursorData.fullMoleculeListName) || !allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0].ContainsKey(fragmentName)) continue;
             
                 // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
@@ -240,7 +257,7 @@ namespace LipidCreator
                 if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.fa1.hydroxyl == 0) continue;
                 
                 
-                MS2Fragment fragment = allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0][fragmentName];
+                MS2Fragment fragment = allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0][fragmentName];
                 
                 // Exception for lipids with NL(NH3) fragment
                 if (fragment.fragmentName.Equals("-(NH3,17)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;
@@ -297,9 +314,8 @@ namespace LipidCreator
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
-                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 
                 if (fragName.IndexOf("[adduct]") > -1)
@@ -341,7 +357,7 @@ namespace LipidCreator
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
                 {
-                    string lipidClass = precursorData.lipidClass;
+                    string lipidClass = precursorData.fullMoleculeListName;
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
@@ -433,7 +449,7 @@ namespace LipidCreator
                 ", @precursorAdduct, '-', '-', 0, " + numFragments +
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
-            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorName);
+            SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorExportName);
             SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
             command.Parameters.Add(parameterPrecursorName);
@@ -500,14 +516,16 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
+        
                 
         public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
         {
-            if (precursorData.fragmentNames.Count == 0) return;
-            string precursorAdduct = precursorData.precursorAdductFormula;  
+            if (precursorData.fragmentNames.Count == 0 || !allFragments.ContainsKey(precursorData.fullMoleculeListName)) return;
             
             var peaks = new List<Peak>();
-            foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.lipidClass][precursorData.precursorCharge >= 0])
+            foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.fullMoleculeListName][precursorData.precursorCharge >= 0])
             {
             
                 MS2Fragment fragment = fragmentPair.Value;
@@ -561,9 +579,8 @@ namespace LipidCreator
                 
                 if (precursorData.lipidCategory == LipidCategory.Mediator)
                 {
-                    massFragment = Convert.ToDouble(fragment.fragmentName, CultureInfo.InvariantCulture); // - fragment.fragmentCharge * 0.00054857990946;
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
-                    //fragName = string.Format("{0:0.000}", Convert.ToDouble(fragName, CultureInfo.InvariantCulture));
                 }
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
@@ -609,13 +626,13 @@ namespace LipidCreator
                     precursorData.precursorIonFormula,
                     "precursor")));
                     
-            
+            string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
             
             foreach (Peak peak in peaks)
             {
                 string fragment = peak.Annotation.Name;
-                double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, precursorAdduct);
-                peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, precursorAdduct, fragment, collisionEnergy);
+                double collisionEnergy = collisionEnergyHandler.getCollisionEnergy(instrument, precursorData.fullMoleculeListName, adduct);
+                peak.Intensity = MS2Fragment.MAX_INTENSITY * collisionEnergyHandler.getIntensity(instrument, precursorData.fullMoleculeListName, adduct, fragment, collisionEnergy);
             }
             
             // Commit to .blib
@@ -793,7 +810,7 @@ namespace LipidCreator
                     break;
                     
                 default:
-                    Console.WriteLine("Error: " + node.Name.ToString());
+                    log.Error("Error: " + node.Name.ToString());
                     throw new Exception("Error: " + node.Name.ToString());
             }
         }
@@ -831,7 +848,7 @@ namespace LipidCreator
             precursorData.lipidCategory = LipidCategory.Unsupported;
             precursorData.moleculeListName = "Unsupported lipid";
             precursorData.fullMoleculeListName = "Unsupported lipid";
-            precursorData.lipidClass = "Unsupported lipid";
+            precursorData.precursorExportName = "Unsupported lipid";
             precursorData.precursorName = "Unsupported lipid";
             precursorData.precursorIonFormula = "Unsupported lipid";
             precursorData.precursorAdduct = "Unsupported lipid";

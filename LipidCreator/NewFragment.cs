@@ -27,19 +27,18 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using log4net;
 
 namespace LipidCreator
 {
     [Serializable]
     public partial class NewFragment : Form
     {
-
+        
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewFragment));
         public Dictionary<string, object[]> elements;
         public MS2Form ms2form = null;
         public string[] buildingBlocks;
@@ -100,24 +99,21 @@ namespace LipidCreator
             // 2 -> fixed, FA1, FA2, HG
             // 3 -> fixed, FA, HG
             // 4 -> fixed, LCB, FA, HG, LCB + FA, LCB + HG, FA + HG, HG
-            // 5 -> fixed, LCB, HG, HG
+            // 5 -> fixed, LCB, HG
             // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, HG
-            // 7 -> fixed, FA1, HG, HG
-            // 8 -> fixed, HG
+            // 7 -> fixed, HG
             string lipidClass = ms2form.getHeadgroup();
             int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
             
             
-            String[][] buildingBlockList = new String[9][];
+            String[][] buildingBlockList = new String[7][];
             buildingBlockList[0] = new String[]{"FA1", "FA2", "FA3", "FA4", "HG"};
             buildingBlockList[1] = new String[]{"FA1", "FA2", "FA3", "HG"};
             buildingBlockList[2] = new String[]{"FA1", "FA2", "HG"};
             buildingBlockList[3] = new String[]{"FA", "HG"};
             buildingBlockList[4] = new String[]{"LCB", "FA", "HG"};
             buildingBlockList[5] = new String[]{"LCB", "HG"};
-            buildingBlockList[6] = new String[]{"FA1", "FA2", "HG"};
-            buildingBlockList[7] = new String[]{"FA", "HG"};
-            buildingBlockList[8] = new String[]{"HG"};
+            buildingBlockList[6] = new String[]{"HG"};
             
             
             selectBaseCombobox.Items.Add("fixed");
@@ -139,7 +135,7 @@ namespace LipidCreator
                 HashSet<string> fragmentBB = new HashSet<string>(  (String[]) ms2Fragment.fragmentBase.ToArray( typeof( string ) ));
                 for (int i = 1; i < buildingBlocksArray.Count; ++i)
                 {
-                    HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(';'));
+                    HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(new char[]{';'}));
                     int intersect = fragmentBB.Intersect(currentBB).Count();
                     if (intersect == fragmentBB.Count() && intersect == currentBB.Count())
                     {
@@ -332,6 +328,7 @@ namespace LipidCreator
                     n = Convert.ToInt32(val);
                 }
                 catch (Exception ee){
+                    log.Error("Conversion error while updating cell value to int32: " + val, ee);
                     n = 0;
                 }
                 if (selectBaseCombobox.SelectedIndex == 0) n = Math.Max(n, 0);

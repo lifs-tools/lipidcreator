@@ -68,17 +68,11 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             
-            string grammerFilename = "data/lipidnames.grammer";
-            char quote = '"';
-            
-            TestParserEventHandler tpeh = new TestParserEventHandler();
-            Parser pp = new Parser(tpeh, grammerFilename, LipidCreator.QUOTE);
-                        
-            
+            string grammarFilename = "data/lipidnames.grammar";
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
-            Parser p = new Parser(peh, grammerFilename, LipidCreator.QUOTE);
+            Parser p = new Parser(peh, grammarFilename, LipidCreator.QUOTE);
             
             
             
@@ -102,7 +96,7 @@ namespace LipidCreator
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
                             lcf.registeredLipids.Add(peh.lipid);
-                            lcf.assembleLipids();
+                            lcf.assembleLipids(false);
                             
                             DataRow row = lcf.transitionList.Rows[0];
                             if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))

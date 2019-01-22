@@ -45,13 +45,13 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
         
-            string grammerFilename = "data/lipidmaps.grammer";
+            string grammarFilename = "data/lipidmaps.grammar";
             char quote = '"';
             int lineCounter;
             
             LipidCreator lipidCreator = new LipidCreator(null);
             LipidMapsParserEventHandler lipidMapsParserEventHandler = new LipidMapsParserEventHandler(lipidCreator);
-            Parser parser = new Parser(lipidMapsParserEventHandler, grammerFilename, quote);
+            Parser parser = new Parser(lipidMapsParserEventHandler, grammarFilename, quote);
             
                         
             string headgroupsFile = "test/lipidmaps.csv";

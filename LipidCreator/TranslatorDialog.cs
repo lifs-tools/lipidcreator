@@ -29,11 +29,7 @@ using System;
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -147,7 +143,7 @@ namespace LipidCreator
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
             {
                 int currentCell = lipidNamesGridView.CurrentCell.RowIndex; 
-                string[] insertText = Clipboard.GetText().Split('\n');
+                string[] insertText = Clipboard.GetText().Split(new char[]{'\n'});
                 foreach (string ins in insertText)
                 {
                     string insert = Parser.strip(ins, (char)13);
@@ -287,8 +283,17 @@ namespace LipidCreator
         // import
         private void button3_Click(object sender, EventArgs e)
         {
+            int[] filterParameters = {2, 2};
+            FilterDialog importFilterDialog = new FilterDialog(filterParameters);
+            importFilterDialog.Owner = this;
+            importFilterDialog.ShowInTaskbar = false;
+            importFilterDialog.ShowDialog();
+            importFilterDialog.Dispose();
+        
             foreach(Lipid currentLipid in parsedLipids)
             {
+                currentLipid.onlyPrecursors = filterParameters[0];
+                currentLipid.onlyHeavyLabeled = filterParameters[1];
                 creatorGUI.lipidCreator.registeredLipids.Add(currentLipid);
             }
             creatorGUI.refreshRegisteredLipidsTable();

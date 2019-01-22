@@ -26,12 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Collections;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace LipidCreator
@@ -46,6 +41,7 @@ namespace LipidCreator
         public bool loading;
         public NewFragment newFragment;
         public CreatorGUI creatorGUI;
+        [NonSerialized]
         public CheckedListBox editDeletePositive;
         public int editDeleteIndex;
         public int hoveredIndex;
@@ -58,16 +54,16 @@ namespace LipidCreator
             Lipid currentLipidTmp = creatorGUI.currentLipid;
             
             
-            if (currentLipidTmp is GLLipid){
-                this.currentLipid = new GLLipid((GLLipid)currentLipidTmp);
+            if (currentLipidTmp is Glycerolipid){
+                this.currentLipid = new Glycerolipid((Glycerolipid)currentLipidTmp);
             }
-            else if (currentLipidTmp is PLLipid)
+            else if (currentLipidTmp is Phospholipid)
             {
-                this.currentLipid = new PLLipid((PLLipid)currentLipidTmp);
+                this.currentLipid = new Phospholipid((Phospholipid)currentLipidTmp);
             }
-            else if (currentLipidTmp is SLLipid)
+            else if (currentLipidTmp is Sphingolipid)
             {
-                this.currentLipid = new SLLipid((SLLipid)currentLipidTmp);
+                this.currentLipid = new Sphingolipid((Sphingolipid)currentLipidTmp);
             }
             else if (currentLipidTmp is Cholesterol)
             {
@@ -458,19 +454,19 @@ namespace LipidCreator
         
         private void okClick(object sender, EventArgs e)
         {
-            if (currentLipid is GLLipid)
+            if (currentLipid is Glycerolipid)
             {
-                creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid] = new GLLipid((GLLipid)currentLipid);
+                creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid] = new Glycerolipid((Glycerolipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.GlyceroLipid];
             }
-            else if (currentLipid is PLLipid)
+            else if (currentLipid is Phospholipid)
             {
-                creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid] = new PLLipid((PLLipid)currentLipid);
+                creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid] = new Phospholipid((Phospholipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid];
             }
-            else if (currentLipid is SLLipid)
+            else if (currentLipid is Sphingolipid)
             {
-                creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid] = new SLLipid((SLLipid)currentLipid);
+                creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid] = new Sphingolipid((Sphingolipid)currentLipid);
                 creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.SphingoLipid];
             }
             else if (currentLipid is Cholesterol)

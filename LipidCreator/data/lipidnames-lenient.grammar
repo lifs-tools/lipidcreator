@@ -112,13 +112,14 @@ Mediator = "10-HDoHE" | "11-HDoHE" | "11-HETE" | "11,12-DHET" | "11(12)-EET"| "1
 FA = FA_pure | FA_pure Ether
 FA_pure = Carbon Carbon_DB_separator DB | Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl | Carbon Carbon_DB_separator DB heavy | Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl heavy
 Ether = "a" | "p"
-LCB = Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl
+LCB = Carbon Carbon_DB_separator DB DB_hydroxyl_separator Hydroxyl | Old_Hydroxyl Carbon Carbon_DB_separator DB
 Carbon = Number
 DB = DB_count | DB_count round_open_bracket DB_position round_close_bracket
 DB_count = Number
 DB_position = Number CisTrans | Number CisTrans | DB_position DB_position_separator DB_position
 CisTrans = "E" | "Z"
 Hydroxyl = Number
+Old_Hydroxyl = "d" | "t"
 Number =  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | Number Number
 
 
@@ -127,7 +128,7 @@ isotopes = isotopes isotopes | "[" Number "]" element Number
 element = "C" | "H" | "O" | "N" | "P" | "S"
 
 ## separators
-sorted_FA_separator = "/"
+sorted_FA_separator = "/" | "\" | "_"
 adduct_separator = " "
 unsorted_FA_separator = "-"
 headgroup_separator = " "

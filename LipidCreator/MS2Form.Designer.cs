@@ -27,10 +27,7 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 
 namespace LipidCreator
 {
@@ -125,8 +122,8 @@ namespace LipidCreator
             // 
             // label3
             // 
-            this.labelFragmentDescriptionBlack.Size = new Size(162, 13);
-            this.labelFragmentDescriptionBlack.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlack.Width, 280);
+            this.labelFragmentDescriptionBlack.Size = new Size(162, 20);
+            this.labelFragmentDescriptionBlack.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlack.Width, 270);
             this.labelFragmentDescriptionBlack.Name = "label3";
             this.labelFragmentDescriptionBlack.TabIndex = 5;
             this.labelFragmentDescriptionBlack.Text = "black: unspecific";
@@ -134,8 +131,8 @@ namespace LipidCreator
             // 
             // label4
             // 
-            this.labelFragmentDescriptionRed.Size = new Size(162, 13);
-            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 295);
+            this.labelFragmentDescriptionRed.Size = new Size(162, 20);
+            this.labelFragmentDescriptionRed.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionRed.Width, 290);
             this.labelFragmentDescriptionRed.Name = "label4";
             this.labelFragmentDescriptionRed.TabIndex = 5;
             this.labelFragmentDescriptionRed.Text = "red: specific for lipid category";
@@ -144,7 +141,7 @@ namespace LipidCreator
             // 
             // label5
             // 
-            this.labelFragmentDescriptionBlue.Size = new Size(162, 13);
+            this.labelFragmentDescriptionBlue.Size = new Size(162, 20);
             this.labelFragmentDescriptionBlue.Location = new System.Drawing.Point(1110 - labelFragmentDescriptionBlue.Width, 310);
             this.labelFragmentDescriptionBlue.Name = "label5";
             this.labelFragmentDescriptionBlue.TabIndex = 5;
@@ -282,9 +279,10 @@ namespace LipidCreator
             
             // 
             // MS2Form
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.Font = SystemFonts.DialogFont;
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1184, 440);
             this.Controls.Add(this.tabControlFragments);
             this.Controls.Add(this.buttonCancel);
@@ -304,31 +302,56 @@ namespace LipidCreator
 
         #endregion
 
+        [NonSerialized]
         public CustomPictureBox pictureBoxFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxPositiveFragments;
+        [NonSerialized]
         public CheckedListBox checkedListBoxNegativeFragments;
+        [NonSerialized]
         public Label labelPositiveFragments;
+        [NonSerialized]
         public Label labelNegativeFragments;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlack;
+        [NonSerialized]
         public Label labelFragmentDescriptionRed;
+        [NonSerialized]
         public Label labelFragmentDescriptionBlue;
+        [NonSerialized]
         public Label labelPositiveSelectAll;
+        [NonSerialized]
         public Label labelPositiveDeselectAll;
+        [NonSerialized]
         public Label labelNegativeSelectAll;
+        [NonSerialized]
         public Label labelNegativeDeselectAll;
+        [NonSerialized]
         public Label labelSlashPositive;
+        [NonSerialized]
         public Label labelSlashNegative;
+        [NonSerialized]
         public Button buttonCancel;
+        [NonSerialized]
         public Button buttonOK;
+        [NonSerialized]
         public Button buttonAddFragment;
+        [NonSerialized]
         public TabControl tabControlFragments;
+        [NonSerialized]
         public ArrayList tabPages;
+        [NonSerialized]
         public ToolTip toolTip1;
+        [NonSerialized]
         public ComboBox isotopeList;
+        [NonSerialized]
         public ArrayList controlElements;
-        
+
+        [NonSerialized]
         public ContextMenu contextMenuFragment;
+        [NonSerialized]
         public MenuItem menuFragmentItem1;
+        [NonSerialized]
         public MenuItem menuFragmentItem2;
     }
 }

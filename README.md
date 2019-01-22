@@ -17,6 +17,9 @@ We currently build against .NET framework v4.5.2, but any later version should a
 For development on Windows, we recommend to install [VisualStudio Community Edition](https://visualstudio.microsoft.com/vs/community/), 
 or any of the other VisualStudio editions. Please note that VisualStudio Code currently does not have great support for UI development.
 
+You also need to install the Windows Git client for the build to work [Git for Windows](https://git-scm.com/download/win). Select that Git should be added to the PATH during the installation.
+After installation of the Git client, you need to restart VisualStudio so that Git becomes available via the PATH.
+
 To build and/or run the project, simply select the appropriate menu entry in VisualStudio.
 
 ### Ubuntu ###
@@ -46,8 +49,11 @@ which will produce output in `bin/Release`.
 ### Windows ###
 
 #### With Skyline ####
+You can install the LipidCreator zip file (name must be LipidCreator.zip) as an external tool. Go to "Tools" &gt; "External Tools" and click on "Add". Select the LipidCreator.zip file and wait until 
+installation completes. Click "OK" on the "External Tools" dialog. LipidCreator can now be started via "Tools" &gt; "LipidCreator".
 
 #### Stand-Alone ####
+If you locate the LipidCreator.exe file, either in your Skyline installation under the "Tools" folder, or within the LipidCreator folder extracted from the zip archive, you need to double click on it to start in stand-alone mode. It is also possible to start LipidCreator from the command line.
 
 ### Ubuntu ###
 To run LipidCreator, locate the directory containing LipidCreator.exe, open a terminal and type

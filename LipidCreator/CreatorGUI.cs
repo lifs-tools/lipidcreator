@@ -76,6 +76,15 @@ namespace LipidCreator
         
         public CreatorGUI(string inputParameters)
         {
+            // TODO: please delete from here
+            LipidsInterList interlist = new LipidsInterList();
+            interlist.Owner = this;
+            interlist.ShowInTaskbar = false;
+            interlist.ShowDialog();
+            interlist.Dispose();
+            // delete until here
+            
+            
             this.inputParameters = inputParameters;
             this.lipidCreator = new LipidCreator(this.inputParameters);
             currentIndex = LipidCategory.NoLipid;

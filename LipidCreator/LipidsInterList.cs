@@ -37,23 +37,23 @@ namespace LipidCreator
     [Serializable]
     public partial class LipidsInterList : Form
     {
-        public DataTable transitionList;
-        public DataTable transitionListUnique;
-        public ArrayList replicates;
+        public ArrayList precursorList;
         public DataTable currentView;
         public CreatorGUI creatorGUI;
-        public string[] dataColumns = {};
 
         public LipidsInterList (CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
+            InitializeComponent ();
+            
+            precursorList = creatorGUI.lipidCreator.precursorDataList;
+            
             transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
             replicates = creatorGUI.lipidCreator.replicates;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             
             
-            InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;

@@ -828,6 +828,40 @@ namespace LipidCreator
         
         
         
+        public void assemblePrecursors()
+        {
+
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
+            
+            createPrecursorList();
+        }
+        
+        
+        
+        public void assembleFragments(bool asDeveloper)
+            if (asDeveloper)
+            {
+                Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                foreach (PrecursorData precursorData in precursorDataList)
+                {
+                    precursorData.precursorName = precursorData.fullMoleculeListName;
+                    precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
+                }
+            }
+            
+            createFragmentList(selectedInstrumentForCE, monitoringType);
+        }
+        
+        
         
         public int[] importLipidList (string lipidListFile, int[] filterParameters = null)
         {

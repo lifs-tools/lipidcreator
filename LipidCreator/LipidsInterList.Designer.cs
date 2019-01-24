@@ -78,8 +78,6 @@ namespace LipidCreator
             this.dataGridViewPrecursors.RowTemplate.Height = 34;
             this.dataGridViewPrecursors.AllowDrop = true;
             this.dataGridViewPrecursors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //fragmentsGridView.CellValueChanged += new DataGridViewCellEventHandler(fragmentsGridView_CellValueChanged);
-            //fragmentsGridView.CellContentClick += new DataGridViewCellEventHandler(fragmentsGridView_CellContentClick);
             this.dataGridViewPrecursors.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(precursorGridViewDataBindingComplete);
             this.dataGridViewPrecursors.RowHeadersVisible = false;
             this.dataGridViewPrecursors.ScrollBars = ScrollBars.Vertical;

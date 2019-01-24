@@ -40,19 +40,30 @@ namespace LipidCreator
         public ArrayList precursorList;
         public DataTable currentView;
         public CreatorGUI creatorGUI;
+        public DataTable precursorDataList = null;
 
         public LipidsInterList (CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
+            precursorList = creatorGUI.lipidCreator.precursorDataList;
+            precursorDataList = new DataTable("precursorDataList");
+            precursorDataList.Columns.Add(new DataColumn("Keep"));
+            precursorDataList.Columns[0].DataType = typeof(bool);
+            precursorDataList.Columns.Add(new DataColumn("Precursor name"));
+            precursorDataList.Columns[1].DataType = typeof(string);
+            
             InitializeComponent ();
             
-            precursorList = creatorGUI.lipidCreator.precursorDataList;
+            foreach(PrecursorData precursorData in precursorList)
+            {
+                DataRow row = precursorDataList.NewRow();
+                row["Keep"] = (bool)true;
+                row["Precursor name"] = precursorData.precursorName;
+                precursorDataList.Rows.Add(row);
+            }
+            dataGridViewPrecursors.Update();
             
-            transitionList = creatorGUI.lipidCreator.transitionList;
-            currentView = this.transitionList;
-            replicates = creatorGUI.lipidCreator.replicates;
-            transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
-            
+            /*
             
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
@@ -71,11 +82,33 @@ namespace LipidCreator
             }
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
-            
+            */
+        }
+        
+        private void precursorGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dataGridViewPrecursors.Columns[0].Width = 50;
+            dataGridViewPrecursors.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            dataGridViewPrecursors.Columns[1].ReadOnly = true;
+            dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+        
+        
+        public void cancelButtonClick (Object sender, EventArgs e)
+        {
+            Close();
         }
         
         
         
+        public void continueReviewButtonClick (Object sender, EventArgs e)
+        {
+            Close();
+            creatorGUI.continueReviewForm();
+        }
+        
+        
+        /*
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             if (currentView == transitionList)
@@ -188,5 +221,6 @@ namespace LipidCreator
                 this.Enabled = true;
             }
         }
+        */
     }
 }

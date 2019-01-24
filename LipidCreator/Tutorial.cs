@@ -965,7 +965,7 @@ namespace LipidCreator
                     TextBox plFA1 = creatorGUI.plFA1Textbox;
                     tutorialArrow.update(new Point(plFA1.Location.X, plFA1.Location.Y + (plFA1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the first fatty acyl chain lengths to '14-18, 20'", "LipidCreator allows to describe a set of different fatty acyls (FAs) concisely instead of describing each FA separately.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set first fatty acyl chain lengths to '14-18, 20'", "LipidCreator allows to describe a set of different fatty acyls (FAs) concisely instead of describing each FA separately.");
                                       
                     
                     plFA1.Text = "12-15";
@@ -1029,7 +1029,7 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set the second FA carbon chain lengths to '8-10' and number of DBs to '2'", "");
                     
-                    plFA2.Text = "12 - 15";
+                    plFA2.Text = "12-15";
                     plFA2.Enabled = true;
                     creatorGUI.plDB2Textbox.Text = "0";
                     creatorGUI.plDB2Textbox.Enabled = true;

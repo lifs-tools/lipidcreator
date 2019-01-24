@@ -67,6 +67,8 @@ namespace LipidCreator
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
         [NonSerialized]
+        public LipidsInterList lipidsInterList = null;
+        [NonSerialized]
         public FilterDialog filterDialog = null;
         [NonSerialized]
         public MenuItem lastCEInstrumentChecked = null;
@@ -76,13 +78,6 @@ namespace LipidCreator
         
         public CreatorGUI(string inputParameters)
         {
-            // TODO: please delete from here
-            LipidsInterList interlist = new LipidsInterList();
-            interlist.Owner = this;
-            interlist.ShowInTaskbar = false;
-            interlist.ShowDialog();
-            interlist.Dispose();
-            // delete until here
             
             
             this.inputParameters = inputParameters;
@@ -3468,8 +3463,32 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids(asDeveloper);
+            lipidCreator.assemblePrecursors();
             lipidCreator.analytics("lipidcreator", "create-transition-list");
+            
+            
+            
+            lipidsInterList = new LipidsInterList(this);
+            lipidsInterList.Owner = this;
+            lipidsInterList.ShowInTaskbar = false;
+            
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                lipidsInterList.ShowDialog();
+                lipidsInterList.Dispose();
+            }
+            else
+            {
+                lipidsInterList.Show();
+            }
+              
+        }
+        
+        
+        public void continueReviewForm()
+        {
+            lipidCreator.assembleFragments(asDeveloper);          
+            
             lipidsReview = new LipidsReview(this);
             lipidsReview.Owner = this;
             lipidsReview.ShowInTaskbar = false;
@@ -3483,7 +3502,6 @@ namespace LipidCreator
             {
                 lipidsReview.Show();
             }
-              
         }
         
         

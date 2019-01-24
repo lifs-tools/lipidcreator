@@ -87,7 +87,7 @@ namespace LipidCreator
         
         public Point valueToPx(double valX, double valY)
         {
-			return new Point((int)(marginLeft + (valX - minXVal) * innerWidthPx / (maxXVal - minXVal)), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
+            return new Point((int)(marginLeft + (valX - minXVal) * innerWidthPx / (maxXVal - minXVal)), (int)(Height - marginBottom - valY * innerHeightPx / maxYVal));
         }
         
         

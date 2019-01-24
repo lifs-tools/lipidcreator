@@ -848,6 +848,7 @@ namespace LipidCreator
         
         
         public void assembleFragments(bool asDeveloper)
+        {
             if (asDeveloper)
             {
                 Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();

@@ -69,7 +69,7 @@ namespace LipidCreator
             // 
             this.dataGridViewPrecursors.Size = new System.Drawing.Size(555, 609);
             this.dataGridViewPrecursors.Location = new System.Drawing.Point(12, 12);
-            this.dataGridViewPrecursors.DataSource = precursorDataList;
+            this.dataGridViewPrecursors.DataSource = precursorDataTable;
             this.dataGridViewPrecursors.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             this.dataGridViewPrecursors.AllowUserToResizeColumns = false;
             this.dataGridViewPrecursors.AllowUserToAddRows = false;
@@ -79,6 +79,8 @@ namespace LipidCreator
             this.dataGridViewPrecursors.AllowDrop = true;
             this.dataGridViewPrecursors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewPrecursors.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(precursorGridViewDataBindingComplete);
+            this.dataGridViewPrecursors.CellContentClick += new DataGridViewCellEventHandler(precursorGridView_CellClicked);
+            this.dataGridViewPrecursors.CellValueChanged += new DataGridViewCellEventHandler(precursorGridView_CellValueChanged);
             this.dataGridViewPrecursors.RowHeadersVisible = false;
             this.dataGridViewPrecursors.ScrollBars = ScrollBars.Vertical;
             // 

@@ -62,6 +62,7 @@ namespace LipidCreator
             this.dataGridViewTransitions = new System.Windows.Forms.DataGridView();
             this.buttonSendToSkyline = new System.Windows.Forms.Button();
             this.buttonStoreTransitionList = new System.Windows.Forms.Button();
+            this.buttonBack = new System.Windows.Forms.Button();
             this.checkBoxHideReplicates = new System.Windows.Forms.CheckBox();
             this.checkBoxCreateSpectralLibrary = new System.Windows.Forms.CheckBox();
             this.buttonStoreSpectralLibrary = new System.Windows.Forms.Button();
@@ -78,7 +79,7 @@ namespace LipidCreator
             this.dataGridViewTransitions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.None;
             this.dataGridViewTransitions.AllowUserToResizeRows = false;
             this.dataGridViewTransitions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTransitions.Location = new System.Drawing.Point(12, 12);
+            this.dataGridViewTransitions.Location = new System.Drawing.Point(12, 58);
             this.dataGridViewTransitions.Name = "dataGridView1";
             this.dataGridViewTransitions.ReadOnly = true;
             this.dataGridViewTransitions.RowHeadersVisible = false;
@@ -90,7 +91,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.buttonSendToSkyline.Location = new System.Drawing.Point(410, 448);
+            this.buttonSendToSkyline.Location = new System.Drawing.Point(410, 494);
             this.buttonSendToSkyline.Name = "button1";
             this.buttonSendToSkyline.Size = new System.Drawing.Size(258, 34);
             this.buttonSendToSkyline.TabIndex = 1;
@@ -100,7 +101,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.buttonStoreTransitionList.Location = new System.Drawing.Point(12, 448);
+            this.buttonStoreTransitionList.Location = new System.Drawing.Point(12, 494);
             this.buttonStoreTransitionList.Name = "button2";
             this.buttonStoreTransitionList.Size = new System.Drawing.Size(258, 34);
             this.buttonStoreTransitionList.TabIndex = 2;
@@ -108,10 +109,20 @@ namespace LipidCreator
             this.buttonStoreTransitionList.UseVisualStyleBackColor = true;
             this.buttonStoreTransitionList.Click += new System.EventHandler(this.buttonStoreTransitionListClick);
             // 
+            // button3
+            // 
+            this.buttonBack.Location = new System.Drawing.Point(12, 12);
+            this.buttonBack.Name = "button3";
+            this.buttonBack.Size = new System.Drawing.Size(88, 34);
+            this.buttonBack.TabIndex = 0;
+            this.buttonBack.Text = "Back";
+            this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBackClick);
+            // 
             // checkBox1
             // 
             this.checkBoxHideReplicates.AutoSize = true;
-            this.checkBoxHideReplicates.Location = new System.Drawing.Point(12, 426);
+            this.checkBoxHideReplicates.Location = new System.Drawing.Point(12, 472);
             this.checkBoxHideReplicates.Name = "checkBox1";
             this.checkBoxHideReplicates.Size = new System.Drawing.Size(96, 17);
             this.checkBoxHideReplicates.TabIndex = 3;
@@ -122,7 +133,7 @@ namespace LipidCreator
             // checkBox2
             // 
             this.checkBoxCreateSpectralLibrary.AutoSize = true;
-            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(500, 426);
+            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(500, 472);
             this.checkBoxCreateSpectralLibrary.Name = "checkBox2";
             this.checkBoxCreateSpectralLibrary.Size = new System.Drawing.Size(96, 17);
             this.checkBoxCreateSpectralLibrary.TabIndex = 3;
@@ -131,7 +142,7 @@ namespace LipidCreator
             // 
             // button3
             // 
-            this.buttonStoreSpectralLibrary.Location = new System.Drawing.Point(809, 448);
+            this.buttonStoreSpectralLibrary.Location = new System.Drawing.Point(809, 494);
             this.buttonStoreSpectralLibrary.Name = "button3";
             this.buttonStoreSpectralLibrary.Size = new System.Drawing.Size(258, 34);
             this.buttonStoreSpectralLibrary.TabIndex = 4;
@@ -143,7 +154,7 @@ namespace LipidCreator
             // label1
             // 
             this.labelNumberOfTransitions.AutoSize = true;
-            this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 426);
+            this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 472);
             this.labelNumberOfTransitions.Name = "label1";
             this.labelNumberOfTransitions.Size = new System.Drawing.Size(109, 13);
             this.labelNumberOfTransitions.TabIndex = 5;
@@ -155,16 +166,17 @@ namespace LipidCreator
             this.Font = SystemFonts.DialogFont;
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1079, 494);
+            this.ClientSize = new System.Drawing.Size(1079, 540);
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);
+            this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.checkBoxHideReplicates);
             this.Controls.Add(this.checkBoxCreateSpectralLibrary);
             this.Controls.Add(this.buttonStoreTransitionList);
             this.Controls.Add(this.buttonSendToSkyline);
             this.Controls.Add(this.dataGridViewTransitions);
             this.Name = "LipidsReview";
-            this.Text = "LipidsReview";
+            this.Text = "Lipid Transitions Review";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransitions)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -172,7 +184,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){buttonSendToSkyline, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
+            controlElements = new ArrayList(){buttonSendToSkyline, buttonBack, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
         }
 
         #endregion
@@ -183,6 +195,8 @@ namespace LipidCreator
         public System.Windows.Forms.Button buttonSendToSkyline;
         [NonSerialized]
         public Button buttonStoreTransitionList;
+        [NonSerialized]
+        public Button buttonBack;
         [NonSerialized]
         public CheckBox checkBoxHideReplicates;
         [NonSerialized]

@@ -742,7 +742,10 @@ namespace LipidCreator
             {         
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    if (precursorData.precursorSelected)
+                    {
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    }
                 }
             }
             else 
@@ -751,6 +754,8 @@ namespace LipidCreator
                 double maxCE = msInstruments[instrument].maxCE;
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
+                    if (!precursorData.precursorSelected) continue;
+                
                     double CE = -1;
                     string precursorName = precursorData.fullMoleculeListName;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);

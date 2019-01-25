@@ -37,33 +37,25 @@ namespace LipidCreator
     [Serializable]
     public partial class LipidsInterList : Form
     {
-        public ArrayList precursorList;
-        public DataTable currentView;
         public CreatorGUI creatorGUI;
-        public DataTable precursorDataList = null;
+        public DataTable precursorDataTable = null;
 
         public LipidsInterList (CreatorGUI _creatorGUI)
         {
             creatorGUI = _creatorGUI;
-            precursorList = creatorGUI.lipidCreator.precursorDataList;
-            precursorDataList = new DataTable("precursorDataList");
-            precursorDataList.Columns.Add(new DataColumn("Keep"));
-            precursorDataList.Columns[0].DataType = typeof(bool);
-            precursorDataList.Columns.Add(new DataColumn("Precursor name"));
-            precursorDataList.Columns[1].DataType = typeof(string);
+            
+            precursorDataTable = new DataTable("precursorDataTable");
+            precursorDataTable.Columns.Add(new DataColumn("Keep"));
+            precursorDataTable.Columns[0].DataType = typeof(bool);
+            precursorDataTable.Columns.Add(new DataColumn("Precursor name"));
+            precursorDataTable.Columns[1].DataType = typeof(string);
             
             InitializeComponent ();
-            
-            foreach(PrecursorData precursorData in precursorList)
-            {
-                DataRow row = precursorDataList.NewRow();
-                row["Keep"] = (bool)true;
-                row["Precursor name"] = precursorData.precursorName;
-                precursorDataList.Rows.Add(row);
-            }
-            dataGridViewPrecursors.Update();
-            
         }
+        
+        
+        
+        
         
         private void precursorGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -71,7 +63,49 @@ namespace LipidCreator
             dataGridViewPrecursors.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            
+            foreach(PrecursorData precursorData in creatorGUI.lipidCreator.precursorDataList)
+            {
+                DataRow row = precursorDataTable.NewRow();
+                row["Keep"] = precursorData.precursorSelected;
+                row["Precursor name"] = precursorData.precursorName;
+                precursorDataTable.Rows.Add(row);
+            }
+            
+            dataGridViewPrecursors.Update();
+            refreshDataGridViewPrecursors();
         }
+        
+        
+        
+        
+        private void refreshDataGridViewPrecursors()
+        {
+            if(this.dataGridViewPrecursors.InvokeRequired) {
+                this.dataGridViewPrecursors.Invoke(new Action(() => {this.dataGridViewPrecursors.Refresh();}));
+            } else {
+                this.dataGridViewPrecursors.Refresh();
+            }
+        }
+        
+        
+        
+        
+        
+        
+        private void precursorGridView_CellClicked(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridViewPrecursors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+        
+        
+        private void precursorGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
+            ((PrecursorData)creatorGUI.lipidCreator.precursorDataList[rowIndex]).precursorSelected = (bool)(((DataGridView)sender).Rows[rowIndex].Cells["Keep"].Value);
+        }
+        
+        
         
         
         public void cancelButtonClick (Object sender, EventArgs e)
@@ -81,16 +115,10 @@ namespace LipidCreator
         
         
         
+        
+        
         public void continueReviewButtonClick (Object sender, EventArgs e)
         {
-            for (int i = precursorDataList.Rows.Count - 1; i >= 0; i--)
-            {
-                if (!((bool)precursorDataList.Rows[i]["Keep"]))
-                {
-                    creatorGUI.lipidCreator.precursorDataList.RemoveAt(i);
-                }
-            }
-        
             Close();
             creatorGUI.continueReviewForm();
         }

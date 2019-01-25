@@ -56,6 +56,7 @@ namespace LipidCreator
         public double precursorM_Z;
         public int precursorCharge;
         public bool addPrecursor;
+        public bool precursorSelected = true;
         public Dictionary<int, int> atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;

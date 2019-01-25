@@ -135,6 +135,14 @@ namespace LipidCreator
         
         
         
+        private void buttonBackClick (object sender, EventArgs e)
+        {
+            Close();
+            creatorGUI.reopenReviewForm();
+        }
+        
+        
+        
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {

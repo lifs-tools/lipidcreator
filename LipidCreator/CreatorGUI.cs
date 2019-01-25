@@ -3481,8 +3481,31 @@ namespace LipidCreator
             {
                 lipidsInterList.Show();
             }
-              
         }
+        
+        
+        
+        
+        
+        
+        public void reopenReviewForm()
+        {
+            lipidsInterList = new LipidsInterList(this);
+            lipidsInterList.Owner = this;
+            lipidsInterList.ShowInTaskbar = false;
+            
+            if (tutorial.tutorial == Tutorials.NoTutorial)
+            {
+                lipidsInterList.ShowDialog();
+                lipidsInterList.Dispose();
+            }
+            else
+            {
+                lipidsInterList.Show();
+            }
+        }
+        
+        
         
         
         public void continueReviewForm()

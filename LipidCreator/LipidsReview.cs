@@ -137,7 +137,7 @@ namespace LipidCreator
         
         private void buttonBackClick (object sender, EventArgs e)
         {
-            Close();
+            Dispose();
             creatorGUI.reopenReviewForm();
         }
         

@@ -51,6 +51,18 @@ namespace LipidCreator
             precursorDataTable.Columns[1].DataType = typeof(string);
             
             InitializeComponent ();
+            
+            
+            foreach(PrecursorData precursorData in creatorGUI.lipidCreator.precursorDataList)
+            {
+                DataRow row = precursorDataTable.NewRow();
+                row["Keep"] = precursorData.precursorSelected;
+                row["Precursor name"] = precursorData.precursorName;
+                precursorDataTable.Rows.Add(row);
+            }
+            
+            dataGridViewPrecursors.Update();
+            refreshDataGridViewPrecursors();
         }
         
         
@@ -64,16 +76,6 @@ namespace LipidCreator
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             
-            foreach(PrecursorData precursorData in creatorGUI.lipidCreator.precursorDataList)
-            {
-                DataRow row = precursorDataTable.NewRow();
-                row["Keep"] = precursorData.precursorSelected;
-                row["Precursor name"] = precursorData.precursorName;
-                precursorDataTable.Rows.Add(row);
-            }
-            
-            dataGridViewPrecursors.Update();
-            refreshDataGridViewPrecursors();
         }
         
         
@@ -119,7 +121,7 @@ namespace LipidCreator
         
         public void continueReviewButtonClick (Object sender, EventArgs e)
         {
-            Close();
+            Dispose();
             creatorGUI.continueReviewForm();
         }
     }

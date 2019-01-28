@@ -43,7 +43,7 @@ namespace LipidCreator
         public bool isCL;
         public bool isLyso;
     
-        public Phospholipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.PhosphoLipid)
+        public Phospholipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Glycerophospholipid)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -87,7 +87,7 @@ namespace LipidCreator
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
-            Updating((int)LipidCategory.PhosphoLipid);
+            Updating((int)LipidCategory.Glycerophospholipid);
         }
         
         public override void import(XElement node, string importVersion)
@@ -219,7 +219,7 @@ namespace LipidCreator
                                     
                                     // filling information on MS1 level for cardiolipin
                                     PrecursorData precursorData = new PrecursorData();
-                                    precursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                                    precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                     precursorData.moleculeListName = headgroup;
                                     precursorData.fullMoleculeListName = headgroup;
                                     precursorData.precursorExportName = headgroup + key;
@@ -278,7 +278,7 @@ namespace LipidCreator
                                                                             
                                         // filling information on MS1 level for heavy cardiolipin
                                         PrecursorData heavyPrecursorData = new PrecursorData();
-                                        heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                                        heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                         heavyPrecursorData.moleculeListName = headgroup;
                                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                         heavyPrecursorData.precursorExportName = headgroup + key;
@@ -367,7 +367,7 @@ namespace LipidCreator
                                                                 
                             // filling information on MS1 level for phospholipid
                             PrecursorData precursorData = new PrecursorData();
-                            precursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                            precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.precursorExportName = completeKey;
@@ -413,7 +413,7 @@ namespace LipidCreator
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
                                 PrecursorData heavyPrecursorData = new PrecursorData();
-                                heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                                heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = completeKey;
@@ -544,7 +544,7 @@ namespace LipidCreator
                                                                     
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
-                                precursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                                precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = completeKey;
@@ -605,7 +605,7 @@ namespace LipidCreator
                                                                         
                                     // filling information on MS1 level for heavy phospholipid
                                     PrecursorData heavyPrecursorData = new PrecursorData();
-                                    heavyPrecursorData.lipidCategory = LipidCategory.PhosphoLipid;
+                                    heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = completeKey;

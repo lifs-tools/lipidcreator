@@ -49,6 +49,10 @@ namespace LipidCreator
             precursorDataTable.Columns[0].DataType = typeof(bool);
             precursorDataTable.Columns.Add(new DataColumn("Precursor name"));
             precursorDataTable.Columns[1].DataType = typeof(string);
+            precursorDataTable.Columns.Add(new DataColumn("Category"));
+            precursorDataTable.Columns[2].DataType = typeof(string);
+            precursorDataTable.Columns.Add(new DataColumn("reference"));
+            precursorDataTable.Columns[3].DataType = typeof(PrecursorData);
             
             InitializeComponent ();
             
@@ -58,6 +62,8 @@ namespace LipidCreator
                 DataRow row = precursorDataTable.NewRow();
                 row["Keep"] = precursorData.precursorSelected;
                 row["Precursor name"] = precursorData.precursorName;
+                row["Category"] = precursorData.lipidCategory.ToString();
+                row["reference"] = precursorData;
                 precursorDataTable.Rows.Add(row);
             }
             
@@ -72,9 +78,11 @@ namespace LipidCreator
         private void precursorGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             dataGridViewPrecursors.Columns[0].Width = 50;
-            dataGridViewPrecursors.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[2].ReadOnly = true;
+            dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[3].Visible = false;
             
         }
         
@@ -103,8 +111,10 @@ namespace LipidCreator
         
         private void precursorGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            
             int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
-            ((PrecursorData)creatorGUI.lipidCreator.precursorDataList[rowIndex]).precursorSelected = (bool)(((DataGridView)sender).Rows[rowIndex].Cells["Keep"].Value);
+            PrecursorData precursorData = (PrecursorData)(((DataGridView)sender).Rows[rowIndex].Cells["reference"]).Value;
+            precursorData.precursorSelected = (bool)((DataGridView)sender).Rows[rowIndex].Cells["Keep"].Value;
         }
         
         
@@ -121,7 +131,14 @@ namespace LipidCreator
         
         public void continueReviewButtonClick (Object sender, EventArgs e)
         {
-            Dispose();
+            if (LipidCreator.LC_OS == PlatformID.Unix)
+            {
+                Close();
+            }
+            else
+            {
+                Dispose();
+            }
             creatorGUI.continueReviewForm();
         }
     }

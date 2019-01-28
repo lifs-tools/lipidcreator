@@ -532,7 +532,7 @@ namespace LipidCreator
         {
             if (tutorial != Tutorials.NoTutorial)
             {
-                if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PhosphoTab)
+                if (currentTabIndex == (int)LipidCategory.Glycerophospholipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.PhosphoTab)
                 {
                     return;
                 }
@@ -540,7 +540,7 @@ namespace LipidCreator
                 {
                     return;
                 }
-                else if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.PhosphoTab)
+                else if (currentTabIndex == (int)LipidCategory.Glycerophospholipid && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.PhosphoTab)
                 {
                     return;
                 }
@@ -548,11 +548,11 @@ namespace LipidCreator
                 {
                     return;
                 }
-                else if (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy)
+                else if (currentTabIndex == (int)LipidCategory.Glycerophospholipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy)
                 {
                     return;
                 }
-                else if (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.ChangeToMediators)
+                else if (currentTabIndex == (int)LipidCategory.LipidMediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.ChangeToMediators)
                 {
                     return;
                 }
@@ -585,9 +585,9 @@ namespace LipidCreator
         {
             // these exceptions should only be executed, when the tabs are being changed by the tutorial and not by the user clicking at a certain tab
             if (
-                (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.PhosphoTab) ||
-                (currentTabIndex == (int)LipidCategory.PhosphoLipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy) ||
-                (currentTabIndex == (int)LipidCategory.Mediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG)
+                (currentTabIndex == (int)LipidCategory.Glycerophospholipid && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.PhosphoTab) ||
+                (currentTabIndex == (int)LipidCategory.Glycerophospholipid && tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.OpenHeavy) ||
+                (currentTabIndex == (int)LipidCategory.LipidMediator && tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.SelectTXB2HG)
                 )
             {
                 return;
@@ -605,13 +605,13 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetFA)
             {
                 HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
-                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.carbonCounts;
+                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerophospholipid]).fag1.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetDB)
             {
                 HashSet<int> expected = new HashSet<int>(){0, 1};
-                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag1.doubleBondCounts;
+                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerophospholipid]).fag1.doubleBondCounts;
                 nextEnabled = doubleBondCounts != null && doubleBondCounts.Intersect(expected).Count() == 2;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SecondFADB)
@@ -619,11 +619,11 @@ namespace LipidCreator
                 nextEnabled = true;
                 
                 HashSet<int> expectedFA = new HashSet<int>(){8, 9, 10};
-                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.carbonCounts;
+                HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerophospholipid]).fag2.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expectedFA).Count() == 3;
                 
                 HashSet<int> expectedDB = new HashSet<int>(){2};
-                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.PhosphoLipid]).fag2.doubleBondCounts;
+                HashSet<int> doubleBondCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerophospholipid]).fag2.doubleBondCounts;
                 nextEnabled = nextEnabled && doubleBondCounts != null && doubleBondCounts.Intersect(expectedDB).Count() == 1;
             }
             else if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.NameFragment)

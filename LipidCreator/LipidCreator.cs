@@ -59,7 +59,7 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
-        public static string LC_OS = "unknown OS";
+        public static PlatformID LC_OS;
         public ArrayList registeredLipids;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
@@ -246,19 +246,19 @@ namespace LipidCreator
                             switch(tokens[0])
                             {
                                 case "GL":
-                                    headgroup.category = LipidCategory.GlyceroLipid;
+                                    headgroup.category = LipidCategory.Glycerolipid;
                                     break;
                                 case "PL":
-                                    headgroup.category = LipidCategory.PhosphoLipid;
+                                    headgroup.category = LipidCategory.Glycerophospholipid;
                                     break;
                                 case "SL":
-                                    headgroup.category = LipidCategory.SphingoLipid;
+                                    headgroup.category = LipidCategory.Sphingolipid;
                                     break;
                                 case "Mediator":
-                                    headgroup.category = LipidCategory.Mediator;
+                                    headgroup.category = LipidCategory.LipidMediator;
                                     break;
                                 case "Cholesterol":
-                                    headgroup.category = LipidCategory.Cholesterol;
+                                    headgroup.category = LipidCategory.Sterollipid;
                                     break;
                                 default:
                                     throw new Exception("invalid lipid category");
@@ -513,8 +513,8 @@ namespace LipidCreator
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
-            LC_OS = Environment.OSVersion.Platform.ToString();
-            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS);
+            LC_OS = Environment.OSVersion.Platform;
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();

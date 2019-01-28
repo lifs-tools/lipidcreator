@@ -39,7 +39,7 @@ using log4net;
 
 namespace LipidCreator
 {
-    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5, Unsupported = 99};
+    public enum LipidCategory {NoLipid = 0, Glycerolipid = 1, Glycerophospholipid = 2, Sphingolipid = 3, Sterollipid = 4, LipidMediator = 5, Unsupported = 99};
     
     
     [Serializable]
@@ -313,7 +313,7 @@ namespace LipidCreator
                 
                 
                 // Exceptions for mediators
-                if (precursorData.lipidCategory == LipidCategory.Mediator)
+                if (precursorData.lipidCategory == LipidCategory.LipidMediator)
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
@@ -578,7 +578,7 @@ namespace LipidCreator
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragName = fragment.fragmentName;
                 
-                if (precursorData.lipidCategory == LipidCategory.Mediator)
+                if (precursorData.lipidCategory == LipidCategory.LipidMediator)
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";

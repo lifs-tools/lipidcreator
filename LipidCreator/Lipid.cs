@@ -64,21 +64,6 @@ namespace LipidCreator
         public FattyAcid fa4;
         public FattyAcid lcb;
         public HashSet<string> fragmentNames;
-        
-        /*
-        public override string ToString()
-        {
-            string str = "molecularListName: " + moleculeListName + "\n";
-            str += "fullMoleculeListName: " + fullMoleculeListName + "\n";
-            str += "lipidClass: " + lipidClass + "\n";
-            str += "precursorName: " + precursorName + "\n";
-            str += "precursorIonFormula: " + precursorIonFormula + "\n";
-            str += "precursorAdduct: " + precursorAdduct + "\n";
-            str += "precursorAdductFormula: " + precursorAdductFormula + "\n";
-            str += "precursorCharge: " + precursorCharge + "\n";
-            return str;
-        }
-        */
     }
     
     

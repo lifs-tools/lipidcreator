@@ -61,6 +61,10 @@ namespace LipidCreator
         {
             this.dataGridViewPrecursors = new System.Windows.Forms.DataGridView();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.labelSelectAll = new System.Windows.Forms.Label();
+            this.labelDeselectAll = new System.Windows.Forms.Label();
+            this.labelSelected = new System.Windows.Forms.Label();
+            this.labelSlash = new System.Windows.Forms.Label();
             this.continueReviewButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrecursors)).BeginInit();
             this.SuspendLayout();
@@ -93,6 +97,42 @@ namespace LipidCreator
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButtonClick);
+            //
+            // label
+            //
+            this.labelSlash.AutoSize = true;
+            this.labelSlash.Location = new System.Drawing.Point(67, 628);
+            this.labelSlash.Name = "labelSlash";
+            this.labelSlash.Text = "/";
+            
+            // 
+            // labelSelectAll
+            // 
+            this.labelSelectAll.AutoSize = true;
+            this.labelSelectAll.Location = new System.Drawing.Point(12, 628);
+            this.labelSelectAll.Name = "labelSelectAll";
+            this.labelSelectAll.TabIndex = 6;
+            this.labelSelectAll.Text = "select all";
+            this.labelSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelSelectAll.Click += new System.EventHandler(precursorSelectAll);
+            // 
+            // labelDeselectAll
+            // 
+            this.labelDeselectAll.AutoSize = true;
+            this.labelDeselectAll.Location = new System.Drawing.Point(74, 628);
+            this.labelDeselectAll.Name = "labelDeselectAll";
+            this.labelDeselectAll.TabIndex = 6;
+            this.labelDeselectAll.Text = "deselect all";
+            this.labelDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelDeselectAll.Click += new System.EventHandler(precursorDeselectAll);
+            // 
+            // labelSelected
+            // 
+            this.labelSelected.AutoSize = true;
+            this.labelSelected.Location = new System.Drawing.Point(12, 648);
+            this.labelSelected.Name = "labelSelected";
+            this.labelSelected.TabIndex = 7;
+            this.labelSelected.Text = "Selected precursors: -";
             // 
             // button2
             // 
@@ -110,6 +150,10 @@ namespace LipidCreator
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridViewPrecursors);
+            this.Controls.Add(this.labelSlash);
+            this.Controls.Add(this.labelSelectAll);
+            this.Controls.Add(this.labelSelected);
+            this.Controls.Add(this.labelDeselectAll);
             this.Name = "LipidsInterList";
             this.Text = "Lipid Precursor Review";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrecursors)).EndInit();
@@ -119,11 +163,19 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton};
+            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton, labelSelectAll, labelDeselectAll};
         }
 
         #endregion
 
+        [NonSerialized]
+        public Label labelSelectAll;
+        [NonSerialized]
+        public Label labelDeselectAll;
+        [NonSerialized]
+        public Label labelSelected;
+        [NonSerialized]
+        public Label labelSlash;
         [NonSerialized]
         public System.Windows.Forms.DataGridView dataGridViewPrecursors;
         [NonSerialized]

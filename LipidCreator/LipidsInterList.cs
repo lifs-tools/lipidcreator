@@ -68,6 +68,7 @@ namespace LipidCreator
             }
             
             dataGridViewPrecursors.Update();
+            updateSelectedLabel();
             refreshDataGridViewPrecursors();
         }
         
@@ -78,12 +79,27 @@ namespace LipidCreator
         private void precursorGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             dataGridViewPrecursors.Columns[0].Width = 50;
+            dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewPrecursors.Columns[2].ReadOnly = true;
             dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewPrecursors.Columns[3].Visible = false;
             
+        }
+        
+        
+        
+        
+        
+        public void updateSelectedLabel()
+        {
+            int count = 0;
+            foreach (DataRow dataRow in precursorDataTable.Rows)
+            {
+                count += (bool)dataRow[0] ? 1 : 0;
+            }
+            labelSelected.Text = "Selected precursors: " + count.ToString();
         }
         
         
@@ -100,21 +116,52 @@ namespace LipidCreator
         
         
         
+        private void precursorSelectAll(object sender, EventArgs e)
+        {
+            foreach (DataRow dataRow in precursorDataTable.Rows)
+            {
+                dataRow[0] = true;
+                ((PrecursorData)dataRow[3]).precursorSelected = true;
+            }
+            refreshDataGridViewPrecursors();
+            updateSelectedLabel();
+        }
+        
+        
+        
+        private void precursorDeselectAll(object sender, EventArgs e)
+        {
+            foreach (DataRow dataRow in precursorDataTable.Rows)
+            {
+                dataRow[0] = false;
+                ((PrecursorData)dataRow[3]).precursorSelected = false;
+            }
+            refreshDataGridViewPrecursors();
+            updateSelectedLabel();
+        }
         
         
         
         private void precursorGridView_CellClicked(object sender, DataGridViewCellEventArgs e)
         {
+            Console.WriteLine("start click");
+            dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewPrecursors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
+            Console.WriteLine("end click");
         }
         
         
         private void precursorGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            
+            Console.WriteLine("start change");
+            //dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
             PrecursorData precursorData = (PrecursorData)(((DataGridView)sender).Rows[rowIndex].Cells["reference"]).Value;
             precursorData.precursorSelected = (bool)((DataGridView)sender).Rows[rowIndex].Cells["Keep"].Value;
+            updateSelectedLabel();
+            //dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
+            Console.WriteLine("end change");
         }
         
         

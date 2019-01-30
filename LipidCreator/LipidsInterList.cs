@@ -144,24 +144,16 @@ namespace LipidCreator
         
         private void precursorGridView_CellClicked(object sender, DataGridViewCellEventArgs e)
         {
-            Console.WriteLine("start click");
-            dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridViewPrecursors.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
-            Console.WriteLine("end click");
         }
         
         
         private void precursorGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            Console.WriteLine("start change");
-            //dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             int rowIndex = ((DataGridView)sender).CurrentCell.RowIndex;
             PrecursorData precursorData = (PrecursorData)(((DataGridView)sender).Rows[rowIndex].Cells["reference"]).Value;
             precursorData.precursorSelected = (bool)((DataGridView)sender).Rows[rowIndex].Cells["Keep"].Value;
             updateSelectedLabel();
-            //dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
-            Console.WriteLine("end change");
         }
         
         

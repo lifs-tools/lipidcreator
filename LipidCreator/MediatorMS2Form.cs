@@ -53,7 +53,7 @@ namespace LipidCreator
             this.creatorGUI = creatorGUI;
             
             isotopeDict = new Dictionary<string, ArrayList>();
-            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.LipidMediator])
             {
                 if (creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy"))
                 {
@@ -69,7 +69,7 @@ namespace LipidCreator
             
             
             List<String> medHgList = new List<String>();
-            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
+            foreach (string lipidClass in creatorGUI.lipidCreator.categoryToClass[(int)LipidCategory.LipidMediator])
             {
                 if (!creatorGUI.lipidCreator.headgroups[lipidClass].attributes.Contains("heavy")) medHgList.Add(lipidClass);
             }
@@ -278,8 +278,8 @@ namespace LipidCreator
         
         private void okClick(object sender, EventArgs e)
         {
-            creatorGUI.lipidTabList[(int)LipidCategory.Mediator] = new Mediator((Mediator)currentLipid);
-            creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.Mediator];            
+            creatorGUI.lipidTabList[(int)LipidCategory.LipidMediator] = new Mediator((Mediator)currentLipid);
+            creatorGUI.currentLipid = (Lipid)creatorGUI.lipidTabList[(int)LipidCategory.LipidMediator];            
             this.Close();
         }
         

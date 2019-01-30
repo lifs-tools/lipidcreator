@@ -135,6 +135,21 @@ namespace LipidCreator
         
         
         
+        private void buttonBackClick (object sender, EventArgs e)
+        {
+            if (LipidCreator.LC_OS == PlatformID.Unix)
+            {
+                Close();
+            }
+            else
+            {
+                Dispose();
+            }
+            creatorGUI.reopenReviewForm();
+        }
+        
+        
+        
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {

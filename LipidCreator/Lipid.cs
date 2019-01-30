@@ -39,7 +39,7 @@ using log4net;
 
 namespace LipidCreator
 {
-    public enum LipidCategory {NoLipid = 0, GlyceroLipid = 1, PhosphoLipid = 2, SphingoLipid = 3, Cholesterol = 4, Mediator = 5, Unsupported = 99};
+    public enum LipidCategory {NoLipid = 0, Glycerolipid = 1, Glycerophospholipid = 2, Sphingolipid = 3, Sterollipid = 4, LipidMediator = 5, Unsupported = 99};
     
     
     [Serializable]
@@ -56,6 +56,7 @@ namespace LipidCreator
         public double precursorM_Z;
         public int precursorCharge;
         public bool addPrecursor;
+        public bool precursorSelected = true;
         public Dictionary<int, int> atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
@@ -63,21 +64,6 @@ namespace LipidCreator
         public FattyAcid fa4;
         public FattyAcid lcb;
         public HashSet<string> fragmentNames;
-        
-        /*
-        public override string ToString()
-        {
-            string str = "molecularListName: " + moleculeListName + "\n";
-            str += "fullMoleculeListName: " + fullMoleculeListName + "\n";
-            str += "lipidClass: " + lipidClass + "\n";
-            str += "precursorName: " + precursorName + "\n";
-            str += "precursorIonFormula: " + precursorIonFormula + "\n";
-            str += "precursorAdduct: " + precursorAdduct + "\n";
-            str += "precursorAdductFormula: " + precursorAdductFormula + "\n";
-            str += "precursorCharge: " + precursorCharge + "\n";
-            return str;
-        }
-        */
     }
     
     
@@ -312,7 +298,7 @@ namespace LipidCreator
                 
                 
                 // Exceptions for mediators
-                if (precursorData.lipidCategory == LipidCategory.Mediator)
+                if (precursorData.lipidCategory == LipidCategory.LipidMediator)
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
@@ -577,7 +563,7 @@ namespace LipidCreator
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragName = fragment.fragmentName;
                 
-                if (precursorData.lipidCategory == LipidCategory.Mediator)
+                if (precursorData.lipidCategory == LipidCategory.LipidMediator)
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";

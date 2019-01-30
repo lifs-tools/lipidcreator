@@ -59,7 +59,7 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
-        public static string LC_OS = "unknown OS";
+        public static PlatformID LC_OS;
         public ArrayList registeredLipids;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
@@ -246,19 +246,19 @@ namespace LipidCreator
                             switch(tokens[0])
                             {
                                 case "GL":
-                                    headgroup.category = LipidCategory.GlyceroLipid;
+                                    headgroup.category = LipidCategory.Glycerolipid;
                                     break;
                                 case "PL":
-                                    headgroup.category = LipidCategory.PhosphoLipid;
+                                    headgroup.category = LipidCategory.Glycerophospholipid;
                                     break;
                                 case "SL":
-                                    headgroup.category = LipidCategory.SphingoLipid;
+                                    headgroup.category = LipidCategory.Sphingolipid;
                                     break;
                                 case "Mediator":
-                                    headgroup.category = LipidCategory.Mediator;
+                                    headgroup.category = LipidCategory.LipidMediator;
                                     break;
                                 case "Cholesterol":
-                                    headgroup.category = LipidCategory.Cholesterol;
+                                    headgroup.category = LipidCategory.Sterollipid;
                                     break;
                                 default:
                                     throw new Exception("invalid lipid category");
@@ -513,8 +513,8 @@ namespace LipidCreator
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
-            LC_OS = Environment.OSVersion.Platform.ToString();
-            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS);
+            LC_OS = Environment.OSVersion.Platform;
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
@@ -742,7 +742,10 @@ namespace LipidCreator
             {         
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    if (precursorData.precursorSelected)
+                    {
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    }
                 }
             }
             else 
@@ -751,6 +754,8 @@ namespace LipidCreator
                 double maxCE = msInstruments[instrument].maxCE;
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
+                    if (!precursorData.precursorSelected) continue;
+                
                     double CE = -1;
                     string precursorName = precursorData.fullMoleculeListName;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
@@ -826,6 +831,41 @@ namespace LipidCreator
             createFragmentList(selectedInstrumentForCE, monitoringType);
         }
         
+        
+        
+        public void assemblePrecursors()
+        {
+
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
+            
+            createPrecursorList();
+        }
+        
+        
+        
+        public void assembleFragments(bool asDeveloper)
+        {
+            if (asDeveloper)
+            {
+                Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                foreach (PrecursorData precursorData in precursorDataList)
+                {
+                    precursorData.precursorName = precursorData.fullMoleculeListName;
+                    precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
+                }
+            }
+            
+            createFragmentList(selectedInstrumentForCE, monitoringType);
+        }
         
         
         

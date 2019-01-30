@@ -609,7 +609,7 @@ namespace LipidCreator
                     creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
                     
                     
-                    if (heavyPrecursor.category != LipidCategory.Mediator)
+                    if (heavyPrecursor.category != LipidCategory.LipidMediator)
                     {
                         foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
                         {

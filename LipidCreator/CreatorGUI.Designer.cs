@@ -983,14 +983,14 @@ namespace LipidCreator
             medHgListbox = new ListBox();
             
             List<String> glHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.GlyceroLipid])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerolipid])
             {
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && headgroup.Length > 3) glHgList.Add(headgroup);
             }
             glHgList.Sort();
             
             List<String> medHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Mediator])
+            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.LipidMediator])
             {
                 if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")) medHgList.Add(headgroup);
             }

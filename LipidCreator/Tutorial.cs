@@ -41,13 +41,13 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2, TutorialCE = 3};
     
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, RepresentitativeFA, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, RepresentitativeFA, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenInterlist, ExplainInterlist, OpenReview, StoreList, Finish};
     
-    public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenReview, StoreList, Finish};
+    public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
-    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenReview, StoreList, Finish};
+    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
-    public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
+    public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, OpenInterlist, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
     
 
     [Serializable]
@@ -104,6 +104,8 @@ namespace LipidCreator
             tutorial = t;
             tutorialStep = 0;
             quitting = false;
+            
+            tutorialStep = 0;
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
@@ -211,6 +213,18 @@ namespace LipidCreator
             creatorGUI.addHeavyPrecursor.button1.MouseDown += mouseDownInteraction;
             creatorGUI.addHeavyPrecursor.button1.Click += buttonInteraction;
             creatorGUI.addHeavyPrecursor.button2.Click += buttonInteraction;
+        }
+        
+        
+        
+        
+        
+        
+        public void initInterList()
+        {
+            creatorGUI.lipidsInterList.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+            creatorGUI.lipidsInterList.continueReviewButton.Click += buttonInteraction;
+            creatorGUI.lipidsInterList.continueReviewButton.MouseDown += mouseDownInteraction;
         }
         
         
@@ -329,6 +343,12 @@ namespace LipidCreator
                 }
                 creatorGUI.ms2fragmentsForm.Close();
                 
+            }
+            if (creatorGUI.lipidsInterList != null)
+            {
+                creatorGUI.lipidsInterList.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                creatorGUI.lipidsInterList.continueReviewButton.Click -= buttonInteraction;
+                creatorGUI.lipidsInterList.continueReviewButton.MouseDown -= mouseDownInteraction;
             }
             
             if (creatorGUI.ceInspector != null)
@@ -457,6 +477,12 @@ namespace LipidCreator
             {
                 foreach (Control control in creatorGUI.filterDialog.controlElements) control.Enabled = false;
                 creatorGUI.filterDialog.Refresh();
+            }
+            
+            if (creatorGUI.lipidsInterList != null)
+            {
+                foreach (Control control in creatorGUI.lipidsInterList.controlElements) control.Enabled = false;
+                creatorGUI.lipidsInterList.Refresh();
             }
         }
         
@@ -815,15 +841,15 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenInterlist, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
-            else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK, (int)SRMSteps.AddLipid, (int)SRMSteps.OpenReview, (int)SRMSteps.StoreList, (int)SRMSteps.Finish}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK, (int)SRMSteps.AddLipid, (int)SRMSteps.OpenInterlist, (int)SRMSteps.OpenReview, (int)SRMSteps.StoreList, (int)SRMSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenInterlist, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
             {
                 nextTutorialStep(true);
             }
@@ -832,7 +858,7 @@ namespace LipidCreator
                 nextEnabled = (sender is MenuItem) && ((string[])((MenuItem)sender).Tag != null) && (((string[])((MenuItem)sender).Tag)[0] == "MS:1002523");
                 tutorialWindow.Refresh();
             }
-            else if (tutorial == Tutorials.TutorialCE && (new HashSet<int>(new int[]{(int)CESteps.OpenCEDialog, (int)CESteps.CloseCE, (int)CESteps.AddLipid, (int)CESteps.ReviewLipids, (int)CESteps.StoreBlib})).Contains(tutorialStep))
+            else if (tutorial == Tutorials.TutorialCE && (new HashSet<int>(new int[]{(int)CESteps.OpenCEDialog, (int)CESteps.CloseCE, (int)CESteps.AddLipid, (int)CESteps.OpenInterlist, (int)CESteps.ReviewLipids, (int)CESteps.StoreBlib})).Contains(tutorialStep))
             {
                 nextTutorialStep(true);
             }
@@ -847,15 +873,15 @@ namespace LipidCreator
             {
                 continueTutorial = true;
             }
-            else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.OpenReview, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.OpenReview, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
             }
-            else if (tutorial == Tutorials.TutorialCE && tutorialStep == (int)CESteps.CloseCE)
+            else if (tutorial == Tutorials.TutorialCE && (tutorialStep == (int)CESteps.CloseCE || tutorialStep == (int)CESteps.ReviewLipids))
             {
                 continueTutorial = true;
             }
@@ -892,8 +918,6 @@ namespace LipidCreator
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
-        
-        
         
         
         
@@ -1085,9 +1109,10 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Click on 'Add phospholipid'", "Add the complete lipid assembly into the basket", false);
                     break;
                     
-
                     
-                case (int)PRMSteps.OpenReview:
+                    
+                    
+                case (int)PRMSteps.OpenInterlist:
                     setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
@@ -1096,7 +1121,28 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
+                    break;
+                
+                
+                
+                case (int)PRMSteps.ExplainInterlist:
+                    initInterList();
+                    setTutorialControls(creatorGUI.lipidsInterList);
                     
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Continue", "Fo fo fo.", false);
+                    nextEnabled = true;
+                    
+                    break;
+
+                    
+                case (int)PRMSteps.OpenReview:
+                    setTutorialControls(creatorGUI.lipidsInterList);
+                    
+                    Button lilb = creatorGUI.lipidsInterList.continueReviewButton;
+                    lilb.Enabled = true;
+                    tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
                     break;
                     
                     
@@ -1333,7 +1379,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case (int)SRMSteps.OpenReview:
+                case (int)SRMSteps.OpenInterlist:
                     setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
@@ -1344,6 +1390,20 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
                     
                     break;
+
+                    
+                case (int)SRMSteps.OpenReview:
+                    initInterList();
+                    setTutorialControls(creatorGUI.lipidsInterList);
+                    
+                    Button lilb = creatorGUI.lipidsInterList.continueReviewButton;
+                    lilb.Enabled = true;
+                    tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
+                    break;
+                    
+                    
                     
                     
                 case (int)SRMSteps.StoreList:
@@ -1669,7 +1729,7 @@ namespace LipidCreator
                     break;
                     
                     
-                case (int)HLSteps.OpenReview:
+                case (int)HLSteps.OpenInterlist:
                     setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
@@ -1679,6 +1739,18 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors and fragment information.");
                     
+                    break;
+
+                    
+                case (int)HLSteps.OpenReview:
+                    initInterList();
+                    setTutorialControls(creatorGUI.lipidsInterList);
+                    
+                    Button lilb = creatorGUI.lipidsInterList.continueReviewButton;
+                    lilb.Enabled = true;
+                    tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
                     break;
                     
                     
@@ -1858,7 +1930,10 @@ namespace LipidCreator
                     tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Click on 'Add mediators'", "Add the lipid assembly into the basket");
                     break;
                     
-                case (int)CESteps.ReviewLipids:
+                    
+                    
+                    
+                case (int)CESteps.OpenInterlist:
                     setTutorialControls(creatorGUI.lipidsGroupbox, creatorGUI);
                     
                     
@@ -1867,6 +1942,18 @@ namespace LipidCreator
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
                     tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors, fragments and CE information.");
+                    break;
+
+                    
+                case (int)CESteps.ReviewLipids:
+                    initInterList();
+                    setTutorialControls(creatorGUI.lipidsInterList);
+                    
+                    Button lilb = creatorGUI.lipidsInterList.continueReviewButton;
+                    lilb.Enabled = true;
+                    tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
+                    
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
                     break;
                     
                     

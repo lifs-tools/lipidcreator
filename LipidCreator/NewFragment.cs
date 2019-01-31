@@ -320,7 +320,18 @@ namespace LipidCreator
             if(updating) return;
             updating = true;
             string key = dataGridViewElements.Rows[e.RowIndex].Cells[0].Value.ToString();
-            string val = dataGridViewElements.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            string val;
+            
+            try 
+            {
+                val = dataGridViewElements.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            }
+            catch(Exception ee)
+            {
+                log.Error("Conversion error while updating cell value, setting value to 0.", ee);
+                dataGridViewElements.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "0";
+                val = "0";
+            }
             if (e.ColumnIndex != 3)
             {
                 int n;

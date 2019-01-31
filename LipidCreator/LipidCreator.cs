@@ -66,7 +66,6 @@ namespace LipidCreator
         public IDictionary<string, Precursor> headgroups;
         public DataTable transitionList;
         public DataTable transitionListUnique;
-        public ArrayList replicates; // replicate transitions excluded from transitionListUnique
         public ArrayList precursorDataList;
         [NonSerialized]
         public SkylineToolClient skylineToolClient;
@@ -121,6 +120,7 @@ namespace LipidCreator
         public const string PRODUCT_MZ = "Product Ion m/z";
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
+        public const string UNIQUE = "unique";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
         public const string SKYLINE_API_COLLISION_ENERGY = "PrecursorCE";
         public readonly static string[] STATIC_SKYLINE_API_HEADER = {
@@ -138,6 +138,7 @@ namespace LipidCreator
             "Note"
         };
         public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
+            UNIQUE,
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
             PRECURSOR_NEUTRAL_FORMULA,
@@ -526,7 +527,6 @@ namespace LipidCreator
             collisionEnergyHandler = new CollisionEnergy();
             availableInstruments = new ArrayList();
             availableInstruments.Add("");
-            replicates = new ArrayList();
             readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
@@ -778,26 +778,54 @@ namespace LipidCreator
             }
             
             
-            IDictionary<String, String> replicateKeys = new Dictionary<String, String> ();
-            int i = 0;
-            replicates.Clear();
+            // check for duplicates
+            IDictionary<String, ArrayList> replicateKeys = new Dictionary<String, ArrayList> ();
             foreach (DataRow row in transitionList.Rows)
             {
-            string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
-            string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
+                string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
+                string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
                 string replicateKey = prec_mass + "/" + prod_mass;
-                if (!replicateKeys.ContainsKey (replicateKey))
+                if (!replicateKeys.ContainsKey (replicateKey)) replicateKeys.Add(replicateKey, new ArrayList());
+                replicateKeys[replicateKey].Add(row);
+            }
+                
+            foreach (string replicateKey in replicateKeys.Keys)
+            {
+                DataRow row = (DataRow)replicateKeys[replicateKey][0];
+                transitionListUnique.ImportRow (row);
+                
+                
+                if (replicateKeys[replicateKey].Count > 1)
                 {
-                    string note = "Interference with " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
-                    replicateKeys.Add(replicateKey, note);
-                    transitionListUnique.ImportRow (row);
+                    for (int i = 0; i < replicateKeys[replicateKey].Count; ++i)
+                    {
+                        DataRow dr1 = (DataRow)replicateKeys[replicateKey][i];
+                        dr1[UNIQUE] = false;
+                        
+                        string note = "";
+                        for (int j = 0; j < replicateKeys[replicateKey].Count; ++j)
+                        {
+                            if (i == j) continue;
+                            DataRow dr2 = (DataRow)replicateKeys[replicateKey][j];
+                            
+                            if (note.Length > 0)
+                            {
+                                note += " and with ";
+                            }
+                            
+                            else
+                            {
+                                note = "Interference with ";
+                            }
+                            note += (string)dr2[LipidCreator.PRECURSOR_NAME] + " " + (string)dr2[LipidCreator.PRECURSOR_ADDUCT] + " " + (string)dr2[LipidCreator.PRODUCT_NAME];
+                        }
+                        dr1[LipidCreator.NOTE] = note;
+                    }
                 }
                 else
                 {
-                    row[LipidCreator.NOTE] = replicateKeys[replicateKey];
-                    if (replicates != null) replicates.Add(i);
+                    row[UNIQUE] = true;
                 }
-                ++i;
             }
         }
         
@@ -982,7 +1010,8 @@ namespace LipidCreator
         public static string toLine (DataRow row, string[] columnKeys, string separator)
         {
             List<string> line = new List<string> ();
-            foreach (String columnKey in columnKeys) {
+            foreach (string columnKey in columnKeys) {
+                if (columnKey == UNIQUE) continue;
                 if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ)
                 {
                     line.Add (((String)row [columnKey]).Replace (",", "."));

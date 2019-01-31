@@ -39,7 +39,6 @@ namespace LipidCreator
     {
         public DataTable transitionList;
         public DataTable transitionListUnique;
-        public ArrayList replicates;
         public DataTable currentView;
         public CreatorGUI creatorGUI;
         public string[] dataColumns = {};
@@ -49,7 +48,6 @@ namespace LipidCreator
             creatorGUI = _creatorGUI;
             transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
-            replicates = creatorGUI.lipidCreator.replicates;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             
             
@@ -76,15 +74,43 @@ namespace LipidCreator
         
         
         
+        
+        
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            gridviewDataColor();
+            
+            dataGridViewTransitions.Columns[0].Visible = false;
+        }
+        
+        
+        
+        
+        
+        private void gridviewDataSorted(object sender, EventArgs e)
+        {
+            gridviewDataColor();
+        }
+        
+        
+        
+        
+        public void gridviewDataColor()
         {
             if (currentView == transitionList)
             {
-                foreach (int i in replicates) dataGridViewTransitions.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
+                foreach (DataGridViewRow dataRow in dataGridViewTransitions.Rows)
+                {
+                    if((string)(dataRow.Cells[0].Value) != "True")
+                    {
+                        dataRow.DefaultCellStyle.BackColor = Color.Beige;
+                    }
+                }
             }
             else dataGridViewTransitions.DefaultCellStyle.BackColor = Color.Empty;
-            foreach (DataGridViewColumn d in dataGridViewTransitions.Columns) d.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
+        
+        
         
         
 
@@ -111,6 +137,8 @@ namespace LipidCreator
             }
             this.Enabled = true;
         }
+        
+        
 
         
         
@@ -135,6 +163,7 @@ namespace LipidCreator
         
         
         
+        
         private void buttonBackClick (object sender, EventArgs e)
         {
             if (LipidCreator.LC_OS == PlatformID.Unix)
@@ -147,6 +176,7 @@ namespace LipidCreator
             }
             creatorGUI.reopenReviewForm();
         }
+        
         
         
         

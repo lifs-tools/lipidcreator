@@ -289,6 +289,15 @@ namespace LipidCreator
             importFilterDialog.ShowInTaskbar = false;
             importFilterDialog.ShowDialog();
             importFilterDialog.Dispose();
+            
+            string[] returnMessage = new string[]{""};
+            LCMessageBox lcmb = new LCMessageBox(returnMessage);
+            lcmb.Owner = this;
+            lcmb.StartPosition = FormStartPosition.CenterParent;
+            lcmb.ShowInTaskbar = false;
+            lcmb.ShowDialog();
+            lcmb.Dispose();
+            if (returnMessage[0] == "replace") creatorGUI.lipidCreator.registeredLipids.Clear();
         
             foreach(Lipid currentLipid in parsedLipids)
             {

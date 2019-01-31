@@ -3579,6 +3579,15 @@ namespace LipidCreator
                     importFilterDialog.ShowDialog();
                     importFilterDialog.Dispose();
                     
+                    string[] returnMessage = new string[]{""};
+                    LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                    lcmb.Owner = this;
+                    lcmb.StartPosition = FormStartPosition.CenterParent;
+                    lcmb.ShowInTaskbar = false;
+                    lcmb.ShowDialog();
+                    lcmb.Dispose();
+                    if (returnMessage[0] == "replace") lipidCreator.registeredLipids.Clear();
+                    
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();
                     MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");

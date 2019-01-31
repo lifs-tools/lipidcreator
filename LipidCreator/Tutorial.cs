@@ -1120,7 +1120,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which including all precursors and fragment information.");
                     break;
                 
                 
@@ -1129,7 +1129,7 @@ namespace LipidCreator
                     initInterList();
                     setTutorialControls(creatorGUI.lipidsInterList);
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Continue", "Fo fo fo.", false);
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue", "The precursors can be select/deselect from this list for the generation of transition list in next step.", false);
                     nextEnabled = true;
                     
                     break;
@@ -1142,7 +1142,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review' window", "");
                     break;
                     
                     
@@ -1387,7 +1387,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays precursors and further the final transition list, including all precursors and fragment information.");
                     
                     break;
 
@@ -1400,7 +1400,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     
@@ -1737,7 +1737,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the precursors and final transition list, including all precursors and fragment information.");
                     
                     break;
 
@@ -1750,7 +1750,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     
@@ -1941,7 +1941,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates the final transition list, including all precursors, fragments and CE information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates precursors and the final transition list, including all precursors, fragments and CE information.");
                     break;
 
                     
@@ -1953,7 +1953,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "Just do it.");
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     

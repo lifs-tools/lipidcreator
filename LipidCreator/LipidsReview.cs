@@ -82,8 +82,7 @@ namespace LipidCreator
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             gridviewDataColor();
-            
-            //dataGridViewTransitions.Columns[0].Visible = false;
+            dataGridViewTransitions.Columns[0].Visible = false;
         }
         
         

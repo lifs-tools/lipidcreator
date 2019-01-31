@@ -2405,8 +2405,10 @@ namespace LipidCreator
             homeText3.Location = new Point(60, 390);
             homeText3.Text = "Citation: Peng et al., Awesome journal, 2019";
             homeText3.BackColor = Color.Transparent;
-            homeText3.Font = new Font(homeTab.Font.FontFamily, 12);
+            homeText3.Font = new Font(homeTab.Font.FontFamily, 12, FontStyle.Bold);
             homeText3.ForeColor = Color.White;
+            homeText3.Click += homeText3LinkClicked;
+            homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();

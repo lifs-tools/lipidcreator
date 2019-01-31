@@ -564,7 +564,7 @@ namespace LipidCreator
                 fag.doubleBondCounts.Add(0);
                 string headgroup = node.getText();
                 if (headgroup.Equals("Sphinganine")) lipid.headGroupNames.Add("LCB");
-                if (headgroup.Equals("Sa")) lipid.headGroupNames.Add("LCB");
+                else if (headgroup.Equals("Sa")) lipid.headGroupNames.Add("LCB");
                 else if (headgroup.Equals("Sphinganine-1-phosphate")) lipid.headGroupNames.Add("LCBP");
                 else lipid = null;
             }

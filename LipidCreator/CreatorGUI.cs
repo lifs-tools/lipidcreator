@@ -36,6 +36,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using log4net;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace LipidCreator
 {
@@ -974,6 +975,13 @@ namespace LipidCreator
         }
         
         
+        
+        private void homeText3LinkClicked(Object sender, EventArgs e)
+        {
+            string url = "http://www.google.de";
+            var si = new ProcessStartInfo(url);
+            Process.Start(si);
+        }
         
         
         

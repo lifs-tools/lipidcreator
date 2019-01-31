@@ -3399,10 +3399,10 @@ namespace LipidCreator
         
         public void windowOnClosing(Object sender, FormClosingEventArgs e)
         {
-            if (this.lipidCreator!=null)
+            if (lipidCreator != null)
             {
                 log.Info("Closing LipidCreator!");
-                this.lipidCreator.Dispose();
+                lipidCreator.Dispose();
             }
         }
         
@@ -3467,65 +3467,43 @@ namespace LipidCreator
             lipidCreator.analytics("lipidcreator", "create-transition-list");
             
             
+            ArrayList returnValues = new ArrayList(){false};
             
-            lipidsInterList = new LipidsInterList(this);
-            lipidsInterList.Owner = this;
-            lipidsInterList.ShowInTaskbar = false;
             
             if (tutorial.tutorial == Tutorials.NoTutorial)
             {
-                lipidsInterList.ShowDialog();
-                lipidsInterList.Dispose();
+                
+                while (!(bool)returnValues[0])
+                {
+                
+                    lipidsInterList = new LipidsInterList(this, returnValues);
+                    lipidsInterList.Owner = this;
+                    lipidsInterList.ShowInTaskbar = false;
+                
+                    lipidsInterList.ShowDialog();
+                    lipidsInterList.Dispose();
+                    
+                    if (!(bool)returnValues[0]) break;
+                    
+                    lipidCreator.assembleFragments(asDeveloper);   
+                
+                    lipidsReview = new LipidsReview(this, returnValues);
+                    lipidsReview.Owner = this;
+                    lipidsReview.ShowInTaskbar = false;
+                    
+                    lipidsReview.ShowDialog();
+                    lipidsReview.Dispose();
+                }
             }
             else
             {
+                lipidsInterList = new LipidsInterList(this, returnValues);
+                lipidsInterList.Owner = this;
+                lipidsInterList.ShowInTaskbar = false;
                 lipidsInterList.Show();
             }
         }
         
-        
-        
-        
-        
-        
-        public void reopenReviewForm()
-        {
-            lipidsInterList = new LipidsInterList(this);
-            lipidsInterList.Owner = this;
-            lipidsInterList.ShowInTaskbar = false;
-            
-            if (tutorial.tutorial == Tutorials.NoTutorial)
-            {
-                lipidsInterList.ShowDialog();
-                lipidsInterList.Dispose();
-            }
-            else
-            {
-                lipidsInterList.Show();
-            }
-        }
-        
-        
-        
-        
-        public void continueReviewForm()
-        {
-            lipidCreator.assembleFragments(asDeveloper);          
-            
-            lipidsReview = new LipidsReview(this);
-            lipidsReview.Owner = this;
-            lipidsReview.ShowInTaskbar = false;
-            
-            if (tutorial.tutorial == Tutorials.NoTutorial)
-            {
-                lipidsReview.ShowDialog();
-                lipidsReview.Dispose();
-            }
-            else
-            {
-                lipidsReview.Show();
-            }
-        }
         
         
         
@@ -3752,7 +3730,7 @@ namespace LipidCreator
             translatorDialog.Owner = this;
             translatorDialog.ShowInTaskbar = false;
             translatorDialog.ShowDialog ();
-            translatorDialog.Dispose ();
+            translatorDialog.Dispose();
         }
         
 
@@ -3762,8 +3740,8 @@ namespace LipidCreator
             AboutDialog aboutDialog = new AboutDialog ();
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
-            aboutDialog.ShowDialog ();
-            aboutDialog.Dispose ();
+            aboutDialog.ShowDialog();
+            aboutDialog.Dispose();
         }
         
         

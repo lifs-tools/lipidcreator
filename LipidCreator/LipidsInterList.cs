@@ -39,10 +39,12 @@ namespace LipidCreator
     {
         public CreatorGUI creatorGUI;
         public DataTable precursorDataTable = null;
+        public ArrayList returnValues;
 
-        public LipidsInterList (CreatorGUI _creatorGUI)
+        public LipidsInterList (CreatorGUI _creatorGUI, ArrayList _returnValues)
         {
             creatorGUI = _creatorGUI;
+            returnValues = _returnValues;
             
             precursorDataTable = new DataTable("precursorDataTable");
             precursorDataTable.Columns.Add(new DataColumn("Keep"));
@@ -55,7 +57,6 @@ namespace LipidCreator
             precursorDataTable.Columns[3].DataType = typeof(PrecursorData);
             
             InitializeComponent ();
-            
             
             foreach(PrecursorData precursorData in creatorGUI.lipidCreator.precursorDataList)
             {
@@ -161,6 +162,7 @@ namespace LipidCreator
         
         public void cancelButtonClick (Object sender, EventArgs e)
         {
+            returnValues[0] = false;
             Close();
         }
         
@@ -170,15 +172,8 @@ namespace LipidCreator
         
         public void continueReviewButtonClick (Object sender, EventArgs e)
         {
-            if (LipidCreator.LC_OS == PlatformID.Unix)
-            {
-                Close();
-            }
-            else
-            {
-                Dispose();
-            }
-            creatorGUI.continueReviewForm();
+            returnValues[0] = true;
+            Close();
         }
     }
 }

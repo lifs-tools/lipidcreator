@@ -40,15 +40,20 @@ namespace LipidCreator
         public DataTable transitionList;
         public DataTable transitionListUnique;
         public DataTable currentView;
+        public ArrayList returnValues;
         public CreatorGUI creatorGUI;
         public string[] dataColumns = {};
+        public bool pressedBackButton = false;
 
-        public LipidsReview (CreatorGUI _creatorGUI)
+        public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
         {
+            returnValues = _returnValues;
+            if (returnValues != null) returnValues[0] = false;
             creatorGUI = _creatorGUI;
             transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
+            pressedBackButton = false;
             
             
             InitializeComponent ();
@@ -78,7 +83,7 @@ namespace LipidCreator
         {
             gridviewDataColor();
             
-            dataGridViewTransitions.Columns[0].Visible = false;
+            //dataGridViewTransitions.Columns[0].Visible = false;
         }
         
         
@@ -106,6 +111,15 @@ namespace LipidCreator
                 }
             }
             else dataGridViewTransitions.DefaultCellStyle.BackColor = Color.Empty;
+        }
+        
+        
+        
+        
+        
+        private void closingInteraction(Object sender, FormClosingEventArgs e)
+        {
+            if (returnValues != null) returnValues[0] = !pressedBackButton;
         }
         
         
@@ -164,15 +178,8 @@ namespace LipidCreator
         
         private void buttonBackClick (object sender, EventArgs e)
         {
-            if (LipidCreator.LC_OS == PlatformID.Unix)
-            {
-                Close();
-            }
-            else
-            {
-                Dispose();
-            }
-            creatorGUI.reopenReviewForm();
+            pressedBackButton = true;
+            Close();
         }
         
         

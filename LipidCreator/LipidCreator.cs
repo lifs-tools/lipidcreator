@@ -792,7 +792,6 @@ namespace LipidCreator
             foreach (string replicateKey in replicateKeys.Keys)
             {
                 DataRow row = (DataRow)replicateKeys[replicateKey][0];
-                transitionListUnique.ImportRow (row);
                 
                 
                 if (replicateKeys[replicateKey].Count > 1)
@@ -826,6 +825,7 @@ namespace LipidCreator
                 {
                     row[UNIQUE] = true;
                 }
+                transitionListUnique.ImportRow (row);
             }
         }
         

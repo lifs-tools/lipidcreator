@@ -165,6 +165,7 @@ namespace LipidCreator
             // LipidsReview
             //
             this.Font = SystemFonts.DialogFont;
+            this.FormClosing += new FormClosingEventHandler(closingInteraction);
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1079, 540);

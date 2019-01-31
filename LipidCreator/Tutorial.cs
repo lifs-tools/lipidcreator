@@ -105,8 +105,6 @@ namespace LipidCreator
             tutorialStep = 0;
             quitting = false;
             
-            tutorialStep = 0;
-            
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
@@ -349,6 +347,7 @@ namespace LipidCreator
                 creatorGUI.lipidsInterList.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                 creatorGUI.lipidsInterList.continueReviewButton.Click -= buttonInteraction;
                 creatorGUI.lipidsInterList.continueReviewButton.MouseDown -= mouseDownInteraction;
+                creatorGUI.lipidsInterList.Close();
             }
             
             if (creatorGUI.ceInspector != null)
@@ -360,6 +359,7 @@ namespace LipidCreator
                 creatorGUI.ceInspector.numericalUpDownCurrentCE.TextChanged -= new EventHandler(textBoxInteraction);
                 creatorGUI.ceInspector.classCombobox.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
                 creatorGUI.ceInspector.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction); 
+                creatorGUI.ceInspector.Close();
             }
             
             if (creatorGUI.filterDialog != null)
@@ -525,9 +525,6 @@ namespace LipidCreator
         {
             creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = false;
             creatorGUI.ms2fragmentsForm.menuFragmentItem2.Enabled = false;
-            Console.WriteLine(tutorial == Tutorials.TutorialHL);
-            Console.WriteLine((tutorialStep == (int)HLSteps.EditFragment) + " " + (int)HLSteps.EditFragment);
-            Console.WriteLine((creatorGUI.ms2fragmentsForm.editDeleteIndex == 0) + " " + creatorGUI.ms2fragmentsForm.editDeleteIndex);
             if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.EditFragment && creatorGUI.ms2fragmentsForm.editDeleteIndex == 0)
             {
                 creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = true;
@@ -843,23 +840,33 @@ namespace LipidCreator
         {
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenInterlist, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
+            
+                if (tutorialStep == (int)PRMSteps.OpenReview) creatorGUI.lipidsReview.Show();
                 nextTutorialStep(true);
             }
+            
             else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK, (int)SRMSteps.AddLipid, (int)SRMSteps.OpenInterlist, (int)SRMSteps.OpenReview, (int)SRMSteps.StoreList, (int)SRMSteps.Finish}).Contains(tutorialStep)))
             {
+                if (tutorialStep == (int)SRMSteps.OpenReview) creatorGUI.lipidsReview.Show();
                 nextTutorialStep(true);
             }
+            
             else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenInterlist, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
             {
+            
+                if (tutorialStep == (int)HLSteps.OpenReview) creatorGUI.lipidsReview.Show();
                 nextTutorialStep(true);
             }
+            
             else if (tutorial == Tutorials.TutorialCE && (int)CESteps.ActivateCE == tutorialStep)
             {
                 nextEnabled = (sender is MenuItem) && ((string[])((MenuItem)sender).Tag != null) && (((string[])((MenuItem)sender).Tag)[0] == "MS:1002523");
                 tutorialWindow.Refresh();
             }
+            
             else if (tutorial == Tutorials.TutorialCE && (new HashSet<int>(new int[]{(int)CESteps.OpenCEDialog, (int)CESteps.CloseCE, (int)CESteps.AddLipid, (int)CESteps.OpenInterlist, (int)CESteps.ReviewLipids, (int)CESteps.StoreBlib})).Contains(tutorialStep))
             {
+                if (tutorialStep == (int)CESteps.ReviewLipids) creatorGUI.lipidsReview.Show();
                 nextTutorialStep(true);
             }
             tutorialArrow.Refresh();
@@ -871,25 +878,43 @@ namespace LipidCreator
         {
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.SelectFilter, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
             {
+                
+                
                 continueTutorial = true;
+                if (tutorialStep == (int)PRMSteps.OpenReview) tutorialAssembleLipids();
             }
+            
             else if (tutorial == Tutorials.TutorialSRM && (new HashSet<int>(new int[]{(int)SRMSteps.OpenMS2, (int)SRMSteps.OpenReview, (int)SRMSteps.AddFragment, (int)SRMSteps.AddingFragment, (int)SRMSteps.ClickOK}).Contains(tutorialStep)))
             {
                 continueTutorial = true;
+                if (tutorialStep == (int)SRMSteps.OpenReview) tutorialAssembleLipids();
             }
+            
             else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.OpenReview, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
             {
+                if (tutorialStep == (int)HLSteps.OpenReview) tutorialAssembleLipids();
                 continueTutorial = true;
             }
+            
             else if (tutorial == Tutorials.TutorialCE && (tutorialStep == (int)CESteps.CloseCE || tutorialStep == (int)CESteps.ReviewLipids))
             {
+                if (tutorialStep == (int)CESteps.ReviewLipids) tutorialAssembleLipids();
                 continueTutorial = true;
             }
+            
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
         
         
+        public void tutorialAssembleLipids()
+        {   
+            creatorGUI.lipidCreator.assembleFragments(creatorGUI.asDeveloper);
+            
+            creatorGUI.lipidsReview = new LipidsReview(creatorGUI, null);
+            creatorGUI.lipidsReview.Owner = creatorGUI;
+            creatorGUI.lipidsReview.ShowInTaskbar = false;
+        }
         
         
         public void checkedListBoxInteraction(Object sender, ItemCheckEventArgs e)
@@ -924,8 +949,10 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
+        
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+            
             if(e.CloseReason == CloseReason.UserClosing && !continueTutorial)
             {
                 quitTutorial(true);

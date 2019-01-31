@@ -730,8 +730,6 @@ namespace LipidCreator
         [NonSerialized]
         Label homeText;
         [NonSerialized]
-        Label homeText2;
-        [NonSerialized]
         Label homeText3;
 
         [NonSerialized]
@@ -1140,7 +1138,6 @@ namespace LipidCreator
             chHydroxylTextbox = new TextBox();
             chFAHydroxyLabel = new Label();
             homeText = new Label();
-            homeText2 = new Label();
             homeText3 = new Label();
 
             clFA3Checkbox1 = new CheckBox();
@@ -2384,39 +2381,32 @@ namespace LipidCreator
             //homeTab.Font = tabFont2;
             
             homeTab.Controls.Add(homeText);
-            homeTab.Controls.Add(homeText2);
             homeTab.Controls.Add(homeText3);
             
             homeText.Width = 560;
-            homeText.Height = 80;
-            homeText.Location = new Point(60, 180);
+            homeText.Height = 140;
+            homeText.Location = new Point(60, 170);
             homeText.Text = "Targeted assays development based on lipid building blocks:" + Environment.NewLine +
             " • Lipid fragmentation prediction" + Environment.NewLine +
             " • Generation of class specific target lists" + Environment.NewLine +
             " • In-silico spectral library generator" + Environment.NewLine +
             //" • Latest lipid nomenclature" + Environment.NewLine +
-            " • Full integration with new small molecule support in Skyline.";
+            " • Full integration with new small molecule support in Skyline." + Environment.NewLine + Environment.NewLine +
+            "LipidCreator offers several interactive tutorials for an easy introduction into" + Environment.NewLine +
+            "its functionality:";
             homeText.BackColor = Color.Transparent;
             homeText.ForeColor = Color.White;
             homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
-            homeText2.Width = 560;
-            homeText2.Height = 40;
-            homeText2.Location = new Point(60, 260);
-            homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
-            homeText2.BackColor = Color.Transparent;
-            homeText2.ForeColor = Color.White;
-            homeText2.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
             
             
             homeText3.Width = 560;
             homeText3.Height = 80;
-            homeText3.Location = new Point(60, 380);
-            homeText3.Text = "Citation: Peng et al., Awesome journal, 2019" + Environment.NewLine + "Contact: corresponding author";
+            homeText3.Location = new Point(60, 390);
+            homeText3.Text = "Citation: Peng et al., Awesome journal, 2019";
             homeText3.BackColor = Color.Transparent;
-            homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
+            homeText3.Font = new Font(homeTab.Font.FontFamily, 12);
             homeText3.ForeColor = Color.White;
-            //homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();

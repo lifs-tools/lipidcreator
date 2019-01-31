@@ -230,6 +230,7 @@ namespace LipidCreator
                 }
             }
             
+            HashSet<string> insertedFragments = new HashSet<string>();
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
@@ -328,6 +329,10 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }
+                
+                // exclude duplicate fragments within the same lipid species
+                if (insertedFragments.Contains(fragName)) continue;
+                insertedFragments.Add(fragName);
                 
                 
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));

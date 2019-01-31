@@ -55,9 +55,7 @@ namespace LipidCreator
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
-            foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns) {
-                dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
+            
             
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();

@@ -434,7 +434,7 @@ namespace LipidCreator
 
                                     string instrument = tokens[columnKeys["instrument"]];
                                     string lipidClass = tokens[columnKeys["class"]];
-                                    string adduct = tokens[columnKeys["adduct"]];
+                                    string precursorAdduct = tokens[columnKeys["precursorAdduct"]];
                                     string fragment = tokens[columnKeys["fragment"]];
                                     string paramKey = tokens[columnKeys["ParKey"]];
                                     string paramValue = tokens[columnKeys["ParValue"]];
@@ -450,23 +450,23 @@ namespace LipidCreator
                                         collisionEnergyHandler.instrumentParameters[instrument].Add(lipidClass, new Dictionary<string, IDictionary<string, IDictionary<string, string>>>());
                                     }
 
-                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(adduct))
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass].ContainsKey(precursorAdduct))
                                     {
-                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(adduct, new Dictionary<string, IDictionary<string, string>>());
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass].Add(precursorAdduct, new Dictionary<string, IDictionary<string, string>>());
                                     }
 
-                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].ContainsKey(fragment))
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][precursorAdduct].ContainsKey(fragment))
                                     {
-                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct].Add(fragment, new Dictionary<string, string>());
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][precursorAdduct].Add(fragment, new Dictionary<string, string>());
                                     }
 
-                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].ContainsKey(paramKey))
+                                    if (!collisionEnergyHandler.instrumentParameters[instrument][lipidClass][precursorAdduct][fragment].ContainsKey(paramKey))
                                     {
-                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][adduct][fragment].Add(paramKey, paramValue);
+                                        collisionEnergyHandler.instrumentParameters[instrument][lipidClass][precursorAdduct][fragment].Add(paramKey, paramValue);
                                     }
                                     else
                                     {
-                                        throw new Exception("ParamKey for " + instrument + " " + lipidClass + " " + adduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
+                                        throw new Exception("ParamKey for " + instrument + " " + lipidClass + " " + precursorAdduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
                                     }
                                 }
                             }

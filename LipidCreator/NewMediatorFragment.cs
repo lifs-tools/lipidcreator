@@ -149,7 +149,13 @@ namespace LipidCreator
             {
                 try {
                     double fragmentMass = double.Parse(textBox1.Text, System.Globalization.CultureInfo.InvariantCulture);
-                    fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
+                    if (fragmentMass > MS2Fragment.ELEMENT_MASSES[(int)Molecules.H])
+                    {
+                        fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
+                    }
+                    else {
+                        allowToAdd = false;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -181,7 +187,20 @@ namespace LipidCreator
             if(updating || elementDict == null) return;
             updating = true;
             string key = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-            string val = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            string val;
+            try 
+            {
+                val = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            }
+            catch(Exception ee)
+            {
+                log.Error("Conversion error while updating cell value, setting value to 0.", ee);
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "0";
+                val = "0";
+            }
+            
+            
+            
             if (e.ColumnIndex != 3)
             {
                 int n;

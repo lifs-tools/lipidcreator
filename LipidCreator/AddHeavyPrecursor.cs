@@ -29,11 +29,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using log4net;
 
 namespace LipidCreator
 {
     public partial class AddHeavyPrecursor : Form
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AddHeavyPrecursor));
         public CreatorGUI creatorGUI;
         ArrayList buildingBlockElementDicts;
         public bool updating;
@@ -450,7 +452,18 @@ namespace LipidCreator
         {
             if (currentDict == null) return;
             string key = (string)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-            currentDict[key][e.ColumnIndex - 1] = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            
+            try
+            {
+                currentDict[key][e.ColumnIndex - 1] = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                int n = Convert.ToInt32(currentDict[key][e.ColumnIndex - 1].ToString());
+            }
+            catch (Exception ee)
+            {
+                log.Error("Conversion error while updating cell value to int32: " + currentDict[key][e.ColumnIndex - 1], ee);
+                currentDict[key][e.ColumnIndex - 1] = "0";
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "0";
+            }
             
             if(updating) return;
             
@@ -609,7 +622,7 @@ namespace LipidCreator
                     creatorGUI.lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
                     
                     
-                    if (heavyPrecursor.category != LipidCategory.Mediator)
+                    if (heavyPrecursor.category != LipidCategory.LipidMediator)
                     {
                         foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in creatorGUI.lipidCreator.allFragments[precursor.name][true])
                         {

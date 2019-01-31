@@ -39,27 +39,28 @@ namespace LipidCreator
     {
         public DataTable transitionList;
         public DataTable transitionListUnique;
-        public ArrayList replicates;
         public DataTable currentView;
+        public ArrayList returnValues;
         public CreatorGUI creatorGUI;
         public string[] dataColumns = {};
+        public bool pressedBackButton = false;
 
-        public LipidsReview (CreatorGUI _creatorGUI)
+        public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
         {
+            returnValues = _returnValues;
+            if (returnValues != null) returnValues[0] = false;
             creatorGUI = _creatorGUI;
             transitionList = creatorGUI.lipidCreator.transitionList;
             currentView = this.transitionList;
-            replicates = creatorGUI.lipidCreator.replicates;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
+            pressedBackButton = false;
             
             
             InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
-            foreach (DataGridViewColumn dgvc in dataGridViewTransitions.Columns) {
-                dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
+            
             
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
@@ -76,15 +77,51 @@ namespace LipidCreator
         
         
         
+        
+        
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            gridviewDataColor();
+            dataGridViewTransitions.Columns[0].Visible = false;
+        }
+        
+        
+        
+        
+        
+        private void gridviewDataSorted(object sender, EventArgs e)
+        {
+            gridviewDataColor();
+        }
+        
+        
+        
+        
+        public void gridviewDataColor()
         {
             if (currentView == transitionList)
             {
-                foreach (int i in replicates) dataGridViewTransitions.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
+                foreach (DataGridViewRow dataRow in dataGridViewTransitions.Rows)
+                {
+                    if((string)(dataRow.Cells[0].Value) != "True")
+                    {
+                        dataRow.DefaultCellStyle.BackColor = Color.Beige;
+                    }
+                }
             }
             else dataGridViewTransitions.DefaultCellStyle.BackColor = Color.Empty;
-            foreach (DataGridViewColumn d in dataGridViewTransitions.Columns) d.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
+        
+        
+        
+        
+        
+        private void closingInteraction(Object sender, FormClosingEventArgs e)
+        {
+            if (returnValues != null) returnValues[0] = !pressedBackButton;
+        }
+        
+        
         
         
 
@@ -111,6 +148,8 @@ namespace LipidCreator
             }
             this.Enabled = true;
         }
+        
+        
 
         
         
@@ -130,6 +169,16 @@ namespace LipidCreator
             dataGridViewTransitions.DataSource = currentView;
             dataGridViewTransitions.Update();
             dataGridViewTransitions.Refresh();
+        }
+        
+        
+        
+        
+        
+        private void buttonBackClick (object sender, EventArgs e)
+        {
+            pressedBackButton = true;
+            Close();
         }
         
         

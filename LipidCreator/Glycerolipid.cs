@@ -43,7 +43,7 @@ namespace LipidCreator
         
     
     
-        public Glycerolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.GlyceroLipid)
+        public Glycerolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Glycerolipid)
         {
             fag1 = new FattyAcidGroup();
             fag2 = new FattyAcidGroup();
@@ -85,7 +85,7 @@ namespace LipidCreator
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
-            Updating((int)LipidCategory.GlyceroLipid);
+            Updating((int)LipidCategory.Glycerolipid);
         }
         
         
@@ -200,7 +200,7 @@ namespace LipidCreator
                                                                                                                     
                                 
                                 PrecursorData precursorData = new PrecursorData();
-                                precursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                precursorData.lipidCategory = LipidCategory.Glycerolipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = headgroup + key;
@@ -251,7 +251,7 @@ namespace LipidCreator
                                                                         
 
                                     PrecursorData heavyPrecursorData = new PrecursorData();
-                                    heavyPrecursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                    heavyPrecursorData.lipidCategory = LipidCategory.Glycerolipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;
@@ -338,7 +338,7 @@ namespace LipidCreator
                                                                                                                     
                                 
                                 PrecursorData precursorData = new PrecursorData();
-                                precursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                precursorData.lipidCategory = LipidCategory.Glycerolipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = headgroup + key;
@@ -394,7 +394,7 @@ namespace LipidCreator
                                                                         
 
                                     PrecursorData heavyPrecursorData = new PrecursorData();
-                                    heavyPrecursorData.lipidCategory = LipidCategory.GlyceroLipid;
+                                    heavyPrecursorData.lipidCategory = LipidCategory.Glycerolipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;

@@ -35,7 +35,7 @@ namespace LipidCreator
     [Serializable]
     public class Mediator : Lipid
     { 
-        public Mediator(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Mediator)
+        public Mediator(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.LipidMediator)
         {
         }
     
@@ -87,7 +87,7 @@ namespace LipidCreator
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
-            Updating((int)LipidCategory.Mediator);
+            Updating((int)LipidCategory.LipidMediator);
         }
         
         
@@ -130,7 +130,7 @@ namespace LipidCreator
                     string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
                                                         
                     PrecursorData precursorData = new PrecursorData();
-                    precursorData.lipidCategory = LipidCategory.Mediator;
+                    precursorData.lipidCategory = LipidCategory.LipidMediator;
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.moleculeListName = precNames[0];
                     precursorData.precursorExportName = precNames[0];

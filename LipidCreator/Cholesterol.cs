@@ -41,7 +41,7 @@ namespace LipidCreator
         public FattyAcidGroup fag;
     
     
-        public Cholesterol(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Cholesterol)
+        public Cholesterol(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Sterollipid)
         {
             fag = new FattyAcidGroup();
             containsEster = false;
@@ -75,7 +75,7 @@ namespace LipidCreator
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
-            Updating((int)LipidCategory.Cholesterol);
+            Updating((int)LipidCategory.Sterollipid);
         }
         
         
@@ -137,7 +137,7 @@ namespace LipidCreator
                         double mass = LipidCreator.computeMass(atomsCount, charge);
                     
                         PrecursorData precursorData = new PrecursorData();
-                        precursorData.lipidCategory = LipidCategory.Cholesterol;
+                        precursorData.lipidCategory = LipidCategory.Sterollipid;
                         precursorData.moleculeListName = headgroup;
                         precursorData.fullMoleculeListName = headgroup;
                         precursorData.precursorExportName = headgroup + key;
@@ -182,7 +182,7 @@ namespace LipidCreator
                                                                 
 
                             PrecursorData heavyPrecursorData = new PrecursorData();
-                            heavyPrecursorData.lipidCategory = LipidCategory.Cholesterol;
+                            heavyPrecursorData.lipidCategory = LipidCategory.Sterollipid;
                             heavyPrecursorData.moleculeListName = headgroup;
                             heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                             heavyPrecursorData.precursorExportName = headgroup + key;
@@ -226,7 +226,7 @@ namespace LipidCreator
                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                     PrecursorData precursorData = new PrecursorData();
-                    precursorData.lipidCategory = LipidCategory.Cholesterol;
+                    precursorData.lipidCategory = LipidCategory.Sterollipid;
                     precursorData.moleculeListName = headgroup;
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.precursorExportName = headgroup;
@@ -266,7 +266,7 @@ namespace LipidCreator
                                                             
 
                         PrecursorData heavyPrecursorData = new PrecursorData();
-                        heavyPrecursorData.lipidCategory = LipidCategory.Cholesterol;
+                        heavyPrecursorData.lipidCategory = LipidCategory.Sterollipid;
                         heavyPrecursorData.moleculeListName = headgroup;
                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                         heavyPrecursorData.precursorExportName = headgroup;

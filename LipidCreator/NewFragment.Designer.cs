@@ -149,27 +149,27 @@ namespace LipidCreator
             // label2
             // 
             this.labelCharge.AutoSize = true;
-            this.labelCharge.Location = new System.Drawing.Point(453, 8);
+            this.labelCharge.Location = new System.Drawing.Point(453, 6);
             this.labelCharge.Name = "label2";
-            this.labelCharge.Size = new System.Drawing.Size(41, 10);
+            this.labelCharge.Size = new System.Drawing.Size(41, 8);
             this.labelCharge.TabIndex = 6;
             this.labelCharge.Text = "Charge";
             // 
             // label3
             // 
             this.labelFragmentName.AutoSize = true;
-            this.labelFragmentName.Location = new System.Drawing.Point(9, 8);
+            this.labelFragmentName.Location = new System.Drawing.Point(9, 6);
             this.labelFragmentName.Name = "label3";
-            this.labelFragmentName.Size = new System.Drawing.Size(80, 10);
+            this.labelFragmentName.Size = new System.Drawing.Size(80, 8);
             this.labelFragmentName.TabIndex = 7;
             this.labelFragmentName.Text = "Fragment name";
             // 
             // label4
             // 
             this.labelSelectBase.AutoSize = true;
-            this.labelSelectBase.Location = new System.Drawing.Point(110, 8);
+            this.labelSelectBase.Location = new System.Drawing.Point(110, 6);
             this.labelSelectBase.Name = "label4";
-            this.labelSelectBase.Size = new System.Drawing.Size(80, 10);
+            this.labelSelectBase.Size = new System.Drawing.Size(80, 8);
             this.labelSelectBase.TabIndex = 7;
             this.labelSelectBase.Text = "Select base";
             // 

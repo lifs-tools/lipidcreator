@@ -36,6 +36,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using log4net;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace LipidCreator
 {
@@ -67,6 +68,8 @@ namespace LipidCreator
         public AddHeavyPrecursor addHeavyPrecursor = null;
         public LipidsReview lipidsReview = null;
         [NonSerialized]
+        public LipidsInterList lipidsInterList = null;
+        [NonSerialized]
         public FilterDialog filterDialog = null;
         [NonSerialized]
         public MenuItem lastCEInstrumentChecked = null;
@@ -76,6 +79,8 @@ namespace LipidCreator
         
         public CreatorGUI(string inputParameters)
         {
+            
+            
             this.inputParameters = inputParameters;
             this.lipidCreator = new LipidCreator(this.inputParameters);
             currentIndex = LipidCategory.NoLipid;
@@ -404,7 +409,7 @@ namespace LipidCreator
                 int category = (int)row.Value.category;
                 switch (category)
                 {
-                    case (int)LipidCategory.GlyceroLipid:
+                    case (int)LipidCategory.Glycerolipid:
                         glPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         glPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         glPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -414,7 +419,7 @@ namespace LipidCreator
                         glNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
                         break;
                     
-                    case (int)LipidCategory.PhosphoLipid:
+                    case (int)LipidCategory.Glycerophospholipid:
                         plPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         plPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         plPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -424,7 +429,7 @@ namespace LipidCreator
                         plNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
                         break;
                         
-                    case (int)LipidCategory.SphingoLipid:
+                    case (int)LipidCategory.Sphingolipid:
                         slPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         slPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         slPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -434,14 +439,14 @@ namespace LipidCreator
                         slNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
                         break;
                         
-                    case (int)LipidCategory.Mediator:
+                    case (int)LipidCategory.LipidMediator:
                         medNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
                         medNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
                         medNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
                         medNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
                         break;
                         
-                    case (int)LipidCategory.Cholesterol:
+                    case (int)LipidCategory.Sterollipid:
                         chPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         chPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         chPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -454,11 +459,11 @@ namespace LipidCreator
                 
             }
         
-            extendWindow(((LipidCategory)index == LipidCategory.PhosphoLipid) && ((Phospholipid)currentLipid).isCL);
+            extendWindow(((LipidCategory)index == LipidCategory.Glycerophospholipid) && ((Phospholipid)currentLipid).isCL);
             
             switch((LipidCategory)index)
             {
-                case LipidCategory.GlyceroLipid:
+                case LipidCategory.Glycerolipid:
                     Glycerolipid currentGlycerolipid = (Glycerolipid)currentLipid;
                     settingListbox = true;
                     for (int i = 0; i < glHgListbox.Items.Count; ++i)
@@ -531,7 +536,7 @@ namespace LipidCreator
                     glPictureBox.SendToBack();
                     break;
                     
-                case LipidCategory.PhosphoLipid:
+                case LipidCategory.Glycerophospholipid:
                     Phospholipid currentPhospholipid = (Phospholipid)currentLipid;
                     
                     if (currentPhospholipid.isCL) plIsCL.Checked = true;
@@ -733,7 +738,7 @@ namespace LipidCreator
                     }
                     break;
                     
-                case LipidCategory.SphingoLipid:
+                case LipidCategory.Sphingolipid:
                     Sphingolipid currentSphingolipid = (Sphingolipid)currentLipid;
                     
                     slIsLyso.Checked = currentSphingolipid.isLyso;
@@ -789,7 +794,7 @@ namespace LipidCreator
                     
                     
                     
-                case LipidCategory.Cholesterol:
+                case LipidCategory.Sterollipid:
                     Cholesterol currentCHLipid = (Cholesterol)currentLipid;
                     chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
                     chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
@@ -810,7 +815,7 @@ namespace LipidCreator
                     updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
                     break;
                     
-                case LipidCategory.Mediator:
+                case LipidCategory.LipidMediator:
                     Mediator currentMedLipid = (Mediator)currentLipid;
                     settingListbox = true;
                     for (int i = 0; i < medHgListbox.Items.Count; ++i)
@@ -867,24 +872,24 @@ namespace LipidCreator
             int index = (int)currentIndex;
             switch (index)
             {
-                case (int)LipidCategory.GlyceroLipid:
+                case (int)LipidCategory.Glycerolipid:
                     newLipid = new Glycerolipid(lipidCreator);
                     break;
                     
-                case (int)LipidCategory.PhosphoLipid:
+                case (int)LipidCategory.Glycerophospholipid:
                     newLipid = new Phospholipid(lipidCreator);
                     ((Phospholipid)newLipid).isCL = plIsCL.Checked;
                     break;
                     
-                case (int)LipidCategory.SphingoLipid:
+                case (int)LipidCategory.Sphingolipid:
                     newLipid = new Sphingolipid(lipidCreator);
                     break;
                     
-                case (int)LipidCategory.Cholesterol:
+                case (int)LipidCategory.Sterollipid:
                     newLipid = new Cholesterol(lipidCreator);
                     break;
                     
-                case (int)LipidCategory.Mediator:
+                case (int)LipidCategory.LipidMediator:
                     newLipid = new Mediator(lipidCreator);
                     break;
                     
@@ -970,6 +975,13 @@ namespace LipidCreator
         }
         
         
+        
+        private void homeText3LinkClicked(Object sender, EventArgs e)
+        {
+            string url = "http://www.google.de";
+            var si = new ProcessStartInfo(url);
+            Process.Start(si);
+        }
         
         
         
@@ -2098,7 +2110,7 @@ namespace LipidCreator
             ((Phospholipid)currentLipid).isCL = plIsCL.Checked;
             ((Phospholipid)currentLipid).isLyso = plIsLyso.Checked;
 
-            changeTab((int)LipidCategory.PhosphoLipid);
+            changeTab((int)LipidCategory.Glycerophospholipid);
         }
         
         
@@ -2377,7 +2389,7 @@ namespace LipidCreator
             
             if (lyso)
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
                 }
@@ -2394,7 +2406,7 @@ namespace LipidCreator
             }
             else
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.PhosphoLipid])
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
                 }
@@ -2556,7 +2568,7 @@ namespace LipidCreator
             
             if (lyso)
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Sphingolipid])
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) slHgList.Add(headgroup);
                 }
@@ -2570,7 +2582,7 @@ namespace LipidCreator
             }
             else
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.SphingoLipid])
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Sphingolipid])
                 {
                     if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) slHgList.Add(headgroup);
                 }
@@ -2802,7 +2814,7 @@ namespace LipidCreator
                         return  LipidCategory.NoLipid;
                     }
                 }
-                return LipidCategory.GlyceroLipid;
+                return LipidCategory.Glycerolipid;
             }
             
             
@@ -2922,7 +2934,7 @@ namespace LipidCreator
                         return  LipidCategory.NoLipid;
                     }
                 }
-                return LipidCategory.PhosphoLipid;
+                return LipidCategory.Glycerophospholipid;
             }
             
             
@@ -2954,7 +2966,7 @@ namespace LipidCreator
                     MessageBox.Show("LCB double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                return LipidCategory.SphingoLipid;
+                return LipidCategory.Sphingolipid;
             }
             
             
@@ -2975,7 +2987,7 @@ namespace LipidCreator
                     MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                return LipidCategory.Cholesterol;
+                return LipidCategory.Sterollipid;
             }
             
             else if (currentLipid is Mediator)
@@ -2985,7 +2997,7 @@ namespace LipidCreator
                     MessageBox.Show("No mediator selected!", "Not registrable");
                     return  LipidCategory.NoLipid;                    
                 }
-                return LipidCategory.Mediator;
+                return LipidCategory.LipidMediator;
             }
             return LipidCategory.NoLipid;
         }
@@ -2997,22 +3009,22 @@ namespace LipidCreator
             int rowIndex = lipidModifications[(int)result];
             switch (result)
             {
-                case LipidCategory.GlyceroLipid:
+                case LipidCategory.Glycerolipid:
                     lipidCreator.registeredLipids[rowIndex] = new Glycerolipid((Glycerolipid)currentLipid);
                     break;
-                case LipidCategory.PhosphoLipid:
+                case LipidCategory.Glycerophospholipid:
                     lipidCreator.registeredLipids[rowIndex] = new Phospholipid((Phospholipid)currentLipid);
                     break;
                     
-                case LipidCategory.SphingoLipid:
+                case LipidCategory.Sphingolipid:
                     lipidCreator.registeredLipids[rowIndex] = new Sphingolipid((Sphingolipid)currentLipid);
                     break;
                     
-                case LipidCategory.Cholesterol:
+                case LipidCategory.Sterollipid:
                     lipidCreator.registeredLipids[rowIndex] = new Cholesterol((Cholesterol)currentLipid);
                     break;
                     
-                case LipidCategory.Mediator:
+                case LipidCategory.LipidMediator:
                     lipidCreator.registeredLipids[rowIndex] = new Mediator((Mediator)currentLipid);
                     break;
                 default:
@@ -3036,34 +3048,34 @@ namespace LipidCreator
             int tabIndex = 0;
             switch (result)
             {
-                case LipidCategory.GlyceroLipid:
+                case LipidCategory.Glycerolipid:
                     lipidCreator.registeredLipids.Add(new Glycerolipid((Glycerolipid)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                    tabIndex = (int)LipidCategory.GlyceroLipid;
+                    tabIndex = (int)LipidCategory.Glycerolipid;
                     break;
                     
-                case LipidCategory.PhosphoLipid:
+                case LipidCategory.Glycerophospholipid:
                     lipidCreator.registeredLipids.Add(new Phospholipid((Phospholipid)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                    tabIndex = (int)LipidCategory.PhosphoLipid;
+                    tabIndex = (int)LipidCategory.Glycerophospholipid;
                     break;
                     
-                case LipidCategory.SphingoLipid:
+                case LipidCategory.Sphingolipid:
                     lipidCreator.registeredLipids.Add(new Sphingolipid((Sphingolipid)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                    tabIndex = (int)LipidCategory.SphingoLipid;
+                    tabIndex = (int)LipidCategory.Sphingolipid;
                     break;
                     
-                case LipidCategory.Cholesterol:
+                case LipidCategory.Sterollipid:
                     lipidCreator.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                    tabIndex = (int)LipidCategory.Cholesterol;
+                    tabIndex = (int)LipidCategory.Sterollipid;
                     break;
                     
-                case LipidCategory.Mediator:
+                case LipidCategory.LipidMediator:
                     lipidCreator.registeredLipids.Add(new Mediator((Mediator)currentLipid));
                     registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                    tabIndex = (int)LipidCategory.Mediator;
+                    tabIndex = (int)LipidCategory.LipidMediator;
                     break;
                     
                 default:
@@ -3155,7 +3167,8 @@ namespace LipidCreator
             {
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
-                if (currentCHLipid.containsEster) row["Building Block 1"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+                row["Building Block 1"] = "Ch" + (currentCHLipid.containsEster ? "E" : "");
+                if (currentCHLipid.containsEster) row["Building Block 2"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             
             else if (currentRegisteredLipid is Mediator)
@@ -3220,27 +3233,27 @@ namespace LipidCreator
                 for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
                 if (currentRegisteredLipid is Glycerolipid)
                 {
-                    tabIndex = (int)LipidCategory.GlyceroLipid;
+                    tabIndex = (int)LipidCategory.Glycerolipid;
                     lipidTabList[tabIndex] = new Glycerolipid((Glycerolipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Phospholipid)
                 {
-                    tabIndex = (int)LipidCategory.PhosphoLipid;
+                    tabIndex = (int)LipidCategory.Glycerophospholipid;
                     lipidTabList[tabIndex] = new Phospholipid((Phospholipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Sphingolipid)
                 {
-                    tabIndex = (int)LipidCategory.SphingoLipid;
+                    tabIndex = (int)LipidCategory.Sphingolipid;
                     lipidTabList[tabIndex] = new Sphingolipid((Sphingolipid)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Cholesterol)
                 {
-                    tabIndex = (int)LipidCategory.Cholesterol;
+                    tabIndex = (int)LipidCategory.Sterollipid;
                     lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
                 }
                 else if (currentRegisteredLipid is Mediator)
                 {
-                    tabIndex = (int)LipidCategory.Mediator;
+                    tabIndex = (int)LipidCategory.LipidMediator;
                     lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
                 }
                 currentLipid = currentRegisteredLipid;
@@ -3270,11 +3283,11 @@ namespace LipidCreator
         {
             Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
             int tabIndex = 0;
-            if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.GlyceroLipid;
-            else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.PhosphoLipid;
-            else if (currentRegisteredLipid is Sphingolipid) tabIndex = (int)LipidCategory.SphingoLipid;
-            else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Cholesterol;
-            else if (currentRegisteredLipid is Mediator) tabIndex = (int)LipidCategory.Mediator;
+            if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.Glycerolipid;
+            else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.Glycerophospholipid;
+            else if (currentRegisteredLipid is Sphingolipid) tabIndex = (int)LipidCategory.Sphingolipid;
+            else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Sterollipid;
+            else if (currentRegisteredLipid is Mediator) tabIndex = (int)LipidCategory.LipidMediator;
             
             DataTable tmpTable = registeredLipidsDatatable.Clone();
             for (int i = 0; i < registeredLipidsDatatable.Rows.Count; ++i)
@@ -3351,7 +3364,7 @@ namespace LipidCreator
                 case (int)LipidCategory.NoLipid:
                     return;
                 
-                case ((int)LipidCategory.Mediator):
+                case ((int)LipidCategory.LipidMediator):
                     mediatorMS2fragmentsForm = new MediatorMS2Form(this, (Mediator)currentLipid);
                     formToOpen = (Form)mediatorMS2fragmentsForm;
                     break;
@@ -3394,10 +3407,10 @@ namespace LipidCreator
         
         public void windowOnClosing(Object sender, FormClosingEventArgs e)
         {
-            if (this.lipidCreator!=null)
+            if (lipidCreator != null)
             {
                 log.Info("Closing LipidCreator!");
-                this.lipidCreator.Dispose();
+                lipidCreator.Dispose();
             }
         }
         
@@ -3458,23 +3471,47 @@ namespace LipidCreator
         
         public void openReviewForm(Object sender, EventArgs e)
         {
-            lipidCreator.assembleLipids(asDeveloper);
+            lipidCreator.assemblePrecursors();
             lipidCreator.analytics("lipidcreator", "create-transition-list");
-            lipidsReview = new LipidsReview(this);
-            lipidsReview.Owner = this;
-            lipidsReview.ShowInTaskbar = false;
+            
+            
+            ArrayList returnValues = new ArrayList(){false};
+            
             
             if (tutorial.tutorial == Tutorials.NoTutorial)
             {
-                lipidsReview.ShowDialog();
-                lipidsReview.Dispose();
+                
+                while (!(bool)returnValues[0])
+                {
+                
+                    lipidsInterList = new LipidsInterList(this, returnValues);
+                    lipidsInterList.Owner = this;
+                    lipidsInterList.ShowInTaskbar = false;
+                
+                    lipidsInterList.ShowDialog();
+                    lipidsInterList.Dispose();
+                    
+                    if (!(bool)returnValues[0]) break;
+                    
+                    lipidCreator.assembleFragments(asDeveloper);   
+                
+                    lipidsReview = new LipidsReview(this, returnValues);
+                    lipidsReview.Owner = this;
+                    lipidsReview.ShowInTaskbar = false;
+                    
+                    lipidsReview.ShowDialog();
+                    lipidsReview.Dispose();
+                }
             }
             else
             {
-                lipidsReview.Show();
+                lipidsInterList = new LipidsInterList(this, returnValues);
+                lipidsInterList.Owner = this;
+                lipidsInterList.ShowInTaskbar = false;
+                lipidsInterList.Show();
             }
-              
         }
+        
         
         
         
@@ -3527,6 +3564,15 @@ namespace LipidCreator
                     importFilterDialog.ShowInTaskbar = false;
                     importFilterDialog.ShowDialog();
                     importFilterDialog.Dispose();
+                    
+                    string[] returnMessage = new string[]{""};
+                    LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                    lcmb.Owner = this;
+                    lcmb.StartPosition = FormStartPosition.CenterParent;
+                    lcmb.ShowInTaskbar = false;
+                    lcmb.ShowDialog();
+                    lcmb.Dispose();
+                    if (returnMessage[0] == "replace") lipidCreator.registeredLipids.Clear();
                     
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();
@@ -3692,7 +3738,7 @@ namespace LipidCreator
             translatorDialog.Owner = this;
             translatorDialog.ShowInTaskbar = false;
             translatorDialog.ShowDialog ();
-            translatorDialog.Dispose ();
+            translatorDialog.Dispose();
         }
         
 
@@ -3702,8 +3748,8 @@ namespace LipidCreator
             AboutDialog aboutDialog = new AboutDialog ();
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
-            aboutDialog.ShowDialog ();
-            aboutDialog.Dispose ();
+            aboutDialog.ShowDialog();
+            aboutDialog.Dispose();
         }
         
         

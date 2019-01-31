@@ -40,7 +40,7 @@ namespace LipidCreator
         public FattyAcidGroup lcb;
         public bool isLyso;
     
-        public Sphingolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.SphingoLipid)
+        public Sphingolipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Sphingolipid)
         {
             lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
@@ -81,7 +81,7 @@ namespace LipidCreator
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
-            Updating((int)LipidCategory.SphingoLipid);
+            Updating((int)LipidCategory.Sphingolipid);
         }
         
         public override void import(XElement node, string importVersion)
@@ -161,7 +161,7 @@ namespace LipidCreator
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
                             
                                 PrecursorData precursorData = new PrecursorData();
-                                precursorData.lipidCategory = LipidCategory.SphingoLipid;
+                                precursorData.lipidCategory = LipidCategory.Sphingolipid;
                                 precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = headgroup + key;
@@ -208,7 +208,7 @@ namespace LipidCreator
                                                                         
 
                                     PrecursorData heavyPrecursorData = new PrecursorData();
-                                    heavyPrecursorData.lipidCategory = LipidCategory.SphingoLipid;
+                                    heavyPrecursorData.lipidCategory = LipidCategory.Sphingolipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;
@@ -255,7 +255,7 @@ namespace LipidCreator
                                     
                                 
                             PrecursorData precursorData = new PrecursorData();
-                            precursorData.lipidCategory = LipidCategory.SphingoLipid;
+                            precursorData.lipidCategory = LipidCategory.Sphingolipid;
                             precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.precursorExportName = headgroup + key;
@@ -301,7 +301,7 @@ namespace LipidCreator
                                                                     
 
                                 PrecursorData heavyPrecursorData = new PrecursorData();
-                                heavyPrecursorData.lipidCategory = LipidCategory.SphingoLipid;
+                                heavyPrecursorData.lipidCategory = LipidCategory.Sphingolipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = headgroup + key;

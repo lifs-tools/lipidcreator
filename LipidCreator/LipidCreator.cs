@@ -59,14 +59,13 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public static string LC_VERSION_NUMBER = "1.0.0";
-        public static string LC_OS = "unknown OS";
+        public static PlatformID LC_OS;
         public ArrayList registeredLipids;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
         public IDictionary<string, Precursor> headgroups;
         public DataTable transitionList;
         public DataTable transitionListUnique;
-        public ArrayList replicates; // replicate transitions excluded from transitionListUnique
         public ArrayList precursorDataList;
         [NonSerialized]
         public SkylineToolClient skylineToolClient;
@@ -121,6 +120,7 @@ namespace LipidCreator
         public const string PRODUCT_MZ = "Product Ion m/z";
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
+        public const string UNIQUE = "unique";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
         public const string SKYLINE_API_COLLISION_ENERGY = "PrecursorCE";
         public readonly static string[] STATIC_SKYLINE_API_HEADER = {
@@ -138,6 +138,7 @@ namespace LipidCreator
             "Note"
         };
         public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
+            UNIQUE,
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
             PRECURSOR_NEUTRAL_FORMULA,
@@ -246,19 +247,19 @@ namespace LipidCreator
                             switch(tokens[0])
                             {
                                 case "GL":
-                                    headgroup.category = LipidCategory.GlyceroLipid;
+                                    headgroup.category = LipidCategory.Glycerolipid;
                                     break;
                                 case "PL":
-                                    headgroup.category = LipidCategory.PhosphoLipid;
+                                    headgroup.category = LipidCategory.Glycerophospholipid;
                                     break;
                                 case "SL":
-                                    headgroup.category = LipidCategory.SphingoLipid;
+                                    headgroup.category = LipidCategory.Sphingolipid;
                                     break;
                                 case "Mediator":
-                                    headgroup.category = LipidCategory.Mediator;
+                                    headgroup.category = LipidCategory.LipidMediator;
                                     break;
                                 case "Cholesterol":
-                                    headgroup.category = LipidCategory.Cholesterol;
+                                    headgroup.category = LipidCategory.Sterollipid;
                                     break;
                                 default:
                                     throw new Exception("invalid lipid category");
@@ -513,8 +514,8 @@ namespace LipidCreator
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
-            LC_OS = Environment.OSVersion.Platform.ToString();
-            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS);
+            LC_OS = Environment.OSVersion.Platform;
+            log.Info("Starting LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
@@ -526,7 +527,6 @@ namespace LipidCreator
             collisionEnergyHandler = new CollisionEnergy();
             availableInstruments = new ArrayList();
             availableInstruments.Add("");
-            replicates = new ArrayList();
             readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
@@ -742,7 +742,10 @@ namespace LipidCreator
             {         
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
-                    Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    if (precursorData.precursorSelected)
+                    {
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                    }
                 }
             }
             else 
@@ -751,6 +754,8 @@ namespace LipidCreator
                 double maxCE = msInstruments[instrument].maxCE;
                 foreach (PrecursorData precursorData in this.precursorDataList)
                 {
+                    if (!precursorData.precursorSelected) continue;
+                
                     double CE = -1;
                     string precursorName = precursorData.fullMoleculeListName;
                     string adduct = computeAdductFormula(null, precursorData.precursorAdduct);
@@ -773,26 +778,54 @@ namespace LipidCreator
             }
             
             
-            IDictionary<String, String> replicateKeys = new Dictionary<String, String> ();
-            int i = 0;
-            replicates.Clear();
+            // check for duplicates
+            IDictionary<String, ArrayList> replicateKeys = new Dictionary<String, ArrayList> ();
             foreach (DataRow row in transitionList.Rows)
             {
-            string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
-            string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
+                string prec_mass = string.Format("{0:N4}%", (String)row [LipidCreator.PRECURSOR_MZ]);
+                string prod_mass = string.Format("{0:N4}%", (((String)row [LipidCreator.PRODUCT_NEUTRAL_FORMULA]) != "" ? (String)row [LipidCreator.PRODUCT_MZ] : (String)row [LipidCreator.PRODUCT_NAME]));
                 string replicateKey = prec_mass + "/" + prod_mass;
-                if (!replicateKeys.ContainsKey (replicateKey))
+                if (!replicateKeys.ContainsKey (replicateKey)) replicateKeys.Add(replicateKey, new ArrayList());
+                replicateKeys[replicateKey].Add(row);
+            }
+                
+            foreach (string replicateKey in replicateKeys.Keys)
+            {
+                DataRow row = (DataRow)replicateKeys[replicateKey][0];
+                
+                
+                if (replicateKeys[replicateKey].Count > 1)
                 {
-                    string note = "Interference with " + (String)row[LipidCreator.PRECURSOR_NAME] + " " + (String)row[LipidCreator.PRECURSOR_ADDUCT] + " " + (String)row[LipidCreator.PRODUCT_NAME];
-                    replicateKeys.Add(replicateKey, note);
-                    transitionListUnique.ImportRow (row);
+                    for (int i = 0; i < replicateKeys[replicateKey].Count; ++i)
+                    {
+                        DataRow dr1 = (DataRow)replicateKeys[replicateKey][i];
+                        dr1[UNIQUE] = false;
+                        
+                        string note = "";
+                        for (int j = 0; j < replicateKeys[replicateKey].Count; ++j)
+                        {
+                            if (i == j) continue;
+                            DataRow dr2 = (DataRow)replicateKeys[replicateKey][j];
+                            
+                            if (note.Length > 0)
+                            {
+                                note += " and with ";
+                            }
+                            
+                            else
+                            {
+                                note = "Interference with ";
+                            }
+                            note += (string)dr2[LipidCreator.PRECURSOR_NAME] + " " + (string)dr2[LipidCreator.PRECURSOR_ADDUCT] + " " + (string)dr2[LipidCreator.PRODUCT_NAME];
+                        }
+                        dr1[LipidCreator.NOTE] = note;
+                    }
                 }
                 else
                 {
-                    row[LipidCreator.NOTE] = replicateKeys[replicateKey];
-                    if (replicates != null) replicates.Add(i);
+                    row[UNIQUE] = true;
                 }
-                ++i;
+                transitionListUnique.ImportRow (row);
             }
         }
         
@@ -826,6 +859,41 @@ namespace LipidCreator
             createFragmentList(selectedInstrumentForCE, monitoringType);
         }
         
+        
+        
+        public void assemblePrecursors()
+        {
+
+            List<string> headerList = new List<string>();
+            headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
+            if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
+            DATA_COLUMN_KEYS = headerList.ToArray();
+            
+            
+            List<string> apiList = new List<string>();
+            apiList.AddRange(STATIC_SKYLINE_API_HEADER);
+            if (selectedInstrumentForCE.Length > 0) apiList.Add(SKYLINE_API_COLLISION_ENERGY);
+            SKYLINE_API_HEADER = apiList.ToArray();
+            
+            createPrecursorList();
+        }
+        
+        
+        
+        public void assembleFragments(bool asDeveloper)
+        {
+            if (asDeveloper)
+            {
+                Dictionary<int, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                foreach (PrecursorData precursorData in precursorDataList)
+                {
+                    precursorData.precursorName = precursorData.fullMoleculeListName;
+                    precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
+                }
+            }
+            
+            createFragmentList(selectedInstrumentForCE, monitoringType);
+        }
         
         
         
@@ -942,7 +1010,8 @@ namespace LipidCreator
         public static string toLine (DataRow row, string[] columnKeys, string separator)
         {
             List<string> line = new List<string> ();
-            foreach (String columnKey in columnKeys) {
+            foreach (string columnKey in columnKeys) {
+                if (columnKey == UNIQUE) continue;
                 if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ)
                 {
                     line.Add (((String)row [columnKey]).Replace (",", "."));

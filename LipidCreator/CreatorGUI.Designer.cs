@@ -2388,8 +2388,8 @@ namespace LipidCreator
             homeTab.Controls.Add(homeText3);
             
             homeText.Width = 560;
-            homeText.Height = 90;
-            homeText.Location = new Point(60, 210);
+            homeText.Height = 80;
+            homeText.Location = new Point(60, 180);
             homeText.Text = "Targeted assays development based on lipid building blocks:" + Environment.NewLine +
             " • Lipid fragmentation prediction" + Environment.NewLine +
             " • Generation of class specific target lists" + Environment.NewLine +
@@ -2402,7 +2402,7 @@ namespace LipidCreator
             
             homeText2.Width = 560;
             homeText2.Height = 40;
-            homeText2.Location = new Point(60, 300);
+            homeText2.Location = new Point(60, 260);
             homeText2.Text = "LipidCreator offers several interactive tutorials for an easy introduction into its functionality:";
             homeText2.BackColor = Color.Transparent;
             homeText2.ForeColor = Color.White;
@@ -2411,12 +2411,12 @@ namespace LipidCreator
             
             homeText3.Width = 560;
             homeText3.Height = 80;
-            homeText3.Location = new Point(60, 320);
-            homeText3.Text = "LipidCreator version " + Application.ProductVersion + Environment.NewLine + Environment.NewLine + "Citation: Peng et al., Awesome journal, 2018" + Environment.NewLine + Environment.NewLine + "Contact: corresponding author";
+            homeText3.Location = new Point(60, 380);
+            homeText3.Text = "Citation: Peng et al., Awesome journal, 2019" + Environment.NewLine + "Contact: corresponding author";
             homeText3.BackColor = Color.Transparent;
             homeText3.Font = new Font(homeTab.Font.FontFamily, 10);
             homeText3.ForeColor = Color.White;
-            homeText3.Visible = false;
+            //homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();
@@ -2424,7 +2424,7 @@ namespace LipidCreator
             startFirstTutorialButton.Text = "Start PRM tutorial";
             startFirstTutorialButton.Width = 200;
             startFirstTutorialButton.Height = 26;
-            startFirstTutorialButton.Location = new Point(60, 346);
+            startFirstTutorialButton.Location = new Point(60, 316);
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
@@ -2433,7 +2433,7 @@ namespace LipidCreator
             startSecondTutorialButton.Text = "Start SRM tutorial";
             startSecondTutorialButton.Width = 200;
             startSecondTutorialButton.Height = 26;
-            startSecondTutorialButton.Location = new Point(300, 346);
+            startSecondTutorialButton.Location = new Point(300, 316);
             startSecondTutorialButton.BackColor = SystemColors.Control;
             startSecondTutorialButton.Click += startSecondTutorial;
             
@@ -2443,7 +2443,7 @@ namespace LipidCreator
             startThirdTutorialButton.Text = "Start heavy isotope tutorial";
             startThirdTutorialButton.Width = 200;
             startThirdTutorialButton.Height = 26;
-            startThirdTutorialButton.Location = new Point(60, 380);
+            startThirdTutorialButton.Location = new Point(60, 350);
             startThirdTutorialButton.BackColor = SystemColors.Control;
             startThirdTutorialButton.Click += startThirdTutorial;
             
@@ -2453,7 +2453,7 @@ namespace LipidCreator
             startFourthTutorialButton.Text = "Start collision energy tutorial";
             startFourthTutorialButton.Width = 200;
             startFourthTutorialButton.Height = 26;
-            startFourthTutorialButton.Location = new Point(300, 380);
+            startFourthTutorialButton.Location = new Point(300, 350);
             startFourthTutorialButton.BackColor = SystemColors.Control;
             startFourthTutorialButton.Click += startFourthTutorial;
             

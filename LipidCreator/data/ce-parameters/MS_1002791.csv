@@ -1,4 +1,4 @@
-instrument,class,adduct,fragment,ParKey,ParValue
+instrument,class,precursorAdduct,fragment,ParKey,ParValue
 MS:1002791,10-HDoHE,[M-H]1-,m/z 121.0658,meanlog,3.66522040780532
 MS:1002791,10-HDoHE,[M-H]1-,m/z 121.0658,model,dlnormPar
 MS:1002791,10-HDoHE,[M-H]1-,m/z 121.0658,scale,0.378218224571498

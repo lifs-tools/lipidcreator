@@ -912,6 +912,7 @@ namespace LipidCreator
                         {
                             foreach (string lipidName in parseLine(line))
                             {
+                                if (lipidName.Length == 0) continue;
                                 parser.parse(lipidName);
                                 if (parser.wordInGrammer)
                                 {

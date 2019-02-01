@@ -3,10 +3,10 @@ Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
-GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,3,
+GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
 GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
 GL,SQDG,9,16,10,0,0,1,0,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
-GL,TAG,3,5,3,0,0,0,0,images/Precursors/TG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,1,
+GL,TAG,3,5,3,0,0,0,0,images/Precursors/TG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,1,
 Mediator,10-HDoHE,22,32,3,0,0,0,0,images/Precursors/10-HDoHE.png,No,No,No,Yes,No,No,No,-H,6,
 Mediator,11-HDoHE,22,32,3,0,0,0,0,images/Precursors/11-HDoHE.png,No,No,No,Yes,No,No,No,-H,6,
 Mediator,11-HETE,20,32,3,0,0,0,0,images/Precursors/11-HETE.png,No,No,No,Yes,No,No,No,-H,6,

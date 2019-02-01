@@ -303,6 +303,7 @@ namespace LipidCreator
             creatorGUI.addLipidButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click -= new EventHandler(buttonInteraction);
+            creatorGUI.filtersButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.menuCollisionEnergyOpt.Click -= new EventHandler(buttonInteraction);
             foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
             {

@@ -45,6 +45,7 @@ namespace LipidCreator
         public bool updating = false;
         public bool edit = false;
         public MS2Fragment ms2Fragment;
+        public string fragmentOutputName = "";
         
 
         public NewFragment(MS2Form ms2form, bool _edit = false)
@@ -130,6 +131,7 @@ namespace LipidCreator
                 textBoxFragmentName.Text = fragmentName;
                 textBoxFragmentName.Enabled = false;
                 addButton.Text = "OK";
+                fragmentOutputName = ms2Fragment.fragmentOutputName;
                 
                 HashSet<string> fragmentBB = new HashSet<string>(  (String[]) ms2Fragment.fragmentBase.ToArray( typeof( string ) ));
                 for (int i = 1; i < buildingBlocksArray.Count; ++i)
@@ -291,7 +293,8 @@ namespace LipidCreator
         
             
             Dictionary<int, int> newElements = createElementData(elements);
-            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, textBoxFragmentName.Text, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
+            if (fragmentOutputName == "") fragmentOutputName = textBoxFragmentName.Text;
+            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 
             if (!edit)

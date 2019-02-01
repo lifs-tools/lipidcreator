@@ -126,7 +126,7 @@ namespace LipidCreator
                             Dictionary<int, int> fattyElements = MS2Fragment.createEmptyElementDict();
                             foreach(XElement row in dataTable.Elements())
                             {
-                                if (row.Name.ToString().Equals("Elements"))
+                                if (row.Name.ToString().Equals("Element"))
                                 {
                                     fattyElements[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
                                 }

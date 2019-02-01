@@ -2,11 +2,11 @@ Category,Precursor,C,H,O,N,P,S,d,File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default A
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
 Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
-GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,
-GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,3,
-GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,
-GL,SQDG,9,16,10,0,0,1,0,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,
-GL,TAG,3,5,3,0,0,0,0,images/Precursors/TG_pos_pre.png,No,No,Yes,No,No,No,No,+NH4,1,
+GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
+GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
+GL,MGDG,9,16,8,0,0,0,0,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
+GL,SQDG,9,16,10,0,0,1,0,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
+GL,TAG,3,5,3,0,0,0,0,images/Precursors/TG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,1,
 Mediator,10-HDoHE,22,32,3,0,0,0,0,images/Precursors/10-HDoHE.png,No,No,No,Yes,No,No,No,-H,6,
 Mediator,11-HDoHE,22,32,3,0,0,0,0,images/Precursors/11-HDoHE.png,No,No,No,Yes,No,No,No,-H,6,
 Mediator,11-HETE,20,32,3,0,0,0,0,images/Precursors/11-HETE.png,No,No,No,Yes,No,No,No,-H,6,
@@ -103,7 +103,7 @@ Mediator,TXB2{d4},20,30,6,0,0,0,4,images/Precursors/IS/TXB2_d4.png,No,No,No,Yes,
 Mediator,TXB3,20,32,6,0,0,0,0,images/Precursors/TXB3.png,No,No,No,Yes,No,No,No,-H,6,
 PL,BMP,6,13,8,0,1,0,0,images/Precursors/BMP_pos_pre.png,Yes,No,Yes,Yes,No,No,No,-H,2,
 PL,CDPDAG,12,19,13,3,2,0,0,images/Precursors/CDP-DAG_neg_pre.png,Yes,No,No,Yes,Yes,No,No,-H,2,
-PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,0,
+PL,CL,9,18,13,0,2,0,0,images/Precursors/CL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,0,cardio
 PL,DMPE,7,16,6,1,1,0,0,images/Precursors/DMPE_pos_pre.png,Yes,No,No,Yes,No,No,No,-H,2,
 PL,LPA,3,8,6,0,1,0,0,images/Precursors/LPA_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,3,lyso
 PL,LPC,8,19,6,1,1,0,0,images/Precursors/LPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,3,lyso
@@ -115,7 +115,7 @@ PL,LPE O-p,5,13,6,1,1,0,0,images/Precursors/pLPE_neg_pre.png,Yes,No,No,Yes,No,No
 PL,LPG,6,14,8,0,1,0,0,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,3,lyso
 PL,LPI,9,18,11,0,1,0,0,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,3,lyso
 PL,LPS,6,13,8,1,1,0,0,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,3,lyso
-PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,1,
+PL,MLCL,9,19,13,0,2,0,0,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,1,cardio
 PL,MMPE,6,14,6,1,1,0,0,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,2,
 PL,PA,3,7,6,0,1,0,0,images/Precursors/PA_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,-H,2,
 PL,PC,8,18,6,1,1,0,0,images/Precursors/PC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,2,

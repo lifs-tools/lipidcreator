@@ -397,19 +397,61 @@ namespace LipidCreator
                 e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, brush, e.Bounds.Left + (e.Bounds.Width - sz.Width) / 2, e.Bounds.Top + (e.Bounds.Height - sz.Height) / 2 + 1);
             }
         }
-
         
         
         
-        public void changeTabElements(int index)
+        
+        
+        
+        public void enableDisableAdducts(int index)
         {
+            glPosAdductCheckbox1.Enabled = false;
+            glPosAdductCheckbox2.Enabled = false;
+            glPosAdductCheckbox3.Enabled = false;
+            glNegAdductCheckbox1.Enabled = false;
+            glNegAdductCheckbox2.Enabled = false;
+            glNegAdductCheckbox3.Enabled = false;
+            glNegAdductCheckbox4.Enabled = false;
+        
+            plPosAdductCheckbox1.Enabled = false;
+            plPosAdductCheckbox2.Enabled = false;
+            plPosAdductCheckbox3.Enabled = false;
+            plNegAdductCheckbox1.Enabled = false;
+            plNegAdductCheckbox2.Enabled = false;
+            plNegAdductCheckbox3.Enabled = false;
+            plNegAdductCheckbox4.Enabled = false;
+            
+            slPosAdductCheckbox1.Enabled = false;
+            slPosAdductCheckbox2.Enabled = false;
+            slPosAdductCheckbox3.Enabled = false;
+            slNegAdductCheckbox1.Enabled = false;
+            slNegAdductCheckbox2.Enabled = false;
+            slNegAdductCheckbox3.Enabled = false;
+            slNegAdductCheckbox4.Enabled = false;
+            
+            medNegAdductCheckbox1.Enabled = false;
+            medNegAdductCheckbox2.Enabled = false;
+            medNegAdductCheckbox3.Enabled = false;
+            medNegAdductCheckbox4.Enabled = false;
+            
+            chPosAdductCheckbox1.Enabled = false;
+            chPosAdductCheckbox2.Enabled = false;
+            chPosAdductCheckbox3.Enabled = false;
+            chNegAdductCheckbox1.Enabled = false;
+            chNegAdductCheckbox2.Enabled = false;
+            chNegAdductCheckbox3.Enabled = false;
+            chNegAdductCheckbox4.Enabled = false;
+        
             // enable all adduct checkboxes
             foreach (KeyValuePair<string, Precursor> row in lipidCreator.headgroups)
             {
                 int category = (int)row.Value.category;
+                if (category != index) continue;
                 switch (category)
                 {
                     case (int)LipidCategory.Glycerolipid:
+                        if (((Glycerolipid)currentLipid).containsSugar ^ row.Value.attributes.Contains("sugar")) break;
+                        
                         glPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         glPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         glPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -420,6 +462,9 @@ namespace LipidCreator
                         break;
                     
                     case (int)LipidCategory.Glycerophospholipid:
+                        if (((Phospholipid)currentLipid).isLyso ^ row.Value.attributes.Contains("lyso")) break;
+                        if (((Phospholipid)currentLipid).isCL ^ row.Value.attributes.Contains("cardio")) break;
+                    
                         plPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         plPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         plPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -430,6 +475,8 @@ namespace LipidCreator
                         break;
                         
                     case (int)LipidCategory.Sphingolipid:
+                        if (((Sphingolipid)currentLipid).isLyso ^ row.Value.attributes.Contains("lyso")) break;
+                        
                         slPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
                         slPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
                         slPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
@@ -458,6 +505,14 @@ namespace LipidCreator
                 }
                 
             }
+        }
+
+        
+        
+        
+        public void changeTabElements(int index)
+        {
+            enableDisableAdducts(index);
         
             extendWindow(((LipidCategory)index == LipidCategory.Glycerophospholipid) && ((Phospholipid)currentLipid).isCL);
             
@@ -1594,6 +1649,8 @@ namespace LipidCreator
         
         
         
+        
+        
         void glFA1Checkbox3MouseLeave(object sender, EventArgs e)
         {
             glPictureBox.Image = glyceroBackboneImage;
@@ -1730,13 +1787,6 @@ namespace LipidCreator
                 glFA3Checkbox3.Visible = false;
                 glDB3Label.Visible = false;
                 glHydroxyl3Label.Visible = false;
-                glPosAdductCheckbox1.Enabled = true;
-                glPosAdductCheckbox2.Enabled = false;
-                glPosAdductCheckbox3.Enabled = true;
-                glNegAdductCheckbox1.Enabled = true;
-                glNegAdductCheckbox2.Enabled = false;
-                glNegAdductCheckbox3.Enabled = true;
-                glNegAdductCheckbox4.Enabled = true;
                 
                 
                 glHgListbox.Visible = true;
@@ -1759,19 +1809,6 @@ namespace LipidCreator
                 glFA3Checkbox3.Visible = true;
                 glDB3Label.Visible = true;
                 glHydroxyl3Label.Visible = true;
-                glPosAdductCheckbox1.Enabled = false;
-                glPosAdductCheckbox2.Enabled = false;
-                glPosAdductCheckbox3.Enabled = true;
-                glNegAdductCheckbox1.Enabled = false;
-                glNegAdductCheckbox2.Enabled = false;
-                glNegAdductCheckbox3.Enabled = false;
-                glNegAdductCheckbox4.Enabled = false;
-                glPosAdductCheckbox1.Checked = false;
-                glPosAdductCheckbox2.Checked = false;
-                glNegAdductCheckbox1.Checked = false;
-                glNegAdductCheckbox2.Checked = false;
-                glNegAdductCheckbox3.Checked = false;
-                glNegAdductCheckbox4.Checked = false;
                 
                 glHgListbox.Visible = false;
                 glHGLabel.Visible = false;
@@ -1786,6 +1823,8 @@ namespace LipidCreator
             }
             glPictureBox.Image = glyceroBackboneImage;
             glPictureBox.Visible = true;
+            
+            enableDisableAdducts((int)currentIndex);
         }
         
         
@@ -2141,7 +2180,7 @@ namespace LipidCreator
                 lcStep2.Top = plStep1.Height + 20;
                 lcStep3.Top = plStep1.Height + 20;
             }
-            
+            enableDisableAdducts((int)currentIndex);
         }
         
         
@@ -2416,6 +2455,7 @@ namespace LipidCreator
             plPictureBox.SendToBack();
             plHgList.Sort();
             plHgListbox.Items.AddRange(plHgList.ToArray());
+            enableDisableAdducts((int)currentIndex);
         }
         
         ////////////////////// SL ////////////////////////////////

@@ -240,15 +240,13 @@ namespace LipidCreator
         public void setGrid()
         {
             // base types:
-            // 0 -> fixed, FA1, FA2, FA3, FA4, FA1 + FA2, FA1 + FA3, FA1 + FA4, FA2 + FA3, FA2 + FA4, FA3 + FA4, FA1 + FA2 + FA3, FA1 + FA2 + FA4, FA1 + FA3 + FA4, PRE
-            // 1 -> fixed, FA1, FA2, FA3, FA1 + FA2, FA1 + FA3, FA2 + FA3, PRE
-            // 2 -> fixed, FA1, FA2, PRE
-            // 3 -> fixed, FA, PRE
-            // 4 -> fixed, LCB, FA, HG, LCB + FA, LCB + HG, FA + HG, PRE
-            // 5 -> fixed, LCB, HG, PRE
-            // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, PRE
-            // 7 -> fixed, FA1, HG, PRE
-            // 8 -> fixed, PRE
+            // 0 -> fixed, FA1, FA2, FA3, FA4, HG
+            // 1 -> fixed, FA1, FA2, FA3, HG
+            // 2 -> fixed, FA1, FA2, HG
+            // 3 -> fixed, FA, HG
+            // 4 -> fixed, LCB, FA, HG
+            // 5 -> fixed, LCB, HG
+            // 6 -> fixed, HG
             clearData();
             comboBox2.Items.Clear();
             inGridSet = true;
@@ -284,7 +282,6 @@ namespace LipidCreator
                         break;
                         
                     case 2:
-                    case 6:
                         comboBox2.Items.Add("Fatty acyl 1");
                         comboBox2.Items.Add("Fatty acyl 2");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
@@ -292,7 +289,6 @@ namespace LipidCreator
                         break;
                         
                     case 3:
-                    case 7:
                         comboBox2.Items.Add("Fatty acyl");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
                         break;
@@ -307,9 +303,6 @@ namespace LipidCreator
                     case 5:
                         comboBox2.Items.Add("Long chain base");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createEmptyElementDict()));
-                        break;
-                        
-                    case 8:
                         break;
                         
                     default:

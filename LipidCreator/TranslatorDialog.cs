@@ -222,7 +222,14 @@ namespace LipidCreator
             {
                 if (i == lipidNamesList.Rows.Count - 1) break;
                 lipidNamesGridView.Rows[i++].DefaultCellStyle.BackColor = Color.Empty;
-                lipidNames.Add((string)row[FIRST_HEADER]);
+                try
+                {
+                    lipidNames.Add((string)row[FIRST_HEADER]);
+                }
+                catch
+                {
+                    lipidNames.Add("");
+                }
             }
             
             parsedLipids = creatorGUI.lipidCreator.translate(lipidNames);

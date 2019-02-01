@@ -94,14 +94,13 @@ namespace LipidCreator
             updating = false;
             
             // base types:
-            // 0 -> fixed, FA1, FA2, FA3, FA4, FA1 + FA2, FA1 + FA3, FA1 + FA4, FA2 + FA3, FA2 + FA4, FA3 + FA4, FA1 + FA2 + FA3, FA1 + FA2 + FA4, FA1 + FA3 + FA4, HG
-            // 1 -> fixed, FA1, FA2, FA3, FA1 + FA2, FA1 + FA3, FA2 + FA3, HG
+            // 0 -> fixed, FA1, FA2, FA3, FA4, HG
+            // 1 -> fixed, FA1, FA2, FA3, HG
             // 2 -> fixed, FA1, FA2, HG
             // 3 -> fixed, FA, HG
-            // 4 -> fixed, LCB, FA, HG, LCB + FA, LCB + HG, FA + HG, HG
+            // 4 -> fixed, LCB, FA, HG
             // 5 -> fixed, LCB, HG
-            // 6 -> fixed, FA1, FA2, HG, FA1 + FA2, FA1 + HG, FA2 + HG, HG
-            // 7 -> fixed, HG
+            // 6 -> fixed, HG
             string lipidClass = ms2form.getHeadgroup();
             int bbType = ms2form.creatorGUI.lipidCreator.headgroups[lipidClass].buildingBlockType;
             

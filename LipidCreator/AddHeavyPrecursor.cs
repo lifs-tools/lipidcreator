@@ -344,7 +344,6 @@ namespace LipidCreator
                         break;
                         
                     case 2:
-                    case 6:
                         comboBox2.Items.Add("Fatty acyl 1");
                         comboBox2.Items.Add("Fatty acyl 2");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
@@ -352,7 +351,6 @@ namespace LipidCreator
                         break;
                         
                     case 3:
-                    case 7:
                         comboBox2.Items.Add("Fatty acyl");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
                         break;
@@ -367,9 +365,6 @@ namespace LipidCreator
                     case 5:
                         comboBox2.Items.Add("Long chain base");
                         buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<int, int>)precursor.userDefinedFattyAcids[0])));
-                        break;
-                        
-                    case 8:
                         break;
                         
                     default:

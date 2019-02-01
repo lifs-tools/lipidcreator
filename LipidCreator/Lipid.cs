@@ -331,8 +331,8 @@ namespace LipidCreator
                 }
                 
                 // exclude duplicate fragments within the same lipid species
-                if (insertedFragments.Contains(fragName)) continue;
-                insertedFragments.Add(fragName);
+                if (insertedFragments.Contains(fragName + "/" + fragAdduct)) continue;
+                insertedFragments.Add(fragName + "/" + fragAdduct);
                 
                 
                 double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));

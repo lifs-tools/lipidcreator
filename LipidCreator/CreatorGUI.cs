@@ -3339,6 +3339,7 @@ namespace LipidCreator
             foreach (DataRow row in tmpTable.Rows) registeredLipidsDatatable.ImportRow(row);
             
             if ((int)lipidModifications[tabIndex] == rowIndex) lipidModifications[tabIndex] = -1;
+            else if ((int)lipidModifications[tabIndex] > rowIndex) lipidModifications[tabIndex] -= 1;
             if (tabIndex == (int)currentIndex) changeTab(tabIndex);
             
             for (int i = 0; i < lipidsGridview.Rows.Count; ++i)

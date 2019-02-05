@@ -46,6 +46,23 @@ namespace LipidCreator
     [Serializable]
     public partial class TestTutorials
     {
+    
+        [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+        //Mouse actions
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
+        
+        public void DoMouseClick()
+        {
+            //Call the imported function with the cursor's current position
+            uint X = (uint)Cursor.Position.X;
+            uint Y = (uint)Cursor.Position.Y;
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
+        }
+        
         
         public CreatorGUI creatorGUI;
         
@@ -105,7 +122,13 @@ namespace LipidCreator
                             p2.X += (int)(creatorGUI.tabControl.ItemSize.Width * 2.5);
                             p2.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
                             Cursor.Position = p2;
+                            DoMouseClick();
+                            /*
+                            tutorial.currentTabIndex = 2;
+                            Application.DoEvents();
+                            Thread.Sleep(1);
                             creatorGUI.tabControl.SelectedIndex = 2;
+                            */
                             break;
                             
                             
@@ -138,7 +161,7 @@ namespace LipidCreator
                 }
                 else 
                 {
-                    Console.WriteLine("First test interrupteds");
+                    Console.WriteLine("First test interrupted");
                 }
             }
             catch (Exception e)

@@ -92,7 +92,6 @@ namespace LipidCreator
             tutorialWindow = new TutorialWindow(this, creatorGUI.lipidCreator.prefixPath);
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
-            creatorGUI.KeyDown += keyPressInteraction;
         }
         
         
@@ -145,15 +144,6 @@ namespace LipidCreator
                 }
             }
             nextTutorialStep(true);
-        }
-        
-        
-        
-        
-        public void keyPressInteraction(object sender, KeyEventArgs e)
-        {
-            //Console.WriteLine(e.KeyChar);
-            if (inTutorial) quitTutorial();
         }
         
         

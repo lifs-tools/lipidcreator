@@ -71,6 +71,7 @@ namespace LipidCreator
         public bool continueTutorial = false;
         public bool passTabChange = false;
         public bool quitting = false;
+        public bool inTutorial = false;
         private static readonly ILog log = LogManager.GetLogger(typeof(Tutorial));
         
         public Tutorial(CreatorGUI creatorGUI)
@@ -91,9 +92,7 @@ namespace LipidCreator
             tutorialWindow = new TutorialWindow(this, creatorGUI.lipidCreator.prefixPath);
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
-            
-            
-           
+            creatorGUI.KeyDown += keyPressInteraction;
         }
         
         
@@ -103,6 +102,7 @@ namespace LipidCreator
             
             tutorial = t;
             tutorialStep = 0;
+            inTutorial = true;
             quitting = false;
             
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
@@ -146,6 +146,16 @@ namespace LipidCreator
             }
             nextTutorialStep(true);
         }
+        
+        
+        
+        
+        public void keyPressInteraction(object sender, KeyEventArgs e)
+        {
+            //Console.WriteLine(e.KeyChar);
+            if (inTutorial) quitTutorial();
+        }
+        
         
         
         
@@ -279,10 +289,12 @@ namespace LipidCreator
         {
             if (quitting) return;
             quitting = true;
+            inTutorial = false;
             tutorial = Tutorials.NoTutorial;
             tutorialStep = 0;
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
+            //tutorialWindow.KeyPress -= keyPressInteraction;
             
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);

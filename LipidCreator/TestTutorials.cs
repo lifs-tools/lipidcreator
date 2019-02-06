@@ -68,10 +68,15 @@ namespace LipidCreator
         
         public Point getMiddle(Control control)
         {
-            Point point = control.PointToScreen(control.Location);
-            point.X += control.Size.Width >> 1;
-            point.Y += control.Size.Height >> 1;
+            Point buttonCentre = new Point(control.Width / 2, control.Height / 2);
+            return control.PointToScreen(buttonCentre);
+            /*
+            Point point = control.PointToScreen(Point.Empty);
+            //Point point = creatorGUI.PointToClient();
+            //point.X += control.Size.Width >> 1;
+            //point.Y += control.Size.Height >> 1;
             return point;
+            */
         }
         
         public Point getOrigin(Control control)
@@ -79,9 +84,10 @@ namespace LipidCreator
             return control.PointToScreen(control.Location);
         }
         
+        
+        
         public void firstTutorialTest()
         {
-            Console.WriteLine("starteed test");
             try 
             {
                 bool passed = false;
@@ -93,8 +99,7 @@ namespace LipidCreator
                 
                 while (!passed && tutorial.inTutorial)
                 {
-                    Console.WriteLine("in test");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                     
                     if (previousStep != tutorial.tutorialStep)
                     {
@@ -113,26 +118,21 @@ namespace LipidCreator
                     
                     switch (tutorial.tutorialStep)
                     {
-                        case 1:
-                            tutorialWindow.next.PerformClick();
+                        case (int)PRMSteps.Welcome:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
-                        case 2:
+                        case (int)PRMSteps.PhosphoTab:
                             Point p2 = getOrigin(creatorGUI.tabControl);
                             p2.X += (int)(creatorGUI.tabControl.ItemSize.Width * 2.5);
                             p2.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
                             Cursor.Position = p2;
                             DoMouseClick();
-                            /*
-                            tutorial.currentTabIndex = 2;
-                            Application.DoEvents();
-                            Thread.Sleep(1);
-                            creatorGUI.tabControl.SelectedIndex = 2;
-                            */
                             break;
                             
                             
-                        case 3:
+                        case (int)PRMSteps.PGheadgroup:
                             int pg_I = 0;
                             foreach (string item in creatorGUI.plHgListbox.Items)
                             {
@@ -146,7 +146,94 @@ namespace LipidCreator
                             tutorialWindow.next.PerformClick();
                             break;
                             
-                        case 0:
+                        case (int)PRMSteps.SetFA:
+                            creatorGUI.plFA1Textbox.Text = "14-18,20";
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.SetDB:
+                            creatorGUI.plDB1Textbox.Text = "0,1";
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.MoreParameters:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.RepresentitativeFA:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.Ether:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.SecondFADB:
+                            creatorGUI.plFA2Textbox.Text = "8-10";
+                            creatorGUI.plDB2Textbox.Text = "2";
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.SelectAdduct:
+                            Cursor.Position = getMiddle(creatorGUI.plPosAdductCheckbox1);
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.OpenFilter:
+                            Cursor.Position = getMiddle(creatorGUI.filtersButton);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.SelectFilter:
+                            Cursor.Position = getMiddle(creatorGUI.filterDialog.radioButton2);
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(creatorGUI.filterDialog.button2);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.AddLipid:
+                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.OpenInterlist:
+                            Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.ExplainInterlist:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                        
+                        case (int)PRMSteps.OpenReview:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsInterList.continueReviewButton);
+                            DoMouseClick();
+                            Thread.Sleep(500);
+                            break;
+                        
+                        case (int)PRMSteps.StoreList:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            DoMouseClick();
+                            Thread.Sleep(500);
+                            SendKeys.SendWait("{ESC}");
+                            break;
+                        
+                        case (int)PRMSteps.Finish:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            passed = true;
+                            break;
+                            
+                        case (int)PRMSteps.Null:
                             break;
                     
                         default:
@@ -157,11 +244,11 @@ namespace LipidCreator
                 }
                 if (passed)
                 {
-                    Console.WriteLine("First test passed");
+                    MessageBox.Show("First test passed without any problem.");
                 }
                 else 
                 {
-                    Console.WriteLine("First test interrupted");
+                    MessageBox.Show("First test interrupted");
                 }
             }
             catch (Exception e)
@@ -174,7 +261,16 @@ namespace LipidCreator
         {
             Thread t = new Thread(new ThreadStart(firstTutorialTest));
             t.Start();
+            try
+            {
+                t.TrySetApartmentState(ApartmentState.STA);
+            }
+            catch (ThreadStateException)
+            {
+                Console.WriteLine("ThreadStateException occurs if apartment state is set after starting thread.");
+            }
         }
+        
         
         public TestTutorials()
         {
@@ -183,6 +279,7 @@ namespace LipidCreator
             Application.Run(creatorGUI);
         }
     
+        [STAThread]
         public static void Main(string[] Args)
         {
             new TestTutorials();

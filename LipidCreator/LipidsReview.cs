@@ -26,10 +26,13 @@ SOFTWARE.
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Globalization;
+using log4net;
 
 
 namespace LipidCreator
@@ -44,6 +47,12 @@ namespace LipidCreator
         public CreatorGUI creatorGUI;
         public string[] dataColumns = {};
         public bool pressedBackButton = false;
+        public bool edited = false;
+        public MoleculeFormulaParserEventHandler moleculeFormulaParserEventHandler;
+        public Parser parser;
+        private static readonly ILog log = LogManager.GetLogger(typeof(LipidsReview));
+        
+        
 
         public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
         {
@@ -55,11 +64,15 @@ namespace LipidCreator
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             pressedBackButton = false;
             
+            moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler(creatorGUI.lipidCreator);
+            parser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.QUOTE);
+            
             
             InitializeComponent ();
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
-            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
+            updateCountLabel();
+            
             
             
             dataGridViewTransitions.Update ();
@@ -76,6 +89,28 @@ namespace LipidCreator
         }
         
         
+        
+        private void gridviewDataRowRemoved(object sender, System.Windows.Forms.DataGridViewRowsRemovedEventArgs e)
+        {
+            updateCountLabel();
+        }
+        
+        
+        
+        
+        private void gridviewDataRowAdded(object sender, System.Windows.Forms.DataGridViewRowsAddedEventArgs e)
+        {
+            updateCountLabel();
+        }
+        
+        
+        
+        
+        
+        public void updateCountLabel()
+        {
+            labelNumberOfTransitions.Text = "Number of transitions: " + (currentView.Rows.Count - (this.checkBoxEditMode.Checked ? 1 : 0));
+        }
         
         
         
@@ -123,11 +158,365 @@ namespace LipidCreator
         
         
         
+        public Dictionary<int, int> parseMoleculeFormula(string moleculeFormula)
+        {
+            parser.parse(moleculeFormula);
+            if (parser.wordInGrammer)
+            {
+                parser.raiseEvents();
+                if (moleculeFormulaParserEventHandler.elements != null)
+                {
+                    return moleculeFormulaParserEventHandler.elements;
+                }
+                else 
+                {
+                    throw new Exception("mocecule formula invalid");
+                }
+            }
+            throw new Exception("molecule formula invalid");
+        }
+        
+        
+        
+        
+        public string parseAdduct(string adduct)
+        {
+            string adductFormula = "";
+            switch (adduct)
+            {
+                case ("[M+H]1+"): adductFormula = "+H"; break;
+                case ("[M+2H]2+"): adductFormula = "+2H"; break;
+                case ("[M+NH4]1+"): adductFormula = "+NH4"; break;
+                case ("[M-H]1-"): adductFormula = "-H"; break;
+                case ("[M-2H]2-"): adductFormula = "-2H"; break;
+                case ("[M+HCOO]1-"): adductFormula = "+HCOO"; break;
+                case ("[M+CH3COO]1-"): adductFormula = "+CH3COO"; break;
+            
+                default: throw new Exception("adduct formula invalid");
+            }
+            return adductFormula;
+        }
+        
+        
+        
+        
+        public int parseCharge(string charge)
+        {
+            try
+            {
+                return Convert.ToInt32(charge);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("charge invalid");
+            }
+        }
+        
+        
+        
+        public double parseMass(string mass)
+        {
+            try
+            {
+                return Convert.ToDouble(mass.Replace(",", "."), CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("mass invalid");
+            }
+        }
+        
+        
+        
+        
+        public bool editedCheck()
+        {
+            int rowLine = 0;
+            foreach (DataRow row in currentView.Rows)
+            {
+                
+                
+                string validNames = "";
+                // check if names are valid
+                try 
+                {
+                    validNames = (string)row[LipidCreator.MOLECULE_LIST_NAME];
+                    if (validNames.Length == 0) throw new Exception();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Invalid molecule list name in line :" + (rowLine + 1));
+                    log.Error("Invalid molecule list name in line " + (rowLine + 1) + ": ", e);
+                    return false;
+                }
+                try
+                {
+                    validNames = (string)row[LipidCreator.PRECURSOR_NAME];
+                    if (validNames.Length == 0) throw new Exception();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Invalid precursor name in line :" + (rowLine + 1));
+                    log.Error("Invalid precursor name in line " + (rowLine + 1) + ": ", e);
+                    return false;
+                }
+                try
+                {   
+                    validNames = (string)row[LipidCreator.PRODUCT_NAME];
+                    if (validNames.Length == 0) throw new Exception();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Invalid product name in line :" + (rowLine + 1));
+                    log.Error("Invalid product name in line " + (rowLine + 1) + ": ", e);
+                    return false;
+                }
+            
+                // check precursor data
+                string precursorMoluculeFormula = "", precursorIonFormula = "", precursorMass = "", precursorCharge = "";
+                try
+                {
+                    precursorMoluculeFormula = (string)row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    precursorIonFormula = (string)row[LipidCreator.PRECURSOR_ADDUCT];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    precursorMass = (string)row[LipidCreator.PRECURSOR_MZ];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    precursorCharge = (string)row[LipidCreator.PRECURSOR_CHARGE];
+                }
+                catch (Exception e) {}
+                
+                
+                int precursorState = (precursorMoluculeFormula.Length > 0 ? 1 : 0) | (precursorIonFormula.Length > 0 ? 2 : 0) | (precursorMass.Length > 0 ? 4 : 0) | (precursorCharge.Length > 0 ? 8 : 0);
+                
+                try {
+                    Dictionary<int, int> precursorElements;
+                    string precursorAdduct;
+                    double precursorMassDB;
+                    int precursorChargeInt;
+                    int charge;
+                    double mass;
+                    switch (precursorState)
+                    {
+                            
+                        case 3:
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
+                            precursorAdduct = parseAdduct(precursorIonFormula);
+                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
+                            row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
+                            break;
+                            
+                        case 7:
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
+                            precursorAdduct = parseAdduct(precursorIonFormula);
+                            precursorMassDB = parseMass(precursorMass);
+                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            if (Math.Abs(mass - precursorMassDB) > 0.01)
+                            {
+                                throw new Exception("mass invalid");
+                            }
+                            row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
+                            break;
+                            
+                        case 11:
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
+                            precursorAdduct = parseAdduct(precursorIonFormula);
+                            precursorChargeInt = parseCharge(precursorCharge);
+                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
+                            if (charge != precursorChargeInt)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        case 15:
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
+                            precursorAdduct = parseAdduct(precursorIonFormula);
+                            precursorMassDB = parseMass(precursorMass);
+                            precursorChargeInt = parseCharge(precursorCharge);
+                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            if (Math.Abs(mass - precursorMassDB) > 0.01)
+                            {
+                                throw new Exception("mass invalid");
+                            }
+                            if (charge != precursorChargeInt)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        case 12:
+                            precursorMassDB = parseMass(precursorMass);
+                            precursorChargeInt = parseCharge(precursorCharge);
+                            if (precursorChargeInt == 0)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        default:
+                            throw new Exception("data missing");
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor " + e.Message);
+                    log.Error("Error in line " + (rowLine + 1) + ": precursor " + e.Message);
+                    return false;
+                }
+                
+                
+                
+                
+                
+            
+                // check product data
+                string productMoluculeFormula = "", productIonFormula = "", productMass = "", productCharge = "";
+                try
+                {
+                    productMoluculeFormula = (string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    productIonFormula = (string)row[LipidCreator.PRODUCT_ADDUCT];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    productMass = (string)row[LipidCreator.PRODUCT_MZ];
+                }
+                catch (Exception e) {}
+                
+                try
+                {
+                    productCharge = (string)row[LipidCreator.PRODUCT_CHARGE];
+                }
+                catch (Exception e) {}
+                
+                
+                int productState = (productMoluculeFormula.Length > 0 ? 1 : 0) | (productIonFormula.Length > 0 ? 2 : 0) | (productMass.Length > 0 ? 4 : 0) | (productCharge.Length > 0 ? 8 : 0);
+                
+                try {
+                    Dictionary<int, int> productElements;
+                    string productAdduct;
+                    double productMassDB;
+                    int productChargeInt;
+                    int charge;
+                    double mass;
+                    switch (productState)
+                    {
+                            
+                        case 3:
+                            productElements = parseMoleculeFormula(productMoluculeFormula);
+                            productAdduct = parseAdduct(productIonFormula);
+                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
+                            row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
+                            break;
+                            
+                        case 7:
+                            productElements = parseMoleculeFormula(productMoluculeFormula);
+                            productAdduct = parseAdduct(productIonFormula);
+                            productMassDB = parseMass(productMass);
+                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            if (Math.Abs(mass - productMassDB) > 0.01)
+                            {
+                                throw new Exception("mass invalid");
+                            }
+                            row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
+                            break;
+                            
+                        case 11:
+                            productElements = parseMoleculeFormula(productMoluculeFormula);
+                            productAdduct = parseAdduct(productIonFormula);
+                            productChargeInt = parseCharge(productCharge);
+                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
+                            if (charge != productChargeInt)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        case 15:
+                            productElements = parseMoleculeFormula(productMoluculeFormula);
+                            productAdduct = parseAdduct(productIonFormula);
+                            productMassDB = parseMass(productMass);
+                            productChargeInt = parseCharge(productCharge);
+                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            if (Math.Abs(mass - productMassDB) > 0.01)
+                            {
+                                throw new Exception("mass invalid");
+                            }
+                            if (charge != productChargeInt)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        case 12:
+                            productMassDB = parseMass(productMass);
+                            productChargeInt = parseCharge(productCharge);
+                            if (productChargeInt == 0)
+                            {
+                                throw new Exception("charge invalid");
+                            }
+                            break;
+                            
+                        default:
+                            throw new Exception("data missing");
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product " + e.Message);
+                    log.Error("Error in line " + (rowLine + 1) + ": product " + e.Message);
+                    return false;
+                }
+                
+                ++rowLine;
+            }
+            return true;
+        }
+        
+        
+        
         
 
         public void buttonSendToSkylineClick (Object sender, EventArgs e)
         {
             this.Enabled = false;
+            
+            if (edited && !editedCheck())
+            {
+                this.Enabled = true;
+                return;
+            }
             
             if (checkBoxCreateSpectralLibrary.Checked) {
                 String[] specName = new String[]{""};
@@ -153,6 +542,43 @@ namespace LipidCreator
 
         
         
+        public void buttonCheckValuesClick (Object sender, EventArgs e)
+        {
+            if (editedCheck())
+            {
+                MessageBox.Show("All data are correct and valid.");
+            }
+        }
+        
+        
+        private void checkBoxEditModeChanged (object sender, EventArgs e)
+        {
+            buttonSendToSkyline.Enabled = false;
+            edited = true;
+            
+            if (((CheckBox)sender).Checked)
+            {
+                dataGridViewTransitions.ReadOnly = false;
+                dataGridViewTransitions.AllowUserToAddRows = true;
+                dataGridViewTransitions.AllowUserToDeleteRows = true;
+                dataGridViewTransitions.RowHeadersVisible = true;
+            }
+            else
+            {
+                dataGridViewTransitions.ReadOnly = true;
+                dataGridViewTransitions.AllowUserToAddRows = false;
+                dataGridViewTransitions.AllowUserToDeleteRows = false;
+                dataGridViewTransitions.RowHeadersVisible = false;
+            }
+            
+            dataGridViewTransitions.Update();
+            dataGridViewTransitions.Refresh();
+        }
+        
+        
+
+        
+        
         
         private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
@@ -165,7 +591,7 @@ namespace LipidCreator
                 currentView = this.transitionList;
             }
             
-            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
+            updateCountLabel();
             dataGridViewTransitions.DataSource = currentView;
             dataGridViewTransitions.Update();
             dataGridViewTransitions.Refresh();

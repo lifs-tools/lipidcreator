@@ -362,18 +362,70 @@ namespace LipidCreator
                             break;
                             
                         case (int)SRMSteps.SelectFragments:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
+                            DoMouseClick();
+                            int hgt = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemHeight;
+                            int i = 0;
+                            foreach (string itemName in creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.Items)
+                            {
+                                if (itemName == "FA1(+O)" || itemName == "HG(PG,171)")
+                                {
+                                    Point p3 = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments);
+                                    p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1;
+                                    p3.Y += (int)(hgt * (i + 0.5));
+                                    Cursor.Position = p3;
+                                    DoMouseClick();
+                                }
+                                ++i;
+                            }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.AddFragment:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.buttonAddFragment);
+                            DoMouseClick();
+                        
                             break;
                             
                         case (int)SRMSteps.InFragment:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.NameFragment:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName);
+                            DoMouseClick();
+                            SendKeys.SendWait("{t}");
+                            SendKeys.SendWait("{e}");
+                            SendKeys.SendWait("{s}");
+                            SendKeys.SendWait("{t}");
+                            SendKeys.SendWait("{F}");
+                            SendKeys.SendWait("{r}");
+                            SendKeys.SendWait("{a}");
+                            SendKeys.SendWait("{g}");
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox);
+                            DoMouseClick();
+                            Thread.Sleep(200);
+                            Point pp = Cursor.Position;
+                            pp.Y += (int)(creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.Height * 1.5);
+                            Cursor.Position = pp;
+                            Thread.Sleep(200);
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.SetCharge:
+                            Point p4 = getOrigin(creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge);
+                            p4.X += (int)(creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Width * 0.75);
+                            p4.X += creatorGUI.ms2fragmentsForm.newFragment.numericUpDownCharge.Height >> 2;
+                            Cursor.Position = p4;
+                            Thread.Sleep(200);
+                            DoMouseClick();
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.SetElements:

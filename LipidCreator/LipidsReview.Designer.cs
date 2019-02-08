@@ -63,7 +63,10 @@ namespace LipidCreator
             this.buttonSendToSkyline = new System.Windows.Forms.Button();
             this.buttonStoreTransitionList = new System.Windows.Forms.Button();
             this.buttonBack = new System.Windows.Forms.Button();
+            this.buttonCheckValues = new System.Windows.Forms.Button();
             this.checkBoxHideReplicates = new System.Windows.Forms.CheckBox();
+            this.checkBoxEditMode = new System.Windows.Forms.CheckBox();
+            this.groupBoxOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxCreateSpectralLibrary = new System.Windows.Forms.CheckBox();
             this.buttonStoreSpectralLibrary = new System.Windows.Forms.Button();
             this.labelNumberOfTransitions = new System.Windows.Forms.Label();
@@ -89,6 +92,8 @@ namespace LipidCreator
             this.dataGridViewTransitions.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(gridviewDataBindingComplete);
             this.dataGridViewTransitions.Sorted += new EventHandler(gridviewDataSorted);
             this.dataGridViewTransitions.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing; 
+            this.dataGridViewTransitions.RowsAdded += new DataGridViewRowsAddedEventHandler(gridviewDataRowAdded);
+            this.dataGridViewTransitions.RowsRemoved += new DataGridViewRowsRemovedEventHandler(gridviewDataRowRemoved);
             // 
             // button1
             // 
@@ -110,6 +115,18 @@ namespace LipidCreator
             this.buttonStoreTransitionList.UseVisualStyleBackColor = true;
             this.buttonStoreTransitionList.Click += new System.EventHandler(this.buttonStoreTransitionListClick);
             // 
+            // groupBoxOptions
+            // 
+            this.groupBoxOptions.Location = new System.Drawing.Point(120, 6);
+            this.groupBoxOptions.Name = "groupBoxOptions";
+            this.groupBoxOptions.Size = new System.Drawing.Size(560, 40);
+            this.groupBoxOptions.TabIndex = 4;
+            this.groupBoxOptions.TabStop = false;
+            this.groupBoxOptions.Text = "Options";
+            groupBoxOptions.Controls.Add(this.checkBoxEditMode);
+            groupBoxOptions.Controls.Add(this.checkBoxHideReplicates);
+            groupBoxOptions.Controls.Add(this.checkBoxCreateSpectralLibrary);
+            // 
             // button3
             // 
             this.buttonBack.Location = new System.Drawing.Point(12, 12);
@@ -120,13 +137,35 @@ namespace LipidCreator
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.buttonBackClick);
             // 
+            // button4
+            // 
+            this.buttonCheckValues.Location = new System.Drawing.Point(900, 12);
+            this.buttonCheckValues.Name = "button3";
+            this.buttonCheckValues.Size = new System.Drawing.Size(168, 34);
+            this.buttonCheckValues.TabIndex = 0;
+            this.buttonCheckValues.Text = "Check transition List";
+            this.buttonCheckValues.UseVisualStyleBackColor = true;
+            this.buttonCheckValues.Click += new System.EventHandler(this.buttonCheckValuesClick);
+            // 
             // checkBox1
             // 
+            this.checkBoxEditMode.AutoSize = true;
+            this.checkBoxEditMode.Location = new System.Drawing.Point(12, 16);
+            this.checkBoxEditMode.Name = "checkBox1";
+            this.checkBoxEditMode.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxEditMode.TabIndex = 3;
+            this.checkBoxEditMode.Text = "Edit mode";
+            this.checkBoxEditMode.UseVisualStyleBackColor = true;
+            this.checkBoxEditMode.CheckedChanged += new System.EventHandler(this.checkBoxEditModeChanged);
+            // 
+            // checkBox3
+            // 
             this.checkBoxHideReplicates.AutoSize = true;
-            this.checkBoxHideReplicates.Location = new System.Drawing.Point(12, 472);
-            this.checkBoxHideReplicates.Name = "checkBox1";
+            //this.checkBoxHideReplicates.Location = new System.Drawing.Point(12, 472);
+            this.checkBoxHideReplicates.Location = new System.Drawing.Point(130, 16);
+            this.checkBoxHideReplicates.Name = "checkBox3";
             this.checkBoxHideReplicates.Size = new System.Drawing.Size(96, 17);
-            this.checkBoxHideReplicates.TabIndex = 3;
+            this.checkBoxHideReplicates.TabIndex = 4;
             this.checkBoxHideReplicates.Text = "Only show unique transtions";
             this.checkBoxHideReplicates.UseVisualStyleBackColor = true;
             this.checkBoxHideReplicates.CheckedChanged += new System.EventHandler(this.checkBoxCheckedChanged);
@@ -134,7 +173,8 @@ namespace LipidCreator
             // checkBox2
             // 
             this.checkBoxCreateSpectralLibrary.AutoSize = true;
-            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(500, 472);
+            //this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(500, 472);
+            this.checkBoxCreateSpectralLibrary.Location = new System.Drawing.Point(360, 16);
             this.checkBoxCreateSpectralLibrary.Name = "checkBox2";
             this.checkBoxCreateSpectralLibrary.Size = new System.Drawing.Size(96, 17);
             this.checkBoxCreateSpectralLibrary.TabIndex = 3;
@@ -155,7 +195,8 @@ namespace LipidCreator
             // label1
             // 
             this.labelNumberOfTransitions.AutoSize = true;
-            this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 472);
+            //this.labelNumberOfTransitions.Location = new System.Drawing.Point(246, 472);
+            this.labelNumberOfTransitions.Location = new System.Drawing.Point(12, 472);
             this.labelNumberOfTransitions.Name = "label1";
             this.labelNumberOfTransitions.Size = new System.Drawing.Size(109, 13);
             this.labelNumberOfTransitions.TabIndex = 5;
@@ -172,8 +213,8 @@ namespace LipidCreator
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);
             this.Controls.Add(this.buttonBack);
-            this.Controls.Add(this.checkBoxHideReplicates);
-            this.Controls.Add(this.checkBoxCreateSpectralLibrary);
+            this.Controls.Add(this.buttonCheckValues);
+            this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.buttonStoreTransitionList);
             this.Controls.Add(this.buttonSendToSkyline);
             this.Controls.Add(this.dataGridViewTransitions);
@@ -186,7 +227,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){buttonSendToSkyline, buttonBack, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary};
+            controlElements = new ArrayList(){buttonSendToSkyline, buttonBack, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxEditMode, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary, buttonCheckValues};
         }
 
         #endregion
@@ -200,13 +241,18 @@ namespace LipidCreator
         [NonSerialized]
         public Button buttonBack;
         [NonSerialized]
+        public Button buttonCheckValues;
+        [NonSerialized]
         public CheckBox checkBoxHideReplicates;
+        [NonSerialized]
+        public CheckBox checkBoxEditMode;
         [NonSerialized]
         public CheckBox checkBoxCreateSpectralLibrary;
         [NonSerialized]
         public Button buttonStoreSpectralLibrary;
         [NonSerialized]
         public Label labelNumberOfTransitions;
+        public GroupBox groupBoxOptions;
         public ArrayList controlElements;
     }
 }

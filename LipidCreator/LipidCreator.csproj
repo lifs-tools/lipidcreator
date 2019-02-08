@@ -178,6 +178,7 @@
       <DependentUpon>LCMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.cs" />
+    <Compile Include="MoleculeFormulaParserEventHandler.cs" />
     <Compile Include="NewMediatorFragment.cs">
       <SubType>Form</SubType>
     </Compile>

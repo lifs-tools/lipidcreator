@@ -108,8 +108,10 @@ namespace LipidCreator
         
         
         public void updateCountLabel()
-        {
-            labelNumberOfTransitions.Text = "Number of transitions: " + (currentView.Rows.Count - (this.checkBoxEditMode.Checked ? 1 : 0));
+        {   
+            dataGridViewTransitions.Update ();
+            dataGridViewTransitions.Refresh ();
+            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
         }
         
         

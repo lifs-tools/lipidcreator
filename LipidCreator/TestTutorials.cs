@@ -548,6 +548,153 @@ namespace LipidCreator
         
         
         
+        public void thirdTutorialTest()
+        {
+            try 
+            {
+                bool passed = false;
+                Tutorial tutorial = creatorGUI.tutorial;
+                TutorialWindow tutorialWindow = tutorial.tutorialWindow;
+                int retries = 0;
+                int previousStep = 0;
+                
+                
+                while (!passed && tutorial.inTutorial)
+                {
+                    Thread.Sleep(STEP_SLEEP);
+                    
+                    if (previousStep != tutorial.tutorialStep)
+                    {
+                        retries = 0;
+                        previousStep = tutorial.tutorialStep;
+                    }
+                    else
+                    {
+                        retries += 1;
+                    }
+                    
+                    if (retries >= MAX_RETRIES)
+                    {
+                        throw new Exception("Tutorial doesn't react at step " + tutorial.tutorialStep.ToString());
+                    }
+                    
+                    switch (tutorial.tutorialStep)
+                    {
+                            
+                        case (int)HLSteps.Null:
+                            break;
+                            
+                        case (int)HLSteps.Welcome:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                            
+                        case (int)HLSteps.OpenHeavy:
+                            Cursor.Position = getMiddle(creatorGUI.MS2fragmentsLipidButton);
+                            DoMouseClick();
+                            break;
+                            
+                        case (int)HLSteps.HeavyPanel:
+                            break;
+                            
+                        case (int)HLSteps.NameHeavy:
+                            break;
+                            
+                        case (int)HLSteps.OptionsExplain:
+                            break;
+                            
+                        case (int)HLSteps.SetElements:
+                            break;
+                            
+                        case (int)HLSteps.ChangeBuildingBlock:
+                            break;
+                            
+                        case (int)HLSteps.SetElements2:
+                            break;
+                            
+                        case (int)HLSteps.AddIsotope:
+                            break;
+                            
+                        case (int)HLSteps.EditExplain:
+                            break;
+                            
+                        case (int)HLSteps.CloseHeavy:
+                            break;
+                            
+                        case (int)HLSteps.OpenMS2:
+                            break;
+                            
+                        case (int)HLSteps.SelectPG:
+                            break;
+                            
+                        case (int)HLSteps.SelectHeavy:
+                            break;
+                            
+                        case (int)HLSteps.SelectFragments:
+                            break;
+                            
+                        case (int)HLSteps.CheckFragment:
+                            break;
+                            
+                        case (int)HLSteps.EditFragment:
+                            break;
+                            
+                        case (int)HLSteps.SetFragElement:
+                            break;
+                            
+                        case (int)HLSteps.ConfirmEdit:
+                            break;
+                            
+                        case (int)HLSteps.CloseFragment:
+                            break;
+                            
+                        case (int)HLSteps.OpenFilter:
+                            break;
+                            
+                        case (int)HLSteps.SelectFilter:
+                            break;
+                            
+                        case (int)HLSteps.AddLipid:
+                            break;
+                            
+                        case (int)HLSteps.OpenInterlist:
+                            break;
+                            
+                        case (int)HLSteps.OpenReview:
+                            break;
+                            
+                        case (int)HLSteps.StoreList:
+                            break;
+                            
+                        case (int)HLSteps.Finish:
+                            break;
+                    
+                        default:
+                            passed = true;
+                            break;
+                    }
+                    creatorGUI.Refresh();
+                }
+                if (passed)
+                {
+                    MessageBox.Show("First test passed without any problem.");
+                }
+                else 
+                {
+                    MessageBox.Show("First test interrupted");
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+        }
+        
+        
+        
+        
+        
+        
 
         public void firstTutorialStart(Object sender, EventArgs e)
         {
@@ -580,6 +727,22 @@ namespace LipidCreator
         }
         
         
+
+        public void thirdTutorialStart(Object sender, EventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(thirdTutorialTest));
+            t.Start();
+            try
+            {
+                t.TrySetApartmentState(ApartmentState.STA);
+            }
+            catch (ThreadStateException)
+            {
+                Console.WriteLine("ThreadStateException occurs if apartment state is set after starting thread.");
+            }
+        }
+        
+        
         
         
         
@@ -588,6 +751,7 @@ namespace LipidCreator
             creatorGUI = new CreatorGUI(null);
             creatorGUI.startFirstTutorialButton.Click += new EventHandler(firstTutorialStart);
             creatorGUI.startSecondTutorialButton.Click += new EventHandler(secondTutorialStart);
+            creatorGUI.startThirdTutorialButton.Click += new EventHandler(thirdTutorialStart);
             Application.Run(creatorGUI);
         }
     

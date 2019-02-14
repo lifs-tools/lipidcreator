@@ -111,7 +111,7 @@ namespace LipidCreator
         {   
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
-            labelNumberOfTransitions.Text = "Number of transitions: " + currentView.Rows.Count;
+            labelNumberOfTransitions.Text = "Number of transitions: " + (dataGridViewTransitions.Rows.Count - (checkBoxEditMode.Checked ? 1 : 0));
         }
         
         
@@ -140,7 +140,7 @@ namespace LipidCreator
             {
                 foreach (DataGridViewRow dataRow in dataGridViewTransitions.Rows)
                 {
-                    if((string)(dataRow.Cells[0].Value) != "True")
+                    if((string)(dataRow.Cells[0].Value) == "False")
                     {
                         dataRow.DefaultCellStyle.BackColor = Color.Beige;
                     }

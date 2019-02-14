@@ -81,9 +81,21 @@ namespace LipidCreator
             return control.PointToScreen(controlCenter);
         }
         
+        
+        
+        
+        
         public Point getOrigin(Control control)
         {
-            Point controlLeft = new Point(1, 1);
+            return getOrigin(control, new Point(1, 1));
+        }
+        
+        
+        
+        
+        
+        public Point getOrigin(Control control, Point controlLeft)
+        {
             return control.PointToScreen(controlLeft);
         }
         
@@ -429,6 +441,26 @@ namespace LipidCreator
                             break;
                             
                         case (int)SRMSteps.SetElements:
+                            DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
+                            int iDGV = dgv.ColumnHeadersHeight ;
+                            foreach (DataGridViewRow dgvRow in dgv.Rows)
+                            {
+                            Console.WriteLine(dgvRow.Cells[0].Value.ToString());
+                                if (dgvRow.Cells[0].Value.ToString() == "H")
+                                {
+                                    Cursor.Position = getMiddle(dgvRow.Cells[1]);
+                                    DoMouseClick();
+                                    SendKeys.SendWait("{3}");
+                                    SendKeys.SendWait("{ENTER}");
+                                }
+                                else if (dgvRow.Cells[0].Value.ToString() == "O")
+                                {
+                                    Cursor.Position = getMiddle(dgvRow.Cells[1]);
+                                    DoMouseClick();
+                                    SendKeys.SendWait("{3}");
+                                    SendKeys.SendWait("{ENTER}");
+                                }
+                            }
                             break;
                             
                         case (int)SRMSteps.AddingFragment:

@@ -442,49 +442,83 @@ namespace LipidCreator
                             
                         case (int)SRMSteps.SetElements:
                             DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
-                            int iDGV = dgv.ColumnHeadersHeight ;
+                            int x1 = dgv.Columns[0].Width + (dgv.Columns[1].Width >> 1);
+                            int y1 = dgv.ColumnHeadersHeight;
                             foreach (DataGridViewRow dgvRow in dgv.Rows)
                             {
-                            Console.WriteLine(dgvRow.Cells[0].Value.ToString());
-                                if (dgvRow.Cells[0].Value.ToString() == "H")
-                                {
-                                    Cursor.Position = getMiddle(dgvRow.Cells[1]);
+                                
+                                if ((string)dgvRow.Cells[0].Value == "H")
+                                {   
+                                    Cursor.Position = getOrigin(dgv, new Point(x1, y1 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
                                     SendKeys.SendWait("{3}");
                                     SendKeys.SendWait("{ENTER}");
                                 }
-                                else if (dgvRow.Cells[0].Value.ToString() == "O")
-                                {
-                                    Cursor.Position = getMiddle(dgvRow.Cells[1]);
+                                else if ((string)dgvRow.Cells[0].Value == "O")
+                                {   
+                                    Cursor.Position = getOrigin(dgv, new Point(x1, y1 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
-                                    SendKeys.SendWait("{3}");
+                                    SendKeys.SendWait("{2}");
                                     SendKeys.SendWait("{ENTER}");
                                 }
+                                y1 += dgvRow.Height;
                             }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.AddingFragment:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.addButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.SelectNew:
+                            int hgtPos = creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemHeight;
+                            int i6 = 0;
+                            foreach (string itemName in creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.Items)
+                            {
+                                if (itemName == "testFrag")
+                                {
+                                    Cursor.Position = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments, new Point(creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1, (int)(hgtPos * (i6 + 0.5))));
+                                    DoMouseClick();
+                                }
+                                ++i6;
+                            }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.ClickOK:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.buttonOK);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.AddLipid:
+                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.OpenInterlist:
+                            Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)SRMSteps.OpenReview:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsInterList.continueReviewButton);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
                             break;
                             
                         case (int)SRMSteps.StoreList:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            SendKeys.SendWait("{ESC}");
                             break;
                             
                         case (int)SRMSteps.Finish:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             passed = true;
                             break;
                     

@@ -313,7 +313,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <DataFiles Include="$(ProjectDir)data\**\*.*" />
+    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx"/>
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
   </ItemGroup>

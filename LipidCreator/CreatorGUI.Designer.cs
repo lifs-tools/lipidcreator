@@ -334,6 +334,8 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuHelp;
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuAbout;
+        [NonSerialized]
+        public System.Windows.Forms.MenuItem menuDocs;
 
 
         [NonSerialized]
@@ -918,13 +920,15 @@ namespace LipidCreator
             this.menuHelp.Text = "&Help";
 
             this.menuAbout = new System.Windows.Forms.MenuItem ();
-            this.menuHelp.MenuItems.AddRange(new MenuItem[]{ menuAbout });
-
-            
             this.menuAbout.Shortcut = System.Windows.Forms.Shortcut.CtrlB;
             this.menuAbout.Text = "A&bout";
             this.menuAbout.Click += new System.EventHandler (menuAboutClick);
 
+			this.menuDocs = new System.Windows.Forms.MenuItem();
+            this.menuDocs.Text = "Documentation";
+            this.menuDocs.Click += new System.EventHandler (menuDocsClick);
+
+			this.menuHelp.MenuItems.AddRange(new MenuItem[]{ this.menuAbout, this.menuDocs });
             this.mainMenuLipidCreator.MenuItems.AddRange(new MenuItem[] { this.menuFile, this.menuOptions, this.menuHelp } );
             
             tabControl = new TabControl();

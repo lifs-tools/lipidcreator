@@ -3796,7 +3796,46 @@ namespace LipidCreator
             aboutDialog.Dispose();
         }
         
-        
+
+        protected void menuDocsClick(object sender, System.EventArgs e)
+        {
+            string docsDir = System.IO.Path.GetFullPath("data/docs");
+            log.Debug("docsDir is " + docsDir);
+            // Check the folder exists
+            if (Directory.Exists(docsDir))
+            {
+                
+                try
+                {
+					log.Debug("Opening directory " + System.IO.Path.GetDirectoryName(docsDir));
+                    int p = (int)Environment.OSVersion.Platform;
+                    if ((p == 4) || (p == 6) || (p == 128))
+                    {
+                        log.Debug("Running on Linux");
+                        string openCmd = "xdg-open";
+                        Process process = System.Diagnostics.Process.Start(openCmd, docsDir);
+                        process.WaitForExit();
+                        log.Debug("Finished starting process '" + openCmd + " " + docsDir + "' with code " + process.ExitCode);
+                    }
+                    else
+                    {
+                        log.Debug("Running on Windows");
+                        Process process = System.Diagnostics.Process.Start(docsDir);
+                        process.WaitForExit();
+                        log.Debug("Finished starting process '"+ docsDir);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Could not open docs folder, " + exception.Message, "Error while opening", MessageBoxButtons.OK);
+                    log.Error("Could not open docs folder " + docsDir + ":", exception);
+                    log.Error(exception.StackTrace);
+                }
+            } else {
+                MessageBox.Show("Could not open docs folder, " + docsDir, "Directory does not exist", MessageBoxButtons.OK);
+                log.Error("Could not open docs folder " + docsDir + ": Directory does not exist!");
+            }
+        }
         
         
     }

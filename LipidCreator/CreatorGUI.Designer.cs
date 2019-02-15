@@ -353,7 +353,7 @@ namespace LipidCreator
         [NonSerialized]
         public TabPage mediatorlipidsTab;
         [NonSerialized]
-        public Panel lipidsGroupbox;
+        public GroupBox lipidsGroupbox;
         [NonSerialized]
         public int DefaultCheckboxBGR;
         [NonSerialized]
@@ -949,7 +949,7 @@ namespace LipidCreator
             sphingolipidsTab = new TabPage();
             cholesterollipidsTab = new TabPage();
             mediatorlipidsTab = new TabPage();
-            lipidsGroupbox = new Panel();
+            lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
             filtersButton = new Button();

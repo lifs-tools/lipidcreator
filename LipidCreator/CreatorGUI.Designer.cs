@@ -353,7 +353,7 @@ namespace LipidCreator
         [NonSerialized]
         public TabPage mediatorlipidsTab;
         [NonSerialized]
-        public GroupBox lipidsGroupbox;
+        public Panel lipidsGroupbox;
         [NonSerialized]
         public int DefaultCheckboxBGR;
         [NonSerialized]
@@ -757,6 +757,10 @@ namespace LipidCreator
         ToolTip toolTip;
 
         [NonSerialized]
+        Panel lipidsGridviewPanel;
+        [NonSerialized]
+        Panel lipidsReviewButtonPanel;
+        [NonSerialized]
         DataGridView lipidsGridview;
         [NonSerialized]
         public Button openReviewFormButton;
@@ -945,7 +949,7 @@ namespace LipidCreator
             sphingolipidsTab = new TabPage();
             cholesterollipidsTab = new TabPage();
             mediatorlipidsTab = new TabPage();
-            lipidsGroupbox = new GroupBox();
+            lipidsGroupbox = new Panel();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
             filtersButton = new Button();
@@ -2267,15 +2271,43 @@ namespace LipidCreator
             }
             medPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             medPictureBox.SendToBack();
-            
 
-            lipidsGroupbox.Controls.Add(lipidsGridview);
-            lipidsGroupbox.Controls.Add(openReviewFormButton);
-            lipidsGroupbox.Dock = DockStyle.Bottom;
-            lipidsGroupbox.Text = "Lipid list";
-            lipidsGroupbox.Height = minLipidGridHeight;
-            
-            
+            lipidsGridview.Dock = DockStyle.Fill;
+            lipidsGridview.DataSource = registeredLipidsDatatable;
+            lipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            lipidsGridview.AllowUserToResizeColumns = false;
+            lipidsGridview.AllowUserToAddRows = false;
+            lipidsGridview.AllowUserToResizeRows = false;
+            lipidsGridview.ReadOnly = true;
+            lipidsGridview.MultiSelect = false;
+            lipidsGridview.RowTemplate.Height = 34;
+            lipidsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
+            lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
+            lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
+            lipidsGridview.RowHeadersVisible = false;
+            lipidsGridview.ScrollBars = ScrollBars.Vertical;
+            lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
+
+            lipidsGridviewPanel = new Panel();
+            lipidsGridviewPanel.Dock = DockStyle.Fill;
+            lipidsGridviewPanel.AutoSize = true;
+            lipidsGridviewPanel.AutoScroll = true;
+            lipidsGridviewPanel.Controls.Add(lipidsGridview);
+
+            //lipidsGroupbox.Controls.Add(lipidsGridviewPanel);
+
+            lipidsReviewButtonPanel = new Panel();
+            lipidsReviewButtonPanel.AutoSize = true;
+            lipidsReviewButtonPanel.Dock = DockStyle.Bottom;
+            lipidsReviewButtonPanel.Controls.Add(openReviewFormButton);
+
+			lipidsGroupbox.Dock = DockStyle.Bottom;
+			lipidsGroupbox.Text = "Lipid list";
+			lipidsGroupbox.Height = minLipidGridHeight;
+            lipidsGroupbox.Controls.Add(lipidsGridviewPanel);
+            lipidsGroupbox.Controls.Add(lipidsReviewButtonPanel);
+
             
             lcStep2.Controls.Add(addHeavyIsotopeButton);
             lcStep2.Controls.Add(MS2fragmentsLipidButton);
@@ -2336,32 +2368,6 @@ namespace LipidCreator
             modifyLipidButton.Location = new Point(lcStep3.Width - addLipidButton.Width - modifyLipidButton.Width - 20, topLowButtons);
             modifyLipidButton.BackColor = SystemColors.Control;
             modifyLipidButton.Click += modifyLipid;
-            
-            
-            
-            
-            
-            
-            lipidsGridview.AutoSize = true;
-            lipidsGridview.Dock = DockStyle.Fill;
-            lipidsGridview.DataSource = registeredLipidsDatatable;
-            lipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            lipidsGridview.AllowUserToResizeColumns = false;
-            lipidsGridview.AllowUserToAddRows = false;
-            lipidsGridview.Width = this.Width;
-            lipidsGridview.AllowUserToResizeRows = false;
-            lipidsGridview.ReadOnly = true;
-            lipidsGridview.MultiSelect = false;
-            lipidsGridview.RowTemplate.Height = 34;
-            lipidsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
-            lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
-            lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
-            lipidsGridview.RowHeadersVisible = false;
-            lipidsGridview.ScrollBars = ScrollBars.Vertical;
-            lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
-            
-            
 
             openReviewFormButton.Text = "Review Lipids";
             openReviewFormButton.Width = 130;

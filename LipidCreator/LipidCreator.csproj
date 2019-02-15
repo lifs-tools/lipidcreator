@@ -306,6 +306,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <None Include="packages.config" />
     <None Include="data\log4net.config" />
+    <Compile Include="LipidCreatorExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -313,7 +314,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx"/>
+    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
   </ItemGroup>

@@ -993,7 +993,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Phosholipids' tab", "LipidCreator offers computation for five lipid categories, namely glycerolipids, phospholipids, sphingolipids, cholesterols and mediators.");
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Glycerophospholipids' tab", "LipidCreator offers computation for five lipid categories, namely glycerolipids, glycerophospholipids, sphingolipids, sterol lipids and lipid mediators.");
                     
                     break;
                     
@@ -1070,7 +1070,7 @@ namespace LipidCreator
                     CheckBox plFACheck1 = creatorGUI.plFA1Checkbox1;
                     tutorialArrow.update(new Point(plFACheck1.Location.X, plFACheck1.Location.Y + (plFACheck1.Size.Height >> 1)), "tr");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Click on 'Continue'", "Ester or ether linked fatty acyls (fatty acyl, plasmenyl or plasmanyl) can be created here.");
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Click on 'Continue'", "Ester or ether linked fatty acyls (FA, fatty acyl; FAp, plasmenyl; or FAa, plasmanyl) can be created here.");
                     nextEnabled = true;
                     
                     break;
@@ -1150,7 +1150,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which including all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which includs all precursors and fragment information.");
                     break;
                 
                 
@@ -1159,7 +1159,7 @@ namespace LipidCreator
                     initInterList();
                     setTutorialControls(creatorGUI.lipidsInterList);
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue", "The precursors can be select/deselect from this list for the generation of transition list in next step.", false);
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "The precursors can be select/deselect from this list for the generation of transition list in next step.", false);
                     nextEnabled = true;
                     
                     break;
@@ -1185,7 +1185,7 @@ namespace LipidCreator
                     
                     tutorialArrow.update(new Point(bstl.Location.X + (bstl.Size.Width >> 1), bstl.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' stores the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly transfered to Skyline by clicking on 'Send to Skyline'.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Store transition list'", "'Store transition list' stores the list in csv format. If LipidCreator is started from Skyline, the transition list can be directly transferred to Skyline by clicking on 'Send to Skyline'.", false);
                     
                     break;
                     
@@ -1318,7 +1318,7 @@ namespace LipidCreator
                     
                     initAddFragmentForm();
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on 'Continue'", "This form allows you to define your own fragments. The definition is descriptive. Name, dependent building blocks, polarity and constant elements can be added.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(620, 234), "Click on 'Continue'", "This form allows you to define your own fragments. The definition is descriptive. Fragment name, select base (dependent building blocks), charge (polarity) and constant elements can be added.", false);
                     
                     nextEnabled = true;
                     tutorialWindow.Refresh();

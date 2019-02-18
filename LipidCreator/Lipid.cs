@@ -203,12 +203,12 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", precursorData.precursorM_Z);
+                lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
                 lipidRowPrecursor[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 lipidRowPrecursor[LipidCreator.PRODUCT_NAME] = "precursor";
                 lipidRowPrecursor[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRowPrecursor[LipidCreator.PRODUCT_ADDUCT] = precursorData.precursorAdductFormula;
-                lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", precursorData.precursorM_Z);
+                lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
                 lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRowPrecursor);
@@ -258,7 +258,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRECURSOR_NAME] = precursorData.precursorName;
                 lipidRow[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
-                lipidRow[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", precursorData.precursorM_Z);
+                lipidRow[LipidCreator.PRECURSOR_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
                 lipidRow[LipidCreator.PRECURSOR_CHARGE] = ((precursorData.precursorCharge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorCharge);
                 
                 
@@ -341,7 +341,7 @@ namespace LipidCreator
                 lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
                 lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
                 lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
-                lipidRow[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", fragMZ);
+                lipidRow[LipidCreator.PRODUCT_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", fragMZ).Replace(",", "");
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 lipidRow[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRow);

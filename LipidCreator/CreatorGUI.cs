@@ -329,30 +329,30 @@ namespace LipidCreator
             {
                  if (initialCall)
                  {
-                     log.Info("Initializing lipid table!");
-                     int numCols = registeredLipidsDatatable.Columns.Count;
+                    log.Debug("Initializing lipid table!");
+                    int numCols = registeredLipidsDatatable.Columns.Count;
                     DataGridViewImageColumn editColumn = new DataGridViewImageColumn();
-                     editColumn.Name = "Edit";
-                     editColumn.HeaderText = "Edit";
-                     editColumn.ValuesAreIcons = false;
-                     lipidsGridview.Columns.Add(editColumn);
+                    editColumn.Name = "Edit";
+                    editColumn.HeaderText = "Edit";
+                    editColumn.ValuesAreIcons = false;
+                    lipidsGridview.Columns.Add(editColumn);
                     DataGridViewImageColumn deleteColumn = new DataGridViewImageColumn();
-                     deleteColumn.Name = "Delete";
-                     deleteColumn.HeaderText = "Delete";
-                     deleteColumn.ValuesAreIcons = false;
-                     lipidsGridview.Columns.Add(deleteColumn);
-                     int w = (lipidsGridview.Width - 160) / (numCols - 1) - 4;
-                     foreach (DataGridViewColumn col in lipidsGridview.Columns)
-                     {
+                    deleteColumn.Name = "Delete";
+                    deleteColumn.HeaderText = "Delete";
+                    deleteColumn.ValuesAreIcons = false;
+                    lipidsGridview.Columns.Add(deleteColumn);
+                    int w = (lipidsGridview.Width - 160) / (numCols - 1) - 4;
+                    foreach (DataGridViewColumn col in lipidsGridview.Columns)
+                    {
                         col.Frozen = false;
                         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
                          //col.Width = Math.Max(col.MinimumWidth, w);
-                     }
-                     lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                     editColumn.Width = 40;
-                     deleteColumn.Width = 40;
-                     initialCall = false;
+                    }
+                    lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    editColumn.Width = 40;
+                    deleteColumn.Width = 40;
+                    initialCall = false;
                     lipidsGridview.Enabled = true;
                     lipidsGridview.Invalidate();
 					lipidsGridview.PerformLayout();
@@ -3058,7 +3058,7 @@ namespace LipidCreator
         public void modifyLipid(Object sender, EventArgs e)
         {
             lipidsGridview.InvokeIfRequired(() => {
-                log.Info("Modifying row in lipid table");
+                log.Debug("Modifying row in lipid table");
                 LipidCategory result = checkPropertiesValid();
                 int rowIndex = lipidModifications[(int)result];
                 switch (result)
@@ -3092,8 +3092,8 @@ namespace LipidCreator
                 lipidsGridview.Rows[rowIndex].Cells["Edit"].Value = editImage;
                 lipidsGridview.Rows[rowIndex].Cells["Delete"].Value = deleteImage;
 //                lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                lipidsGridview.Invalidate();
-                lipidsGridview.PerformLayout();
+                //lipidsGridview.Invalidate();
+                //lipidsGridview.PerformLayout();
                 //lipidsGridview.Update();
                 //lipidsGridview.Refresh();
             });
@@ -3104,7 +3104,7 @@ namespace LipidCreator
         public void registerLipid(Object sender, EventArgs e)
         {
             lipidsGridview.InvokeIfRequired(() => {
-                log.Info("Registering lipids for lipid table");
+                log.Debug("Registering lipids for lipid table");
                 //lipidsGridview.ScrollBars = ScrollBars.None;
                 LipidCategory result = checkPropertiesValid();
                 int tabIndex = 0;
@@ -3147,8 +3147,8 @@ namespace LipidCreator
                 lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Edit"].Value = editImage;
                 lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Delete"].Value = deleteImage;
                 //lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                lipidsGridview.Invalidate();
-                lipidsGridview.PerformLayout();
+                //lipidsGridview.Invalidate();
+                //lipidsGridview.PerformLayout();
                 //lipidsGridview.Update();
                 //lipidsGridview.Refresh();
 
@@ -3275,8 +3275,7 @@ namespace LipidCreator
         {
             lipidsGridview.InvokeIfRequired(() =>
             {
-                log.Info("Refreshing lipids table");
-                //lipidsGridview.ScrollBars = ScrollBars.None;
+                log.Debug("Refreshing lipids table");
                 registeredLipidsDatatable.Clear();
                 foreach (Lipid currentRegisteredLipid in lipidCreator.registeredLipids)
                 {
@@ -3290,11 +3289,8 @@ namespace LipidCreator
                     lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
 
-                //lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                lipidsGridview.Invalidate();
-				lipidsGridview.PerformLayout();
-                //lipidsGridview.Update();
-                //lipidsGridview.Refresh();
+    //            lipidsGridview.Invalidate();
+				//lipidsGridview.PerformLayout();
             });
         }
         
@@ -3362,8 +3358,7 @@ namespace LipidCreator
         {
             lipidsGridview.InvokeIfRequired(() =>
             {
-                log.Info("Deleting row "+rowIndex+" from lipids table");
-                //lipidsGridview.ScrollBars = ScrollBars.None;
+                log.Debug("Deleting row "+rowIndex+" from lipids table");
                 Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
                 int tabIndex = 0;
                 if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.Glycerolipid;
@@ -3392,11 +3387,8 @@ namespace LipidCreator
                 }
 
                 lipidCreator.registeredLipids.RemoveAt(rowIndex);
-                //lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                lipidsGridview.Invalidate();
-                lipidsGridview.PerformLayout();
-                //lipidsGridview.Update();
-                //lipidsGridview.Refresh();
+                //lipidsGridview.Invalidate();
+                //lipidsGridview.PerformLayout();
             });
 
         }

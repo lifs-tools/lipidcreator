@@ -183,7 +183,6 @@ namespace LipidCreator
                     int cnt = 0;
                     foreach (DataRow row in lcf.transitionList.Rows)
                     {
-                        //Console.WriteLine(row[LipidCreator.PRODUCT_NAME] + " " + row[LipidCreator.PRODUCT_ADDUCT]);
                         if (row[LipidCreator.PRODUCT_NAME].Equals(fragmentName) && row[LipidCreator.PRODUCT_ADDUCT].Equals(unitTestRow[8]))
                         {
                             // precursor
@@ -191,16 +190,14 @@ namespace LipidCreator
                             Assert((string)row[LipidCreator.PRECURSOR_NAME], unitTestRow[1], "precursor name: ");
                             Assert((string)row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA], unitTestRow[2], "precursor formula: ");
                             Assert((string)row[LipidCreator.PRECURSOR_ADDUCT], unitTestRow[3], "precursor adduct: ");
-                            Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ]), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");
+                            Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRECURSOR_CHARGE]), Convert.ToInt32(unitTestRow[5]), "precursor charge: ");
-                            
-                            //Console.WriteLine(row[LipidCreator.PRECURSOR_NAME] + " " + (string)row[LipidCreator.PRODUCT_NAME]);
                             
                             // product
                             Assert((string)row[LipidCreator.PRODUCT_NAME], fragmentName, "product name: ");
                             Assert((string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA], unitTestRow[7], "product formula: ");
                             Assert((string)row[LipidCreator.PRODUCT_ADDUCT], unitTestRow[8], "product adduct: ");
-                            Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ]), Convert.ToDouble(unitTestRow[9], CultureInfo.InvariantCulture), "product mass: ");
+                            Assert(Convert.ToDouble(row[LipidCreator.PRODUCT_MZ], CultureInfo.InvariantCulture), Convert.ToDouble(unitTestRow[9], CultureInfo.InvariantCulture), "product mass: ");
                             Assert(Convert.ToInt32(row[LipidCreator.PRODUCT_CHARGE]), Convert.ToInt32(unitTestRow[10]), "product charge: ");
                             ++cnt;
                         }

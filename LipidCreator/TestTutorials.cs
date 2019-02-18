@@ -924,6 +924,119 @@ namespace LipidCreator
         
         
         
+        public void fourthTutorialTest()
+        {
+            try 
+            {
+                bool passed = false;
+                Tutorial tutorial = creatorGUI.tutorial;
+                TutorialWindow tutorialWindow = tutorial.tutorialWindow;
+                int retries = 0;
+                int previousStep = 0;
+                
+                
+                while (!passed && tutorial.inTutorial)
+                {
+                    Thread.Sleep(STEP_SLEEP);
+                    
+                    if (previousStep != tutorial.tutorialStep)
+                    {
+                        retries = 0;
+                        previousStep = tutorial.tutorialStep;
+                    }
+                    else
+                    {
+                        retries += 1;
+                    }
+                    
+                    if (retries >= MAX_RETRIES)
+                    {
+                        throw new Exception("Tutorial doesn't react at step " + tutorial.tutorialStep.ToString());
+                    }
+                    
+                    switch (tutorial.tutorialStep)
+                    {
+                            
+                        case (int)CESteps.Null:
+                            break;
+                            
+                        case (int)CESteps.Welcome:
+                            break;
+                            
+                        case (int)CESteps.ActivateCE:
+                            break;
+                            
+                        case (int)CESteps.OpenCEDialog:
+                            break;
+                            
+                        case (int)CESteps.SelectTXB2:
+                            break;
+                            
+                        case (int)CESteps.ExplainBlackCurve:
+                            break;
+                            
+                        case (int)CESteps.ChangeManually:
+                            break;
+                            
+                        case (int)CESteps.CEto20:
+                            break;
+                            
+                        case (int)CESteps.SameForD4:
+                            break;
+                            
+                        case (int)CESteps.CloseCE:
+                            break;
+                            
+                        case (int)CESteps.ChangeToMediators:
+                            break;
+                            
+                        case (int)CESteps.SelectTXB2HG:
+                            break;
+                            
+                        case (int)CESteps.AddLipid:
+                            break;
+                            
+                        case (int)CESteps.OpenInterlist:
+                            break;
+                            
+                        case (int)CESteps.ReviewLipids:
+                            break;
+                            
+                        case (int)CESteps.ExplainLCasExternal:
+                            break;
+                            
+                        case (int)CESteps.StoreBlib:
+                            break;
+                            
+                        case (int)CESteps.Finish:
+                            break;
+                    
+                        default:
+                            passed = true;
+                            break;
+                    }
+                    creatorGUI.Refresh();
+                }
+                if (passed)
+                {
+                    MessageBox.Show("Third test passed without any problem.");
+                }
+                else 
+                {
+                    MessageBox.Show("Third test interrupted");
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+        }
+        
+        
+        
+        
+        
+        
 
         public void firstTutorialStart(Object sender, EventArgs e)
         {
@@ -972,6 +1085,22 @@ namespace LipidCreator
         }
         
         
+
+        public void fourthTutorialStart(Object sender, EventArgs e)
+        {
+            Thread t = new Thread(new ThreadStart(fourthTutorialTest));
+            t.Start();
+            try
+            {
+                t.TrySetApartmentState(ApartmentState.STA);
+            }
+            catch (ThreadStateException)
+            {
+                Console.WriteLine("ThreadStateException occurs if apartment state is set after starting thread.");
+            }
+        }
+        
+        
         
         
         
@@ -981,6 +1110,7 @@ namespace LipidCreator
             creatorGUI.startFirstTutorialButton.Click += new EventHandler(firstTutorialStart);
             creatorGUI.startSecondTutorialButton.Click += new EventHandler(secondTutorialStart);
             creatorGUI.startThirdTutorialButton.Click += new EventHandler(thirdTutorialStart);
+            creatorGUI.startFourthTutorialButton.Click += new EventHandler(fourthTutorialStart);
             Application.Run(creatorGUI);
         }
     

@@ -458,4 +458,8 @@
     <!-- create zip distribution on Linux / OSX -->
     <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images predefined LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
+  <Target Name="AfterClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(IntermediateOutputPath)" />
+    <RemoveDir Directories="$(TargetDir)" />
+  </Target>
 </Project>

@@ -481,6 +481,7 @@ namespace LipidCreator
                             }
                             break;
                             
+                        case 14:
                         case 12:
                             productMassDB = parseMass(productMass);
                             productChargeInt = parseCharge(productCharge);

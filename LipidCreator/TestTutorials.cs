@@ -294,7 +294,6 @@ namespace LipidCreator
                             break;
                     
                         default:
-                            passed = true;
                             break;
                     }
                     creatorGUI.Refresh();
@@ -539,7 +538,6 @@ namespace LipidCreator
                             break;
                     
                         default:
-                            passed = true;
                             break;
                     }
                     creatorGUI.Refresh();
@@ -899,7 +897,6 @@ namespace LipidCreator
                             break;
                     
                         default:
-                            passed = true;
                             break;
                     }
                     creatorGUI.Refresh();
@@ -961,69 +958,185 @@ namespace LipidCreator
                             break;
                             
                         case (int)CESteps.Welcome:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.ActivateCE:
+                            SendKeys.SendWait("{F10}");
+                            SendKeys.SendWait("{RIGHT}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{RIGHT}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{ENTER}");
+                            Thread.Sleep(50);
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.OpenCEDialog:
+                            SendKeys.SendWait("{F10}");
+                            SendKeys.SendWait("{RIGHT}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{DOWN}");
+                            SendKeys.SendWait("{ENTER}");
                             break;
                             
                         case (int)CESteps.SelectTXB2:
+                            ComboBox cb = creatorGUI.ceInspector.classCombobox;
+                            Cursor.Position = getOrigin(cb, new Point((int)(cb.Width * 0.9), cb.Height >> 1));
+                            DoMouseClick();
+                            int ii = 0;
+                            string lastSelected = "";
+                            while (lastSelected != (string)cb.Items[cb.SelectedIndex])
+                            {
+                                lastSelected = (string)cb.Items[cb.SelectedIndex];
+                                SendKeys.SendWait("{PGDN}");
+                                Thread.Sleep(10);
+                            }
+                            
+                            while (ii++ < 20)
+                            {
+                                if ((string)cb.Items[cb.SelectedIndex] == "TXB2")
+                                {
+                                    SendKeys.SendWait("{ENTER}");
+                                    break;
+                                }
+                                else
+                                {
+                                    SendKeys.SendWait("{UP}");
+                                    Thread.Sleep(10);
+                                }
+                            }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.ExplainBlackCurve:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.ChangeManually:
+                            Cursor.Position = getMiddle(creatorGUI.ceInspector.radioButtonPRMArbitrary);
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.CEto20:
+                            Cursor.Position = getMiddle(creatorGUI.ceInspector.numericalUpDownCurrentCE);
+                            DoMouseClick();
+                            for (int i2 = 0; i2 < 5; ++i2) SendKeys.SendWait("{BACKSPACE}");
+                            for (int i2 = 0; i2 < 5; ++i2) SendKeys.SendWait("{DEL}");
+                            SendKeys.SendWait("{2}");
+                            SendKeys.SendWait("{0}");
+                            SendKeys.SendWait("{ENTER}");
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.SameForD4:
+                            ComboBox cbc = creatorGUI.ceInspector.classCombobox;
+                            Cursor.Position = getOrigin(cbc, new Point((int)(cbc.Width * 0.9), cbc.Height >> 1));
+                            DoMouseClick();
+                            Thread.Sleep(10);
+                            SendKeys.SendWait("{DOWN}");
+                            Thread.Sleep(10);
+                            SendKeys.SendWait("{ENTER}");
+                            Thread.Sleep(10);
+                            Cursor.Position = getMiddle(creatorGUI.ceInspector.numericalUpDownCurrentCE);
+                            DoMouseClick();
+                            for (int i2 = 0; i2 < 5; ++i2) SendKeys.SendWait("{BACKSPACE}");
+                            for (int i2 = 0; i2 < 5; ++i2) SendKeys.SendWait("{DEL}");
+                            SendKeys.SendWait("{2}");
+                            SendKeys.SendWait("{0}");
+                            SendKeys.SendWait("{ENTER}");
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.CloseCE:
+                            Cursor.Position = getMiddle(creatorGUI.ceInspector.button2);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.ChangeToMediators:
+                            Cursor.Position = getOrigin(creatorGUI.tabControl, new Point((int)(creatorGUI.tabControl.ItemSize.Width * 5.5), creatorGUI.tabControl.ItemSize.Height >> 1));
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.SelectTXB2HG:
+                            Cursor.Position = getOrigin(creatorGUI.medHgListbox, new Point(10, 10));
+                            DoMouseClick();
+                            Thread.Sleep(10);
+                            int i = 0;
+                            while(i < 100)
+                            {
+                                if (creatorGUI.medHgListbox.SelectedItems.Count > 0)
+                                {
+                                    if ((string)creatorGUI.medHgListbox.SelectedItems[0] == "TXB2") break;
+                                
+                                    SendKeys.SendWait(" ");
+                                    SendKeys.SendWait("{DOWN}");
+                                    SendKeys.SendWait(" ");
+                                    Thread.Sleep(50);
+                                    
+                                    ++i;
+                                }
+                            }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.AddLipid:
+                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.OpenInterlist:
+                            Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.ReviewLipids:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsInterList.continueReviewButton);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
                             break;
                             
                         case (int)CESteps.ExplainLCasExternal:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)CESteps.StoreBlib:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreSpectralLibrary);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            SendKeys.SendWait("{ESC}");
                             break;
                             
                         case (int)CESteps.Finish:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            passed = true;
                             break;
                     
                         default:
-                            passed = true;
                             break;
                     }
                     creatorGUI.Refresh();
                 }
                 if (passed)
                 {
-                    MessageBox.Show("Third test passed without any problem.");
+                    MessageBox.Show("Fourth test passed without any problem.");
                 }
                 else 
                 {
-                    MessageBox.Show("Third test interrupted");
+                    MessageBox.Show("Fourth test interrupted");
                 }
             }
             catch (Exception e)

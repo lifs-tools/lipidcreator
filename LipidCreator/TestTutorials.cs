@@ -546,11 +546,11 @@ namespace LipidCreator
                 }
                 if (passed)
                 {
-                    MessageBox.Show("First test passed without any problem.");
+                    MessageBox.Show("Second test passed without any problem.");
                 }
                 else 
                 {
-                    MessageBox.Show("First test interrupted");
+                    MessageBox.Show("Second test interrupted");
                 }
             }
             catch (Exception e)
@@ -793,56 +793,109 @@ namespace LipidCreator
                         case (int)HLSteps.EditFragment:
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
                             DoMouseClick();
-                            int hgtn = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemHeight;
+                            CheckedListBox clb = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
+                            int hgtn = clb.ItemHeight;
                             int i4 = 0;
-                            foreach (string itemName in creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.Items)
+                            foreach (string itemName in clb.Items)
                             {
                                 if (itemName == "FA1(+O)")
                                 {
-                                    Point p3 = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments);
+                                    
+                                    Cursor.Position = getOrigin(clb, new Point(0, -40));
+                                    SendKeys.SendWait("{ESC}");
+                                    Point p3 = getOrigin(clb);
                                     p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1;
                                     p3.Y += (int)(hgtn * (i4 + 0.5));
                                     Cursor.Position = p3;
-                                    /*
                                     DoMouseRightClick();
+                                    Thread.Sleep(200);
                                     p3.X += 20;
                                     p3.Y += 10;
                                     Cursor.Position = p3;
                                     DoMouseClick();
-                                    break;*/
                                 }
                                 ++i4;
                             }
                             break;
                             
                         case (int)HLSteps.SetFragElement:
+                            DataGridView dgvFrag = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
+                            int x3 = dgvFrag.Columns[0].Width + (dgvFrag.Columns[2].Width >> 1);
+                            int y3 = dgvFrag.ColumnHeadersHeight;
+                            foreach (DataGridViewRow dgvRow in dgvFrag.Rows)
+                            {
+                                
+                                if ((string)dgvRow.Cells[0].Value == "H")
+                                {   
+                                    Cursor.Position = getOrigin(dgvFrag, new Point(x3, y3 + (dgvRow.Height >> 1)));
+                                    DoMouseClick();
+                                    for (int i2 = 0; i2 < 2; ++i2) SendKeys.SendWait("{BACKSPACE}");
+                                    for (int i2 = 0; i2 < 2; ++i2) SendKeys.SendWait("{DEL}");
+                                    SendKeys.SendWait("{0}");
+                                    SendKeys.SendWait("{ENTER}");
+                                    Cursor.Position = getOrigin(dgvFrag, new Point(x3 + dgvFrag.Columns[1].Width, y3 + (dgvRow.Height >> 1)));
+                                    DoMouseClick();
+                                    for (int i2 = 0; i2 < 2; ++i2) SendKeys.SendWait("{BACKSPACE}");
+                                    for (int i2 = 0; i2 < 2; ++i2) SendKeys.SendWait("{DEL}");
+                                    SendKeys.SendWait("{1}");
+                                    SendKeys.SendWait("{ENTER}");
+                                    break;
+                                }
+                                y3 += dgvRow.Height;
+                            }
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.ConfirmEdit:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.addButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.CloseFragment:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.buttonOK);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.OpenFilter:
+                            Cursor.Position = getMiddle(creatorGUI.filtersButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.SelectFilter:
+                            Cursor.Position = getMiddle(creatorGUI.filterDialog.radioButton5);
+                            DoMouseClick();
+                            Cursor.Position = getMiddle(creatorGUI.filterDialog.button2);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.AddLipid:
+                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.OpenInterlist:
+                            Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);
+                            DoMouseClick();
                             break;
                             
                         case (int)HLSteps.OpenReview:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsInterList.continueReviewButton);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
                             break;
                             
                         case (int)HLSteps.StoreList:
+                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            SendKeys.SendWait("{ESC}");
                             break;
                             
                         case (int)HLSteps.Finish:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            passed = true;
                             break;
                     
                         default:
@@ -853,11 +906,11 @@ namespace LipidCreator
                 }
                 if (passed)
                 {
-                    MessageBox.Show("First test passed without any problem.");
+                    MessageBox.Show("Third test passed without any problem.");
                 }
                 else 
                 {
-                    MessageBox.Show("First test interrupted");
+                    MessageBox.Show("Third test interrupted");
                 }
             }
             catch (Exception e)

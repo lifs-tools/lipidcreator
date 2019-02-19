@@ -217,6 +217,7 @@ namespace LipidCreator
                 }
             }
             lastCEInstrumentChecked = menuCollisionEnergyNone;
+            
         }
         
         

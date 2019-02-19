@@ -169,6 +169,18 @@ namespace LipidCreator
             {"33S", (int)Molecules.S33}
         };
         
+        
+        public static Dictionary<string, int> HEAVY_POSITIONS_IUPAC = new Dictionary<string, int>(){
+            {"H2", (int)Molecules.H2},
+            {"C13", (int)Molecules.C13},
+            {"N15", (int)Molecules.N15},
+            {"O17", (int)Molecules.O17},
+            {"O18", (int)Molecules.O18},
+            {"P32", (int)Molecules.P32},
+            {"S34", (int)Molecules.S34},
+            {"S33", (int)Molecules.S33}
+        };
+        
         public static Dictionary<int, int> LIGHT_ORIGIN = new Dictionary<int, int>()
         {
             {(int)Molecules.C13, (int)Molecules.C},
@@ -188,6 +200,17 @@ namespace LipidCreator
             foreach (KeyValuePair<int, double> kvp in ELEMENT_MASSES) elements.Add(kvp.Key, 0);
             return elements;
         }
+        
+        
+        public static bool validElementDict(Dictionary<int, int> dict)
+        {
+            foreach (int count in dict.Values)
+            {
+                if (count < 0) return false;
+            }
+            return true;
+        }
+        
         
         
         public static Dictionary<int, int> createFilledElementDict(DataTable dt)

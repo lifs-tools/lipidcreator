@@ -49,7 +49,9 @@ namespace LipidCreator
         public bool pressedBackButton = false;
         public bool edited = false;
         public MoleculeFormulaParserEventHandler moleculeFormulaParserEventHandler;
-        public Parser parser;
+        public Parser moleculeFormulaParser;
+        public IonFormulaParserEventHandler ionFormulaParserEventHandler;
+        public Parser ionFormulaParser;
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidsReview));
         
         
@@ -64,8 +66,10 @@ namespace LipidCreator
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             pressedBackButton = false;
             
-            moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler(creatorGUI.lipidCreator);
-            parser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.QUOTE);
+            moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
+            moleculeFormulaParser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.QUOTE);
+            ionFormulaParserEventHandler = new IonFormulaParserEventHandler();
+            ionFormulaParser = new Parser(ionFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/ion-formula.grammar", LipidCreator.QUOTE);
             
             
             InitializeComponent ();
@@ -120,6 +124,7 @@ namespace LipidCreator
         {
             gridviewDataColor();
             dataGridViewTransitions.Columns[0].Visible = false;
+            updateCountLabel();
         }
         
         
@@ -160,49 +165,49 @@ namespace LipidCreator
         
         
         
-        public Dictionary<int, int> parseMoleculeFormula(string moleculeFormula)
+        public Dictionary<int, int> parseMoleculeFormula(string moleculeFormula, string colName)
         {
-            parser.parse(moleculeFormula);
-            if (parser.wordInGrammer)
+            moleculeFormulaParser.parse(moleculeFormula);
+            if (moleculeFormulaParser.wordInGrammer)
             {
-                parser.raiseEvents();
+                moleculeFormulaParser.raiseEvents();
                 if (moleculeFormulaParserEventHandler.elements != null)
                 {
                     return moleculeFormulaParserEventHandler.elements;
                 }
                 else 
                 {
-                    throw new Exception("mocecule formula invalid");
+                    throw new WrongFormatException("molecule formula invalid", colName);
                 }
             }
-            throw new Exception("molecule formula invalid");
+            throw new WrongFormatException("molecule formula invalid", colName);
         }
         
         
         
         
-        public string parseAdduct(string adduct)
+        public ArrayList parseAdduct(string adduct, string colName)
         {
-            string adductFormula = "";
-            switch (adduct)
+            ionFormulaParser.parse(adduct);
+            if (ionFormulaParser.wordInGrammer)
             {
-                case ("[M+H]1+"): adductFormula = "+H"; break;
-                case ("[M+2H]2+"): adductFormula = "+2H"; break;
-                case ("[M+NH4]1+"): adductFormula = "+NH4"; break;
-                case ("[M-H]1-"): adductFormula = "-H"; break;
-                case ("[M-2H]2-"): adductFormula = "-2H"; break;
-                case ("[M+HCOO]1-"): adductFormula = "+HCOO"; break;
-                case ("[M+CH3COO]1-"): adductFormula = "+CH3COO"; break;
-            
-                default: throw new Exception("adduct formula invalid");
+                ionFormulaParser.raiseEvents();
+                if (ionFormulaParserEventHandler.validIon)
+                {
+                    return new ArrayList(){ionFormulaParserEventHandler.adduct, ionFormulaParserEventHandler.elements};
+                }
+                else 
+                {
+                    throw new WrongFormatException("adduct formula invalid", colName);
+                }
             }
-            return adductFormula;
+            throw new WrongFormatException("addut formula invalid", colName);
         }
         
         
         
         
-        public int parseCharge(string charge)
+        public int parseCharge(string charge, string colName)
         {
             try
             {
@@ -210,13 +215,13 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                throw new Exception("charge invalid");
+                throw new WrongFormatException("charge invalid", colName);
             }
         }
         
         
         
-        public double parseMass(string mass)
+        public double parseMass(string mass, string colName)
         {
             try
             {
@@ -224,11 +229,25 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                throw new Exception("mass invalid");
+                throw new WrongFormatException("mass invalid", colName);
             }
         }
         
         
+        public void selectCell(int r, string colName)
+        {
+            int c = 0;
+            foreach (DataColumn col in currentView.Columns)
+            {
+                if (col.ColumnName == colName) break;
+                c++;
+            }
+            if (c < dataGridViewTransitions.Rows[r].Cells.Count)
+            {
+                dataGridViewTransitions.CurrentCell = dataGridViewTransitions.Rows[r].Cells[c];
+                dataGridViewTransitions.CurrentCell.Selected = true;
+            }
+        }
         
         
         public bool editedCheck()
@@ -243,34 +262,34 @@ namespace LipidCreator
                 try 
                 {
                     validNames = (string)row[LipidCreator.MOLECULE_LIST_NAME];
-                    if (validNames.Length == 0) throw new Exception();
+                    if (validNames.Length == 0) throw new WrongFormatException("molecule list name invalid", LipidCreator.MOLECULE_LIST_NAME);
                 }
-                catch (Exception e)
+                catch (WrongFormatException e)
                 {
-                    MessageBox.Show("Invalid molecule list name in line :" + (rowLine + 1));
-                    log.Error("Invalid molecule list name in line " + (rowLine + 1) + ": ", e);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
+                    selectCell(rowLine, e.columnName);
                     return false;
                 }
                 try
                 {
                     validNames = (string)row[LipidCreator.PRECURSOR_NAME];
-                    if (validNames.Length == 0) throw new Exception();
+                    if (validNames.Length == 0) throw new WrongFormatException("precursor name invalid", LipidCreator.PRECURSOR_NAME);
                 }
-                catch (Exception e)
+                catch (WrongFormatException e)
                 {
-                    MessageBox.Show("Invalid precursor name in line :" + (rowLine + 1));
-                    log.Error("Invalid precursor name in line " + (rowLine + 1) + ": ", e);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
+                    selectCell(rowLine, e.columnName);
                     return false;
                 }
                 try
                 {   
                     validNames = (string)row[LipidCreator.PRODUCT_NAME];
-                    if (validNames.Length == 0) throw new Exception();
+                    if (validNames.Length == 0) throw new WrongFormatException("product name invalid", LipidCreator.PRODUCT_NAME);
                 }
-                catch (Exception e)
+                catch (WrongFormatException e)
                 {
-                    MessageBox.Show("Invalid product name in line :" + (rowLine + 1));
-                    log.Error("Invalid product name in line " + (rowLine + 1) + ": ", e);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
+                    selectCell(rowLine, e.columnName);
                     return false;
                 }
             
@@ -305,7 +324,9 @@ namespace LipidCreator
                 
                 try {
                     Dictionary<int, int> precursorElements;
+                    Dictionary<int, int> precursorHeavyElements;
                     string precursorAdduct;
+                    ArrayList precursorAdductData;
                     double precursorMassDB;
                     int precursorChargeInt;
                     int charge;
@@ -314,8 +335,13 @@ namespace LipidCreator
                     {
                             
                         case 3:
-                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
-                            precursorAdduct = parseAdduct(precursorIonFormula);
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
+                            precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
+                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorHeavyElements = (Dictionary<int, int>)precursorAdductData[1];
+                            MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
+                            if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
+                            
                             charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
@@ -323,65 +349,80 @@ namespace LipidCreator
                             break;
                             
                         case 7:
-                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
-                            precursorAdduct = parseAdduct(precursorIonFormula);
-                            precursorMassDB = parseMass(precursorMass);
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
+                            precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
+                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorHeavyElements = (Dictionary<int, int>)precursorAdductData[1];
+                            MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
+                            if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
+                            
+                            precursorMassDB = parseMass(precursorMass, LipidCreator.PRECURSOR_MZ);
                             charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
-                                throw new Exception("mass invalid");
+                                throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             }
                             row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
                             break;
                             
                         case 11:
-                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
-                            precursorAdduct = parseAdduct(precursorIonFormula);
-                            precursorChargeInt = parseCharge(precursorCharge);
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
+                            precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
+                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorHeavyElements = (Dictionary<int, int>)precursorAdductData[1];
+                            MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
+                            if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
+                            
+                            precursorChargeInt = parseCharge(precursorCharge, LipidCreator.PRECURSOR_CHARGE);
                             charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             if (charge != precursorChargeInt)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRECURSOR_CHARGE);
                             }
                             break;
                             
                         case 15:
-                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula);
-                            precursorAdduct = parseAdduct(precursorIonFormula);
-                            precursorMassDB = parseMass(precursorMass);
-                            precursorChargeInt = parseCharge(precursorCharge);
+                            precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
+                            precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
+                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorHeavyElements = (Dictionary<int, int>)precursorAdductData[1];
+                            MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
+                            if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
+                            
+                            precursorMassDB = parseMass(precursorMass, LipidCreator.PRECURSOR_MZ);
+                            precursorChargeInt = parseCharge(precursorCharge, LipidCreator.PRECURSOR_CHARGE);
                             charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
-                                throw new Exception("mass invalid");
+                                throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             }
                             if (charge != precursorChargeInt)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRECURSOR_CHARGE);
                             }
                             break;
                             
                         case 12:
-                            precursorMassDB = parseMass(precursorMass);
-                            precursorChargeInt = parseCharge(precursorCharge);
+                            precursorMassDB = parseMass(precursorMass, LipidCreator.PRECURSOR_MZ);
+                            precursorChargeInt = parseCharge(precursorCharge, LipidCreator.PRECURSOR_CHARGE);
                             if (precursorChargeInt == 0)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRECURSOR_CHARGE);
                             }
                             break;
                             
                         default:
-                            throw new Exception("data missing");
+                            throw new WrongFormatException("data missing", LipidCreator.PRECURSOR_MZ);
                     }
                 }
-                catch (Exception e)
+                catch (WrongFormatException e)
                 {
+                    selectCell(rowLine, e.columnName);
                     MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor " + e.Message);
-                    log.Error("Error in line " + (rowLine + 1) + ": precursor " + e.Message);
                     return false;
                 }
                 
@@ -421,7 +462,9 @@ namespace LipidCreator
                 
                 try {
                     Dictionary<int, int> productElements;
+                    Dictionary<int, int> productHeavyElements;
                     string productAdduct;
+                    ArrayList productAdductData;
                     double productMassDB;
                     int productChargeInt;
                     int charge;
@@ -430,8 +473,13 @@ namespace LipidCreator
                     {
                             
                         case 3:
-                            productElements = parseMoleculeFormula(productMoluculeFormula);
-                            productAdduct = parseAdduct(productIonFormula);
+                            productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
+                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdduct = (string)productAdductData[0];
+                            productHeavyElements = (Dictionary<int, int>)productAdductData[1];
+                            MS2Fragment.addCounts(productElements, productHeavyElements);
+                            if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
+                            
                             charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
@@ -439,64 +487,80 @@ namespace LipidCreator
                             break;
                             
                         case 7:
-                            productElements = parseMoleculeFormula(productMoluculeFormula);
-                            productAdduct = parseAdduct(productIonFormula);
-                            productMassDB = parseMass(productMass);
+                            productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
+                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdduct = (string)productAdductData[0];
+                            productHeavyElements = (Dictionary<int, int>)productAdductData[1];
+                            MS2Fragment.addCounts(productElements, productHeavyElements);
+                            if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
+                            
+                            productMassDB = parseMass(productMass, LipidCreator.PRODUCT_MZ);
                             charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
-                                throw new Exception("mass invalid");
+                                throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             }
                             row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
                             break;
                             
                         case 11:
-                            productElements = parseMoleculeFormula(productMoluculeFormula);
-                            productAdduct = parseAdduct(productIonFormula);
-                            productChargeInt = parseCharge(productCharge);
+                            productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
+                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdduct = (string)productAdductData[0];
+                            productHeavyElements = (Dictionary<int, int>)productAdductData[1];
+                            MS2Fragment.addCounts(productElements, productHeavyElements);
+                            if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
+                            
+                            productChargeInt = parseCharge(productCharge, LipidCreator.PRODUCT_CHARGE);
                             charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             if (charge != productChargeInt)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRODUCT_CHARGE);
                             }
                             break;
                             
                         case 15:
-                            productElements = parseMoleculeFormula(productMoluculeFormula);
-                            productAdduct = parseAdduct(productIonFormula);
-                            productMassDB = parseMass(productMass);
-                            productChargeInt = parseCharge(productCharge);
+                            productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
+                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdduct = (string)productAdductData[0];
+                            productHeavyElements = (Dictionary<int, int>)productAdductData[1];
+                            MS2Fragment.addCounts(productElements, productHeavyElements);
+                            if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
+                            
+                            productMassDB = parseMass(productMass, LipidCreator.PRODUCT_MZ);
+                            productChargeInt = parseCharge(productCharge, LipidCreator.PRODUCT_CHARGE);
                             charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
-                                throw new Exception("mass invalid");
+                                throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             }
                             if (charge != productChargeInt)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRODUCT_CHARGE);
                             }
                             break;
                             
                         case 14:
                         case 12:
-                            productMassDB = parseMass(productMass);
-                            productChargeInt = parseCharge(productCharge);
+                            productMassDB = parseMass(productMass, LipidCreator.PRODUCT_MZ);
+                            productChargeInt = parseCharge(productCharge, LipidCreator.PRODUCT_CHARGE);
                             if (productChargeInt == 0)
                             {
-                                throw new Exception("charge invalid");
+                                throw new WrongFormatException("charge invalid", LipidCreator.PRODUCT_CHARGE);
                             }
                             break;
                             
                         default:
-                            throw new Exception("data missing");
+                            throw new WrongFormatException("data missing", LipidCreator.PRODUCT_MZ);
                     }
                 }
-                catch (Exception e)
+                catch (WrongFormatException e)
                 {
+                    selectCell(rowLine, e.columnName);
                     MessageBox.Show("Error in line " + (rowLine + 1) + ": product " + e.Message);
                     log.Error("Error in line " + (rowLine + 1) + ": product " + e.Message);
                     return false;
@@ -665,6 +729,14 @@ namespace LipidCreator
                 }
                 this.Enabled = true;
             }
+        }
+    }
+    
+    public class WrongFormatException : Exception{
+        public string columnName;
+        public WrongFormatException(string error, string _columnName) : base(error)
+        {
+            columnName = _columnName;
         }
     }
 }

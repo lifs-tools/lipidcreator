@@ -32,15 +32,13 @@ namespace LipidCreator
     [Serializable]
     public class MoleculeFormulaParserEventHandler : BaseParserEventHandler
     {
-        public LipidCreator lipidCreator;
         public Dictionary<int, int> elements;
         public int molecule;
         public int count;
     
     
-        public MoleculeFormulaParserEventHandler(LipidCreator _lipidCreator) : base()
+        public MoleculeFormulaParserEventHandler() : base()
         {
-            lipidCreator = _lipidCreator;
             molecule = -1;
             elements = MS2Fragment.createEmptyElementDict();
             

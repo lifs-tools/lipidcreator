@@ -34,6 +34,7 @@ namespace LipidCreator
     {
         public string adduct;
         public string charge;
+        public string chargeOutput;
         public bool validIon;
         public Dictionary<int, int> elements;
         public int count;
@@ -47,6 +48,7 @@ namespace LipidCreator
             validIon = false;
             elements = MS2Fragment.createEmptyElementDict();
             count = 0;
+            chargeOutput = "";
             heavyElement = "";
             
             registeredEvents.Add("Ion_Formula_pre_event", resetParser);
@@ -66,6 +68,7 @@ namespace LipidCreator
             validIon = false;
             elements = MS2Fragment.createEmptyElementDict();
             count = 0;
+            chargeOutput = "";
             heavyElement = "";
         }
         
@@ -79,20 +82,24 @@ namespace LipidCreator
                     case "+H":
                     case "+NH4":
                         validIon = (charge == "1+");
+                        chargeOutput = "+1";
                         break;
                         
                     case "+2H":
                         validIon = (charge == "2+");
+                        chargeOutput = "+2";
                         break;
                         
                     case "-H":
                     case "+HCOO":
                     case "+CH3COO":
                         validIon = (charge == "1-");
+                        chargeOutput = "-1";
                         break;
                         
                     case "-2H":
                         validIon = (charge == "2-");
+                        chargeOutput = "-2";
                         break;
                         
                     default:

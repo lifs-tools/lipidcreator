@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="Glycerolipid.cs" />
     <Compile Include="CollisionEnergy.cs" />
+    <Compile Include="IonFormulaParserEventHandler.cs" />
     <Compile Include="Lipid.cs" />
     <Compile Include="LipidsReview.cs">
       <SubType>Form</SubType>

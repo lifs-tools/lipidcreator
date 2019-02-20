@@ -259,39 +259,44 @@ namespace LipidCreator
                 
                 string validNames = "";
                 // check if names are valid
+                
                 try 
                 {
                     validNames = (string)row[LipidCreator.MOLECULE_LIST_NAME];
-                    if (validNames.Length == 0) throw new WrongFormatException("molecule list name invalid", LipidCreator.MOLECULE_LIST_NAME);
+                    if (validNames.Length == 0) throw new Exception();
                 }
-                catch (WrongFormatException e)
+                catch (Exception e)
                 {
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
-                    selectCell(rowLine, e.columnName);
+                    selectCell(rowLine, LipidCreator.MOLECULE_LIST_NAME);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": molecule list name invalid");
                     return false;
                 }
+                
+                
                 try
                 {
                     validNames = (string)row[LipidCreator.PRECURSOR_NAME];
-                    if (validNames.Length == 0) throw new WrongFormatException("precursor name invalid", LipidCreator.PRECURSOR_NAME);
+                    if (validNames.Length == 0) throw new Exception();
                 }
-                catch (WrongFormatException e)
+                catch (Exception e)
                 {
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
-                    selectCell(rowLine, e.columnName);
+                    selectCell(rowLine, LipidCreator.PRECURSOR_NAME);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor name invalid");
                     return false;
                 }
+                
                 try
                 {   
                     validNames = (string)row[LipidCreator.PRODUCT_NAME];
-                    if (validNames.Length == 0) throw new WrongFormatException("product name invalid", LipidCreator.PRODUCT_NAME);
+                    if (validNames.Length == 0) throw new Exception();
                 }
-                catch (WrongFormatException e)
+                catch (Exception e)
                 {
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": " + e.Message);
-                    selectCell(rowLine, e.columnName);
+                    selectCell(rowLine, LipidCreator.PRODUCT_NAME);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product name invalid");
                     return false;
                 }
+                
             
                 // check precursor data
                 string precursorMoluculeFormula = "", precursorIonFormula = "", precursorMass = "", precursorCharge = "";
@@ -318,6 +323,7 @@ namespace LipidCreator
                     precursorCharge = (string)row[LipidCreator.PRECURSOR_CHARGE];
                 }
                 catch (Exception e) {}
+                
                 
                 
                 int precursorState = (precursorMoluculeFormula.Length > 0 ? 1 : 0) | (precursorIonFormula.Length > 0 ? 2 : 0) | (precursorMass.Length > 0 ? 4 : 0) | (precursorCharge.Length > 0 ? 8 : 0);

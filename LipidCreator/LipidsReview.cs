@@ -267,7 +267,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.MOLECULE_LIST_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": molecule list name invalid", "Sanity check");
+                    MessageBox.Show("Error in row " + (rowLine + 1) + ": molecule list name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -280,7 +280,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.PRECURSOR_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor name invalid", "Sanity check");
+                    MessageBox.Show("Error in row " + (rowLine + 1) + ": precursor name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -292,7 +292,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.PRODUCT_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product name invalid", "Sanity check");
+                    MessageBox.Show("Error in row " + (rowLine + 1) + ": product name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -378,7 +378,7 @@ namespace LipidCreator
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
-                                throw new WrongFormatException("mass invalid\nEither delete precursor mass or precursor molecule formula entry", LipidCreator.PRECURSOR_MZ);
+                                throw new WrongFormatException("mass invalid\n\nEither delete 'Precursor Ion m/z' or 'Precursor Molecule Formula'", LipidCreator.PRECURSOR_MZ);
                             }
                             row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
                             break;
@@ -397,7 +397,7 @@ namespace LipidCreator
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             if (charge != precursorChargeInt)
                             {
-                                throw new WrongFormatException("charge invalid\nDelete precursor charge entry", LipidCreator.PRECURSOR_CHARGE);
+                                throw new WrongFormatException("charge invalid\n\nDelete 'Precursor Charge'", LipidCreator.PRECURSOR_CHARGE);
                             }
                             break;
                             
@@ -424,11 +424,11 @@ namespace LipidCreator
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
-                                throw new WrongFormatException("mass invalid\nEither delete precursor mass or precursor molecule formula entry", LipidCreator.PRECURSOR_MZ);
+                                throw new WrongFormatException("mass invalid\n\nEither delete 'Precursor Ion m/z' or 'Precursor Molecule Formula'", LipidCreator.PRECURSOR_MZ);
                             }
                             if (charge != precursorChargeInt)
                             {
-                                throw new WrongFormatException("charge invalid\nDelete precursor charge entry", LipidCreator.PRECURSOR_CHARGE);
+                                throw new WrongFormatException("charge invalid\n\nDelete 'Precursor Charge'", LipidCreator.PRECURSOR_CHARGE);
                             }
                             break;
                             
@@ -439,7 +439,7 @@ namespace LipidCreator
                 catch (WrongFormatException e)
                 {
                     selectCell(rowLine, e.columnName);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor " + e.Message, "Sanity check");
+                    MessageBox.Show("Error in row " + (rowLine + 1) + ": precursor " + e.Message, "Sanity check");
                     return false;
                 }
                 
@@ -528,7 +528,7 @@ namespace LipidCreator
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
-                                throw new WrongFormatException("mass invalid\nEither delete product mass or product molecule formula entry", LipidCreator.PRODUCT_MZ);
+                                throw new WrongFormatException("mass invalid\n\nEither delete 'Product Ion m/z' or 'Product Molecule Formula'", LipidCreator.PRODUCT_MZ);
                             }
                             row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
                             break;
@@ -547,7 +547,7 @@ namespace LipidCreator
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             if (charge != productChargeInt)
                             {
-                                throw new WrongFormatException("charge invalid\nDelete product charge entry", LipidCreator.PRODUCT_CHARGE);
+                                throw new WrongFormatException("charge invalid\n\nDelete 'Product Charge'", LipidCreator.PRODUCT_CHARGE);
                             }
                             break;
                             
@@ -565,11 +565,11 @@ namespace LipidCreator
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
-                                throw new WrongFormatException("mass invalid\nEither delete product mass or product molecule formula entry", LipidCreator.PRODUCT_MZ);
+                                throw new WrongFormatException("mass invalid\n\nEither delete 'Product Ion m/z' or 'Product Molecule Formula'", LipidCreator.PRODUCT_MZ);
                             }
                             if (charge != productChargeInt)
                             {
-                                throw new WrongFormatException("charge invalid\nDelete product charge entry", LipidCreator.PRODUCT_CHARGE);
+                                throw new WrongFormatException("charge invalid\n\nDelete 'Product Charge'", LipidCreator.PRODUCT_CHARGE);
                             }
                             break;
                             
@@ -599,7 +599,7 @@ namespace LipidCreator
                 catch (WrongFormatException e)
                 {
                     selectCell(rowLine, e.columnName);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product " + e.Message, "Sanity check");
+                    MessageBox.Show("Error in row " + (rowLine + 1) + ": product " + e.Message, "Sanity check");
                     return false;
                 }
                 

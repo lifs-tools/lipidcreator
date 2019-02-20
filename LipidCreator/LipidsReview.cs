@@ -52,7 +52,6 @@ namespace LipidCreator
         public Parser moleculeFormulaParser;
         public IonFormulaParserEventHandler ionFormulaParserEventHandler;
         public Parser ionFormulaParser;
-        private static readonly ILog log = LogManager.GetLogger(typeof(LipidsReview));
         
         
 
@@ -268,7 +267,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.MOLECULE_LIST_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": molecule list name invalid");
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": molecule list name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -281,7 +280,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.PRECURSOR_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor name invalid");
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -293,7 +292,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     selectCell(rowLine, LipidCreator.PRODUCT_NAME);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product name invalid");
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product name invalid", "Sanity check");
                     return false;
                 }
                 
@@ -440,7 +439,7 @@ namespace LipidCreator
                 catch (WrongFormatException e)
                 {
                     selectCell(rowLine, e.columnName);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor " + e.Message);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": precursor " + e.Message, "Sanity check");
                     return false;
                 }
                 
@@ -600,8 +599,7 @@ namespace LipidCreator
                 catch (WrongFormatException e)
                 {
                     selectCell(rowLine, e.columnName);
-                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product " + e.Message);
-                    log.Error("Error in line " + (rowLine + 1) + ": product " + e.Message);
+                    MessageBox.Show("Error in line " + (rowLine + 1) + ": product " + e.Message, "Sanity check");
                     return false;
                 }
                 
@@ -652,7 +650,7 @@ namespace LipidCreator
         {
             if (editedCheck())
             {
-                MessageBox.Show("All data are correct and valid.");
+                MessageBox.Show("All data are correct and valid.", "Sanity check");
             }
         }
         

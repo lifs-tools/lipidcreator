@@ -662,7 +662,7 @@ namespace LipidCreator
             if (inEditingCheck) return;
             
             inEditingCheck = true;
-            if (!edited)
+            if (!edited && creatorGUI.lipidCreator.selectedInstrumentForCE.Length > 0)
             {
                 DialogResult mbr = MessageBox.Show ("You are about to turn on the edit mode. This option will disable the creation of a spectral library. Do you want to continue?", "Edit mode", MessageBoxButtons.YesNo);
                 if (mbr == DialogResult.No)

@@ -52,6 +52,7 @@ namespace LipidCreator
         public Parser moleculeFormulaParser;
         public IonFormulaParserEventHandler ionFormulaParserEventHandler;
         public Parser ionFormulaParser;
+        public bool inEditingCheck;
         
         
 
@@ -64,6 +65,7 @@ namespace LipidCreator
             currentView = this.transitionList;
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             pressedBackButton = false;
+            inEditingCheck = false;
             
             moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
             moleculeFormulaParser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.QUOTE);
@@ -657,7 +659,24 @@ namespace LipidCreator
         
         private void checkBoxEditModeChanged (object sender, EventArgs e)
         {
-            buttonSendToSkyline.Enabled = false;
+            if (inEditingCheck) return;
+            
+            inEditingCheck = true;
+            if (!edited)
+            {
+                DialogResult mbr = MessageBox.Show ("You are about to turn on the editing mode. This option will disable the creation of a spectral library. Do you want to continue?", "Turning on editing mode", MessageBoxButtons.YesNo);
+                if (mbr == DialogResult.No)
+                {
+                    ((CheckBox)sender).Checked = false;
+                    inEditingCheck = false;
+                    return;
+                }
+            }
+        
+            buttonStoreSpectralLibrary.Enabled = false;
+            checkBoxCreateSpectralLibrary.Checked = false;
+            checkBoxCreateSpectralLibrary.Enabled = false;
+            
             edited = true;
             
             if (((CheckBox)sender).Checked)
@@ -677,6 +696,7 @@ namespace LipidCreator
             
             dataGridViewTransitions.Update();
             dataGridViewTransitions.Refresh();
+            inEditingCheck = false;
         }
         
         

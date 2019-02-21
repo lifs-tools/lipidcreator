@@ -178,7 +178,7 @@ namespace LipidCreator
             this.checkBoxCreateSpectralLibrary.Name = "checkBox2";
             this.checkBoxCreateSpectralLibrary.Size = new System.Drawing.Size(96, 17);
             this.checkBoxCreateSpectralLibrary.TabIndex = 3;
-            this.checkBoxCreateSpectralLibrary.Text = "Create Spectral library";
+            this.checkBoxCreateSpectralLibrary.Text = "Send spectral library to Skyline";
             this.checkBoxCreateSpectralLibrary.UseVisualStyleBackColor = true;
             // 
             // button3

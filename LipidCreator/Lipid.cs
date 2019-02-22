@@ -297,7 +297,6 @@ namespace LipidCreator
                 getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
                 
-                
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.LipidMediator)
                 {
@@ -329,6 +328,7 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }
+                
                 
                 // exclude duplicate fragments within the same lipid species
                 if (insertedFragments.Contains(fragName + "/" + fragAdduct)) continue;

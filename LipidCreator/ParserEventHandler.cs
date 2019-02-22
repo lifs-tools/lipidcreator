@@ -38,6 +38,7 @@ namespace LipidCreator
         public FattyAcidGroup fag;
         public int charge;
         public string adduct;
+        public bool sortedSeparator;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -61,7 +62,6 @@ namespace LipidCreator
             
             registeredEvents.Add("GL_pre_event", GLPreEvent);
             registeredEvents.Add("PL_pre_event", PLPreEvent);
-            registeredEvents.Add("PL-O_post_event", PL_OPostEvent);
             registeredEvents.Add("SL_pre_event", SLPreEvent);
             registeredEvents.Add("Cholesterol_pre_event", CholesterolPreEvent);
             registeredEvents.Add("Mediator_pre_event", MediatorPreEvent);
@@ -84,13 +84,15 @@ namespace LipidCreator
             registeredEvents.Add("Ch_pre_event", ChPreEvent);
             registeredEvents.Add("HG_ChE_pre_event", HG_ChEPreEvent);
             
-            registeredEvents.Add("PL_post_event", PLPostEvent);
+            registeredEvents.Add("DPL_post_event", DPLPostEvent);
+            registeredEvents.Add("DPL-O_post_event", DPLPostEvent);
             registeredEvents.Add("SL_post_event", SLPostEvent);
             registeredEvents.Add("Mediator_post_event", MediatorPostEvent);
             
             registeredEvents.Add("adduct_pre_event", adductPreEvent);
             registeredEvents.Add("charge_pre_event", chargePreEvent);
             registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
+            registeredEvents.Add("sorted_FA_separator_pre_event", sortedFASeparatorPreEvent);
         }
         
         
@@ -102,6 +104,7 @@ namespace LipidCreator
             fag = null;
             charge = 0;
             adduct = "";
+            sortedSeparator = false;
         }
         
         
@@ -141,6 +144,13 @@ namespace LipidCreator
         
         
         
+        
+        public void sortedFASeparatorPreEvent(Parser.TreeNode node)
+        {
+            sortedSeparator = true;
+        }
+        
+        
         public void GLPreEvent(Parser.TreeNode node)
         {
             lipid = new Glycerolipid(lipidCreator);
@@ -153,16 +163,22 @@ namespace LipidCreator
             fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
         }
         
-        public void PL_OPostEvent(Parser.TreeNode node)
+        public void DPLPostEvent(Parser.TreeNode node)
         {
             if (lipid != null)
             {
                 if (lipid.headGroupNames.Count != 0)
                 {
-                    string hg = lipid.headGroupNames[0];
-                    if (hg[hg.Length - 1] == '-')
+                    Phospholipid gpl = (Phospholipid)lipid;
+                    if (!sortedSeparator && (gpl.fag2.faTypes["FAp"] || gpl.fag2.faTypes["FAa"]))
                     {
-                        lipid = null;
+                        FattyAcidGroup swapFAG = gpl.fag1;
+                        gpl.fag1 = gpl.fag2;
+                        gpl.fag2 = swapFAG;
+                    }
+                    if (gpl.fag2.faTypes["FAp"] || gpl.fag2.faTypes["FAa"])
+                    {
+                        lipid = new UnsupportedLipid(lipidCreator);
                     }
                 }
                 else
@@ -321,10 +337,12 @@ namespace LipidCreator
             
                 string faType = node.getText();
                 fag.faTypes["FA" + faType] = true;
+                /*
                 if ((new HashSet<string>{"LPC O-", "LPE O-", "PC O-", "PE O-"}).Contains(lipid.headGroupNames[0]))
                 {
                     lipid.headGroupNames[0] += faType;
                 }
+                */
             }
         }
         
@@ -424,7 +442,10 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                lipid.headGroupNames.Add(headgroup + "-");
+                //lipid.headGroupNames.Add(headgroup + "-");
+                if (headgroup == "PE O") headgroup = "PE";
+                else if (headgroup == "PC O") headgroup = "PC";
+                lipid.headGroupNames.Add(headgroup);
             }
         }
         
@@ -433,7 +454,10 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                lipid.headGroupNames.Add(headgroup + "-");
+                //lipid.headGroupNames.Add(headgroup + "-");
+                if (headgroup == "LPE O") headgroup = "LPE";
+                else if (headgroup == "LPC O") headgroup = "LPC";
+                lipid.headGroupNames.Add(headgroup);
                 ((Phospholipid)lipid).isLyso = true;
             }
         }
@@ -482,17 +506,8 @@ namespace LipidCreator
         }
         
         
-            
-        public void PLPostEvent(Parser.TreeNode node)
-        {
-            if (lipid != null)
-            {
-                if (lipid.headGroupNames.Count == 0)
-                {
-                    lipid = null;
-                }
-            }
-        }
+        
+        
             
         public void SLPostEvent(Parser.TreeNode node)
         {

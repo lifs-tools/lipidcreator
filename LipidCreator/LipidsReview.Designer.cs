@@ -143,7 +143,7 @@ namespace LipidCreator
             this.buttonCheckValues.Name = "button3";
             this.buttonCheckValues.Size = new System.Drawing.Size(168, 34);
             this.buttonCheckValues.TabIndex = 0;
-            this.buttonCheckValues.Text = "Check transition List";
+            this.buttonCheckValues.Text = "Check transition list";
             this.buttonCheckValues.UseVisualStyleBackColor = true;
             this.buttonCheckValues.Click += new System.EventHandler(this.buttonCheckValuesClick);
             // 

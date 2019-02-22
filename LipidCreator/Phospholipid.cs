@@ -556,6 +556,7 @@ namespace LipidCreator
                                 precursorData.precursorCharge = charge;
                                 precursorData.atomsCount = headgroups[headgroup].elements;
                                 
+                                
                                 if (!isSorted)
                                 {
                                     precursorData.fa1 = fa1;

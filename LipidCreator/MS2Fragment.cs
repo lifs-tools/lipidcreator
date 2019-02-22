@@ -194,6 +194,16 @@ namespace LipidCreator
         };
         
         
+        
+        public static void printElementDict(Dictionary<int, int> dict)
+        {
+            foreach (KeyValuePair<int, int> kvp in dict)
+            {
+                Console.WriteLine(ELEMENT_SHORTCUTS[kvp.Key] + ": " + kvp.Value);
+            }
+        }
+        
+        
         public static Dictionary<int, int> createEmptyElementDict()
         {
             Dictionary<int, int> elements = new Dictionary<int, int>();

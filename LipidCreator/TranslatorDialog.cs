@@ -263,6 +263,7 @@ namespace LipidCreator
                     }
                     else
                     {
+                        newLipidName = "Unsupported molecule";
                         lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                     }
                     usedKeys.Clear();

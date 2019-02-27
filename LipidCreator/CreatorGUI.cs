@@ -117,10 +117,10 @@ namespace LipidCreator
                     {
                         string subFile = subdirectoryFile.Replace(subdirectoryEntry + Path.DirectorySeparatorChar, "");
                         string upperFile = subFile.ToUpper();
-                        if (upperFile.EndsWith(".LCXML"))
+                        if (upperFile.EndsWith(".CSV"))
                         {
                             System.Windows.Forms.MenuItem predefFile = new System.Windows.Forms.MenuItem();
-                            predefFile.Text = subFile.Remove(subFile.Length - 6);
+                            predefFile.Text = subFile.Remove(subFile.Length - 4);
                             predefFile.Tag = subdirectoryFile;
                             predefFile.Click += new System.EventHandler (menuImportPredefinedClick);
                             predefFolder.MenuItems.Add(predefFile);
@@ -3604,6 +3604,13 @@ namespace LipidCreator
         protected void menuImportPredefinedClick(object sender, System.EventArgs e)
         {
         
+            int[] filterParameters = {2, 2};
+            FilterDialog importFilterDialog = new FilterDialog(filterParameters);
+            importFilterDialog.Owner = this;
+            importFilterDialog.ShowInTaskbar = false;
+            importFilterDialog.ShowDialog();
+            importFilterDialog.Dispose();
+            
             string[] returnMessage = new string[]{""};
             LCMessageBox lcmb = new LCMessageBox(returnMessage);
             lcmb.Owner = this;
@@ -3611,22 +3618,14 @@ namespace LipidCreator
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
-            if (returnMessage[0] == "replace") resetLipidCreator(false);
-        
+            if (returnMessage[0] == "replace") lipidCreator.registeredLipids.Clear();
+            
             System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
             string filePath = (string)PredefItem.Tag;
-            XDocument doc;
-            try 
-            {
-                doc = XDocument.Load(filePath);
-                lipidCreator.import(doc);
-                refreshRegisteredLipidsTable();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not read file, " + ex.Message, "Error while reading", MessageBoxButtons.OK);
-                log.Error("Could not read file " + filePath + ":", ex);
-            }
+            
+            int[] importNumbers = lipidCreator.importLipidList(filePath, filterParameters);
+            refreshRegisteredLipidsTable();
+            MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
         }
         
         

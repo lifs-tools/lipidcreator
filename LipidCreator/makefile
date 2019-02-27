@@ -31,7 +31,6 @@ tests: setup
 complete:
 	$(MAKE) setup
 	$(MAKE) main
-	$(MAKE) predefined
 	$(MAKE) zip
 
 zip:
@@ -46,13 +45,6 @@ setup:
 	fi
 	mkdir -p $(BUILD_DIR)/data/predefined
 	
-	
-predefined:
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/human-platelet.csv $(BUILD_DIR)/data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-platelet.csv $(BUILD_DIR)/data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-heart.csv $(BUILD_DIR)/data/predefined/Mouse/Heart.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-brain.csv $(BUILD_DIR)/data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/yeast-lipidome.csv $(BUILD_DIR)/data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
 	rm -rf bin && rm -rf obj/

@@ -43,6 +43,7 @@ using System.Security.Cryptography;
 
 using log4net;
 using log4net.Config;
+using System.Globalization;
 
 namespace LipidCreator
 {   
@@ -393,9 +394,9 @@ namespace LipidCreator
             
             
             string ceParametersDir = prefixPath + "data/ce-parameters";
-            string[] ceFilePaths = Directory.GetFiles(prefixPath + "data/ce-parameters/", "*.csv", SearchOption.TopDirectoryOnly);
             if (Directory.Exists(ceParametersDir))
             {
+                string[] ceFilePaths = Directory.GetFiles(prefixPath + "data/ce-parameters/", "*.csv", SearchOption.TopDirectoryOnly);
                 foreach(string ceParametersFile in ceFilePaths)
                 {
                     lineCounter = 0;
@@ -1141,16 +1142,16 @@ namespace LipidCreator
                     sb.Append("\"").Append(exportName).Append("\","); // preName
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz
-                    maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ]));
+                    sb.Append("\"").Append(Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture)).Append("\","); // preMz
+                    maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture));
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append("\","); // preCharge
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\","); // prodName
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\","); // ProdFormula, no prodAdduct
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_MZ]).Append("\","); // prodMz
+                    sb.Append("\"").Append(Convert.ToDouble((string)entry[LipidCreator.PRODUCT_MZ], CultureInfo.InvariantCulture)).Append("\","); // prodMz
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_CHARGE]).Append("\","); // prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.NOTE]).Append("\""); // note
-                    if (withCE) sb.Append(",\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
+                    if (withCE) sb.Append(",\"").Append(Convert.ToDouble((string)entry[LipidCreator.COLLISION_ENERGY], CultureInfo.InvariantCulture)).Append("\""); // note
                     sb.AppendLine();
                 } 
                 catch(Exception e)
@@ -1166,8 +1167,8 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.");
-                log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass + "Da.", e);
+                MessageBox.Show("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass.ToString(CultureInfo.InvariantCulture) + "Da.");
+                log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass.ToString(CultureInfo.InvariantCulture) + "Da.", e);
             }
         }
         
@@ -1542,25 +1543,32 @@ namespace LipidCreator
             string outputDir = System.IO.Path.GetDirectoryName(filename);
             System.IO.Directory.CreateDirectory(outputDir);
             if (File.Exists(filename)) File.Delete(filename);
-        
+
+            log.Debug("Connection to sqlite " + filename);
             SQLiteConnection mDBConnection = new SQLiteConnection("Data Source=" + filename + ";Version=3;");
             mDBConnection.Open();
+            log.Debug("Opened connection to sqlite " + filename);
             SQLiteCommand command = new SQLiteCommand(mDBConnection);
-            
-            
+
+            log.Debug("Adjusting settings on sqlite " + filename );
             command.CommandText = "PRAGMA synchronous=OFF;";
             command.ExecuteNonQuery();
-            
-            command.CommandText = "PRAGMA cache_size=" + (double)(250 * 1024 / 1.5) + ";";
+
+            log.Debug("Adjusting settings on sqlite " + filename);
+            command.CommandText = "PRAGMA cache_size=" + (int)(250 * 1024 / 1.5) + ";";
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Adjusting settings on sqlite " + filename);
             command.CommandText = "PRAGMA temp_store=MEMORY;";
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating LibInfo table in sqlite " + filename);
+
             String sql = "CREATE TABLE LibInfo(libLSID TEXT, createTime TEXT, numSpecs INTEGER, majorVersion INTEGER, minorVersion INTEGER)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
+            log.Debug("Inserting LibInfo table data in sqlite " + filename);
             //fill in the LibInfo first
             string lsid = "urn:lsid:isas.de:spectral_library:bibliospec:nr:1";
             // Simulate ctime(d), which is what BlibBuild uses.
@@ -1568,26 +1576,32 @@ namespace LipidCreator
             sql = "INSERT INTO LibInfo values('" + lsid + "','" + createTime + "',-1,1,7)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table RefSpectra in sqlite " + filename);
             sql = "CREATE TABLE RefSpectra (id INTEGER primary key autoincrement not null, peptideSeq VARCHAR(150), precursorMZ REAL, precursorCharge INTEGER, peptideModSeq VARCHAR(200), prevAA CHAR(1), nextAA CHAR(1), copies INTEGER, numPeaks INTEGER, ionMobility REAL, collisionalCrossSectionSqA REAL, ionMobilityHighEnergyOffset REAL, ionMobilityType TINYINT, retentionTime REAL, moleculeName VARCHAR(128), chemicalFormula VARCHAR(128), precursorAdduct VARCHAR(128), inchiKey VARCHAR(128), otherKeys VARCHAR(128), fileID INTEGER, SpecIDinFile VARCHAR(256), score REAL, scoreType TINYINT)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table Modifications in sqlite " + filename);
             sql = "CREATE TABLE Modifications (id INTEGER primary key autoincrement not null, RefSpectraID INTEGER, position INTEGER, mass REAL)";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table RefSpectraPeaks in sqlite " + filename);
             sql = "CREATE TABLE RefSpectraPeaks(RefSpectraID INTEGER, peakMZ BLOB, peakIntensity BLOB )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table SpectrumSourceFiles in sqlite " + filename);
             sql = "CREATE TABLE SpectrumSourceFiles (id INTEGER PRIMARY KEY autoincrement not null, fileName VARCHAR(512), cutoffScore REAL )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
+            log.Debug("Inserting SpectrumSourceFiles table data in sqlite " + filename);
             sql = "INSERT INTO SpectrumSourceFiles(id, fileName, cutoffScore) VALUES(1, 'Generated By LipidCreator', 0.0)"; // An empty table causes trouble for Skyline
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table IonMobilityTypes in sqlite " + filename);
             sql = "CREATE TABLE IonMobilityTypes (id INTEGER PRIMARY KEY, ionMobilityType VARCHAR(128) )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
@@ -1595,16 +1609,19 @@ namespace LipidCreator
             
             
             string[] ionMobilityType = { "none", "driftTime(msec)", "inverseK0(Vsec/cm^2)"};
-            for(int i=0; i < ionMobilityType.Length; ++i){
+            log.Debug("Inserting IonMobilityTypes table data in sqlite " + filename);
+            for (int i=0; i < ionMobilityType.Length; ++i){
                 sql = "INSERT INTO IonMobilityTypes(id, ionMobilityType) VALUES(" + i + ", '" + ionMobilityType[i] + "')";
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
             }
-            
+
+            log.Debug("Creating table ScoreTypes in sqlite " + filename);
             sql = "CREATE TABLE ScoreTypes (id INTEGER PRIMARY KEY, scoreType VARCHAR(128), probabilityType VARCHAR(128) )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table RefSpectraPeakAnnotations in sqlite " + filename);
             sql = "CREATE TABLE RefSpectraPeakAnnotations ("+
                 "id INTEGER primary key autoincrement not null, " +
                 "RefSpectraID INTEGER, " +
@@ -1620,7 +1637,8 @@ namespace LipidCreator
                 "mzObserved REAL )";
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
+
+            log.Debug("Creating table RetentionTimes in sqlite " + filename);
             sql = "CREATE TABLE RetentionTimes(RefSpectraID INTEGER, RedundantRefSpectraID INTEGER, SpectrumSourceID INTEGER, driftTimeMsec REAL, collisionalCrossSectionSqA REAL, driftTimeHighEnergyOffsetMsec REAL, retentionTime REAL, bestSpectrum INTEGER, FOREIGN KEY(RefSpectraID) REFERENCES RefSpectra(id))";
             command.CommandText = sql;
             command.ExecuteNonQuery();
@@ -1648,14 +1666,15 @@ namespace LipidCreator
                 Tuple.Create("PEPTIDE SHAKER CONFIDENCE", "PROBABILITY_THAT_IDENTIFICATION_IS_INCORRECT"), // peptideshaker .mzid files
                 Tuple.Create("GENERIC Q-VALUE", "PROBABILITY_THAT_IDENTIFICATION_IS_CORRECT")
             };
-            
-            for(int i=0; i < scoreType.Length; ++i){
+
+            log.Debug("Inserting ScoreTypes table data in sqlite " + filename);
+            for (int i=0; i < scoreType.Length; ++i){
                 sql = "INSERT INTO ScoreTypes(id, scoreType, probabilityType) VALUES(" + i + ", '" + scoreType[i].Item1 + "', '" + scoreType[i].Item2 + "')";
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
             }
-            
-            
+
+            log.Debug("Opening transaction to write data in sqlite " + filename);
             sql = "BEGIN TRANSACTION;";
             command.CommandText = sql;
             command.ExecuteNonQuery();
@@ -1665,7 +1684,7 @@ namespace LipidCreator
             {
                 string precursorName = precursorData.fullMoleculeListName;
                 string adduct = precursorData.precursorAdductFormula;
-                
+                log.Info("Adding precursor " + precursorName + " and adduct " + adduct);
                 if (collisionEnergyHandler.getCollisionEnergy(selectedInstrumentForCE, precursorName, adduct) == -1)
                 {
                     collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[selectedInstrumentForCE], precursorName, adduct);
@@ -1682,16 +1701,19 @@ namespace LipidCreator
             
             
             sql = "COMMIT;";
+            log.Debug("Committing transaction in sqlite " + filename);
             command.CommandText = sql;
             command.ExecuteNonQuery();
-            
-            
+
+
             // update numspecs
+            log.Debug("Updating LibInfo numSpecs in sqlite " + filename);
             sql = "UPDATE LibInfo SET numSpecs = (SELECT MAX(id) FROM RefSpectra);";
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
             // indexing
+            log.Debug("Creating INDICES in sqlite " + filename);
             command.CommandText = "CREATE INDEX idxPeptide ON RefSpectra (peptideSeq, precursorCharge)";
             command.ExecuteNonQuery();
             command.CommandText = "CREATE INDEX idxPeptideMod ON RefSpectra (peptideModSeq, precursorCharge)";
@@ -1704,8 +1726,8 @@ namespace LipidCreator
             command.ExecuteNonQuery();
             command.CommandText = "CREATE INDEX idxRefIdPeakAnnotations ON RefSpectraPeakAnnotations (RefSpectraID)";
             command.ExecuteNonQuery();
-            
-            
+            log.Debug("Done creating sqlite " + filename);
+
         }
 
         public DataTable addDataColumns (DataTable dataTable)

@@ -1142,16 +1142,16 @@ namespace LipidCreator
                     sb.Append("\"").Append(exportName).Append("\","); // preName
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture)).Append("\","); // preMz
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz
                     maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture));
                     sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append("\","); // preCharge
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\","); // prodName
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\","); // ProdFormula, no prodAdduct
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(Convert.ToDouble((string)entry[LipidCreator.PRODUCT_MZ], CultureInfo.InvariantCulture)).Append("\","); // prodMz
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_MZ]).Append("\","); // prodMz
                     sb.Append("\"").Append(entry[LipidCreator.PRODUCT_CHARGE]).Append("\","); // prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.NOTE]).Append("\""); // note
-                    if (withCE) sb.Append(",\"").Append(Convert.ToDouble((string)entry[LipidCreator.COLLISION_ENERGY], CultureInfo.InvariantCulture)).Append("\""); // note
+                    if (withCE) sb.Append(",\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
                     sb.AppendLine();
                 } 
                 catch(Exception e)

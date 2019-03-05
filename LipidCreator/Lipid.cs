@@ -440,7 +440,7 @@ namespace LipidCreator
                 ", @precursorAdduct, '-', '-', 0, " + numFragments +
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
-            log.Info("Inserting into RefSpectra: " + command.CommandText);
+            log.Debug("Inserting into RefSpectra: " + command.CommandText);
             SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorExportName);
             SQLiteParameter parameterPrecursorMz = new SQLiteParameter("@precursorMz", precursorData.precursorM_Z);
             SQLiteParameter parameterPrecursorCharge = new SQLiteParameter("@precursorCharge", precursorData.precursorCharge);
@@ -456,7 +456,7 @@ namespace LipidCreator
             // add spectrum
             command.CommandText =
                 "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
-            log.Info("Inserting into RefSpectraPeaks: " + command.CommandText);
+            log.Debug("Inserting into RefSpectraPeaks: " + command.CommandText);
             SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
             SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
             parameterMZ.Value = Compressing.Compress(valuesMZArray.ToArray());
@@ -506,7 +506,7 @@ namespace LipidCreator
                     SQLiteParameter parameterAnnComment = new SQLiteParameter("@annotationComment", ann.Comment);
                     SQLiteParameter parameterMzTheor = new SQLiteParameter("@mzTheoretical", valuesMZArray[i]);
                     SQLiteParameter parameterMzObs = new SQLiteParameter("@mzObserved", valuesMZArray[i]);
-                    log.Info("Inserting into RefSpectraPeakAnnotations: " + command.CommandText);
+                    log.Debug("Inserting into RefSpectraPeakAnnotations: " + command.CommandText);
                     command.Parameters.Add(parameterAnnName);
                     command.Parameters.Add(parameterAnnFormula);
                     command.Parameters.Add(parameterAnnCharge);

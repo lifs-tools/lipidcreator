@@ -1117,13 +1117,10 @@ namespace LipidCreator
             Dictionary<string, string> nameToExportName = new Dictionary<string, string>();
             foreach (PrecursorData precursorData in precursorDataList)
             {
-                nameToExportName.Add(precursorData.precursorName, precursorData.precursorExportName);
+                if (!nameToExportName.ContainsKey(precursorData.precursorName)) nameToExportName.Add(precursorData.precursorName, precursorData.precursorExportName);
             }            
             
 
-
-            
-            
             string header = string.Join(",", SKYLINE_API_HEADER);
 
             StringBuilder sb = new StringBuilder(header, header.Length);
@@ -1134,8 +1131,7 @@ namespace LipidCreator
             foreach (DataRow entry in dt.Rows)
             {
                 try
-                {
-                    
+                {                    
                     string exportName = nameToExportName.ContainsKey((string)entry[LipidCreator.PRECURSOR_NAME]) ? nameToExportName[(string)entry[LipidCreator.PRECURSOR_NAME]] : (string)entry[LipidCreator.PRECURSOR_NAME];
                     // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname

@@ -418,6 +418,7 @@ namespace LipidCreator
             }
             creatorGUI.Enabled = true;
             quitting = false;
+            creatorGUI.resetLipidCreator();
         }
         
         

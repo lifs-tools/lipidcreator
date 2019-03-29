@@ -272,11 +272,6 @@ namespace LipidCreator
                             DoMouseClick();
                             break;
                         
-                        case (int)PRMSteps.RepresentitativeFA:
-                            Cursor.Position = getMiddle(tutorialWindow.next);
-                            DoMouseClick();
-                            break;
-                        
                         case (int)PRMSteps.Ether:
                             Cursor.Position = getMiddle(tutorialWindow.next);
                             DoMouseClick();
@@ -325,6 +320,44 @@ namespace LipidCreator
                             Cursor.Position = getMiddle(creatorGUI.addLipidButton);
                             DoMouseClick();
                             break;
+                            
+                            
+                            
+                        case (int)PRMSteps.ChangeGlycero:
+                        
+                            Point pg = getOrigin(creatorGUI.tabControl);
+                            pg.X += (int)(creatorGUI.tabControl.ItemSize.Width * 1.5);
+                            pg.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
+                            Cursor.Position = pg;
+                            DoMouseClick();
+                            break;
+                            
+                            
+                        case (int)PRMSteps.SetGLFA:
+                            break;
+                            
+                            
+                        case (int)PRMSteps.EvenChain:
+                            break;    
+                            
+                            
+                        
+                        case (int)PRMSteps.RepresentitativeFA:
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                            
+                            
+                            
+                    
+                    
+                        case (int)PRMSteps.DeselectThirdFA:
+                            break;
+                            
+                            
+                        case (int)PRMSteps.AddGL:
+                            break;
+                            
                         
                         case (int)PRMSteps.OpenInterlist:
                             Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);

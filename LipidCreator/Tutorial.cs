@@ -41,7 +41,7 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2, TutorialCE = 3};
     
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, RepresentitativeFA, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenInterlist, ExplainInterlist, OpenReview, StoreList, Finish};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, ChangeGlycero, SetGLFA, EvenChain, RepresentitativeFA, DeselectThirdFA, AddGL, OpenInterlist, ExplainInterlist, OpenReview, StoreList, Finish};
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
@@ -1053,7 +1053,7 @@ namespace LipidCreator
                     nextEnabled = true;
                     break;
                     
-                    
+                    /*
                 case (int)PRMSteps.RepresentitativeFA:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
@@ -1064,6 +1064,7 @@ namespace LipidCreator
                     
                     nextEnabled = true;
                     break;
+                    */
                     
                     
                 case (int)PRMSteps.Ether:
@@ -1141,6 +1142,40 @@ namespace LipidCreator
                     break;
                     
                     
+                case (int)PRMSteps.ChangeGlycero:
+                    setTutorialControls(creatorGUI.homeTab);
+                    
+                    tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 2.5), 0), "lt");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Glycerolipids' tab", "That was easy, let's add some more lipids. Click on 'Glycerolipids' tab to change the lipid category.");
+                    break;
+                    
+                    
+                case (int)PRMSteps.SetGLFA:
+                    break;
+                    
+                    
+                case (int)PRMSteps.EvenChain:
+                    break;
+                    
+                    
+                case (int)PRMSteps.RepresentitativeFA:
+                    setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
+                    
+                    CheckBox glRep = creatorGUI.glRepresentativeFA;
+                    tutorialArrow.update(new Point(glRep.Location.X, glRep.Location.Y + (glRep.Size.Height >> 1)), "tr");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Enable 'First FA representative'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
+                    
+                    break;
+                    
+                    
+                case (int)PRMSteps.DeselectThirdFA:
+                    break;
+                    
+                    
+                case (int)PRMSteps.AddGL:
+                    break;
                     
                     
                 case (int)PRMSteps.OpenInterlist:

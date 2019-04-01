@@ -41,7 +41,7 @@ namespace LipidCreator
     
     public enum Tutorials {NoTutorial = -1, TutorialPRM = 0, TutorialSRM = 1, TutorialHL = 2, TutorialCE = 3};
     
-    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, RepresentitativeFA, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, OpenInterlist, ExplainInterlist, OpenReview, StoreList, Finish};
+    public enum PRMSteps {Null, Welcome, PhosphoTab, PGheadgroup, SetFA, SetDB, MoreParameters, Ether, SecondFADB, SelectAdduct, OpenFilter, SelectFilter, AddLipid, ChangeGlycero, SetGLFA, EvenChain, RepresentitativeFA, DeselectThirdFA, AddGL, OpenInterlist, ExplainInterlist, OpenReview, StoreList, Finish};
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
@@ -110,6 +110,7 @@ namespace LipidCreator
             creatorGUI.tabControl.MouseMove += new MouseEventHandler(dragInteraction);
             creatorGUI.tabControl.SelectedIndexChanged += new EventHandler(tabSelectedInteraction);
             creatorGUI.plFA1Textbox.TextChanged += new EventHandler(textBoxInteraction);
+            creatorGUI.glFA1Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plDB1Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plFA2Textbox.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.plDB2Textbox.TextChanged += new EventHandler(textBoxInteraction);
@@ -122,6 +123,9 @@ namespace LipidCreator
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.filtersButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.menuCollisionEnergyOpt.Click += new EventHandler(buttonInteraction);
+            creatorGUI.glFA1Combobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
+            creatorGUI.glRepresentativeFA.CheckedChanged += new EventHandler(checkBoxInteraction);
+            creatorGUI.glFA3Checkbox1.CheckedChanged += new EventHandler(checkBoxInteraction);
             foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
             {
                 menuItem.Click += new EventHandler(buttonInteraction);
@@ -295,6 +299,7 @@ namespace LipidCreator
             creatorGUI.tabControl.Deselecting -= new TabControlCancelEventHandler(tabDeselectingInteraction);
             creatorGUI.tabControl.SelectedIndexChanged -= new EventHandler(tabSelectedInteraction);
             creatorGUI.plFA1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
+            creatorGUI.glFA1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plDB1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plFA2Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plDB2Textbox.TextChanged -= new EventHandler(textBoxInteraction);
@@ -307,6 +312,9 @@ namespace LipidCreator
             creatorGUI.openReviewFormButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.filtersButton.Click -= new EventHandler(buttonInteraction);
             creatorGUI.menuCollisionEnergyOpt.Click -= new EventHandler(buttonInteraction);
+            creatorGUI.glFA1Combobox.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
+            creatorGUI.glRepresentativeFA.CheckedChanged -= new EventHandler(checkBoxInteraction);
+            creatorGUI.glFA3Checkbox1.CheckedChanged -= new EventHandler(checkBoxInteraction);
             foreach (MenuItem menuItem in creatorGUI.menuCollisionEnergy.MenuItems)
             {
                 menuItem.Click -= new EventHandler(buttonInteraction);
@@ -418,6 +426,7 @@ namespace LipidCreator
             }
             creatorGUI.Enabled = true;
             quitting = false;
+            creatorGUI.resetLipidCreator();
         }
         
         
@@ -562,6 +571,10 @@ namespace LipidCreator
                 {
                     return;
                 }
+                else if (currentTabIndex == (int)LipidCategory.Glycerolipid && tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.ChangeGlycero)
+                {
+                    return;
+                }
                 else if (currentTabIndex == pgIndex && tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.SelectPG)
                 {
                     return;
@@ -633,6 +646,12 @@ namespace LipidCreator
                 HashSet<int> expected = new HashSet<int>(){14, 15, 16, 17, 18, 20};
                 HashSet<int> carbonCounts = ((Phospholipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerophospholipid]).fag1.carbonCounts;
                 nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 6;
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetGLFA)
+            {
+                HashSet<int> expected = new HashSet<int>(){16, 17, 18, 19, 20};
+                HashSet<int> carbonCounts = ((Glycerolipid)creatorGUI.lipidTabList[(int)LipidCategory.Glycerolipid]).fag1.carbonCounts;
+                nextEnabled = carbonCounts != null && carbonCounts.Intersect(expected).Count() == 5;
             }
             else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.SetDB)
             {
@@ -708,6 +727,14 @@ namespace LipidCreator
             {
                 nextEnabled = creatorGUI.plPosAdductCheckbox1.Checked && !creatorGUI.plPosAdductCheckbox3.Checked;
             }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.RepresentitativeFA)
+            {
+                nextEnabled = creatorGUI.glRepresentativeFA.Checked;
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.DeselectThirdFA)
+            {
+                nextEnabled = !creatorGUI.glFA3Checkbox1.Checked;
+            }
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }
@@ -721,6 +748,10 @@ namespace LipidCreator
             if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.NameFragment)
             {
                 nextEnabled = (creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.Text == "testFrag") && (creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndex == 1);
+            }
+            else if (tutorial == Tutorials.TutorialPRM && tutorialStep == (int)PRMSteps.EvenChain)
+            {
+                nextEnabled = creatorGUI.glFA1Combobox.SelectedIndex == 2;
             }
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.NameHeavy)
             {
@@ -841,7 +872,7 @@ namespace LipidCreator
         
         public void buttonInteraction(Object sender, EventArgs e)
         {
-            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenInterlist, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
+            if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.AddLipid, (int)PRMSteps.AddGL, (int)PRMSteps.OpenFilter, (int)PRMSteps.SelectFilter, (int)PRMSteps.OpenInterlist, (int)PRMSteps.OpenReview, (int)PRMSteps.StoreList, (int)PRMSteps.Finish}).Contains(tutorialStep)))
             {
             
                 if (tutorialStep == (int)PRMSteps.OpenReview) creatorGUI.lipidsReview.Show();
@@ -1052,7 +1083,7 @@ namespace LipidCreator
                     nextEnabled = true;
                     break;
                     
-                    
+                    /*
                 case (int)PRMSteps.RepresentitativeFA:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
                     
@@ -1063,6 +1094,7 @@ namespace LipidCreator
                     
                     nextEnabled = true;
                     break;
+                    */
                     
                     
                 case (int)PRMSteps.Ether:
@@ -1140,6 +1172,76 @@ namespace LipidCreator
                     break;
                     
                     
+                case (int)PRMSteps.ChangeGlycero:
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    
+                    tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 1.5), 0), "lt");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(340, 200), "Click on 'Glycerolipids' tab", "That was easy, let's add some more lipids. Click on 'Glycerolipids' tab to change the lipid category.");
+                    break;
+                    
+                    
+                case (int)PRMSteps.SetGLFA:
+                    setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
+                    
+                    TextBox glFA1 = creatorGUI.glFA1Textbox;
+                    tutorialArrow.update(new Point(glFA1.Location.X, glFA1.Location.Y + (glFA1.Size.Height >> 1)), "tr");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set first fatty acyl chain lengths to '16-20'", "For the second lipid, please set the first fatty acyl carbon lengths from 16 til 20.", false);
+                                      
+                    
+                    glFA1.Text = "12-15";
+                    glFA1.Enabled = true;
+                    break;
+                    
+                    
+                case (int)PRMSteps.EvenChain:
+                    setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
+                    
+                    ComboBox glFA1cb = creatorGUI.glFA1Combobox;
+                    tutorialArrow.update(new Point(glFA1cb.Location.X, glFA1cb.Location.Y + (glFA1cb.Size.Height >> 1)), "tr");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select 'Fatty acyl chain - even' for FA1", "When selecting 'Fatty acyl chain - even', only even carbon lengths will be computed, for odd respectively.", false);
+                                      
+                    
+                    glFA1cb.SelectedIndex = 0;
+                    glFA1cb.Enabled = true;
+                    break;
+                    
+                    
+                case (int)PRMSteps.RepresentitativeFA:
+                    setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
+                    
+                    CheckBox glRep = creatorGUI.glRepresentativeFA;
+                    tutorialArrow.update(new Point(glRep.Location.X, glRep.Location.Y + (glRep.Size.Height >> 1)), "tr");
+                    
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Enable 'First FA representative'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
+                    glRep.Enabled = true;
+                    glRep.Checked = true;
+                    break;
+                    
+                    
+                case (int)PRMSteps.DeselectThirdFA:
+                    setTutorialControls(creatorGUI.glycerolipidsTab);
+                    
+                    CheckBox glFA3C1 = creatorGUI.glFA3Checkbox1;
+                    tutorialArrow.update(new Point(glFA3C1.Location.X, glFA3C1.Location.Y + (glFA3C1.Size.Height >> 1)), "br");
+                    tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Deselect 'FA' on third fatty acyl", "To create diacylglycerols, one has simply deselect all fatty acyl options on the third fatty acyl. To create monoacylglycerols, on second fatty acyl, respectively. Please deselect all fatty acyl options on the third fatty acyl.");
+                    glFA3C1.Enabled = true;
+                    glFA3C1.Checked = true;
+                    break;
+                    
+                    
+                case (int)PRMSteps.AddGL:
+                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    
+                    
+                    Button alb2 = creatorGUI.addLipidButton;
+                    tutorialArrow.update(new Point(alb2.Location.X + 20 + creatorGUI.lcStep3.Location.X, alb2.Location.Y + creatorGUI.lcStep3.Location.Y), "rb");
+                    alb2.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(34, 34), "Click on 'Add glycerolipid'", "");
+                    break;
                     
                     
                 case (int)PRMSteps.OpenInterlist:
@@ -1150,7 +1252,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which includs all precursors and fragment information.");
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which includs all precursors and fragment information.", false);
                     break;
                 
                 

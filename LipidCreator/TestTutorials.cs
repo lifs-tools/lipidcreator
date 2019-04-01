@@ -272,11 +272,6 @@ namespace LipidCreator
                             DoMouseClick();
                             break;
                         
-                        case (int)PRMSteps.RepresentitativeFA:
-                            Cursor.Position = getMiddle(tutorialWindow.next);
-                            DoMouseClick();
-                            break;
-                        
                         case (int)PRMSteps.Ether:
                             Cursor.Position = getMiddle(tutorialWindow.next);
                             DoMouseClick();
@@ -325,6 +320,70 @@ namespace LipidCreator
                             Cursor.Position = getMiddle(creatorGUI.addLipidButton);
                             DoMouseClick();
                             break;
+                            
+                            
+                            
+                        case (int)PRMSteps.ChangeGlycero:
+                        
+                            Point pg = getOrigin(creatorGUI.tabControl);
+                            pg.X += (int)(creatorGUI.tabControl.ItemSize.Width * 1.5);
+                            pg.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
+                            Cursor.Position = pg;
+                            DoMouseClick();
+                            break;
+                            
+                            
+                        case (int)PRMSteps.SetGLFA:
+                            Cursor.Position = getMiddle(creatorGUI.glFA1Textbox);
+                            DoMouseClick();
+                            for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
+                            for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
+                            
+                            keyPress('1');
+                            keyPress('6');
+                            keyPress(KEY_DASH);
+                            keyPress('2');
+                            keyPress('0');
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                            
+                            
+                        case (int)PRMSteps.EvenChain:
+                            Cursor.Position = getMiddle(creatorGUI.glFA1Combobox);
+                            DoMouseClick();
+                            keyPress(KEY_DOWN);
+                            keyPress(KEY_DOWN);
+                            keyPress(KEY_ENTER);
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;    
+                            
+                            
+                        
+                        case (int)PRMSteps.RepresentitativeFA:
+                            Cursor.Position = getMiddle(creatorGUI.glRepresentativeFA);
+                            DoMouseClick();
+                        
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                    
+                    
+                        case (int)PRMSteps.DeselectThirdFA:
+                            Cursor.Position = getMiddle(creatorGUI.glFA3Checkbox1);
+                            DoMouseClick();
+                        
+                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            DoMouseClick();
+                            break;
+                            
+                            
+                        case (int)PRMSteps.AddGL:
+                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            DoMouseClick();
+                            break;
+                            
                         
                         case (int)PRMSteps.OpenInterlist:
                             Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);

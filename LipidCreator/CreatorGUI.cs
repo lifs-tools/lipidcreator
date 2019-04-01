@@ -3179,7 +3179,9 @@ namespace LipidCreator
                 if (faRepresentation.Length > 0) faRepresentation += ", ";
                 faRepresentation += "FAa";
             }
-            faRepresentation += ": ";
+            if (fag.chainType == 0) faRepresentation += ":";
+            else if (fag.chainType == 1) faRepresentation += " (odd):";
+            else if (fag.chainType == 2) faRepresentation += " (even):";
             
             return faRepresentation;
         }

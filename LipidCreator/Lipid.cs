@@ -219,13 +219,13 @@ namespace LipidCreator
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
-                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = CE;
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = CE.ToString(CultureInfo.InvariantCulture);
                     }
                     else if (monitoringType == MonitoringTypes.SRM)
                     {
                         double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, "precursor");
                         if (ceValue != -1) ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
-                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = ceValue;
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = ceValue.ToString(CultureInfo.InvariantCulture);
                     }
                 }
             }
@@ -352,13 +352,13 @@ namespace LipidCreator
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
-                        lipidRow[LipidCreator.COLLISION_ENERGY] = CE;
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = CE.ToString(CultureInfo.InvariantCulture);
                     }
                     else if (monitoringType == MonitoringTypes.SRM)
                     {
                         double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, fragName);
                         if (ceValue != -1) ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
-                        lipidRow[LipidCreator.COLLISION_ENERGY] = ceValue;
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = ceValue.ToString(CultureInfo.InvariantCulture);
                     }
                 }
             }
@@ -436,14 +436,19 @@ namespace LipidCreator
 
             // add MS1 information - always claim FileId=1 (SpectrumSourceFiles has an entry for this, saying that these are generated spectra)
             sql =
-                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES(@precursorName, " + precursorData.precursorM_Z + ", " + precursorData.precursorCharge +
+                "INSERT INTO RefSpectra (moleculeName, precursorMZ, precursorCharge, precursorAdduct, prevAA, nextAA, copies, numPeaks, ionMobility, collisionalCrossSectionSqA, ionMobilityHighEnergyOffset, ionMobilityType, retentionTime, fileID, SpecIDinFile, score, scoreType, inchiKey, otherKeys, peptideSeq, peptideModSeq, chemicalFormula) VALUES(@precursorName, @precursorMz, @precursorCharge "  +
                 ", @precursorAdduct, '-', '-', 0, " + numFragments +
                 ", 0, 0, 0, 0, 0, '1', 0, 1, 1, '', '', '', '',  @precursorIonFormula)";
             command.CommandText = sql;
+            log.Debug("Inserting into RefSpectra: " + command.CommandText);
             SQLiteParameter parameterPrecursorName = new SQLiteParameter("@precursorName", precursorData.precursorExportName);
+            SQLiteParameter parameterPrecursorMz = new SQLiteParameter("@precursorMz", precursorData.precursorM_Z);
+            SQLiteParameter parameterPrecursorCharge = new SQLiteParameter("@precursorCharge", precursorData.precursorCharge);
             SQLiteParameter parameterPrecursorAdduct = new SQLiteParameter("@precursorAdduct", precursorData.precursorAdductFormula);
             SQLiteParameter parameterPrecursorIonFormula = new SQLiteParameter("@precursorIonFormula", precursorData.precursorIonFormula);
             command.Parameters.Add(parameterPrecursorName);
+            command.Parameters.Add(parameterPrecursorMz);
+            command.Parameters.Add(parameterPrecursorCharge);
             command.Parameters.Add(parameterPrecursorAdduct);
             command.Parameters.Add(parameterPrecursorIonFormula);
             command.ExecuteNonQuery();
@@ -451,6 +456,7 @@ namespace LipidCreator
             // add spectrum
             command.CommandText =
                 "INSERT INTO RefSpectraPeaks(RefSpectraID, peakMZ, peakIntensity) VALUES((SELECT MAX(id) FROM RefSpectra), @mzvalues, @intensvalues)";
+            log.Debug("Inserting into RefSpectraPeaks: " + command.CommandText);
             SQLiteParameter parameterMZ = new SQLiteParameter("@mzvalues", System.Data.DbType.Binary);
             SQLiteParameter parameterIntens = new SQLiteParameter("@intensvalues", System.Data.DbType.Binary);
             parameterMZ.Value = Compressing.Compress(valuesMZArray.ToArray());
@@ -490,19 +496,25 @@ namespace LipidCreator
                     }
                     command.CommandText =
                         "INSERT INTO RefSpectraPeakAnnotations(RefSpectraID, " +
-                        "peakIndex , name , formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
-                        i + ", @annotationName, @annotationFormula, '', '', " + ann.Charge + ", @annotationAdduct, @annotationComment, " + valuesMZArray[i] + ", " + valuesMZArray[i] + ")";
+                        "peakIndex , name, formula, inchiKey, otherKeys, charge, adduct, comment, mzTheoretical, mzObserved) VALUES((SELECT MAX(id) FROM RefSpectra), " +
+                        i + ", @annotationName, @annotationFormula, '', '', @annotationCharge, @annotationAdduct, @annotationComment, @mzTheoretical, @mzObserved)";
                     
                     SQLiteParameter parameterAnnName = new SQLiteParameter("@annotationName", ann.Name);
                     SQLiteParameter parameterAnnFormula = new SQLiteParameter("@annotationFormula", ann.Formula);
+                    SQLiteParameter parameterAnnCharge = new SQLiteParameter("@annotationCharge", ann.Charge);
                     SQLiteParameter parameterAnnAdduct = new SQLiteParameter("@annotationAdduct", adduct);
                     SQLiteParameter parameterAnnComment = new SQLiteParameter("@annotationComment", ann.Comment);
-                    
+                    SQLiteParameter parameterMzTheor = new SQLiteParameter("@mzTheoretical", valuesMZArray[i]);
+                    SQLiteParameter parameterMzObs = new SQLiteParameter("@mzObserved", valuesMZArray[i]);
+                    log.Debug("Inserting into RefSpectraPeakAnnotations: " + command.CommandText);
                     command.Parameters.Add(parameterAnnName);
                     command.Parameters.Add(parameterAnnFormula);
+                    command.Parameters.Add(parameterAnnCharge);
                     command.Parameters.Add(parameterAnnAdduct);
                     command.Parameters.Add(parameterAnnComment);
-                    
+                    command.Parameters.Add(parameterMzTheor);
+                    command.Parameters.Add(parameterMzObs);
+
                     command.ExecuteNonQuery();
                 }
             }

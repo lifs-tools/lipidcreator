@@ -1178,6 +1178,7 @@ namespace LipidCreator
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 1.5), 0), "lt");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(340, 200), "Click on 'Glycerolipids' tab", "That was easy, let's add some more lipids. Click on 'Glycerolipids' tab to change the lipid category.");
+
                     break;
                     
                     

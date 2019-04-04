@@ -28,17 +28,16 @@ SOFTWARE.
 ============================== Installation ==================================
 
 Requirements:
- - either Windows XP / Vista / 7 / 8 / 10
- - or Ubuntu 16.04 or higher (with 'mono-complete' package installed)
- - 256MB main memory
+ - either Windows Vista / 7 / 8 / 10 (only 64 bit)
+ - or Ubuntu 16.04 or higher (with 'mono-complete' package installed, only 64 bit)
+ - at least 256MB main memory or higher
  
 
-Installation for stand alone mode:
-If you can read this text, then you have successfully unpacked the stand alone
-version in the zip file. Please click on 'LipidCreator.exe' to run the tool.
+Installation for standalone mode:
+No installation required, please click on 'LipidCreator.exe' to run the software.
 
 Installation as external program in Skyline [1]:
- 1) Open Skyline with an blank document
+ 1) Open Skyline with a blank document
  2) Go in the menu on 'Tools' -> 'External Tools...'
  3) Click on 'Add' -> 'From File'
  4) Browse to the 'LipidCreator.zip' archive and select it
@@ -47,6 +46,18 @@ Installation as external program in Skyline [1]:
  
  
 [1] https://skyline.ms
+
+
+============================== Demo ========================================
+ 
+LipidCreator provides several predefined data sets for a number of organisms
+and tissues.
+ 1) Start LipidCreator
+ 2) Click in the menu on 'File' -> 'Import Predefined' -> 'Yeast' -> 'Lipidome'
+ 3) After loading, click on 'Review Lipids'. The new window shows 406 precursors.
+ 4) Click on 'Continue' to get the final list containing 5268 transitions for the
+    yeast lipidome which can be used / stored for further method development.
+This demo can be performed in few seconds.
 
 
 =============================== Tutorials ====================================
@@ -58,5 +69,5 @@ from the 'Home' tab, namely:
  - heavy labeled isotope tutorial
  - collision energy tutorial
 
-
-
+Additionally, a text version (pdf) is available in LipidCreator, please click in
+the menu on 'Help' -> 'Documentation'.

@@ -928,6 +928,14 @@ namespace LipidCreator
                                         registeredLipids.Add(parserEventHandler.lipid);
                                         ++valid;
                                     }
+                                    else 
+                                    {
+                                        log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                                    }
+                                }
+                                else
+                                {
+                                    log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                                 }
                             }
                             

@@ -1,10 +1,6 @@
 CC = x86_64-w64-mingw32-g++
-SQLite_DLL = System.Data.SQLite.dll
-SQLite_DLL_Version = 1.0.98.1
-SQLite_DLL_Folder = $(SQLite_DLL).$(SQLite_DLL_Version)/lib/net40/
-Log4Net_DLL = log4net
-Log4Net_DLL_Version = 2.0.8
-Log4Net_DLL_Folder = $(Log4Net_DLL).$(Log4Net_DLL_Version)/lib/net40/
+SQLite_DLL = ../packages/System.Data.SQLite.Core.1.0.110.0/lib/net40/System.Data.SQLite.dll
+Log4Net_DLL = ../packages/log4net.2.0.8/lib/net40-client/log4net.dll
 
 CORE_FILES = LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs Glycerolipid.cs Phospholipid.cs Sphingolipid.cs Cholesterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs IonFormulaParserEventHandler.cs MoleculeFormulaParserEventHandler.cs ParserEventHandler.cs Parser.cs LipidCreatorExtensionMethods.cs
 
@@ -24,47 +20,35 @@ RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:
 main: setup
 	resgen2 -compile $(RESX_FILES)
 
-	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL_Folder)$(SQLite_DLL) -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
+	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
 
 tests: setup
-
-	#mcs -pkg:dotnet -r:log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	#mcs -pkg:dotnet -r:log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	#mcs -pkg:dotnet -r:log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 	
-	mcs -pkg:dotnet -r:log4net.2.0.8/lib/net45-full/log4net.dll -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:System.Data.SQLite.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
 
 complete:
 	$(MAKE) setup
 	$(MAKE) main
-	$(MAKE) predefined
 	$(MAKE) zip
-	
-%.dll:
-	nuget install $(SQLite_DLL) -Version $(SQLite_DLL_Version)
-	nuget install $(Log4Net_DLL) -Version $(Log4Net_DLL_Version)
 
 zip:
 	cd $(BUILD_DIR) && zip -r ../../LipidCreator.zip LipidCreator.exe data images SkylineTool.dll Ionic.Zip.dll System.Data.SQLite.dll log4net.dll log4net.xml tool-inf
 	
-setup:  $(SQLite_DLL_Folder)$(SQLite_DLL)
+	
+setup:  $(SQLite_DLL)
 	if [ ! -d "$(BUILD_DIR)" ];then \
 		mkdir -p bin; \
 		mkdir -p $(BUILD_DIR); \
-		cp -r data images SkylineTool.dll Ionic.Zip.dll $(SQLite_DLL_Folder)$(SQLite_DLL) log4net.2.0.8/lib/net45-full/log4net.dll log4net.2.0.8/lib/net45-full/log4net.xml tool-inf $(BUILD_DIR); \
+		cp -r data images SkylineTool.dll Ionic.Zip.dll $(SQLite_DLL) ../packages/log4net.2.0.8/lib/net40-client/* tool-inf $(BUILD_DIR); \
 		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
 	fi
 	mkdir -p $(BUILD_DIR)/data/predefined
 	
-	
-predefined:
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/human-platelet.csv $(BUILD_DIR)/data/predefined/Human/Platelet.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-platelet.csv $(BUILD_DIR)/data/predefined/Mouse/Platelet.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-heart.csv $(BUILD_DIR)/data/predefined/Mouse/Heart.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/mouse-brain.csv $(BUILD_DIR)/data/predefined/Mouse/Brain.lcXML -l -p 0 -h 0
-	mono $(BUILD_DIR)/LipidCreator.exe transitionlist $(BUILD_DIR)/data/predefined-lists/yeast-lipidome.csv $(BUILD_DIR)/data/predefined/Yeast/Lipidome.lcXML -l -p 0 -h 0
 
 clean:
 	rm -rf bin && rm -rf obj/

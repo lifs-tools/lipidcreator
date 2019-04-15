@@ -1218,7 +1218,7 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Enable 'First FA representative'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
                     glRep.Enabled = true;
-                    glRep.Checked = true;
+                    glRep.Checked = false;
                     break;
                     
                     

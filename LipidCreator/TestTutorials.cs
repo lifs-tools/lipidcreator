@@ -61,6 +61,9 @@ namespace LipidCreator
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
         public const int MAX_RETRIES = 3;
         public const int STEP_SLEEP = 500;
+        public const int KEY_SLEEP = 100;
+        public const int ANIMATION_SLEEP = 10;
+        public const double ANIMATION_STEPS = 100.0;
         
         
         // Keyboard keys
@@ -86,6 +89,7 @@ namespace LipidCreator
         
         public void keyPress(int key, bool shift = false)
         {
+            Thread.Sleep(KEY_SLEEP);
             if (shift) keybd_event((byte)VK_SHIFT, 0, 0, 0);
             keybd_event((byte)key, 0, 0, 0);
             keybd_event((byte)key, 0, KEYEVENTF_KEYUP, 0);
@@ -96,6 +100,7 @@ namespace LipidCreator
         public void DoMouseClick()
         {
             //Call the imported function with the cursor's current position
+            Thread.Sleep(STEP_SLEEP);
             uint X = (uint)Cursor.Position.X;
             uint Y = (uint)Cursor.Position.Y;
             mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
@@ -105,6 +110,7 @@ namespace LipidCreator
         public void DoMouseDown()
         {
             //Call the imported function with the cursor's current position
+            Thread.Sleep(STEP_SLEEP);
             uint X = (uint)Cursor.Position.X;
             uint Y = (uint)Cursor.Position.Y;
             mouse_event(MOUSEEVENTF_LEFTDOWN, X, Y, 0, 0);
@@ -114,6 +120,7 @@ namespace LipidCreator
         public void DoMouseUp()
         {
             //Call the imported function with the cursor's current position
+            Thread.Sleep(STEP_SLEEP);
             uint X = (uint)Cursor.Position.X;
             uint Y = (uint)Cursor.Position.Y;
             mouse_event(MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
@@ -163,13 +170,25 @@ namespace LipidCreator
         
         public void relocateForm(Form form)
         {
-            Cursor.Position = new Point(form.Left + 30, form.Top + 10);
+            moveMouse(new Point(form.Left + 30, form.Top + 10));
             DoMouseDown();
-            Cursor.Position = new Point(50, 30);
+            moveMouse(new Point(50, 30));
             DoMouseUp();
             Thread.Sleep(50);
         }
         
+        
+        
+        public void moveMouse(Point destination)
+        {
+            int sourceX = Cursor.Position.X;
+            int sourceY = Cursor.Position.Y;
+            for (int i = 1; i <= (int)ANIMATION_STEPS; ++i)
+            {
+                Cursor.Position = new Point((int)(sourceX + (destination.X - sourceX) * ((double)(i)) / ANIMATION_STEPS), sourceY + (int)((destination.Y - sourceY) * (double)i / ANIMATION_STEPS));
+                Thread.Sleep(ANIMATION_SLEEP);
+            }
+        }
         
         
         
@@ -208,7 +227,7 @@ namespace LipidCreator
                         case (int)PRMSteps.Welcome:
                             relocateForm(creatorGUI);
                         
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                             
@@ -217,7 +236,7 @@ namespace LipidCreator
                             Point p2 = getOrigin(creatorGUI.tabControl);
                             p2.X += (int)(creatorGUI.tabControl.ItemSize.Width * 2.5);
                             p2.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
-                            Cursor.Position = p2;
+                            moveMouse(p2);
                             DoMouseClick();
                             break;
                             
@@ -231,14 +250,14 @@ namespace LipidCreator
                             Point p3 = getOrigin(plHG);
                             p3.X += plHG.Size.Width >> 1;
                             p3.Y += (int)((pg_I + 0.5) * plHG.ItemHeight);
-                            Cursor.Position = p3;
+                            moveMouse(p3);
                             DoMouseClick();
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                             
                         case (int)PRMSteps.SetFA:
-                            Cursor.Position = getMiddle(creatorGUI.plFA1Textbox);
+                            moveMouse(getMiddle(creatorGUI.plFA1Textbox));
                             DoMouseClick();
                             for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
                             for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
@@ -251,34 +270,34 @@ namespace LipidCreator
                             keyPress(KEY_COMMA);
                             keyPress('2');
                             keyPress('0');
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.SetDB:
-                            Cursor.Position = getMiddle(creatorGUI.plDB1Textbox);
+                            moveMouse(getMiddle(creatorGUI.plDB1Textbox));
                             DoMouseClick();
                             for (int i = 0; i < 10; ++i) keyPress(KEY_BACKSPACE);
                             for (int i = 0; i < 10; ++i) keyPress(KEY_DEL);
                             keyPress('0');
                             keyPress(KEY_DASH);
                             keyPress('1');
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.MoreParameters:
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.Ether:
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.SecondFADB:
-                            Cursor.Position = getMiddle(creatorGUI.plFA2Textbox);
+                            moveMouse(getMiddle(creatorGUI.plFA2Textbox));
                             DoMouseClick();
                             for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
                             for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
@@ -286,38 +305,38 @@ namespace LipidCreator
                             keyPress(KEY_DASH);
                             keyPress('1');
                             keyPress('0');
-                            Cursor.Position = getMiddle(creatorGUI.plDB2Textbox);
+                            moveMouse(getMiddle(creatorGUI.plDB2Textbox));
                             DoMouseClick();
                             for (int i = 0; i < 10; ++i) keyPress(KEY_BACKSPACE);
                             for (int i = 0; i < 10; ++i) keyPress(KEY_DEL);
                             keyPress('2');
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.SelectAdduct:
-                            Cursor.Position = getMiddle(creatorGUI.plPosAdductCheckbox1);
+                            moveMouse(getMiddle(creatorGUI.plPosAdductCheckbox1));
                             DoMouseClick();
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.OpenFilter:
-                            Cursor.Position = getMiddle(creatorGUI.filtersButton);
+                            moveMouse(getMiddle(creatorGUI.filtersButton));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.SelectFilter:
                             relocateForm(creatorGUI.filterDialog);
                             
-                            Cursor.Position = getMiddle(creatorGUI.filterDialog.radioButton2);
+                            moveMouse(getMiddle(creatorGUI.filterDialog.radioButton2));
                             DoMouseClick();
-                            Cursor.Position = getMiddle(creatorGUI.filterDialog.button2);
+                            moveMouse(getMiddle(creatorGUI.filterDialog.button2));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.AddLipid:
-                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            moveMouse(getMiddle(creatorGUI.addLipidButton));
                             DoMouseClick();
                             break;
                             
@@ -328,13 +347,13 @@ namespace LipidCreator
                             Point pg = getOrigin(creatorGUI.tabControl);
                             pg.X += (int)(creatorGUI.tabControl.ItemSize.Width * 1.5);
                             pg.Y += creatorGUI.tabControl.ItemSize.Height >> 1;
-                            Cursor.Position = pg;
+                            moveMouse(pg);
                             DoMouseClick();
                             break;
                             
                             
                         case (int)PRMSteps.SetGLFA:
-                            Cursor.Position = getMiddle(creatorGUI.glFA1Textbox);
+                            moveMouse(getMiddle(creatorGUI.glFA1Textbox));
                             DoMouseClick();
                             for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
                             for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
@@ -344,75 +363,75 @@ namespace LipidCreator
                             keyPress(KEY_DASH);
                             keyPress('2');
                             keyPress('0');
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                             
                             
                         case (int)PRMSteps.EvenChain:
-                            Cursor.Position = getMiddle(creatorGUI.glFA1Combobox);
+                            moveMouse(getMiddle(creatorGUI.glFA1Combobox));
                             DoMouseClick();
                             keyPress(KEY_DOWN);
                             keyPress(KEY_DOWN);
                             keyPress(KEY_ENTER);
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;    
                             
                             
                         
                         case (int)PRMSteps.RepresentitativeFA:
-                            Cursor.Position = getMiddle(creatorGUI.glRepresentativeFA);
+                            moveMouse(getMiddle(creatorGUI.glRepresentativeFA));
                             DoMouseClick();
                         
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                     
                     
                         case (int)PRMSteps.DeselectThirdFA:
-                            Cursor.Position = getMiddle(creatorGUI.glFA3Checkbox1);
+                            moveMouse(getMiddle(creatorGUI.glFA3Checkbox1));
                             DoMouseClick();
                         
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                             
                             
                         case (int)PRMSteps.AddGL:
-                            Cursor.Position = getMiddle(creatorGUI.addLipidButton);
+                            moveMouse(getMiddle(creatorGUI.addLipidButton));
                             DoMouseClick();
                             break;
                             
                         
                         case (int)PRMSteps.OpenInterlist:
-                            Cursor.Position = getMiddle(creatorGUI.openReviewFormButton);
+                            moveMouse(getMiddle(creatorGUI.openReviewFormButton));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.ExplainInterlist:
                             relocateForm(creatorGUI.lipidsInterList);
                             
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             break;
                         
                         case (int)PRMSteps.OpenReview:
-                            Cursor.Position = getMiddle(creatorGUI.lipidsInterList.continueReviewButton);
+                            moveMouse(getMiddle(creatorGUI.lipidsInterList.continueReviewButton));
                             DoMouseClick();
                             Thread.Sleep(STEP_SLEEP);
                             break;
                         
                         case (int)PRMSteps.StoreList:
                             relocateForm(creatorGUI.lipidsReview);
-                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList));
                             DoMouseClick();
                             Thread.Sleep(STEP_SLEEP);
                             keyPress(KEY_ESC);
                             break;
                         
                         case (int)PRMSteps.Finish:
-                            Cursor.Position = getMiddle(tutorialWindow.next);
+                            moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
                             passed = true;
                             break;

@@ -80,6 +80,8 @@ namespace LipidCreator
         public bool enableAnalytics = false;
         public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
         public string prefixPath = "";
+        public RunMode runMode;
+        public static string ANALYTICS_CATEGORY;
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -515,6 +517,7 @@ namespace LipidCreator
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_VERSION_NUMBER = Application.ProductVersion;
             LC_OS = Environment.OSVersion.Platform;
+            ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
             categoryToClass = new Dictionary<int, ArrayList>();
@@ -734,6 +737,8 @@ namespace LipidCreator
         
         public void createFragmentList(string instrument, MonitoringTypes monitoringType)
         {
+            analytics(ANALYTICS_CATEGORY, "create-transition-list-" + runMode);
+            
             transitionList = addDataColumns(new DataTable ());
             transitionListUnique = addDataColumns (new DataTable ());
             
@@ -963,7 +968,7 @@ namespace LipidCreator
         {
         
             string outputDir = System.IO.Path.GetDirectoryName(filename);
-            System.IO.Directory.CreateDirectory(outputDir);
+            if (outputDir.Length > 0) System.IO.Directory.CreateDirectory(outputDir);
             if (!filename.EndsWith(mode)) filename += mode;
             if (split)
             {
@@ -1545,6 +1550,7 @@ namespace LipidCreator
         public void createBlib(String filename)
         {
             string outputDir = System.IO.Path.GetDirectoryName(filename);
+            if (outputDir.Length > 0) System.IO.Directory.CreateDirectory(outputDir);
             System.IO.Directory.CreateDirectory(outputDir);
             if (File.Exists(filename)) File.Delete(filename);
 

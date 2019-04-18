@@ -3560,7 +3560,6 @@ namespace LipidCreator
         public void openReviewForm(Object sender, EventArgs e)
         {
             lipidCreator.assemblePrecursors();
-            lipidCreator.analytics("lipidcreator", "create-transition-list");
             
             
             ArrayList returnValues = new ArrayList(){false};

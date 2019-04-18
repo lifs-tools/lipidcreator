@@ -41,16 +41,18 @@ using System.Diagnostics;
 namespace LipidCreator
 {
 
+    public enum RunMode {commandline, standalone, external};
+        
     [Serializable]
     public partial class MainApplication
     {
-    
-    
+        private static RunMode runMode;
         private static readonly ILog log = LogManager.GetLogger(typeof(MainApplication));
         
         public static void printHelp(string option = "")
         {
             LipidCreator lc = new LipidCreator(null);
+            lc.runMode = runMode;
             StringBuilder b;
             switch (option)
             {
@@ -152,7 +154,7 @@ namespace LipidCreator
         
         
         
-        public static void checkForAnalytics(bool withPrefix)
+        public static void checkForAnalytics(RunMode runMode, bool withPrefix)
         {
             string analyticsFile = (withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : "") + "data/analytics.txt";
             try {
@@ -181,17 +183,40 @@ namespace LipidCreator
                     
                     if (analyticsContent == "-1")
                     {
-                        DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\n"+
+                        bool enableAnalytics = false;
+                        if (runMode != RunMode.commandline)
+                        {
+                            DialogResult mbr = MessageBox.Show ("Thank you for choosing LipidCreator.\n\n"+
                                                             "LipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative.\nThe project administration requires us to report ANONYMIZED usage statistics for this tool to evaluate its usefulness for the community.\n\n" +
                                                             "With your permission, we collect the following ANONYMIZED statistics:\n - # of LipidCreator launches\n - # of generated transition lists\n\n" + 
                                                             "We do NOT collect any of the following statistics:\n - IP address\n - operating system\n - any information that may traced back to the user\n\n" +
                                                             "When you click 'Yes':\n - you agree to allow us to collect ANONYMIZED usage statistics.\n\n" + 
                                                             "When you click 'No':\n - no data will be sent\n - you can use LipidCreator without any restrictions.\n\n" + 
                                                             "We would highly appreciate your help to secure further funding for the continued development of LipidCreator.", "LipidCreator note", MessageBoxButtons.YesNo);
+                            enableAnalytics = mbr == DialogResult.Yes;
+                        }
+                        else 
+                        {
+                            Console.WriteLine("Thank you for choosing LipidCreator.\n\n"+
+                                                            "LipidCreator is funded by the German federal ministry of education and research (BMBF) as part of the de.NBI initiative.\nThe project administration requires us to report ANONYMIZED usage statistics for this tool to evaluate its usefulness for the community.\n\n" +
+                                                            "With your permission, we collect the following ANONYMIZED statistics:\n - # of LipidCreator launches\n - # of generated transition lists\n\n" + 
+                                                            "We do NOT collect any of the following statistics:\n - IP address\n - operating system\n - any information that may traced back to the user\n\n" +
+                                                            "When you type 'Yes':\n - you agree to allow us to collect ANONYMIZED usage statistics.\n\n" + 
+                                                            "When you type 'No':\n - no data will be sent\n - you can use LipidCreator without any restrictions.\n\n" + 
+                                                            "We would highly appreciate your help to secure further funding for the continued development of LipidCreator.\nDo you agree on the statistics usage? [Yes / No]");
+                            while (true)
+                            {
+                                String inline = Console.ReadLine();
+                                enableAnalytics = inline.ToLower().Equals("yes");
+                                
+                                if (inline.ToLower().Equals("yes") || inline.ToLower().Equals("no")) break;
+                                Console.WriteLine("\n\n\nDo you agree on the statistics usage? [Yes / No]");
+                            }
+                        }
                         
                         using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                         {
-                            outputFile.WriteLine ((mbr == DialogResult.Yes ? "1" : "0"));
+                            outputFile.WriteLine ((enableAnalytics ? "1" : "0"));
                         }
                     }
                 }
@@ -201,6 +226,13 @@ namespace LipidCreator
                 log.Warn("Warning: Analytics file could not be opened at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
         }
+        
+        
+        
+        
+        
+        
+        
     
         [STAThread]
         public static void Main(string[] args)
@@ -214,33 +246,43 @@ namespace LipidCreator
                     {
                         
                         case "dev":
-                            checkForAnalytics(false);
+                            runMode = RunMode.standalone;
+                            checkForAnalytics(runMode, false);
                             CreatorGUI creatorGUIDev = new CreatorGUI(null);
+                            creatorGUIDev.lipidCreator.runMode = runMode;
                             creatorGUIDev.asDeveloper = true;
-                            creatorGUIDev.lipidCreator.analytics("lipidcreator", "launch");
+                            creatorGUIDev.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                             Application.Run(creatorGUIDev);
                             break;
                             
                         
                         case "external":
-                            checkForAnalytics(true);
+                            runMode = RunMode.external;
+                            checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
-                            creatorGUI.lipidCreator.analytics("lipidcreator-external", "launch");
+                            creatorGUI.lipidCreator.runMode = runMode;
+                            creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                             Application.Run(creatorGUI);
                             break;
                             
                             
                         case "agentmode":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             printHelp("agentmode");
                             break;
                             
                             
                         case "help":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             printHelp();
                             break;
                             
                             
                         case "random":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             if (args.Length > 1 && args[1].Equals("help")) printHelp("random");
                             int num = 1;
                             if (args.Length > 1) num = int.TryParse(args[1], out num) ? num : 1;
@@ -249,6 +291,8 @@ namespace LipidCreator
                           
                           
                         case "translate":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             if (args.Length < 3)
                             {
                                 printHelp("translate");
@@ -275,7 +319,8 @@ namespace LipidCreator
                                         }
                                         
                                         LipidCreator lc = new LipidCreator(null);
-                                        lc.analytics("lipidcreator-cli", "launch");
+                                        lc.runMode = RunMode.commandline;
+                                        lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                         
                                         ArrayList parsedLipids = lc.translate(lipidNames);
                                         
@@ -317,6 +362,8 @@ namespace LipidCreator
                             
                             
                         case "transitionlist":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             if (args.Length < 3)
                             {
                                 printHelp("transitionlist");
@@ -386,7 +433,8 @@ namespace LipidCreator
                                 
                                 
                                 LipidCreator lc = new LipidCreator(null);
-                                lc.analytics("lipidcreator-cli", "launch");
+                                lc.runMode = runMode;
+                                lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
@@ -421,7 +469,7 @@ namespace LipidCreator
                                 else
                                 {
                                     string outputDir = System.IO.Path.GetDirectoryName(outputCSV);
-                                    System.IO.Directory.CreateDirectory(outputDir);
+                                    if (outputDir.Length > 0) System.IO.Directory.CreateDirectory(outputDir);
                                     using (StreamWriter writer = new StreamWriter (outputCSV))
                                     {
                                         writer.Write(lc.serialize());
@@ -433,6 +481,8 @@ namespace LipidCreator
                             
                             
                         case "library":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
                             if (args.Length < 4)
                             {
                                 printHelp("library");
@@ -445,7 +495,8 @@ namespace LipidCreator
                                 
                                 
                                 LipidCreator lc = new LipidCreator(null);
-                                lc.analytics("lipidcreator-cli", "launch");
+                                lc.runMode = runMode;
+                                lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
@@ -459,14 +510,18 @@ namespace LipidCreator
                 }
                 else 
                 {
+                    runMode = RunMode.commandline;
+                    checkForAnalytics(runMode, false);
                     printHelp();
                 }
             }
             else 
             {
-                checkForAnalytics(false);
+                runMode = RunMode.standalone;
+                checkForAnalytics(runMode, false);
                 CreatorGUI creatorGUI = new CreatorGUI(null);
-                creatorGUI.lipidCreator.analytics("lipidcreator-standalone", "launch");
+                creatorGUI.lipidCreator.runMode = runMode;
+                creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                 Application.Run(creatorGUI);
             }
         }

@@ -213,7 +213,7 @@ namespace LipidCreator
             g.FillRectangle(bbBrush, bbStart.X, bbStart.Y, bbEnd.X - bbStart.X + 1, bbEnd.Y - bbStart.Y);
             
             // drawing the axes
-            Font labelFont = new Font("Arial", 8);
+            Font labelFont = new Font("Arial", CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR);
             Pen blackPen = new Pen(Color.Black, 2);
             int xAxis = valueToPx(minXVal - 1, 0).X;
             g.DrawLine(blackPen, new Point(xAxis - LABEL_EXTENSION, Height - marginBottom), new Point(Width, Height - marginBottom));
@@ -269,7 +269,7 @@ namespace LipidCreator
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width - 1, this.Size.Height - 1);
             
             // draw axes labels
-            labelFont = new Font("Arial", 12);
+            labelFont = new Font("Arial", 12 * CreatorGUI.FONT_SIZE_FACTOR);
             PointF drawPointLabel = new PointF(marginLeft + (innerWidthPx >> 1), Height - marginBottom + 24);
             StringFormat formatLabel = new StringFormat();
             formatLabel.Alignment = StringAlignment.Center;
@@ -500,8 +500,8 @@ namespace LipidCreator
             // 
             // CEInspector
             //
-            this.Font = SystemFonts.DialogFont;
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.cartesean);

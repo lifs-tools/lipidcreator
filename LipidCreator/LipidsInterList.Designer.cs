@@ -143,9 +143,8 @@ namespace LipidCreator
             this.continueReviewButton.Text = "Continue";
             this.continueReviewButton.UseVisualStyleBackColor = true;
             this.continueReviewButton.Click += new System.EventHandler(this.continueReviewButtonClick);
-            this.Font = SystemFonts.DialogFont;
-            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(579, 674);
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);

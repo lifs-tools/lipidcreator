@@ -215,12 +215,14 @@ namespace LipidCreator
             g.DrawRectangle(blackPen, 0, 0, this.Size.Width, this.Size.Height);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             
-            Font instructionFont = new Font("Arial", 14, FontStyle.Bold);
+            int fontSizeInstruction = (int)(14.0 * CreatorGUI.FONT_SIZE_FACTOR);
+            Font instructionFont = new Font("Arial", fontSizeInstruction, FontStyle.Bold);
             RectangleF instructionRect = new RectangleF(20, 20, this.Size.Width - 40 - next.Size.Width, 40);
             g.DrawString(instruction, instructionFont, drawBrush, instructionRect);
             
             
-            Font textFont = new Font("Arial", 13);
+            int fontSizeText = (int)(13.0 * CreatorGUI.FONT_SIZE_FACTOR);
+            Font textFont = new Font("Arial", fontSizeText);
             RectangleF textRect = new RectangleF(20, 80, this.Size.Width - 40, this.Size.Height - 100);
             g.DrawString(text, textFont, drawBrush, textRect);
             g.Dispose();
@@ -803,9 +805,9 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            this.Font = SystemFonts.DefaultFont;
             this.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Font = new Font(Font.Name, REGULAR_FONT_SIZE * FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Text = "LipidCreator";
             
             this.timerEasterEgg = new System.Timers.Timer(15);
@@ -1268,7 +1270,7 @@ namespace LipidCreator
             tabControl.ShowToolTips = true;
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
-            Font tabFont = new Font(tabControl.Font.FontFamily, this.Font.Size + 5);
+            Font tabFont = new Font(tabControl.Font.FontFamily, (REGULAR_FONT_SIZE + 5) * FONT_SIZE_FACTOR);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
             tabControl.ItemSize = new Size(170, 50);
@@ -1278,10 +1280,7 @@ namespace LipidCreator
             
             homeTab.Text = "Home";
             homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
-            
-            
-            Font homeFont = new Font(homeTab.Font.FontFamily, 8.25F);
-            homeTab.Font = homeFont;
+            homeTab.Font = Font;
             
 
             // tab for cardiolipins
@@ -1304,8 +1303,7 @@ namespace LipidCreator
             plStep1.Controls.Add(clDB4Label);
             plStep1.Controls.Add(clHydroxyl3Label);
             plStep1.Controls.Add(clHydroxyl4Label);
-            Font plFont = new Font(phospholipidsTab.Font.FontFamily, 8.25F);
-            phospholipidsTab.Font = plFont;
+            phospholipidsTab.Font = Font;
             
             
             clFA3Textbox.Visible = false;
@@ -1456,8 +1454,7 @@ namespace LipidCreator
             glycerolipidsTab.AutoSize = true;
             glycerolipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             glycerolipidsTab.BackColor = Color.White;
-            Font glFont = new Font(glycerolipidsTab.Font.FontFamily, 8.25F);
-            glycerolipidsTab.Font = glFont;
+            glycerolipidsTab.Font = Font;
             
             glStep1.SendToBack();
             glStep1.Location = new Point(10, 10);
@@ -1856,7 +1853,7 @@ namespace LipidCreator
             easterText.Location = new Point(1030, 250);
             easterText.Text = "Fat is unfair, it sticks 2 minutes in your mouth, 2 hours in your stomach and 2 decades at your hips.";
             easterText.Visible = false;
-            easterText.Font = new Font(new Font(easterText.Font.FontFamily, 40), FontStyle.Bold);
+            easterText.Font = new Font(new Font(easterText.Font.FontFamily, (int)(40.0 * FONT_SIZE_FACTOR)), FontStyle.Bold);
             easterText.AutoSize = true;
 
             plPositiveAdduct.Width = 120;
@@ -1942,8 +1939,7 @@ namespace LipidCreator
             sphingolipidsTab.AutoSize = true;
             sphingolipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             sphingolipidsTab.BackColor = Color.White;
-            Font slFont = new Font(sphingolipidsTab.Font.FontFamily, 8.25F);
-            sphingolipidsTab.Font = slFont;
+            sphingolipidsTab.Font = Font;
             
             slStep1.SendToBack();
             slStep1.Location = new Point(10, 10);
@@ -2107,8 +2103,7 @@ namespace LipidCreator
             cholesterollipidsTab.AutoSize = true;
             cholesterollipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             cholesterollipidsTab.BackColor = Color.White;
-            Font cholFont = new Font(cholesterollipidsTab.Font.FontFamily, 8.25F);
-            cholesterollipidsTab.Font = cholFont;
+            cholesterollipidsTab.Font = Font;
             
             chStep1.SendToBack();
             chStep1.Location = new Point(10, 10);
@@ -2223,8 +2218,7 @@ namespace LipidCreator
             mediatorlipidsTab.AutoSize = true;
             mediatorlipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             mediatorlipidsTab.BackColor = Color.White;
-            Font medFont = new Font(mediatorlipidsTab.Font.FontFamily, 8.25F);
-            mediatorlipidsTab.Font = medFont;
+            mediatorlipidsTab.Font = Font;
             
             medStep1.SendToBack();
             medStep1.Location = new Point(10, 10);
@@ -2406,7 +2400,7 @@ namespace LipidCreator
             "its functionality:";
             homeText.BackColor = Color.Transparent;
             homeText.ForeColor = Color.White;
-            homeText.Font = new Font(homeTab.Font.FontFamily, this.Font.Size + 3);
+            homeText.Font = new Font(homeTab.Font.FontFamily, (int)((REGULAR_FONT_SIZE + 3.0) * FONT_SIZE_FACTOR));
             
             
             
@@ -2415,7 +2409,7 @@ namespace LipidCreator
             homeText3.Location = new Point(60, 390);
             homeText3.Text = "Citation: Peng et al., Awesome journal, 2019";
             homeText3.BackColor = Color.Transparent;
-            homeText3.Font = new Font(homeTab.Font.FontFamily, 12, FontStyle.Bold);
+            homeText3.Font = new Font(homeTab.Font.FontFamily, (int)(12.0 * FONT_SIZE_FACTOR), FontStyle.Bold);
             homeText3.ForeColor = Color.White;
             homeText3.Click += homeText3LinkClicked;
             homeText3.Visible = false;

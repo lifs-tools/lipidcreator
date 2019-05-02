@@ -76,12 +76,15 @@ namespace LipidCreator
         [NonSerialized]
         public MenuItem lastCEInstrumentChecked = null;
         public bool asDeveloper = false;
+        public static float FONT_SIZE_FACTOR;
+        public static readonly float REGULAR_FONT_SIZE = 8.25f;
         
         
         
         public CreatorGUI(string inputParameters)
         {
-            
+        
+            FONT_SIZE_FACTOR = 96.0f / CreateGraphics().DpiX;
             
             this.inputParameters = inputParameters;
             this.lipidCreator = new LipidCreator(this.inputParameters);
@@ -97,6 +100,7 @@ namespace LipidCreator
             registeredLipidsDatatable.Columns.Add(new DataColumn("Building Block 4"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Adducts"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Filters"));
+        
             InitializeComponent();
             
             // add predefined menu

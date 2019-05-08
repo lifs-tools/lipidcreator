@@ -115,23 +115,18 @@ namespace LipidCreator
             if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
-                lipid.adducts["+H"] = false;
-                lipid.adducts["+2H"] = false;
-                lipid.adducts["+NH4"] = false;
-                lipid.adducts["-H"] = false;
-                lipid.adducts["-2H"] = false;
-                lipid.adducts["+HCOO"] = false;
-                lipid.adducts["+CH3COO"] = false;
+                foreach (string adduct in Lipid.adductToCharge.Keys) lipid.adducts[adduct] = false;
+            
                 
                 if (charge != 0)
                 {
-                    if (lipid.adducts.ContainsKey(adduct) && Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    if (Lipid.adductToCharge.ContainsKey(adduct) && Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
                     {
                         lipid.adducts[adduct] = true;
                     }
                     else
                     {
-                        lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+                        lipid = null;
                     }
                 }
                 else
@@ -536,6 +531,7 @@ namespace LipidCreator
             if (lipid != null)
             {
                 adduct = node.getText();
+            
             }
         }
         

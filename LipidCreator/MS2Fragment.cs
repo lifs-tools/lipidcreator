@@ -33,7 +33,6 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum Molecules {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
     
     [Serializable]
     public class MS2Fragment
@@ -49,6 +48,39 @@ namespace LipidCreator
         public const double MAX_INTENSITY = 100.0;
         public const double DEFAULT_INTENSITY = 10.0;
         public string CommentForSpectralLibrary { get { return fragmentName; } }
+        
+        public static Dictionary<Molecule, Element> ALL_ELEMENTS = new Dictionary<Molecule, Element>(){
+            {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new HashSet<Molecule> (){Molecule.C13}, Molecule.C)},
+            {Molecule.H, new Element("H", "H", "H", "H", 0, 1.007825035, false, new HashSet<Molecule> (){Molecule.H2}, Molecule.H)},
+            {Molecule.N, new Element("N", "N", "N", "N", 0, 14.0030740, false, new HashSet<Molecule> (){Molecule.N15}, Molecule.N)},
+            {Molecule.O, new Element("O", "O", "O", "O", 0, 15.99491463, false, new HashSet<Molecule> (){Molecule.O17, Molecule.O18}, Molecule.O)},
+            {Molecule.P, new Element("P", "P", "P", "P", 0, 30.973762, false, new HashSet<Molecule> (){Molecule.P32}, Molecule.P)},
+            {Molecule.S, new Element("S", "S", "S", "S", 0, 31.9720707, false, new HashSet<Molecule> (){Molecule.S33, Molecule.S34}, Molecule.S)},
+        };
+        
+        
+        
+        
+        
+        public static Dictionary<int, double> ELEMENT_MASSES = new Dictionary<int, double>(){
+            {(int)Molecules.C, 12.0},
+            {(int)Molecules.H, 1.007825035},
+            {(int)Molecules.N, 14.003074},
+            {(int)Molecules.O, 15.99491463},
+            {(int)Molecules.P, 30.973762},
+            {(int)Molecules.S, 31.9720707},
+            {(int)Molecules.H2, 2.014101779},
+            {(int)Molecules.C13, 13.0033548378},
+            {(int)Molecules.N15, 15.0001088984},
+            {(int)Molecules.O17, 16.9991315},
+            {(int)Molecules.O18, 17.9991604},
+            {(int)Molecules.P32, 31.973907274},
+            {(int)Molecules.S34, 33.96786690},
+            {(int)Molecules.S33, 32.97145876}
+        };
+        
+        
+        
         public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
             {"C", (int)Molecules.C},
             {"H", (int)Molecules.H},
@@ -74,24 +106,6 @@ namespace LipidCreator
             {(int)Molecules.O, 3},
             {(int)Molecules.P, 4},
             {(int)Molecules.S, 5}
-        };
-        
-        
-        public static Dictionary<int, double> ELEMENT_MASSES = new Dictionary<int, double>(){
-            {(int)Molecules.C, 12.0},
-            {(int)Molecules.H, 1.007825035},
-            {(int)Molecules.N, 14.003074},
-            {(int)Molecules.O, 15.99491463},
-            {(int)Molecules.P, 30.973762},
-            {(int)Molecules.S, 31.9720707},
-            {(int)Molecules.H2, 2.014101779},
-            {(int)Molecules.C13, 13.0033548378},
-            {(int)Molecules.N15, 15.0001088984},
-            {(int)Molecules.O17, 16.9991315},
-            {(int)Molecules.O18, 17.9991604},
-            {(int)Molecules.P32, 31.973907274},
-            {(int)Molecules.S34, 33.96786690},
-            {(int)Molecules.S33, 32.97145876}
         };
         
         

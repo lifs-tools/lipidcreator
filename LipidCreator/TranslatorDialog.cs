@@ -245,9 +245,10 @@ namespace LipidCreator
                 if (currentLipid != null)
                 {
                     currentLipid.computePrecursorData(creatorGUI.lipidCreator.headgroups, usedKeys, precursorDataList);
-                    string newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
+                    string newLipidName = "";
                     if (!(currentLipid is UnsupportedLipid))
                     {
+                        newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
                         string adduct = "";
                         foreach (string addct in currentLipid.adducts.Keys)
                         {

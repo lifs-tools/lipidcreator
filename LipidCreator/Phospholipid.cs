@@ -326,13 +326,11 @@ namespace LipidCreator
                     foreach(string headgroupIter in headGroupNames)
                     {   
                         string headgroup = headgroupIter;
-                        if (headgroup.Equals("PA") || headgroup.Equals("PC") || headgroup.Equals("PE") || headgroup.Equals("PG") || headgroup.Equals("PI") || headgroup.Equals("PS"))
+                        
+                        if (headgroup.Equals("LPC") || headgroup.Equals("LPE"))
                         {
-                            if (headgroup.Equals("PC") || headgroup.Equals("PE"))
-                            {
-                                if (isPlamalogen) headgroup = headgroup + " O-p";
-                                else if (isFAa) headgroup = headgroup + " O-a";
-                            }
+                            if (isPlamalogen) headgroup = headgroup + " O-p";
+                            else if (isFAa) headgroup = headgroup + " O-a";
                         }
                         
                         String key = " ";
@@ -480,20 +478,17 @@ namespace LipidCreator
                             bool isSorted = true;
                             
                             
-                            if (headgroup.Equals("PA") || headgroup.Equals("PC") || headgroup.Equals("PE") || headgroup.Equals("PG") || headgroup.Equals("PI") || headgroup.Equals("PS"))
+                            if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                             {
-                                if (headgroup.Equals("PC") || headgroup.Equals("PE"))
+                                if (isPlamalogen)
                                 {
-                                    if (isPlamalogen)
-                                    {
-                                        headgroup = headgroup + " O-p";
-                                        isSorted = false;
-                                    }
-                                    else if (isFAa)
-                                    {
-                                        headgroup = headgroup + " O-a";
-                                        isSorted = false;
-                                    }
+                                    headgroup = headgroup + " O-p";
+                                    isSorted = false;
+                                }
+                                else if (isFAa)
+                                {
+                                    headgroup = headgroup + " O-a";
+                                    isSorted = false;
                                 }
                             }
                             

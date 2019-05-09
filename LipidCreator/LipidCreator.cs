@@ -51,6 +51,7 @@ namespace LipidCreator
 
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};
+    public enum RunMode {commandline, standalone, external};
 
     [Serializable]
     public class LipidCreator : IDisposable
@@ -75,8 +76,6 @@ namespace LipidCreator
         public IDictionary<string, InstrumentData> msInstruments;
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
-        public ParserEventHandler parserEventHandler;
-        public Parser parser;
         public bool enableAnalytics = false;
         public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
         public string prefixPath = "";
@@ -553,8 +552,6 @@ namespace LipidCreator
                 }
             }
             
-            parserEventHandler = new ParserEventHandler(this);
-            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
             lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
@@ -565,7 +562,7 @@ namespace LipidCreator
         
         
         // parser for reading the csv lines with comma separation and "" quotation (if present)
-        // using an Moore automaton based approach
+        // using a Moore automaton based approach
         public static string[] parseLine(string line, char separator = ',', char quote = QUOTE)
         {
             List<string> listTokens = new List<string>();
@@ -910,6 +907,7 @@ namespace LipidCreator
                 int valid = 0;
                 try
                 {
+                    ArrayList lipidsToImport = new ArrayList();
                     using (StreamReader sr = new StreamReader(lipidListFile))
                     {
                         string line;
@@ -919,31 +917,20 @@ namespace LipidCreator
                             {
                                 ++total;
                                 if (lipidName.Length == 0) continue;
-                                parser.parse(lipidName);
-                                if (parser.wordInGrammer)
-                                {
-                                    parser.raiseEvents();
-                                    if (parserEventHandler.lipid != null)
-                                    {
-                                        if (filterParameters != null)
-                                        {
-                                            parserEventHandler.lipid.onlyPrecursors = filterParameters[0];
-                                            parserEventHandler.lipid.onlyHeavyLabeled = filterParameters[1];
-                                        }
-                                        registeredLipids.Add(parserEventHandler.lipid);
-                                        ++valid;
-                                    }
-                                    else 
-                                    {
-                                        log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                                    }
-                                }
-                                else
-                                {
-                                    log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                                }
+                                lipidsToImport.Add(lipidName);
                             }
-                            
+                        }
+                                
+                        ArrayList importedLipids = translate(lipidsToImport, true);
+                        foreach (Lipid lipid in importedLipids)
+                        {
+                            if (filterParameters != null)
+                            {
+                                lipid.onlyPrecursors = filterParameters[0];
+                                lipid.onlyHeavyLabeled = filterParameters[1];
+                            }
+                            registeredLipids.Add(lipid);
+                            ++valid;
                         }
                     }
                 }
@@ -1360,15 +1347,15 @@ namespace LipidCreator
         
         
         
-        public ArrayList translate(ArrayList lipidNamesList)
+        public ArrayList translate(ArrayList lipidNamesList, bool reportError = false)
         {
             ArrayList parsedLipids = new ArrayList();
-            foreach (string oldLipidName in lipidNamesList)
+            foreach (string lipidName in lipidNamesList)
             {
                 Lipid lipid = null;
-                if (oldLipidName.Length > 0)
+                if (lipidName.Length > 0)
                 {
-                    lipidMapsParser.parse(oldLipidName);
+                    lipidMapsParser.parse(lipidName);
                     if (lipidMapsParser.wordInGrammer)
                     {
                         lipidMapsParser.raiseEvents();
@@ -1376,10 +1363,14 @@ namespace LipidCreator
                         {
                             lipid = lipidMapsParserEventHandler.lipid;
                         }
+                        else if (reportError)
+                        {
+                            log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                        }
                     }
                     else {
                     
-                        lipidMapsNewParser.parse(oldLipidName);
+                        lipidMapsNewParser.parse(lipidName);
                         if (lipidMapsNewParser.wordInGrammer)
                         {
                             lipidMapsNewParser.raiseEvents();
@@ -1387,6 +1378,14 @@ namespace LipidCreator
                             {
                                 lipid = lipidMapsNewParserEventHandler.lipid;
                             }
+                            else if (reportError)
+                            {
+                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                            }
+                        }
+                        else if (reportError)
+                        {
+                            log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                         }
                     }
                 }

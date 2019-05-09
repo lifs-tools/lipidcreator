@@ -39,6 +39,8 @@ namespace LipidCreator
         public int charge;
         public string adduct;
         public bool sortedSeparator;
+        public bool expectsEther;
+        public int ethers;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -105,6 +107,8 @@ namespace LipidCreator
             charge = 0;
             adduct = "";
             sortedSeparator = false;
+            expectsEther = false;
+            ethers = 0;
         }
         
         
@@ -133,7 +137,11 @@ namespace LipidCreator
                 {
                     lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
                 }
-                
+            }
+            
+            if (lipid != null && expectsEther && ethers != 1)
+            {
+                lipid = null;
             }
         }
         
@@ -332,6 +340,7 @@ namespace LipidCreator
             
                 string faType = node.getText();
                 fag.faTypes["FA" + faType] = true;
+                ++ethers;
                 /*
                 if ((new HashSet<string>{"LPC O-", "LPE O-", "PC O-", "PE O-"}).Contains(lipid.headGroupNames[0]))
                 {
@@ -438,8 +447,16 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 //lipid.headGroupNames.Add(headgroup + "-");
-                if (headgroup == "PE O") headgroup = "PE";
-                else if (headgroup == "PC O") headgroup = "PC";
+                if (headgroup == "PE O")
+                {
+                    headgroup = "PE";
+                    expectsEther = true;
+                }
+                else if (headgroup == "PC O")
+                {
+                    headgroup = "PC";
+                    expectsEther = true;
+                }
                 lipid.headGroupNames.Add(headgroup);
             }
         }
@@ -450,8 +467,16 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 //lipid.headGroupNames.Add(headgroup + "-");
-                if (headgroup == "LPE O") headgroup = "LPE";
-                else if (headgroup == "LPC O") headgroup = "LPC";
+                if (headgroup == "LPE O")
+                {
+                    headgroup = "LPE";
+                    expectsEther = true;
+                }
+                else if (headgroup == "LPC O")
+                {
+                    headgroup = "LPC";
+                    expectsEther = true;
+                }
                 lipid.headGroupNames.Add(headgroup);
                 ((Phospholipid)lipid).isLyso = true;
             }

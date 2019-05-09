@@ -40,8 +40,6 @@ using System.Diagnostics;
 
 namespace LipidCreator
 {
-
-    public enum RunMode {commandline, standalone, external};
         
     [Serializable]
     public partial class MainApplication

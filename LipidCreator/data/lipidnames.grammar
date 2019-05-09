@@ -128,7 +128,7 @@ isotopes = isotopes isotopes | "[" Number "]" element Number
 element = "C" | "H" | "O" | "N" | "P" | "S"
 
 ## separators
-sorted_FA_separator = "/"
+sorted_FA_separator = "/" | "\" | "_"
 adduct_separator = " "
 unsorted_FA_separator = "-"
 headgroup_separator = " "

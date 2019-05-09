@@ -90,8 +90,8 @@ namespace LipidCreator
         public LipidMapsParserEventHandler lipidMapsParserEventHandler;
         public Parser lipidMapsParser;
         
-        public ParserEventHandler lipidMapsNewParserEventHandler;
-        public Parser lipidMapsNewParser;
+        public ParserEventHandler parserEventHandler;
+        public Parser parser;
         
         public static char HEAVY_LABEL_OPENING_BRACKET = '{';
         public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
@@ -556,8 +556,8 @@ namespace LipidCreator
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
             lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
             
-            lipidMapsNewParserEventHandler = new ParserEventHandler(this);
-            lipidMapsNewParser = new Parser(lipidMapsNewParserEventHandler, prefixPath + "data/lipidnames-lenient.grammar", QUOTE);
+            parserEventHandler = new ParserEventHandler(this);
+            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
         }
         
         
@@ -1370,13 +1370,13 @@ namespace LipidCreator
                     }
                     else {
                     
-                        lipidMapsNewParser.parse(lipidName);
-                        if (lipidMapsNewParser.wordInGrammer)
+                        parser.parse(lipidName);
+                        if (parser.wordInGrammer)
                         {
-                            lipidMapsNewParser.raiseEvents();
-                            if (lipidMapsNewParserEventHandler.lipid != null)
+                            parser.raiseEvents();
+                            if (parserEventHandler.lipid != null)
                             {
-                                lipid = lipidMapsNewParserEventHandler.lipid;
+                                lipid = parserEventHandler.lipid;
                             }
                             else if (reportError)
                             {

@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Linq;
 using log4net;
 
 
@@ -75,20 +76,24 @@ namespace LipidCreator
             dataGridView1.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
             dataGridView1.AllowUserToAddRows = false;
             
-            for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
-            foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
+            foreach (Molecule m in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
-                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].position;
-                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut;
+                dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
+            }
+            
+            foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
+            {
+                int l = MS2Fragment.ALL_ELEMENTS[molecule].position;
+                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[molecule].shortcut;
                 dataGridView1.Rows[l].Cells[1].Value = 0;
                 dataGridView1.Rows[l].Cells[2].Value = 0;
                 
                 DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)dataGridView1.Rows[l].Cells[3];
                 int j = 0;
-                foreach (int element in row.Value)
+                foreach (Molecule heavyMolecule in MS2Fragment.ALL_ELEMENTS[molecule].derivatives)
                 {
-                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber;
-                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber);
+                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[heavyMolecule].shortcutNumber;
+                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[heavyMolecule].shortcutNumber);
                 }
             }
             updating = false;

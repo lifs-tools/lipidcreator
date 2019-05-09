@@ -1038,17 +1038,17 @@ namespace LipidCreator
         public static string computeChemicalFormula(IDictionary<int, int> elements)
         {
             String chemForm = "";            
-            foreach (int molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
+            foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
-                int numElements = elements[molecule];
-                foreach (int heavyMolecule in MS2Fragment.HEAVY_DERIVATIVE[molecule])
+                int numElements = elements[(int)molecule];
+                foreach (int heavyMolecule in MS2Fragment.ALL_ELEMENTS[molecule].derivatives)
                 {
                     numElements += elements[heavyMolecule];
                 }
             
                 if (numElements > 0)
                 {
-                    chemForm += MS2Fragment.ALL_ELEMENTS[(Molecule)molecule].shortcut + ((numElements > 1) ? Convert.ToString(numElements) : "");
+                    chemForm += MS2Fragment.ALL_ELEMENTS[molecule].shortcut + ((numElements > 1) ? Convert.ToString(numElements) : "");
                 }
             }
             return chemForm;
@@ -1064,11 +1064,11 @@ namespace LipidCreator
             String adductForm = "[M";
             if (elements != null)
             {
-                foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_IUPAC.Keys)
+                foreach (int molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
                 {
                     if (elements[molecule] > 0)
                     {
-                        adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.HEAVY_SHORTCUTS_IUPAC[molecule];
+                        adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.ALL_ELEMENTS[(Molecule)molecule].shortcutIUPAC;
                     }
                 }
             }
@@ -1083,11 +1083,11 @@ namespace LipidCreator
         public static string computeHeavyIsotopeLabel(IDictionary<int, int> elements)
         {
             string label = "";
-            foreach (int molecule in MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE.Keys)
+            foreach (int molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
                 if (elements[molecule] > 0)
                 {
-                    label += MS2Fragment.HEAVY_SHORTCUTS_NOMENCLATURE[molecule] + Convert.ToString(elements[molecule]);
+                    label += MS2Fragment.ALL_ELEMENTS[(Molecule)molecule].shortcutNomenclature + Convert.ToString(elements[molecule]);
                 }
             }
             if (label.Length > 0) label = "(+" + label + ")";

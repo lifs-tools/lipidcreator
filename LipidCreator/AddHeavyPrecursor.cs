@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 using log4net;
 
 namespace LipidCreator
@@ -94,20 +95,24 @@ namespace LipidCreator
         public void fillGridContent()
         {
             updating = true;
-            for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
-            foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
+            foreach (Molecule m in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
-                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].position;
-                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut;
+                dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
+            }
+            
+            foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
+            {
+                int l = MS2Fragment.ALL_ELEMENTS[molecule].position;
+                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[molecule].shortcut;
                 dataGridView1.Rows[l].Cells[1].Value = 0;
                 dataGridView1.Rows[l].Cells[2].Value = 0;
                 
                 DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)dataGridView1.Rows[l].Cells[3];
                 int j = 0;
-                foreach (int element in row.Value)
+                foreach (Molecule heavyMolecule in MS2Fragment.ALL_ELEMENTS[molecule].derivatives)
                 {
-                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber;
-                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber);
+                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[heavyMolecule].shortcutNumber;
+                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[heavyMolecule].shortcutNumber);
                 }
             }
             updating = false;
@@ -142,14 +147,15 @@ namespace LipidCreator
                 if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
                 {
                     // check for heavy isotopes
-                    int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
+                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives.Count - 1;
                     int heavyElementCount = 0;
                     string heavyShortcut = "";
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
-                        heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
-                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]].shortcutNumber;
-                        if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
+                        Molecule heavyID = (Molecule)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[heavyElementIndex];
+                        heavyElementCount = input[(int)heavyID];
+                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[heavyID].shortcutNumber;
+                        if (input[(int)heavyID] > 0)
                         {
                             break;
                         }
@@ -167,8 +173,8 @@ namespace LipidCreator
             Dictionary<int, int> elements = MS2Fragment.createEmptyElementDict();
             foreach (KeyValuePair<string, object[]> row in input)
             {
-                int elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
-                int heavyIndex = MS2Fragment.HEAVY_POSITIONS[(string)row.Value[2]];
+                int elementIndex = (int)MS2Fragment.ELEMENT_POSITIONS[row.Key];
+                int heavyIndex = (int)MS2Fragment.ELEMENT_POSITIONS[(string)row.Value[2]];
                 
                 elements[elementIndex] = (int)row.Value[0];
                 elements[heavyIndex] = (int)row.Value[1];
@@ -462,7 +468,7 @@ namespace LipidCreator
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 
-                int orig = precursor.elements[MS2Fragment.LIGHT_ORIGIN[MS2Fragment.HEAVY_POSITIONS[(string)dataGridView1.Rows[e.RowIndex].Cells[3].Value]]];
+                int orig = precursor.elements[(int)MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[(string)dataGridView1.Rows[e.RowIndex].Cells[3].Value]].lightOrigin];
                 int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value);
                 if (n < 0) n = 0;
                 if (n > orig) n = orig;

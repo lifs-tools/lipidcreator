@@ -111,7 +111,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        elements[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        elements[(int)MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     case "Attribute":
@@ -128,7 +128,7 @@ namespace LipidCreator
                             {
                                 if (row.Name.ToString().Equals("Element"))
                                 {
-                                    fattyElements[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
+                                    fattyElements[(int)MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
                                 }
                             }
                             userDefinedFattyAcids.Add(fattyElements);

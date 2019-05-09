@@ -71,7 +71,7 @@ namespace LipidCreator
             string element = node.getText();
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element))
             {
-                molecule = MS2Fragment.ELEMENT_POSITIONS[element];
+                molecule = (int)MS2Fragment.ELEMENT_POSITIONS[element];
             }
             else
             {
@@ -88,7 +88,7 @@ namespace LipidCreator
             string element = node.getText();
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element))
             {
-                molecule = MS2Fragment.ELEMENT_POSITIONS[element];
+                molecule = (int)MS2Fragment.ELEMENT_POSITIONS[element];
                 elements[molecule] += 1;
             }
             else

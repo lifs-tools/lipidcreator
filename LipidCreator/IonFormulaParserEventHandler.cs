@@ -130,11 +130,11 @@ namespace LipidCreator
         
         public void MoleculeGroupPostEvent(Parser.TreeNode node)
         {
-            if (elements != null && MS2Fragment.HEAVY_POSITIONS_IUPAC.ContainsKey(heavyElement))
+            if (elements != null && MS2Fragment.ELEMENT_POSITIONS.ContainsKey(heavyElement) && MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[heavyElement]].shortcutIUPAC.Equals(heavyElement))
             {
-                int pos = MS2Fragment.HEAVY_POSITIONS_IUPAC[heavyElement];
-                int lightPos = MS2Fragment.LIGHT_ORIGIN[pos];
-                elements[pos] += count;
+                Molecule pos = MS2Fragment.ELEMENT_POSITIONS[heavyElement];
+                int lightPos = (int)MS2Fragment.ALL_ELEMENTS[pos].lightOrigin;
+                elements[(int)pos] += count;
                 elements[lightPos] -= count;
             }
             else

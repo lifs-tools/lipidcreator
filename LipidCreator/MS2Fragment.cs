@@ -50,37 +50,53 @@ namespace LipidCreator
         public string CommentForSpectralLibrary { get { return fragmentName; } }
         
         public static Dictionary<Molecule, Element> ALL_ELEMENTS = new Dictionary<Molecule, Element>(){
-            {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new HashSet<Molecule> (){Molecule.C13}, Molecule.C)},
-            {Molecule.H, new Element("H", "H", "H", "H", 1, 1.007825035, false, new HashSet<Molecule> (){Molecule.H2}, Molecule.H)},
-            {Molecule.N, new Element("N", "N", "N", "N", 2, 14.0030740, false, new HashSet<Molecule> (){Molecule.N15}, Molecule.N)},
-            {Molecule.O, new Element("O", "O", "O", "O", 3, 15.99491463, false, new HashSet<Molecule> (){Molecule.O17, Molecule.O18}, Molecule.O)},
-            {Molecule.P, new Element("P", "P", "P", "P", 4, 30.973762, false, new HashSet<Molecule> (){Molecule.P32}, Molecule.P)},
-            {Molecule.S, new Element("S", "S", "S", "S", 5, 31.9720707, false, new HashSet<Molecule> (){Molecule.S33, Molecule.S34}, Molecule.S)},
-            {Molecule.H2, new Element("H'", "2H", "H2", "[2]H", 6, 2.014101779, true, new HashSet<Molecule> (){}, Molecule.H)},
-            {Molecule.C13, new Element("C'", "13C", "C13", "[13]C", 7, 13.0033548378, true, new HashSet<Molecule> (){}, Molecule.C)},
-            {Molecule.N15, new Element("N'", "15N", "N15", "[15]N", 8, 15.0001088984, true, new HashSet<Molecule> (){}, Molecule.N)},
-            {Molecule.O17, new Element("O'", "17O", "O17", "[17]O", 9, 16.9991315, true, new HashSet<Molecule> (){}, Molecule.O)},
-            {Molecule.O18, new Element("O''", "18O", "O18", "[18]O", 10, 17.9991604, true, new HashSet<Molecule> (){}, Molecule.O)},
-            {Molecule.P32, new Element("P'", "32P", "P32", "[32]P", 11, 31.973907274, true, new HashSet<Molecule> (){}, Molecule.P)},
-            {Molecule.S33, new Element("S'", "33S", "S33", "[33]S", 12, 32.97145876, true, new HashSet<Molecule> (){}, Molecule.S)},
-            {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new HashSet<Molecule> (){}, Molecule.S)}
+            {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new ArrayList(){Molecule.C13}, Molecule.C)},
+            {Molecule.H, new Element("H", "H", "H", "H", 1, 1.007825035, false, new ArrayList(){Molecule.H2}, Molecule.H)},
+            {Molecule.N, new Element("N", "N", "N", "N", 2, 14.0030740, false, new ArrayList(){Molecule.N15}, Molecule.N)},
+            {Molecule.O, new Element("O", "O", "O", "O", 3, 15.99491463, false, new ArrayList(){Molecule.O17, Molecule.O18}, Molecule.O)},
+            {Molecule.P, new Element("P", "P", "P", "P", 4, 30.973762, false, new ArrayList(){Molecule.P32}, Molecule.P)},
+            {Molecule.S, new Element("S", "S", "S", "S", 5, 31.9720707, false, new ArrayList(){Molecule.S33, Molecule.S34}, Molecule.S)},
+            {Molecule.H2, new Element("H'", "2H", "H2", "[2]H", 6, 2.014101779, true, new ArrayList(){}, Molecule.H)},
+            {Molecule.C13, new Element("C'", "13C", "C13", "[13]C", 7, 13.0033548378, true, new ArrayList(){}, Molecule.C)},
+            {Molecule.N15, new Element("N'", "15N", "N15", "[15]N", 8, 15.0001088984, true, new ArrayList(){}, Molecule.N)},
+            {Molecule.O17, new Element("O'", "17O", "O17", "[17]O", 9, 16.9991315, true, new ArrayList(){}, Molecule.O)},
+            {Molecule.O18, new Element("O''", "18O", "O18", "[18]O", 10, 17.9991604, true, new ArrayList(){}, Molecule.O)},
+            {Molecule.P32, new Element("P'", "32P", "P32", "[32]P", 11, 31.973907274, true, new ArrayList(){}, Molecule.P)},
+            {Molecule.S33, new Element("S'", "33S", "S33", "[33]S", 12, 32.97145876, true, new ArrayList(){}, Molecule.S)},
+            {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new ArrayList(){}, Molecule.S)}
         };
         
-        public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
-            {"C", (int)Molecules.C},
-            {"H", (int)Molecules.H},
-            {"N", (int)Molecules.N},
-            {"O", (int)Molecules.O},
-            {"P", (int)Molecules.P},
-            {"P'", (int)Molecules.P32},
-            {"S", (int)Molecules.S},
-            {"S'", (int)Molecules.S34},
-            {"S''", (int)Molecules.S33},
-            {"H'", (int)Molecules.H2},
-            {"C'", (int)Molecules.C13},
-            {"N'", (int)Molecules.N15},
-            {"O'", (int)Molecules.O17},
-            {"O''", (int)Molecules.O18}
+        public static Dictionary<string, Molecule> ELEMENT_POSITIONS = new Dictionary<string, Molecule>(){
+            {"C", Molecule.C},
+            {"H", Molecule.H},
+            {"N", Molecule.N},
+            {"O", Molecule.O},
+            {"P", Molecule.P},
+            {"P'", Molecule.P32},
+            {"S", Molecule.S},
+            {"S'", Molecule.S34},
+            {"S''", Molecule.S33},
+            {"H'", Molecule.H2},
+            {"C'", Molecule.C13},
+            {"N'", Molecule.N15},
+            {"O'", Molecule.O17},
+            {"O''", Molecule.O18},
+            {"2H", Molecule.H2},
+            {"13C", Molecule.C13},
+            {"15N", Molecule.N15},
+            {"17O", Molecule.O17},
+            {"18O", Molecule.O18},
+            {"32P", Molecule.P32},
+            {"34S", Molecule.S34},
+            {"33S", Molecule.S33},
+            {"H2", Molecule.H2},
+            {"C13", Molecule.C13},
+            {"N15", Molecule.N15},
+            {"O17", Molecule.O17},
+            {"O18", Molecule.O18},
+            {"P32", Molecule.P32},
+            {"S34", Molecule.S34},
+            {"S33", Molecule.S33}
         };
         
         /*
@@ -92,9 +108,6 @@ namespace LipidCreator
             {(int)Molecules.P, 4},
             {(int)Molecules.S, 5}
         };
-        */
-        
-        /*
         public static Dictionary<int, string> ELEMENT_SHORTCUTS = new Dictionary<int, string>(){
             {(int)Molecules.C, "C"},
             {(int)Molecules.H, "H"},
@@ -122,7 +135,6 @@ namespace LipidCreator
             {(int)Molecules.S34, "34S"},
             {(int)Molecules.S33, "33S"}
         };
-        */
         
         
         public static Dictionary<int, string> HEAVY_SHORTCUTS_IUPAC = new Dictionary<int, string>(){
@@ -193,6 +205,7 @@ namespace LipidCreator
             {(int)Molecules.S34, (int)Molecules.S},
             {(int)Molecules.S33, (int)Molecules.S}
         };
+        */
         
         
         public static Dictionary<int, int> createEmptyElementDict()
@@ -219,7 +232,7 @@ namespace LipidCreator
             Dictionary<int, int> elements = new Dictionary<int, int>();
             foreach (DataRow dr in dt.Rows)
             {
-                elements.Add(ELEMENT_POSITIONS[(string)dr["Shortcut"]], Convert.ToInt32(dr["Count"]));
+                elements.Add((int)ELEMENT_POSITIONS[(string)dr["Shortcut"]], Convert.ToInt32(dr["Count"]));
             }
             return elements;
         }
@@ -282,7 +295,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        fragmentElements[ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        fragmentElements[(int)ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     default:

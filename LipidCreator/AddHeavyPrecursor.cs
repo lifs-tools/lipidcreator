@@ -97,8 +97,8 @@ namespace LipidCreator
             for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
             foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
             {
-                int l = MS2Fragment.MONOISOTOPE_POSITIONS[row.Key];
-                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ELEMENT_SHORTCUTS[row.Key];
+                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].position;
+                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut;
                 dataGridView1.Rows[l].Cells[1].Value = 0;
                 dataGridView1.Rows[l].Cells[2].Value = 0;
                 
@@ -121,7 +121,7 @@ namespace LipidCreator
             currentDict = null;
             foreach (KeyValuePair<string, object[]> row in data)
             {
-                int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
+                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
                 
                 dataGridView1.Rows[l].Cells[1].Value = row.Value[0];
                 dataGridView1.Rows[l].Cells[2].Value = row.Value[1];
@@ -139,7 +139,7 @@ namespace LipidCreator
             
             foreach (KeyValuePair<int, int> row in input)
             {
-                if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
+                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
                 {
                     // check for heavy isotopes
                     int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
@@ -155,7 +155,7 @@ namespace LipidCreator
                         }
                     }
             
-                    data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
                 }
             }
             return data;
@@ -444,7 +444,7 @@ namespace LipidCreator
             try
             {
                 currentDict[key][e.ColumnIndex - 1] = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                int n = Convert.ToInt32(currentDict[key][e.ColumnIndex - 1].ToString());
+                Convert.ToInt32(currentDict[key][e.ColumnIndex - 1].ToString());
             }
             catch (Exception ee)
             {

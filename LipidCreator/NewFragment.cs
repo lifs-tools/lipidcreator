@@ -79,8 +79,8 @@ namespace LipidCreator
             for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridViewElements.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
             foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
             {
-                int l = MS2Fragment.MONOISOTOPE_POSITIONS[row.Key];
-                dataGridViewElements.Rows[l].Cells[0].Value = MS2Fragment.ELEMENT_SHORTCUTS[row.Key];
+                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].position;
+                dataGridViewElements.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut;
                 dataGridViewElements.Rows[l].Cells[1].Value = 0;
                 dataGridViewElements.Rows[l].Cells[2].Value = 0;
                 
@@ -152,7 +152,7 @@ namespace LipidCreator
             
                 foreach (KeyValuePair<int, int> row in input)
                 {
-                    if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
+                    if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
                     {
                         // check for heavy isotopes
                         int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
@@ -168,13 +168,13 @@ namespace LipidCreator
                             }
                         }
                 
-                        data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, heavyElementCount, heavyShortcut});
+                        data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
                     }
                 }
                 
                 foreach (KeyValuePair<string, object[]> row in data)
                 {
-                    int l = MS2Fragment.MONOISOTOPE_POSITIONS[(int)MS2Fragment.ELEMENT_POSITIONS[row.Key]];
+                    int l = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
                     
                     dataGridViewElements.Rows[l].Cells[1].Value = row.Value[0];
                     dataGridViewElements.Rows[l].Cells[2].Value = row.Value[1];
@@ -218,7 +218,7 @@ namespace LipidCreator
             
             foreach (KeyValuePair<int, int> row in input)
             {
-                if (MS2Fragment.MONOISOTOPE_POSITIONS.ContainsKey(row.Key))
+                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
                 {
                     // check for heavy isotopes
                     int heavyElementIndex = MS2Fragment.HEAVY_DERIVATIVE[row.Key].Count - 1;
@@ -234,7 +234,7 @@ namespace LipidCreator
                         }
                     }
             
-                    data.Add(MS2Fragment.ELEMENT_SHORTCUTS[row.Key], new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
                 }
             }
             return data;
@@ -382,12 +382,14 @@ namespace LipidCreator
                 baseName = (string)selectBaseCombobox.SelectedItem;
             }
             
-            foreach (KeyValuePair<int, int> row in MS2Fragment.MONOISOTOPE_POSITIONS)
+            foreach (KeyValuePair<Molecule, Element> row in MS2Fragment.ALL_ELEMENTS)
             {
-                string element = MS2Fragment.ELEMENT_SHORTCUTS[row.Key];
+                if (row.Value.isHeavy) continue;
+                
+                string element = MS2Fragment.ALL_ELEMENTS[row.Key].shortcut;
                 int elementCount = (int)elements[element][0];
                 int heavyElementCount = (int)elements[element][1];
-                string heavyElement = MS2Fragment.ELEMENT_SHORTCUTS[MS2Fragment.HEAVY_POSITIONS[(string)elements[element][2]]];
+                string heavyElement = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.HEAVY_POSITIONS[(string)elements[element][2]]].shortcut;
                 
                 if (elementCount > 0) chemFormP += element + Convert.ToString(elementCount);
                 if (heavyElementCount > 0) chemFormP += heavyElement + Convert.ToString(heavyElementCount);

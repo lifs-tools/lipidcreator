@@ -208,8 +208,8 @@ namespace LipidCreator
                 
                 foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (row.Value > 0) chemFormP += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
-                    else if (row.Value < 0) chemFormN += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                    if (row.Value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
+                    else if (row.Value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
                 }
                 string combinedChemForm = "";
                 if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
@@ -270,8 +270,8 @@ namespace LipidCreator
                 
                 foreach (KeyValuePair<int, int> row in fragment.fragmentElements)
                 {
-                    if (row.Value > 0) chemFormP += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
-                    else if (row.Value < 0) chemFormN += MS2Fragment.ELEMENT_SHORTCUTS[row.Key] + Convert.ToString(Math.Abs(row.Value));
+                    if (row.Value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
+                    else if (row.Value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
                 }
                 string combinedChemForm = "";
                 if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))

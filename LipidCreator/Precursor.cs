@@ -68,7 +68,7 @@ namespace LipidCreator
             }
             foreach (KeyValuePair<int, int> kvp in elements)
             {
-                xml += "<Element type=\"" + MS2Fragment.ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
             }
             foreach (string attribute in attributes)
             {
@@ -83,7 +83,7 @@ namespace LipidCreator
                     xml += "<DataTable>\n";
                     foreach (KeyValuePair<int, int> kvp in table)
                     {
-                        xml += "<Element type=\"" + MS2Fragment.ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                        xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
                     }
                     xml += "</DataTable>\n";
                 }

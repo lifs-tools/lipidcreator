@@ -51,35 +51,20 @@ namespace LipidCreator
         
         public static Dictionary<Molecule, Element> ALL_ELEMENTS = new Dictionary<Molecule, Element>(){
             {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new HashSet<Molecule> (){Molecule.C13}, Molecule.C)},
-            {Molecule.H, new Element("H", "H", "H", "H", 0, 1.007825035, false, new HashSet<Molecule> (){Molecule.H2}, Molecule.H)},
-            {Molecule.N, new Element("N", "N", "N", "N", 0, 14.0030740, false, new HashSet<Molecule> (){Molecule.N15}, Molecule.N)},
-            {Molecule.O, new Element("O", "O", "O", "O", 0, 15.99491463, false, new HashSet<Molecule> (){Molecule.O17, Molecule.O18}, Molecule.O)},
-            {Molecule.P, new Element("P", "P", "P", "P", 0, 30.973762, false, new HashSet<Molecule> (){Molecule.P32}, Molecule.P)},
-            {Molecule.S, new Element("S", "S", "S", "S", 0, 31.9720707, false, new HashSet<Molecule> (){Molecule.S33, Molecule.S34}, Molecule.S)},
+            {Molecule.H, new Element("H", "H", "H", "H", 1, 1.007825035, false, new HashSet<Molecule> (){Molecule.H2}, Molecule.H)},
+            {Molecule.N, new Element("N", "N", "N", "N", 2, 14.0030740, false, new HashSet<Molecule> (){Molecule.N15}, Molecule.N)},
+            {Molecule.O, new Element("O", "O", "O", "O", 3, 15.99491463, false, new HashSet<Molecule> (){Molecule.O17, Molecule.O18}, Molecule.O)},
+            {Molecule.P, new Element("P", "P", "P", "P", 4, 30.973762, false, new HashSet<Molecule> (){Molecule.P32}, Molecule.P)},
+            {Molecule.S, new Element("S", "S", "S", "S", 5, 31.9720707, false, new HashSet<Molecule> (){Molecule.S33, Molecule.S34}, Molecule.S)},
+            {Molecule.H2, new Element("H'", "2H", "H2", "[2]H", 6, 2.014101779, true, new HashSet<Molecule> (){}, Molecule.H)},
+            {Molecule.C13, new Element("C'", "13C", "C13", "[13]C", 7, 13.0033548378, true, new HashSet<Molecule> (){}, Molecule.C)},
+            {Molecule.N15, new Element("N'", "15N", "N15", "[15]N", 8, 15.0001088984, true, new HashSet<Molecule> (){}, Molecule.N)},
+            {Molecule.O17, new Element("O'", "17O", "O17", "[17]O", 9, 16.9991315, true, new HashSet<Molecule> (){}, Molecule.O)},
+            {Molecule.O18, new Element("O''", "18O", "O18", "[18]O", 10, 17.9991604, true, new HashSet<Molecule> (){}, Molecule.O)},
+            {Molecule.P32, new Element("P'", "32P", "P32", "[32]P", 11, 31.973907274, true, new HashSet<Molecule> (){}, Molecule.P)},
+            {Molecule.S33, new Element("S'", "33S", "S33", "[33]S", 12, 32.97145876, true, new HashSet<Molecule> (){}, Molecule.S)},
+            {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new HashSet<Molecule> (){}, Molecule.S)}
         };
-        
-        
-        
-        
-        
-        public static Dictionary<int, double> ELEMENT_MASSES = new Dictionary<int, double>(){
-            {(int)Molecules.C, 12.0},
-            {(int)Molecules.H, 1.007825035},
-            {(int)Molecules.N, 14.003074},
-            {(int)Molecules.O, 15.99491463},
-            {(int)Molecules.P, 30.973762},
-            {(int)Molecules.S, 31.9720707},
-            {(int)Molecules.H2, 2.014101779},
-            {(int)Molecules.C13, 13.0033548378},
-            {(int)Molecules.N15, 15.0001088984},
-            {(int)Molecules.O17, 16.9991315},
-            {(int)Molecules.O18, 17.9991604},
-            {(int)Molecules.P32, 31.973907274},
-            {(int)Molecules.S34, 33.96786690},
-            {(int)Molecules.S33, 32.97145876}
-        };
-        
-        
         
         public static Dictionary<string, int> ELEMENT_POSITIONS = new Dictionary<string, int>(){
             {"C", (int)Molecules.C},
@@ -98,7 +83,7 @@ namespace LipidCreator
             {"O''", (int)Molecules.O18}
         };
         
-        
+        /*
         public static Dictionary<int, int> MONOISOTOPE_POSITIONS = new Dictionary<int, int>(){
             {(int)Molecules.C, 0},
             {(int)Molecules.H, 1},
@@ -107,8 +92,9 @@ namespace LipidCreator
             {(int)Molecules.P, 4},
             {(int)Molecules.S, 5}
         };
+        */
         
-        
+        /*
         public static Dictionary<int, string> ELEMENT_SHORTCUTS = new Dictionary<int, string>(){
             {(int)Molecules.C, "C"},
             {(int)Molecules.H, "H"},
@@ -125,7 +111,7 @@ namespace LipidCreator
             {(int)Molecules.S34, "S'"},
             {(int)Molecules.S33, "S''"}
         };
-        
+        */
         
         public static Dictionary<int, string> HEAVY_SHORTCUTS = new Dictionary<int, string>(){
             {(int)Molecules.H2, "2H"},
@@ -209,20 +195,10 @@ namespace LipidCreator
         };
         
         
-        
-        public static void printElementDict(Dictionary<int, int> dict)
-        {
-            foreach (KeyValuePair<int, int> kvp in dict)
-            {
-                Console.WriteLine(ELEMENT_SHORTCUTS[kvp.Key] + ": " + kvp.Value);
-            }
-        }
-        
-        
         public static Dictionary<int, int> createEmptyElementDict()
         {
             Dictionary<int, int> elements = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, double> kvp in ELEMENT_MASSES) elements.Add(kvp.Key, 0);
+            foreach (int elementKey in ALL_ELEMENTS.Keys) elements.Add(elementKey, 0);
             return elements;
         }
         
@@ -280,7 +256,7 @@ namespace LipidCreator
             }
             foreach (KeyValuePair<int, int> kvp in fragmentElements)
             {
-                xml += "<Element type=\"" + ELEMENT_SHORTCUTS[kvp.Key] + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                xml += "<Element type=\"" + ALL_ELEMENTS[(Molecule)kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
             }
             xml += "</MS2Fragment>\n";
             return xml;
@@ -339,7 +315,7 @@ namespace LipidCreator
             fragmentCharge = -1;
             fragmentFile = "-";
             fragmentElements = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
+            foreach (int element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
@@ -354,7 +330,7 @@ namespace LipidCreator
             fragmentCharge = -1;
             fragmentFile = fileName;
             fragmentElements = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
+            foreach (int element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;
@@ -368,7 +344,7 @@ namespace LipidCreator
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, string> kvp in ELEMENT_SHORTCUTS) fragmentElements.Add(kvp.Key, 0);
+            foreach (int element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             intensity = DEFAULT_INTENSITY;

@@ -78,8 +78,8 @@ namespace LipidCreator
             for (int k = 0; k < MS2Fragment.HEAVY_DERIVATIVE.Count; ++k) dataGridView1.Rows.Add(new object[] {"-", 0, 0, new DataGridViewComboBoxCell()});
             foreach (KeyValuePair<int, ArrayList> row in MS2Fragment.HEAVY_DERIVATIVE)
             {
-                int l = MS2Fragment.MONOISOTOPE_POSITIONS[row.Key];
-                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ELEMENT_SHORTCUTS[row.Key];
+                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].position;
+                dataGridView1.Rows[l].Cells[0].Value = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut;
                 dataGridView1.Rows[l].Cells[1].Value = 0;
                 dataGridView1.Rows[l].Cells[2].Value = 0;
                 
@@ -149,7 +149,7 @@ namespace LipidCreator
             {
                 try {
                     double fragmentMass = double.Parse(textBox1.Text, System.Globalization.CultureInfo.InvariantCulture);
-                    if (fragmentMass > MS2Fragment.ELEMENT_MASSES[(int)Molecules.H])
+                    if (fragmentMass > MS2Fragment.ALL_ELEMENTS[Molecule.H].mass)
                     {
                         fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
                     }
@@ -165,7 +165,7 @@ namespace LipidCreator
             }
             else {
                 double fragmentMass = LipidCreator.computeMass(AddHeavyPrecursor.createElementData(elementDict), -1);
-                if (fragmentMass > MS2Fragment.ELEMENT_MASSES[(int)Molecules.H])
+                if (fragmentMass > MS2Fragment.ALL_ELEMENTS[Molecule.H].mass)
                 {
                     fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);
                 }

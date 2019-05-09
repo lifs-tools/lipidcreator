@@ -1038,7 +1038,7 @@ namespace LipidCreator
         public static string computeChemicalFormula(IDictionary<int, int> elements)
         {
             String chemForm = "";            
-            foreach (int molecule in MS2Fragment.MONOISOTOPE_POSITIONS.Keys.OrderBy(x => MS2Fragment.MONOISOTOPE_POSITIONS[x]))
+            foreach (int molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
                 int numElements = elements[molecule];
                 foreach (int heavyMolecule in MS2Fragment.HEAVY_DERIVATIVE[molecule])
@@ -1048,7 +1048,7 @@ namespace LipidCreator
             
                 if (numElements > 0)
                 {
-                    chemForm += MS2Fragment.ELEMENT_SHORTCUTS[molecule] + ((numElements > 1) ? Convert.ToString(numElements) : "");
+                    chemForm += MS2Fragment.ALL_ELEMENTS[(Molecule)molecule].shortcut + ((numElements > 1) ? Convert.ToString(numElements) : "");
                 }
             }
             return chemForm;
@@ -1102,7 +1102,7 @@ namespace LipidCreator
             double mass = 0;
             foreach (KeyValuePair<int, int> row in elements)
             {
-                mass += row.Value * MS2Fragment.ELEMENT_MASSES[row.Key];
+                mass += row.Value * MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].mass;
             }
             return mass - charge * 0.00054857990946;
         }

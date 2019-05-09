@@ -106,8 +106,8 @@ namespace LipidCreator
                 int j = 0;
                 foreach (int element in row.Value)
                 {
-                    if (j++ == 0) cell.Value = MS2Fragment.HEAVY_SHORTCUTS[element];
-                    cell.Items.Add(MS2Fragment.HEAVY_SHORTCUTS[element]);
+                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber;
+                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber);
                 }
             }
             updating = false;
@@ -148,7 +148,7 @@ namespace LipidCreator
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
                         heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
-                        heavyShortcut = MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]];
+                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]].shortcutNumber;
                         if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
                         {
                             break;
@@ -498,7 +498,7 @@ namespace LipidCreator
             foreach (Dictionary<string, object[]> bbdt in buildingBlockElementDicts)
             {
                 Dictionary<int, int> elements = createElementData(bbdt);
-                foreach(KeyValuePair<int, int> row in elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
+                foreach(KeyValuePair<int, int> row in elements) if (MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 tmp.Add(elements);
                 
             }
@@ -576,7 +576,7 @@ namespace LipidCreator
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 Precursor heavyPrecursor = new Precursor();
                 heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0]);
-                foreach(KeyValuePair<int, int> row in heavyPrecursor.elements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
+                foreach(KeyValuePair<int, int> row in heavyPrecursor.elements) if (MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 heavyPrecursor.name = name;
                 heavyPrecursor.category = precursor.category;
                 heavyPrecursor.pathToImage = precursor.pathToImage;
@@ -589,7 +589,7 @@ namespace LipidCreator
                 for (int i = 1; i < buildingBlockElementDicts.Count; ++i)
                 {
                     Dictionary<int, int> newElements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
-                    foreach(KeyValuePair<int, int> row in newElements) if (MS2Fragment.HEAVY_SHORTCUTS.ContainsKey(row.Key) && row.Value > 0) numHeavyElements += row.Value;
+                    foreach(KeyValuePair<int, int> row in newElements) if (MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                     heavyPrecursor.userDefinedFattyAcids.Add(newElements);
                 }
                 

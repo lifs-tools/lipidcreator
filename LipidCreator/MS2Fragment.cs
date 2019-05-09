@@ -111,7 +111,6 @@ namespace LipidCreator
             {(int)Molecules.S34, "S'"},
             {(int)Molecules.S33, "S''"}
         };
-        */
         
         public static Dictionary<int, string> HEAVY_SHORTCUTS = new Dictionary<int, string>(){
             {(int)Molecules.H2, "2H"},
@@ -123,6 +122,7 @@ namespace LipidCreator
             {(int)Molecules.S34, "34S"},
             {(int)Molecules.S33, "33S"}
         };
+        */
         
         
         public static Dictionary<int, string> HEAVY_SHORTCUTS_IUPAC = new Dictionary<int, string>(){

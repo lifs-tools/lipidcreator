@@ -87,8 +87,8 @@ namespace LipidCreator
                 int j = 0;
                 foreach (int element in row.Value)
                 {
-                    if (j++ == 0) cell.Value = MS2Fragment.HEAVY_SHORTCUTS[element];
-                    cell.Items.Add(MS2Fragment.HEAVY_SHORTCUTS[element]);
+                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber;
+                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber);
                 }
             }
             updating = false;

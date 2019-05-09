@@ -88,8 +88,8 @@ namespace LipidCreator
                 int j = 0;
                 foreach (int element in row.Value)
                 {
-                    if (j++ == 0) cell.Value = MS2Fragment.HEAVY_SHORTCUTS[element];
-                    cell.Items.Add(MS2Fragment.HEAVY_SHORTCUTS[element]);
+                    if (j++ == 0) cell.Value = MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber;
+                    cell.Items.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)element].shortcutNumber);
                 }
             }
             updating = false;
@@ -161,7 +161,7 @@ namespace LipidCreator
                         for (; heavyElementIndex >= 0; --heavyElementIndex)
                         {
                             heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
-                            heavyShortcut = MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]];
+                            heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]].shortcutNumber;
                             if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
                             {
                                 break;
@@ -227,7 +227,7 @@ namespace LipidCreator
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
                         heavyElementCount = input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]];
-                        heavyShortcut = MS2Fragment.HEAVY_SHORTCUTS[(int)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]];
+                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.HEAVY_DERIVATIVE[(int)row.Key][heavyElementIndex]].shortcutNumber;
                         if (input[(int)MS2Fragment.HEAVY_DERIVATIVE[row.Key][heavyElementIndex]] > 0)
                         {
                             break;

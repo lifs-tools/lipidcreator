@@ -32,14 +32,14 @@ namespace LipidCreator
     [Serializable]
     public class MoleculeFormulaParserEventHandler : BaseParserEventHandler
     {
-        public Dictionary<int, int> elements;
-        public int molecule;
+        public Dictionary<Molecule, int> elements;
+        public Molecule molecule;
         public int count;
     
     
         public MoleculeFormulaParserEventHandler() : base()
         {
-            molecule = -1;
+            molecule = Molecule.H;
             elements = MS2Fragment.createEmptyElementDict();
             
             registeredEvents.Add("Molecule_pre_event", resetParser);
@@ -71,7 +71,7 @@ namespace LipidCreator
             string element = node.getText();
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element))
             {
-                molecule = (int)MS2Fragment.ELEMENT_POSITIONS[element];
+                molecule = MS2Fragment.ELEMENT_POSITIONS[element];
             }
             else
             {
@@ -88,7 +88,7 @@ namespace LipidCreator
             string element = node.getText();
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element))
             {
-                molecule = (int)MS2Fragment.ELEMENT_POSITIONS[element];
+                molecule = MS2Fragment.ELEMENT_POSITIONS[element];
                 elements[molecule] += 1;
             }
             else

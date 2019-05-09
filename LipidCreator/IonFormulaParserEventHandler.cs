@@ -36,7 +36,7 @@ namespace LipidCreator
         public string charge;
         public string chargeOutput;
         public bool validIon;
-        public Dictionary<int, int> elements;
+        public Dictionary<Molecule, int> elements;
         public int count;
         public string heavyElement;
     
@@ -133,8 +133,8 @@ namespace LipidCreator
             if (elements != null && MS2Fragment.ELEMENT_POSITIONS.ContainsKey(heavyElement) && MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[heavyElement]].shortcutIUPAC.Equals(heavyElement))
             {
                 Molecule pos = MS2Fragment.ELEMENT_POSITIONS[heavyElement];
-                int lightPos = (int)MS2Fragment.ALL_ELEMENTS[pos].lightOrigin;
-                elements[(int)pos] += count;
+                Molecule lightPos = MS2Fragment.ALL_ELEMENTS[pos].lightOrigin;
+                elements[pos] += count;
                 elements[lightPos] -= count;
             }
             else

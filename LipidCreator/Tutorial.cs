@@ -1597,9 +1597,9 @@ namespace LipidCreator
                     ((Phospholipid)creatorGUI.lipidTabList[2]).fag2.dbInfo = "2";
                     
                     // set MS2 data from tutorial two
-                    Dictionary<int, int> newElements = MS2Fragment.createEmptyElementDict();
-                    newElements[(int)MS2Fragment.ELEMENT_POSITIONS["H"]] = 3;
-                    newElements[(int)MS2Fragment.ELEMENT_POSITIONS["O"]] = 2;
+                    Dictionary<Molecule, int> newElements = MS2Fragment.createEmptyElementDict();
+                    newElements[MS2Fragment.ELEMENT_POSITIONS["H"]] = 3;
+                    newElements[MS2Fragment.ELEMENT_POSITIONS["O"]] = 2;
                     MS2Fragment newFragment = new MS2Fragment("testFrag", "testFrag", 1, null, newElements, "FA1");
                     newFragment.userDefined = true;
                     creatorGUI.lipidCreator.allFragments["PG"][true]["testFrag"] = newFragment;

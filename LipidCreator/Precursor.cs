@@ -37,7 +37,7 @@ namespace LipidCreator
     {
         public string name;
         public LipidCategory category;
-        public Dictionary<int, int> elements;
+        public Dictionary<Molecule, int> elements;
         public string pathToImage;
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
@@ -66,9 +66,9 @@ namespace LipidCreator
             {
                 xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
             }
-            foreach (KeyValuePair<int, int> kvp in elements)
+            foreach (KeyValuePair<Molecule, int> kvp in elements)
             {
-                xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
             }
             foreach (string attribute in attributes)
             {
@@ -111,7 +111,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        elements[(int)MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        elements[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     case "Attribute":
@@ -123,12 +123,12 @@ namespace LipidCreator
                         var dataTables = child.Descendants("DataTable");
                         foreach ( var dataTable in dataTables)
                         {
-                            Dictionary<int, int> fattyElements = MS2Fragment.createEmptyElementDict();
+                            Dictionary<Molecule, int> fattyElements = MS2Fragment.createEmptyElementDict();
                             foreach(XElement row in dataTable.Elements())
                             {
                                 if (row.Name.ToString().Equals("Element"))
                                 {
-                                    fattyElements[(int)MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
+                                    fattyElements[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
                                 }
                             }
                             userDefinedFattyAcids.Add(fattyElements);

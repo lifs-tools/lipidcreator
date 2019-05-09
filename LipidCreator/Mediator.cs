@@ -120,7 +120,7 @@ namespace LipidCreator
                     
                     usedKeys.Add(key + adduct.Key);
                     
-                    Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                    Dictionary<Molecule, int> atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                     string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);

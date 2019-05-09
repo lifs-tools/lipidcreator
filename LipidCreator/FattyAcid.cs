@@ -36,7 +36,7 @@ namespace LipidCreator
         public int db;
         public int hydroxyl;
         public string suffix;
-        public Dictionary<int, int> atomsCount;
+        public Dictionary<Molecule, int> atomsCount;
         public bool isLCB;
         
         public FattyAcid(int l, int db, int hydro)
@@ -56,20 +56,20 @@ namespace LipidCreator
                 this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
                 if (length > 0 || db > 0)
                 {
-                    atomsCount[(int)Molecules.C] = length; // C
+                    atomsCount[Molecule.C] = length; // C
                     switch(this.suffix)
                     {
                         case "":
-                            atomsCount[(int)Molecules.H] = 2 * length - 1 - 2 * db; // H
-                            atomsCount[(int)Molecules.O] = 1 + hydroxyl; // O
+                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * db; // H
+                            atomsCount[Molecule.O] = 1 + hydroxyl; // O
                             break;
                         case "p":
-                            atomsCount[(int)Molecules.H] = 2 * length - 1 - 2 * db + 2; // H
-                            atomsCount[(int)Molecules.O] = hydroxyl; // O
+                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * db + 2; // H
+                            atomsCount[Molecule.O] = hydroxyl; // O
                             break;
                         case "a":
-                            atomsCount[(int)Molecules.H] = (length + 1) * 2 - 1 - 2 * db; // H
-                            atomsCount[(int)Molecules.O] = hydroxyl; // O
+                            atomsCount[Molecule.H] = (length + 1) * 2 - 1 - 2 * db; // H
+                            atomsCount[Molecule.O] = hydroxyl; // O
                             break;
                     }
                 }
@@ -78,10 +78,10 @@ namespace LipidCreator
             {
                 // long chain base
                 this.suffix = "";
-                atomsCount[(int)Molecules.C] = length; // C
-                atomsCount[(int)Molecules.H] = (2 * (length - db) + 2); // H
-                atomsCount[(int)Molecules.O] = hydroxyl; // O
-                atomsCount[(int)Molecules.N] = 1; // N
+                atomsCount[Molecule.C] = length; // C
+                atomsCount[Molecule.H] = (2 * (length - db) + 2); // H
+                atomsCount[Molecule.O] = hydroxyl; // O
+                atomsCount[Molecule.N] = 1; // N
             }
         }
         
@@ -93,7 +93,7 @@ namespace LipidCreator
             hydroxyl = copy.hydroxyl;
             suffix = copy.suffix;
             atomsCount = MS2Fragment.createEmptyElementDict();
-            foreach (KeyValuePair<int, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
+            foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
         }
         
         public override string ToString()
@@ -118,25 +118,25 @@ namespace LipidCreator
         }
         
         
-        public void updateForHeavyLabeled(Dictionary<int, int> heavyAtomsCount)
+        public void updateForHeavyLabeled(Dictionary<Molecule, int> heavyAtomsCount)
         {
-            foreach (KeyValuePair<int, int> row in heavyAtomsCount)
+            foreach (KeyValuePair<Molecule, int> row in heavyAtomsCount)
             {
                 int c = atomsCount[row.Key] + row.Value;
                 if (c < 0)
                 {
-                    if (row.Key != (int)Molecules.S && row.Key != (int)Molecules.O) atomsCount[(int)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[0]] += c;
+                    if (row.Key != Molecule.S && row.Key != Molecule.O) atomsCount[(Molecule)MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
                     else
                     {
-                        if (row.Key == (int)Molecules.S)
+                        if (row.Key == Molecule.S)
                         {
-                            if(atomsCount[(int)Molecules.S33] != 0) atomsCount[(int)Molecules.S33] += c;
-                            else atomsCount[(int)Molecules.S34] += c;
+                            if(atomsCount[Molecule.S33] != 0) atomsCount[Molecule.S33] += c;
+                            else atomsCount[Molecule.S34] += c;
                         }
                         else
                         {
-                            if(atomsCount[(int)Molecules.O17] != 0) atomsCount[(int)Molecules.O17] += c;
-                            else atomsCount[(int)Molecules.O18] += c;
+                            if(atomsCount[Molecule.O17] != 0) atomsCount[Molecule.O17] += c;
+                            else atomsCount[Molecule.O18] += c;
                         }
                     }
                     c = 0;

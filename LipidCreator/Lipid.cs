@@ -57,7 +57,7 @@ namespace LipidCreator
         public int precursorCharge;
         public bool addPrecursor;
         public bool precursorSelected = true;
-        public Dictionary<int, int> atomsCount;
+        public Dictionary<Molecule, int> atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
         public FattyAcid fa3;
@@ -263,7 +263,7 @@ namespace LipidCreator
                 
                 
                 string fragName = fragment.fragmentOutputName;
-                Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
+                Dictionary<Molecule, int> atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -545,7 +545,7 @@ namespace LipidCreator
             
             
             
-                Dictionary<int, int> atomsCountFragment = fragment.copyElementDict();
+                Dictionary<Molecule, int> atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -725,42 +725,42 @@ namespace LipidCreator
         
         
         
-        public static int getChargeAndAddAdduct(Dictionary<int, int> atomsCount, String adduct)
+        public static int getChargeAndAddAdduct(Dictionary<Molecule, int> atomsCount, String adduct)
         {
             int charge = 0;
             switch (adduct)
             {                                                                              
                 case "+H":
-                    atomsCount[(int)Molecules.H] += 1;
+                    atomsCount[Molecule.H] += 1;
                     charge = 1;
                     break;
                 case "+2H":
-                    atomsCount[(int)Molecules.H] += 2;
+                    atomsCount[Molecule.H] += 2;
                     charge = 2;
                     break;
                 case "+NH4":
-                    atomsCount[(int)Molecules.H] += 4;
-                    atomsCount[(int)Molecules.N] += 1;
+                    atomsCount[Molecule.H] += 4;
+                    atomsCount[Molecule.N] += 1;
                     charge = 1;
                     break;
                 case "-H":
-                    atomsCount[(int)Molecules.H] -= 1;
+                    atomsCount[Molecule.H] -= 1;
                     charge = -1;
                     break;
                 case "-2H":
-                    atomsCount[(int)Molecules.H] -= 2;
+                    atomsCount[Molecule.H] -= 2;
                     charge = -2;
                     break;
                 case "+HCOO":
-                    atomsCount[(int)Molecules.H] += 1;
-                    atomsCount[(int)Molecules.C] += 1;
-                    atomsCount[(int)Molecules.O] += 2;
+                    atomsCount[Molecule.H] += 1;
+                    atomsCount[Molecule.C] += 1;
+                    atomsCount[Molecule.O] += 2;
                     charge = -1;
                     break;
                 case "+CH3COO":
-                    atomsCount[(int)Molecules.C] += 2;
-                    atomsCount[(int)Molecules.H] += 3;
-                    atomsCount[(int)Molecules.O] += 2;
+                    atomsCount[Molecule.C] += 2;
+                    atomsCount[Molecule.H] += 3;
+                    atomsCount[Molecule.O] += 2;
                     charge = -1;
                     break;
             }

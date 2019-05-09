@@ -128,7 +128,7 @@ namespace LipidCreator
                         
                         usedKeys.Add(headgroup + key + adduct.Key);
                         
-                        Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                        Dictionary<Molecule, int> atomsCount = MS2Fragment.createEmptyElementDict();
                         MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                         MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                         string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
@@ -167,9 +167,9 @@ namespace LipidCreator
                             
                             
                             FattyAcid heavyFA1 = new FattyAcid(fa);
-                            heavyFA1.updateForHeavyLabeled((Dictionary<int, int>)heavyPrecursor.userDefinedFattyAcids[0]);
+                            heavyFA1.updateForHeavyLabeled((Dictionary<Molecule, int>)heavyPrecursor.userDefinedFattyAcids[0]);
                 
-                            Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
+                            Dictionary<Molecule, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                             MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                             string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
@@ -218,7 +218,7 @@ namespace LipidCreator
                     
                     usedKeys.Add(key + adduct.Key);
                     
-                    Dictionary<int, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                    Dictionary<Molecule, int> atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                     string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
@@ -254,7 +254,7 @@ namespace LipidCreator
                         
                         if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
             
-                        Dictionary<int, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
+                        Dictionary<Molecule, int> heavyAtomsCount = MS2Fragment.createEmptyElementDict();
                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                         string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
                         string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);

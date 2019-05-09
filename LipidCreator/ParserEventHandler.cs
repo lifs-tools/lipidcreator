@@ -279,6 +279,16 @@ namespace LipidCreator
             
             if (lipid != null && fag != null)
             {
+                // fatty acids with plasmalogens must not contain zero double bonds
+                // it's not a bug, it's a feature ;-)
+                if (fag.faTypes["FAp"] && (new List<int>(fag.doubleBondCounts))[0] == 0)
+                {
+                    lipid = new UnsupportedLipid(lipidCreator);
+                }
+            }
+            
+            if (lipid != null && fag != null)
+            {
                 foreach(int l in fag.carbonCounts) fag.lengthInfo = Convert.ToString(l);
                 foreach(int db in fag.doubleBondCounts) fag.dbInfo = Convert.ToString(db);
                 foreach(int h in fag.hydroxylCounts) fag.hydroxylInfo = Convert.ToString(h);

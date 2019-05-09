@@ -192,9 +192,7 @@ namespace LipidCreator
                                 {
                                     if (fa.length > 0 && fa.suffix != "x"){
                                         if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
-                                        key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
-                                        if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
-                                        key += fa.suffix;
+                                        key += fa.ToString();
                                     }
                                 }
                                 
@@ -333,15 +331,8 @@ namespace LipidCreator
                             else if (isFAa) headgroup = headgroup + " O-a";
                         }
                         
-                        String key = " ";
-                        if (isPlamalogen) key = key.Replace("O-p", "O");
-                        else if (isFAa) key = key.Replace("O-a", "O");
+                        String key = " " + fa1.ToString();
                         
-                        if (fa1.length > 0){
-                            key += Convert.ToString(fa1.length) + ":" + Convert.ToString(fa1.db);
-                            if (fa1.hydroxyl > 0) key += ";" + Convert.ToString(fa1.hydroxyl);
-                            key += fa1.suffix;
-                        }
                         
                         foreach (KeyValuePair<string, bool> adduct in adducts)
                         {

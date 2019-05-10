@@ -91,7 +91,10 @@ namespace LipidCreator
         public Parser lipidMapsParser;
         
         public ParserEventHandler parserEventHandler;
-        public Parser parser;
+        public Parser lipidNamesParser;
+        
+        ListingParserEventHandler listingParserEventHandler;
+        Parser listingParser;
         
         public static char HEAVY_LABEL_OPENING_BRACKET = '{';
         public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
@@ -557,7 +560,10 @@ namespace LipidCreator
             lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
             
             parserEventHandler = new ParserEventHandler(this);
-            parser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
+            lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
+            
+            listingParserEventHandler = new ListingParserEventHandler();
+            listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", QUOTE);
         }
         
         
@@ -636,69 +642,28 @@ namespace LipidCreator
         
         
         // obType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public HashSet<int> parseRange(String text, int lower, int upper, int obType = 0)
+        public HashSet<int> parseRange(string text, int lower, int upper, int obType = 0)
         {
             int oddEven = (obType <= 2) ? obType : 0;
             if (text.Length == 0) return null;
-            foreach (char c in text)
+            
+            text = text.Replace(" ", "");
+            
+            listingParserEventHandler = new ListingParserEventHandler();
+            listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", QUOTE);
+            
+            listingParserEventHandler.changeOddEvenFlag(oddEven);
+            listingParser.parse(text);
+            if (listingParser.wordInGrammer)
             {
-                int ic = (int)c;
-                if (!((ic == (int)',') || (ic == (int)'-') || (ic == (int)' ') || ('0' <= ic && ic <= '9')))
+                listingParser.raiseEvents();
+                if (lower <= listingParserEventHandler.min && listingParserEventHandler.max <= upper)
                 {
-                    return null;
+                    return listingParserEventHandler.counts;
                 }
             }
             
-            string[] tokens = text.Split(new char[]{','}, StringSplitOptions.None);
-            
-            HashSet<int> carbonCounts = new HashSet<int>();
-            
-            for (int i = 0; i < tokens.Length; ++i)
-            {
-                if (tokens[i].Length == 0) return null;
-                string[] rangeBoundaries = tokens[i].Split(new char[]{'-'}, StringSplitOptions.None);
-                if (rangeBoundaries.Length == 1)
-                {
-                    int rangeStart = 0;
-                    try 
-                    {
-                        rangeStart = Convert.ToInt32(rangeBoundaries[0]);
-                    }
-                    catch (Exception e)
-                    {
-                        return null;
-                    }
-                    if (rangeStart < lower || upper < rangeStart) return null;
-                    if (oddEven == 0 || (oddEven == 1 && (rangeStart % 2 == 1)) || (oddEven == 2 && (rangeStart % 2 == 0)))
-                    {
-                        carbonCounts.Add(rangeStart);
-                    }
-                }
-                else if (rangeBoundaries.Length == 2)
-                {
-                    int rangeStart = 0;
-                    int rangeEnd = 0;
-                    try 
-                    {
-                        rangeStart = Convert.ToInt32(rangeBoundaries[0]);
-                        rangeEnd = Convert.ToInt32(rangeBoundaries[1]);
-                    }
-                    catch (Exception e)
-                    {
-                        return null;
-                    }
-                    if (rangeEnd < rangeStart || rangeStart < lower || upper < rangeEnd) return null;
-                    for (int l = rangeStart; l <= rangeEnd; ++l)
-                    {
-                        if (oddEven == 0 || (oddEven == 1 && (l % 2 == 1)) || (oddEven == 2 && (l % 2 == 0)))
-                        {
-                            carbonCounts.Add(l);
-                        }
-                    }
-                }
-                else return null;
-            }
-            return carbonCounts;
+            return null;
         }
         
         
@@ -1370,10 +1335,10 @@ namespace LipidCreator
                     }
                     else {
                     
-                        parser.parse(lipidName);
-                        if (parser.wordInGrammer)
+                        lipidNamesParser.parse(lipidName);
+                        if (lipidNamesParser.wordInGrammer)
                         {
-                            parser.raiseEvents();
+                            lipidNamesParser.raiseEvents();
                             if (parserEventHandler.lipid != null)
                             {
                                 lipid = parserEventHandler.lipid;

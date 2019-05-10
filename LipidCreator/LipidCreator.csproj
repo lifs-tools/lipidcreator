@@ -161,6 +161,7 @@
       <DependentUpon>CreatorGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="FattyAcid.cs" />
+    <Compile Include="ListingParserEventHandler.cs" />
     <Compile Include="FattyAcidGroup.cs" />
     <Compile Include="FilterDialog.cs">
       <SubType>Form</SubType>

@@ -192,7 +192,7 @@ namespace LipidCreator
         public char quote;
         [NonSerialized]
         public TreeNode parseTree;
-        public bool wordInGrammer;
+        public bool wordInGrammar;
         public Dictionary<long, string> NTtoRule;
         public BaseParserEventHandler parserEventHandler;
         public const int SHIFT = 32;
@@ -208,7 +208,7 @@ namespace LipidCreator
             quote = _quote;
             parserEventHandler = _parserEventHandler;
             parseTree = null;
-            wordInGrammer = false;
+            wordInGrammar = false;
             
             
             if (File.Exists(grammarFilename))
@@ -582,7 +582,7 @@ namespace LipidCreator
         // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
-            wordInGrammer = false;
+            wordInGrammar = false;
             parseTree = null;
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
@@ -651,7 +651,7 @@ namespace LipidCreator
             
             if (dpTable[0][n - 1].ContainsKey(1)) // 1 => start rule
             {
-                wordInGrammer = true;
+                wordInGrammar = true;
                 parseTree = new TreeNode(1, NTtoRule.ContainsKey(1));
                 fillTree(parseTree, dpTable[0][n - 1][1]);
             }

@@ -169,7 +169,7 @@ namespace LipidCreator
         public ElementDictionary parseMoleculeFormula(string moleculeFormula, string colName)
         {
             moleculeFormulaParser.parse(moleculeFormula);
-            if (moleculeFormulaParser.wordInGrammer)
+            if (moleculeFormulaParser.wordInGrammar)
             {
                 moleculeFormulaParser.raiseEvents();
                 if (moleculeFormulaParserEventHandler.elements != null)
@@ -190,7 +190,7 @@ namespace LipidCreator
         public ArrayList parseAdduct(string adduct, string colName)
         {
             ionFormulaParser.parse(adduct);
-            if (ionFormulaParser.wordInGrammer)
+            if (ionFormulaParser.wordInGrammar)
             {
                 ionFormulaParser.raiseEvents();
                 if (ionFormulaParserEventHandler.validIon)

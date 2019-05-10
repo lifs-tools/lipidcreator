@@ -83,10 +83,7 @@ namespace LipidCreator
         
         public void RangePostEvent(Parser.TreeNode node)
         {
-            for (int count = lowerLimit; count <= upperLimit; ++count)
-            {
-                Add(count);
-            }
+            for (int count = lowerLimit; count <= upperLimit; ++count) Add(count);
         }
         
         public void Add(int count)

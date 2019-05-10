@@ -649,12 +649,9 @@ namespace LipidCreator
             
             text = text.Replace(" ", "");
             
-            listingParserEventHandler = new ListingParserEventHandler();
-            listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", QUOTE);
-            
             listingParserEventHandler.changeOddEvenFlag(oddEven);
             listingParser.parse(text);
-            if (listingParser.wordInGrammer)
+            if (listingParser.wordInGrammar)
             {
                 listingParser.raiseEvents();
                 if (lower <= listingParserEventHandler.min && listingParserEventHandler.max <= upper)
@@ -1321,7 +1318,7 @@ namespace LipidCreator
                 if (lipidName.Length > 0)
                 {
                     lipidMapsParser.parse(lipidName);
-                    if (lipidMapsParser.wordInGrammer)
+                    if (lipidMapsParser.wordInGrammar)
                     {
                         lipidMapsParser.raiseEvents();
                         if (lipidMapsParserEventHandler.lipid != null)
@@ -1336,7 +1333,7 @@ namespace LipidCreator
                     else {
                     
                         lipidNamesParser.parse(lipidName);
-                        if (lipidNamesParser.wordInGrammer)
+                        if (lipidNamesParser.wordInGrammar)
                         {
                             lipidNamesParser.raiseEvents();
                             if (parserEventHandler.lipid != null)

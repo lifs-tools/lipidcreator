@@ -37,7 +37,7 @@ namespace LipidCreator
     {
         public string name;
         public LipidCategory category;
-        public Dictionary<Molecule, int> elements;
+        public ElementDictionary elements;
         public string pathToImage;
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
@@ -78,12 +78,12 @@ namespace LipidCreator
             if (userDefined)
             {
                 xml += "<userDefinedFattyAcids>\n";
-                foreach (Dictionary<int, int> table in userDefinedFattyAcids)
+                foreach (ElementDictionary table in userDefinedFattyAcids)
                 {
                     xml += "<DataTable>\n";
-                    foreach (KeyValuePair<int, int> kvp in table)
+                    foreach (KeyValuePair<Molecule, int> kvp in table)
                     {
-                        xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                        xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
                     }
                     xml += "</DataTable>\n";
                 }
@@ -123,7 +123,7 @@ namespace LipidCreator
                         var dataTables = child.Descendants("DataTable");
                         foreach ( var dataTable in dataTables)
                         {
-                            Dictionary<Molecule, int> fattyElements = MS2Fragment.createEmptyElementDict();
+                            ElementDictionary fattyElements = MS2Fragment.createEmptyElementDict();
                             foreach(XElement row in dataTable.Elements())
                             {
                                 if (row.Name.ToString().Equals("Element"))

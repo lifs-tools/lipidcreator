@@ -150,23 +150,23 @@ namespace LipidCreator
                 
                 numericUpDownCharge.Value = ms2Fragment.fragmentCharge;
                 
-                Dictionary<Molecule, int> input = ms2Fragment.fragmentElements;
+                ElementDictionary input = ms2Fragment.fragmentElements;
                 Dictionary<string, object[]> data = new Dictionary<string, object[]>();
                 
             
                 foreach (KeyValuePair<Molecule, int> row in input)
                 {
-                    if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
+                    if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
                     {
                         // check for heavy isotopes
-                        int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives.Count - 1;
+                        int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
                         int heavyElementCount = 0;
                         string heavyShortcut = "";
                         for (; heavyElementIndex >= 0; --heavyElementIndex)
                         {
-                            heavyElementCount = input[(Molecule)MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]];
-                            heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]].shortcutNumber;
-                            if (input[(Molecule)MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]] > 0)
+                            heavyElementCount = input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]];
+                            heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]].shortcutNumber;
+                            if (input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]] > 0)
                             {
                                 break;
                             }
@@ -178,7 +178,7 @@ namespace LipidCreator
                 
                 foreach (KeyValuePair<string, object[]> row in data)
                 {
-                    int l = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
+                    int l = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
                     
                     dataGridViewElements.Rows[l].Cells[1].Value = row.Value[0];
                     dataGridViewElements.Rows[l].Cells[2].Value = row.Value[1];
@@ -216,29 +216,29 @@ namespace LipidCreator
         
         
         
-        public Dictionary<string, object[]> createGridData(Dictionary<Molecule, int> input)
+        public Dictionary<string, object[]> createGridData(ElementDictionary input)
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
             
             foreach (KeyValuePair<Molecule, int> row in input)
             {
-                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
+                if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
                 {
                     // check for heavy isotopes
-                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives.Count - 1;
+                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
                     int heavyElementCount = 0;
                     string heavyShortcut = "";
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
-                        heavyElementCount = input[(Molecule)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[heavyElementIndex]];
-                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[heavyElementIndex]].shortcutNumber;
-                        if (input[(Molecule)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[heavyElementIndex]] > 0)
+                        heavyElementCount = input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]];
+                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]].shortcutNumber;
+                        if (input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]] > 0)
                         {
                             break;
                         }
                     }
             
-                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
                 }
             }
             return data;
@@ -247,9 +247,9 @@ namespace LipidCreator
         
         
         
-        public Dictionary<Molecule, int> createElementData(Dictionary<string, object[]> input)
+        public ElementDictionary createElementData(Dictionary<string, object[]> input)
         {
-            Dictionary<Molecule, int> elements = MS2Fragment.createEmptyElementDict();
+            ElementDictionary elements = MS2Fragment.createEmptyElementDict();
             foreach (KeyValuePair<string, object[]> row in input)
             {
                 Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
@@ -296,7 +296,7 @@ namespace LipidCreator
             }
         
             
-            Dictionary<Molecule, int> newElements = createElementData(elements);
+            ElementDictionary newElements = createElementData(elements);
             if (fragmentOutputName == "") fragmentOutputName = textBoxFragmentName.Text;
             MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
@@ -393,7 +393,7 @@ namespace LipidCreator
                 string element = MS2Fragment.ALL_ELEMENTS[row.Key].shortcut;
                 int elementCount = (int)elements[element][0];
                 int heavyElementCount = (int)elements[element][1];
-                string heavyElement = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ELEMENT_POSITIONS[(string)elements[element][2]]].shortcut;
+                string heavyElement = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[(string)elements[element][2]]].shortcut;
                 
                 if (elementCount > 0) chemFormP += element + Convert.ToString(elementCount);
                 if (heavyElementCount > 0) chemFormP += heavyElement + Convert.ToString(heavyElementCount);

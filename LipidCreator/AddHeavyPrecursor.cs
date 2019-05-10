@@ -126,7 +126,7 @@ namespace LipidCreator
             currentDict = null;
             foreach (KeyValuePair<string, object[]> row in data)
             {
-                int l = MS2Fragment.ALL_ELEMENTS[(Molecule)MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
+                int l = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[row.Key]].position;
                 
                 dataGridView1.Rows[l].Cells[1].Value = row.Value[0];
                 dataGridView1.Rows[l].Cells[2].Value = row.Value[1];
@@ -138,21 +138,21 @@ namespace LipidCreator
         
         
         
-        public static Dictionary<string, object[]> createGridData(Dictionary<Molecule, int> input)
+        public static Dictionary<string, object[]> createGridData(ElementDictionary input)
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
             
             foreach (KeyValuePair<Molecule, int> row in input)
             {
-                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].isHeavy)
+                if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
                 {
                     // check for heavy isotopes
-                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count - 1;
+                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
                     int heavyElementCount = 0;
                     string heavyShortcut = "";
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
-                        Molecule heavyID = (Molecule)MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].derivatives[heavyElementIndex];
+                        Molecule heavyID = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex];
                         heavyElementCount = input[heavyID];
                         heavyShortcut = MS2Fragment.ALL_ELEMENTS[heavyID].shortcutNumber;
                         if (input[heavyID] > 0)
@@ -161,16 +161,16 @@ namespace LipidCreator
                         }
                     }
             
-                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
                 }
             }
             return data;
         }
         
         
-        public static Dictionary<Molecule, int> createElementData(Dictionary<string, object[]> input)
+        public static ElementDictionary createElementData(Dictionary<string, object[]> input)
         {
-            Dictionary<Molecule, int> elements = MS2Fragment.createEmptyElementDict();
+            ElementDictionary elements = MS2Fragment.createEmptyElementDict();
             foreach (KeyValuePair<string, object[]> row in input)
             {
                 Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
@@ -334,43 +334,43 @@ namespace LipidCreator
                         comboBox2.Items.Add("Fatty acyl 2");
                         comboBox2.Items.Add("Fatty acyl 3");
                         comboBox2.Items.Add("Fatty acyl 4");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[1])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[2])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[3])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[2])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[3])));
                         break;
                         
                     case 1:
                         comboBox2.Items.Add("Fatty acyl 1");
                         comboBox2.Items.Add("Fatty acyl 2");
                         comboBox2.Items.Add("Fatty acyl 3");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[1])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[2])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[2])));
                         break;
                         
                     case 2:
                         comboBox2.Items.Add("Fatty acyl 1");
                         comboBox2.Items.Add("Fatty acyl 2");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[1])));
                         break;
                         
                     case 3:
                         comboBox2.Items.Add("Fatty acyl");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
                         break;
                         
                     case 4:
                         comboBox2.Items.Add("Long chain base");
                         comboBox2.Items.Add("Fatty acyl");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[1])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[1])));
                         break;
                         
                     case 5:
                         comboBox2.Items.Add("Long chain base");
-                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((Dictionary<Molecule, int>)precursor.userDefinedFattyAcids[0])));
+                        buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict((ElementDictionary)precursor.userDefinedFattyAcids[0])));
                         break;
                         
                     default:
@@ -503,7 +503,7 @@ namespace LipidCreator
             ArrayList tmp = new ArrayList();
             foreach (Dictionary<string, object[]> bbdt in buildingBlockElementDicts)
             {
-                Dictionary<Molecule, int> elements = createElementData(bbdt);
+                ElementDictionary elements = createElementData(bbdt);
                 foreach(KeyValuePair<Molecule, int> row in elements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 tmp.Add(elements);
                 
@@ -517,7 +517,7 @@ namespace LipidCreator
                 {
                     string heavyHeadgroup = (string)comboBox1.Items[comboBox1.SelectedIndex] + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + (string)comboBox3.Items[comboBox3.SelectedIndex] + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
                     Precursor heavyPrecursor = creatorGUI.lipidCreator.headgroups[heavyHeadgroup];
-                    heavyPrecursor.elements = (Dictionary<Molecule, int>)tmp[0];
+                    heavyPrecursor.elements = (ElementDictionary)tmp[0];
                     heavyPrecursor.userDefinedFattyAcids.Clear();
                     for (int i = 1; i < tmp.Count; ++i)
                     {
@@ -595,7 +595,7 @@ namespace LipidCreator
                 heavyPrecursor.userDefinedFattyAcids = new ArrayList();
                 for (int i = 1; i < buildingBlockElementDicts.Count; ++i)
                 {
-                    Dictionary<Molecule, int> newElements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
+                    ElementDictionary newElements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
                     foreach(KeyValuePair<Molecule, int> row in newElements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                     heavyPrecursor.userDefinedFattyAcids.Add(newElements);
                 }

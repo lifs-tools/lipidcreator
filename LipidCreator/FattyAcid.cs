@@ -36,7 +36,7 @@ namespace LipidCreator
         public int db;
         public int hydroxyl;
         public string suffix;
-        public Dictionary<Molecule, int> atomsCount;
+        public ElementDictionary atomsCount;
         public bool isLCB;
         
         public FattyAcid(int l, int db, int hydro)
@@ -118,14 +118,14 @@ namespace LipidCreator
         }
         
         
-        public void updateForHeavyLabeled(Dictionary<Molecule, int> heavyAtomsCount)
+        public void updateForHeavyLabeled(ElementDictionary heavyAtomsCount)
         {
             foreach (KeyValuePair<Molecule, int> row in heavyAtomsCount)
             {
                 int c = atomsCount[row.Key] + row.Value;
                 if (c < 0)
                 {
-                    if (row.Key != Molecule.S && row.Key != Molecule.O) atomsCount[(Molecule)MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
+                    if (row.Key != Molecule.S && row.Key != Molecule.O) atomsCount[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
                     else
                     {
                         if (row.Key == Molecule.S)

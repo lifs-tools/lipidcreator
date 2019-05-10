@@ -36,7 +36,7 @@ namespace LipidCreator
         public string charge;
         public string chargeOutput;
         public bool validIon;
-        public Dictionary<Molecule, int> elements;
+        public ElementDictionary elements;
         public int count;
         public string heavyElement;
     

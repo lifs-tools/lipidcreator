@@ -57,7 +57,7 @@ namespace LipidCreator
         public int precursorCharge;
         public bool addPrecursor;
         public bool precursorSelected = true;
-        public Dictionary<Molecule, int> atomsCount;
+        public ElementDictionary atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
         public FattyAcid fa3;
@@ -263,7 +263,7 @@ namespace LipidCreator
                 
                 
                 string fragName = fragment.fragmentOutputName;
-                Dictionary<Molecule, int> atomsCountFragment = fragment.copyElementDict();
+                ElementDictionary atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -545,7 +545,7 @@ namespace LipidCreator
             
             
             
-                Dictionary<Molecule, int> atomsCountFragment = fragment.copyElementDict();
+                ElementDictionary atomsCountFragment = fragment.copyElementDict();
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -725,7 +725,7 @@ namespace LipidCreator
         
         
         
-        public static int getChargeAndAddAdduct(Dictionary<Molecule, int> atomsCount, String adduct)
+        public static int getChargeAndAddAdduct(ElementDictionary atomsCount, String adduct)
         {
             int charge = 0;
             switch (adduct)

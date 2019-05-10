@@ -27,9 +27,13 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+
 
 namespace LipidCreator
 {
+    public class ElementDictionary : Dictionary<Molecule, int> {}
+
     public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
 
     [Serializable]
@@ -42,10 +46,10 @@ namespace LipidCreator
         public int position;
         public double mass;
         public bool isHeavy;
-        public ArrayList derivatives;
+        public Molecule[] derivatives;
         public Molecule lightOrigin;
         
-        public Element(string _shortcut, string _shortcutNumber, string _shortcutIUPAC, string _shortcutNomenclature, int _position, double _mass, bool _isHeavy, ArrayList _derivatives, Molecule _lightOrigin)
+        public Element(string _shortcut, string _shortcutNumber, string _shortcutIUPAC, string _shortcutNomenclature, int _position, double _mass, bool _isHeavy, Molecule[] _derivatives, Molecule _lightOrigin)
         {
             shortcut = _shortcut;
             shortcutNumber = _shortcutNumber;

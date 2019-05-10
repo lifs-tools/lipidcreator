@@ -166,7 +166,7 @@ namespace LipidCreator
         
         
         
-        public Dictionary<Molecule, int> parseMoleculeFormula(string moleculeFormula, string colName)
+        public ElementDictionary parseMoleculeFormula(string moleculeFormula, string colName)
         {
             moleculeFormulaParser.parse(moleculeFormula);
             if (moleculeFormulaParser.wordInGrammer)
@@ -330,8 +330,8 @@ namespace LipidCreator
                 int precursorState = (precursorMoluculeFormula.Length > 0 ? 1 : 0) | (precursorIonFormula.Length > 0 ? 2 : 0) | (precursorMass.Length > 0 ? 4 : 0) | (precursorCharge.Length > 0 ? 8 : 0);
                 
                 try {
-                    Dictionary<Molecule, int> precursorElements;
-                    Dictionary<Molecule, int> precursorHeavyElements;
+                    ElementDictionary precursorElements;
+                    ElementDictionary precursorHeavyElements;
                     string precursorAdduct;
                     ArrayList precursorAdductData;
                     double precursorMassDB;
@@ -352,7 +352,7 @@ namespace LipidCreator
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
                             precursorAdduct = (string)precursorAdductData[0];
-                            precursorHeavyElements = (Dictionary<Molecule, int>)precursorAdductData[1];
+                            precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
@@ -371,7 +371,7 @@ namespace LipidCreator
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
                             precursorAdduct = (string)precursorAdductData[0];
-                            precursorHeavyElements = (Dictionary<Molecule, int>)precursorAdductData[1];
+                            precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
@@ -389,7 +389,7 @@ namespace LipidCreator
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
                             precursorAdduct = (string)precursorAdductData[0];
-                            precursorHeavyElements = (Dictionary<Molecule, int>)precursorAdductData[1];
+                            precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
@@ -416,7 +416,7 @@ namespace LipidCreator
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
                             precursorAdduct = (string)precursorAdductData[0];
-                            precursorHeavyElements = (Dictionary<Molecule, int>)precursorAdductData[1];
+                            precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
@@ -480,8 +480,8 @@ namespace LipidCreator
                 int productState = (productMoluculeFormula.Length > 0 ? 1 : 0) | (productIonFormula.Length > 0 ? 2 : 0) | (productMass.Length > 0 ? 4 : 0) | (productCharge.Length > 0 ? 8 : 0);
                 
                 try {
-                    Dictionary<Molecule, int> productElements;
-                    Dictionary<Molecule, int> productHeavyElements;
+                    ElementDictionary productElements;
+                    ElementDictionary productHeavyElements;
                     string productAdduct;
                     ArrayList productAdductData;
                     double productMassDB;
@@ -502,7 +502,7 @@ namespace LipidCreator
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
                             productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
                             productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (Dictionary<Molecule, int>)productAdductData[1];
+                            productHeavyElements = (ElementDictionary)productAdductData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
@@ -521,7 +521,7 @@ namespace LipidCreator
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
                             productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
                             productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (Dictionary<Molecule, int>)productAdductData[1];
+                            productHeavyElements = (ElementDictionary)productAdductData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
@@ -539,7 +539,7 @@ namespace LipidCreator
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
                             productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
                             productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (Dictionary<Molecule, int>)productAdductData[1];
+                            productHeavyElements = (ElementDictionary)productAdductData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
@@ -557,7 +557,7 @@ namespace LipidCreator
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
                             productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
                             productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (Dictionary<Molecule, int>)productAdductData[1];
+                            productHeavyElements = (ElementDictionary)productAdductData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             

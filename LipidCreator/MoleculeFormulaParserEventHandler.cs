@@ -32,7 +32,7 @@ namespace LipidCreator
     [Serializable]
     public class MoleculeFormulaParserEventHandler : BaseParserEventHandler
     {
-        public Dictionary<Molecule, int> elements;
+        public ElementDictionary elements;
         public Molecule molecule;
         public int count;
     

@@ -119,7 +119,7 @@ namespace LipidCreator
             }
             
             
-            Dictionary<Molecule, int> newElements = AddHeavyPrecursor.createElementData(elementDict);
+            ElementDictionary newElements = AddHeavyPrecursor.createElementData(elementDict);
             MS2Fragment newFragment = new MS2Fragment(fragmentName, fragmentName, -1, null, newElements, "HG");
             newFragment.userDefined = true;
             

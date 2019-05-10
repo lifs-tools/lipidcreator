@@ -188,7 +188,7 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(false, new Dictionary<string, MS2Fragment>());
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
-                            Dictionary<Molecule, int> atomsCount = MS2Fragment.createEmptyElementDict();
+                            ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                             atomsCount[Molecule.C] = Convert.ToInt32(tokens[6]);
                             atomsCount[Molecule.H] = Convert.ToInt32(tokens[7]);
                             atomsCount[Molecule.O] = Convert.ToInt32(tokens[8]);
@@ -850,7 +850,7 @@ namespace LipidCreator
             createPrecursorList();
             if (asDeveloper)
             {
-                Dictionary<Molecule, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                ElementDictionary emptyAtomsCount = MS2Fragment.createEmptyElementDict();
                 foreach (PrecursorData precursorData in precursorDataList)
                 {
                     precursorData.precursorName = precursorData.fullMoleculeListName;
@@ -886,7 +886,7 @@ namespace LipidCreator
         {
             if (asDeveloper)
             {
-                Dictionary<Molecule, int> emptyAtomsCount = MS2Fragment.createEmptyElementDict();
+                ElementDictionary emptyAtomsCount = MS2Fragment.createEmptyElementDict();
                 foreach (PrecursorData precursorData in precursorDataList)
                 {
                     precursorData.precursorName = precursorData.fullMoleculeListName;
@@ -1035,7 +1035,7 @@ namespace LipidCreator
         
         
         
-        public static string computeChemicalFormula(IDictionary<Molecule, int> elements)
+        public static string computeChemicalFormula(ElementDictionary elements)
         {
             String chemForm = "";            
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
@@ -1057,7 +1057,7 @@ namespace LipidCreator
         
         
         
-        public static string computeAdductFormula(IDictionary<Molecule, int> elements, string adduct, int charge = 0)
+        public static string computeAdductFormula(ElementDictionary elements, string adduct, int charge = 0)
         {
             if (charge == 0) charge = Lipid.adductToCharge[adduct];
             
@@ -1080,7 +1080,7 @@ namespace LipidCreator
         
         
         
-        public static string computeHeavyIsotopeLabel(IDictionary<Molecule, int> elements)
+        public static string computeHeavyIsotopeLabel(ElementDictionary elements)
         {
             string label = "";
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
@@ -1097,7 +1097,7 @@ namespace LipidCreator
         
         
         
-        public static double computeMass(IDictionary<Molecule, int> elements, double charge)
+        public static double computeMass(ElementDictionary elements, double charge)
         {
             double mass = 0;
             foreach (KeyValuePair<Molecule, int> row in elements)

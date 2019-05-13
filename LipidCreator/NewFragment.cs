@@ -148,7 +148,7 @@ namespace LipidCreator
                     }
                 }
                 
-                numericUpDownCharge.Value = ms2Fragment.fragmentCharge;
+                numericUpDownCharge.Value = ms2Fragment.fragmentAdduct.charge;
                 
                 ElementDictionary input = ms2Fragment.fragmentElements;
                 Dictionary<string, object[]> data = new Dictionary<string, object[]>();
@@ -298,7 +298,7 @@ namespace LipidCreator
             
             ElementDictionary newElements = createElementData(elements);
             if (fragmentOutputName == "") fragmentOutputName = textBoxFragmentName.Text;
-            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, charge, null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
+            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, Lipid.chargeToAdduct[charge], null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 
             if (!edit)

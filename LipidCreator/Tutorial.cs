@@ -1600,7 +1600,7 @@ namespace LipidCreator
                     ElementDictionary newElements = MS2Fragment.createEmptyElementDict();
                     newElements[MS2Fragment.ELEMENT_POSITIONS["H"]] = 3;
                     newElements[MS2Fragment.ELEMENT_POSITIONS["O"]] = 2;
-                    MS2Fragment newFragment = new MS2Fragment("testFrag", "testFrag", 1, null, newElements, "FA1");
+                    MS2Fragment newFragment = new MS2Fragment("testFrag", "testFrag", Lipid.chargeToAdduct[1], null, newElements, "FA1");
                     newFragment.userDefined = true;
                     creatorGUI.lipidCreator.allFragments["PG"][true]["testFrag"] = newFragment;
                     ((Lipid)creatorGUI.lipidTabList[2]).positiveFragments["PG"].Clear();

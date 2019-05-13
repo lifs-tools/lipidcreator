@@ -120,7 +120,7 @@ namespace LipidCreator
             
             
             ElementDictionary newElements = AddHeavyPrecursor.createElementData(elementDict);
-            MS2Fragment newFragment = new MS2Fragment(fragmentName, fragmentName, -1, null, newElements, "HG");
+            MS2Fragment newFragment = new MS2Fragment(fragmentName, fragmentName, Lipid.chargeToAdduct[-1], null, newElements, "HG");
             newFragment.userDefined = true;
             
             mediatorMS2Form.creatorGUI.lipidCreator.allFragments[lipidClass][false].Add(fragmentName, newFragment);

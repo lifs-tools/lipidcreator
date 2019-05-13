@@ -323,9 +323,9 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
-                MS2Fragment.addCounts(atomsCountFragment, fragment.adduct.elements);
-                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
+                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
+                MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
+                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 
                 // Exceptions for mediators
                 if (precursorData.lipidCategory == LipidCategory.LipidMediator)
@@ -365,8 +365,8 @@ namespace LipidCreator
                 insertedFragments.Add(fragName + "/" + fragAdduct);
                 
                 
-                double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentCharge));
-                string fragCharge = ((fragment.fragmentCharge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentCharge);
+                double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentAdduct.charge));
+                string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);
                 
                 lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
                 lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
@@ -605,9 +605,9 @@ namespace LipidCreator
                 }
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
-                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
-                MS2Fragment.addCounts(atomsCountFragment, fragment.adduct.elements);
-                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
+                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
+                MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
+                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge) / (double)(Math.Abs(fragment.fragmentAdduct.charge));
                 string fragName = fragment.fragmentName;
                 
                 if (precursorData.lipidCategory == LipidCategory.LipidMediator)
@@ -644,7 +644,7 @@ namespace LipidCreator
                 peaks.Add(new Peak(massFragment,
                     MS2Fragment.DEFAULT_INTENSITY,
                     new PeakAnnotation(fragName,
-                        fragment.fragmentCharge,
+                        fragment.fragmentAdduct.charge,
                         fragAdduct,
                         chemFormFragment,
                         fragment.CommentForSpectralLibrary)));

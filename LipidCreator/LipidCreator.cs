@@ -207,13 +207,12 @@ namespace LipidCreator
                             Adduct adduct = Lipid.chargeToAdduct[charge];
                             if (tokens[12].Length > 0)
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
                             }
                             else 
                             {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5]));
+                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5]));
                             }
-                            allFragments[tokens[0]][charge >= 0][tokens[2]].adduct = adduct;
                         }
                     }
                 }
@@ -1440,7 +1439,7 @@ namespace LipidCreator
                 {
                     MS2Fragment ms2fragment = new MS2Fragment();
                     ms2fragment.import(ms2fragmentXML, importVersion);
-                    if (!allFragments[headgroup][ms2fragment.fragmentCharge >= 0].ContainsKey(ms2fragment.fragmentName)) allFragments[headgroup][ms2fragment.fragmentCharge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
+                    if (!allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].ContainsKey(ms2fragment.fragmentName)) allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
                     else fragmentImportIgnored = true;
                 }
             }

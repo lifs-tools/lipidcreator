@@ -39,10 +39,9 @@ namespace LipidCreator
     {
         public string fragmentName;
         public string fragmentOutputName;
-        public int fragmentCharge;
         public String fragmentFile;
         public ElementDictionary fragmentElements;
-        public Adduct adduct;
+        public Adduct fragmentAdduct;
         public ArrayList fragmentBase;
         public double intensity;
         public bool userDefined;
@@ -168,7 +167,7 @@ namespace LipidCreator
             string xml = "<MS2Fragment";
             xml += " fragmentName=\"" + fragmentName + "\"";
             xml += " fragmentOutputName=\"" + fragmentOutputName + "\"";
-            xml += " fragmentCharge=\"" + fragmentCharge + "\"";
+            xml += " fragmentAdduct=\"" + fragmentAdduct.name + "\"";
             xml += " fragmentFile=\"" + fragmentFile + "\"";
             xml += " intensity=\"" + intensity + "\"";
             xml += " userDefined=\"" + userDefined + "\">";
@@ -189,7 +188,7 @@ namespace LipidCreator
             fragmentBase.Clear();
             fragmentName = node.Attribute("fragmentName").Value.ToString();
             fragmentOutputName = node.Attribute("fragmentOutputName").Value.ToString();
-            fragmentCharge = Convert.ToInt32(node.Attribute("fragmentCharge").Value.ToString());
+            fragmentAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[node.Attribute("fragmentAdduct").Value.ToString()]];
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
             intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
             userDefined = node.Attribute("userDefined").Value.Equals("True");
@@ -234,9 +233,8 @@ namespace LipidCreator
         {
             fragmentName = "-";
             fragmentOutputName = "-";
-            fragmentCharge = -1;
             fragmentFile = "-";
-            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = new ElementDictionary();
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
@@ -250,10 +248,9 @@ namespace LipidCreator
         {
             fragmentName = name;
             fragmentOutputName = name;
-            fragmentCharge = -1;
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
-            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
@@ -261,14 +258,13 @@ namespace LipidCreator
         }
 
 
-        public MS2Fragment(String name, String fileName, int charge)
+        public MS2Fragment(String name, String fileName, Adduct _adduct)
         {
             fragmentName = name;
             fragmentOutputName = name;
-            fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
-            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentAdduct = _adduct;
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
@@ -277,13 +273,12 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, String outputname, int charge, String fileName, ElementDictionary dataElements, String baseForms)
+        public MS2Fragment(String name, String outputname, Adduct _adduct, String fileName, ElementDictionary dataElements, String baseForms)
         {
             fragmentName = name;
             fragmentOutputName = outputname;
-            fragmentCharge = charge;
             fragmentFile = fileName;
-            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentAdduct = _adduct;
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
@@ -292,13 +287,12 @@ namespace LipidCreator
         
         
         
-        public MS2Fragment(String name, String outputname, int charge, String fileName, ElementDictionary dataElements, String baseForms, double intens)
+        public MS2Fragment(String name, String outputname, Adduct _adduct, String fileName, ElementDictionary dataElements, String baseForms, double intens)
         {
             fragmentName = name;
             fragmentOutputName = outputname;
-            fragmentCharge = charge;
             fragmentFile = fileName;
-            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentAdduct = _adduct;
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
@@ -311,10 +305,9 @@ namespace LipidCreator
         {
             fragmentName = copy.fragmentName;
             fragmentOutputName = copy.fragmentOutputName;
-            fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
             fragmentElements = new ElementDictionary();
-            adduct = copy.adduct;
+            fragmentAdduct = copy.fragmentAdduct;
             foreach (KeyValuePair<Molecule, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;

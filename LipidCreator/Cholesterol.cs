@@ -149,7 +149,6 @@ namespace LipidCreator
                         precursorData.precursorAdduct = adduct;
                         precursorData.precursorAdductFormula = adductForm;
                         precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
-                        precursorData.precursorCharge = charge;
                         precursorData.atomsCount = headgroups[headgroup].elements;
                         precursorData.fa1 = fa;
                         precursorData.fa2 = null;
@@ -194,7 +193,6 @@ namespace LipidCreator
                             heavyPrecursorData.precursorAdduct = adduct;
                             heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                             heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(charge));
-                            heavyPrecursorData.precursorCharge = charge;
                             heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                             heavyPrecursorData.fa1 = heavyFA1;
                             heavyPrecursorData.fa2 = null;
@@ -240,7 +238,6 @@ namespace LipidCreator
                     precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;
                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
-                    precursorData.precursorCharge = charge;
                     precursorData.atomsCount = headgroups[headgroup].elements;
                     precursorData.fa1 = null;
                     precursorData.fa2 = null;
@@ -280,7 +277,6 @@ namespace LipidCreator
                         heavyPrecursorData.precursorAdduct = adduct;
                         heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                         heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(charge));
-                        heavyPrecursorData.precursorCharge = charge;
                         heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                         heavyPrecursorData.fa1 = null;
                         heavyPrecursorData.fa2 = null;

@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Linq;
 
 
 namespace LipidCreator
@@ -112,19 +113,21 @@ namespace LipidCreator
                 else if (precNames[1].Length == 0 && onlyHeavyLabeled == 1) continue;
                 
                 
-                foreach (KeyValuePair<string, bool> adduct in adducts)
+                foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                 {
                 
-                    if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                    if (usedKeys.Contains(key + adduct.Key)) continue;
+                    if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                    if (usedKeys.Contains(key + adductKey)) continue;
                     
-                    usedKeys.Add(key + adduct.Key);
+                    usedKeys.Add(key + adductKey);
                     
                     ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
-                    int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
+                    Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                    int charge = adduct.charge;
+                    MS2Fragment.addCounts(atomsCount, adduct.elements);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                     string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
@@ -136,7 +139,7 @@ namespace LipidCreator
                     precursorData.precursorExportName = precNames[0];
                     precursorData.precursorName = newKey;
                     precursorData.precursorIonFormula = chemForm;
-                    precursorData.precursorAdduct = adduct.Key;
+                    precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;
                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                     precursorData.precursorCharge = charge;

@@ -119,12 +119,12 @@ namespace LipidCreator
             if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
-                foreach (string adduct in Lipid.adductToCharge.Keys) lipid.adducts[adduct] = false;
+                foreach (string adduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[adduct] = false;
             
                 
                 if (charge != 0)
                 {
-                    if (Lipid.adductToCharge.ContainsKey(adduct) && Lipid.adductToCharge[adduct] == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    if (Lipid.ADDUCT_POSITIONS.ContainsKey(adduct) && Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adduct]].charge == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
                     {
                         lipid.adducts[adduct] = true;
                     }

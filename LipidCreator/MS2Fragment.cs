@@ -42,6 +42,7 @@ namespace LipidCreator
         public int fragmentCharge;
         public String fragmentFile;
         public ElementDictionary fragmentElements;
+        public Adduct adduct;
         public ArrayList fragmentBase;
         public double intensity;
         public bool userDefined;
@@ -235,6 +236,7 @@ namespace LipidCreator
             fragmentOutputName = "-";
             fragmentCharge = -1;
             fragmentFile = "-";
+            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = new ElementDictionary();
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
@@ -251,6 +253,7 @@ namespace LipidCreator
             fragmentCharge = -1;
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
+            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
@@ -265,6 +268,7 @@ namespace LipidCreator
             fragmentCharge = charge;
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
+            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
@@ -279,6 +283,7 @@ namespace LipidCreator
             fragmentOutputName = outputname;
             fragmentCharge = charge;
             fragmentFile = fileName;
+            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
@@ -293,6 +298,7 @@ namespace LipidCreator
             fragmentOutputName = outputname;
             fragmentCharge = charge;
             fragmentFile = fileName;
+            adduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
@@ -308,6 +314,7 @@ namespace LipidCreator
             fragmentCharge = copy.fragmentCharge;
             fragmentFile = copy.fragmentFile;
             fragmentElements = new ElementDictionary();
+            adduct = copy.adduct;
             foreach (KeyValuePair<Molecule, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;

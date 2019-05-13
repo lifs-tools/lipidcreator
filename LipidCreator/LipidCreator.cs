@@ -203,8 +203,8 @@ namespace LipidCreator
                             {
                                 log.Error("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
                             }
-                            
                             int charge = Convert.ToInt32(tokens[4]);
+                            Adduct adduct = Lipid.chargeToAdduct[charge];
                             if (tokens[12].Length > 0)
                             {
                                 allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
@@ -213,6 +213,7 @@ namespace LipidCreator
                             {
                                 allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], charge, fragmentFile, atomsCount, tokens[5]));
                             }
+                            allFragments[tokens[0]][charge >= 0][tokens[2]].adduct = adduct;
                         }
                     }
                 }
@@ -1007,9 +1008,9 @@ namespace LipidCreator
         
         
         
-        public static string computeAdductFormula(ElementDictionary elements, string adduct, int charge = 0)
+        public static string computeAdductFormula(ElementDictionary elements, Adduct adduct, int charge = 0)
         {
-            if (charge == 0) charge = Lipid.adductToCharge[adduct];
+            if (charge == 0) charge = adduct.charge;
             
             String adductForm = "[M";
             if (elements != null)
@@ -1022,7 +1023,7 @@ namespace LipidCreator
                     }
                 }
             }
-            adductForm += adduct + "]";
+            adductForm += adduct.name + "]";
             adductForm += Convert.ToString(Math.Abs(charge));
             adductForm += (charge > 0) ? "+" : "-";
             return adductForm;

@@ -332,8 +332,9 @@ namespace LipidCreator
                 try {
                     ElementDictionary precursorElements;
                     ElementDictionary precursorHeavyElements;
-                    string precursorAdduct;
+                    string precursorAdductName;
                     ArrayList precursorAdductData;
+                    Adduct precursorAdduct;
                     double precursorMassDB;
                     int precursorChargeInt;
                     int charge;
@@ -351,12 +352,14 @@ namespace LipidCreator
                         case 3: // precursor molecule formula and precursor adduct are provided
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
-                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorAdductName = (string)precursorAdductData[0];
                             precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
-                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
+                            charge = precursorAdduct.charge;
+                            MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
@@ -370,13 +373,15 @@ namespace LipidCreator
                         case 7: // precursor charge is not provided
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
-                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorAdductName = (string)precursorAdductData[0];
                             precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
                             precursorMassDB = parseMass(precursorMass, LipidCreator.PRECURSOR_MZ);
-                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
+                            charge = precursorAdduct.charge;
+                            MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
@@ -388,13 +393,15 @@ namespace LipidCreator
                         case 11: // precursor mass is not provided
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
-                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorAdductName = (string)precursorAdductData[0];
                             precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
                             precursorChargeInt = parseCharge(precursorCharge, LipidCreator.PRECURSOR_CHARGE);
-                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
+                            charge = precursorAdduct.charge;
+                            MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             if (charge != precursorChargeInt)
@@ -415,14 +422,16 @@ namespace LipidCreator
                         case 15: // everything is provided
                             precursorElements = parseMoleculeFormula(precursorMoluculeFormula, LipidCreator.PRECURSOR_NEUTRAL_FORMULA);
                             precursorAdductData = parseAdduct(precursorIonFormula, LipidCreator.PRECURSOR_ADDUCT);
-                            precursorAdduct = (string)precursorAdductData[0];
+                            precursorAdductName = (string)precursorAdductData[0];
                             precursorHeavyElements = (ElementDictionary)precursorAdductData[1];
                             MS2Fragment.addCounts(precursorElements, precursorHeavyElements);
                             if (!MS2Fragment.validElementDict(precursorElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRECURSOR_MZ);
                             
                             precursorMassDB = parseMass(precursorMass, LipidCreator.PRECURSOR_MZ);
                             precursorChargeInt = parseCharge(precursorCharge, LipidCreator.PRECURSOR_CHARGE);
-                            charge = Lipid.getChargeAndAddAdduct(precursorElements, precursorAdduct);
+                            precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
+                            charge = precursorAdduct.charge;
+                            MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
                             mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
@@ -482,8 +491,9 @@ namespace LipidCreator
                 try {
                     ElementDictionary productElements;
                     ElementDictionary productHeavyElements;
-                    string productAdduct;
-                    ArrayList productAdductData;
+                    string productAdductName;
+                    Adduct productAdduct;
+                    ArrayList productAdductNameData;
                     double productMassDB;
                     int productChargeInt;
                     int charge;
@@ -500,33 +510,37 @@ namespace LipidCreator
                             
                         case 3:
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
-                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
-                            productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (ElementDictionary)productAdductData[1];
+                            productAdductNameData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdductName = (string)productAdductNameData[0];
+                            productHeavyElements = (ElementDictionary)productAdductNameData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
-                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
+                            charge = productAdduct.charge;
+                            MS2Fragment.addCounts(productElements, productAdduct.elements);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
                             break;
                             
                         case 6: // product adduct and product mass are provided
-                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
-                            row[LipidCreator.PRODUCT_CHARGE] = productAdductData[2];
+                            productAdductNameData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            row[LipidCreator.PRODUCT_CHARGE] = productAdductNameData[2];
                             break;
                             
                         case 7:
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
-                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
-                            productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (ElementDictionary)productAdductData[1];
+                            productAdductNameData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdductName = (string)productAdductNameData[0];
+                            productHeavyElements = (ElementDictionary)productAdductNameData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
                             productMassDB = parseMass(productMass, LipidCreator.PRODUCT_MZ);
-                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
+                            charge = productAdduct.charge;
+                            MS2Fragment.addCounts(productElements, productAdduct.elements);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
@@ -537,14 +551,16 @@ namespace LipidCreator
                             
                         case 11:
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
-                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
-                            productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (ElementDictionary)productAdductData[1];
+                            productAdductNameData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdductName = (string)productAdductNameData[0];
+                            productHeavyElements = (ElementDictionary)productAdductNameData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
                             productChargeInt = parseCharge(productCharge, LipidCreator.PRODUCT_CHARGE);
-                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
+                            charge = productAdduct.charge;
+                            MS2Fragment.addCounts(productElements, productAdduct.elements);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             if (charge != productChargeInt)
@@ -555,15 +571,17 @@ namespace LipidCreator
                             
                         case 15:
                             productElements = parseMoleculeFormula(productMoluculeFormula, LipidCreator.PRODUCT_NEUTRAL_FORMULA);
-                            productAdductData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
-                            productAdduct = (string)productAdductData[0];
-                            productHeavyElements = (ElementDictionary)productAdductData[1];
+                            productAdductNameData = parseAdduct(productIonFormula, LipidCreator.PRODUCT_ADDUCT);
+                            productAdductName = (string)productAdductNameData[0];
+                            productHeavyElements = (ElementDictionary)productAdductNameData[1];
                             MS2Fragment.addCounts(productElements, productHeavyElements);
                             if (!MS2Fragment.validElementDict(productElements)) throw new WrongFormatException("mass invalid", LipidCreator.PRODUCT_MZ);
                             
                             productMassDB = parseMass(productMass, LipidCreator.PRODUCT_MZ);
                             productChargeInt = parseCharge(productCharge, LipidCreator.PRODUCT_CHARGE);
-                            charge = Lipid.getChargeAndAddAdduct(productElements, productAdduct);
+                            productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
+                            charge = productAdduct.charge;
+                            MS2Fragment.addCounts(productElements, productAdduct.elements);
                             mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {

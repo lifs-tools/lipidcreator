@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Linq;
 using log4net;
 
 namespace LipidCreator
@@ -196,12 +197,12 @@ namespace LipidCreator
                                     }
                                 }
                                 
-                                foreach (KeyValuePair<string, bool> adduct in adducts)
+                                foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                                 {
-                                    if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                                    if (usedKeys.Contains(headgroup + key + adduct.Key)) continue;
+                                    if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                                    if (usedKeys.Contains(headgroup + key + adductKey)) continue;
                                     
-                                    usedKeys.Add(headgroup + key + adduct.Key);
+                                    usedKeys.Add(headgroup + key + adductKey);
                                     
                                     // adding element counts for all building blocks
                                     ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
@@ -211,8 +212,10 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(atomsCount, fa4.atomsCount);
                                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
-                                    int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
+                                    Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                                    int charge = adduct.charge;
+                                    MS2Fragment.addCounts(atomsCount, adduct.elements);
                                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                                     // filling information on MS1 level for cardiolipin
@@ -223,7 +226,7 @@ namespace LipidCreator
                                     precursorData.precursorExportName = headgroup + key;
                                     precursorData.precursorName = headgroup + key;
                                     precursorData.precursorIonFormula = chemForm;
-                                    precursorData.precursorAdduct = adduct.Key;
+                                    precursorData.precursorAdduct = adduct;
                                     precursorData.precursorAdductFormula = adductForm;
                                     precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                     precursorData.precursorCharge = charge;
@@ -243,7 +246,7 @@ namespace LipidCreator
                                     {
                                         string heavyHeadgroup = heavyPrecursor.name;
                                         
-                                        if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
+                                        if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
                                         
                                     
                                         FattyAcid heavyFA1 = new FattyAcid(fa1);
@@ -268,9 +271,9 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(heavyAtomsCount, heavyFA4.atomsCount);
                                         MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                         string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                                        string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
-                                        int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
-                                        double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                        string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
+                                        MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
+                                        double heavyMass = LipidCreator.computeMass(atomsCount, charge);
                                         
                                         string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                             
@@ -282,10 +285,10 @@ namespace LipidCreator
                                         heavyPrecursorData.precursorExportName = headgroup + key;
                                         heavyPrecursorData.precursorName = heavyKey + key;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                        heavyPrecursorData.precursorAdduct = adduct.Key;
+                                        heavyPrecursorData.precursorAdduct = adduct;
                                         heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
-                                        heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
-                                        heavyPrecursorData.precursorCharge = heavyCharge;
+                                        heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(charge));
+                                        heavyPrecursorData.precursorCharge = charge;
                                         heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                         heavyPrecursorData.fa1 = heavySortedAcids[0];
                                         heavyPrecursorData.fa2 = heavySortedAcids[1];
@@ -293,7 +296,7 @@ namespace LipidCreator
                                         heavyPrecursorData.fa4 = heavySortedAcids[3];
                                         heavyPrecursorData.lcb = null;
                                         heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
-                                        heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                                        heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
                                         
                                         precursorDataList.Add(heavyPrecursorData);
                                     }
@@ -334,24 +337,26 @@ namespace LipidCreator
                         String key = " " + fa1.ToString();
                         
                         
-                        foreach (KeyValuePair<string, bool> adduct in adducts)
+                        foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
                             string completeKey = headgroup;
                             if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
                             else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
                             completeKey += key;
                             
-                            if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                            if (usedKeys.Contains(completeKey + adduct.Key)) continue;
+                            if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                            if (usedKeys.Contains(completeKey + adductKey)) continue;
                             
-                            usedKeys.Add(completeKey + adduct.Key);
+                            usedKeys.Add(completeKey + adductKey);
                             
                             ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                             MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                             MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                             string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                            string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
-                            int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
+                            Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                            string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                            int charge = adduct.charge;
+                            MS2Fragment.addCounts(atomsCount, adduct.elements);
                             double mass = LipidCreator.computeMass(atomsCount, charge);
                                                                 
                             // filling information on MS1 level for phospholipid
@@ -362,7 +367,7 @@ namespace LipidCreator
                             precursorData.precursorExportName = completeKey;
                             precursorData.precursorName = completeKey;
                             precursorData.precursorIonFormula = chemForm;
-                            precursorData.precursorAdduct = adduct.Key;
+                            precursorData.precursorAdduct = adduct;
                             precursorData.precursorAdductFormula = adductForm;
                             precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                             precursorData.precursorCharge = charge;
@@ -383,7 +388,7 @@ namespace LipidCreator
                                 
                                 string heavyHeadgroup = heavyPrecursor.name;
                                 
-                                if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
+                                if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
                                 
                             
                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
@@ -394,9 +399,9 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                                 MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                 string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                                string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
-                                int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
-                                double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
+                                MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
+                                double heavyMass = LipidCreator.computeMass(atomsCount, charge);
                                 
                                 string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                     
@@ -408,10 +413,10 @@ namespace LipidCreator
                                 heavyPrecursorData.precursorExportName = completeKey;
                                 heavyPrecursorData.precursorName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                heavyPrecursorData.precursorAdduct = adduct.Key;
+                                heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
-                                heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
-                                heavyPrecursorData.precursorCharge = heavyCharge;
+                                heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(charge));
+                                heavyPrecursorData.precursorCharge = charge;
                                 heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                 heavyPrecursorData.fa1 = heavyFA1;
                                 heavyPrecursorData.fa2 = null;
@@ -419,7 +424,7 @@ namespace LipidCreator
                                 heavyPrecursorData.fa4 = null;
                                 heavyPrecursorData.lcb = null;
                                 heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
-                                heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                                heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
                                 
                                 precursorDataList.Add(heavyPrecursorData);
                             }
@@ -507,25 +512,27 @@ namespace LipidCreator
                             }
                             
                           
-                            foreach (KeyValuePair<string, bool> adduct in adducts)
+                            foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
                                 string completeKey = headgroup;
                                 if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
                                 else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
                                 completeKey += key;
                                 
-                                if (!adduct.Value || !headgroups[headgroup].adductRestrictions[adduct.Key]) continue;
-                                if (usedKeys.Contains(completeKey + adduct.Key)) continue;
+                                if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                                if (usedKeys.Contains(completeKey + adductKey)) continue;
                                 
-                                usedKeys.Add(completeKey + adduct.Key);
+                                usedKeys.Add(completeKey + adductKey);
                                 
                                 ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
                                 MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                 string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                                string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct.Key);
-                                int charge = getChargeAndAddAdduct(atomsCount, adduct.Key);
+                                Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                                string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                                int charge = adduct.charge;
+                                MS2Fragment.addCounts(atomsCount, adduct.elements);
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
                                                                     
                                 // filling information on MS1 level for phospholipid
@@ -536,7 +543,7 @@ namespace LipidCreator
                                 precursorData.precursorExportName = completeKey;
                                 precursorData.precursorName = completeKey;
                                 precursorData.precursorIonFormula = chemForm;
-                                precursorData.precursorAdduct = adduct.Key;
+                                precursorData.precursorAdduct = adduct;
                                 precursorData.precursorAdductFormula = adductForm;
                                 precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
                                 precursorData.precursorCharge = charge;
@@ -567,7 +574,7 @@ namespace LipidCreator
                                     
                                     string heavyHeadgroup = heavyPrecursor.name;
                                     
-                                    if (!headgroups[heavyHeadgroup].adductRestrictions[adduct.Key]) continue;
+                                    if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
                                 
                                     FattyAcid heavyFA1 = new FattyAcid(fa1);
                                     FattyAcid heavyFA2 = new FattyAcid(fa2);
@@ -584,9 +591,9 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
                                     MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                                     string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                                    string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct.Key);
-                                    int heavyCharge = getChargeAndAddAdduct(heavyAtomsCount, adduct.Key);
-                                    double heavyMass = LipidCreator.computeMass(heavyAtomsCount, heavyCharge);
+                                    string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
+                                    MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
+                                    double heavyMass = LipidCreator.computeMass(atomsCount, charge);
                                     
                                     string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                         
@@ -598,10 +605,10 @@ namespace LipidCreator
                                     heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + key;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                    heavyPrecursorData.precursorAdduct = adduct.Key;
+                                    heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
-                                    heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(heavyCharge));
-                                    heavyPrecursorData.precursorCharge = heavyCharge;
+                                    heavyPrecursorData.precursorM_Z = heavyMass / (double)(Math.Abs(charge));
+                                    heavyPrecursorData.precursorCharge = charge;
                                     heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                     heavyPrecursorData.fa1 = heavySortedAcids[0];
                                     heavyPrecursorData.fa2 = heavySortedAcids[1];
@@ -609,7 +616,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fa4 = null;
                                     heavyPrecursorData.lcb = null;
                                     heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
-                                    heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((heavyCharge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                                    heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
                                     
                                     precursorDataList.Add(heavyPrecursorData);
                                 }

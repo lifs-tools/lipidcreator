@@ -249,17 +249,17 @@ namespace LipidCreator
                     if (!(currentLipid is UnsupportedLipid))
                     {
                         newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
-                        string adduct = "";
+                        string adductName = "";
                         foreach (string addct in currentLipid.adducts.Keys)
                         {
                             if (currentLipid.adducts[addct])
                             {
-                                adduct = addct;
+                                adductName = addct;
                                 break;
                             }
                         }
-                        int charge = Lipid.adductToCharge[adduct];
-                        newLipidName += LipidCreator.computeAdductFormula(((PrecursorData)precursorDataList[0]).atomsCount, adduct, charge);
+                        Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductName]];
+                        newLipidName += LipidCreator.computeAdductFormula(((PrecursorData)precursorDataList[0]).atomsCount, adduct);
                         ++correctlyParsed;
                     }
                     else

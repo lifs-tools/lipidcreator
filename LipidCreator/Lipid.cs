@@ -51,8 +51,7 @@ namespace LipidCreator
         public string precursorExportName;
         public string precursorName;
         public string precursorIonFormula;
-        public string precursorAdduct;
-        public Adduct adduct;
+        public Adduct precursorAdduct;
         public string precursorAdductFormula;
         public double precursorM_Z;
         public int precursorCharge;
@@ -83,11 +82,6 @@ namespace LipidCreator
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
         public static int MEDIATOR_PREFIX_LENGTH = 4;
-        public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
-        
-        public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
-        
-        
         
         
         public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>(){
@@ -117,6 +111,7 @@ namespace LipidCreator
         };
         
         
+        public static Dictionary<int, Adduct> chargeToAdduct = new Dictionary<int, Adduct>{{1, ALL_ADDUCTS[AdductType.Hp]}, {2, ALL_ADDUCTS[AdductType.HHp]}, {-1, ALL_ADDUCTS[AdductType.Hm]}, {-2, ALL_ADDUCTS[AdductType.HHm]}};
         
         
         
@@ -329,7 +324,7 @@ namespace LipidCreator
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
-                getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
+                MS2Fragment.addCounts(atomsCountFragment, fragment.adduct.elements);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge);
                 
                 // Exceptions for mediators
@@ -341,7 +336,7 @@ namespace LipidCreator
                 
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
-                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct);
+                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct.name);
                 }
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
@@ -611,7 +606,7 @@ namespace LipidCreator
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, chargeToAdduct[fragment.fragmentCharge], fragment.fragmentCharge);
-                getChargeAndAddAdduct(atomsCountFragment, Lipid.chargeToAdduct[fragment.fragmentCharge]);
+                MS2Fragment.addCounts(atomsCountFragment, fragment.adduct.elements);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentCharge) / (double)(Math.Abs(fragment.fragmentCharge));
                 string fragName = fragment.fragmentName;
                 
@@ -622,7 +617,7 @@ namespace LipidCreator
                 }
                 if (fragName.IndexOf("[adduct]") > -1)
                 {
-                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct);
+                    fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct.name);
                 }
                 
                 if (fragName.IndexOf("[xx:x]") > -1)
@@ -759,7 +754,7 @@ namespace LipidCreator
         }
         
         
-        
+        /*
         public static int getChargeAndAddAdduct(ElementDictionary atomsCount, String adduct)
         {
             int charge = 0;
@@ -801,6 +796,7 @@ namespace LipidCreator
             }
             return charge;
         }
+        */
         
         
         public virtual void import(XElement node, string importVersion)
@@ -889,7 +885,7 @@ namespace LipidCreator
             precursorData.precursorExportName = "Unsupported lipid";
             precursorData.precursorName = "Unsupported lipid";
             precursorData.precursorIonFormula = "Unsupported lipid";
-            precursorData.precursorAdduct = "Unsupported lipid";
+            precursorData.precursorAdduct = null;
             precursorData.precursorAdductFormula = "Unsupported lipid";
             precursorData.precursorM_Z = 0;
             precursorData.precursorCharge = 0;

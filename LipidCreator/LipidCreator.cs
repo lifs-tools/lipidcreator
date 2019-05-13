@@ -666,18 +666,6 @@ namespace LipidCreator
         
         
         
-        
-        public string getSeparator(string list)
-        {
-            if (list.IndexOf(Lipid.ID_SEPARATOR_SPECIFIC) >= 0 && list.IndexOf(Lipid.ID_SEPARATOR_UNSPECIFIC) == -1) return Lipid.ID_SEPARATOR_SPECIFIC;
-            else if (list.IndexOf(Lipid.ID_SEPARATOR_UNSPECIFIC) >= 0 && list.IndexOf(Lipid.ID_SEPARATOR_SPECIFIC) == -1) return Lipid.ID_SEPARATOR_UNSPECIFIC;
-            return "";
-        }
-        
-        
-        
-        
-        
         public void createPrecursorList()
         {
             HashSet<String> usedKeys = new HashSet<String>();

@@ -127,7 +127,7 @@ namespace LipidCreator
                     // parse species identifier
                     Lipid lipid = null;
                     parser.parse(unitTestRow[1]);
-                    if (parser.wordInGrammer)
+                    if (parser.wordInGrammar)
                     {
                         parser.raiseEvents();
                         if (parserEventHandler.lipid != null) lipid = parserEventHandler.lipid;

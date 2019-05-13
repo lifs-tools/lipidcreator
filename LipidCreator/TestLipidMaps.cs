@@ -76,7 +76,7 @@ namespace LipidCreator
                             string[] tokens = LipidCreator.parseLine(line);
                             parser.parse(tokens[0]);
                             string translatedName = "";
-                            if (parser.wordInGrammer)
+                            if (parser.wordInGrammar)
                             {
                                 parser.raiseEvents();
                                 if (lipidMapsParserEventHandler.lipid != null)

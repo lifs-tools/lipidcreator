@@ -39,12 +39,14 @@ namespace LipidCreator
     public partial class Adduct
     {
         public string name;
+        public string visualization;
         public int charge;
         public ElementDictionary elements;
         
-        public Adduct(string _name, int _charge, ElementDictionary _elements)
+        public Adduct(string _name, string _visualization, int _charge, ElementDictionary _elements)
         {
             name = _name;
+            visualization = _visualization;
             charge = _charge;
             elements = _elements;
         }

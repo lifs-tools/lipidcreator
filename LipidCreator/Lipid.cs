@@ -84,15 +84,15 @@ namespace LipidCreator
         
         
         public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>(){
-            {AdductType.Hp, new Adduct("+H", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}}))},
-            {AdductType.HHp, new Adduct("+2H", 2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 2}}))},
-            {AdductType.NHHHHp, new Adduct("+NH4", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 4}, {"N", 1}}))},
-            //{AdductType.Nap, new Adduct("+Na", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Na", 1}}))},
-            {AdductType.Hm, new Adduct("-H", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -1}}))},
-            {AdductType.HHm, new Adduct("-2H", -2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -2}}))},
-            {AdductType.HCOOm, new Adduct("+HCOO", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}, {"C", 1}, {"O", 2}}))},
-            {AdductType.CHHHCOOm, new Adduct("+CH3COO", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))} /*,
-            {AdductType.Clm, new Adduct("+Cl", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Cl", 1}}))}*/
+            {AdductType.Hp, new Adduct("+H", "+H⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}}))},
+            {AdductType.HHp, new Adduct("+2H", "+2H⁺⁺", 2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 2}}))},
+            {AdductType.NHHHHp, new Adduct("+NH4", "+NH4⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 4}, {"N", 1}}))},
+            //{AdductType.Nap, new Adduct("+Na", "+Na⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Na", 1}}))},
+            {AdductType.Hm, new Adduct("-H", "-H⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -1}}))},
+            {AdductType.HHm, new Adduct("-2H", "-2H⁻ ⁻", -2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -2}}))},
+            {AdductType.HCOOm, new Adduct("+HCOO", "+HCOO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}, {"C", 1}, {"O", 2}}))},
+            {AdductType.CHHHCOOm, new Adduct("+CH3COO", "+CH3COO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))} /*,
+            {AdductType.Clm, new Adduct("+Cl", "+Cl⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Cl", 1}}))}*/
         };
         
         public static Dictionary<string, AdductType> ADDUCT_POSITIONS = ALL_ADDUCTS.Keys.ToDictionary(k=>ALL_ADDUCTS[k].name, k=>k);

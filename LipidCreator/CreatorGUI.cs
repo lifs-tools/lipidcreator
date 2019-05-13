@@ -3254,13 +3254,10 @@ namespace LipidCreator
             
             
             string adductsStr = "";
-            if (currentRegisteredLipid.adducts["+H"]) adductsStr += "+H⁺";
-            if (currentRegisteredLipid.adducts["+2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+2H⁺⁺";
-            if (currentRegisteredLipid.adducts["+NH4"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+NH4⁺";
-            if (currentRegisteredLipid.adducts["-H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-H⁻";
-            if (currentRegisteredLipid.adducts["-2H"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "-2H⁻ ⁻";
-            if (currentRegisteredLipid.adducts["+HCOO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+HCOO⁻";
-            if (currentRegisteredLipid.adducts["+CH3COO"]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + "+CH3COO⁻";
+            foreach (Adduct adduct in Lipid.ALL_ADDUCTS.Values)
+            {
+                if (currentRegisteredLipid.adducts[adduct.name]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + adduct.visualization;
+            }
             row["Adducts"] = adductsStr;
             
             string filtersStr = "";

@@ -66,6 +66,9 @@ namespace LipidCreator
             {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new Molecule[]{}, Molecule.S)}
         };
         
+        
+        
+        
         public static Dictionary<string, Molecule> ELEMENT_POSITIONS = new Dictionary<string, Molecule>(){
             {"C", Molecule.C},
             {"H", Molecule.H},

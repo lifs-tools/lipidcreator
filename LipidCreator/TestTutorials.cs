@@ -63,7 +63,7 @@ namespace LipidCreator
         public const int STEP_SLEEP = 500;
         public const int KEY_SLEEP = 100;
         public const int ANIMATION_SLEEP = 10;
-        public const double ANIMATION_STEPS = 100.0;
+        public const double ANIMATION_STEPS = 10.0;
         
         
         // Keyboard keys
@@ -532,6 +532,7 @@ namespace LipidCreator
                             break;
                             
                         case (int)SRMSteps.SelectFragments:
+                            ArrayList cursorPosition = new ArrayList();
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
                             DoMouseClick();
                             int hgt = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemHeight;
@@ -543,11 +544,16 @@ namespace LipidCreator
                                     Point p3 = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments);
                                     p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1;
                                     p3.Y += (int)(hgt * (i + 0.5));
-                                    Cursor.Position = p3;
-                                    DoMouseClick();
+                                    cursorPosition.Add(p3);
                                 }
                                 ++i;
                             }
+                            foreach (Point p3 in cursorPosition)
+                            {
+                                Cursor.Position = p3;
+                                DoMouseClick();
+                            }
+                            
                             Cursor.Position = getMiddle(tutorialWindow.next);
                             DoMouseClick();
                             break;
@@ -646,6 +652,7 @@ namespace LipidCreator
                                 {
                                     Cursor.Position = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments, new Point(creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1, (int)(hgtPos * (i6 + 0.5))));
                                     DoMouseClick();
+                                    break;
                                 }
                                 ++i6;
                             }
@@ -924,6 +931,7 @@ namespace LipidCreator
                                     p3.Y += (int)(hgtp * (i + 0.5));
                                     Cursor.Position = p3;
                                     DoMouseClick();
+                                    break;
                                 }
                                 ++i;
                             }
@@ -931,6 +939,7 @@ namespace LipidCreator
                         
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
                             DoMouseClick();
+                            ArrayList cursorPosition = new ArrayList();
                             int hgt = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemHeight;
                             int i3 = 0;
                             foreach (string itemName in creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.Items)
@@ -940,10 +949,15 @@ namespace LipidCreator
                                     Point p3 = getOrigin(creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments);
                                     p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1;
                                     p3.Y += (int)(hgt * (i3 + 0.5));
-                                    Cursor.Position = p3;
-                                    DoMouseClick();
+                                    cursorPosition.Add(p3);
                                 }
                                 ++i3;
+                            }
+                            
+                            foreach (Point p3 in cursorPosition)
+                            {
+                                Cursor.Position = p3;
+                                DoMouseClick();
                             }
                             Cursor.Position = getMiddle(tutorialWindow.next);
                             DoMouseClick();
@@ -965,18 +979,24 @@ namespace LipidCreator
                                 if (itemName == "FA1(+O)")
                                 {
                                     
-                                    Cursor.Position = getOrigin(clb, new Point(0, -40));
                                     keyPress(KEY_ESC);
                                     Point p3 = getOrigin(clb);
-                                    p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 1;
+                                    p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 2;
                                     p3.Y += (int)(hgtn * (i4 + 0.5));
                                     Cursor.Position = p3;
+                                    //Thread.Sleep(200);
                                     DoMouseRightClick();
                                     Thread.Sleep(200);
-                                    p3.X += 20;
-                                    p3.Y += 10;
-                                    Cursor.Position = p3;
-                                    DoMouseClick();
+                                    //creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = true;
+                                    if (creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled)
+                                    {
+                                        p3.X += 20;
+                                        p3.Y += 10;
+                                        Cursor.Position = p3;
+                                        DoMouseClick();
+                                    }
+                                    break;
+                                    
                                 }
                                 ++i4;
                             }

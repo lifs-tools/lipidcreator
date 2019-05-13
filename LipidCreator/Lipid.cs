@@ -52,6 +52,7 @@ namespace LipidCreator
         public string precursorName;
         public string precursorIonFormula;
         public string precursorAdduct;
+        public Adduct adduct;
         public string precursorAdductFormula;
         public double precursorM_Z;
         public int precursorCharge;
@@ -85,6 +86,40 @@ namespace LipidCreator
         public static Dictionary<int, string> chargeToAdduct = new Dictionary<int, string>{{1, "+H"}, {2, "+2H"}, {-1, "-H"}, {-2, "-2H"}};
         
         public static Dictionary<string, int> adductToCharge = new Dictionary<string, int>{{"+H", 1}, {"+2H", 2}, {"+NH4", 1}, {"-H", -1}, {"-2H", -2}, {"+HCOO", -1}, {"+CH3COO", -1}};
+        
+        
+        
+        
+        public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>(){
+            {AdductType.Hp, new Adduct("+H", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}}))},
+            {AdductType.HHp, new Adduct("+2H", 2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 2}}))},
+            {AdductType.NHHHHp, new Adduct("+NH4", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 4}, {"N", 1}}))},
+            {AdductType.Nap, new Adduct("+Na", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Na", 1}}))},
+            {AdductType.Hm, new Adduct("-H", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -1}}))},
+            {AdductType.HHm, new Adduct("-2H", -2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -2}}))},
+            {AdductType.HCOOm, new Adduct("+HCOO", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}, {"C", 1}, {"O", 2}}))},
+            {AdductType.CHHHCOOm, new Adduct("+CH3COO", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))},
+            {AdductType.Clm, new Adduct("+Cl", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Cl", 1}}))}
+        };
+        
+        
+        
+        public static Dictionary<string, AdductType> ADDUCT_POSITIONS = new Dictionary<string, AdductType>(){
+            {"+H", AdductType.Hp},
+            {"+2H", AdductType.HHp},
+            {"+NH4", AdductType.NHHHHp},
+            {"+Na", AdductType.Nap},
+            {"-H", AdductType.Hm},
+            {"-2H", AdductType.HHm},
+            {"+HCOO", AdductType.HCOOm},
+            {"+CH3COO", AdductType.CHHHCOOm},
+            {"+Cl", AdductType.Clm}
+        };
+        
+        
+        
+        
+        
     
         public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {

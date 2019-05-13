@@ -109,6 +109,21 @@ namespace LipidCreator
         }
         
         
+        
+        public static ElementDictionary initializeElementDict(Dictionary<string, int> dict)
+        {
+            ElementDictionary elements = createEmptyElementDict();
+            foreach (KeyValuePair<string, int> elementKvp in dict)
+            {
+                if (ELEMENT_POSITIONS.ContainsKey(elementKvp.Key))
+                {
+                    elements[ELEMENT_POSITIONS[elementKvp.Key]] = elementKvp.Value;
+                }
+            }
+            return elements;
+        }
+        
+        
         public static bool validElementDict(ElementDictionary dict)
         {
             foreach (int count in dict.Values)

@@ -194,6 +194,7 @@
     <Compile Include="IonFormulaParserEventHandler.cs" />
     <Compile Include="Lipid.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="Adduct.cs" />
     <Compile Include="LipidsReview.cs">
       <SubType>Form</SubType>
     </Compile>

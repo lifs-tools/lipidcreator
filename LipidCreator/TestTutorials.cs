@@ -63,7 +63,7 @@ namespace LipidCreator
         public const int STEP_SLEEP = 500;
         public const int KEY_SLEEP = 100;
         public const int ANIMATION_SLEEP = 10;
-        public const double ANIMATION_STEPS = 10.0;
+        public const double ANIMATION_STEPS = 100.0;
         
         
         // Keyboard keys

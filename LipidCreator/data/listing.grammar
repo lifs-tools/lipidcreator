@@ -27,8 +27,9 @@
 //// This is a BNF grammer for lipid subspecies identifiers followed by
 //// J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
 
-/* first rule is always start rule */
+grammar Listing;
 
+/* first rule is always start rule */
 Listing: Token;
 Token: SingleValue | Range | Token Separator Token;
 Range: LowerValue RangeSeparator UpperValue;

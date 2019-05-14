@@ -27,8 +27,9 @@
 //// This is a BNF grammer for lipid subspecies identifiers followed by
 //// J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
 
-/* first rule is always start rule */
+grammar IonFormula;
 
+/* first rule is always start rule */
 Ion_Formula: "[M" Adduct "]" Charge | "[M" Heavy_Molecules Adduct "]" Charge;
 Adduct: "+H" | "+2H" | "+NH4" | "-H" | "-2H" | "+HCOO" | "+CH3COO";
 Charge: Charge_Digit Charge_Sign;

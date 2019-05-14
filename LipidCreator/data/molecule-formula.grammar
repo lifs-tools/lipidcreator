@@ -27,8 +27,9 @@
 //// This is a BNF grammer for lipid subspecies identifiers followed by
 //// J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
 
-/* first rule is always start rule */
+grammar MoleculeFormula;
 
+/* first rule is always start rule */
 Molecule: Molecule_Group;
 Molecule_Group: Element_Group | Single_Element | Molecule_Group Molecule_Group;
 Element_Group: Element Count;

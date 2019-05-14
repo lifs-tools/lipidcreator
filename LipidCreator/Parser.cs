@@ -310,15 +310,33 @@ namespace LipidCreator
                     Console.WriteLine(grammar);
                     throw new Exception("Error: corrupted grammar, last rule has no termininating sign");
                 }
-                
                 ArrayList rules = splitString(grammar, ';', quote);
                 
+                if (rules.Count < 1) return;
+                
+                ArrayList grammarNameRule = splitString((string)rules[0], ' ', quote);
+                if (!grammarNameRule[0].Equals("grammar"))
+                {
+                    throw new Exception("Error: first rule must start with the keyword 'grammar'");
+                }
+                else if (grammarNameRule.Count != 2)
+                {
+                    throw new Exception("Error: incorrect first rule");
+                }
                         
+                int lineCount = 0;
                 foreach (string ruleLine in rules)
                 {
+                    if (lineCount++ == 0) continue;
+                
                     ArrayList tokens_level_1 = new ArrayList();
                     foreach (string t in splitString(ruleLine, ':', quote)) tokens_level_1.Add(strip(t, ' '));
                     if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar rule: '" + ruleLine + "'");
+                    
+                    if (splitString((string)tokens_level_1[0], ' ', quote).Count > 1)
+                    {
+                        throw new Exception("Error: several rule names on left hand side in grammar rule: '" + ruleLine + "'");
+                    }
 
                     string rule = (string)tokens_level_1[0];
                     

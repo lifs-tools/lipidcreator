@@ -3261,13 +3261,20 @@ namespace LipidCreator
             row["Adducts"] = adductsStr;
             
             string filtersStr = "";
-            if (currentRegisteredLipid.onlyPrecursors == 0) filtersStr = "no precursors,\n";
-            else if (currentRegisteredLipid.onlyPrecursors == 1) filtersStr = "only precursors,\n";
-            else if (currentRegisteredLipid.onlyPrecursors == 2) filtersStr = "with precursors,\n";
+            switch (currentRegisteredLipid.onlyPrecursors)
+            {
+                case 0: filtersStr = "no precursors,\n"; break;
+                case 1: filtersStr = "only precursors,\n"; break;
+                case 2: filtersStr = "with precursors,\n"; break;
+            }
             
-            if (currentRegisteredLipid.onlyHeavyLabeled == 0) filtersStr += "no heavy";
-            else if (currentRegisteredLipid.onlyHeavyLabeled == 1) filtersStr += "only heavy";
-            else if (currentRegisteredLipid.onlyHeavyLabeled == 2) filtersStr += "with heavy";
+            switch (currentRegisteredLipid.onlyHeavyLabeled)
+            {
+                case 0: filtersStr += "no heavy"; break;
+                case 1: filtersStr += "only heavy"; break;
+                case 2: filtersStr += "with heavy"; break;
+            }
+            
             row["Filters"] = filtersStr;
             
             return row;
@@ -3292,9 +3299,6 @@ namespace LipidCreator
                     lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
                     lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
-
-    //            lipidsGridview.Invalidate();
-				//lipidsGridview.PerformLayout();
             });
         }
         

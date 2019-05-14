@@ -112,10 +112,6 @@ namespace LipidCreator
         }
         
         
-        public string FaDbToString()
-        {
-            return Convert.ToString(length) + ":" + Convert.ToString(db);
-        }
         
         
         public void updateForHeavyLabeled(ElementDictionary heavyAtomsCount)
@@ -176,7 +172,7 @@ namespace LipidCreator
     {
         public override int GetHashCode(FattyAcid obj)
         {
-            return obj.length * 31 * 31 * 6 + obj.db * 31 + obj.hydroxyl;
+            return obj.length * (LipidCreator.MAX_CARBON_LENGTH + 1) * (LipidCreator.MAX_CARBON_LENGTH + 1) * (LipidCreator.MAX_DB_LENGTH + 1) + obj.db * (LipidCreator.MAX_CARBON_LENGTH + 1) + obj.hydroxyl;
         }
         
         public override bool Equals(FattyAcid obj, FattyAcid obj2)

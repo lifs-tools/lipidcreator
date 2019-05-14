@@ -87,12 +87,10 @@ namespace LipidCreator
             {AdductType.Hp, new Adduct("+H", "+H⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}}))},
             {AdductType.HHp, new Adduct("+2H", "+2H⁺⁺", 2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 2}}))},
             {AdductType.NHHHHp, new Adduct("+NH4", "+NH4⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 4}, {"N", 1}}))},
-            //{AdductType.Nap, new Adduct("+Na", "+Na⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Na", 1}}))},
             {AdductType.Hm, new Adduct("-H", "-H⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -1}}))},
             {AdductType.HHm, new Adduct("-2H", "-2H⁻ ⁻", -2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -2}}))},
             {AdductType.HCOOm, new Adduct("+HCOO", "+HCOO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}, {"C", 1}, {"O", 2}}))},
-            {AdductType.CHHHCOOm, new Adduct("+CH3COO", "+CH3COO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))} /*,
-            {AdductType.Clm, new Adduct("+Cl", "+Cl⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Cl", 1}}))}*/
+            {AdductType.CHHHCOOm, new Adduct("+CH3COO", "+CH3COO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))}
         };
         
         public static Dictionary<string, AdductType> ADDUCT_POSITIONS = ALL_ADDUCTS.Keys.ToDictionary(k=>ALL_ADDUCTS[k].name, k=>k);
@@ -194,12 +192,6 @@ namespace LipidCreator
         public abstract void computePrecursorData(IDictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList);
         
         
-        
-        
-        public static string getAdductAsString(int fragmentCharge, string adduct)
-        {
-            return "[M" + adduct + "]" + (Math.Abs(fragmentCharge)).ToString() + (fragmentCharge > 0 ? "+" : "-");
-        }
         
         
         
@@ -321,19 +313,19 @@ namespace LipidCreator
                 }
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
-                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.FaDbToString());
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
                 }
                 if (fragName.IndexOf("[yy:y]") > -1)
                 {
-                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.FaDbToString());
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
                 }
                 if (fragName.IndexOf("[zz:z]") > -1)
                 {
-                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.FaDbToString());
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
                 }
                 if (fragName.IndexOf("[uu:u]") > -1)
                 {
-                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.FaDbToString());
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
                 }
                 if (fragName.IndexOf("[xx:x;x]") > -1)
                 {
@@ -346,13 +338,12 @@ namespace LipidCreator
                 insertedFragments.Add(fragName + "/" + fragAdduct);
                 
                 
-                double fragMZ = massFragment / (double)(Math.Abs(fragment.fragmentAdduct.charge));
                 string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);
                 
                 lipidRow[LipidCreator.PRODUCT_NAME] = fragName;
                 lipidRow[LipidCreator.PRODUCT_NEUTRAL_FORMULA] = chemFormFragment;
                 lipidRow[LipidCreator.PRODUCT_ADDUCT] = fragAdduct;
-                lipidRow[LipidCreator.PRODUCT_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", fragMZ).Replace(",", "");
+                lipidRow[LipidCreator.PRODUCT_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", massFragment).Replace(",", "");
                 lipidRow[LipidCreator.PRODUCT_CHARGE] = fragCharge;
                 lipidRow[LipidCreator.NOTE] = "";
                 transitionList.Rows.Add(lipidRow);
@@ -588,7 +579,7 @@ namespace LipidCreator
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
-                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge) / (double)(Math.Abs(fragment.fragmentAdduct.charge));
+                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 string fragName = fragment.fragmentName;
                 
                 if (precursorData.lipidCategory == LipidCategory.LipidMediator)
@@ -734,50 +725,6 @@ namespace LipidCreator
             }
         }
         
-        
-        /*
-        public static int getChargeAndAddAdduct(ElementDictionary atomsCount, String adduct)
-        {
-            int charge = 0;
-            switch (adduct)
-            {                                                                              
-                case "+H":
-                    atomsCount[Molecule.H] += 1;
-                    charge = 1;
-                    break;
-                case "+2H":
-                    atomsCount[Molecule.H] += 2;
-                    charge = 2;
-                    break;
-                case "+NH4":
-                    atomsCount[Molecule.H] += 4;
-                    atomsCount[Molecule.N] += 1;
-                    charge = 1;
-                    break;
-                case "-H":
-                    atomsCount[Molecule.H] -= 1;
-                    charge = -1;
-                    break;
-                case "-2H":
-                    atomsCount[Molecule.H] -= 2;
-                    charge = -2;
-                    break;
-                case "+HCOO":
-                    atomsCount[Molecule.H] += 1;
-                    atomsCount[Molecule.C] += 1;
-                    atomsCount[Molecule.O] += 2;
-                    charge = -1;
-                    break;
-                case "+CH3COO":
-                    atomsCount[Molecule.C] += 2;
-                    atomsCount[Molecule.H] += 3;
-                    atomsCount[Molecule.O] += 2;
-                    charge = -1;
-                    break;
-            }
-            return charge;
-        }
-        */
         
         
         public virtual void import(XElement node, string importVersion)

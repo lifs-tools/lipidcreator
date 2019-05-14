@@ -360,7 +360,7 @@ namespace LipidCreator
                             precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
                             charge = precursorAdduct.charge;
                             MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
-                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(precursorElements, charge);
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             row[LipidCreator.PRECURSOR_CHARGE] = Convert.ToString(charge);
                             break;
@@ -382,7 +382,7 @@ namespace LipidCreator
                             precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
                             charge = precursorAdduct.charge;
                             MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
-                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(precursorElements, charge);
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
                                 throw new WrongFormatException("mass invalid\n\nEither delete 'Precursor Ion m/z' or 'Precursor Molecule Formula'", LipidCreator.PRECURSOR_MZ);
@@ -402,7 +402,7 @@ namespace LipidCreator
                             precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
                             charge = precursorAdduct.charge;
                             MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
-                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(precursorElements, charge);
                             row[LipidCreator.PRECURSOR_MZ] = string.Format("{0:N4}", mass);
                             if (charge != precursorChargeInt)
                             {
@@ -432,7 +432,7 @@ namespace LipidCreator
                             precursorAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[precursorAdductName]];
                             charge = precursorAdduct.charge;
                             MS2Fragment.addCounts(precursorElements, precursorAdduct.elements);
-                            mass = LipidCreator.computeMass(precursorElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(precursorElements, charge);
                             if (Math.Abs(mass - precursorMassDB) > 0.01)
                             {
                                 throw new WrongFormatException("mass invalid\n\nEither delete 'Precursor Ion m/z' or 'Precursor Molecule Formula'", LipidCreator.PRECURSOR_MZ);
@@ -519,7 +519,7 @@ namespace LipidCreator
                             productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
                             charge = productAdduct.charge;
                             MS2Fragment.addCounts(productElements, productAdduct.elements);
-                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(productElements, charge);
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             row[LipidCreator.PRODUCT_CHARGE] = Convert.ToString(charge);
                             break;
@@ -541,7 +541,7 @@ namespace LipidCreator
                             productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
                             charge = productAdduct.charge;
                             MS2Fragment.addCounts(productElements, productAdduct.elements);
-                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(productElements, charge);
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
                                 throw new WrongFormatException("mass invalid\n\nEither delete 'Product Ion m/z' or 'Product Molecule Formula'", LipidCreator.PRODUCT_MZ);
@@ -561,7 +561,7 @@ namespace LipidCreator
                             productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
                             charge = productAdduct.charge;
                             MS2Fragment.addCounts(productElements, productAdduct.elements);
-                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(productElements, charge);
                             row[LipidCreator.PRODUCT_MZ] = string.Format("{0:N4}", mass);
                             if (charge != productChargeInt)
                             {
@@ -582,7 +582,7 @@ namespace LipidCreator
                             productAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[productAdductName]];
                             charge = productAdduct.charge;
                             MS2Fragment.addCounts(productElements, productAdduct.elements);
-                            mass = LipidCreator.computeMass(productElements, charge) / (double)(Math.Abs(charge));
+                            mass = LipidCreator.computeMass(productElements, charge);
                             if (Math.Abs(mass - productMassDB) > 0.01)
                             {
                                 throw new WrongFormatException("mass invalid\n\nEither delete 'Product Ion m/z' or 'Product Molecule Formula'", LipidCreator.PRODUCT_MZ);

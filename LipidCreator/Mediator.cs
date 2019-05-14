@@ -141,7 +141,7 @@ namespace LipidCreator
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;
-                    precursorData.precursorM_Z = mass / (double)(Math.Abs(charge));
+                    precursorData.precursorM_Z = mass;
                     precursorData.atomsCount = headgroups[headgroup].elements;
                     precursorData.fa1 = null;
                     precursorData.fa2 = null;

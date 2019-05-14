@@ -71,8 +71,6 @@ namespace LipidCreator
         [NonSerialized]
         public SkylineToolClient skylineToolClient;
         public bool openedAsExternal;
-        public HashSet<string> lysoSphingoLipids;
-        public HashSet<string> lysoPhosphoLipids;
         public IDictionary<string, InstrumentData> msInstruments;
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
@@ -109,6 +107,8 @@ namespace LipidCreator
         public static int MAX_LCB_HYDROXY_LENGTH = 3;
         public static int MIN_SPHINGO_FA_HYDROXY_LENGTH = 0;
         public static int MAX_SPHINGO_FA_HYDROXY_LENGTH = 3;
+        
+        public static double ELECTRON_REST_MASS = 0.00054857990946;
         
         public const char QUOTE = '"';
         public const string MOLECULE_LIST_NAME = "Molecule List Name";
@@ -526,8 +526,6 @@ namespace LipidCreator
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
             precursorDataList = new ArrayList();
-            lysoSphingoLipids = new HashSet<string>();
-            lysoPhosphoLipids = new HashSet<string>();
             msInstruments = new Dictionary<string, InstrumentData>();
             collisionEnergyHandler = new CollisionEnergy();
             availableInstruments = new ArrayList();
@@ -535,7 +533,8 @@ namespace LipidCreator
             readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
-            foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys) {
+            foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys)
+            {
                 availableInstruments.Add(instrument);
             }
             
@@ -568,7 +567,9 @@ namespace LipidCreator
         
         
         // parser for reading the csv lines with comma separation and "" quotation (if present)
-        // using a Moore automaton based approach
+        // using a Moore automaton based approach. I avoided to write a grammar based parser,
+        // because this solution runs in O(n) whereas our Cocke-Younger-Kasami algorithm needs
+        // O(n^3) runtime
         public static string[] parseLine(string line, char separator = ',', char quote = QUOTE)
         {
             List<string> listTokens = new List<string>();
@@ -1054,7 +1055,7 @@ namespace LipidCreator
             {
                 mass += row.Value * MS2Fragment.ALL_ELEMENTS[row.Key].mass;
             }
-            return mass - charge * 0.00054857990946;
+            return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);
         }
         
         

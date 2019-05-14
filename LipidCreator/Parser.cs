@@ -307,6 +307,7 @@ namespace LipidCreator
                 grammar = strip(sb.ToString().Replace("\n", ""), ' ');
                 if (grammar[grammar.Length - 1] != ';')
                 {
+                    Console.WriteLine(grammar);
                     throw new Exception("Error: corrupted grammar, last rule has no termininating sign");
                 }
                 

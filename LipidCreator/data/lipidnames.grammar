@@ -27,7 +27,7 @@
 //// This is a BNF grammer for lipid subspecies identifiers followed by
 //// J.K. Pauling et al. 2017, PLoS One, 12(11):e0188394. 
 
-/* first rule is always start rule */;
+/* first rule is always start rule */
 lipid: lipid_pure | lipid_pure adductInfo;
 lipid_pure: GL | PL | SL | Cholesterol | MediatorC;
 
@@ -135,4 +135,4 @@ Carbon_DB_separator: ":";
 DB_hydroxyl_separator: ";";
 DB_position_separator: ",";
 round_open_bracket: "(";
-round_close_bracket: ")"
+round_close_bracket: ")";

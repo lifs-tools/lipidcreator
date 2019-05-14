@@ -30,9 +30,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace LipidCreator
 {    
+    
+    public enum Context {NoContext, InLineComment, InLongComment, InQuote};
+    public enum MatchWords {LineCommentStart, LineCommentEnd, LongCommentStart, LongCommentEnd, Quote};
     
     [Serializable]
     public class Parser
@@ -56,7 +60,6 @@ namespace LipidCreator
                 return current;
             }
         }
-        
         
         
         
@@ -213,112 +216,191 @@ namespace LipidCreator
             
             if (File.Exists(grammarFilename))
             {
-                int lineCounter = 0;
-                
                 Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
+                
+                // read in grammar
+                StringBuilder sb = new StringBuilder();
                 using (StreamReader sr = new StreamReader(grammarFilename))
                 {
                     string line;
                     while((line = sr.ReadLine()) != null)
                     {
-                    
-                        lineCounter++;
-                        
-                        // skip empty lines and comments
-                        if (line.Length < 1) continue;
-                        line = strip(line, ' ');
-                        if (line[0] == '#') continue;
-                        if (line.Length < 1) continue;
-                        line = strip(line, ' ');
-                        if (line.Length < 2) continue;
-                        
-                        ArrayList tokens_level_1 = new ArrayList();
-                        foreach (string t in splitString(line, '=', quote)) tokens_level_1.Add(strip(t, ' '));
-                        if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar, line " + lineCounter);
-
-                        string rule = (string)tokens_level_1[0];
-                        
-                        ArrayList products = new ArrayList();
-                        foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
-                        
-                        if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
-                        long newRuleIndex = ruleToNT[rule];
-                        
-                        if (!NTtoRule.ContainsKey(newRuleIndex)) NTtoRule.Add(newRuleIndex, rule);
-                        
-                        
-                        foreach (string product in products)
-                        {
-                            LinkedList<string> nonTerminals = new LinkedList<string>();
-                            ExtendedLinkedList<long> nonTerminalRules = new ExtendedLinkedList<long>();
-                            foreach (string NT in splitString(product, ' ', quote))
+                        sb.Append(line).Append("\n");
+                    }
+                }
+                sb.Append("\n");
+                
+                string grammar = sb.ToString();
+                int grammarLength = grammar.Length;
+                sb.Clear();
+                
+                // deleting comments
+                ArrayList matches = new ArrayList();
+                for (int i = 0; i < grammarLength - 1; ++i)
+                {
+                    if (grammar[i] == '/' && grammar[i + 1] == '/') matches.Add(new int[]{(int)MatchWords.LineCommentStart, i});
+                    if (grammar[i] == '\n') matches.Add(new int[]{(int)MatchWords.LineCommentEnd, i});
+                    if (grammar[i] == '/' && grammar[i + 1] == '*') matches.Add(new int[]{(int)MatchWords.LongCommentStart, i});
+                    if (grammar[i] == '*' && grammar[i + 1] == '/') matches.Add(new int[]{(int)MatchWords.LongCommentEnd, i});
+                    if (grammar[i] == quote) matches.Add(new int[]{(int)MatchWords.Quote, i});
+                }
+                
+                
+                Context currentContext = Context.NoContext;
+                int currentPosition = 0;
+                foreach (int[] match in matches)
+                {
+                    switch (currentContext)
+                    {
+                        case Context.NoContext:
+                            if (match[0] == (int)MatchWords.LongCommentStart)
                             {
-                                string stripedNT = strip(NT, ' ');
-                                if (stripedNT[0] == '#') break;
-                                nonTerminals.AddLast(stripedNT);
+                                sb.Append(grammar.Substring(currentPosition, match[1] - currentPosition));
+                                currentContext = Context.InLongComment;
                             }
-                            
-                            string NTFirst = nonTerminals.First.Value;
-                            if (nonTerminals.Count > 1 || !isTerminal(NTFirst, quote) || NTFirst.Length != 3)
+                            else if (match[0] == (int)MatchWords.LineCommentStart)
                             {
+                                sb.Append(grammar.Substring(currentPosition, match[1] - currentPosition));
+                                currentContext = Context.InLineComment;
+                            }
+                            else if (match[0] == (int)MatchWords.Quote)
+                            {
+                                currentContext = Context.InQuote;
+                            } 
+                            break;
                             
-                                foreach (string nonTerminal in nonTerminals)
+                            
+                            
+                        case Context.InQuote:
+                            if (match[0] == (int)MatchWords.Quote)
+                            {
+                                currentContext = Context.NoContext;
+                            }
+                            break;
+                            
+                            
+                        case Context.InLineComment:
+                            if (match[0] == (int)MatchWords.LineCommentEnd)
+                            {
+                                currentContext = Context.NoContext;
+                                currentPosition = match[1] + 1;
+                            }
+                            break;
+                            
+                        case Context.InLongComment:
+                            if (match[0] == (int)MatchWords.LongCommentEnd)
+                            {
+                                currentContext = Context.NoContext;
+                                currentPosition = match[1] + 2;
+                            }
+                            break;
+                    }
+                }
+                if (currentContext == Context.NoContext)
+                {
+                    sb.Append(grammar.Substring(currentPosition, grammarLength - currentPosition));
+                }
+                else
+                {
+                    throw new Exception("Error: corrupted grammar, ends either in comment or quote");
+                }
+                grammar = strip(sb.ToString().Replace("\n", ""), ' ');
+                if (grammar[grammar.Length - 1] != ';')
+                {
+                    throw new Exception("Error: corrupted grammar, last rule has no termininating sign");
+                }
+                
+                ArrayList rules = splitString(grammar, ';', quote);
+                
+                        
+                foreach (string ruleLine in rules)
+                {
+                    ArrayList tokens_level_1 = new ArrayList();
+                    foreach (string t in splitString(ruleLine, ':', quote)) tokens_level_1.Add(strip(t, ' '));
+                    if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar rule: '" + ruleLine + "'");
+
+                    string rule = (string)tokens_level_1[0];
+                    
+                    ArrayList products = new ArrayList();
+                    foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
+                    
+                    if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
+                    long newRuleIndex = ruleToNT[rule];
+                    
+                    if (!NTtoRule.ContainsKey(newRuleIndex)) NTtoRule.Add(newRuleIndex, rule);
+                    
+                    
+                    foreach (string product in products)
+                    {
+                        LinkedList<string> nonTerminals = new LinkedList<string>();
+                        ExtendedLinkedList<long> nonTerminalRules = new ExtendedLinkedList<long>();
+                        foreach (string NT in splitString(product, ' ', quote))
+                        {
+                            string stripedNT = strip(NT, ' ');
+                            if (stripedNT[0] == '#') break;
+                            nonTerminals.AddLast(stripedNT);
+                        }
+                        
+                        string NTFirst = nonTerminals.First.Value;
+                        if (nonTerminals.Count > 1 || !isTerminal(NTFirst, quote) || NTFirst.Length != 3)
+                        {
+                        
+                            foreach (string nonTerminal in nonTerminals)
+                            {
+                                if (isTerminal(nonTerminal, quote))
                                 {
-                                    if (isTerminal(nonTerminal, quote))
+                                    nonTerminalRules.AddLast(addTerminal(nonTerminal));
+                                }
+                                else
+                                {
+                                    if (!ruleToNT.ContainsKey(nonTerminal))
                                     {
-                                        nonTerminalRules.AddLast(addTerminal(nonTerminal));
+                                        ruleToNT[nonTerminal] = getNextFreeRuleIndex();
                                     }
-                                    else
-                                    {
-                                        if (!ruleToNT.ContainsKey(nonTerminal))
-                                        {
-                                            ruleToNT[nonTerminal] = getNextFreeRuleIndex();
-                                        }
-                                        nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
-                                    }
+                                    nonTerminalRules.AddLast(ruleToNT[nonTerminal]);
                                 }
                             }
-                            else
-                            {
-                                char c = NTFirst[1];
-                                if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<long>();
-                                TtoNT[c].Add(newRuleIndex);
-                            }
+                        }
+                        else
+                        {
+                            char c = NTFirst[1];
+                            if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<long>();
+                            TtoNT[c].Add(newRuleIndex);
+                        }
+                        
+                        
+                        // more than two rules, insert intermediate rule indexes
+                        while (nonTerminalRules.Count > 2)
+                        {
+                            long ruleIndex2 = nonTerminalRules.PopLast();
+                            long ruleIndex1 = nonTerminalRules.PopLast();
                             
+                            long key = computeRuleKey(ruleIndex1, ruleIndex2);
+                            long nextIndex = getNextFreeRuleIndex();
+                            if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
+                            NTtoNT[key].Add(nextIndex);
+                            nonTerminalRules.AddLast(nextIndex);
+                        }    
+                        
                             
-                            // more than two rules, insert intermediate rule indexes
-                            while (nonTerminalRules.Count > 2)
-                            {
-                                long ruleIndex2 = nonTerminalRules.PopLast();
-                                long ruleIndex1 = nonTerminalRules.PopLast();
-                                
-                                long key = computeRuleKey(ruleIndex1, ruleIndex2);
-                                long nextIndex = getNextFreeRuleIndex();
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
-                                NTtoNT[key].Add(nextIndex);
-                                nonTerminalRules.AddLast(nextIndex);
-                            }    
+                        // two product rules
+                        if (nonTerminalRules.Count == 2)
+                        {
+                            long ruleIndex1 = nonTerminalRules.PopFirst();
+                            long ruleIndex2 = nonTerminalRules.PopFirst();
+                            long key = computeRuleKey(ruleIndex1, ruleIndex2);
+                            if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
+                            NTtoNT[key].Add(newRuleIndex);
                             
-                                
-                            // two product rules
-                            if (nonTerminalRules.Count == 2)
-                            {
-                                long ruleIndex1 = nonTerminalRules.PopFirst();
-                                long ruleIndex2 = nonTerminalRules.PopFirst();
-                                long key = computeRuleKey(ruleIndex1, ruleIndex2);
-                                if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
-                                NTtoNT[key].Add(newRuleIndex);
-                                
-                            }
-                            // only one product rule
-                            else if (nonTerminalRules.Count == 1)
-                            {
-                                long ruleIndex1 = nonTerminalRules.First.Value;
-                                if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
-                                
-                                if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<long>());
-                                NTtoNT[ruleIndex1].Add(newRuleIndex);
-                            }
+                        }
+                        // only one product rule
+                        else if (nonTerminalRules.Count == 1)
+                        {
+                            long ruleIndex1 = nonTerminalRules.First.Value;
+                            if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                            
+                            if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<long>());
+                            NTtoNT[ruleIndex1].Add(newRuleIndex);
                         }
                     }
                 }

@@ -404,7 +404,6 @@ namespace LipidCreator
                             long key = computeRuleKey(ruleIndex1, ruleIndex2);
                             if (!NTtoNT.ContainsKey(key)) NTtoNT.Add(key, new HashSet<long>());
                             NTtoNT[key].Add(newRuleIndex);
-                            
                         }
                         // only one product rule
                         else if (nonTerminalRules.Count == 1)
@@ -511,8 +510,19 @@ namespace LipidCreator
         
         public static string strip(string text, char stripChar)
         {
-            while (text.Length > 0 && text[0] == stripChar) text = text.Substring(1, text.Length - 1);
-            while (text.Length > 0 && text[text.Length - 1] == stripChar) text = text.Substring(0, text.Length - 1);
+            if (text.Length > 0)
+            {
+                int st = 0;
+                while (st < text.Length - 1 && text[st] == stripChar) ++st;
+                text = text.Substring(st, text.Length - st);
+            }
+            
+            if (text.Length > 0)
+            {
+                int en = 0;
+                while (en < text.Length - 1 && text[text.Length - 1 - en] == stripChar) ++en;
+                text = text.Substring(0, text.Length - en);
+            }
             return text;
         }
         
@@ -719,7 +729,7 @@ namespace LipidCreator
                     int jp1 = j + 1;
                     
                     foreach(int k in Ks[j].getBitPositions())
-                    {   
+                    {
                         if (k >= i) break;
                         if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
                         

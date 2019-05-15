@@ -200,6 +200,9 @@ namespace LipidCreator
         public BaseParserEventHandler parserEventHandler;
         public const int SHIFT = 32;
         public const long MASK = (1L << SHIFT) - 1;
+        public const char RULE_ASSIGNMENT = ':';
+        public const char RULE_SEPARATOR = '|';
+        public const char RULE_TERMINAL = ';';
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
@@ -222,7 +225,11 @@ namespace LipidCreator
                 int grammarLength = grammar.Length;
                 
                 
-                // deleting comments to prepare for splitting in rules
+                // deleting comments to prepare for splitting the grammar in rules.
+                // Therefore, we have to consider three different contexts, namely
+                // within a quote, within a line comment, within a long comment.
+                // As long as we are in one context, key words for starting / ending
+                // the other contexts have to be ignored.
                 StringBuilder sb = new StringBuilder();
                 Context currentContext = Context.NoContext;
                 int currentPosition = 0;
@@ -298,12 +305,11 @@ namespace LipidCreator
                     throw new Exception("Error: corrupted grammar, ends either in comment or quote");
                 }
                 grammar = strip(sb.ToString().Replace("\n", ""), ' ');
-                if (grammar[grammar.Length - 1] != ';')
+                if (grammar[grammar.Length - 1] != RULE_TERMINAL)
                 {
-                    Console.WriteLine(grammar);
                     throw new Exception("Error: corrupted grammar, last rule has no termininating sign");
                 }
-                ArrayList rules = splitString(grammar, ';', quote);
+                ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
                 
                 if (rules.Count < 1) return;
                 
@@ -317,15 +323,13 @@ namespace LipidCreator
                     throw new Exception("Error: incorrect first rule");
                 }
                    
-                   
+                
                 // interpret the rules and create the structure for parsing
-                int lineCount = 0;
+                rules.RemoveAt(0);
                 foreach (string ruleLine in rules)
                 {
-                    if (lineCount++ == 0) continue;
-                
                     ArrayList tokens_level_1 = new ArrayList();
-                    foreach (string t in splitString(ruleLine, ':', quote)) tokens_level_1.Add(strip(t, ' '));
+                    foreach (string t in splitString(ruleLine, RULE_ASSIGNMENT, quote)) tokens_level_1.Add(strip(t, ' '));
                     if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar rule: '" + ruleLine + "'");
                     
                     if (splitString((string)tokens_level_1[0], ' ', quote).Count > 1)
@@ -336,7 +340,7 @@ namespace LipidCreator
                     string rule = (string)tokens_level_1[0];
                     
                     ArrayList products = new ArrayList();
-                    foreach (string p in splitString((string)tokens_level_1[1], '|', quote)) products.Add(strip(p, ' '));
+                    foreach (string p in splitString((string)tokens_level_1[1], RULE_SEPARATOR, quote)) products.Add(strip(p, ' '));
                     
                     if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, getNextFreeRuleIndex());
                     long newRuleIndex = ruleToNT[rule];

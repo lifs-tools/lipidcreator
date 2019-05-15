@@ -30,7 +30,6 @@
 
 grammar LipidNames;
 
-
 /* first rule is always start rule */
 lipid: lipid_pure | lipid_pure adductInfo;
 lipid_pure: GL | PL | SL | Cholesterol | MediatorC;

@@ -96,7 +96,7 @@ namespace LipidCreator
             foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
         }
         
-        public override string ToString()
+        public string ToString(bool fullFormat = true)
         {
             string key = Convert.ToString(length) + ":" + Convert.ToString(db);
             if (isLCB)
@@ -105,8 +105,11 @@ namespace LipidCreator
             }
             else
             {
-                if (hydroxyl > 0) key += ";" + Convert.ToString(hydroxyl);
-                key += suffix;
+                if (fullFormat)
+                {
+                    if (hydroxyl > 0) key += ";" + Convert.ToString(hydroxyl);
+                    key += suffix;
+                }
             }
             return key;
         }

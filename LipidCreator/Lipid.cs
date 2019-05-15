@@ -313,19 +313,19 @@ namespace LipidCreator
                 }
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
-                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString(false));
                 }
                 if (fragName.IndexOf("[yy:y]") > -1)
                 {
-                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString(false));
                 }
                 if (fragName.IndexOf("[zz:z]") > -1)
                 {
-                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString(false));
                 }
                 if (fragName.IndexOf("[uu:u]") > -1)
                 {
-                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString(false));
                 }
                 if (fragName.IndexOf("[xx:x;x]") > -1)
                 {
@@ -594,19 +594,19 @@ namespace LipidCreator
                 
                 if (fragName.IndexOf("[xx:x]") > -1)
                 {
-                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString());
+                    fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString(false));
                 }
                 if (fragName.IndexOf("[yy:y]") > -1)
                 {
-                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString());
+                    fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString(false));
                 }
                 if (fragName.IndexOf("[zz:z]") > -1)
                 {
-                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString());
+                    fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString(false));
                 }
                 if (fragName.IndexOf("[uu:u]") > -1)
                 {
-                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString());
+                    fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString(false));
                 }
                 if (fragName.IndexOf("[xx:x;x]") > -1)
                 {

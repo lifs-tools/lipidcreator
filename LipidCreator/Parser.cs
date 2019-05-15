@@ -304,7 +304,7 @@ namespace LipidCreator
                 {
                     throw new Exception("Error: corrupted grammar, ends either in comment or quote");
                 }
-                grammar = strip(sb.ToString().Replace("\n", ""), ' ');
+                grammar = strip(sb.ToString().Replace("\n", "").Replace("\\\\", "\\"), ' ');
                 if (grammar[grammar.Length - 1] != RULE_TERMINAL)
                 {
                     throw new Exception("Error: corrupted grammar, last rule has no termininating sign");

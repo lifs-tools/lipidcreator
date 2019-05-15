@@ -214,7 +214,7 @@ namespace LipidCreator
             {
                 return Convert.ToInt32(charge);
             }
-            catch (Exception e)
+            catch
             {
                 throw new WrongFormatException("charge invalid", colName);
             }
@@ -228,7 +228,7 @@ namespace LipidCreator
             {
                 return Convert.ToDouble(mass.Replace(",", "."), CultureInfo.InvariantCulture);
             }
-            catch (Exception e)
+            catch
             {
                 throw new WrongFormatException("mass invalid", colName);
             }
@@ -266,7 +266,7 @@ namespace LipidCreator
                     validNames = (string)row[LipidCreator.MOLECULE_LIST_NAME];
                     if (validNames.Length == 0) throw new Exception();
                 }
-                catch (Exception e)
+                catch
                 {
                     selectCell(rowLine, LipidCreator.MOLECULE_LIST_NAME);
                     MessageBox.Show("Error in row " + (rowLine + 1) + ": molecule list name invalid", "Sanity check");
@@ -279,7 +279,7 @@ namespace LipidCreator
                     validNames = (string)row[LipidCreator.PRECURSOR_NAME];
                     if (validNames.Length == 0) throw new Exception();
                 }
-                catch (Exception e)
+                catch
                 {
                     selectCell(rowLine, LipidCreator.PRECURSOR_NAME);
                     MessageBox.Show("Error in row " + (rowLine + 1) + ": precursor name invalid", "Sanity check");
@@ -291,7 +291,7 @@ namespace LipidCreator
                     validNames = (string)row[LipidCreator.PRODUCT_NAME];
                     if (validNames.Length == 0) throw new Exception();
                 }
-                catch (Exception e)
+                catch
                 {
                     selectCell(rowLine, LipidCreator.PRODUCT_NAME);
                     MessageBox.Show("Error in row " + (rowLine + 1) + ": product name invalid", "Sanity check");
@@ -305,25 +305,25 @@ namespace LipidCreator
                 {
                     precursorMoluculeFormula = (string)row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     precursorIonFormula = (string)row[LipidCreator.PRECURSOR_ADDUCT];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     precursorMass = (string)row[LipidCreator.PRECURSOR_MZ];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     precursorCharge = (string)row[LipidCreator.PRECURSOR_CHARGE];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 
                 
@@ -465,25 +465,25 @@ namespace LipidCreator
                 {
                     productMoluculeFormula = (string)row[LipidCreator.PRODUCT_NEUTRAL_FORMULA];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     productIonFormula = (string)row[LipidCreator.PRODUCT_ADDUCT];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     productMass = (string)row[LipidCreator.PRODUCT_MZ];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 try
                 {
                     productCharge = (string)row[LipidCreator.PRODUCT_CHARGE];
                 }
-                catch (Exception e) {}
+                catch {}
                 
                 
                 int productState = (productMoluculeFormula.Length > 0 ? 1 : 0) | (productIonFormula.Length > 0 ? 2 : 0) | (productMass.Length > 0 ? 4 : 0) | (productCharge.Length > 0 ? 8 : 0);

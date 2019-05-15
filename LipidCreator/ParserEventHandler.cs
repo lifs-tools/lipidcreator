@@ -51,50 +51,50 @@ namespace LipidCreator
             registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
             registeredEvents.Add("lipid_post_event", lipidPostEvent);
             
-            registeredEvents.Add("FA_pre_event", FAPreEvent);
-            registeredEvents.Add("FA_post_event", FAPostEvent);
+            registeredEvents.Add("fa_pre_event", FAPreEvent);
+            registeredEvents.Add("fa_post_event", FAPostEvent);
             
-            registeredEvents.Add("LCB_pre_event", LCBPreEvent);
-            registeredEvents.Add("LCB_post_event", LCBPostEvent);
-            registeredEvents.Add("Carbon_pre_event", CarbonPreEvent);
-            registeredEvents.Add("DB_count_pre_event", DB_countPreEvent);
-            registeredEvents.Add("Hydroxyl_pre_event", HydroxylPreEvent);
-            registeredEvents.Add("Old_Hydroxyl_pre_event", OldHydroxylPreEvent);
-            registeredEvents.Add("Ether_pre_event", EtherPreEvent);
+            registeredEvents.Add("lcb_pre_event", LCBPreEvent);
+            registeredEvents.Add("lcb_post_event", LCBPostEvent);
+            registeredEvents.Add("carbon_pre_event", CarbonPreEvent);
+            registeredEvents.Add("db_count_pre_event", DB_countPreEvent);
+            registeredEvents.Add("hydroxyl_pre_event", HydroxylPreEvent);
+            registeredEvents.Add("old_Hydroxyl_pre_event", OldHydroxylPreEvent);
+            registeredEvents.Add("ether_pre_event", EtherPreEvent);
             
-            registeredEvents.Add("GL_pre_event", GLPreEvent);
-            registeredEvents.Add("PL_pre_event", PLPreEvent);
-            registeredEvents.Add("SL_pre_event", SLPreEvent);
-            registeredEvents.Add("Cholesterol_pre_event", CholesterolPreEvent);
-            registeredEvents.Add("Mediator_pre_event", MediatorPreEvent);
+            registeredEvents.Add("gl_pre_event", GLPreEvent);
+            registeredEvents.Add("pl_pre_event", PLPreEvent);
+            registeredEvents.Add("sl_pre_event", SLPreEvent);
+            registeredEvents.Add("cholesterol_pre_event", CholesterolPreEvent);
+            registeredEvents.Add("mediator_pre_event", MediatorPreEvent);
             
-            registeredEvents.Add("HG_MGL_pre_event", HG_MGLPreEvent);
-            registeredEvents.Add("HG_DGL_pre_event", HG_DGLPreEvent);
-            registeredEvents.Add("HG_SGL_pre_event", HG_SGLPreEvent);
-            registeredEvents.Add("HG_TGL_pre_event", HG_TGLPreEvent);
+            registeredEvents.Add("hg_mgl_pre_event", HG_MGLPreEvent);
+            registeredEvents.Add("hg_dgl_pre_event", HG_DGLPreEvent);
+            registeredEvents.Add("hg_sgl_pre_event", HG_SGLPreEvent);
+            registeredEvents.Add("hg_tgl_pre_event", HG_TGLPreEvent);
             
-            registeredEvents.Add("HG_CL_pre_event", HG_CLPreEvent);
-            registeredEvents.Add("HG_MLCL_pre_event", HG_MLCLPreEvent);
-            registeredEvents.Add("HG_PL_pre_event", HG_PLPreEvent);
-            registeredEvents.Add("HG_LPL_pre_event", HG_LPLPreEvent);
-            registeredEvents.Add("HG_LPL-O_pre_event", HG_LPL_OPreEvent);
-            registeredEvents.Add("HG_PL-O_pre_event", HG_PL_OPreEvent);
+            registeredEvents.Add("hg_cl_pre_event", HG_CLPreEvent);
+            registeredEvents.Add("hg_mlcl_pre_event", HG_MLCLPreEvent);
+            registeredEvents.Add("hg_pl_pre_event", HG_PLPreEvent);
+            registeredEvents.Add("hg_lpl_pre_event", HG_LPLPreEvent);
+            registeredEvents.Add("hg_lpl_o_pre_event", HG_LPL_OPreEvent);
+            registeredEvents.Add("hg_pl_o_pre_event", HG_PL_OPreEvent);
             
-            registeredEvents.Add("HG_LSL_pre_event", HG_LSLPreEvent);
-            registeredEvents.Add("HG_DSL_pre_event", HG_DSLPreEvent);
+            registeredEvents.Add("hg_lsl_pre_event", HG_LSLPreEvent);
+            registeredEvents.Add("hg_dsl_pre_event", HG_DSLPreEvent);
             
-            registeredEvents.Add("Ch_pre_event", ChPreEvent);
-            registeredEvents.Add("HG_ChE_pre_event", HG_ChEPreEvent);
+            registeredEvents.Add("ch_pre_event", ChPreEvent);
+            registeredEvents.Add("hg_che_pre_event", HG_ChEPreEvent);
             
-            registeredEvents.Add("DPL_post_event", DPLPostEvent);
-            registeredEvents.Add("DPL-O_post_event", DPLPostEvent);
-            registeredEvents.Add("SL_post_event", SLPostEvent);
-            registeredEvents.Add("Mediator_post_event", MediatorPostEvent);
+            registeredEvents.Add("dpl_post_event", DPLPostEvent);
+            registeredEvents.Add("dpl_o_post_event", DPLPostEvent);
+            registeredEvents.Add("sl_post_event", SLPostEvent);
+            registeredEvents.Add("mediator_post_event", MediatorPostEvent);
             
             registeredEvents.Add("adduct_pre_event", adductPreEvent);
             registeredEvents.Add("charge_pre_event", chargePreEvent);
             registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
-            registeredEvents.Add("sorted_FA_separator_pre_event", sortedFASeparatorPreEvent);
+            registeredEvents.Add("sorted_fa_separator_pre_event", sortedFASeparatorPreEvent);
         }
         
         

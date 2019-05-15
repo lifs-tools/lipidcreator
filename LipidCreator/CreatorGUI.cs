@@ -346,7 +346,7 @@ namespace LipidCreator
                     deleteColumn.HeaderText = "Delete";
                     deleteColumn.ValuesAreIcons = false;
                     lipidsGridview.Columns.Add(deleteColumn);
-                    int w = (lipidsGridview.Width - 160) / (numCols - 1) - 4;
+                    //int w = (lipidsGridview.Width - 160) / (numCols - 1) - 4;
                     foreach (DataGridViewColumn col in lipidsGridview.Columns)
                     {
                         col.Frozen = false;

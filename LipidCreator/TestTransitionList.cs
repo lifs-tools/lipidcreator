@@ -78,8 +78,8 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
-            string grammarFilename = "data/lipidnames.grammar";
-            char quote = '"';
+            string grammarFilename = "data/goslin/Goslin.g4";
+            char quote = '\'';
             ParserEventHandler parserEventHandler = new ParserEventHandler(lcf);
             Parser parser = new Parser(parserEventHandler, grammarFilename, quote);
             

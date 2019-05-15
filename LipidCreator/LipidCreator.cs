@@ -559,7 +559,7 @@ namespace LipidCreator
             lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
             
             parserEventHandler = new ParserEventHandler(this);
-            lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/lipidnames.grammar", QUOTE);
+            lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/goslin/Goslin.g4", '\'');
             
             listingParserEventHandler = new ListingParserEventHandler();
             listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", QUOTE);
@@ -1130,8 +1130,8 @@ namespace LipidCreator
         public static ArrayList createRandomLipidNames(int num = 1)
         {
         
-            string grammarFilename = "data/lipidnames.grammar";
-            char quote = '"';
+            string grammarFilename = "data/goslin/Goslin.g4";
+            char quote = '\'';
             ArrayList lipidNames = new ArrayList();
             if (File.Exists(grammarFilename))
             {
@@ -1707,7 +1707,7 @@ namespace LipidCreator
                 {
                     ((IDisposable)skylineToolClient).Dispose();
                 }
-                catch (System.TimeoutException e)
+                catch
                 {
                     log.Warn("Disposing SkylineToolClient timed out!");
                 }

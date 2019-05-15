@@ -445,7 +445,7 @@ namespace LipidCreator
                                     doc = XDocument.Load(inputCSV);
                                     lc.import(doc);
                                 }
-                                catch (Exception ex)
+                                catch
                                 {
                                     lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
                                 }

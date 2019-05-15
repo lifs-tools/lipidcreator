@@ -68,11 +68,11 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             
-            string grammarFilename = "data/lipidnames.grammar";
+            string grammarFilename = "data/goslin/Goslin.g4";
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
-            Parser p = new Parser(peh, grammarFilename, LipidCreator.QUOTE);
+            Parser p = new Parser(peh, grammarFilename, '\'');
             
             
             

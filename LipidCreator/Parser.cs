@@ -36,7 +36,7 @@ namespace LipidCreator
 {    
     
     public enum Context {NoContext, InLineComment, InLongComment, InQuote};
-    public enum MatchWords {LineCommentStart, LineCommentEnd, LongCommentStart, LongCommentEnd, Quote};
+    public enum MatchWords {NoMatch, LineCommentStart, LineCommentEnd, LongCommentStart, LongCommentEnd, Quote};
     
     [Serializable]
     public class Parser
@@ -218,82 +218,75 @@ namespace LipidCreator
             {
                 Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
                 
-                // read in grammar
-                StringBuilder sb = new StringBuilder();
-                using (StreamReader sr = new StreamReader(grammarFilename))
-                {
-                    string line;
-                    while((line = sr.ReadLine()) != null)
-                    {
-                        sb.Append(line).Append("\n");
-                    }
-                }
-                sb.Append("\n");
-                
-                string grammar = sb.ToString();
+                string grammar = File.ReadAllText(grammarFilename) + "\n";
                 int grammarLength = grammar.Length;
-                sb.Clear();
-                
-                // deleting comments
-                ArrayList matches = new ArrayList();
-                for (int i = 0; i < grammarLength - 1; ++i)
-                {
-                    if (grammar[i] == '/' && grammar[i + 1] == '/') matches.Add(new int[]{(int)MatchWords.LineCommentStart, i});
-                    if (grammar[i] == '\n') matches.Add(new int[]{(int)MatchWords.LineCommentEnd, i});
-                    if (grammar[i] == '/' && grammar[i + 1] == '*') matches.Add(new int[]{(int)MatchWords.LongCommentStart, i});
-                    if (grammar[i] == '*' && grammar[i + 1] == '/') matches.Add(new int[]{(int)MatchWords.LongCommentEnd, i});
-                    if (grammar[i] == quote) matches.Add(new int[]{(int)MatchWords.Quote, i});
-                }
                 
                 
+                // deleting comments to prepare for splitting in rules
+                StringBuilder sb = new StringBuilder();
                 Context currentContext = Context.NoContext;
                 int currentPosition = 0;
-                foreach (int[] match in matches)
+                for (int i = 0; i < grammarLength - 1; ++i)
                 {
-                    switch (currentContext)
+                    MatchWords match = MatchWords.NoMatch;
+                
+                    if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
+                    else if (grammar[i] == '\n') match = MatchWords.LineCommentEnd;
+                    else if (grammar[i] == '/' && grammar[i + 1] == '*') match = MatchWords.LongCommentStart;
+                    else if (grammar[i] == '*' && grammar[i + 1] == '/') match = MatchWords.LongCommentEnd;
+                    else if (grammar[i] == quote) match = MatchWords.Quote;
+                    
+                    if (match != MatchWords.NoMatch)
                     {
-                        case Context.NoContext:
-                            if (match[0] == (int)MatchWords.LongCommentStart)
-                            {
-                                sb.Append(grammar.Substring(currentPosition, match[1] - currentPosition));
-                                currentContext = Context.InLongComment;
-                            }
-                            else if (match[0] == (int)MatchWords.LineCommentStart)
-                            {
-                                sb.Append(grammar.Substring(currentPosition, match[1] - currentPosition));
-                                currentContext = Context.InLineComment;
-                            }
-                            else if (match[0] == (int)MatchWords.Quote)
-                            {
-                                currentContext = Context.InQuote;
-                            } 
-                            break;
-                            
-                            
-                            
-                        case Context.InQuote:
-                            if (match[0] == (int)MatchWords.Quote)
-                            {
-                                currentContext = Context.NoContext;
-                            }
-                            break;
-                            
-                            
-                        case Context.InLineComment:
-                            if (match[0] == (int)MatchWords.LineCommentEnd)
-                            {
-                                currentContext = Context.NoContext;
-                                currentPosition = match[1] + 1;
-                            }
-                            break;
-                            
-                        case Context.InLongComment:
-                            if (match[0] == (int)MatchWords.LongCommentEnd)
-                            {
-                                currentContext = Context.NoContext;
-                                currentPosition = match[1] + 2;
-                            }
-                            break;
+                        switch (currentContext)
+                        {
+                            case Context.NoContext:
+                                switch (match)
+                                {
+                                    case MatchWords.LongCommentStart:
+                                        sb.Append(grammar.Substring(currentPosition, i - currentPosition));
+                                        currentContext = Context.InLongComment;
+                                        break;
+                                        
+                                    case MatchWords.LineCommentStart:
+                                        sb.Append(grammar.Substring(currentPosition, i - currentPosition));
+                                        currentContext = Context.InLineComment;
+                                        break;
+                                        
+                                    case MatchWords.Quote:
+                                        currentContext = Context.InQuote;
+                                        break;
+                                        
+                                    default:
+                                        break;
+                                } 
+                                break;
+                                
+                                
+                            case Context.InQuote:
+                                if (match == MatchWords.Quote)
+                                {
+                                    currentContext = Context.NoContext;
+                                }
+                                break;
+                                
+                                
+                            case Context.InLineComment:
+                                if (match == MatchWords.LineCommentEnd)
+                                {
+                                    currentContext = Context.NoContext;
+                                    currentPosition = i + 1;
+                                }
+                                break;
+                                
+                            case Context.InLongComment:
+                                if (match == MatchWords.LongCommentEnd)
+                                {
+                                    currentContext = Context.NoContext;
+                                    currentPosition = i + 2;
+                                }
+                                break;
+                        }
                     }
                 }
                 if (currentContext == Context.NoContext)
@@ -323,7 +316,9 @@ namespace LipidCreator
                 {
                     throw new Exception("Error: incorrect first rule");
                 }
-                        
+                   
+                   
+                // interpret the rules and create the structure for parsing
                 int lineCount = 0;
                 foreach (string ruleLine in rules)
                 {
@@ -356,7 +351,6 @@ namespace LipidCreator
                         foreach (string NT in splitString(product, ' ', quote))
                         {
                             string stripedNT = strip(NT, ' ');
-                            if (stripedNT[0] == '#') break;
                             nonTerminals.AddLast(stripedNT);
                         }
                         

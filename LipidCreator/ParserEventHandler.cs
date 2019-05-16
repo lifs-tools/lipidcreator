@@ -41,6 +41,7 @@ namespace LipidCreator
         public bool sortedSeparator;
         public bool expectsEther;
         public int ethers;
+        public bool makeUnsupported = false;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -96,7 +97,11 @@ namespace LipidCreator
             registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
             registeredEvents.Add("sorted_fa_separator_pre_event", sortedFASeparatorPreEvent);
             
-            registeredEvents.Add("heavy_pre_event", heavyPreEvent);
+            registeredEvents.Add("heavy_pre_event", unsupportedEvent);
+            registeredEvents.Add("gl_species_pre_event", unsupportedEvent);
+            registeredEvents.Add("pl_species_pre_event", unsupportedEvent);
+            registeredEvents.Add("sl_species_pre_event", unsupportedEvent);
+            
         }
         
         
@@ -145,13 +150,19 @@ namespace LipidCreator
             {
                 lipid = null;
             }
+            
+            if (lipid == null && makeUnsupported)
+            {
+                lipid = new UnsupportedLipid(lipidCreator);
+            }
         }
         
         
         
-        public void heavyPreEvent(Parser.TreeNode node)
+        public void unsupportedEvent(Parser.TreeNode node)
         {
-            lipid = new UnsupportedLipid(lipidCreator);
+            lipid = null;
+            makeUnsupported = true;
         }
         
         
@@ -189,7 +200,8 @@ namespace LipidCreator
                     }
                     if (gpl.fag2.faTypes["FAp"] || gpl.fag2.faTypes["FAa"])
                     {
-                        lipid = new UnsupportedLipid(lipidCreator);
+                        lipid = null;
+                        makeUnsupported = true;
                     }
                 }
                 else
@@ -291,7 +303,8 @@ namespace LipidCreator
                 // it's not a bug, it's a feature ;-)
                 if (fag.faTypes["FAp"] && (new List<int>(fag.doubleBondCounts))[0] == 0)
                 {
-                    lipid = new UnsupportedLipid(lipidCreator);
+                    lipid = null;
+                    makeUnsupported = true;
                 }
             }
             

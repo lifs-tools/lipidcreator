@@ -556,7 +556,7 @@ namespace LipidCreator
             
             
             lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/lipidmaps.grammar", QUOTE);
+            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/goslin/lipidmaps.g4", QUOTE);
             
             parserEventHandler = new ParserEventHandler(this);
             lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/goslin/Goslin.g4", '\'');

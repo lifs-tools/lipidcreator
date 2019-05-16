@@ -208,6 +208,7 @@ namespace LipidCreator
         public const long EOF_RULE = 1;
         public const long START_RULE = 2;
         public bool usedEOF = false;
+        public string grammarName = "";
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
@@ -241,15 +242,21 @@ namespace LipidCreator
                 StringBuilder sb = new StringBuilder();
                 Context currentContext = Context.NoContext;
                 int currentPosition = 0;
+                int lastEscapedBackslash = -1;
                 for (int i = 0; i < grammarLength - 1; ++i)
                 {
                     MatchWords match = MatchWords.NoMatch;
+                    if (i > 0 && grammar[i] == '\\' && lastEscapedBackslash != i - 1)
+                    {
+                        lastEscapedBackslash = i;
+                        continue;
+                    }
                 
                     if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
                     else if (grammar[i] == '\n') match = MatchWords.LineCommentEnd;
                     else if (grammar[i] == '/' && grammar[i + 1] == '*') match = MatchWords.LongCommentStart;
                     else if (grammar[i] == '*' && grammar[i + 1] == '/') match = MatchWords.LongCommentEnd;
-                    else if (grammar[i] == quote) match = MatchWords.Quote;
+                    else if (grammar[i] == quote && !(i >= 1 && grammar[i - 1] == '\\' && i - 1 != lastEscapedBackslash)) match = MatchWords.Quote;
                     
                     if (match != MatchWords.NoMatch)
                     {
@@ -310,12 +317,12 @@ namespace LipidCreator
                 }
                 else
                 {
-                    throw new Exception("Error: corrupted grammar, ends either in comment or quote");
+                    throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
                 }
                 grammar = strip(sb.ToString().Replace("\n", "").Replace("\\\\", "\\"), ' ');
                 if (grammar[grammar.Length - 1] != RULE_TERMINAL)
                 {
-                    throw new Exception("Error: corrupted grammar, last rule has no termininating sign");
+                    throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign");
                 }
                 ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
                 
@@ -330,6 +337,7 @@ namespace LipidCreator
                 {
                     throw new Exception("Error: incorrect first rule");
                 }
+                grammarName = (string)grammarNameRule[1];
                    
                 
                 // interpret the rules and create the structure for parsing
@@ -550,15 +558,7 @@ namespace LipidCreator
         // checking if string is terminal
         public static bool isTerminal(string productToken, char quote)
         {
-            int cnt = 0;
-            foreach(char c in productToken) cnt += (c == quote) ? 1 : 0;
-            if (cnt != 0 && cnt != 2) throw new Exception("Error: corrupted token in grammar");
-            
-            if (cnt == 0) return false;
-        
-            if (productToken[0] == quote && productToken[productToken.Length - 1] == quote && productToken.Length > 2) return true;
-
-            throw new Exception("Error: corrupted token in grammar");
+            return (productToken[0] == quote && productToken[productToken.Length - 1] == quote && productToken.Length > 2);
         }
         
         

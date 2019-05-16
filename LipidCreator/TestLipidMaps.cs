@@ -45,7 +45,7 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
         
-            string grammarFilename = "data/lipidmaps.grammar";
+            string grammarFilename = "data/goslin/lipidmaps.g4";
             char quote = '"';
             int lineCounter;
             

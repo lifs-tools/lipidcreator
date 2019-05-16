@@ -189,7 +189,7 @@ namespace LipidCreator
         
         
         
-        public uint nextFreeRuleIndex;
+        public long nextFreeRuleIndex;
         public Dictionary<char, HashSet<long>> TtoNT;
         public Dictionary<long, HashSet<long>> NTtoNT;
         public char quote;
@@ -203,11 +203,16 @@ namespace LipidCreator
         public const char RULE_ASSIGNMENT = ':';
         public const char RULE_SEPARATOR = '|';
         public const char RULE_TERMINAL = ';';
+        public const string EOF_RULE_NAME = "EOF";
+        public const char EOF_SIGN = '\0';
+        public const long EOF_RULE = 1;
+        public const long START_RULE = 2;
+        public bool usedEOF = false;
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
         {
-            nextFreeRuleIndex = 1;
+            nextFreeRuleIndex = START_RULE;
             TtoNT = new Dictionary<char, HashSet<long>>();
             NTtoNT = new Dictionary<long, HashSet<long>>();
             NTtoRule = new Dictionary<long, string>();
@@ -217,9 +222,12 @@ namespace LipidCreator
             wordInGrammar = false;
             
             
+            
             if (File.Exists(grammarFilename))
             {
                 Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
+                ruleToNT.Add(EOF_RULE_NAME, EOF_RULE);
+                TtoNT.Add(EOF_SIGN, new HashSet<long>(){EOF_RULE});
                 
                 string grammar = File.ReadAllText(grammarFilename) + "\n";
                 int grammarLength = grammar.Length;
@@ -339,6 +347,11 @@ namespace LipidCreator
 
                     string rule = (string)tokens_level_1[0];
                     
+                    if (rule.Equals(EOF_RULE_NAME))
+                    {
+                        throw new Exception("Error: rule name is not allowed to be called EOF");
+                    }
+                    
                     ArrayList products = new ArrayList();
                     foreach (string p in splitString((string)tokens_level_1[1], RULE_SEPARATOR, quote)) products.Add(strip(p, ' '));
                     
@@ -356,6 +369,7 @@ namespace LipidCreator
                         {
                             string stripedNT = strip(NT, ' ');
                             nonTerminals.AddLast(stripedNT);
+                            usedEOF |= stripedNT.Equals(EOF_RULE_NAME);
                         }
                         
                         string NTFirst = nonTerminals.First.Value;
@@ -637,7 +651,7 @@ namespace LipidCreator
                 string nodeRuleName = node.fireEvent ? NTtoRule[node.ruleIndex] : "";
                 if (node.fireEvent) parserEventHandler.handleEvent(nodeRuleName + "_pre_event", node);
                 
-                if (node.terminal == '\0') // node.terminal is != null when node is leaf
+                if (node.left != null) // node.terminal is != null when node is leaf
                 {
                     raiseEvents(node.left);
                     if (node.right != null) raiseEvents(node.right);
@@ -691,6 +705,8 @@ namespace LipidCreator
         // re-implementation of Cocke-Younger-Kasami algorithm
         public void parse(string textToParse)
         {
+            if (usedEOF) textToParse += EOF_SIGN;
+            
             wordInGrammar = false;
             parseTree = null;
             int n = textToParse.Length;
@@ -756,15 +772,15 @@ namespace LipidCreator
                 }
             }
             
-            
-            
-            if (dpTable[0][n - 1].ContainsKey(1)) // 1 => start rule
-            {
-                wordInGrammar = true;
-                parseTree = new TreeNode(1, NTtoRule.ContainsKey(1));
-                fillTree(parseTree, dpTable[0][n - 1][1]);
+            for (int i = n - 1; i > 0; --i){
+                if (dpTable[0][i].ContainsKey(START_RULE))
+                {
+                    wordInGrammar = true;
+                    parseTree = new TreeNode(START_RULE, NTtoRule.ContainsKey(START_RULE));
+                    fillTree(parseTree, dpTable[0][i][START_RULE]);
+                    break;
+                }
             }
-            
         }
     }    
 }

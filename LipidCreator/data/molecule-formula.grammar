@@ -30,7 +30,8 @@
 grammar MoleculeFormula;
 
 /* first rule is always start rule */
-Molecule: Molecule_Group;
+Molecule: Molecule_Rule EOF;
+Molecule_Rule: Molecule_Group;
 Molecule_Group: Element_Group | Single_Element | Molecule_Group Molecule_Group;
 Element_Group: Element Count;
 Single_Element: Element;

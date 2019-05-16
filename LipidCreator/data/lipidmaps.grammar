@@ -30,7 +30,8 @@
 grammar LipidMaps;
 
 /* first rule is always start rule */
-lipid: lipid_mono | lipid_mono isotope;
+lipid: lipid_rule EOF;
+lipid_rule: lipid_mono | lipid_mono isotope;
 lipid_mono: lipid_pure | lipid_pure isoform;
 lipid_pure: Pure_FA | GL | PL | SL | Cholesterol | Mediator;
 isoform: square_open_bracket "rac" square_close_bracket | square_open_bracket "iso" Number square_close_bracket;

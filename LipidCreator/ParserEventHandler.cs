@@ -95,6 +95,8 @@ namespace LipidCreator
             registeredEvents.Add("charge_pre_event", chargePreEvent);
             registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
             registeredEvents.Add("sorted_fa_separator_pre_event", sortedFASeparatorPreEvent);
+            
+            registeredEvents.Add("heavy_pre_event", heavyPreEvent);
         }
         
         
@@ -145,6 +147,12 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        public void heavyPreEvent(Parser.TreeNode node)
+        {
+            lipid = new UnsupportedLipid(lipidCreator);
+        }
         
         
         

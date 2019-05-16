@@ -30,7 +30,8 @@
 grammar IonFormula;
 
 /* first rule is always start rule */
-Ion_Formula: "[M" Adduct "]" Charge | "[M" Heavy_Molecules Adduct "]" Charge;
+Ion_Formula: Ion_Formula_Rule EOF;
+Ion_Formula_Rule: "[M" Adduct "]" Charge | "[M" Heavy_Molecules Adduct "]" Charge;
 Adduct: "+H" | "+2H" | "+NH4" | "-H" | "-2H" | "+HCOO" | "+CH3COO";
 Charge: Charge_Digit Charge_Sign;
 Charge_Digit: Digit;

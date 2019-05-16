@@ -30,7 +30,8 @@
 grammar Listing;
 
 /* first rule is always start rule */
-Listing: Token;
+Listing: ListingRule EOF;
+ListingRule: Token;
 Token: SingleValue | Range | Token Separator Token;
 Range: LowerValue RangeSeparator UpperValue;
 

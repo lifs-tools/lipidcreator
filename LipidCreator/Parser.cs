@@ -246,7 +246,7 @@ namespace LipidCreator
                 for (int i = 0; i < grammarLength - 1; ++i)
                 {
                     MatchWords match = MatchWords.NoMatch;
-                    if (i > 0 && grammar[i] == '\\' && lastEscapedBackslash != i - 1)
+                    if (i > 0 && grammar[i] == '\\' && grammar[i - 1] == '\\' && lastEscapedBackslash != i - 1)
                     {
                         lastEscapedBackslash = i;
                         continue;

@@ -47,61 +47,55 @@ namespace LipidCreator
             registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
             registeredEvents.Add("lipid_post_event", lipidPostEvent);
             
-            registeredEvents.Add("Pure_FA_pre_event", PureFAPreEvent);
+            registeredEvents.Add("pure_fa_pre_event", PureFAPreEvent);
             
-            registeredEvents.Add("FA_pre_event", FAPreEvent);
-            registeredEvents.Add("FA_post_event", FAPostEvent);
+            registeredEvents.Add("fa_pre_event", FAPreEvent);
+            registeredEvents.Add("fa_post_event", FAPostEvent);
+            registeredEvents.Add("lcb_pre_event", LCBPreEvent);
+            registeredEvents.Add("lcb_post_event", LCBPostEvent);
             
-            registeredEvents.Add("LCB_pre_event", LCBPreEvent);
-            registeredEvents.Add("LCB_post_event", LCBPostEvent);
-            
-            registeredEvents.Add("Carbon_pre_event", CarbonPreEvent);
-            registeredEvents.Add("DB_count_pre_event", DB_countPreEvent);
-            registeredEvents.Add("Hydroxyl_pre_event", HydroxylPreEvent);
-            registeredEvents.Add("Hydroxyl_LCB_pre_event", HydroxylLCBPreEvent);
-            registeredEvents.Add("Ether_pre_event", EtherPreEvent);
+            registeredEvents.Add("carbon_pre_event", CarbonPreEvent);
+            registeredEvents.Add("db_count_pre_event", DB_countPreEvent);
+            registeredEvents.Add("hydroxyl_pre_event", HydroxylPreEvent);
+            registeredEvents.Add("hydroxyl_lcb_pre_event", HydroxylLCBPreEvent);
+            registeredEvents.Add("ether_pre_event", EtherPreEvent);
             registeredEvents.Add("mod_text_pre_event", mod_textPreEvent);
             
-            registeredEvents.Add("GL_pre_event", GLPreEvent);
-            registeredEvents.Add("PL_pre_event", PLPreEvent);
-            registeredEvents.Add("PL_post_event", PLPostEvent);
-            registeredEvents.Add("SL_pre_event", SLPreEvent);
-            registeredEvents.Add("Cholesterol_pre_event", CholesterolPreEvent);
-            registeredEvents.Add("Mediator_pre_event", MediatorPreEvent);
+            registeredEvents.Add("gl_pre_event", GLPreEvent);
+            registeredEvents.Add("pl_pre_event", PLPreEvent);
+            registeredEvents.Add("pl_post_event", PLPostEvent);
+            registeredEvents.Add("sl_pre_event", SLPreEvent);
+            registeredEvents.Add("sl_post_event", SLPostEvent);
+            registeredEvents.Add("cholesterol_pre_event", CholesterolPreEvent);
+            registeredEvents.Add("mediator_pre_event", MediatorPreEvent);
             
-            registeredEvents.Add("HG_SGL_pre_event", HG_SGLPreEvent);
-            registeredEvents.Add("HG_GL_pre_event", HG_GLPreEvent);
+            registeredEvents.Add("hg_sgl_pre_event", HG_SGLPreEvent);
+            registeredEvents.Add("hg_gl_pre_event", HG_GLPreEvent);
             
-            registeredEvents.Add("HG_CL_pre_event", HG_CLPreEvent);
-            registeredEvents.Add("HG_DPL_pre_event", HG_DPLPreEvent);
-            registeredEvents.Add("HG_LPL_pre_event", HG_LPLPreEvent);
-            registeredEvents.Add("HG_4PL_pre_event", HG_4PLPreEvent);
+            registeredEvents.Add("hg_cl_pre_event", HG_CLPreEvent);
+            registeredEvents.Add("hg_dpl_pre_event", HG_DPLPreEvent);
+            registeredEvents.Add("hg_lpl_pre_event", HG_LPLPreEvent);
+            registeredEvents.Add("hg_fourpl_pre_event", HG_4PLPreEvent);
             
-            registeredEvents.Add("HG_DSL_pre_event", HG_DSLPreEvent);
-            registeredEvents.Add("HG_LSL_pre_event", HG_LSLPreEvent);
-            registeredEvents.Add("SL_post_event", SLPostEvent);
-            registeredEvents.Add("SphingoXine_pre_event", SphingoXinePreEvent);
-            registeredEvents.Add("SphingoXine_post_event", SphingoXinePostEvent);
-            registeredEvents.Add("SphingoXine_pure_pre_event", SphingoXine_purePreEvent);
-            registeredEvents.Add("Sphingosine_name_pre_event", Sphingosine_namePreEvent);
-            registeredEvents.Add("Sphinganine_name_pre_event", Sphinganine_namePreEvent);
-            registeredEvents.Add("CType_pre_event", CTypePreEvent);
+            registeredEvents.Add("hg_dsl_pre_event", HG_DSLPreEvent);
+            registeredEvents.Add("hg_lsl_pre_event", HG_LSLPreEvent);
+            registeredEvents.Add("sphingoxine_pre_event", SphingoXinePreEvent);
+            registeredEvents.Add("sphingoxine_post_event", SphingoXinePostEvent);
+            registeredEvents.Add("sphingoxine_pure_pre_event", SphingoXine_purePreEvent);
+            registeredEvents.Add("sphingosine_name_pre_event", Sphingosine_namePreEvent);
+            registeredEvents.Add("sphinganine_name_pre_event", Sphinganine_namePreEvent);
+            registeredEvents.Add("ctype_pre_event", CTypePreEvent);
             
+            registeredEvents.Add("ch_pre_event", ChPreEvent);
+            registeredEvents.Add("hg_che_pre_event", HG_ChEPreEvent);
             
-            
-            registeredEvents.Add("Ch_pre_event", ChPreEvent);
-            registeredEvents.Add("HG_ChE_pre_event", HG_ChEPreEvent);
-            
-            
-            
-            
-            registeredEvents.Add("Mediator_post_event", MediatorPostEvent);
-            registeredEvents.Add("Mediator_Number_pure_pre_event", MediatorAssemble);
-            registeredEvents.Add("Mediator_Oxo_pre_event", Mediator_OxoPreEvent);
-            registeredEvents.Add("Mediator_Name_separator_pre_event", MediatorAssemble);
-            registeredEvents.Add("Mediator_separator_pre_event", MediatorAssemble);
-            registeredEvents.Add("Mediator_Var_Name_pre_event", MediatorAssemble);
-            registeredEvents.Add("Mediator_Const_pre_event", MediatorAssemble);
+            registeredEvents.Add("mediator_post_event", MediatorPostEvent);
+            registeredEvents.Add("mediator_number_pure_pre_event", MediatorAssemble);
+            registeredEvents.Add("mediator_oxo_pre_event", Mediator_OxoPreEvent);
+            registeredEvents.Add("mediator_name_separator_pre_event", MediatorAssemble);
+            registeredEvents.Add("mediator_separator_pre_event", MediatorAssemble);
+            registeredEvents.Add("mediator_var_name_pre_event", MediatorAssemble);
+            registeredEvents.Add("mediator_const_pre_event", MediatorAssemble);
             
         }
         

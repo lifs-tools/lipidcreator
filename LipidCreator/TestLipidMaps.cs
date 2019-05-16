@@ -73,7 +73,8 @@ namespace LipidCreator
                             if (line.Length < 2) continue;
                             if (line[0] == '#') continue;
                             
-                            string[] tokens = LipidCreator.parseLine(line);
+                            string[] tokens = LipidCreator.parseLine(line, ',', '"');
+                            if (tokens.Length < 2 || tokens[1].Equals("")) continue;
                             parser.parse(tokens[0]);
                             string translatedName = "";
                             if (parser.wordInGrammar)
@@ -89,19 +90,22 @@ namespace LipidCreator
                                         Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', no precursor created!");
                                         Environment.Exit(-1);
                                     }
-                                    translatedName =  ((PrecursorData)precursorDataList[0]).precursorName;
+                                    translatedName = ((PrecursorData)precursorDataList[0]).precursorName;
                                     usedKeys.Clear();
                                     precursorDataList.Clear();
                                 }
-                            }
                             
-                            if (tokens.Length >= 2)
-                            {
                                 if (tokens[1] != translatedName)
                                 {
                                     Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', got '" + translatedName + "'!");
                                     Environment.Exit(-1);
                                 }
+                            }
+                            
+                            else
+                            {
+                                Console.WriteLine("Error: could not parse '" + tokens[0] + "'!");
+                                Environment.Exit(-1);
                             }
                         }
                     }

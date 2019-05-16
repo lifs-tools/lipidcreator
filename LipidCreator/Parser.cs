@@ -246,10 +246,11 @@ namespace LipidCreator
                 for (int i = 0; i < grammarLength - 1; ++i)
                 {
                     MatchWords match = MatchWords.NoMatch;
+                    
                     if (i > 0 && grammar[i] == '\\' && grammar[i - 1] == '\\' && lastEscapedBackslash != i - 1)
                     {
                         lastEscapedBackslash = i;
-                        continue;
+                        //continue;
                     }
                 
                     if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
@@ -319,7 +320,7 @@ namespace LipidCreator
                 {
                     throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
                 }
-                grammar = strip(sb.ToString().Replace("\n", "").Replace("\\\\", "\\"), ' ');
+                grammar = strip(sb.ToString().Replace("\n", ""), ' ');
                 if (grammar[grammar.Length - 1] != RULE_TERMINAL)
                 {
                     throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign");
@@ -344,6 +345,7 @@ namespace LipidCreator
                 rules.RemoveAt(0);
                 foreach (string ruleLine in rules)
                 {
+                
                     ArrayList tokens_level_1 = new ArrayList();
                     foreach (string t in splitString(ruleLine, RULE_ASSIGNMENT, quote)) tokens_level_1.Add(strip(t, ' '));
                     if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar rule: '" + ruleLine + "'");
@@ -376,6 +378,7 @@ namespace LipidCreator
                         foreach (string NT in splitString(product, ' ', quote))
                         {
                             string stripedNT = strip(NT, ' ');
+                            if (isTerminal(stripedNT, quote)) stripedNT = deEscape(stripedNT, quote);
                             nonTerminals.AddLast(stripedNT);
                             usedEOF |= stripedNT.Equals(EOF_RULE_NAME);
                         }
@@ -497,19 +500,27 @@ namespace LipidCreator
         
         
         
+        
+        
         public static ArrayList splitString(string text, char separator, char quote)
         {
             bool inQuote = false;
             ArrayList tokens = new ArrayList();
             string token = "";
+            int lastChar = '\0';
+            bool lastEscapedBackslash = false;
             
             foreach (char c in text)
             {
+                bool escapedBackslash = false;
                 if (!inQuote)
                 {
                     if (c == separator)
                     {
-                        if (token.Length > 0) tokens.Add(token);
+                        if (token.Length > 0)
+                        {
+                            tokens.Add(token);
+                        }
                         token = "";
                     }
                     else
@@ -520,12 +531,24 @@ namespace LipidCreator
                 }
                 else
                 {
-                    if (c == quote) inQuote = !inQuote;
+                    if (c == '\\' && lastChar == '\\' && !lastEscapedBackslash)
+                    {
+                        escapedBackslash = true;
+                    }
+                    else
+                    {
+                        if (c == quote && !(lastChar == '\\' && !lastEscapedBackslash)) inQuote = !inQuote;
+                    }
                     token += c;
                 }
+                lastEscapedBackslash = escapedBackslash;
+                lastChar = c;
             }
                     
-            if (token.Length > 0) tokens.Add(token);
+            if (token.Length > 0)
+            {
+                tokens.Add(token);
+            }
             if (inQuote) throw new Exception("Error: corrupted token in grammar");
             
             return tokens;
@@ -564,13 +587,46 @@ namespace LipidCreator
         
         
         
+        public string deEscape(string text, char quote)
+        {
+            // remove the escape chars
+            StringBuilder sb = new StringBuilder();
+            sb.Append(quote);
+            bool lastEscapeChar = false;
+            for (int i = 1; i < text.Length - 1; ++i)
+            {
+                char c = text[i];
+                bool escapeChar = false;
+                if (c == '\\')
+                {
+                    if (!lastEscapeChar)
+                    {
+                        escapeChar = true;
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                }
+                else 
+                {
+                    sb.Append(c);
+                }
+                lastEscapeChar = escapeChar;
+            }
+            sb.Append(quote);
+            return sb.ToString();
+        }
+        
+        
+        
         // splitting the whole terminal in a tree structure where characters of terminal are the leafs and the inner nodes are added non terminal rules
         public long addTerminal(string text)
         {
-            text = strip(text, quote);
             ExtendedLinkedList<long> terminalRules = new ExtendedLinkedList<long>();
-            foreach (char c in text)
+            for (int i = 1; i < text.Length - 1; ++i)
             {
+                char c = text[i];
                 if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new HashSet<long>());
                 long nextIndex = getNextFreeRuleIndex();
                 TtoNT[c].Add(nextIndex);

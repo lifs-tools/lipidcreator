@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text;
 using log4net;
 
 namespace LipidCreator
@@ -65,18 +66,17 @@ namespace LipidCreator
         }
         
         
-        public override string serialize()
+        public override void serialize(StringBuilder sb)
         {
-            string xml = "<lipid type=\"SL\" isLyso=\"" + isLyso + "\">\n";
-            xml += lcb.serialize();
-            xml += fag.serialize();
+            sb.Append("<lipid type=\"SL\" isLyso=\"" + isLyso + "\">\n");
+            lcb.serialize(sb);
+            fag.serialize(sb);
             foreach (string headgroup in headGroupNames)
             {
-                xml += "<headGroup>" + headgroup + "</headGroup>\n";
+                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
             }
-            xml += base.serialize();
-            xml += "</lipid>\n";
-            return xml;
+            base.serialize(sb);
+            sb.Append("</lipid>\n");
         }
         
         // synchronize the fragment list with list from LipidCreator root

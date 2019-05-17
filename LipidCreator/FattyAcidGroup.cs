@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Text;
 
 namespace LipidCreator
 {   
@@ -161,35 +162,34 @@ namespace LipidCreator
             }
         }
         
-        public string serialize()
+        public void serialize(StringBuilder sb)
         {
-            string xml = "<FattyAcidGroup";
-            xml += " chainType=\"" + chainType + "\"";
-            xml += " isLCB=\"" + isLCB + "\"";
-            xml += " lengthInfo=\"" + lengthInfo + "\"";
-            xml += " dbInfo=\"" + dbInfo + "\"";
-            xml += " hydroxylInfo=\"" + hydroxylInfo + "\">\n";
+            sb.Append("<FattyAcidGroup");
+            sb.Append(" chainType=\"" + chainType + "\"");
+            sb.Append(" isLCB=\"" + isLCB + "\"");
+            sb.Append(" lengthInfo=\"" + lengthInfo + "\"");
+            sb.Append(" dbInfo=\"" + dbInfo + "\"");
+            sb.Append(" hydroxylInfo=\"" + hydroxylInfo + "\">\n");
             foreach (KeyValuePair<String, bool> item in faTypes)
             {
-                xml += "<faType";
-                xml += " type=\"" + item.Key + "\">";
-                xml += (item.Value ? 1 : 0);
-                xml += "</faType>\n";
+                sb.Append("<faType");
+                sb.Append(" type=\"" + item.Key + "\">");
+                sb.Append((item.Value ? 1 : 0));
+                sb.Append("</faType>\n");
             }
             foreach (int len in carbonCounts)
             {
-                xml += "<length>" + len + "</length>\n";
+                sb.Append("<length>" + len + "</length>\n");
             }
             foreach (int db in doubleBondCounts)
             {
-                xml += "<doublebond>" + db + "</doublebond>\n";
+                sb.Append("<doublebond>" + db + "</doublebond>\n");
             }
             foreach (int hydroxyl in hydroxylCounts)
             {
-                xml += "<hydroxyl>" + hydroxyl + "</hydroxyl>\n";
+                sb.Append("<hydroxyl>" + hydroxyl + "</hydroxyl>\n");
             }
-            xml += "</FattyAcidGroup>\n";
-            return xml;
+            sb.Append("</FattyAcidGroup>\n");
         }
         
         

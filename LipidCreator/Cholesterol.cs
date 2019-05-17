@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text;
 using log4net;
 
 
@@ -64,13 +65,12 @@ namespace LipidCreator
         }
         
         
-        public override string serialize()
+        public override void serialize(StringBuilder sb)
         {
-            string xml = "<lipid type=\"Cholesterol\" containsEster=\"" + containsEster + "\">\n";
-            xml += fag.serialize();
-            xml += base.serialize();
-            xml += "</lipid>\n";
-            return xml;
+            sb.Append("<lipid type=\"Cholesterol\" containsEster=\"" + containsEster + "\">\n");
+            fag.serialize(sb);
+            base.serialize(sb);
+            sb.Append("</lipid>\n");
         }
         
         // synchronize the fragment list with list from LipidCreator root

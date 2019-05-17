@@ -32,6 +32,7 @@ using System.Xml.Linq;
 using System.Data.SQLite;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using log4net;
 
 // For the benefit of Skyline developer systems configured to not allow nonlocalized strings
@@ -646,7 +647,21 @@ namespace LipidCreator
         
         
         
-        public virtual string serialize()
+        public virtual void serialize(StringBuilder sb)
+        {
+            
+        
+            sb.Append("<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n");
+            sb.Append("<onlyPrecursors>" + onlyPrecursors + "</onlyPrecursors>\n");
+            sb.Append("<onlyHeavyLabeled>" + onlyHeavyLabeled + "</onlyHeavyLabeled>\n");
+            foreach (string adduct in adducts.Keys.Where(x => adducts[x]))
+            {
+                sb.Append("<adduct type=\"" + adduct + "\" />\n");
+            }
+        }
+        
+        
+        public virtual void serializeFragments(StringBuilder sb)
         {
             HashSet<string> headGroupSet = new HashSet<string>();
             
@@ -657,25 +672,17 @@ namespace LipidCreator
                 }
             }
             
-        
-            string xml = "<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n";
-            xml += "<onlyPrecursors>" + onlyPrecursors + "</onlyPrecursors>\n";
-            xml += "<onlyHeavyLabeled>" + onlyHeavyLabeled + "</onlyHeavyLabeled>\n";
-            foreach (KeyValuePair<String, bool> item in adducts)
-            {
-                xml += "<adduct type=\"" + item.Key + "\">" + (item.Value ? 1 : 0) + "</adduct>\n";
-            }
             
             foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
             {
                 if (headGroupSet.Contains(positiveFragment.Key))
                 {
-                    xml += "<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n";
+                    sb.Append("<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n");
                     foreach (string fragment in positiveFragment.Value)
                     {
-                        xml += "<fragment>" + fragment + "</fragment>\n";
+                        sb.Append("<fragment>" + fragment + "</fragment>\n");
                     }
-                    xml += "</positiveFragments>\n";
+                    sb.Append("</positiveFragments>\n");
                 }
             }
             
@@ -683,16 +690,18 @@ namespace LipidCreator
             {
                 if (headGroupSet.Contains(negativeFragment.Key))
                 {
-                    xml += "<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n";
+                    sb.Append("<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n");
                     foreach (string fragment in negativeFragment.Value)
                     {
-                        xml += "<fragment>" + fragment + "</fragment>\n";
+                        sb.Append("<fragment>" + fragment + "</fragment>\n");
                     }
-                    xml += "</negativeFragments>\n";
+                    sb.Append("</negativeFragments>\n");
                 }
             }
-            return xml;
         }
+        
+        
+        
         
         public Lipid(Lipid copy)
         {
@@ -727,6 +736,7 @@ namespace LipidCreator
         
         
         
+        
         public virtual void import(XElement node, string importVersion)
         {   
             switch (node.Name.ToString())
@@ -746,7 +756,7 @@ namespace LipidCreator
                     
                 case "adduct":
                     string adductKey = node.Attribute("type").Value.ToString();
-                    adducts[adductKey] = node.Value == "1";
+                    if (adducts.ContainsKey(adductKey)) adducts[adductKey] = true;
                     break;
                     
                 case "positiveFragments":

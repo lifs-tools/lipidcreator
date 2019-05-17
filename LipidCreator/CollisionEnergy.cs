@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Globalization;
-
+using System.Text;
 
 
 namespace LipidCreator
@@ -128,35 +128,35 @@ namespace LipidCreator
         
         
         
-        public string serialize()
+        public void serialize(StringBuilder sb)
         {
-            string xml = "<CE>\n";
+            sb.Append("<CE>\n");
             foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>>> kvp1 in instrumentParameters)
             {
-                xml += "<ins type=\"" + kvp1.Key + "\">\n";
+                sb.Append("<ins type=\"" + kvp1.Key + "\">\n");
                 
             
                 // foreach class
                 foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, IDictionary<string, string>>>> kvp2 in kvp1.Value)
                 {
-                    xml += "<lCl type=\"" + kvp2.Key + "\">\n";
+                    sb.Append("<lCl type=\"" + kvp2.Key + "\">\n");
                 
                     // foreach adduct
                     foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
                     {
-                        xml += "<adt type=\"" + kvp3.Key + "\" ce=\""+ string.Format(new CultureInfo("en-US"), "{0:0.000}", collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]) + "\">\n";
+                        sb.Append("<adt type=\"" + kvp3.Key + "\" ce=\""+ string.Format(new CultureInfo("en-US"), "{0:0.000}", collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]) + "\">\n");
                     
                         foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
                         {
-                            xml += "<fr type=\"" + kvp4.Key + "\" sel=\"" + kvp4.Value["selected"] + "\" />\n";
+                            sb.Append("<fr type=\"" + kvp4.Key + "\" sel=\"" + kvp4.Value["selected"] + "\" />\n");
                         }
-                        xml += "</adt>\n";
+                        sb.Append("</adt>\n");
                     }
-                    xml += "</lCl>\n";
+                    sb.Append("</lCl>\n");
                 }
-                xml += "</ins>\n";
+                sb.Append("</ins>\n");
             }
-            return xml + "</CE>\n";
+            sb.Append("</CE>\n");
         }
         
         

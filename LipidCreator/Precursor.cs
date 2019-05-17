@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Text;
 
 namespace LipidCreator
 {    
@@ -59,39 +60,41 @@ namespace LipidCreator
             attributes = new HashSet<string>();
         }
         
-        public string serialize()
+        public void serialize(StringBuilder sb)
         {
-            string xml = "<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\" derivative=\"" + derivative + "\" userDefined=\"" + userDefined + "\">\n";
+            sb.Append("<Precursor name=\"" + name + "\" category=\"" + ((int)category).ToString() + "\" pathToImage=\"" + pathToImage + "\" buildingBlockType=\"" + buildingBlockType.ToString() + "\" derivative=\"" + derivative + "\" userDefined=\"" + userDefined + "\">\n");
             foreach (KeyValuePair<string, bool> adductRestriction in adductRestrictions)
             {
-                xml += "<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n";
+                sb.Append("<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n");
             }
             foreach (KeyValuePair<Molecule, int> kvp in elements)
             {
-                xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
             }
             foreach (string attribute in attributes)
             {
-                xml += "<Attribute>" + attribute + "</Attribute>\n";
+                sb.Append("<Attribute>" + attribute + "</Attribute>\n");
             }
             
             if (userDefined)
             {
-                xml += "<userDefinedFattyAcids>\n";
+                sb.Append("<userDefinedFattyAcids>\n");
                 foreach (ElementDictionary table in userDefinedFattyAcids)
                 {
-                    xml += "<DataTable>\n";
+                    sb.Append("<DataTable>\n");
                     foreach (KeyValuePair<Molecule, int> kvp in table)
                     {
-                        xml += "<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                        sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
                     }
-                    xml += "</DataTable>\n";
+                    sb.Append("</DataTable>\n");
                 }
-                xml += "</userDefinedFattyAcids>\n";
+                sb.Append("</userDefinedFattyAcids>\n");
             }
-            xml += "</Precursor>\n";
-            return xml;
+            sb.Append("</Precursor>\n");
         }
+        
+        
+        
         
         public void import(XElement node, string importVersion)
         {

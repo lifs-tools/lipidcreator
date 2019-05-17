@@ -678,6 +678,8 @@ namespace LipidCreator
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
+                foreach (string hg in currentLipid.headGroupNames) Console.WriteLine(hg);
+                Console.WriteLine("----------");
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
         }
@@ -1242,15 +1244,16 @@ namespace LipidCreator
         
         public string serialize(bool onlySettings = false)
         {
-            string xml = "<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n";
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<LipidCreator version=\"" + LC_VERSION_NUMBER + "\" CEinstrument=\"" + selectedInstrumentForCE + "\" monitoringType=\"" + monitoringType + "\"  PRMMode=\"" + PRMMode + "\">\n");
             
-            xml += collisionEnergyHandler.serialize();
+            collisionEnergyHandler.serialize(sb);
             
             foreach (KeyValuePair<string, Precursor> precursor in headgroups)
             {
                 if (precursor.Value.userDefined)
                 {
-                    xml += precursor.Value.serialize();
+                    precursor.Value.serialize(sb);
                 }
             }
             
@@ -1260,18 +1263,18 @@ namespace LipidCreator
                 {
                     if (fragment.Value.userDefined)
                     {
-                        xml += "<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n";
-                        xml += fragment.Value.serialize();
-                        xml += "</userDefinedFragment>\n";
+                        sb.Append("<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n");
+                        fragment.Value.serialize(sb);
+                        sb.Append("</userDefinedFragment>\n");
                     }
                 }
                 foreach (KeyValuePair<string, MS2Fragment> fragment in allFragments[headgroup.Key][false])
                 {
                     if (fragment.Value.userDefined)
                     {
-                        xml += "<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n";
-                        xml += fragment.Value.serialize();
-                        xml += "</userDefinedFragment>\n";
+                        sb.Append("<userDefinedFragment headgroup=\"" + headgroup.Key + "\">\n");
+                        fragment.Value.serialize(sb);
+                        sb.Append("</userDefinedFragment>\n");
                     }
                 }
             }
@@ -1279,11 +1282,11 @@ namespace LipidCreator
             {
                 foreach (Lipid currentLipid in registeredLipids)
                 {
-                    xml += currentLipid.serialize();
+                    currentLipid.serialize(sb);
                 }
             }
-            xml += "</LipidCreator>\n";
-            return xml;
+            sb.Append("</LipidCreator>\n");
+            return sb.ToString();
         }
         
         

@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Text;
 using System.Linq;
 
 
@@ -54,16 +55,15 @@ namespace LipidCreator
         }
         
         
-        public override string serialize()
+        public override void serialize(StringBuilder sb)
         {
-            string xml = "<lipid type=\"Mediator\">\n";
+            sb.Append("<lipid type=\"Mediator\">\n");
             foreach (string headgroup in headGroupNames)
             {
-                xml += "<headGroup>" + headgroup + "</headGroup>\n";
+                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
             }
-            xml += base.serialize();
-            xml += "</lipid>\n";
-            return xml;
+            base.serialize(sb);
+            sb.Append("</lipid>\n");
         }
         
         

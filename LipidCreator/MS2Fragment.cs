@@ -30,6 +30,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text;
 
 namespace LipidCreator
 {
@@ -165,25 +166,24 @@ namespace LipidCreator
         }
     
     
-        public string serialize()
+        public void serialize(StringBuilder sb)
         {
-            string xml = "<MS2Fragment";
-            xml += " fragmentName=\"" + fragmentName + "\"";
-            xml += " fragmentOutputName=\"" + fragmentOutputName + "\"";
-            xml += " fragmentAdduct=\"" + fragmentAdduct.name + "\"";
-            xml += " fragmentFile=\"" + fragmentFile + "\"";
-            xml += " intensity=\"" + intensity + "\"";
-            xml += " userDefined=\"" + userDefined + "\">";
+            sb.Append("<MS2Fragment");
+            sb.Append(" fragmentName=\"" + fragmentName + "\"");
+            sb.Append(" fragmentOutputName=\"" + fragmentOutputName + "\"");
+            sb.Append(" fragmentAdduct=\"" + fragmentAdduct.name + "\"");
+            sb.Append(" fragmentFile=\"" + fragmentFile + "\"");
+            sb.Append(" intensity=\"" + intensity + "\"");
+            sb.Append(" userDefined=\"" + userDefined + "\">");
             foreach (string fbase in fragmentBase)
             {
-                xml += "<fragmentBase>" + fbase + "</fragmentBase>\n";
+                sb.Append("<fragmentBase>" + fbase + "</fragmentBase>\n");
             }
             foreach (KeyValuePair<Molecule, int> kvp in fragmentElements)
             {
-                xml += "<Element type=\"" + ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n";
+                sb.Append("<Element type=\"" + ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
             }
-            xml += "</MS2Fragment>\n";
-            return xml;
+            sb.Append("</MS2Fragment>\n");
         }
         
         public void import(XElement node, string importVersion)

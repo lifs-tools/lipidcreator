@@ -124,6 +124,10 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
+        
         public void import(XElement node, string importVersion)
         {
             chainType = Convert.ToInt32(node.Attribute("chainType").Value);
@@ -132,9 +136,11 @@ namespace LipidCreator
             hydroxylInfo = node.Attribute("hydroxylInfo").Value;
             isLCB = node.Attribute("isLCB").Value == "True";
             
-            carbonCounts.Clear();
-            doubleBondCounts.Clear();
-            hydroxylCounts.Clear();
+            carbonCounts = LipidCreator.parseRange(lengthInfo, LipidCreator.MIN_CARBON_LENGTH,  LipidCreator.MAX_CARBON_LENGTH, (ChainType)chainType);
+            doubleBondCounts = LipidCreator.parseRange(dbInfo, LipidCreator.MIN_DB_LENGTH,  LipidCreator.MAX_DB_LENGTH, ChainType.dbLength);
+            hydroxylCounts = LipidCreator.parseRange(hydroxylInfo, LipidCreator.MIN_HYDROXY_LENGTH,  LipidCreator.MAX_HYDROXY_LENGTH, ChainType.hydroxylLength);
+            
+            
         
             foreach(XElement child in node.Elements())
             {
@@ -143,7 +149,7 @@ namespace LipidCreator
                     case "faType":
                         faTypes[child.Attribute("type").Value.ToString()] = child.Value == "1";
                         break;
-                        
+                    /*
                     case "length":
                         carbonCounts.Add(Convert.ToInt32(child.Value.ToString()));
                         break;
@@ -155,17 +161,21 @@ namespace LipidCreator
                     case "hydroxyl":
                         hydroxylCounts.Add(Convert.ToInt32(child.Value.ToString()));
                         break;
-                        
+                    */
                     default:
                         throw new Exception("Error for fatty acid group import");
                 }
             }
         }
         
+        
+        
+        
+        
         public void serialize(StringBuilder sb)
         {
             sb.Append("<FattyAcidGroup");
-            sb.Append(" chainType=\"" + chainType + "\"");
+            sb.Append(" chainType=\"" + (int)chainType + "\"");
             sb.Append(" isLCB=\"" + isLCB + "\"");
             sb.Append(" lengthInfo=\"" + lengthInfo + "\"");
             sb.Append(" dbInfo=\"" + dbInfo + "\"");
@@ -177,6 +187,8 @@ namespace LipidCreator
                 sb.Append((item.Value ? 1 : 0));
                 sb.Append("</faType>\n");
             }
+            
+            /*
             foreach (int len in carbonCounts)
             {
                 sb.Append("<length>" + len + "</length>\n");
@@ -189,6 +201,8 @@ namespace LipidCreator
             {
                 sb.Append("<hydroxyl>" + hydroxyl + "</hydroxyl>\n");
             }
+            
+            */
             sb.Append("</FattyAcidGroup>\n");
         }
         

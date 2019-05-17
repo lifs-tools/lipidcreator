@@ -71,10 +71,6 @@ namespace LipidCreator
             sb.Append("<lipid type=\"SL\" isLyso=\"" + isLyso + "\">\n");
             lcb.serialize(sb);
             fag.serialize(sb);
-            foreach (string headgroup in headGroupNames)
-            {
-                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
-            }
             base.serialize(sb);
             sb.Append("</lipid>\n");
         }
@@ -109,10 +105,6 @@ namespace LipidCreator
                             throw new Exception();
                         }
                         ++fattyAcidCounter;
-                        break;
-                        
-                    case "headGroup":
-                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                         

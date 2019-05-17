@@ -649,8 +649,6 @@ namespace LipidCreator
         
         public virtual void serialize(StringBuilder sb)
         {
-            
-        
             sb.Append("<representativeFA>" + (representativeFA ? 1 : 0) + "</representativeFA>\n");
             sb.Append("<onlyPrecursors>" + onlyPrecursors + "</onlyPrecursors>\n");
             sb.Append("<onlyHeavyLabeled>" + onlyHeavyLabeled + "</onlyHeavyLabeled>\n");
@@ -658,6 +656,11 @@ namespace LipidCreator
             {
                 sb.Append("<adduct type=\"" + adduct + "\" />\n");
             }
+            foreach (string headgroup in headGroupNames)
+            {
+                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
+            }
+            serializeFragments(sb);
         }
         
         
@@ -757,6 +760,11 @@ namespace LipidCreator
                 case "adduct":
                     string adductKey = node.Attribute("type").Value.ToString();
                     if (adducts.ContainsKey(adductKey)) adducts[adductKey] = true;
+                    break;
+                    
+                case "headGroup":
+                    string headgroup = node.Value.ToString();
+                    headGroupNames.Add(headgroup);
                     break;
                     
                 case "positiveFragments":

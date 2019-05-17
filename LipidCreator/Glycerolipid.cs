@@ -63,10 +63,17 @@ namespace LipidCreator
             containsSugar = copy.containsSugar;
         }
         
+        
+        
+        
         public override ArrayList getFattyAcidGroupList()
         {
             return new ArrayList{fag1, fag2, fag3};
         }
+        
+        
+        
+        
         
         public override void serialize(StringBuilder sb)
         {
@@ -75,19 +82,47 @@ namespace LipidCreator
             fag2.serialize(sb);
             fag3.serialize(sb);
             sb.Append("<containsSugar>" + (containsSugar ? 1 : 0) + "</containsSugar>\n");
-            foreach (string headgroup in headGroupNames)
-            {
-                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
-            }
             base.serialize(sb);
             sb.Append("</lipid>\n");
         }
+        
+        
+        
+        
+        public override void serializeFragments(StringBuilder sb)
+        {
+            foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
+            {                
+                sb.Append("<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n");
+                foreach (string fragment in positiveFragment.Value)
+                {
+                    sb.Append("<fragment>" + fragment + "</fragment>\n");
+                }
+                sb.Append("</positiveFragments>\n");
+            }
+            
+            foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)
+            {
+                sb.Append("<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n");
+                foreach (string fragment in negativeFragment.Value)
+                {
+                    sb.Append("<fragment>" + fragment + "</fragment>\n");
+                }
+                sb.Append("</negativeFragments>\n");
+            }
+        }
+        
+        
         
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
             Updating((int)LipidCategory.Glycerolipid);
         }
+        
+        
+        
+        
         
         
         public override void import(XElement node, string importVersion)
@@ -117,10 +152,6 @@ namespace LipidCreator
                             throw new Exception();
                         }
                         ++fattyAcidCounter;
-                        break;
-                        
-                    case "headGroup":
-                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                     case "containsSugar":

@@ -79,8 +79,6 @@ namespace LipidCreator
         public static float FONT_SIZE_FACTOR;
         public static readonly float REGULAR_FONT_SIZE = 8.25f;
         
-        
-        
         public CreatorGUI(string inputParameters)
         {
         
@@ -1011,39 +1009,34 @@ namespace LipidCreator
         
         
         // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectType, bool isLCB)
+        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectTypeI, bool isLCB)
         {
+            ChainType objectType = (ChainType)objectTypeI;
             int minRange = 0, maxRange = 0;
-            if (objectType <= 2)
+            bool incorrectParsing = false;
+            if (objectType <= ChainType.carbonLengthEven)
             {
                 minRange = LipidCreator.MIN_CARBON_LENGTH;
                 maxRange = LipidCreator.MAX_CARBON_LENGTH;
+                fag.carbonCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                incorrectParsing = fag.carbonCounts == null;
             }
-            else if (objectType == 3)
+            else if (objectType == ChainType.dbLength)
             {
                 minRange = LipidCreator.MIN_DB_LENGTH;
                 maxRange = LipidCreator.MAX_DB_LENGTH;
+                fag.doubleBondCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                incorrectParsing = fag.doubleBondCounts == null;
             }
-            else if (objectType == 4)
+            else if (objectType == ChainType.hydroxylLength)
             {
                 minRange = LipidCreator.MIN_HYDROXY_LENGTH;
                 maxRange = LipidCreator.MAX_HYDROXY_LENGTH;
+                fag.hydroxylCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                incorrectParsing = fag.hydroxylCounts == null;
             }
             
-            HashSet<int> lengths = lipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
-            if (objectType <= 2)
-            {
-                fag.carbonCounts = lengths; 
-            }
-            else if (objectType == 3)
-            { 
-                fag.doubleBondCounts = lengths;          
-            }
-            else if (objectType == 4)
-            {
-                fag.hydroxylCounts = lengths;
-            }
-            tb.BackColor = (lengths == null) ? alertColor : Color.White;
+            tb.BackColor = incorrectParsing ? alertColor : Color.White;
         }
         
         

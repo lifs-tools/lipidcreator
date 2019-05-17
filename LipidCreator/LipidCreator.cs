@@ -52,6 +52,7 @@ namespace LipidCreator
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};
     public enum RunMode {commandline, standalone, external};
+    public enum ChainType {carbonLength, carbonLengthOdd, carbonLengthEven, dbLength, hydroxylLength};
 
     [Serializable]
     public class LipidCreator : IDisposable
@@ -91,8 +92,8 @@ namespace LipidCreator
         public ParserEventHandler parserEventHandler;
         public Parser lipidNamesParser;
         
-        ListingParserEventHandler listingParserEventHandler;
-        Parser listingParser;
+        public static ListingParserEventHandler listingParserEventHandler;
+        public static Parser listingParser;
         
         public static char HEAVY_LABEL_OPENING_BRACKET = '{';
         public static char HEAVY_LABEL_CLOSING_BRACKET = '}';
@@ -646,9 +647,9 @@ namespace LipidCreator
         
         
         // obType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public HashSet<int> parseRange(string text, int lower, int upper, int obType = 0)
+        public static HashSet<int> parseRange(string text, int lower, int upper, ChainType obType = ChainType.carbonLength)
         {
-            int oddEven = (obType <= 2) ? obType : 0;
+            int oddEven = ((int)obType <= 2) ? (int)obType : 0;
             if (text.Length == 0) return null;
             
             text = text.Replace(" ", "");

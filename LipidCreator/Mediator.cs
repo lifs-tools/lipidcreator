@@ -58,10 +58,6 @@ namespace LipidCreator
         public override void serialize(StringBuilder sb)
         {
             sb.Append("<lipid type=\"Mediator\">\n");
-            foreach (string headgroup in headGroupNames)
-            {
-                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
-            }
             base.serialize(sb);
             sb.Append("</lipid>\n");
         }
@@ -72,12 +68,7 @@ namespace LipidCreator
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
-                {
-                        
-                    case "headGroup":
-                        headGroupNames.Add(child.Value.ToString());
-                        break;                     
-                        
+                {       
                     default:
                         base.import(child, importVersion);
                         break;

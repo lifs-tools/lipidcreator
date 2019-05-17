@@ -73,11 +73,43 @@ namespace LipidCreator
             sb.Append("</lipid>\n");
         }
         
+        
+        
+        
+        public override void serializeFragments(StringBuilder sb)
+        {
+            foreach (KeyValuePair<string, HashSet<string>> positiveFragment in positiveFragments)
+            {                
+                sb.Append("<positiveFragments lipidClass=\"" + positiveFragment.Key + "\">\n");
+                foreach (string fragment in positiveFragment.Value)
+                {
+                    sb.Append("<fragment>" + fragment + "</fragment>\n");
+                }
+                sb.Append("</positiveFragments>\n");
+            }
+            
+            foreach (KeyValuePair<string, HashSet<string>> negativeFragment in negativeFragments)
+            {
+                sb.Append("<negativeFragments lipidClass=\"" + negativeFragment.Key + "\">\n");
+                foreach (string fragment in negativeFragment.Value)
+                {
+                    sb.Append("<fragment>" + fragment + "</fragment>\n");
+                }
+                sb.Append("</negativeFragments>\n");
+            }
+        }
+        
+        
+        
+        
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
             Updating((int)LipidCategory.Sterollipid);
         }
+        
+        
+        
         
         
         public override void import(XElement node, string importVersion)

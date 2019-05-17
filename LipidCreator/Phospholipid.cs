@@ -78,10 +78,6 @@ namespace LipidCreator
             fag2.serialize(sb);
             fag3.serialize(sb);
             fag4.serialize(sb);
-            foreach (string headgroup in headGroupNames)
-            {
-                sb.Append("<headGroup>" + headgroup + "</headGroup>\n");
-            }
             base.serialize(sb);
             sb.Append("</lipid>\n");
         }
@@ -125,10 +121,6 @@ namespace LipidCreator
                             throw new Exception("Error, fatty acid");
                         }
                         ++fattyAcidCounter;
-                        break;
-                        
-                    case "headGroup":
-                        headGroupNames.Add(child.Value.ToString());
                         break;
                         
                         

@@ -571,6 +571,8 @@ namespace LipidCreator
         // using a Moore automaton based approach. I avoided to write a grammar based parser,
         // because this solution runs in O(n) whereas our Cocke-Younger-Kasami algorithm needs
         // O(n^3) runtime
+        
+        // TODO: add capability of handling with escape signs
         public static string[] parseLine(string line, char separator = ',', char quote = QUOTE)
         {
             List<string> listTokens = new List<string>();

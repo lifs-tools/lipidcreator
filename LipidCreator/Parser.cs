@@ -226,123 +226,13 @@ namespace LipidCreator
             
             if (File.Exists(grammarFilename))
             {
+                // interpret the rules and create the structure for parsing
+                ArrayList rules = Parser.extractTextBasedRules(grammarFilename, quote);
+                grammarName = (string)splitString((string)rules[0], ' ', quote)[1];
+                rules.RemoveAt(0);
                 Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
                 ruleToNT.Add(EOF_RULE_NAME, EOF_RULE);
                 TtoNT.Add(EOF_SIGN, new HashSet<long>(){EOF_RULE});
-                
-                string grammar = File.ReadAllText(grammarFilename) + "\n";
-                int grammarLength = grammar.Length;
-                
-                
-                // deleting comments to prepare for splitting the grammar in rules.
-                // Therefore, we have to consider three different contexts, namely
-                // within a quote, within a line comment, within a long comment.
-                // As long as we are in one context, key words for starting / ending
-                // the other contexts have to be ignored.
-                StringBuilder sb = new StringBuilder();
-                Context currentContext = Context.NoContext;
-                int currentPosition = 0;
-                int lastEscapedBackslash = -1;
-                for (int i = 0; i < grammarLength - 1; ++i)
-                {
-                    MatchWords match = MatchWords.NoMatch;
-                    
-                    if (i > 0 && grammar[i] == '\\' && grammar[i - 1] == '\\' && lastEscapedBackslash != i - 1)
-                    {
-                        lastEscapedBackslash = i;
-                        //continue;
-                    }
-                
-                    if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
-                    else if (grammar[i] == '\n') match = MatchWords.LineCommentEnd;
-                    else if (grammar[i] == '/' && grammar[i + 1] == '*') match = MatchWords.LongCommentStart;
-                    else if (grammar[i] == '*' && grammar[i + 1] == '/') match = MatchWords.LongCommentEnd;
-                    else if (grammar[i] == quote && !(i >= 1 && grammar[i - 1] == '\\' && i - 1 != lastEscapedBackslash)) match = MatchWords.Quote;
-                    
-                    if (match != MatchWords.NoMatch)
-                    {
-                        switch (currentContext)
-                        {
-                            case Context.NoContext:
-                                switch (match)
-                                {
-                                    case MatchWords.LongCommentStart:
-                                        sb.Append(grammar.Substring(currentPosition, i - currentPosition));
-                                        currentContext = Context.InLongComment;
-                                        break;
-                                        
-                                    case MatchWords.LineCommentStart:
-                                        sb.Append(grammar.Substring(currentPosition, i - currentPosition));
-                                        currentContext = Context.InLineComment;
-                                        break;
-                                        
-                                    case MatchWords.Quote:
-                                        currentContext = Context.InQuote;
-                                        break;
-                                        
-                                    default:
-                                        break;
-                                } 
-                                break;
-                                
-                                
-                            case Context.InQuote:
-                                if (match == MatchWords.Quote)
-                                {
-                                    currentContext = Context.NoContext;
-                                }
-                                break;
-                                
-                                
-                            case Context.InLineComment:
-                                if (match == MatchWords.LineCommentEnd)
-                                {
-                                    currentContext = Context.NoContext;
-                                    currentPosition = i + 1;
-                                }
-                                break;
-                                
-                            case Context.InLongComment:
-                                if (match == MatchWords.LongCommentEnd)
-                                {
-                                    currentContext = Context.NoContext;
-                                    currentPosition = i + 2;
-                                }
-                                break;
-                        }
-                    }
-                }
-                if (currentContext == Context.NoContext)
-                {
-                    sb.Append(grammar.Substring(currentPosition, grammarLength - currentPosition));
-                }
-                else
-                {
-                    throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
-                }
-                grammar = strip(sb.ToString().Replace("\n", ""), ' ');
-                if (grammar[grammar.Length - 1] != RULE_TERMINAL)
-                {
-                    throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign");
-                }
-                ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
-                
-                if (rules.Count < 1) return;
-                
-                ArrayList grammarNameRule = splitString((string)rules[0], ' ', quote);
-                if (!grammarNameRule[0].Equals("grammar"))
-                {
-                    throw new Exception("Error: first rule must start with the keyword 'grammar'");
-                }
-                else if (grammarNameRule.Count != 2)
-                {
-                    throw new Exception("Error: incorrect first rule");
-                }
-                grammarName = (string)grammarNameRule[1];
-                   
-                
-                // interpret the rules and create the structure for parsing
-                rules.RemoveAt(0);
                 foreach (string ruleLine in rules)
                 {
                 
@@ -483,6 +373,124 @@ namespace LipidCreator
         
         
         
+        
+        public static ArrayList extractTextBasedRules(string grammarFilename, char quote)
+        {
+            string grammar = File.ReadAllText(grammarFilename) + "\n";
+            int grammarLength = grammar.Length;
+            
+            
+            // deleting comments to prepare for splitting the grammar in rules.
+            // Therefore, we have to consider three different contexts, namely
+            // within a quote, within a line comment, within a long comment.
+            // As long as we are in one context, key words for starting / ending
+            // the other contexts have to be ignored.
+            StringBuilder sb = new StringBuilder();
+            Context currentContext = Context.NoContext;
+            int currentPosition = 0;
+            int lastEscapedBackslash = -1;
+            for (int i = 0; i < grammarLength - 1; ++i)
+            {
+                MatchWords match = MatchWords.NoMatch;
+                
+                if (i > 0 && grammar[i] == '\\' && grammar[i - 1] == '\\' && lastEscapedBackslash != i - 1)
+                {
+                    lastEscapedBackslash = i;
+                    continue;
+                }
+            
+                if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
+                else if (grammar[i] == '\n') match = MatchWords.LineCommentEnd;
+                else if (grammar[i] == '/' && grammar[i + 1] == '*') match = MatchWords.LongCommentStart;
+                else if (grammar[i] == '*' && grammar[i + 1] == '/') match = MatchWords.LongCommentEnd;
+                else if (grammar[i] == quote && !(i >= 1 && grammar[i - 1] == '\\' && i - 1 != lastEscapedBackslash)) match = MatchWords.Quote;
+                
+                if (match != MatchWords.NoMatch)
+                {
+                    switch (currentContext)
+                    {
+                        case Context.NoContext:
+                            switch (match)
+                            {
+                                case MatchWords.LongCommentStart:
+                                    sb.Append(grammar.Substring(currentPosition, i - currentPosition));
+                                    currentContext = Context.InLongComment;
+                                    break;
+                                    
+                                case MatchWords.LineCommentStart:
+                                    sb.Append(grammar.Substring(currentPosition, i - currentPosition));
+                                    currentContext = Context.InLineComment;
+                                    break;
+                                    
+                                case MatchWords.Quote:
+                                    currentContext = Context.InQuote;
+                                    break;
+                                    
+                                default:
+                                    break;
+                            } 
+                            break;
+                            
+                            
+                        case Context.InQuote:
+                            if (match == MatchWords.Quote)
+                            {
+                                currentContext = Context.NoContext;
+                            }
+                            break;
+                            
+                            
+                        case Context.InLineComment:
+                            if (match == MatchWords.LineCommentEnd)
+                            {
+                                currentContext = Context.NoContext;
+                                currentPosition = i + 1;
+                            }
+                            break;
+                            
+                        case Context.InLongComment:
+                            if (match == MatchWords.LongCommentEnd)
+                            {
+                                currentContext = Context.NoContext;
+                                currentPosition = i + 2;
+                            }
+                            break;
+                    }
+                }
+            }
+            if (currentContext == Context.NoContext)
+            {
+                sb.Append(grammar.Substring(currentPosition, grammarLength - currentPosition));
+            }
+            else
+            {
+                throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
+            }
+            grammar = strip(sb.ToString().Replace("\n", ""), ' ');
+            if (grammar[grammar.Length - 1] != RULE_TERMINAL)
+            {
+                throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign");
+            }
+            ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
+            
+            if (rules.Count < 1) throw new Exception("Error: corrupted grammar'" + grammarFilename + "', grammar is empty");
+            
+            ArrayList grammarNameRule = splitString((string)rules[0], ' ', quote);
+            if (!grammarNameRule[0].Equals("grammar"))
+            {
+                throw new Exception("Error: first rule must start with the keyword 'grammar'");
+            }
+            else if (grammarNameRule.Count != 2)
+            {
+                throw new Exception("Error: incorrect first rule");
+            }
+            return rules;
+        }
+        
+        
+        
+        
+        
         public long getNextFreeRuleIndex()
         {
             if (nextFreeRuleIndex <= MASK) return nextFreeRuleIndex++;
@@ -506,7 +514,7 @@ namespace LipidCreator
         {
             bool inQuote = false;
             ArrayList tokens = new ArrayList();
-            string token = "";
+            StringBuilder sb = new StringBuilder();
             int lastChar = '\0';
             bool lastEscapedBackslash = false;
             
@@ -517,16 +525,16 @@ namespace LipidCreator
                 {
                     if (c == separator)
                     {
-                        if (token.Length > 0)
+                        if (sb.Length > 0)
                         {
-                            tokens.Add(token);
+                            tokens.Add(sb.ToString());
                         }
-                        token = "";
+                        sb.Clear();
                     }
                     else
                     {
                         if (c == quote) inQuote = !inQuote;
-                        token += c;
+                        sb.Append(c);
                     }
                 }
                 else
@@ -535,19 +543,19 @@ namespace LipidCreator
                     {
                         escapedBackslash = true;
                     }
-                    else
+                    else if (c == quote && !(lastChar == '\\' && !lastEscapedBackslash))
                     {
-                        if (c == quote && !(lastChar == '\\' && !lastEscapedBackslash)) inQuote = !inQuote;
+                        inQuote = !inQuote;
                     }
-                    token += c;
+                    sb.Append(c);
                 }
                 lastEscapedBackslash = escapedBackslash;
                 lastChar = c;
             }
                     
-            if (token.Length > 0)
+            if (sb.Length > 0)
             {
-                tokens.Add(token);
+                tokens.Add(sb.ToString());
             }
             if (inQuote) throw new Exception("Error: corrupted token in grammar");
             
@@ -587,34 +595,27 @@ namespace LipidCreator
         
         
         
-        public string deEscape(string text, char quote)
+        public static string deEscape(string text, char quote)
         {
             // remove the escape chars
             StringBuilder sb = new StringBuilder();
-            sb.Append(quote);
             bool lastEscapeChar = false;
-            for (int i = 1; i < text.Length - 1; ++i)
+            foreach (char c in text)
             {
-                char c = text[i];
                 bool escapeChar = false;
-                if (c == '\\')
-                {
-                    if (!lastEscapeChar)
-                    {
-                        escapeChar = true;
-                    }
-                    else
-                    {
-                        sb.Append(c);
-                    }
-                }
-                else 
+                
+                if (c != '\\')
                 {
                     sb.Append(c);
                 }
+                else
+                {
+                    if (!lastEscapeChar) escapeChar = true;
+                    else sb.Append(c);
+                } 
+                
                 lastEscapeChar = escapeChar;
             }
-            sb.Append(quote);
             return sb.ToString();
         }
         

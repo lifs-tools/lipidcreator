@@ -259,7 +259,8 @@ namespace LipidCreator
                             }
                         }
                         Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductName]];
-                        newLipidName += LipidCreator.computeAdductFormula(((PrecursorData)precursorDataList[0]).atomsCount, adduct);
+                        ElementDictionary precursorElements = creatorGUI.lipidCreator.headgroups[((PrecursorData)precursorDataList[0]).moleculeListName].elements;
+                        newLipidName += LipidCreator.computeAdductFormula(precursorElements, adduct);
                         ++correctlyParsed;
                     }
                     else

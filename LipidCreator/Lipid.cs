@@ -57,7 +57,6 @@ namespace LipidCreator
         public double precursorM_Z;
         public bool addPrecursor;
         public bool precursorSelected = true;
-        public ElementDictionary atomsCount;
         public FattyAcid fa1;
         public FattyAcid fa2;
         public FattyAcid fa3;
@@ -197,7 +196,7 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler = null, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring, double CE = -1, double minCE = 0, double maxCE = 0)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, IDictionary<String, Precursor> headgroups, CollisionEnergy collisionEnergyHandler = null, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring, double CE = -1, double minCE = 0, double maxCE = 0)
         {
             
             
@@ -289,7 +288,7 @@ namespace LipidCreator
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                             break;
                         case "HG":
-                            MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.moleculeListName].elements);
                             break;
                         default:
                             break;
@@ -526,7 +525,7 @@ namespace LipidCreator
         
         
                 
-        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, CollisionEnergy collisionEnergyHandler, string instrument)
+        public static void addSpectra(SQLiteCommand command, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, IDictionary<String, Precursor> headgroups, CollisionEnergy collisionEnergyHandler, string instrument)
         {
             if (precursorData.fragmentNames.Count == 0 || !allFragments.ContainsKey(precursorData.fullMoleculeListName)) return;
             
@@ -570,7 +569,7 @@ namespace LipidCreator
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                             break;
                         case "HG":
-                            MS2Fragment.addCounts(atomsCountFragment, precursorData.atomsCount);
+                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.moleculeListName].elements);
                             break;
                         default:
                             break;
@@ -834,7 +833,6 @@ namespace LipidCreator
             precursorData.precursorAdduct = null;
             precursorData.precursorAdductFormula = "Unsupported lipid";
             precursorData.precursorM_Z = 0;
-            precursorData.atomsCount = null;
             precursorData.addPrecursor = true;
             precursorData.fragmentNames = new HashSet<string>();
             precursorDataList.Add(precursorData);

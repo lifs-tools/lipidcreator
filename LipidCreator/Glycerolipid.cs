@@ -242,7 +242,6 @@ namespace LipidCreator
                                 precursorData.precursorAdduct = adduct;
                                 precursorData.precursorAdductFormula = adductForm;
                                 precursorData.precursorM_Z = mass;
-                                precursorData.atomsCount = headgroups[headgroup].elements;
                                 precursorData.fa1 = sortedAcids[0];
                                 precursorData.fa2 = sortedAcids[1];
                                 precursorData.fa3 = null;
@@ -292,7 +291,6 @@ namespace LipidCreator
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                                     heavyPrecursorData.precursorM_Z = heavyMass;
-                                    heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                     heavyPrecursorData.fa1 = heavySortedAcids[0];
                                     heavyPrecursorData.fa2 = heavySortedAcids[1];
                                     heavyPrecursorData.fa3 = null;
@@ -380,7 +378,6 @@ namespace LipidCreator
                                 precursorData.precursorAdduct = adduct;
                                 precursorData.precursorAdductFormula = adductForm;
                                 precursorData.precursorM_Z = mass;
-                                precursorData.atomsCount = headgroups[headgroup].elements;
                                 precursorData.fa1 = sortedAcids[0];
                                 precursorData.fa2 = sortedAcids[1];
                                 precursorData.fa3 = sortedAcids[2];
@@ -439,7 +436,6 @@ namespace LipidCreator
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                                     heavyPrecursorData.precursorM_Z = heavyMass;
-                                    heavyPrecursorData.atomsCount = headgroups[heavyHeadgroup].elements;
                                     heavyPrecursorData.fa1 = heavySortedAcids[0];
                                     heavyPrecursorData.fa2 = heavySortedAcids[1];
                                     heavyPrecursorData.fa3 = heavySortedAcids[2];

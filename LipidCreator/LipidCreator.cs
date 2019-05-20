@@ -679,8 +679,6 @@ namespace LipidCreator
             // create precursor list
             foreach (Lipid currentLipid in registeredLipids)
             {
-                foreach (string hg in currentLipid.headGroupNames) Console.WriteLine(hg);
-                Console.WriteLine("----------");
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
             }
         }
@@ -703,7 +701,7 @@ namespace LipidCreator
                 {
                     if (precursorData.precursorSelected)
                     {
-                        Lipid.computeFragmentData (transitionList, precursorData, allFragments);
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments, headgroups);
                     }
                 }
             }
@@ -732,7 +730,7 @@ namespace LipidCreator
                         }
                         CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
                     }
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
             }
             
@@ -1659,7 +1657,7 @@ namespace LipidCreator
                 }
                 try
                 {
-                    Lipid.addSpectra(command, precursorData, allFragments, collisionEnergyHandler, selectedInstrumentForCE);
+                    Lipid.addSpectra(command, precursorData, allFragments, headgroups, collisionEnergyHandler, selectedInstrumentForCE);
                 }
                 catch(Exception e)
                 {

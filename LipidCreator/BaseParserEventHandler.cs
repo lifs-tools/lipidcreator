@@ -24,8 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-//using System.Data;
-//using System.Collections;
 using System.Collections.Generic;
 
 namespace LipidCreator
@@ -45,6 +43,8 @@ namespace LipidCreator
         }
         
         
+        
+        // checking if all registered events are reasonable and orrur as rules in the grammar
         public void sanityCheck()
         {
             foreach (string eventName in registeredEvents.Keys)

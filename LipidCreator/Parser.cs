@@ -335,6 +335,14 @@ namespace LipidCreator
                         }
                     }
                 }
+                
+                // adding all rule names into the event handler
+                foreach (string ruleName in ruleToNT.Keys)
+                {
+                    parserEventHandler.ruleNames.Add(ruleName);
+                }
+                parserEventHandler.parser = this;
+                parserEventHandler.sanityCheck();
             }
             else
             {

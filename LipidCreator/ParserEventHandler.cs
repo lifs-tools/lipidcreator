@@ -60,7 +60,7 @@ namespace LipidCreator
             registeredEvents.Add("carbon_pre_event", CarbonPreEvent);
             registeredEvents.Add("db_count_pre_event", DB_countPreEvent);
             registeredEvents.Add("hydroxyl_pre_event", HydroxylPreEvent);
-            registeredEvents.Add("old_Hydroxyl_pre_event", OldHydroxylPreEvent);
+            registeredEvents.Add("old_hydroxyl_pre_event", OldHydroxylPreEvent);
             registeredEvents.Add("ether_pre_event", EtherPreEvent);
             
             registeredEvents.Add("gl_pre_event", GLPreEvent);
@@ -101,7 +101,6 @@ namespace LipidCreator
             registeredEvents.Add("gl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("pl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("sl_species_pre_event", unsupportedEvent);
-            
         }
         
         

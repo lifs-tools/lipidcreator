@@ -24,6 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
+//using System.Data;
+//using System.Collections;
 using System.Collections.Generic;
 
 namespace LipidCreator
@@ -32,13 +34,31 @@ namespace LipidCreator
     [Serializable]
     public abstract class BaseParserEventHandler
     {
-        public Dictionary<string, Action<Parser.TreeNode>> registeredEvents;
-    
+        public Dictionary<string, Action<Parser.TreeNode>> registeredEvents = new Dictionary<string, Action<Parser.TreeNode>>();
+        public HashSet<string> ruleNames = new HashSet<string>();
+        public Parser parser = null;
     
         public BaseParserEventHandler()
         {
             registeredEvents = new Dictionary<string, Action<Parser.TreeNode>>();
-            
+            ruleNames = new HashSet<string>();
+        }
+        
+        
+        public void sanityCheck()
+        {
+            foreach (string eventName in registeredEvents.Keys)
+            {
+                if (!eventName.EndsWith("_pre_event") && !eventName.EndsWith("_post_event"))
+                {
+                    throw new Exception("Parser event handler error: event '" + eventName + "' does not contain the suffix '_pre_event' or '_post_event'");
+                }
+                string ruleName = eventName.Replace("_pre_event", "").Replace("_post_event", "");
+                if (!ruleNames.Contains(ruleName))
+                {
+                    throw new Exception("Parser event handler error: rule '" + ruleName + "' in event '" + eventName + "' is not present in the grammar" + (parser != null ? " '" + parser.grammarName + "'" : ""));
+                }
+            }
         }
         
         

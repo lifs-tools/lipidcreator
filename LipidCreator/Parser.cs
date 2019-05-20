@@ -153,6 +153,18 @@ namespace LipidCreator
                     spre += 64;
                 }
             }
+            
+            
+            public static System.Collections.Generic.IEnumerable<int> getPositions(long x)
+            {
+                while (x != 0)
+                {
+                    // algorithm for getting least significant bit position
+                    ulong v1 = (ulong)((long)x & -(long)x);
+                    yield return positions[unchecked((v1 * multiplicator) >> 58)];
+                    x &= x - 1;
+                }
+            }
         }
         
         
@@ -772,6 +784,105 @@ namespace LipidCreator
         {
             if (usedEOF) textToParse += EOF_SIGN;
             
+            if (textToParse.Length < 64) parse64(textToParse);
+            else parseRegular(textToParse);
+        }
+            
+            
+            
+            
+            
+            
+            
+        public void parse64(string textToParse)
+        {
+            wordInGrammar = false;
+            parseTree = null;
+            int n = textToParse.Length;
+            // dp stands for dynamic programming, nothing else
+            Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
+            // V (vertical) and Diag (diagonal) are lookups, which fields in the dpTable are filled
+            long[] V = new long[n];
+            long[] Diag = new long[n];
+            
+            
+            
+            for (int i = 0; i < n; ++i)
+            {
+                dpTable[i] = new Dictionary<long, DPNode>[n - i];
+                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<long, DPNode>();
+                V[i] = 0;
+                Diag[i] = 0;
+            }
+            
+            for (int i = 0; i < n; ++i)
+            {
+                char c = textToParse[i];
+                if (!TtoNT.ContainsKey(c)) return;
+                
+                foreach (long ruleIndex in TtoNT[c])
+                {
+                    long newKey = ruleIndex >> SHIFT;
+                    long oldKey = ruleIndex & MASK;
+                    DPNode dpNode = new DPNode((long)c, oldKey, null, null);
+                    dpTable[i][0][newKey] =  dpNode;
+                    V[i] = 1;
+                    Diag[i] = 1L << i;
+                }
+            }
+            
+            for (int i = 1; i < n; ++i)
+            {
+                int im1 = i - 1;
+                for (int j = 0; j < n - i; ++j)
+                {
+                    Dictionary<long, DPNode>[] D = dpTable[j];
+                    Dictionary<long, DPNode> Di = D[i];
+                    int jp1 = j + 1;
+                    
+                    // checking if at least one k is valid
+                    long intersect = (V[j] & unchecked((1L << i) - 1L)) & unchecked(Diag[i + j] >> jp1);
+                    if (intersect == 0) continue;
+                    
+                    foreach(int k in Bitfield.getPositions(intersect))
+                    {
+                        foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
+                        {
+                            foreach (KeyValuePair<long, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
+                            {
+                                long key = computeRuleKey(indexPair1.Key, indexPair2.Key);
+                                if (!NTtoNT.ContainsKey(key)) continue;
+                                
+                                DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
+                                V[j] |= unchecked(1L << i);
+                                Diag[i + j] |= unchecked(1L << j);
+                                foreach (long ruleIndex in NTtoNT[key])
+                                {
+                                    Di[ruleIndex] = content;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            for (int i = n - 1; i > 0; --i){
+                if (dpTable[0][i].ContainsKey(START_RULE))
+                {
+                    wordInGrammar = true;
+                    parseTree = new TreeNode(START_RULE, NTtoRule.ContainsKey(START_RULE));
+                    fillTree(parseTree, dpTable[0][i][START_RULE]);
+                    break;
+                }
+            }
+        }
+            
+            
+            
+            
+            
+        public void parseRegular(string textToParse)
+        {
             wordInGrammar = false;
             parseTree = null;
             int n = textToParse.Length;

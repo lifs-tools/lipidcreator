@@ -288,7 +288,7 @@ namespace LipidCreator
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                             break;
                         case "HG":
-                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.moleculeListName].elements);
+                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
                             break;
                         default:
                             break;
@@ -569,7 +569,7 @@ namespace LipidCreator
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
                             break;
                         case "HG":
-                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.moleculeListName].elements);
+                            MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
                             break;
                         default:
                             break;

@@ -879,7 +879,7 @@ namespace LipidCreator
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
-                            if (lipid == null) continue;
+                            if (lipid == null || (lipid is UnsupportedLipid)) continue;
                             
                             if (filterParameters != null)
                             {

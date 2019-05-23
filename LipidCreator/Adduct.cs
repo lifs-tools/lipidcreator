@@ -49,5 +49,10 @@ namespace LipidCreator
             charge = _charge;
             elements = _elements;
         }
+        
+        public override string ToString()
+        {
+            return "[M" + name + "]" + Math.Abs(charge) + (charge > 0 ? "+" : "-");
+        }
     }
 }

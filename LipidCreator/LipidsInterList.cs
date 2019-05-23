@@ -51,10 +51,12 @@ namespace LipidCreator
             precursorDataTable.Columns[0].DataType = typeof(bool);
             precursorDataTable.Columns.Add(new DataColumn("Precursor name"));
             precursorDataTable.Columns[1].DataType = typeof(string);
-            precursorDataTable.Columns.Add(new DataColumn("Category"));
+            precursorDataTable.Columns.Add(new DataColumn("Adduct"));
             precursorDataTable.Columns[2].DataType = typeof(string);
+            precursorDataTable.Columns.Add(new DataColumn("Category"));
+            precursorDataTable.Columns[3].DataType = typeof(string);
             precursorDataTable.Columns.Add(new DataColumn("reference"));
-            precursorDataTable.Columns[3].DataType = typeof(PrecursorData);
+            precursorDataTable.Columns[4].DataType = typeof(PrecursorData);
             
             InitializeComponent ();
             
@@ -63,6 +65,7 @@ namespace LipidCreator
                 DataRow row = precursorDataTable.NewRow();
                 row["Keep"] = precursorData.precursorSelected;
                 row["Precursor name"] = precursorData.precursorName;
+                row["Adduct"] = precursorData.precursorAdduct.ToString();
                 row["Category"] = precursorData.lipidCategory.ToString();
                 row["reference"] = precursorData;
                 precursorDataTable.Rows.Add(row);
@@ -85,7 +88,9 @@ namespace LipidCreator
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewPrecursors.Columns[2].ReadOnly = true;
             dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewPrecursors.Columns[3].Visible = false;
+            dataGridViewPrecursors.Columns[3].ReadOnly = true;
+            dataGridViewPrecursors.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[4].Visible = false;
             
         }
         
@@ -122,7 +127,7 @@ namespace LipidCreator
             foreach (DataRow dataRow in precursorDataTable.Rows)
             {
                 dataRow[0] = true;
-                ((PrecursorData)dataRow[3]).precursorSelected = true;
+                ((PrecursorData)dataRow[4]).precursorSelected = true;
             }
             refreshDataGridViewPrecursors();
             updateSelectedLabel();
@@ -135,7 +140,7 @@ namespace LipidCreator
             foreach (DataRow dataRow in precursorDataTable.Rows)
             {
                 dataRow[0] = false;
-                ((PrecursorData)dataRow[3]).precursorSelected = false;
+                ((PrecursorData)dataRow[4]).precursorSelected = false;
             }
             refreshDataGridViewPrecursors();
             updateSelectedLabel();

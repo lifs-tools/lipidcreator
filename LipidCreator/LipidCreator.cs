@@ -879,6 +879,8 @@ namespace LipidCreator
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
+                            if (lipid == null) continue;
+                            
                             if (filterParameters != null)
                             {
                                 lipid.onlyPrecursors = filterParameters[0];

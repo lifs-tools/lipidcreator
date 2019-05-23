@@ -329,9 +329,9 @@ namespace LipidCreator
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
                             string completeKey = headgroup;
-                            if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
-                            else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
                             completeKey += key;
+                            if (isPlamalogen) completeKey = completeKey.Replace("O-p ", "O-");
+                            else if (isFAa) completeKey = completeKey.Replace("O-a ", "O-");
                             
                             if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
                             if (usedKeys.Contains(completeKey + adductKey)) continue;
@@ -500,9 +500,9 @@ namespace LipidCreator
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
                                 string completeKey = headgroup;
-                                if (isPlamalogen) completeKey = completeKey.Replace("O-p", "O");
-                                else if (isFAa) completeKey = completeKey.Replace("O-a", "O");
                                 completeKey += key;
+                                if (isPlamalogen) completeKey = completeKey.Replace("O-p ", "O-");
+                                else if (isFAa) completeKey = completeKey.Replace("O-a ", "O-");
                                 
                                 if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
                                 if (usedKeys.Contains(completeKey + adductKey)) continue;

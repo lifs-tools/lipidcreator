@@ -476,7 +476,6 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                //lipid.headGroupNames.Add(headgroup + "-");
                 if (headgroup == "PE O")
                 {
                     headgroup = "PE";
@@ -496,7 +495,6 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                //lipid.headGroupNames.Add(headgroup + "-");
                 if (headgroup == "LPE O")
                 {
                     headgroup = "LPE";

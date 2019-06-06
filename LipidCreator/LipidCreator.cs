@@ -45,6 +45,9 @@ using log4net;
 using log4net.Config;
 using System.Globalization;
 
+
+using ExcelLibrary.SpreadSheet;
+
 namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
@@ -515,6 +518,21 @@ namespace LipidCreator
         
         public LipidCreator(string pipe)
         {
+        
+            /*
+            Workbook workbook = new Workbook();
+            Worksheet worksheet = new Worksheet("Test1");
+            worksheet.Cells[0, 1] = new Cell(100);
+            worksheet.Cells[2, 0] = new Cell("-H2");
+            workbook.Worksheets.Add(worksheet);
+            workbook.Save("test.xls");
+            
+            Environment.Exit(0);
+            */
+        
+        
+        
+        
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
@@ -1059,6 +1077,7 @@ namespace LipidCreator
             double mass = 0;
             foreach (KeyValuePair<Molecule, int> row in elements)
             {
+                if (row.Value < 0) throw new Exception("error in computation: an element table has negative count for element " + row.Key);
                 mass += row.Value * MS2Fragment.ALL_ELEMENTS[row.Key].mass;
             }
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);

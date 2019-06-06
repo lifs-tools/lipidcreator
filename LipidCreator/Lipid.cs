@@ -295,10 +295,10 @@ namespace LipidCreator
                     }
                 }
                 
+                MS2Fragment.correctCountsAndCheck(atomsCountFragment);   // correct element counts
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
-                MS2Fragment.correctCountsAndCheck(atomsCountFragment);   // correct element counts
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 
                 // Exceptions for mediators
@@ -578,10 +578,10 @@ namespace LipidCreator
                     }
                 }
                 
+                MS2Fragment.correctCountsAndCheck(atomsCountFragment); // correct element counts
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
-                MS2Fragment.correctCountsAndCheck(atomsCountFragment); // correct element counts
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 string fragName = fragment.fragmentName;
                 

@@ -298,6 +298,7 @@ namespace LipidCreator
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
+                MS2Fragment.correctCountsAndCheck(atomsCountFragment);   // correct element counts
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 
                 // Exceptions for mediators
@@ -336,6 +337,7 @@ namespace LipidCreator
                 // exclude duplicate fragments within the same lipid species
                 if (insertedFragments.Contains(fragName + "/" + fragAdduct)) continue;
                 insertedFragments.Add(fragName + "/" + fragAdduct);
+                
                 
                 
                 string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);
@@ -579,6 +581,7 @@ namespace LipidCreator
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
+                MS2Fragment.correctCountsAndCheck(atomsCountFragment); // correct element counts
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 string fragName = fragment.fragmentName;
                 
@@ -612,6 +615,7 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }
+                
                 
                 peaks.Add(new Peak(massFragment,
                     MS2Fragment.DEFAULT_INTENSITY,

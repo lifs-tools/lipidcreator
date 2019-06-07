@@ -462,7 +462,7 @@ namespace LipidCreator
                                 {
                                     lc.assembleLipids(asDeveloper); 
                                     DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
-                                    lc.storeTransitionList(",", split, outputCSV, transitionList);
+                                    lc.storeTransitionList(",", split, false, outputCSV, transitionList);
                                 }
                                 else
                                 {

@@ -518,21 +518,6 @@ namespace LipidCreator
         
         public LipidCreator(string pipe)
         {
-        
-            /*
-            Workbook workbook = new Workbook();
-            Worksheet worksheet = new Worksheet("Test1");
-            worksheet.Cells[0, 1] = new Cell(100);
-            worksheet.Cells[2, 0] = new Cell("-H2");
-            workbook.Worksheets.Add(worksheet);
-            workbook.Save("test.xls");
-            
-            Environment.Exit(0);
-            */
-        
-        
-        
-        
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
@@ -926,45 +911,152 @@ namespace LipidCreator
         
         
         
-        public void storeTransitionList(string separator, bool split, string filename, DataTable currentView, string mode = ".csv")
+        public void storeTransitionList(string separator, bool split, bool xls, string filename, DataTable currentView, string mode = ".csv")
         {
-        
+            
             string outputDir = System.IO.Path.GetDirectoryName(filename);
             if (outputDir.Length > 0) System.IO.Directory.CreateDirectory(outputDir);
             if (!filename.EndsWith(mode)) filename += mode;
-            if (split)
+            
+            if (xls)
             {
-                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_positive" + mode)))
+                if (split)
                 {
-                    outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
-                    foreach (DataRow row in currentView.Rows)
-                    {
-                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2")
+                    { // positive
+                        Workbook workbook = new Workbook();
+                        Worksheet worksheet = new Worksheet("transition list");
+                        
+                        // adding headers
+                        int ii = 0;
+                        foreach (string header in LipidCreator.SKYLINE_API_HEADER)
                         {
-                            outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                            worksheet.Cells[0, ii++] = new Cell(header);
                         }
+                        
+                        int jj = 1;
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) != "+1" && ((String)row [LipidCreator.PRECURSOR_CHARGE]) != "+2") continue;
+                            ii = 0;
+                            foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
+                            {
+                                if (col.Equals(UNIQUE)) continue;
+                                string val = (string)row[col];
+                                if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
+                                {
+                                    val = val.Replace (",", ".");
+                                }
+                                worksheet.Cells[jj, ii++] = new Cell(val);
+                            }
+                            jj++;
+                        }
+                        workbook.Worksheets.Add(worksheet);
+                        workbook.Save(filename.Replace (mode, "_positive" + mode));
+                    }
+                    
+                    
+                    { // positive
+                        Workbook workbook = new Workbook();
+                        Worksheet worksheet = new Worksheet("transition list");
+                        
+                        // adding headers
+                        int ii = 0;
+                        foreach (string header in LipidCreator.SKYLINE_API_HEADER)
+                        {
+                            worksheet.Cells[0, ii++] = new Cell(header);
+                        }
+                        
+                        int jj = 1;
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) != "-1" && ((String)row [LipidCreator.PRECURSOR_CHARGE]) != "-2") continue;
+                            ii = 0;
+                            foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
+                            {
+                                if (col.Equals(UNIQUE)) continue;
+                                string val = (string)row[col];
+                                if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
+                                {
+                                    val = val.Replace (",", ".");
+                                }
+                                worksheet.Cells[jj, ii++] = new Cell(val);
+                            }
+                            jj++;
+                        }
+                        workbook.Worksheets.Add(worksheet);
+                        workbook.Save(filename.Replace (mode, "_negative" + mode));
                     }
                 }
-                using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode)))
+                
+                else 
                 {
-                    outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                    Workbook workbook = new Workbook();
+                    Worksheet worksheet = new Worksheet("transition list");
+                    
+                    // adding headers
+                    int ii = 0;
+                    foreach (string header in LipidCreator.SKYLINE_API_HEADER)
+                    {
+                        worksheet.Cells[0, ii++] = new Cell(header);
+                    }
+                    
+                    int jj = 1;
                     foreach (DataRow row in currentView.Rows)
                     {
-                        if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2")
+                        ii = 0;
+                        foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
                         {
-                            outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                            if (col.Equals(UNIQUE)) continue;
+                            string val = (string)row[col];
+                            if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
+                            {
+                                val = val.Replace (",", ".");
+                            }
+                            worksheet.Cells[jj, ii++] = new Cell(val);
                         }
+                        jj++;
                     }
+                    workbook.Worksheets.Add(worksheet);
+                    workbook.Save(filename);
                 }
             }
-            else
+            
+            else 
             {
-                using (StreamWriter writer = new StreamWriter(filename))
+                if (split)
                 {
-                    writer.WriteLine(toHeaderLine(separator, LipidCreator.SKYLINE_API_HEADER));
-                    foreach (DataRow row in currentView.Rows)
+                    using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_positive" + mode)))
                     {
-                        writer.WriteLine(toLine(row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "+2")
+                            {
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                            }
+                        }
+                    }
+                    using (StreamWriter outputFile = new StreamWriter (filename.Replace (mode, "_negative" + mode)))
+                    {
+                        outputFile.WriteLine (toHeaderLine (separator, LipidCreator.SKYLINE_API_HEADER));
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            if (((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-1" || ((String)row [LipidCreator.PRECURSOR_CHARGE]) == "-2")
+                            {
+                                outputFile.WriteLine (toLine (row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    using (StreamWriter writer = new StreamWriter(filename))
+                    {
+                        writer.WriteLine(toHeaderLine(separator, LipidCreator.SKYLINE_API_HEADER));
+                        foreach (DataRow row in currentView.Rows)
+                        {
+                            writer.WriteLine(toLine(row, LipidCreator.DATA_COLUMN_KEYS, separator));
+                        }
                     }
                 }
             }

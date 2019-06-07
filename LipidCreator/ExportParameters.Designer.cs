@@ -1,4 +1,33 @@
-﻿namespace LipidCreator
+﻿/*
+MIT License
+
+Copyright (c) 2018 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
+                   Bing Peng   -   bing.peng {at} isas.de
+                   Nils Hoffmann  -  nils.hoffmann {at} isas.de
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
+using System.Windows.Forms;
+
+namespace LipidCreator
 {
     partial class ExportParameters
     {
@@ -48,7 +77,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.mergeClick);
+            this.button1.Click += new System.EventHandler(this.okClick);
             // 
             // button2
             // 
@@ -58,7 +87,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.replaceClick);
+            this.button2.Click += new System.EventHandler(this.cancelClick);
             // 
             // groupBox1
             // 
@@ -80,6 +109,7 @@
             this.radioButton2.TabIndex = 1;
             this.radioButton2.Text = "csv";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new EventHandler(rb2CheckedChanged);
             // 
             // radioButton1
             // 
@@ -92,6 +122,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "xls";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new EventHandler(rb1CheckedChanged);
             // 
             // groupBox2
             // 
@@ -114,10 +145,12 @@
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "split in two files";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new EventHandler(rb3CheckedChanged);
             // 
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
+            this.radioButton4.Checked = true;
             this.radioButton4.Location = new System.Drawing.Point(23, 19);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(141, 17);
@@ -125,6 +158,7 @@
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "keep polarities in one file";
             this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new EventHandler(rb4CheckedChanged);
             // 
             // ExportParameters
             // 

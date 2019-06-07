@@ -142,6 +142,9 @@
     <Reference Include="SkylineTool">
       <HintPath>SkylineTool.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>ExcelLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -481,9 +484,9 @@
     <Delete Files="$(TargetDir)System.Data.SQLite.dll.config" />
     <Delete Files="$(TargetDir)System.Data.SQLite.xml" />
     <!-- create zip distribution on Windows -->
-    <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create zip distribution on Linux / OSX -->
-    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
   <Target Name="AfterClean" AfterTargets="Clean">
     <RemoveDir Directories="$(IntermediateOutputPath)" />

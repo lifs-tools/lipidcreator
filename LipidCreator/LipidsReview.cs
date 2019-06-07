@@ -755,27 +755,54 @@ namespace LipidCreator
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
             
-            saveFileDialog1.InitialDirectory = "c:\\";
-            saveFileDialog1.Filter = "csv files (*.csv)|*.csv|tsv files (*.tsv)|*.tsv|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 0;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
-                string mode = ".csv";
-                string separator = ",";
-                if(saveFileDialog1.FilterIndex==2) {
-                    mode = ".tsv";
-                    separator = "\t";
-                }
-                DialogResult mbr = MessageBox.Show ("Split polarities into two separate files?", "Storing mode", MessageBoxButtons.YesNo);
+            int[] parameterValues = new int[]{0, 0, 0};
+            
+            ExportParameters exportParameters = new ExportParameters(parameterValues);
+            exportParameters.Owner = this;
+            exportParameters.ShowInTaskbar = false;
+            exportParameters.ShowDialog();
+            exportParameters.Dispose();
+            
+            if (parameterValues[2] == 1) return;
+            
+            if (parameterValues[0] == 0) // xls
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
                 
-                this.Enabled = false;
-                creatorGUI.lipidCreator.storeTransitionList(separator, (mbr == DialogResult.Yes), Path.GetFullPath (saveFileDialog1.FileName), currentView, mode);
-                this.Enabled = true;
-                MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
+                saveFileDialog1.InitialDirectory = "c:\\";
+                saveFileDialog1.Filter = "xls files (*.xls)|*.xls|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 0;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                    this.Enabled = false;
+                    creatorGUI.lipidCreator.storeTransitionList("", parameterValues[1] == 1, true, Path.GetFullPath (saveFileDialog1.FileName), currentView, ".xls");
+                    this.Enabled = true;
+                }
             }
+            else // csv
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
+                
+                saveFileDialog1.InitialDirectory = "c:\\";
+                saveFileDialog1.Filter = "csv files (*.csv)|*.csv|tsv files (*.tsv)|*.tsv|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 0;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                    string mode = ".csv";
+                    string separator = ",";
+                    if(saveFileDialog1.FilterIndex==2) {
+                        mode = ".tsv";
+                        separator = "\t";
+                    }
+                    this.Enabled = false;
+                    creatorGUI.lipidCreator.storeTransitionList(separator, parameterValues[1] == 1, false, Path.GetFullPath (saveFileDialog1.FileName), currentView, mode);
+                    this.Enabled = true;
+                }
+            }
+                    MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
         }
         
         

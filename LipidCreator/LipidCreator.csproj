@@ -177,9 +177,9 @@
     </Compile>
     <Compile Include="LCMessageBox.cs">
       <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LCMessageBox.Designer.cs">
       <DependentUpon>LCMessageBox.cs</DependentUpon>
-    </Compile>
     </Compile>
     <Compile Include="ExportParameters.cs">
       <SubType>Form</SubType>

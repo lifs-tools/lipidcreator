@@ -73,12 +73,12 @@ namespace LipidCreator
         
         protected void okClick(object sender, System.EventArgs e)
         {
-            Close();        
+            parameterValues[2] = 0;
+            Close();
         }
         
         protected void cancelClick(object sender, System.EventArgs e)
         {
-            parameterValues[2] = 1;
             Close();
         }
     }

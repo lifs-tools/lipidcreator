@@ -71,7 +71,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(67, 183);
+            this.button1.Location = new System.Drawing.Point(67, 193);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -81,7 +81,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(148, 183);
+            this.button2.Location = new System.Drawing.Point(148, 193);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -107,7 +107,7 @@ namespace LipidCreator
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(42, 17);
             this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "csv";
+            this.radioButton2.Text = ".csv";
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new EventHandler(rb2CheckedChanged);
             // 
@@ -120,7 +120,7 @@ namespace LipidCreator
             this.radioButton1.Size = new System.Drawing.Size(37, 17);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "xls";
+            this.radioButton1.Text = ".xls";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new EventHandler(rb1CheckedChanged);
             // 
@@ -133,7 +133,7 @@ namespace LipidCreator
             this.groupBox2.Size = new System.Drawing.Size(211, 67);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Polarity";
+            this.groupBox2.Text = "Separated by polarity";
             // 
             // radioButton3
             // 
@@ -143,7 +143,7 @@ namespace LipidCreator
             this.radioButton3.Size = new System.Drawing.Size(95, 17);
             this.radioButton3.TabIndex = 1;
             this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "split in two files";
+            this.radioButton3.Text = "Yes";
             this.radioButton3.UseVisualStyleBackColor = true;
             this.radioButton3.CheckedChanged += new EventHandler(rb3CheckedChanged);
             // 
@@ -156,7 +156,7 @@ namespace LipidCreator
             this.radioButton4.Size = new System.Drawing.Size(141, 17);
             this.radioButton4.TabIndex = 0;
             this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "keep polarities in one file";
+            this.radioButton4.Text = "No";
             this.radioButton4.UseVisualStyleBackColor = true;
             this.radioButton4.CheckedChanged += new EventHandler(rb4CheckedChanged);
             // 

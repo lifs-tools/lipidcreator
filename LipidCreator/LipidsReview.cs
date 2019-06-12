@@ -756,7 +756,7 @@ namespace LipidCreator
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
             
-            int[] parameterValues = new int[]{0, 0, 0};
+            int[] parameterValues = new int[]{0, 0, 1};
             
             ExportParameters exportParameters = new ExportParameters(parameterValues);
             exportParameters.Owner = this;

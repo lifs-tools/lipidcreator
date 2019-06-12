@@ -65,13 +65,16 @@ namespace LipidCreator
             this.labelDeselectAll = new System.Windows.Forms.Label();
             this.labelSelected = new System.Windows.Forms.Label();
             this.labelSlash = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.continueReviewButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrecursors)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
             // 
-            this.dataGridViewPrecursors.Size = new System.Drawing.Size(555, 609);
+            this.dataGridViewPrecursors.Size = new System.Drawing.Size(705, 609);
             this.dataGridViewPrecursors.Location = new System.Drawing.Point(12, 12);
             this.dataGridViewPrecursors.DataSource = precursorDataTable;
             this.dataGridViewPrecursors.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -90,7 +93,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(356, 628);
+            this.cancelButton.Location = new System.Drawing.Point(506, 638);
             this.cancelButton.Name = "button1";
             this.cancelButton.Size = new System.Drawing.Size(88, 34);
             this.cancelButton.TabIndex = 2;
@@ -101,15 +104,50 @@ namespace LipidCreator
             // label
             //
             this.labelSlash.AutoSize = true;
-            this.labelSlash.Location = new System.Drawing.Point(67, 628);
+            this.labelSlash.Location = new System.Drawing.Point(67, 638);
             this.labelSlash.Name = "labelSlash";
             this.labelSlash.Text = "/";
-            
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Location = new System.Drawing.Point(200, 628);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(241, 55);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Computation method";
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(13, 15);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(37, 17);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Compute on subspecies level";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            //this.radioButton1.CheckedChanged += new EventHandler(rb1CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(13, 35);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(42, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "Compute on species level";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            //this.radioButton2.CheckedChanged += new EventHandler(rb2CheckedChanged);
+            // 
             // 
             // labelSelectAll
             // 
             this.labelSelectAll.AutoSize = true;
-            this.labelSelectAll.Location = new System.Drawing.Point(12, 628);
+            this.labelSelectAll.Location = new System.Drawing.Point(12, 638);
             this.labelSelectAll.Name = "labelSelectAll";
             this.labelSelectAll.TabIndex = 6;
             this.labelSelectAll.Text = "select all";
@@ -119,7 +157,7 @@ namespace LipidCreator
             // labelDeselectAll
             // 
             this.labelDeselectAll.AutoSize = true;
-            this.labelDeselectAll.Location = new System.Drawing.Point(74, 628);
+            this.labelDeselectAll.Location = new System.Drawing.Point(74, 638);
             this.labelDeselectAll.Name = "labelDeselectAll";
             this.labelDeselectAll.TabIndex = 6;
             this.labelDeselectAll.Text = "deselect all";
@@ -129,23 +167,24 @@ namespace LipidCreator
             // labelSelected
             // 
             this.labelSelected.AutoSize = true;
-            this.labelSelected.Location = new System.Drawing.Point(12, 648);
+            this.labelSelected.Location = new System.Drawing.Point(12, 658);
             this.labelSelected.Name = "labelSelected";
             this.labelSelected.TabIndex = 7;
             this.labelSelected.Text = "Selected precursors: -";
             // 
             // button2
             // 
-            this.continueReviewButton.Location = new System.Drawing.Point(459, 628);
+            this.continueReviewButton.Location = new System.Drawing.Point(609, 638);
             this.continueReviewButton.Name = "button2";
             this.continueReviewButton.Size = new System.Drawing.Size(108, 34);
             this.continueReviewButton.TabIndex = 1;
             this.continueReviewButton.Text = "Continue";
             this.continueReviewButton.UseVisualStyleBackColor = true;
             this.continueReviewButton.Click += new System.EventHandler(this.continueReviewButtonClick);
+            
             this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(579, 674);
+            this.ClientSize = new System.Drawing.Size(729, 694);
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridViewPrecursors);
@@ -153,6 +192,7 @@ namespace LipidCreator
             this.Controls.Add(this.labelSelectAll);
             this.Controls.Add(this.labelSelected);
             this.Controls.Add(this.labelDeselectAll);
+            this.Controls.Add(this.groupBox1);
             this.Name = "LipidsInterList";
             this.Text = "Lipid Precursor Review";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrecursors)).EndInit();
@@ -162,7 +202,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton, labelSelectAll, labelDeselectAll};
+            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton, labelSelectAll, labelDeselectAll, groupBox1, radioButton1, radioButton2};
         }
 
         #endregion
@@ -181,6 +221,9 @@ namespace LipidCreator
         public System.Windows.Forms.Button cancelButton;
         [NonSerialized]
         public Button continueReviewButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
         public ArrayList controlElements;
     }
 }

@@ -125,6 +125,7 @@ namespace LipidCreator
         {
             gridviewDataColor();
             dataGridViewTransitions.Columns[0].Visible = false;
+            dataGridViewTransitions.Columns[13].Visible = false;
             updateCountLabel();
         }
         

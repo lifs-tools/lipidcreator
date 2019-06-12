@@ -66,6 +66,7 @@ namespace LipidCreator
                      AppendLine("    -h 1:\t\tCompute only heavy labeled isotopes").
                      AppendLine("    -h 2:\t\tCompute with heavy labeled isotopes").
                      AppendLine("    -s:\t\t\tSplit in positive and negative list").
+                     AppendLine("    -S:\t\t\tCompute on species level").
                      AppendLine("    -x:\t\t\tDeveloper or Xpert mode").
                      AppendLine("    -l:\t\t\tCreate LipidCreator project file instead of transition list").
                      AppendLine("    -d:\t\t\tDelete replicate transitions (equal precursor and fragment mass)").
@@ -376,6 +377,7 @@ namespace LipidCreator
                                 string mode = "";
                                 bool deleteReplicates = false;
                                 bool split = false;
+                                bool species = false;
                                 bool asDeveloper = false;
                                 bool createXMLFile = false;
                                 int p = 3;
@@ -407,6 +409,11 @@ namespace LipidCreator
                                             p += 1;
                                             break;
                                             
+                                        case "-S": // file split parameter
+                                            species = true;
+                                            p += 1;
+                                            break;
+                                            
                                         case "-d":
                                             deleteReplicates = true;
                                             p += 1;
@@ -432,6 +439,7 @@ namespace LipidCreator
                                 
                                 LipidCreator lc = new LipidCreator(null);
                                 lc.runMode = runMode;
+                                lc.computeOnSpeciesLevel = species;
                                 lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");

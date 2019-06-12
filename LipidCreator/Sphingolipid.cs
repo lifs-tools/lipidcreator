@@ -154,6 +154,11 @@ namespace LipidCreator
                                 int charge = adduct.charge;
                                 MS2Fragment.addCounts(atomsCount, adduct.elements);
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
+                                
+                                // species name
+                                FattyAcid speciesFA = new FattyAcid(lcbType);
+                                speciesFA.merge(fa);
+                                string speciesName = headgroup + " " + speciesFA.ToString();
                             
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Sphingolipid;
@@ -161,6 +166,7 @@ namespace LipidCreator
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = headgroup + key;
                                 precursorData.precursorName = headgroup + key;
+                                precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct;
                                 precursorData.precursorAdductFormula = adductForm;
@@ -206,6 +212,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;
                                     heavyPrecursorData.precursorName = heavyKey + key;
+                                    heavyPrecursorData.precursorSpeciesName = speciesName;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -253,6 +260,7 @@ namespace LipidCreator
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.precursorExportName = headgroup + key;
                             precursorData.precursorName = headgroup + key;
+                            precursorData.precursorSpeciesName = headgroup + key;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct;
                             precursorData.precursorAdductFormula = adductForm;
@@ -297,6 +305,7 @@ namespace LipidCreator
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = headgroup + key;
                                 heavyPrecursorData.precursorName = heavyKey + key;
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

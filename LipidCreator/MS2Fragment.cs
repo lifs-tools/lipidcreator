@@ -44,7 +44,7 @@ namespace LipidCreator
         public ElementDictionary fragmentElements;
         public Adduct fragmentAdduct;
         public ArrayList fragmentBase;
-        public double intensity;
+        public bool specific;
         public bool userDefined;
         public const double MAX_INTENSITY = 100.0;
         public const double DEFAULT_INTENSITY = 10.0;
@@ -173,7 +173,7 @@ namespace LipidCreator
             sb.Append(" fragmentOutputName=\"" + fragmentOutputName + "\"");
             sb.Append(" fragmentAdduct=\"" + fragmentAdduct.name + "\"");
             sb.Append(" fragmentFile=\"" + fragmentFile + "\"");
-            sb.Append(" intensity=\"" + intensity + "\"");
+            sb.Append(" specific=\"" + (specific ? "1" : "0") + "\"");
             sb.Append(" userDefined=\"" + userDefined + "\">");
             foreach (string fbase in fragmentBase)
             {
@@ -193,7 +193,7 @@ namespace LipidCreator
             fragmentOutputName = node.Attribute("fragmentOutputName").Value.ToString();
             fragmentAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[node.Attribute("fragmentAdduct").Value.ToString()]];
             fragmentFile = node.Attribute("fragmentFile").Value.ToString();
-            intensity = Convert.ToInt32(node.Attribute("intensity").Value.ToString());
+            specific = node.Attribute("specific").Value.ToString() == "1";
             userDefined = node.Attribute("userDefined").Value.Equals("True");
             
             
@@ -225,11 +225,12 @@ namespace LipidCreator
         
         // TODO: compute fragment intensity based on parameterized
         // model depending on collision energy 
+        /*
         public double computeIntensity(double collisionEnergy = 0)
         {
             return intensity;
         }
-        
+        */
         
         
         public static void correctCountsAndCheck(ElementDictionary counts)
@@ -260,7 +261,7 @@ namespace LipidCreator
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
-            intensity = DEFAULT_INTENSITY;
+            specific = false;
         }
         
         
@@ -275,7 +276,7 @@ namespace LipidCreator
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
-            intensity = DEFAULT_INTENSITY;
+            specific = false;
         }
 
 
@@ -289,7 +290,7 @@ namespace LipidCreator
             foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
-            intensity = DEFAULT_INTENSITY;
+            specific = false;
         }
         
         
@@ -303,12 +304,12 @@ namespace LipidCreator
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            intensity = DEFAULT_INTENSITY;
+            specific = false;
         }
         
         
         
-        public MS2Fragment(String name, String outputname, Adduct _adduct, String fileName, ElementDictionary dataElements, String baseForms, double intens)
+        public MS2Fragment(String name, String outputname, Adduct _adduct, String fileName, ElementDictionary dataElements, String baseForms, bool _specific)
         {
             fragmentName = name;
             fragmentOutputName = outputname;
@@ -317,7 +318,7 @@ namespace LipidCreator
             fragmentElements = dataElements;
             fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
             userDefined = false;
-            intensity = Math.Min(DEFAULT_INTENSITY, Math.Max(0, intens));
+            specific = _specific;
         }
 
         
@@ -333,7 +334,7 @@ namespace LipidCreator
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
-            intensity = copy.intensity;
+            specific = copy.specific;
         }
     }
 }

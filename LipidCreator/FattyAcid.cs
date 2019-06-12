@@ -96,6 +96,22 @@ namespace LipidCreator
             foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
         }
         
+        
+        
+        
+        public void merge(FattyAcid copy)
+        {
+            if (copy.suffix == "x") return;
+            
+            length += copy.length;
+            db += copy.db;
+            isLCB |= copy.isLCB;
+            hydroxyl += copy.hydroxyl;
+            suffix += copy.suffix;
+            foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] += row.Value;
+        }
+        
+        
         public string ToString(bool fullFormat = true)
         {
             string key = Convert.ToString(length) + ":" + Convert.ToString(db);

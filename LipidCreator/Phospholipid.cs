@@ -211,6 +211,15 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(atomsCount, adduct.elements);
                                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
+                                    
+                                    // species name
+                                    FattyAcid speciesFA = new FattyAcid(fa1);
+                                    speciesFA.merge(fa2);
+                                    speciesFA.merge(fa3);
+                                    speciesFA.merge(fa4);
+                                    string speciesName = headgroup + " " + speciesFA.ToString();
+                                    
+                                    
                                     // filling information on MS1 level for cardiolipin
                                     PrecursorData precursorData = new PrecursorData();
                                     precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
@@ -218,6 +227,7 @@ namespace LipidCreator
                                     precursorData.fullMoleculeListName = headgroup;
                                     precursorData.precursorExportName = headgroup + key;
                                     precursorData.precursorName = headgroup + key;
+                                    precursorData.precursorSpeciesName = speciesName;
                                     precursorData.precursorIonFormula = chemForm;
                                     precursorData.precursorAdduct = adduct;
                                     precursorData.precursorAdductFormula = adductForm;
@@ -275,6 +285,7 @@ namespace LipidCreator
                                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                         heavyPrecursorData.precursorExportName = headgroup + key;
                                         heavyPrecursorData.precursorName = heavyKey + key;
+                                        heavyPrecursorData.precursorSpeciesName = speciesName;
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                         heavyPrecursorData.precursorAdduct = adduct;
                                         heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -355,6 +366,7 @@ namespace LipidCreator
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.precursorExportName = completeKey;
                             precursorData.precursorName = completeKey;
+                            precursorData.precursorSpeciesName = completeKey;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct;
                             precursorData.precursorAdductFormula = adductForm;
@@ -399,6 +411,7 @@ namespace LipidCreator
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = completeKey;
                                 heavyPrecursorData.precursorName = heavyKey + key;
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + key;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -519,6 +532,12 @@ namespace LipidCreator
                                 int charge = adduct.charge;
                                 MS2Fragment.addCounts(atomsCount, adduct.elements);
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
+                                    
+                                    
+                                // species name
+                                FattyAcid speciesFA = new FattyAcid(fa1);
+                                speciesFA.merge(fa2);
+                                string speciesName = headgroup + " " + speciesFA.ToString();
                                                                     
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
@@ -527,6 +546,7 @@ namespace LipidCreator
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = completeKey;
                                 precursorData.precursorName = completeKey;
+                                precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct;
                                 precursorData.precursorAdductFormula = adductForm;
@@ -587,6 +607,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + key;
+                                    heavyPrecursorData.precursorSpeciesName = speciesName;
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

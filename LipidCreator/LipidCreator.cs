@@ -83,6 +83,8 @@ namespace LipidCreator
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
+        public bool computeOnSpeciesLevel = false;
+        public bool mergePrecursor = false;
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -130,6 +132,7 @@ namespace LipidCreator
         public const string PRODUCT_CHARGE = "Product Charge";
         public const string NOTE = "Note";
         public const string UNIQUE = "unique";
+        public const string SPECIFIC = "specific";
         public const string COLLISION_ENERGY = "Explicit Collision Energy";
         public const string SKYLINE_API_COLLISION_ENERGY = "PrecursorCE";
         public readonly static string[] STATIC_SKYLINE_API_HEADER = {
@@ -210,14 +213,7 @@ namespace LipidCreator
                             }
                             int charge = Convert.ToInt32(tokens[4]);
                             Adduct adduct = Lipid.chargeToAdduct[charge];
-                            if (tokens[12].Length > 0)
-                            {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5], Convert.ToDouble(tokens[12])));
-                            }
-                            else 
-                            {
-                                allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5]));
-                            }
+                            allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5], tokens[12] == "1"));
                         }
                     }
                 }
@@ -704,7 +700,7 @@ namespace LipidCreator
                 {
                     if (precursorData.precursorSelected)
                     {
-                        Lipid.computeFragmentData (transitionList, precursorData, allFragments, headgroups);
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments, headgroups, computeOnSpeciesLevel, mergePrecursor);
                     }
                 }
             }
@@ -733,7 +729,28 @@ namespace LipidCreator
                         }
                         CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
                     }
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, computeOnSpeciesLevel, mergePrecursor, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
+                }
+            }
+            
+            
+            if (computeOnSpeciesLevel)
+            {
+            
+                HashSet<string> transitionListSpecies = new HashSet<string>();
+                for (int i = transitionList.Rows.Count - 1; i >= 0; --i)
+                {
+                    DataRow row = transitionList.Rows[i];
+                    if ((string)row["specific"] == "1")
+                    {
+                        string key = (string)row[PRECURSOR_NAME] + "-" + (string)row[PRECURSOR_ADDUCT] + "-" + (string)row[PRODUCT_NAME] + "-" + (string)row[PRODUCT_ADDUCT];
+                        
+                        if (!transitionListSpecies.Contains(key))
+                        {
+                            transitionListSpecies.Add(key);
+                            row.Delete();
+                        }
+                    }
                 }
             }
             
@@ -1814,6 +1831,7 @@ namespace LipidCreator
             foreach (string columnKey in DATA_COLUMN_KEYS) {
                 dataTable.Columns.Add (columnKey);
             }
+            dataTable.Columns.Add ("specific");
             return dataTable;
         }
 

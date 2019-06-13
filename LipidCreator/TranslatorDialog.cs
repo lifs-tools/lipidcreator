@@ -248,7 +248,6 @@ namespace LipidCreator
                     string newLipidName = "";
                     if (!(currentLipid is UnsupportedLipid))
                     {
-                        Console.WriteLine("huhu");
                         newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
                         string adductName = "";
                         foreach (string addct in currentLipid.adducts.Keys)

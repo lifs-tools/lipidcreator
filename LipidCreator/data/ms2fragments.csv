@@ -904,15 +904,15 @@ PE O-a,-FA [yy:y](-H),-FA2(-H),images/MS2/Phospholipids/ePE/ePE_neg_FA2'+O.png,-
 PE O-a,FA [yy:y] -(CO),FA2 -(CO),images/MS2/Phospholipids/ePE/ePE_neg_FA2-CO.png,-1,FA2,-1,1,-1,0,0,0,0
 PE O-a,"-HG(PE,141)","-HG(PE,141)",images/MS2/Phospholipids/ePE/ePE_pos_NL.png,1,HG;FA1;FA2,-2,-8,-4,-1,-1,0,1
 PE O-a,FA [yy:y]+(C3H6O2),FA2+(C3H6O2),images/MS2/Phospholipids/ePE/ePE_pos_FA2+G.png,1,FA2,3,5,2,0,0,0,0
-GB3,"-(H2O,18)","-(H2O,18)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_NL(H2O).png,1,HG;LCB;FA,0,-2,-1,0,0,0,1
-GB3,LCB [xx:x;x](-HO),LCB(-HO),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W'.png,1,LCB,0,-1,-1,0,0,0,0
-GB3,LCB [xx:x;x](-H3O2),LCB(-H3O2),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W''.png,1,LCB,0,-3,-2,0,0,0,0
-GB3,LCB [xx:x;x](-CH3O2),LCB(-CH3O2),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W'-CHO.png,1,LCB,-1,-3,-2,0,0,0,0
-GB3,"-HG(Hex3,504)","-HG(Hex3,504)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0.png,1,HG;LCB;FA,-18,-32,-16,0,0,0,1
-GB3,"-HG(Hex3,522)","-HG(Hex3,522)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0-H2O.png,1,HG;LCB;FA,-18,-34,-17,0,0,0,1
-GB3,"-HG(Hex3,534)","-HG(Hex3,534)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0-H2O-C.png,1,HG;LCB;FA,-19,-34,-17,0,0,0,1
-GB3,"-HG(Hex2,342)","-HG(Hex2,342)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z1.png,1,HG;LCB;FA,-12,-22,-11,0,0,0,1
-GB3,"-HG(Hex,180)","-HG(Hex,180)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z2.png,1,HG;LCB;FA,-6,-12,-6,0,0,0,1
+Hex3Cer,"-(H2O,18)","-(H2O,18)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_NL(H2O).png,1,HG;LCB;FA,0,-2,-1,0,0,0,1
+Hex3Cer,LCB [xx:x;x](-HO),LCB(-HO),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W'.png,1,LCB,0,-1,-1,0,0,0,0
+Hex3Cer,LCB [xx:x;x](-H3O2),LCB(-H3O2),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W''.png,1,LCB,0,-3,-2,0,0,0,0
+Hex3Cer,LCB [xx:x;x](-CH3O2),LCB(-CH3O2),images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_W'-CHO.png,1,LCB,-1,-3,-2,0,0,0,0
+Hex3Cer,"-HG(Hex3,504)","-HG(Hex3,504)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0.png,1,HG;LCB;FA,-18,-32,-16,0,0,0,1
+Hex3Cer,"-HG(Hex3,522)","-HG(Hex3,522)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0-H2O.png,1,HG;LCB;FA,-18,-34,-17,0,0,0,1
+Hex3Cer,"-HG(Hex3,534)","-HG(Hex3,534)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z0-H2O-C.png,1,HG;LCB;FA,-19,-34,-17,0,0,0,1
+Hex3Cer,"-HG(Hex2,342)","-HG(Hex2,342)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z1.png,1,HG;LCB;FA,-12,-22,-11,0,0,0,1
+Hex3Cer,"-HG(Hex,180)","-HG(Hex,180)",images/MS2/Sphingolipids/GB3Cer/GB3Cer_pos_Z2.png,1,HG;LCB;FA,-6,-12,-6,0,0,0,1
 GB4,"HG(NHex,204)","HG(NHex,204)",images/MS2/Sphingolipids/GB4Cer/GB4Cer_pos_B1.png,1,HG,-18,-30,-15,0,0,0,1
 GB4,"HG(NHex2,366)","HG(NHex2,366)",images/MS2/Sphingolipids/GB4Cer/GB4Cer_pos_B2.png,1,HG,-12,-20,-10,0,0,0,1
 GB4,"HG(NHex3,528)","HG(NHex3,528)",images/MS2/Sphingolipids/GB4Cer/GB4Cer_pos_B3.png,1,HG,-6,-10,-5,0,0,0,1

@@ -177,6 +177,7 @@ namespace LipidCreator
                         precursorData.fullMoleculeListName = headgroup;
                         precursorData.precursorExportName = headgroup + key;
                         precursorData.precursorName = headgroup + key;
+                        precursorData.precursorSpeciesName = headgroup + key;
                         precursorData.precursorIonFormula = chemForm;
                         precursorData.precursorAdduct = adduct;
                         precursorData.precursorAdductFormula = adductForm;
@@ -219,6 +220,7 @@ namespace LipidCreator
                             heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                             heavyPrecursorData.precursorExportName = headgroup + key;
                             heavyPrecursorData.precursorName = heavyKey + key;
+                            heavyPrecursorData.precursorSpeciesName = heavyKey + key;
                             heavyPrecursorData.precursorIonFormula = heavyChemForm;
                             heavyPrecursorData.precursorAdduct = adduct;
                             heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -263,6 +265,7 @@ namespace LipidCreator
                     precursorData.fullMoleculeListName = headgroup;
                     precursorData.precursorExportName = headgroup;
                     precursorData.precursorName = key;
+                    precursorData.precursorSpeciesName = key;
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;
@@ -301,6 +304,7 @@ namespace LipidCreator
                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                         heavyPrecursorData.precursorExportName = headgroup;
                         heavyPrecursorData.precursorName = heavyKey;
+                        heavyPrecursorData.precursorSpeciesName = heavyKey;
                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                         heavyPrecursorData.precursorAdduct = adduct;
                         heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

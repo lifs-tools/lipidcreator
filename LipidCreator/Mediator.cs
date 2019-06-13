@@ -39,11 +39,11 @@ namespace LipidCreator
     { 
         public Mediator(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.LipidMediator)
         {
+            adducts["-H"] = true;
         }
     
         public Mediator(Mediator copy) : base((Lipid)copy) 
         {
-            
         }
         
         
@@ -129,6 +129,7 @@ namespace LipidCreator
                     precursorData.moleculeListName = precNames[0];
                     precursorData.precursorExportName = precNames[0];
                     precursorData.precursorName = newKey;
+                    precursorData.precursorSpeciesName = newKey;
                     precursorData.precursorIonFormula = chemForm;
                     precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;

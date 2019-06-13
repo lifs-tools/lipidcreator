@@ -75,7 +75,7 @@ namespace LipidCreator
             // 
             // dataGridView1
             // 
-            this.dataGridViewPrecursors.Size = new System.Drawing.Size(705, 609);
+            this.dataGridViewPrecursors.Size = new System.Drawing.Size(505, 609);
             this.dataGridViewPrecursors.Location = new System.Drawing.Point(12, 12);
             this.dataGridViewPrecursors.DataSource = precursorDataTable;
             this.dataGridViewPrecursors.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -94,13 +94,23 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(508, 688);
+            this.cancelButton.Location = new System.Drawing.Point(308, 698);
             this.cancelButton.Name = "button1";
             this.cancelButton.Size = new System.Drawing.Size(88, 34);
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButtonClick);
+            // 
+            // button2
+            // 
+            this.continueReviewButton.Location = new System.Drawing.Point(409, 698);
+            this.continueReviewButton.Name = "button2";
+            this.continueReviewButton.Size = new System.Drawing.Size(108, 34);
+            this.continueReviewButton.TabIndex = 1;
+            this.continueReviewButton.Text = "Continue";
+            this.continueReviewButton.UseVisualStyleBackColor = true;
+            this.continueReviewButton.Click += new System.EventHandler(this.continueReviewButtonClick);
             //
             // label
             //
@@ -116,7 +126,7 @@ namespace LipidCreator
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Location = new System.Drawing.Point(12, 648);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(488, 75);
+            this.groupBox1.Size = new System.Drawing.Size(288, 85);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
@@ -140,13 +150,13 @@ namespace LipidCreator
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(42, 17);
             this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Display precursors on species level (only containing class specific fragments)";
+            this.radioButton2.Text = "Display precursors on species level" + Environment.NewLine + "(only containing class specific fragments)";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(13, 55);
+            this.radioButton3.Location = new System.Drawing.Point(13, 65);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(42, 17);
             this.radioButton3.TabIndex = 1;
@@ -181,20 +191,10 @@ namespace LipidCreator
             this.labelSelected.Name = "labelSelected";
             this.labelSelected.TabIndex = 7;
             this.labelSelected.Text = "Selected precursors: -";
-            // 
-            // button2
-            // 
-            this.continueReviewButton.Location = new System.Drawing.Point(609, 688);
-            this.continueReviewButton.Name = "button2";
-            this.continueReviewButton.Size = new System.Drawing.Size(108, 34);
-            this.continueReviewButton.TabIndex = 1;
-            this.continueReviewButton.Text = "Continue";
-            this.continueReviewButton.UseVisualStyleBackColor = true;
-            this.continueReviewButton.Click += new System.EventHandler(this.continueReviewButtonClick);
             
             this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(729, 734);
+            this.ClientSize = new System.Drawing.Size(529, 744);
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridViewPrecursors);

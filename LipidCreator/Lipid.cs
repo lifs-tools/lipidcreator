@@ -301,10 +301,15 @@ namespace LipidCreator
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
-                double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                double massFragment = 0;
                 
                 // Exceptions for mediators
-                if (precursorData.lipidCategory == LipidCategory.LipidMediator)
+                
+                if (precursorData.lipidCategory != LipidCategory.LipidMediator)
+                {
+                    massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                }
+                else
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";

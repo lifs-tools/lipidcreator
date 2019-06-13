@@ -943,7 +943,7 @@ namespace LipidCreator
         
         public void tutorialAssembleLipids()
         {   
-            creatorGUI.lipidCreator.assembleFragments(creatorGUI.asDeveloper);
+            creatorGUI.lipidCreator.assembleFragments(creatorGUI.asDeveloper, new ArrayList(){false, 0});
             
             creatorGUI.lipidsReview = new LipidsReview(creatorGUI, null);
             creatorGUI.lipidsReview.Owner = creatorGUI;

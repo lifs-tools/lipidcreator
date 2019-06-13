@@ -3160,18 +3160,22 @@ namespace LipidCreator
         public string FARepresentation(FattyAcidGroup fag)
         {
             string faRepresentation = "";
-            
-            if (fag.faTypes["FA"])
+            if (fag.isLCB)
+            {
+                if (faRepresentation.Length > 0) faRepresentation += ", ";
+                faRepresentation += "LCB";
+            }
+            else if (fag.faTypes["FA"])
             {
                 if (faRepresentation.Length > 0) faRepresentation += ", ";
                 faRepresentation += "FA";
             }
-            if (fag.faTypes["FAp"])
+            else if (fag.faTypes["FAp"])
             {
                 if (faRepresentation.Length > 0) faRepresentation += ", ";
                 faRepresentation += "FAp";
             }
-            if (fag.faTypes["FAa"])
+            else if (fag.faTypes["FAa"])
             {
                 if (faRepresentation.Length > 0) faRepresentation += ", ";
                 faRepresentation += "FAa";
@@ -3226,8 +3230,8 @@ namespace LipidCreator
                 Sphingolipid currentSphingolipid = (Sphingolipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
-                row["Building Block 2"] = "LCB: " + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
-                if (!currentSphingolipid.isLyso) row["Building Block 3"] = "FA: " + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
+                row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
+                if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
             }
             
             else if (currentRegisteredLipid is Cholesterol)
@@ -3235,7 +3239,7 @@ namespace LipidCreator
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
                 row["Building Block 1"] = "Ch" + (currentCHLipid.containsEster ? "E" : "");
-                if (currentCHLipid.containsEster) row["Building Block 2"] = "FA: " + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+                if (currentCHLipid.containsEster) row["Building Block 2"] = FARepresentation(currentCHLipid.fag) + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             
             else if (currentRegisteredLipid is Mediator)
@@ -3560,7 +3564,7 @@ namespace LipidCreator
             lipidCreator.assemblePrecursors();
             
             
-            ArrayList returnValues = new ArrayList(){false};
+            ArrayList returnValues = new ArrayList(){false, 0};
             
             
             if (tutorial.tutorial == Tutorials.NoTutorial)
@@ -3578,7 +3582,7 @@ namespace LipidCreator
                     
                     if (!(bool)returnValues[0]) break;
                     
-                    lipidCreator.assembleFragments(asDeveloper);   
+                    lipidCreator.assembleFragments(asDeveloper, returnValues);   
                 
                     lipidsReview = new LipidsReview(this, returnValues);
                     lipidsReview.Owner = this;

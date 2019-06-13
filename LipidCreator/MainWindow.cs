@@ -439,7 +439,6 @@ namespace LipidCreator
                                 
                                 LipidCreator lc = new LipidCreator(null);
                                 lc.runMode = runMode;
-                                lc.computeOnSpeciesLevel = species;
                                 lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
@@ -468,7 +467,7 @@ namespace LipidCreator
                                 
                                 if (!createXMLFile)
                                 {
-                                    lc.assembleLipids(asDeveloper); 
+                                    lc.assembleLipids(asDeveloper, new ArrayList(){false, (species ? 2 : 0)}); 
                                     DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                     lc.storeTransitionList(",", split, false, outputCSV, transitionList);
                                 }

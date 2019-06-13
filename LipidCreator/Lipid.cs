@@ -197,14 +197,14 @@ namespace LipidCreator
         
         
         
-        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, IDictionary<String, Precursor> headgroups, bool speciesLevel, bool mergePrecursor, CollisionEnergy collisionEnergyHandler = null, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring, double CE = -1, double minCE = 0, double maxCE = 0)
+        public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, IDictionary<String, Precursor> headgroups, ArrayList parameters, CollisionEnergy collisionEnergyHandler = null, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring, double CE = -1, double minCE = 0, double maxCE = 0)
         {
             
             
             if (precursorData.addPrecursor){
                 DataRow lipidRowPrecursor = transitionList.NewRow();
                 lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
-                lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = (speciesLevel && mergePrecursor) ? precursorData.precursorSpeciesName : precursorData.precursorName;
+                lipidRowPrecursor[LipidCreator.PRECURSOR_NAME] = ((int)parameters[1] != 0) ? precursorData.precursorSpeciesName : precursorData.precursorName;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
                 lipidRowPrecursor[LipidCreator.PRECURSOR_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
@@ -215,7 +215,7 @@ namespace LipidCreator
                 lipidRowPrecursor[LipidCreator.PRODUCT_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
                 lipidRowPrecursor[LipidCreator.PRODUCT_CHARGE] = ((precursorData.precursorAdduct.charge > 0) ? "+" : "") + Convert.ToString(precursorData.precursorAdduct.charge);
                 lipidRowPrecursor[LipidCreator.NOTE] = "";
-                lipidRowPrecursor[LipidCreator.SPECIFIC] = mergePrecursor ? "1" : "0";
+                lipidRowPrecursor[LipidCreator.SPECIFIC] = "1";
                 transitionList.Rows.Add(lipidRowPrecursor);
                 
                 if (collisionEnergyHandler != null && instrument.Length > 0 && monitoringType != MonitoringTypes.NoMonitoring)
@@ -260,7 +260,7 @@ namespace LipidCreator
                 
                 DataRow lipidRow = transitionList.NewRow();
                 lipidRow[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
-                lipidRow[LipidCreator.PRECURSOR_NAME] = (speciesLevel && fragment.specific) ? precursorData.precursorSpeciesName : precursorData.precursorName;
+                lipidRow[LipidCreator.PRECURSOR_NAME] = (((int)parameters[1] == 1 && fragment.specific) || (int)parameters[1] == 2) ? precursorData.precursorSpeciesName : precursorData.precursorName;
                 lipidRow[LipidCreator.PRECURSOR_NEUTRAL_FORMULA] = precursorData.precursorIonFormula;
                 lipidRow[LipidCreator.PRECURSOR_ADDUCT] = precursorData.precursorAdductFormula;
                 lipidRow[LipidCreator.PRECURSOR_MZ] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");

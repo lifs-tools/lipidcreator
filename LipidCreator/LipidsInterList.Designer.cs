@@ -68,6 +68,7 @@ namespace LipidCreator
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.continueReviewButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrecursors)).BeginInit();
             this.SuspendLayout();
@@ -93,7 +94,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(506, 668);
+            this.cancelButton.Location = new System.Drawing.Point(508, 688);
             this.cancelButton.Name = "button1";
             this.cancelButton.Size = new System.Drawing.Size(88, 34);
             this.cancelButton.TabIndex = 2;
@@ -110,14 +111,15 @@ namespace LipidCreator
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Location = new System.Drawing.Point(12, 648);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(241, 55);
+            this.groupBox1.Size = new System.Drawing.Size(488, 75);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Computation method";
+            this.groupBox1.Text = "Options";
             // 
             // radioButton1
             // 
@@ -128,9 +130,8 @@ namespace LipidCreator
             this.radioButton1.Size = new System.Drawing.Size(37, 17);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Compute on subspecies level";
+            this.radioButton1.Text = "Display precursors on subspecies level";
             this.radioButton1.UseVisualStyleBackColor = true;
-            //this.radioButton1.CheckedChanged += new EventHandler(rb1CheckedChanged);
             // 
             // radioButton2
             // 
@@ -139,9 +140,18 @@ namespace LipidCreator
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(42, 17);
             this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Compute on species level";
+            this.radioButton2.Text = "Display precursors on species level (only containing class specific fragments)";
             this.radioButton2.UseVisualStyleBackColor = true;
-            //this.radioButton2.CheckedChanged += new EventHandler(rb2CheckedChanged);
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(13, 55);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(42, 17);
+            this.radioButton3.TabIndex = 1;
+            this.radioButton3.Text = "Display precursors on species level";
+            this.radioButton3.UseVisualStyleBackColor = true;
             // 
             // 
             // labelSelectAll
@@ -174,7 +184,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.continueReviewButton.Location = new System.Drawing.Point(609, 668);
+            this.continueReviewButton.Location = new System.Drawing.Point(609, 688);
             this.continueReviewButton.Name = "button2";
             this.continueReviewButton.Size = new System.Drawing.Size(108, 34);
             this.continueReviewButton.TabIndex = 1;
@@ -184,7 +194,7 @@ namespace LipidCreator
             
             this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(729, 714);
+            this.ClientSize = new System.Drawing.Size(729, 734);
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridViewPrecursors);
@@ -202,7 +212,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
-            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton, labelSelectAll, labelDeselectAll, groupBox1, radioButton1, radioButton2};
+            controlElements = new ArrayList(){cancelButton, dataGridViewPrecursors, continueReviewButton, labelSelectAll, labelDeselectAll, groupBox1, radioButton1, radioButton2, radioButton3};
         }
 
         #endregion
@@ -224,6 +234,7 @@ namespace LipidCreator
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton3;
         public ArrayList controlElements;
     }
 }

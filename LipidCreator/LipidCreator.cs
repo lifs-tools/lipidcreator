@@ -83,8 +83,6 @@ namespace LipidCreator
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
-        public bool computeOnSpeciesLevel = false;
-        public bool mergePrecursor = false;
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -686,7 +684,7 @@ namespace LipidCreator
         
         
         
-        public void createFragmentList(string instrument, MonitoringTypes monitoringType)
+        public void createFragmentList(string instrument, MonitoringTypes monitoringType, ArrayList parameters)
         {
             analytics(ANALYTICS_CATEGORY, "create-transition-list-" + runMode);
             
@@ -700,7 +698,7 @@ namespace LipidCreator
                 {
                     if (precursorData.precursorSelected)
                     {
-                        Lipid.computeFragmentData (transitionList, precursorData, allFragments, headgroups, computeOnSpeciesLevel, mergePrecursor);
+                        Lipid.computeFragmentData (transitionList, precursorData, allFragments, headgroups, parameters);
                     }
                 }
             }
@@ -729,12 +727,11 @@ namespace LipidCreator
                         }
                         CE = collisionEnergyHandler.getCollisionEnergy(instrument, precursorName, adduct);
                     }
-                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, computeOnSpeciesLevel, mergePrecursor, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
+                    Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, parameters, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
             }
             
-            
-            if (computeOnSpeciesLevel)
+            if ((int)parameters[1] != 0)
             {
             
                 HashSet<string> transitionListSpecies = new HashSet<string>();
@@ -808,7 +805,7 @@ namespace LipidCreator
         
         
         
-        public void assembleLipids(bool asDeveloper)
+        public void assembleLipids(bool asDeveloper, ArrayList parameters)
         {
 
             List<string> headerList = new List<string>();
@@ -833,7 +830,7 @@ namespace LipidCreator
                 }
             }
             
-            createFragmentList(selectedInstrumentForCE, monitoringType);
+            createFragmentList(selectedInstrumentForCE, monitoringType, parameters);
         }
         
         
@@ -857,7 +854,7 @@ namespace LipidCreator
         
         
         
-        public void assembleFragments(bool asDeveloper)
+        public void assembleFragments(bool asDeveloper, ArrayList parameters)
         {
             if (asDeveloper)
             {
@@ -869,7 +866,7 @@ namespace LipidCreator
                 }
             }
             
-            createFragmentList(selectedInstrumentForCE, monitoringType);
+            createFragmentList(selectedInstrumentForCE, monitoringType, parameters);
         }
         
         

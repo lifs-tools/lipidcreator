@@ -60,8 +60,6 @@ namespace LipidCreator
             
             InitializeComponent ();
             
-            radioButton2.Checked = creatorGUI.lipidCreator.computeOnSpeciesLevel;
-            
             foreach(PrecursorData precursorData in creatorGUI.lipidCreator.precursorDataList)
             {
                 DataRow row = precursorDataTable.NewRow();
@@ -179,13 +177,7 @@ namespace LipidCreator
         
         public void continueReviewButtonClick (Object sender, EventArgs e)
         {
-            creatorGUI.lipidCreator.computeOnSpeciesLevel = radioButton2.Checked;
-            if (radioButton2.Checked)
-            {
-                DialogResult dr = MessageBox.Show("Do you want to compute precursor on species level as well?", "Precursor Computation", MessageBoxButtons.YesNo);
-                      
-                creatorGUI.lipidCreator.mergePrecursor = (dr == DialogResult.Yes);
-            }
+            returnValues[1] = radioButton1.Checked ? 0 : (radioButton2.Checked ? 1 : 2);
             returnValues[0] = true;
             Close();
         }

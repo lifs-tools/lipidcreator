@@ -84,10 +84,12 @@ namespace LipidCreator
         {
             dataGridViewPrecursors.Columns[0].Width = 50;
             dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
+            dataGridViewPrecursors.Columns[1].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.4);
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
-            dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dataGridViewPrecursors.Columns[2].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.2);
             dataGridViewPrecursors.Columns[2].ReadOnly = true;
-            dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dataGridViewPrecursors.Columns[3].ReadOnly = true;
             dataGridViewPrecursors.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewPrecursors.Columns[4].Visible = false;

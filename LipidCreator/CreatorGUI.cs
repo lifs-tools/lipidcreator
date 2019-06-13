@@ -344,13 +344,11 @@ namespace LipidCreator
                     deleteColumn.HeaderText = "Delete";
                     deleteColumn.ValuesAreIcons = false;
                     lipidsGridview.Columns.Add(deleteColumn);
-                    //int w = (lipidsGridview.Width - 160) / (numCols - 1) - 4;
                     foreach (DataGridViewColumn col in lipidsGridview.Columns)
                     {
                         col.Frozen = false;
                         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
-                         //col.Width = Math.Max(col.MinimumWidth, w);
                     }
                     lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     editColumn.Width = 40;
@@ -358,7 +356,7 @@ namespace LipidCreator
                     initialCall = false;
                     lipidsGridview.Enabled = true;
                     lipidsGridview.Invalidate();
-					lipidsGridview.PerformLayout();
+                    lipidsGridview.PerformLayout();
                  }
             });
         }

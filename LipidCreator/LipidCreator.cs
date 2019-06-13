@@ -729,7 +729,11 @@ namespace LipidCreator
                     }
                     Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, parameters, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
-            }
+            }           
+            
+            
+            
+            
             
             if ((int)parameters[1] != 0)
             {
@@ -745,6 +749,9 @@ namespace LipidCreator
                         if (!transitionListSpecies.Contains(key))
                         {
                             transitionListSpecies.Add(key);
+                        }
+                        else
+                        {
                             row.Delete();
                         }
                     }
@@ -801,6 +808,8 @@ namespace LipidCreator
                 }
                 transitionListUnique.ImportRow (row);
             }
+            
+            
         }
         
         

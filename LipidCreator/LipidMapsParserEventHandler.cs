@@ -37,6 +37,7 @@ namespace LipidCreator
         public FattyAcidGroupEnumerator fagEnum;
         public FattyAcidGroup fag;
         public string mediatorName;
+        public bool makeUnsupported = false;
     
     
         public LipidMapsParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -97,6 +98,14 @@ namespace LipidCreator
             registeredEvents.Add("mediator_var_name_pre_event", MediatorAssemble);
             registeredEvents.Add("mediator_const_pre_event", MediatorAssemble);
             
+            
+            registeredEvents.Add("dpl_species_pre_event", Unsupported);
+            registeredEvents.Add("cl_species_pre_event", Unsupported);
+            registeredEvents.Add("tgl_species_pre_event", Unsupported);
+            registeredEvents.Add("sgl_species_pre_event", Unsupported);
+            registeredEvents.Add("dsl_species_pre_event", Unsupported);
+            
+            
         }
         
         
@@ -106,8 +115,15 @@ namespace LipidCreator
             fagEnum = null;
             fag = null;
             mediatorName = "";
+            makeUnsupported = false;
         }
         
+        
+        public void Unsupported(Parser.TreeNode node)
+        {
+            lipid = null;
+            makeUnsupported = true;
+        }
         
         
         
@@ -140,6 +156,11 @@ namespace LipidCreator
                 lipid.adducts["+CH3COO"] = false;
                 
                 lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+            }
+            
+            if (lipid == null && makeUnsupported)
+            {
+                lipid = new UnsupportedLipid(lipidCreator);
             }
         }
         

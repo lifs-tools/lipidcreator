@@ -233,21 +233,6 @@ namespace LipidCreator
         */
         
         
-        public static void correctCountsAndCheck(ElementDictionary counts)
-        {
-            foreach (Molecule molecule in ALL_ELEMENTS.Keys.Where(x => ALL_ELEMENTS[x].isHeavy)){
-                if (counts[molecule] < 0) throw new Exception("error in computation: an element table has negative count for element " + molecule);
-                
-                Molecule origin = ALL_ELEMENTS[molecule].lightOrigin;
-                if (counts[molecule] + counts[origin] < 0) throw new Exception("error in computation: an element table has negative count for element " + molecule);
-                
-                if (counts[origin] < 0)
-                {
-                    counts[molecule] += counts[origin];
-                    counts[origin] = 0;
-                }
-            }
-        }
         
         
     

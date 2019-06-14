@@ -1192,7 +1192,7 @@ namespace LipidCreator
             double mass = 0;
             foreach (KeyValuePair<Molecule, int> row in elements)
             {
-                if (row.Value < 0) throw new Exception("error in computation: an element table has negative count for element " + row.Key);
+                if (row.Value < 0) throw new LipidException(row.Key, row.Value);
                 mass += row.Value * MS2Fragment.ALL_ELEMENTS[row.Key].mass;
             }
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);

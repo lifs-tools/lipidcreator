@@ -43,6 +43,9 @@ namespace LipidCreator
     public enum LipidCategory {NoLipid = 0, Glycerolipid = 1, Glycerophospholipid = 2, Sphingolipid = 3, Sterollipid = 4, LipidMediator = 5, Unsupported = 99};
     
     
+    
+    
+    
     [Serializable]
     public class PrecursorData
     {
@@ -65,6 +68,38 @@ namespace LipidCreator
         public FattyAcid lcb;
         public HashSet<string> fragmentNames;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    public class LipidException : Exception
+    {
+        public MS2Fragment fragment = null;
+        public PrecursorData precursorData = null;
+        public Molecule molecule = Molecule.C;
+        public int counts = 0;
+        public string heavyIsotope = "";
+        
+        public LipidException(PrecursorData _precursorData, MS2Fragment _fragment)
+        {
+            fragment = _fragment;
+            precursorData = _precursorData;
+        }
+        
+        public LipidException(Molecule _molecule, int _counts)
+        {
+            molecule = _molecule;
+            counts = _counts;
+        }
+    }
+    
+    
+    
+    
     
     
     [Serializable]
@@ -297,7 +332,7 @@ namespace LipidCreator
                     }
                 }
                 
-                MS2Fragment.correctCountsAndCheck(atomsCountFragment);   // correct element counts
+                
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
@@ -307,7 +342,17 @@ namespace LipidCreator
                 
                 if (precursorData.lipidCategory != LipidCategory.LipidMediator)
                 {
-                    massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                    try
+                    {
+                        massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                    }
+                    catch (LipidException lipidException)
+                    {
+                        lipidException.precursorData = precursorData;
+                        lipidException.fragment = fragment;
+                        lipidException.heavyIsotope = LipidCreator.precursorNameSplit(precursorData.fullMoleculeListName)[1];
+                        throw lipidException;
+                    }
                 }
                 else
                 {
@@ -586,7 +631,7 @@ namespace LipidCreator
                     }
                 }
                 
-                MS2Fragment.correctCountsAndCheck(atomsCountFragment); // correct element counts
+                
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);

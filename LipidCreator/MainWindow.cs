@@ -467,7 +467,20 @@ namespace LipidCreator
                                 
                                 if (!createXMLFile)
                                 {
-                                    lc.assembleLipids(asDeveloper, new ArrayList(){false, (species ? 2 : 0)}); 
+                                    try
+                                    {
+                                        lc.assembleLipids(asDeveloper, new ArrayList(){false, (species ? 2 : 0)});
+                                    }
+                                    catch (LipidException lipidException)
+                                    {
+                                        string lipidName = lipidException.precursorData.precursorName;
+                                        string fragmentName = lipidException.fragment.fragmentName;
+                                        string elementName = MS2Fragment.ALL_ELEMENTS[lipidException.molecule].shortcut;
+                                        int counts = lipidException.counts;
+                                        string heavyIsotope = lipidException.heavyIsotope.Length > 0 ? " the heavy isotope '{" + lipidException.heavyIsotope + "}' of" : "";
+                                        log.Error("A problem occurred during the computation of fragment '" + fragmentName + "' for" + heavyIsotope + " lipid '" + lipidName + "'. The element '" + elementName + "' contains " + counts + " counts. Please update the fragment with regard on the element counts.");
+                                        Environment.Exit(-1);
+                                    }
                                     DataTable transitionList = deleteReplicates ? lc.transitionListUnique : lc.transitionList;
                                     lc.storeTransitionList(",", split, false, outputCSV, transitionList);
                                 }

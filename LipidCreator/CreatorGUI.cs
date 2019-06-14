@@ -3580,14 +3580,27 @@ namespace LipidCreator
                     
                     if (!(bool)returnValues[0]) break;
                     
-                    lipidCreator.assembleFragments(asDeveloper, returnValues);   
-                
-                    lipidsReview = new LipidsReview(this, returnValues);
-                    lipidsReview.Owner = this;
-                    lipidsReview.ShowInTaskbar = false;
+                    try
+                    {
+                        lipidCreator.assembleFragments(asDeveloper, returnValues);   
                     
-                    lipidsReview.ShowDialog();
-                    lipidsReview.Dispose();
+                        lipidsReview = new LipidsReview(this, returnValues);
+                        lipidsReview.Owner = this;
+                        lipidsReview.ShowInTaskbar = false;
+                        
+                        lipidsReview.ShowDialog();
+                        lipidsReview.Dispose();
+                    }
+                    catch (LipidException lipidException)
+                    {
+                        string lipidName = lipidException.precursorData.precursorName;
+                        string fragmentName = lipidException.fragment.fragmentName;
+                        string elementName = MS2Fragment.ALL_ELEMENTS[lipidException.molecule].shortcut;
+                        int counts = lipidException.counts;
+                        string heavyIsotope = lipidException.heavyIsotope.Length > 0 ? " the heavy isotope '{" + lipidException.heavyIsotope + "}' of" : "";
+                        MessageBox.Show("A problem occurred during the computation of fragment '" + fragmentName + "' for" + heavyIsotope + " lipid '" + lipidName + "'. The element '" + elementName + "' contains " + counts + " counts. Please update the fragment with regard on the element counts.", "Problem in fragment computation");
+                        break;
+                    }
                 }
             }
             else

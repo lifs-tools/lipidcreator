@@ -149,6 +149,7 @@ namespace LipidCreator
         };
         public readonly static string[] STATIC_DATA_COLUMN_KEYS = {
             UNIQUE,
+            SPECIFIC,
             MOLECULE_LIST_NAME,
             PRECURSOR_NAME,
             PRECURSOR_NEUTRAL_FORMULA,
@@ -742,7 +743,7 @@ namespace LipidCreator
                 for (int i = transitionList.Rows.Count - 1; i >= 0; --i)
                 {
                     DataRow row = transitionList.Rows[i];
-                    if ((string)row["specific"] == "1")
+                    if ((string)row[SPECIFIC] == "1")
                     {
                         string key = (string)row[PRECURSOR_NAME] + "-" + (string)row[PRECURSOR_ADDUCT] + "-" + (string)row[PRODUCT_NAME] + "-" + (string)row[PRODUCT_ADDUCT];
                         
@@ -1837,7 +1838,6 @@ namespace LipidCreator
             foreach (string columnKey in DATA_COLUMN_KEYS) {
                 dataTable.Columns.Add (columnKey);
             }
-            dataTable.Columns.Add ("specific");
             return dataTable;
         }
 

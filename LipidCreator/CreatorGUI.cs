@@ -3593,12 +3593,12 @@ namespace LipidCreator
                     }
                     catch (LipidException lipidException)
                     {
-                        string lipidName = lipidException.precursorData.precursorName;
-                        string fragmentName = lipidException.fragment.fragmentName;
-                        string elementName = MS2Fragment.ALL_ELEMENTS[lipidException.molecule].shortcut;
-                        int counts = lipidException.counts;
-                        string heavyIsotope = lipidException.heavyIsotope.Length > 0 ? " the heavy isotope '{" + lipidException.heavyIsotope + "}' of" : "";
-                        MessageBox.Show("A problem occurred during the computation of fragment '" + fragmentName + "' for" + heavyIsotope + " lipid '" + lipidName + "'. The element '" + elementName + "' contains " + counts + " counts. Please update the fragment with regard on the element counts.", "Problem in fragment computation");
+                        lipidException.creatorGUI = this;
+                        int[] messageBoxValues = new int[]{0};
+                        LCMessageBox lcMessageBox = new LCMessageBox(messageBoxValues, 1, lipidException);
+                        lcMessageBox.Owner = this;
+                        lcMessageBox.ShowInTaskbar = false;
+                        lcMessageBox.Show();
                         break;
                     }
                 }
@@ -3625,14 +3625,14 @@ namespace LipidCreator
             importFilterDialog.ShowDialog();
             importFilterDialog.Dispose();
             
-            string[] returnMessage = new string[]{""};
-            LCMessageBox lcmb = new LCMessageBox(returnMessage);
+            int[] returnMessage = new int[]{0};
+            LCMessageBox lcmb = new LCMessageBox(returnMessage, 0);
             lcmb.Owner = this;
             lcmb.StartPosition = FormStartPosition.CenterParent;
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
-            if (returnMessage[0] == "replace") lipidCreator.registeredLipids.Clear();
+            if (returnMessage[0] == 1) lipidCreator.registeredLipids.Clear(); // replace
             
             System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
             string filePath = (string)PredefItem.Tag;
@@ -3664,14 +3664,14 @@ namespace LipidCreator
                     importFilterDialog.ShowDialog();
                     importFilterDialog.Dispose();
                     
-                    string[] returnMessage = new string[]{""};
-                    LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                    int[] returnMessage = new int[]{0};
+                    LCMessageBox lcmb = new LCMessageBox(returnMessage, 0);
                     lcmb.Owner = this;
                     lcmb.StartPosition = FormStartPosition.CenterParent;
                     lcmb.ShowInTaskbar = false;
                     lcmb.ShowDialog();
                     lcmb.Dispose();
-                    if (returnMessage[0] == "replace") lipidCreator.registeredLipids.Clear();
+                    if (returnMessage[0] == 1) lipidCreator.registeredLipids.Clear(); // replace
                     
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();
@@ -3687,6 +3687,17 @@ namespace LipidCreator
         
         
         
+        
+        public void goToFragment()
+        {
+            
+        }
+        
+        
+        
+        
+        
+        
         protected void menuImportClick(object sender, System.EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -3697,14 +3708,14 @@ namespace LipidCreator
 
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string[] returnMessage = new string[]{""};
-                LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                int[] returnMessage = new int[]{0};
+                LCMessageBox lcmb = new LCMessageBox(returnMessage, 0);
                 lcmb.Owner = this;
                 lcmb.StartPosition = FormStartPosition.CenterParent;
                 lcmb.ShowInTaskbar = false;
                 lcmb.ShowDialog();
                 lcmb.Dispose();
-                if (returnMessage[0] == "replace") resetLipidCreator(false);
+                if (returnMessage[0] == 1) resetLipidCreator(false); // replace
                 
                 XDocument doc;
                 try 
@@ -3737,14 +3748,14 @@ namespace LipidCreator
 
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string[] returnMessage = new string[]{""};
-                LCMessageBox lcmb = new LCMessageBox(returnMessage);
+                int[] returnMessage = new int[]{0};
+                LCMessageBox lcmb = new LCMessageBox(returnMessage, 0);
                 lcmb.Owner = this;
                 lcmb.StartPosition = FormStartPosition.CenterParent;
                 lcmb.ShowInTaskbar = false;
                 lcmb.ShowDialog();
                 lcmb.Dispose();
-                if (returnMessage[0] == "replace") resetLipidCreator(false);
+                if (returnMessage[0] == 1) resetLipidCreator(false); // replace
             
                 XDocument doc;
                 try 

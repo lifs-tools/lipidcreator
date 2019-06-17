@@ -1,5 +1,10 @@
-﻿namespace LipidCreator
-{
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+namespace LipidCreator
+{   
     partial class LCMessageBox
     {
         /// <summary>
@@ -29,36 +34,44 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LCMessageBox));
-            this.label1 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // richTextBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(244, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Do you want to merge or replace the imported file?";
+            this.richTextBox1.AutoSize = true;
+            this.richTextBox1.Location = new System.Drawing.Point(13, 13);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.TabIndex = 2;
+            this.richTextBox1.Size = new System.Drawing.Size(484, 60);
+            this.richTextBox1.BackColor = SystemColors.Control;
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.GotFocus += new System.EventHandler(richTextBox1_Focus);
+            this.richTextBox1.MouseEnter += new System.EventHandler(richTextBox1_MouseEnter);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(139, 60);
+            this.button1.Location = new System.Drawing.Point(270, 60);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
+            this.button1.Size = new System.Drawing.Size(110, 23);
+            this.button1.TabIndex = 0;
             this.button1.Text = "Merge";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.mergeClick);
+            
+            this.timerText = new System.Timers.Timer(15);
+            this.timerText.Elapsed += this.timer_Elapsed;
+            this.timerText.Enabled = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(220, 60);
+            this.button2.Location = new System.Drawing.Point(390, 60);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
+            this.button2.Size = new System.Drawing.Size(110, 23);
+            this.button2.TabIndex = 1;
             this.button2.Text = "Replace";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.replaceClick);
@@ -66,10 +79,10 @@
             // LCMessageBox
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(310, 93);
+            this.ClientSize = new System.Drawing.Size(510, 93);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.richTextBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -83,7 +96,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        public System.Timers.Timer timerText;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
     }

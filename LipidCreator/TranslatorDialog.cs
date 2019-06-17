@@ -300,14 +300,14 @@ namespace LipidCreator
             importFilterDialog.ShowDialog();
             importFilterDialog.Dispose();
             
-            string[] returnMessage = new string[]{""};
-            LCMessageBox lcmb = new LCMessageBox(returnMessage);
+            int[] returnMessage = new int[]{0};
+            LCMessageBox lcmb = new LCMessageBox(returnMessage, 0);
             lcmb.Owner = this;
             lcmb.StartPosition = FormStartPosition.CenterParent;
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
-            if (returnMessage[0] == "replace") creatorGUI.lipidCreator.registeredLipids.Clear();
+            if (returnMessage[0] == 1) creatorGUI.lipidCreator.registeredLipids.Clear(); // replace
         
             foreach(Lipid currentLipid in parsedLipids)
             {

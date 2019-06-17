@@ -56,6 +56,9 @@ namespace LipidCreator
             adducts["-H"] = true;
         }
     
+    
+    
+    
         public Phospholipid(Phospholipid copy) : base((Lipid)copy)
         {
             fag1 = new FattyAcidGroup(copy.fag1);
@@ -66,10 +69,31 @@ namespace LipidCreator
             isLyso = copy.isLyso;
         }
         
+        
+        
+        
         public override ArrayList getFattyAcidGroupList()
         {
             return new ArrayList{fag1, fag2, fag3, fag4};
         }
+        
+        
+        
+        
+        public override long getHashCode()
+        {
+            long hashCode = base.getHashCode() + 13034653259202L;
+            hashCode += fag1.getHashCode();
+            hashCode += fag2.getHashCode();
+            hashCode += fag3.getHashCode();
+            hashCode += fag4.getHashCode();
+            hashCode += isLyso ? (1L << 21) : (1L << 55);
+            hashCode += isCL ? (1L << 13) : (1L << 44);
+            return hashCode;
+        }
+        
+        
+        
         
         public override void serialize(StringBuilder sb)
         {

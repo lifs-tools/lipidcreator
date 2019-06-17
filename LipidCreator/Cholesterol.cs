@@ -65,6 +65,17 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public override long getHashCode()
+        {
+            long hashCode = base.getHashCode() + 59829043095020L;
+            hashCode += fag.getHashCode();
+            hashCode += containsEster ? (1L << 31) : (1L << 15);
+            return hashCode;
+        }
+        
+        
         public override void serialize(StringBuilder sb)
         {
             sb.Append("<lipid type=\"Cholesterol\" containsEster=\"" + containsEster + "\">\n");

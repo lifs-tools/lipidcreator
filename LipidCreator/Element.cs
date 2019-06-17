@@ -41,6 +41,17 @@ namespace LipidCreator
             }
             Console.WriteLine("----------------");
         }
+        
+        
+        public long getHashCode()
+        {
+            long hashCode = 0;
+            foreach (KeyValuePair<Molecule, int> kvp in this)
+            {
+                hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (kvp.Value + 7);
+            }
+            return hashCode;
+        }
     }
 
     public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};

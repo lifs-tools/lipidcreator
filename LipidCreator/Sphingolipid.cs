@@ -66,6 +66,18 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public override long getHashCode()
+        {
+            long hashCode = base.getHashCode() + 6930302729454L;
+            hashCode += lcb.getHashCode();
+            hashCode += fag.getHashCode();
+            hashCode += isLyso ? (1L << 12) : (1L << 54);
+            return hashCode;
+        }
+        
+        
         public override void serialize(StringBuilder sb)
         {
             sb.Append("<lipid type=\"SL\" isLyso=\"" + isLyso + "\">\n");

@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Linq;
 using System.Text;
 
 namespace LipidCreator
@@ -125,6 +126,21 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public long getHashCode()
+        {
+            long hashCode = chainType << 10;
+            hashCode += LipidCreator.HashCode(lengthInfo);
+            hashCode += LipidCreator.HashCode(dbInfo);
+            hashCode += LipidCreator.HashCode(hydroxylInfo);
+            hashCode += isLCB ? 2 : 8;
+            foreach (string faType in faTypes.Keys.Where(x => faTypes[x]))
+            {
+                hashCode += LipidCreator.HashCode(faType);
+            }
+            return hashCode;
+        }
         
         
         

@@ -139,6 +139,25 @@ namespace LipidCreator
         
         
         
+        
+        
+        public long getHashCode()
+        {
+            long hashCode = LipidCreator.HashCode(fragmentName);
+            hashCode += LipidCreator.HashCode(fragmentOutputName);
+            hashCode += LipidCreator.HashCode(fragmentFile);
+            hashCode += fragmentElements.getHashCode();
+            hashCode += fragmentAdduct.getHashCode();
+            foreach (string fragBase in fragmentBase)
+            {
+                hashCode += LipidCreator.HashCode(fragBase);
+            }
+            hashCode += specific ? (1L << 23) : (1L << 60);
+            hashCode += userDefined ? (1L << 35) : (1L << 48);
+            return hashCode;
+        }
+        
+        
         public static ElementDictionary createFilledElementDict(DataTable dt)
         {
             ElementDictionary elements = new ElementDictionary();

@@ -109,11 +109,11 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(Lipid));
         public Dictionary<string, HashSet<string>> positiveFragments;
         public Dictionary<string, HashSet<string>> negativeFragments;
-        public Dictionary<String, bool> adducts;
+        public Dictionary<string, bool> adducts;
         public bool representativeFA;
         public int onlyPrecursors;
         public int onlyHeavyLabeled;
-        public List<String> headGroupNames;
+        public List<string> headGroupNames;
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
@@ -148,12 +148,12 @@ namespace LipidCreator
             representativeFA = false;
             onlyPrecursors = 2;
             onlyHeavyLabeled = 2;
-            headGroupNames = new List<String>();
+            headGroupNames = new List<string>();
             lipidCreator.Update += new LipidUpdateEventHandler(this.Update);
             
             if (lipidCreator.categoryToClass.ContainsKey((int)lipidCategory))
             {
-                foreach (String lipidClass in lipidCreator.categoryToClass[(int)lipidCategory])
+                foreach (string lipidClass in lipidCreator.categoryToClass[(int)lipidCategory])
                 {
                     if (!positiveFragments.ContainsKey(lipidClass)) positiveFragments.Add(lipidClass, new HashSet<string>());
                     if (!negativeFragments.ContainsKey(lipidClass)) negativeFragments.Add(lipidClass, new HashSet<string>());
@@ -230,6 +230,40 @@ namespace LipidCreator
         
         
         
+        public virtual long getHashCode()
+        {
+            long hashCode = representativeFA ? (1L << 26) : (1L << 61);
+            hashCode += (long)(onlyPrecursors + 23) << 14;
+            hashCode += (long)(onlyHeavyLabeled + 37) << 33;
+            
+            foreach (string adduct in adducts.Keys.Where(x => adducts[x]))
+            {
+                hashCode += LipidCreator.HashCode(adduct);
+            }
+            
+            foreach (string hg in headGroupNames)
+            {
+                hashCode += LipidCreator.HashCode(hg);
+            }
+            
+            foreach (string lipidClass in positiveFragments.Keys)
+            {
+                foreach (string lipidName in positiveFragments[lipidClass])
+                {
+                    if (lipidCreator.allFragments[lipidClass][true].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][true][lipidName].getHashCode();
+                }
+            }
+            
+            
+            foreach (string lipidClass in negativeFragments.Keys)
+            {
+                foreach (string lipidName in negativeFragments[lipidClass])
+                {
+                    if (lipidCreator.allFragments[lipidClass][false].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][false][lipidName].getHashCode();
+                }
+            }
+            return hashCode;
+        }
         
         
         
@@ -861,6 +895,14 @@ namespace LipidCreator
         public UnsupportedLipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Unsupported)
         {
         
+        }
+        
+        
+        
+        
+        public override long getHashCode()
+        {
+            return 0L;
         }
         
         

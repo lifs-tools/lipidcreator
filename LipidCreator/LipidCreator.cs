@@ -66,6 +66,7 @@ namespace LipidCreator
         public static string LC_VERSION_NUMBER = "1.0.0";
         public static PlatformID LC_OS;
         public ArrayList registeredLipids;
+        public Dictionary<string, Lipid> registeredLipidDictionary;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
         public IDictionary<string, Precursor> headgroups;
@@ -522,6 +523,7 @@ namespace LipidCreator
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
+            registeredLipidDictionary = new Dictionary<string, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
@@ -639,6 +641,24 @@ namespace LipidCreator
             else throw new Exception("invalid line in file");
             
             return listTokens.ToArray();
+        }
+        
+        
+        
+        
+        
+        public static long HashCode(string read)
+        {
+            long hashedValue = 0;
+            int i = 0;
+            long multiplier = 1;
+            while (i < read.Length)
+            {
+                hashedValue += read[i] * multiplier;
+                multiplier *= 37;
+                i++;
+            }
+            return hashedValue;
         }
 
 

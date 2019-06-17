@@ -63,6 +63,16 @@ namespace LipidCreator
         }
         
         
+        
+        
+        public override long getHashCode()
+        {
+            long hashCode = base.getHashCode();
+            hashCode += 3406582395346L;
+            return hashCode;
+        }
+        
+        
         public override void import(XElement node, string importVersion)
         {
             foreach (XElement child in node.Elements())

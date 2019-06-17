@@ -54,5 +54,14 @@ namespace LipidCreator
         {
             return "[M" + name + "]" + Math.Abs(charge) + (charge > 0 ? "+" : "-");
         }
+        
+        
+        public long getHashCode()
+        {
+            long hashCode = LipidCreator.HashCode(name);
+            hashCode += LipidCreator.HashCode(visualization);
+            hashCode += 3896323L << (charge + 5);
+            return hashCode;
+        }
     }
 }

@@ -74,6 +74,16 @@ namespace LipidCreator
         
         
         
+        public override long getHashCode()
+        {
+            long hashCode = base.getHashCode() + 77489593927525L;
+            hashCode += fag1.getHashCode();
+            hashCode += fag2.getHashCode();
+            hashCode += fag3.getHashCode();
+            hashCode += containsSugar ? (1L << 18) : (1L << 58);
+            return hashCode;
+        }
+        
         
         public override void serialize(StringBuilder sb)
         {

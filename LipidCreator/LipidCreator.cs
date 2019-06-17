@@ -1469,13 +1469,13 @@ namespace LipidCreator
                 Lipid lipid = null;
                 if (lipidName.Length > 0)
                 {
-                    lipidMapsParser.parse(lipidName);
-                    if (lipidMapsParser.wordInGrammar)
+                    lipidNamesParser.parse(lipidName);
+                    if (lipidNamesParser.wordInGrammar)
                     {
-                        lipidMapsParser.raiseEvents();
-                        if (lipidMapsParserEventHandler.lipid != null)
+                        lipidNamesParser.raiseEvents();
+                        if (parserEventHandler.lipid != null)
                         {
-                            lipid = lipidMapsParserEventHandler.lipid;
+                            lipid = parserEventHandler.lipid;
                         }
                         else if (reportError)
                         {
@@ -1484,13 +1484,14 @@ namespace LipidCreator
                     }
                     else {
                     
-                        lipidNamesParser.parse(lipidName);
-                        if (lipidNamesParser.wordInGrammar)
+                        
+                        lipidMapsParser.parse(lipidName);
+                        if (lipidMapsParser.wordInGrammar)
                         {
-                            lipidNamesParser.raiseEvents();
-                            if (parserEventHandler.lipid != null)
+                            lipidMapsParser.raiseEvents();
+                            if (lipidMapsParserEventHandler.lipid != null)
                             {
-                                lipid = parserEventHandler.lipid;
+                                lipid = lipidMapsParserEventHandler.lipid;
                             }
                             else if (reportError)
                             {

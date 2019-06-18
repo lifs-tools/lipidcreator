@@ -45,9 +45,11 @@ namespace LipidCreator
         public CheckedListBox editDeletePositive;
         public int editDeleteIndex;
         public int hoveredIndex;
+        public LipidException lipidException;
         
-        public MS2Form(CreatorGUI creatorGUI)
+        public MS2Form(CreatorGUI creatorGUI, LipidException _lipidException = null)
         {
+            lipidException = _lipidException;
             senderInterupt = false;
             loading = false;
             hoveredIndex = -1;
@@ -390,6 +392,67 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
+        private void Form_Shown(Object sender, EventArgs e)
+        {
+            if (lipidException == null) return;
+            
+            // search for precursor
+            for (int i = 0; i < tabControlFragments.TabCount; ++i)
+            {
+                if (tabControlFragments.TabPages[i].Text == lipidException.precursorData.moleculeListName)
+                {
+                    tabControlFragments.SelectedIndex = i;
+                    // search for isotope
+                    for (int j = 1; j < isotopeList.Items.Count; ++j)
+                    {
+                        string isotopeName = LipidCreator.precursorNameSplit((string)isotopeList.Items[j])[1];
+                        if (isotopeName.Equals(lipidException.heavyIsotope))
+                        {
+                            isotopeList.SelectedIndex = j;
+                            
+                            // search for fragment
+                            string fragmentName = lipidException.fragment.fragmentName;
+                            CheckedListBox clb = null;
+                            if (lipidException.fragment.fragmentAdduct.charge > 0)
+                            {
+                                clb = checkedListBoxPositiveFragments;
+                            }
+                            else
+                            {
+                                clb = checkedListBoxNegativeFragments;
+                            }
+                            editDeletePositive = clb;
+                            
+                            for (int k = 0; k < clb.Items.Count; ++k)
+                            {
+                                if (fragmentName.Equals((string)clb.Items[k]))
+                                {
+                                    clb.SelectedIndex = k;
+                                    newFragment = new NewFragment(this, true, lipidException);
+                                    newFragment.Owner = this;
+                                    newFragment.ShowInTaskbar = false;
+                                    newFragment.ShowDialog();
+                                    newFragment.Dispose();
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+        }
+
+        
+        
+        
+        
+        
 
         public void tabChange(int index)
         {
@@ -451,10 +514,19 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
+        
         private void cancelClick(object sender, EventArgs e)
         {
             this.Close();
         }
+        
+        
+        
+        
+        
         
         private void okClick(object sender, EventArgs e)
         {
@@ -480,6 +552,11 @@ namespace LipidCreator
             }
             this.Close();
         }
+        
+        
+        
+        
+        
         
         private void addFragmentClick(object sender, EventArgs e)
         {

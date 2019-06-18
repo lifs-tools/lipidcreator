@@ -295,6 +295,7 @@ namespace LipidCreator
             this.Text = "MS2 Fragments";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
             this.tabControlFragments.ResumeLayout(false);
+            this.Shown += Form_Shown;
             
             controlElements = new ArrayList(){checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, buttonCancel, buttonOK, buttonAddFragment, isotopeList, labelPositiveDeselectAll, labelPositiveSelectAll, labelNegativeDeselectAll, labelNegativeSelectAll, menuFragmentItem1, menuFragmentItem2};
         }

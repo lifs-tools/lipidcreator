@@ -46,10 +46,12 @@ namespace LipidCreator
         public bool edit = false;
         public MS2Fragment ms2Fragment;
         public string fragmentOutputName = "";
+        public LipidException lipidException;
         
 
-        public NewFragment(MS2Form ms2form, bool _edit = false)
+        public NewFragment(MS2Form ms2form, bool _edit = false, LipidException _lipidException = null)
         {
+            lipidException = _lipidException;
             this.ms2form = ms2form;
             edit = _edit;
             elements = createGridData(MS2Fragment.createEmptyElementDict());
@@ -212,6 +214,22 @@ namespace LipidCreator
         private void cancelClick(object sender, EventArgs e)
         {
             this.Close();
+        }
+        
+        
+        
+        private void Form_Shown(Object sender, EventArgs e)
+        {
+            if (lipidException == null) return;
+            
+            for (int i = 0; i < dataGridViewElements.Rows.Count; ++i)
+            {
+                if (((string)dataGridViewElements.Rows[i].Cells[0].Value).Equals(MS2Fragment.ALL_ELEMENTS[lipidException.molecule].shortcut))
+                {
+                    dataGridViewElements.CurrentCell = dataGridViewElements.Rows[i].Cells[2];
+                    break;
+                }
+            }
         }
         
         

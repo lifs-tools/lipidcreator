@@ -3776,6 +3776,27 @@ namespace LipidCreator
                 return;
             }
             loadLipid(lipidException.precursorData.lipidHash);
+            
+            Form formToOpen = null;
+            switch ((int)currentIndex)
+            {
+                case (int)LipidCategory.NoLipid:
+                    return;
+                
+                case ((int)LipidCategory.LipidMediator):
+                    mediatorMS2fragmentsForm = new MediatorMS2Form(this, (Mediator)currentLipid);
+                    formToOpen = (Form)mediatorMS2fragmentsForm;
+                    break;
+                
+                default:
+                    ms2fragmentsForm = new MS2Form(this, lipidException);
+                    formToOpen = (Form)ms2fragmentsForm;
+                    break;
+            }
+            formToOpen.Owner = this;
+            formToOpen.ShowInTaskbar = false;
+            formToOpen.ShowDialog();
+            formToOpen.Dispose();
         }
         
         

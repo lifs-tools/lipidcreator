@@ -95,13 +95,26 @@ namespace LipidCreator
                             
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
-                            lcf.registeredLipids.Add(peh.lipid);
-                            lcf.assembleLipids(false);
                             
-                            DataRow row = lcf.transitionList.Rows[0];
-                            if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                            long lipidHash = 0;
+                            if (peh.lipid is Glycerolipid) lipidHash = ((Glycerolipid)peh.lipid).getHashCode();
+                            else if (peh.lipid is Phospholipid) lipidHash = ((Phospholipid)peh.lipid).getHashCode();
+                            else if (peh.lipid is Sphingolipid) lipidHash = ((Sphingolipid)peh.lipid).getHashCode();
+                            else if (peh.lipid is Cholesterol) lipidHash = ((Cholesterol)peh.lipid).getHashCode();
+                            else if (peh.lipid is Mediator) lipidHash = ((Mediator)peh.lipid).getHashCode();
+                            else if (peh.lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)peh.lipid).getHashCode();
+                            
+                            if (!lcf.registeredLipidDictionary.ContainsKey(lipidHash))
                             {
-                                throw new Exception("Error: inserted lipid name '" + line + "' does not equal to computed name '" + row[LipidCreator.PRECURSOR_NAME] + "'.");
+                                lcf.registeredLipidDictionary.Add(lipidHash, peh.lipid);
+                                lcf.registeredLipids.Add(lipidHash);
+                                lcf.assembleLipids(false, new ArrayList(){false, 0});
+                                
+                                DataRow row = lcf.transitionList.Rows[0];
+                                if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                                {
+                                    throw new Exception("Error: inserted lipid name '" + line + "' does not equal to computed name '" + row[LipidCreator.PRECURSOR_NAME] + "'.");
+                                }
                             }
                         }
                     }

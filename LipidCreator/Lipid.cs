@@ -73,9 +73,6 @@ namespace LipidCreator
     
     
     
-    
-    
-    
     public class LipidException : Exception
     {
         public MS2Fragment fragment = null;
@@ -83,7 +80,7 @@ namespace LipidCreator
         public Molecule molecule = Molecule.C;
         public int counts = 0;
         public string heavyIsotope = "";
-        public CreatorGUI creatorGUI = null;
+        public Object creatorGUI = null;
         
         public LipidException(PrecursorData _precursorData, MS2Fragment _fragment)
         {

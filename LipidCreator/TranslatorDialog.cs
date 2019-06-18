@@ -307,13 +307,30 @@ namespace LipidCreator
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
-            if (returnMessage[0] == 1) creatorGUI.lipidCreator.registeredLipids.Clear(); // replace
+            if (returnMessage[0] == 1)
+            {
+                creatorGUI.lipidCreator.registeredLipidDictionary.Clear(); // replace
+                creatorGUI.lipidCreator.registeredLipids.Clear(); // replace
+            }
         
             foreach(Lipid currentLipid in parsedLipids)
             {
-                currentLipid.onlyPrecursors = filterParameters[0];
-                currentLipid.onlyHeavyLabeled = filterParameters[1];
-                creatorGUI.lipidCreator.registeredLipids.Add(currentLipid);
+                
+                long lipidHash = 0;
+                if (currentLipid is Glycerolipid) lipidHash = ((Glycerolipid)currentLipid).getHashCode();
+                else if (currentLipid is Phospholipid) lipidHash = ((Phospholipid)currentLipid).getHashCode();
+                else if (currentLipid is Sphingolipid) lipidHash = ((Sphingolipid)currentLipid).getHashCode();
+                else if (currentLipid is Cholesterol) lipidHash = ((Cholesterol)currentLipid).getHashCode();
+                else if (currentLipid is Mediator) lipidHash = ((Mediator)currentLipid).getHashCode();
+                else if (currentLipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)currentLipid).getHashCode();
+            
+                if (!creatorGUI.lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
+                {
+                    currentLipid.onlyPrecursors = filterParameters[0];
+                    currentLipid.onlyHeavyLabeled = filterParameters[1];
+                    creatorGUI.lipidCreator.registeredLipidDictionary.Add(lipidHash, currentLipid);
+                    creatorGUI.lipidCreator.registeredLipids.Add(lipidHash);
+                }
             }
             creatorGUI.refreshRegisteredLipidsTable();
             Close();

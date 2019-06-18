@@ -55,7 +55,7 @@ namespace LipidCreator
         public AboutDialog aboutDialog;
         public Lipid currentLipid;
         public DataTable registeredLipidsDatatable;
-        public int[] lipidModifications;
+        public long[] lipidModifications;
         public Color alertColor = Color.FromArgb(255, 180, 180);
         public bool settingListbox = false;
         public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
@@ -102,7 +102,7 @@ namespace LipidCreator
             InitializeComponent();
             
             // add predefined menu
-            lipidModifications = Enumerable.Repeat(-1, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
+            lipidModifications = Enumerable.Repeat(0L, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
             string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
             if(Directory.Exists(predefinedFolder)) 
@@ -258,6 +258,7 @@ namespace LipidCreator
         
         public void clearLipidList(Object sender, EventArgs e)
         {
+            lipidCreator.registeredLipidDictionary.Clear();
             lipidCreator.registeredLipids.Clear();
             registeredLipidsDatatable.Rows.Clear();
             refreshRegisteredLipidsTable();
@@ -3056,42 +3057,70 @@ namespace LipidCreator
             lipidsGridview.InvokeIfRequired(() => {
                 log.Debug("Modifying row in lipid table");
                 LipidCategory result = checkPropertiesValid();
-                int rowIndex = lipidModifications[(int)result];
+                long lipidHash = lipidModifications[(int)result];
+                if (!lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
+                {
+                    log.Error("An error happened during the modification of a lipid.");
+                    return;
+                }
+                
+                int lipidRow = 0;
+                while (lipidRow < lipidCreator.registeredLipids.Count && (long)lipidCreator.registeredLipids[lipidRow] != lipidHash) lipidRow++;
+                if (lipidRow >= lipidCreator.registeredLipids.Count)
+                {
+                    log.Error("An error happened during the modification of a lipid.");
+                    return;
+                }
+                
+                long newHash = 0;
                 switch (result)
                 {
+                    
                     case LipidCategory.Glycerolipid:
-                        lipidCreator.registeredLipids[rowIndex] = new Glycerolipid((Glycerolipid)currentLipid);
+                        newHash = ((Glycerolipid)currentLipid).getHashCode();
+                        lipidCreator.registeredLipids[lipidRow] = newHash;
+                        lipidCreator.registeredLipidDictionary.Remove(lipidHash);
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Glycerolipid((Glycerolipid)currentLipid));
                         break;
+                        
                     case LipidCategory.Glycerophospholipid:
-                        lipidCreator.registeredLipids[rowIndex] = new Phospholipid((Phospholipid)currentLipid);
+                        newHash = ((Phospholipid)currentLipid).getHashCode();
+                        lipidCreator.registeredLipids[lipidRow] = newHash;
+                        lipidCreator.registeredLipidDictionary.Remove(lipidHash);
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Phospholipid((Phospholipid)currentLipid));
                         break;
                         
                     case LipidCategory.Sphingolipid:
-                        lipidCreator.registeredLipids[rowIndex] = new Sphingolipid((Sphingolipid)currentLipid);
+                        newHash = ((Sphingolipid)currentLipid).getHashCode();
+                        lipidCreator.registeredLipids[lipidRow] = newHash;
+                        lipidCreator.registeredLipidDictionary.Remove(lipidHash);
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Sphingolipid((Sphingolipid)currentLipid));
                         break;
                         
                     case LipidCategory.Sterollipid:
-                        lipidCreator.registeredLipids[rowIndex] = new Cholesterol((Cholesterol)currentLipid);
+                        newHash = ((Cholesterol)currentLipid).getHashCode();
+                        lipidCreator.registeredLipids[lipidRow] = newHash;
+                        lipidCreator.registeredLipidDictionary.Remove(lipidHash);
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Cholesterol((Cholesterol)currentLipid));
                         break;
                         
                     case LipidCategory.LipidMediator:
-                        lipidCreator.registeredLipids[rowIndex] = new Mediator((Mediator)currentLipid);
+                        newHash = ((Mediator)currentLipid).getHashCode();
+                        lipidCreator.registeredLipids[lipidRow] = newHash;
+                        lipidCreator.registeredLipidDictionary.Remove(lipidHash);
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Mediator((Mediator)currentLipid));
                         break;
+                        
                     default:
                         return;
                 }
-                //lipidsGridview.ScrollBars = ScrollBars.None;
                 DataRow tmpRow = createLipidsGridviewRow(currentLipid);
-                foreach (DataColumn dc in registeredLipidsDatatable.Columns) registeredLipidsDatatable.Rows[rowIndex][dc.ColumnName] = tmpRow[dc.ColumnName];
+                foreach (DataColumn dc in registeredLipidsDatatable.Columns) registeredLipidsDatatable.Rows[lipidRow][dc.ColumnName] = tmpRow[dc.ColumnName];
             
 
-                lipidsGridview.Rows[rowIndex].Cells["Edit"].Value = editImage;
-                lipidsGridview.Rows[rowIndex].Cells["Delete"].Value = deleteImage;
-//                lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                //lipidsGridview.Invalidate();
-                //lipidsGridview.PerformLayout();
-                //lipidsGridview.Update();
-                //lipidsGridview.Refresh();
+                lipidsGridview.Rows[lipidRow].Cells["Edit"].Value = editImage;
+                lipidsGridview.Rows[lipidRow].Cells["Delete"].Value = deleteImage;
+                
             });
         }
         
@@ -3101,56 +3130,69 @@ namespace LipidCreator
         {
             lipidsGridview.InvokeIfRequired(() => {
                 log.Debug("Registering lipids for lipid table");
-                //lipidsGridview.ScrollBars = ScrollBars.None;
                 LipidCategory result = checkPropertiesValid();
                 int tabIndex = 0;
-                switch (result)
-                {
-                    case LipidCategory.Glycerolipid:
-                        lipidCreator.registeredLipids.Add(new Glycerolipid((Glycerolipid)currentLipid));
-                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                        tabIndex = (int)LipidCategory.Glycerolipid;
-                        break;
-                        
-                    case LipidCategory.Glycerophospholipid:
-                        lipidCreator.registeredLipids.Add(new Phospholipid((Phospholipid)currentLipid));
-                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                        tabIndex = (int)LipidCategory.Glycerophospholipid;
-                        break;
-                        
-                    case LipidCategory.Sphingolipid:
-                        lipidCreator.registeredLipids.Add(new Sphingolipid((Sphingolipid)currentLipid));
-                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                        tabIndex = (int)LipidCategory.Sphingolipid;
-                        break;
-                        
-                    case LipidCategory.Sterollipid:
-                        lipidCreator.registeredLipids.Add(new Cholesterol((Cholesterol)currentLipid));
-                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                        tabIndex = (int)LipidCategory.Sterollipid;
-                        break;
-                        
-                    case LipidCategory.LipidMediator:
-                        lipidCreator.registeredLipids.Add(new Mediator((Mediator)currentLipid));
-                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
-                        tabIndex = (int)LipidCategory.LipidMediator;
-                        break;
-                        
-                    default:
-                        return;
+                long lipidHash = 0;
+                
+                try {
+                    switch (result)
+                    {
+                        case LipidCategory.Glycerolipid:
+                            lipidHash = ((Glycerolipid)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Glycerolipid((Glycerolipid)currentLipid));
+                            lipidCreator.registeredLipids.Add(lipidHash);
+                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
+                            tabIndex = (int)LipidCategory.Glycerolipid;
+                            break;
+                            
+                        case LipidCategory.Glycerophospholipid:
+                            lipidHash = ((Phospholipid)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Phospholipid((Phospholipid)currentLipid));
+                            lipidCreator.registeredLipids.Add(lipidHash);
+                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
+                            tabIndex = (int)LipidCategory.Glycerophospholipid;
+                            break;
+                            
+                        case LipidCategory.Sphingolipid:
+                            lipidHash = ((Sphingolipid)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Sphingolipid((Sphingolipid)currentLipid));
+                            lipidCreator.registeredLipids.Add(lipidHash);
+                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
+                            tabIndex = (int)LipidCategory.Sphingolipid;
+                            break;
+                            
+                        case LipidCategory.Sterollipid:
+                            lipidHash = ((Cholesterol)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Cholesterol((Cholesterol)currentLipid));
+                            lipidCreator.registeredLipids.Add(lipidHash);
+                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
+                            tabIndex = (int)LipidCategory.Sterollipid;
+                            break;
+                            
+                        case LipidCategory.LipidMediator:
+                            lipidHash = ((Mediator)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Mediator((Mediator)currentLipid));
+                            lipidCreator.registeredLipids.Add(lipidHash);
+                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
+                            tabIndex = (int)LipidCategory.LipidMediator;
+                            break;
+                            
+                        default:
+                            return;
+                    }
+
+                    lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Edit"].Value = editImage;
+                    lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Delete"].Value = deleteImage;
+
+                    //for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
+                    lipidModifications[tabIndex] = lipidHash;
+                    modifyLipidButton.Enabled = true;
                 }
-
-                lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Edit"].Value = editImage;
-                lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Delete"].Value = deleteImage;
-                //lipidsGridview.ScrollBars = ScrollBars.Vertical;
-                //lipidsGridview.Invalidate();
-                //lipidsGridview.PerformLayout();
-                //lipidsGridview.Update();
-                //lipidsGridview.Refresh();
-
-                for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
-                lipidModifications[tabIndex] = lipidsGridview.Rows.Count - 1;
-                modifyLipidButton.Enabled = true;
+                catch
+                {
+                    log.Debug("A lipid with this set of parameters is already registered.");
+                    MessageBox.Show("A lipid with this set of parameters is already registered.", "Lipid registered");
+                }
             });
         }
         
@@ -3283,9 +3325,14 @@ namespace LipidCreator
             {
                 log.Debug("Refreshing lipids table");
                 registeredLipidsDatatable.Clear();
-                foreach (Lipid currentRegisteredLipid in lipidCreator.registeredLipids)
+                foreach (long lipidHash in lipidCreator.registeredLipids)
                 {
-                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentRegisteredLipid));
+                    if (!lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
+                    {
+                        log.Error("Error during refreshing table.");
+                        return;
+                    }
+                    registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(lipidCreator.registeredLipidDictionary[lipidHash]));
                     
                 }
 
@@ -3305,7 +3352,7 @@ namespace LipidCreator
             if (((DataGridView)sender).Columns[colIndex].Name == "Edit")
             {
             
-                Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
+                Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[(long)lipidCreator.registeredLipids[rowIndex]];
                 int tabIndex = 0;
                 for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
                 if (currentRegisteredLipid is Glycerolipid)
@@ -3361,8 +3408,9 @@ namespace LipidCreator
         {
             lipidsGridview.InvokeIfRequired(() =>
             {
-                log.Debug("Deleting row "+rowIndex+" from lipids table");
-                Lipid currentRegisteredLipid = (Lipid)lipidCreator.registeredLipids[rowIndex];
+                log.Debug("Deleting row " + rowIndex + " from lipids table");
+                long lipidHash = (long)lipidCreator.registeredLipids[rowIndex];
+                Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[lipidHash];
                 int tabIndex = 0;
                 if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.Glycerolipid;
                 else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.Glycerophospholipid;
@@ -3375,12 +3423,11 @@ namespace LipidCreator
                 {
                     if (i != rowIndex) tmpTable.ImportRow(registeredLipidsDatatable.Rows[i]);
                 }
-                registeredLipidsDatatable.Rows.Clear();
                 
+                registeredLipidsDatatable.Rows.Clear();
                 foreach (DataRow row in tmpTable.Rows) registeredLipidsDatatable.ImportRow(row);
                 
-                if ((int)lipidModifications[tabIndex] == rowIndex) lipidModifications[tabIndex] = -1;
-                else if ((int)lipidModifications[tabIndex] > rowIndex) lipidModifications[tabIndex] -= 1;
+                if (lipidModifications[tabIndex] == lipidHash) lipidModifications[tabIndex] = 0L;
                 if (tabIndex == (int)currentIndex) changeTab(tabIndex);
 
                 for (int i = 0; i < lipidsGridview.Rows.Count; ++i)
@@ -3388,10 +3435,8 @@ namespace LipidCreator
                     lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
                     lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
-
+                lipidCreator.registeredLipidDictionary.Remove((long)lipidCreator.registeredLipids[rowIndex]);
                 lipidCreator.registeredLipids.RemoveAt(rowIndex);
-                //lipidsGridview.Invalidate();
-                //lipidsGridview.PerformLayout();
             });
 
         }
@@ -3632,7 +3677,10 @@ namespace LipidCreator
             lcmb.ShowInTaskbar = false;
             lcmb.ShowDialog();
             lcmb.Dispose();
-            if (returnMessage[0] == 1) lipidCreator.registeredLipids.Clear(); // replace
+            if (returnMessage[0] == 1){
+                lipidCreator.registeredLipidDictionary.Clear();
+                lipidCreator.registeredLipids.Clear(); // replace
+            }
             
             System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
             string filePath = (string)PredefItem.Tag;
@@ -3671,7 +3719,11 @@ namespace LipidCreator
                     lcmb.ShowInTaskbar = false;
                     lcmb.ShowDialog();
                     lcmb.Dispose();
-                    if (returnMessage[0] == 1) lipidCreator.registeredLipids.Clear(); // replace
+                    if (returnMessage[0] == 1)
+                    {
+                        lipidCreator.registeredLipidDictionary.Clear();
+                        lipidCreator.registeredLipids.Clear(); // replace
+                    }
                     
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();

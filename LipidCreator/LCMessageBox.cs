@@ -14,10 +14,12 @@ namespace LipidCreator
     {
         public int[] returnMessage = null;
         public int type = 0;
+        public LipidException lipidException;
         public CreatorGUI creatorGUI;
         
-        public LCMessageBox(int[] _returnMessage, int _type, LipidException lipidException = null)
+        public LCMessageBox(int[] _returnMessage, int _type, LipidException _lipidException = null)
         {
+            lipidException = _lipidException;
             returnMessage = _returnMessage;
             type = _type;
             InitializeComponent();
@@ -78,7 +80,7 @@ namespace LipidCreator
                     break;
                 
                 case 1:
-                    
+                    creatorGUI.goToFragment(lipidException);
                     break;
             }
         }

@@ -566,13 +566,6 @@ namespace LipidCreator
             listingParserEventHandler = new ListingParserEventHandler();
             listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", PARSER_QUOTE);
             
-            /*
-            lipidMapsParser.parse("LysoPC(18:1(11Z))");
-            Console.WriteLine(lipidMapsParser.wordInGrammar);
-            lipidMapsParser.raiseEvents();
-            Console.WriteLine(lipidMapsParserEventHandler.lipid is UnsupportedLipid);
-            Environment.Exit(-1);
-            */
         }
         
         
@@ -707,6 +700,12 @@ namespace LipidCreator
             {
                 Lipid currentLipid = registeredLipidDictionary[lipidHash];
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
+                int i = precursorDataList.Count - 1;
+                while (i >= 0 && ((PrecursorData)precursorDataList[i]).lipidHash == 0)
+                {
+                    ((PrecursorData)precursorDataList[i]).lipidHash = lipidHash;
+                    --i;
+                }
             }
         }
         

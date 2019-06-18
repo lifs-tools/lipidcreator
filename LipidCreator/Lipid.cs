@@ -57,6 +57,7 @@ namespace LipidCreator
         public string precursorSpeciesName;
         public string precursorIonFormula;
         public Adduct precursorAdduct;
+        public long lipidHash = 0;
         public string precursorAdductFormula;
         public double precursorM_Z;
         public bool addPrecursor;

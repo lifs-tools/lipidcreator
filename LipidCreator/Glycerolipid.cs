@@ -81,6 +81,7 @@ namespace LipidCreator
             hashCode += fag2.getHashCode();
             hashCode += fag3.getHashCode();
             hashCode += containsSugar ? (1L << 18) : (1L << 58);
+            if (hashCode == 0) hashCode += 1;
             return hashCode;
         }
         

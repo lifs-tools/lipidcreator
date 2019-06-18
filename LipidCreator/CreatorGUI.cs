@@ -924,7 +924,7 @@ namespace LipidCreator
             {
                 ((TabPage)tabList[index]).Controls.Add(lcStep2);
                 ((TabPage)tabList[index]).Controls.Add(lcStep3);                
-                modifyLipidButton.Enabled = lipidModifications[(int)currentIndex] > -1;
+                modifyLipidButton.Enabled = lipidModifications[(int)currentIndex] != 0;
             }
         }
         
@@ -3057,9 +3057,13 @@ namespace LipidCreator
             lipidsGridview.InvokeIfRequired(() => {
                 log.Debug("Modifying row in lipid table");
                 LipidCategory result = checkPropertiesValid();
+                
+                if (result == LipidCategory.NoLipid) return;
+                
                 long lipidHash = lipidModifications[(int)result];
                 if (!lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
                 {
+                    MessageBox.Show("An error happened during the modification of a lipid.", "Error during modification");
                     log.Error("An error happened during the modification of a lipid.");
                     return;
                 }
@@ -3068,6 +3072,7 @@ namespace LipidCreator
                 while (lipidRow < lipidCreator.registeredLipids.Count && (long)lipidCreator.registeredLipids[lipidRow] != lipidHash) lipidRow++;
                 if (lipidRow >= lipidCreator.registeredLipids.Count)
                 {
+                    MessageBox.Show("An error happened during the modification of a lipid. Lipid is not in list any more.", "Error during modification");
                     log.Error("An error happened during the modification of a lipid.");
                     return;
                 }
@@ -3131,6 +3136,7 @@ namespace LipidCreator
             lipidsGridview.InvokeIfRequired(() => {
                 log.Debug("Registering lipids for lipid table");
                 LipidCategory result = checkPropertiesValid();
+                if (result == LipidCategory.NoLipid) return;
                 int tabIndex = 0;
                 long lipidHash = 0;
                 
@@ -3184,7 +3190,7 @@ namespace LipidCreator
                     lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Edit"].Value = editImage;
                     lipidsGridview.Rows[lipidsGridview.Rows.Count - 1].Cells["Delete"].Value = deleteImage;
 
-                    //for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
+                    for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = 0;
                     lipidModifications[tabIndex] = lipidHash;
                     modifyLipidButton.Enabled = true;
                 }
@@ -3351,39 +3357,7 @@ namespace LipidCreator
             int colIndex = ((DataGridView)sender).CurrentCell.ColumnIndex;
             if (((DataGridView)sender).Columns[colIndex].Name == "Edit")
             {
-            
-                Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[(long)lipidCreator.registeredLipids[rowIndex]];
-                int tabIndex = 0;
-                for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = -1;
-                if (currentRegisteredLipid is Glycerolipid)
-                {
-                    tabIndex = (int)LipidCategory.Glycerolipid;
-                    lipidTabList[tabIndex] = new Glycerolipid((Glycerolipid)currentRegisteredLipid);
-                }
-                else if (currentRegisteredLipid is Phospholipid)
-                {
-                    tabIndex = (int)LipidCategory.Glycerophospholipid;
-                    lipidTabList[tabIndex] = new Phospholipid((Phospholipid)currentRegisteredLipid);
-                }
-                else if (currentRegisteredLipid is Sphingolipid)
-                {
-                    tabIndex = (int)LipidCategory.Sphingolipid;
-                    lipidTabList[tabIndex] = new Sphingolipid((Sphingolipid)currentRegisteredLipid);
-                }
-                else if (currentRegisteredLipid is Cholesterol)
-                {
-                    tabIndex = (int)LipidCategory.Sterollipid;
-                    lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
-                }
-                else if (currentRegisteredLipid is Mediator)
-                {
-                    tabIndex = (int)LipidCategory.LipidMediator;
-                    lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
-                }
-                currentLipid = currentRegisteredLipid;
-                lipidModifications[tabIndex] = rowIndex;
-                tabControl.SelectedIndex = tabIndex;
-                changeTab(tabIndex);
+                loadLipid((long)lipidCreator.registeredLipids[rowIndex]);
                 
             }
             else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
@@ -3391,6 +3365,55 @@ namespace LipidCreator
                 deleteLipidsGridviewRow(rowIndex);
             }
         }
+        
+        
+        
+        
+        
+        public void loadLipid(long lipidHash)
+        {
+            Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[lipidHash];
+            int tabIndex = 0;
+            for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = 0;
+            
+            if (currentRegisteredLipid is Glycerolipid)
+            {
+                tabIndex = (int)LipidCategory.Glycerolipid;
+                lipidTabList[tabIndex] = new Glycerolipid((Glycerolipid)currentRegisteredLipid);
+                currentLipid = (Glycerolipid)lipidTabList[tabIndex];
+            }
+            else if (currentRegisteredLipid is Phospholipid)
+            {
+                tabIndex = (int)LipidCategory.Glycerophospholipid;
+                lipidTabList[tabIndex] = new Phospholipid((Phospholipid)currentRegisteredLipid);
+                currentLipid = (Phospholipid)lipidTabList[tabIndex];
+            }
+            else if (currentRegisteredLipid is Sphingolipid)
+            {
+                tabIndex = (int)LipidCategory.Sphingolipid;
+                lipidTabList[tabIndex] = new Sphingolipid((Sphingolipid)currentRegisteredLipid);
+                currentLipid = (Sphingolipid)lipidTabList[tabIndex];
+            }
+            else if (currentRegisteredLipid is Cholesterol)
+            {
+                tabIndex = (int)LipidCategory.Sterollipid;
+                lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
+                currentLipid = (Cholesterol)lipidTabList[tabIndex];
+            }
+            else if (currentRegisteredLipid is Mediator)
+            {
+                tabIndex = (int)LipidCategory.LipidMediator;
+                lipidTabList[tabIndex] = new Mediator((Mediator)currentRegisteredLipid);
+                currentLipid = (Mediator)lipidTabList[tabIndex];
+            }
+            lipidModifications[tabIndex] = lipidHash;
+            
+            tabControl.SelectedIndex = tabIndex;
+            changeTab(tabIndex);
+        }
+        
+        
+        
         
         
         public void lipidsGridviewKeydown(Object sender, KeyEventArgs e)
@@ -3402,6 +3425,11 @@ namespace LipidCreator
                 e.Handled = true;
             }
         }
+        
+        
+        
+        
+        
         
         
         public void deleteLipidsGridviewRow(int rowIndex)
@@ -3740,9 +3768,14 @@ namespace LipidCreator
         
         
         
-        public void goToFragment()
+        public void goToFragment(LipidException lipidException)
         {
-            
+            if (lipidException == null || lipidException.precursorData.lipidHash == 0 || !lipidCreator.registeredLipidDictionary.ContainsKey(lipidException.precursorData.lipidHash))
+            {
+                MessageBox.Show("Could not open fragment, it seems that the lipid assembly is not registered any more.");
+                return;
+            }
+            loadLipid(lipidException.precursorData.lipidHash);
         }
         
         

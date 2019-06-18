@@ -89,6 +89,7 @@ namespace LipidCreator
             hashCode += fag4.getHashCode();
             hashCode += isLyso ? (1L << 21) : (1L << 55);
             hashCode += isCL ? (1L << 13) : (1L << 44);
+            if (hashCode == 0) hashCode += 1;
             return hashCode;
         }
         

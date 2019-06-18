@@ -48,6 +48,7 @@ namespace LipidCreator
             this.richTextBox1.Size = new System.Drawing.Size(484, 60);
             this.richTextBox1.BackColor = SystemColors.Control;
             this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Text = "123456";
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.GotFocus += new System.EventHandler(richTextBox1_Focus);
             this.richTextBox1.MouseEnter += new System.EventHandler(richTextBox1_MouseEnter);
@@ -62,7 +63,7 @@ namespace LipidCreator
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.mergeClick);
             
-            this.timerText = new System.Timers.Timer(15);
+            this.timerText = new System.Timers.Timer(150);
             this.timerText.Elapsed += this.timer_Elapsed;
             this.timerText.Enabled = true;
             // 

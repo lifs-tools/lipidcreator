@@ -72,6 +72,7 @@ namespace LipidCreator
         protected void mergeClick(object sender, System.EventArgs e)
         {
             returnMessage[0] = 0; // merge / go to fragment
+            timerText.Enabled = false;
             
             switch (type)
             {
@@ -88,6 +89,7 @@ namespace LipidCreator
         protected void replaceClick(object sender, System.EventArgs e)
         {
             returnMessage[0] = 1; // replace / close
+            timerText.Enabled = false;
             Close();
         }
     }

@@ -135,6 +135,7 @@ namespace LipidCreator
                 ms2Fragment = new MS2Fragment(ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][isPositive][fragmentName]);
                 textBoxFragmentName.Text = fragmentName;
                 textBoxFragmentName.Enabled = false;
+                numericUpDownCharge.Enabled = false;
                 addButton.Text = "OK";
                 fragmentOutputName = ms2Fragment.fragmentOutputName;
                 
@@ -316,7 +317,7 @@ namespace LipidCreator
             
             ElementDictionary newElements = createElementData(elements);
             if (fragmentOutputName == "") fragmentOutputName = textBoxFragmentName.Text;
-            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, Lipid.chargeToAdduct[charge], null, newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
+            MS2Fragment newFragment = new MS2Fragment(textBoxFragmentName.Text, fragmentOutputName, Lipid.chargeToAdduct[charge], "", newElements, buildingBlocks[selectBaseCombobox.SelectedIndex]);
             newFragment.userDefined = true;
                 
             if (!edit)

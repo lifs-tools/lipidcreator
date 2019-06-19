@@ -40,7 +40,7 @@ namespace LipidCreator
     {
         public string fragmentName;
         public string fragmentOutputName;
-        public String fragmentFile;
+        public string fragmentFile;
         public ElementDictionary fragmentElements;
         public Adduct fragmentAdduct;
         public ArrayList fragmentBase;

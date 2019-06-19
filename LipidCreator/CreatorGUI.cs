@@ -3052,6 +3052,9 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public void modifyLipid(Object sender, EventArgs e)
         {
             lipidsGridview.InvokeIfRequired(() => {
@@ -3078,6 +3081,7 @@ namespace LipidCreator
                 }
                 
                 long newHash = 0;
+                int tabIndex = 0;
                 switch (result)
                 {
                     
@@ -3086,6 +3090,7 @@ namespace LipidCreator
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
                         lipidCreator.registeredLipidDictionary.Add(newHash, new Glycerolipid((Glycerolipid)currentLipid));
+                        tabIndex = (int)LipidCategory.Glycerolipid; 
                         break;
                         
                     case LipidCategory.Glycerophospholipid:
@@ -3093,6 +3098,7 @@ namespace LipidCreator
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
                         lipidCreator.registeredLipidDictionary.Add(newHash, new Phospholipid((Phospholipid)currentLipid));
+                        tabIndex = (int)LipidCategory.Glycerophospholipid;
                         break;
                         
                     case LipidCategory.Sphingolipid:
@@ -3100,6 +3106,7 @@ namespace LipidCreator
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
                         lipidCreator.registeredLipidDictionary.Add(newHash, new Sphingolipid((Sphingolipid)currentLipid));
+                        tabIndex = (int)LipidCategory.Sphingolipid;
                         break;
                         
                     case LipidCategory.Sterollipid:
@@ -3107,6 +3114,7 @@ namespace LipidCreator
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
                         lipidCreator.registeredLipidDictionary.Add(newHash, new Cholesterol((Cholesterol)currentLipid));
+                        tabIndex = (int)LipidCategory.Sterollipid;
                         break;
                         
                     case LipidCategory.LipidMediator:
@@ -3114,6 +3122,7 @@ namespace LipidCreator
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
                         lipidCreator.registeredLipidDictionary.Add(newHash, new Mediator((Mediator)currentLipid));
+                        tabIndex = (int)LipidCategory.LipidMediator;
                         break;
                         
                     default:
@@ -3121,6 +3130,9 @@ namespace LipidCreator
                 }
                 DataRow tmpRow = createLipidsGridviewRow(currentLipid);
                 foreach (DataColumn dc in registeredLipidsDatatable.Columns) registeredLipidsDatatable.Rows[lipidRow][dc.ColumnName] = tmpRow[dc.ColumnName];
+                
+                for (int i = 0; i < lipidModifications.Length; ++i) lipidModifications[i] = 0;
+                lipidModifications[tabIndex] = newHash;
             
 
                 lipidsGridview.Rows[lipidRow].Cells["Edit"].Value = editImage;
@@ -3128,6 +3140,9 @@ namespace LipidCreator
                 
             });
         }
+        
+        
+        
         
         
         
@@ -3201,6 +3216,10 @@ namespace LipidCreator
                 }
             });
         }
+        
+        
+        
+        
         
         
         public string FARepresentation(FattyAcidGroup fag)

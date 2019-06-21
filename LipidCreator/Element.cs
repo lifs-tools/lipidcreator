@@ -45,12 +45,15 @@ namespace LipidCreator
         
         public long getHashCode()
         {
-            long hashCode = 0;
-            foreach (KeyValuePair<Molecule, int> kvp in this)
+            unchecked
             {
-                hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (kvp.Value + 7);
+                long hashCode = 0;
+                foreach (KeyValuePair<Molecule, int> kvp in this)
+                {
+                    hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (kvp.Value + 7);
+                }
+                return hashCode;
             }
-            return hashCode;
         }
     }
 

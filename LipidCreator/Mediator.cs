@@ -67,10 +67,13 @@ namespace LipidCreator
         
         public override long getHashCode()
         {
-            long hashCode = base.getHashCode();
-            hashCode += 3406582395346L;
-            if (hashCode == 0) hashCode += 1;
-            return hashCode;
+            unchecked
+            {
+                long hashCode = base.getHashCode();
+                hashCode += 3406582395346L;
+                if (hashCode == 0) hashCode += 1;
+                return hashCode;
+            }
         }
         
         

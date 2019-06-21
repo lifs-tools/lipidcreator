@@ -230,37 +230,40 @@ namespace LipidCreator
         
         public virtual long getHashCode()
         {
-            long hashCode = representativeFA ? (1L << 26) : (1L << 61);
-            hashCode += (long)(onlyPrecursors + 23) << 14;
-            hashCode += (long)(onlyHeavyLabeled + 37) << 33;
-            
-            foreach (string adduct in adducts.Keys.Where(x => adducts[x]))
+            unchecked
             {
-                hashCode += LipidCreator.HashCode(adduct);
-            }
-            
-            foreach (string hg in headGroupNames)
-            {
-                hashCode += LipidCreator.HashCode(hg);
-            }
-            
-            foreach (string lipidClass in positiveFragments.Keys)
-            {
-                foreach (string lipidName in positiveFragments[lipidClass])
+                long hashCode = representativeFA ? (1L << 26) : (1L << 61);
+                hashCode += (long)(onlyPrecursors + 23) << 14;
+                hashCode += (long)(onlyHeavyLabeled + 37) << 33;
+
+                foreach (string adduct in adducts.Keys.Where(x => adducts[x]))
                 {
-                    if (lipidCreator.allFragments[lipidClass][true].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][true][lipidName].getHashCode();
+                    hashCode += LipidCreator.HashCode(adduct);
                 }
-            }
-            
-            
-            foreach (string lipidClass in negativeFragments.Keys)
-            {
-                foreach (string lipidName in negativeFragments[lipidClass])
+
+                foreach (string hg in headGroupNames)
                 {
-                    if (lipidCreator.allFragments[lipidClass][false].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][false][lipidName].getHashCode();
+                    hashCode += LipidCreator.HashCode(hg);
                 }
+
+                foreach (string lipidClass in positiveFragments.Keys)
+                {
+                    foreach (string lipidName in positiveFragments[lipidClass])
+                    {
+                        if (lipidCreator.allFragments[lipidClass][true].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][true][lipidName].getHashCode();
+                    }
+                }
+
+
+                foreach (string lipidClass in negativeFragments.Keys)
+                {
+                    foreach (string lipidName in negativeFragments[lipidClass])
+                    {
+                        if (lipidCreator.allFragments[lipidClass][false].ContainsKey(lipidName)) hashCode += lipidCreator.allFragments[lipidClass][false][lipidName].getHashCode();
+                    }
+                }
+                return hashCode;
             }
-            return hashCode;
         }
         
         
@@ -900,7 +903,10 @@ namespace LipidCreator
         
         public override long getHashCode()
         {
-            return 0L;
+            unchecked
+            {
+                return 0L;
+            }
         }
         
         

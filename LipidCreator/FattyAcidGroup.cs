@@ -130,16 +130,19 @@ namespace LipidCreator
         
         public long getHashCode()
         {
-            long hashCode = chainType << 10;
-            hashCode += LipidCreator.HashCode(lengthInfo);
-            hashCode += LipidCreator.HashCode(dbInfo);
-            hashCode += LipidCreator.HashCode(hydroxylInfo);
-            hashCode += isLCB ? 2 : 8;
-            foreach (string faType in faTypes.Keys.Where(x => faTypes[x]))
+            unchecked
             {
-                hashCode += LipidCreator.HashCode(faType);
+                long hashCode = chainType << 10;
+                hashCode += LipidCreator.HashCode(lengthInfo);
+                hashCode += LipidCreator.HashCode(dbInfo);
+                hashCode += LipidCreator.HashCode(hydroxylInfo);
+                hashCode += isLCB ? 2 : 8;
+                foreach (string faType in faTypes.Keys.Where(x => faTypes[x]))
+                {
+                    hashCode += LipidCreator.HashCode(faType);
+                }
+                return hashCode;
             }
-            return hashCode;
         }
         
         

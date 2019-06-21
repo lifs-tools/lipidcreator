@@ -82,15 +82,17 @@ namespace LipidCreator
         
         public override long getHashCode()
         {
-            long hashCode = base.getHashCode() + 13034653259202L;
-            hashCode += fag1.getHashCode();
-            hashCode += fag2.getHashCode();
-            hashCode += fag3.getHashCode();
-            hashCode += fag4.getHashCode();
-            hashCode += isLyso ? (1L << 21) : (1L << 55);
-            hashCode += isCL ? (1L << 13) : (1L << 44);
-            if (hashCode == 0) hashCode += 1;
-            return hashCode;
+            unchecked {
+                long hashCode = base.getHashCode() + 13034653259202L;
+                hashCode += fag1.getHashCode();
+                hashCode += fag2.getHashCode();
+                hashCode += fag3.getHashCode();
+                hashCode += fag4.getHashCode();
+                hashCode += isLyso ? (1L << 21) : (1L << 55);
+                hashCode += isCL ? (1L << 13) : (1L << 44);
+                if (hashCode == 0) hashCode += 1;
+                return hashCode;
+            }
         }
         
         

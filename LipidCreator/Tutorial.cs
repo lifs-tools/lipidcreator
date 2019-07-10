@@ -1253,7 +1253,7 @@ namespace LipidCreator
                     orfb.Enabled = true;
                     tutorialArrow.update(new Point(orfb.Location.X + (orfb.Size.Width >> 1), orfb.Location.Y), "lb");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which includs all precursors and fragment information.", false);
+                    tutorialWindow.update(new Size(500, 200), new Point(480, 34), "Click on 'Review Lipids'", "This creates and displays the precursors and further the final transition list which includes all precursors and fragment information.", false);
                     break;
                 
                 
@@ -1262,7 +1262,7 @@ namespace LipidCreator
                     initInterList();
                     setTutorialControls(creatorGUI.lipidsInterList);
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "The precursors can be select/deselect from this list for the generation of transition list in next step.", false);
+                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "The precursors can be select/deselect from this list for the generation of transition list in next step. The 'options' allows to display lipid names further between subspecies and species level.", false);
                     nextEnabled = true;
                     
                     break;

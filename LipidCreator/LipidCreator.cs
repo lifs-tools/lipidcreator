@@ -66,7 +66,7 @@ namespace LipidCreator
         public static string LC_VERSION_NUMBER = "1.0.0";
         public static PlatformID LC_OS;
         public ArrayList registeredLipids;
-        public Dictionary<string, Lipid> registeredLipidDictionary;
+        public Dictionary<long, Lipid> registeredLipidDictionary;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
         public IDictionary<string, Precursor> headgroups;
@@ -523,7 +523,7 @@ namespace LipidCreator
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
-            registeredLipidDictionary = new Dictionary<string, Lipid>();
+            registeredLipidDictionary = new Dictionary<long, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
@@ -565,6 +565,7 @@ namespace LipidCreator
             
             listingParserEventHandler = new ListingParserEventHandler();
             listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", PARSER_QUOTE);
+            
         }
         
         
@@ -649,16 +650,18 @@ namespace LipidCreator
         
         public static long HashCode(string read)
         {
-            long hashedValue = 0;
-            int i = 0;
-            long multiplier = 1;
-            while (i < read.Length)
-            {
-                hashedValue += read[i] * multiplier;
-                multiplier *= 37;
-                i++;
+            unchecked {
+				long hashedValue = 0;
+				int i = 0;
+				long multiplier = 1;
+				while (i < read.Length)
+				{
+				    hashedValue += read[i] * multiplier;
+				    multiplier *= 37;
+				    i++;
+				}
+				return hashedValue;
             }
-            return hashedValue;
         }
 
 
@@ -695,9 +698,16 @@ namespace LipidCreator
             precursorDataList.Clear();
             
             // create precursor list
-            foreach (Lipid currentLipid in registeredLipids)
+            foreach (long lipidHash in registeredLipids)
             {
+                Lipid currentLipid = registeredLipidDictionary[lipidHash];
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
+                int i = precursorDataList.Count - 1;
+                while (i >= 0 && ((PrecursorData)precursorDataList[i]).lipidHash == 0)
+                {
+                    ((PrecursorData)precursorDataList[i]).lipidHash = lipidHash;
+                    --i;
+                }
             }
         }
         
@@ -922,10 +932,11 @@ namespace LipidCreator
                                 lipidsToImport.Add(lipidName);
                             }
                         }
-                                
+
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
+                            log.Info("Processing lipid "+ String.Join(",", lipid.headGroupNames.ToArray()));
                             if (lipid == null || (lipid is UnsupportedLipid)) continue;
                             
                             if (filterParameters != null)
@@ -933,8 +944,24 @@ namespace LipidCreator
                                 lipid.onlyPrecursors = filterParameters[0];
                                 lipid.onlyHeavyLabeled = filterParameters[1];
                             }
-                            registeredLipids.Add(lipid);
-                            ++valid;
+                            
+                            long lipidHash = 0;
+                            if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
+                            else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
+                            else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
+                            else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
+                            else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
+                            else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
+                            
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, lipid);
+                                registeredLipids.Add(lipidHash);
+                                ++valid;
+                            } else {
+                                registeredLipids.Add(lipidHash);
+                                ++valid;
+                            }
                         }
                     }
                 }
@@ -1436,9 +1463,9 @@ namespace LipidCreator
             }
             if (!onlySettings)
             {
-                foreach (Lipid currentLipid in registeredLipids)
+                foreach (long lipidHash in registeredLipids)
                 {
-                    currentLipid.serialize(sb);
+                    registeredLipidDictionary[lipidHash].serialize(sb);
                 }
             }
             sb.Append("</LipidCreator>\n");
@@ -1619,36 +1646,62 @@ namespace LipidCreator
             foreach ( var lipid in lipids )
             {
                 string lipidType = lipid.Attribute("type").Value;
+                long lipidHash = 0;
                 switch (lipidType)
                 {
                     case "GL":
                         Glycerolipid gll = new Glycerolipid(this);
+                        lipidHash = gll.getHashCode();
                         gll.import(lipid, importVersion);
-                        registeredLipids.Add(gll);
+                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                        {
+                            registeredLipidDictionary.Add(lipidHash, gll);
+                            registeredLipids.Add(lipidHash);
+                        }
                         break;
                         
                     case "PL":
                         Phospholipid pll = new Phospholipid(this);
+                        lipidHash = pll.getHashCode();
                         pll.import(lipid, importVersion);
-                        registeredLipids.Add(pll);
+                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                        {
+                            registeredLipidDictionary.Add(lipidHash, pll);
+                            registeredLipids.Add(lipidHash);
+                        }
                         break;
                         
                     case "SL":
                         Sphingolipid sll = new Sphingolipid(this);
+                        lipidHash = sll.getHashCode();
                         sll.import(lipid, importVersion);
-                        registeredLipids.Add(sll);
+                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                        {
+                            registeredLipidDictionary.Add(lipidHash, sll);
+                            registeredLipids.Add(lipidHash);
+                        }
                         break;
                         
                     case "Cholesterol":
                         Cholesterol chl = new Cholesterol(this);
+                        lipidHash = chl.getHashCode();
                         chl.import(lipid, importVersion);
-                        registeredLipids.Add(chl);
+                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                        {
+                            registeredLipidDictionary.Add(lipidHash, chl);
+                            registeredLipids.Add(lipidHash);
+                        }
                         break;
                         
                     case "Mediator":
                         Mediator med = new Mediator(this);
+                        lipidHash = med.getHashCode();
                         med.import(lipid, importVersion);
-                        registeredLipids.Add(med);
+                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                        {
+                            registeredLipidDictionary.Add(lipidHash, med);
+                            registeredLipids.Add(lipidHash);
+                        }
                         break;
                         
                     default:

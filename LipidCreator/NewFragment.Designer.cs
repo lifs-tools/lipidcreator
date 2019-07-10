@@ -220,6 +220,7 @@ namespace LipidCreator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.Shown += Form_Shown;
 
             controlElements = new ArrayList(){cancelButton, addButton, selectBaseCombobox, textBoxFragmentName, numericUpDownCharge, dataGridViewElements};
         }

@@ -170,10 +170,21 @@ namespace LipidCreator
                     if (!lipid.adducts[adduct] || !lcf.headgroups[headgroup].adductRestrictions[adduct]) throw new Exception("Error: combination '" + headgroup + "' and '" + unitTestRow[3] + "' are not valid");
                     
                     
+                    long lipidHash = 0;
+                    if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
+                    else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
+                    else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
+                    else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
+                    else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
+                    else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
+                    
+                    
                     // create transition
                     lcf.registeredLipids.Clear();
-                    lcf.registeredLipids.Add(lipid);
-                    lcf.assembleLipids(false);
+                    lcf.registeredLipidDictionary.Clear();
+                    lcf.registeredLipidDictionary.Add(lipidHash, lipid);
+                    lcf.registeredLipids.Add(lipidHash);
+                    lcf.assembleLipids(false, new ArrayList(){false, 0});
                     
                     // resolve the [adduct] wildcards if present
                     string fragmentName = unitTestRow[6];

@@ -34,13 +34,13 @@ using System.Text;
 
 namespace LipidCreator
 {
-    
+
     [Serializable]
     public class MS2Fragment
     {
         public string fragmentName;
         public string fragmentOutputName;
-        public String fragmentFile;
+        public string fragmentFile;
         public ElementDictionary fragmentElements;
         public Adduct fragmentAdduct;
         public ArrayList fragmentBase;
@@ -49,7 +49,7 @@ namespace LipidCreator
         public const double MAX_INTENSITY = 100.0;
         public const double DEFAULT_INTENSITY = 10.0;
         public string CommentForSpectralLibrary { get { return fragmentName; } }
-        
+
         public static Dictionary<Molecule, Element> ALL_ELEMENTS = new Dictionary<Molecule, Element>(){
             {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new Molecule[]{Molecule.C13}, Molecule.C)},
             {Molecule.H, new Element("H", "H", "H", "H", 1, 1.007825035, false, new Molecule[]{Molecule.H2}, Molecule.H)},
@@ -66,10 +66,10 @@ namespace LipidCreator
             {Molecule.S33, new Element("S'", "33S", "S33", "[33]S", 12, 32.97145876, true, new Molecule[]{}, Molecule.S)},
             {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new Molecule[]{}, Molecule.S)}
         };
-        
-        
-        
-        
+
+
+
+
         public static Dictionary<string, Molecule> ELEMENT_POSITIONS = new Dictionary<string, Molecule>(){
             {"C", Molecule.C},
             {"H", Molecule.H},
@@ -102,18 +102,18 @@ namespace LipidCreator
             {"S34", Molecule.S34},
             {"S33", Molecule.S33}
         };
-        
-        
-        
+
+
+
         public static ElementDictionary createEmptyElementDict()
         {
             ElementDictionary elements = new ElementDictionary();
             foreach (Molecule elementKey in ALL_ELEMENTS.Keys) elements.Add(elementKey, 0);
             return elements;
         }
-        
-        
-        
+
+
+
         public static ElementDictionary initializeElementDict(Dictionary<string, int> dict)
         {
             ElementDictionary elements = createEmptyElementDict();
@@ -126,8 +126,8 @@ namespace LipidCreator
             }
             return elements;
         }
-        
-        
+
+
         public static bool validElementDict(ElementDictionary dict)
         {
             foreach (int count in dict.Values)
@@ -136,25 +136,27 @@ namespace LipidCreator
             }
             return true;
         }
-        
-        
-        
-        
-        
+
+
+
+
+
         public long getHashCode()
         {
-            long hashCode = LipidCreator.HashCode(fragmentName);
-            hashCode += LipidCreator.HashCode(fragmentOutputName);
-            hashCode += LipidCreator.HashCode(fragmentFile);
-            hashCode += fragmentElements.getHashCode();
-            hashCode += fragmentAdduct.getHashCode();
-            foreach (string fragBase in fragmentBase)
-            {
-                hashCode += LipidCreator.HashCode(fragBase);
-            }
-            hashCode += specific ? (1L << 23) : (1L << 60);
-            hashCode += userDefined ? (1L << 35) : (1L << 48);
-            return hashCode;
+            unchecked {
+                long hashCode = LipidCreator.HashCode(fragmentName);
+                hashCode += LipidCreator.HashCode(fragmentOutputName);
+                hashCode += LipidCreator.HashCode(fragmentFile);
+                hashCode += fragmentElements.getHashCode();
+                hashCode += fragmentAdduct.getHashCode();
+                foreach (string fragBase in fragmentBase)
+                {
+                    hashCode += LipidCreator.HashCode(fragBase);
+                }
+                hashCode += specific ? (1L << 23) : (1L << 60);
+                hashCode += userDefined ? (1L << 35) : (1L << 48);
+                return hashCode;
+            }            
         }
         
         

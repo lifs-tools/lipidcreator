@@ -72,6 +72,7 @@ namespace LipidCreator
             long hashCode = base.getHashCode() + 59829043095020L;
             hashCode += fag.getHashCode();
             hashCode += containsEster ? (1L << 31) : (1L << 15);
+            if (hashCode == 0) hashCode += 1;
             return hashCode;
         }
         

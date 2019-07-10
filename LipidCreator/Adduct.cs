@@ -58,10 +58,12 @@ namespace LipidCreator
         
         public long getHashCode()
         {
-            long hashCode = LipidCreator.HashCode(name);
-            hashCode += LipidCreator.HashCode(visualization);
-            hashCode += 3896323L << (charge + 5);
-            return hashCode;
+            unchecked {
+				long hashCode = LipidCreator.HashCode(name);
+				hashCode += LipidCreator.HashCode(visualization);
+				hashCode += 3896323L << (charge + 5);
+				return hashCode;
+            }
         }
     }
 }

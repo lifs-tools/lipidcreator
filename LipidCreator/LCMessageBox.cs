@@ -14,10 +14,12 @@ namespace LipidCreator
     {
         public int[] returnMessage = null;
         public int type = 0;
+        public LipidException lipidException;
         public CreatorGUI creatorGUI;
         
-        public LCMessageBox(int[] _returnMessage, int _type, LipidException lipidException = null)
+        public LCMessageBox(int[] _returnMessage, int _type, LipidException _lipidException = null)
         {
+            lipidException = _lipidException;
             returnMessage = _returnMessage;
             type = _type;
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace LipidCreator
                     string lipidName = lipidException.precursorData.precursorName;
                     string fragmentName = lipidException.fragment.fragmentName;
                     string elementName = MS2Fragment.ALL_ELEMENTS[lipidException.molecule].shortcut;
-                    creatorGUI = lipidException.creatorGUI;
+                    creatorGUI = (CreatorGUI)lipidException.creatorGUI;
                     int counts = lipidException.counts;
                     string heavyIsotope = lipidException.heavyIsotope.Length > 0 ? " the heavy isotope '{" + lipidException.heavyIsotope + "}' of" : "";
                     string infoText = "A problem occurred during the computation of fragment '" + fragmentName + "' for" + heavyIsotope + " lipid '" + lipidName + "'. The element '" + elementName + "' contains " + counts + " counts. Please update the fragment with regard on the element counts.";
@@ -79,7 +81,7 @@ namespace LipidCreator
                     break;
                 
                 case 1:
-                    
+                    creatorGUI.goToFragment(lipidException);
                     break;
             }
         }

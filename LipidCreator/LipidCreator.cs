@@ -1011,7 +1011,7 @@ namespace LipidCreator
                             ii = 0;
                             foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
                             {
-                                if (col.Equals(UNIQUE)) continue;
+                                if (col.Equals(UNIQUE) || col.Equals(SPECIFIC)) continue;
                                 string val = (string)row[col];
                                 if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
                                 {
@@ -1044,7 +1044,7 @@ namespace LipidCreator
                             ii = 0;
                             foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
                             {
-                                if (col.Equals(UNIQUE)) continue;
+                                if (col.Equals(UNIQUE) || col.Equals(SPECIFIC)) continue;
                                 string val = (string)row[col];
                                 if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
                                 {
@@ -1077,7 +1077,7 @@ namespace LipidCreator
                         ii = 0;
                         foreach (string col in LipidCreator.DATA_COLUMN_KEYS)
                         {
-                            if (col.Equals(UNIQUE)) continue;
+                            if (col.Equals(UNIQUE) || col.Equals(SPECIFIC)) continue;
                             string val = (string)row[col];
                             if (col.Equals(LipidCreator.PRODUCT_MZ) || col.Equals(LipidCreator.PRECURSOR_MZ))
                             {
@@ -1150,7 +1150,7 @@ namespace LipidCreator
         {
             List<string> line = new List<string> ();
             foreach (string columnKey in columnKeys) {
-                if (columnKey == UNIQUE) continue;
+                if (columnKey == UNIQUE || columnKey == SPECIFIC) continue;
                 if (columnKey == LipidCreator.PRODUCT_MZ || columnKey == LipidCreator.PRECURSOR_MZ)
                 {
                     line.Add (((String)row [columnKey]).Replace (",", "."));

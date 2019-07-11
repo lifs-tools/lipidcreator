@@ -240,8 +240,14 @@ namespace LipidCreator
     
         public static void addCounts(ElementDictionary counts1, ElementDictionary counts2)
         {
-            foreach (KeyValuePair<Molecule, int> kvp in counts2) counts1[kvp.Key] += kvp.Value;
+            foreach (KeyValuePair<Molecule, int> kvp in counts2)
+            {
+                counts1[kvp.Key] += kvp.Value;
+            }
         }
+        
+        
+        
         
         
         // TODO: compute fragment intensity based on parameterized

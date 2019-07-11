@@ -54,7 +54,7 @@ namespace LipidCreator
         public Parser ionFormulaParser;
         public bool inEditingCheck;
         public ExportParameters exportParameters;
-        
+        public int[] parameterValues;
         
 
         public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
@@ -67,6 +67,10 @@ namespace LipidCreator
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             pressedBackButton = false;
             inEditingCheck = false;
+            
+            parameterValues = new int[]{0, 0, 1};
+            exportParameters = new ExportParameters(parameterValues);
+            
             
             moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
             moleculeFormulaParser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.PARSER_QUOTE);
@@ -757,10 +761,6 @@ namespace LipidCreator
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
-            
-            int[] parameterValues = new int[]{0, 0, 1};
-            
-            exportParameters = new ExportParameters(parameterValues);
             exportParameters.Owner = this;
             exportParameters.ShowInTaskbar = false;
             exportParameters.ShowDialog();

@@ -894,6 +894,9 @@ namespace LipidCreator
         
         
         
+        
+        
+        
         public void assembleFragments(bool asDeveloper, ArrayList parameters)
         {
             if (asDeveloper)
@@ -908,6 +911,9 @@ namespace LipidCreator
             
             createFragmentList(selectedInstrumentForCE, monitoringType, parameters);
         }
+        
+        
+        
         
         
         
@@ -1133,6 +1139,9 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
 
         public static string toHeaderLine(string separator, string[] columnKeys)
         {
@@ -1143,6 +1152,9 @@ namespace LipidCreator
             }
             return String.Join(separator, columnKeys.ToList().ConvertAll<string>(key => quote+key+quote).ToArray());
         }
+        
+        
+        
         
         
 
@@ -1173,6 +1185,9 @@ namespace LipidCreator
         
         
         
+        
+        
+        
         public static string computeChemicalFormula(ElementDictionary elements)
         {
             String chemForm = "";            
@@ -1195,6 +1210,8 @@ namespace LipidCreator
         
         
         
+        
+        
         public static string computeAdductFormula(ElementDictionary elements, Adduct adduct, int charge = 0)
         {
             if (charge == 0) charge = adduct.charge;
@@ -1202,6 +1219,24 @@ namespace LipidCreator
             String adductForm = "[M";
             if (elements != null)
             {
+                if (adduct.name == "-H")
+                {
+                    if (elements[Molecule.H] < 1)
+                    {
+                        elements[Molecule.H2] += elements[Molecule.H] - 1;
+                        elements[Molecule.H] = 1;
+                    }
+                }
+                else if (adduct.name == "-2H")
+                {
+                    if (elements[Molecule.H] < 2)
+                    {
+                        elements[Molecule.H2] += elements[Molecule.H] - 2;
+                        elements[Molecule.H] = 2;
+                    }
+                }
+            
+            
                 foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
                 {
                     if (elements[molecule] > 0)
@@ -1215,6 +1250,9 @@ namespace LipidCreator
             adductForm += (charge > 0) ? "+" : "-";
             return adductForm;
         }
+        
+        
+        
         
         
         
@@ -1245,6 +1283,9 @@ namespace LipidCreator
             }
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);
         }
+        
+        
+        
         
         
         
@@ -1306,6 +1347,9 @@ namespace LipidCreator
                 log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass.ToString(CultureInfo.InvariantCulture) + "Da.", e);
             }
         }
+        
+        
+        
         
         
         

@@ -340,6 +340,8 @@ namespace LipidCreator
                 
                 string fragName = fragment.fragmentOutputName;
                 ElementDictionary atomsCountFragment = fragment.copyElementDict();
+                
+                
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -375,7 +377,6 @@ namespace LipidCreator
                 double massFragment = 0;
                 
                 // Exceptions for mediators
-                
                 if (precursorData.lipidCategory != LipidCategory.LipidMediator)
                 {
                     try

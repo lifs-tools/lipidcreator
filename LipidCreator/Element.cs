@@ -42,7 +42,6 @@ namespace LipidCreator
             Console.WriteLine("----------------");
         }
         
-        
         public long getHashCode()
         {
             unchecked

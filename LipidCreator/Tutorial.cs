@@ -45,7 +45,7 @@ namespace LipidCreator
     
     public enum SRMSteps {Null, Welcome, PhosphoTab, OpenMS2, InMS2, SelectPG, SelectFragments, AddFragment, InFragment, NameFragment, SetCharge, SetElements, AddingFragment, SelectNew, ClickOK, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
-    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
+    public enum HLSteps {Null, Welcome, OpenHeavy, HeavyPanel, NameHeavy, OptionsExplain, SetElements, ChangeBuildingBlock, SetElements2, AddIsotope, EditExplain, CloseHeavy, OpenMS2, SelectPG, SelectHeavy, SelectFragments, CheckFragment, EditFragment, SetFragElement, ConfirmEdit, EditFragmentSecond, SetFragElementSecond, CloseFragment, OpenFilter, SelectFilter, AddLipid, OpenInterlist, OpenReview, StoreList, Finish};
     
     public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, OpenInterlist, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
     
@@ -250,6 +250,8 @@ namespace LipidCreator
             creatorGUI.lipidsReview.buttonStoreTransitionList.Click += buttonInteraction;
             creatorGUI.lipidsReview.buttonStoreSpectralLibrary.Click += buttonInteraction;
             creatorGUI.lipidsReview.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+            creatorGUI.lipidsReview.exportParameters.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+            creatorGUI.lipidsReview.exportParameters.button1.MouseDown += mouseDownInteraction;
         }
         
         
@@ -325,6 +327,8 @@ namespace LipidCreator
                 creatorGUI.lipidsReview.buttonStoreTransitionList.Click -= buttonInteraction;
                 creatorGUI.lipidsReview.buttonStoreSpectralLibrary.Click -= buttonInteraction;
                 creatorGUI.lipidsReview.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                creatorGUI.lipidsReview.exportParameters.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
+                creatorGUI.lipidsReview.exportParameters.button1.MouseDown -= mouseDownInteraction;
                 creatorGUI.lipidsReview.Close();
             }
             
@@ -537,7 +541,8 @@ namespace LipidCreator
         {
             creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = false;
             creatorGUI.ms2fragmentsForm.menuFragmentItem2.Enabled = false;
-            if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.EditFragment && creatorGUI.ms2fragmentsForm.editDeleteIndex == 0)
+            if (tutorial == Tutorials.TutorialHL && ((tutorialStep == (int)HLSteps.EditFragment && creatorGUI.ms2fragmentsForm.editDeleteIndex == 0)
+            || (tutorialStep == (int)HLSteps.EditFragmentSecond && creatorGUI.ms2fragmentsForm.editDeleteIndex == 7)))
             {
                 creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled = true;
             }
@@ -784,9 +789,9 @@ namespace LipidCreator
         
         public void tableCellChanged(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
-            nextEnabled = true;
             if (tutorial == Tutorials.TutorialSRM && tutorialStep == (int)SRMSteps.SetElements)
             {
+                nextEnabled = true;
                 DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
                 Dictionary<string, object[]> elements = creatorGUI.ms2fragmentsForm.newFragment.elements;
                 for (int i = 0; i < dgv.Rows.Count; ++i){
@@ -805,6 +810,7 @@ namespace LipidCreator
             }
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SetElements)
             {
+                nextEnabled = true;
                 DataGridView dgv = creatorGUI.addHeavyPrecursor.dataGridView1;
                 for (int i = 0; i < dgv.Rows.Count; ++i){
                     string key = dgv.Rows[i].Cells[0].Value.ToString();
@@ -821,6 +827,7 @@ namespace LipidCreator
             }
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SetElements2)
             {
+                nextEnabled = true;
                 DataGridView dgv = creatorGUI.addHeavyPrecursor.dataGridView1;
                 for (int i = 0; i < dgv.Rows.Count; ++i){
                     string key = dgv.Rows[i].Cells[0].Value.ToString();
@@ -838,6 +845,7 @@ namespace LipidCreator
             }
             else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SetFragElement)
             {
+                nextEnabled = true;
                 DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
                 Dictionary<string, object[]> elements = creatorGUI.ms2fragmentsForm.newFragment.elements;
                 for (int i = 0; i < dgv.Rows.Count; ++i){
@@ -856,6 +864,37 @@ namespace LipidCreator
                     if (((int)elements[key][0] != val_mono) || ((int)elements[key][1] != val_heavy))
                     {
                         nextEnabled = false;
+                        break;
+                    }
+                }
+                creatorGUI.ms2fragmentsForm.Refresh();
+            }
+            else if (tutorial == Tutorials.TutorialHL && tutorialStep == (int)HLSteps.SetFragElementSecond)
+            {
+                DataGridView dgv = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
+                Dictionary<string, object[]> elements = creatorGUI.ms2fragmentsForm.newFragment.elements;
+                creatorGUI.ms2fragmentsForm.newFragment.addButton.Enabled = true;
+                
+                for (int i = 0; i < dgv.Rows.Count; ++i){
+                    string key = dgv.Rows[i].Cells[0].Value.ToString();
+                    int val_mono = 0;
+                    int val_heavy = 0;
+                    if (key == "C"){
+                        val_mono = 0;
+                        val_heavy = -3;
+                    }
+                    if (key == "H"){
+                        val_mono = -4;
+                        val_heavy = 0;
+                    }
+                    if (key == "O"){
+                        val_mono = -2;
+                        val_heavy = 0;
+                    }
+                    if (((int)elements[key][0] != val_mono) || ((int)elements[key][1] != val_heavy))
+                    {
+                        //nextEnabled = false;
+                        creatorGUI.ms2fragmentsForm.newFragment.addButton.Enabled = false;
                         break;
                     }
                 }
@@ -885,7 +924,7 @@ namespace LipidCreator
                 nextTutorialStep(true);
             }
             
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenInterlist, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.EditFragmentSecond, (int)HLSteps.SetFragElementSecond, (int)HLSteps.ConfirmEdit, (int)HLSteps.CloseFragment, (int)HLSteps.OpenFilter, (int)HLSteps.SelectFilter, (int)HLSteps.AddLipid, (int)HLSteps.OpenInterlist, (int)HLSteps.OpenReview, (int)HLSteps.StoreList, (int)HLSteps.Finish}).Contains(tutorialStep)))
             {
             
                 if (tutorialStep == (int)HLSteps.OpenReview) creatorGUI.lipidsReview.Show();
@@ -908,6 +947,10 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
+        
         public void mouseDownInteraction(Object sender, EventArgs e)
         {
             if (tutorial == Tutorials.TutorialPRM && (new HashSet<int>(new int[]{(int)PRMSteps.OpenReview, (int)PRMSteps.SelectFilter, (int)PRMSteps.StoreList}).Contains(tutorialStep)))
@@ -924,7 +967,7 @@ namespace LipidCreator
                 if (tutorialStep == (int)SRMSteps.OpenReview) tutorialAssembleLipids();
             }
             
-            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.OpenReview, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment}).Contains(tutorialStep)))
+            else if (tutorial == Tutorials.TutorialHL && (new HashSet<int>(new int[]{(int)HLSteps.OpenHeavy, (int)HLSteps.AddIsotope, (int)HLSteps.CloseHeavy, (int)HLSteps.OpenMS2, (int)HLSteps.EditFragment, (int)HLSteps.EditFragmentSecond, (int)HLSteps.SetFragElementSecond, (int)HLSteps.OpenReview, (int)HLSteps.ConfirmEdit, (int)HLSteps.SelectFilter, (int)HLSteps.CloseFragment, (int)HLSteps.StoreList}).Contains(tutorialStep)))
             {
                 if (tutorialStep == (int)HLSteps.OpenReview) tutorialAssembleLipids();
                 continueTutorial = true;
@@ -941,6 +984,10 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
+        
         public void tutorialAssembleLipids()
         {   
             creatorGUI.lipidCreator.assembleFragments(creatorGUI.asDeveloper, new ArrayList(){false, 0});
@@ -949,6 +996,9 @@ namespace LipidCreator
             creatorGUI.lipidsReview.Owner = creatorGUI;
             creatorGUI.lipidsReview.ShowInTaskbar = false;
         }
+        
+        
+        
         
         
         public void checkedListBoxInteraction(Object sender, ItemCheckEventArgs e)
@@ -972,7 +1022,7 @@ namespace LipidCreator
                  HashSet<string> posFrag = creatorGUI.ms2fragmentsForm.currentLipid.positiveFragments["PG{13C6d30}"];
                  HashSet<string> negFrag = creatorGUI.ms2fragmentsForm.currentLipid.negativeFragments["PG{13C6d30}"];
                  
-                 nextEnabled = (posFrag.Count == 1 && posFrag.Contains("-HG(PG,172)") && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
+                 nextEnabled = (posFrag.Count == 0 && negFrag.Count == 2 && negFrag.Contains("FA1(+O)") && negFrag.Contains("HG(PG,171)"));
             }
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
@@ -1755,7 +1805,7 @@ namespace LipidCreator
                     CheckedListBox negCLB_2 = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
                     tutorialArrow.update(new Point(negCLB_2.Location.X + negCLB_2.Size.Width, negCLB_2.Location.Y + (negCLB_2.Size.Height >> 1)), "tl");
                     
-                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only -HG(PG,172), FA1(+O) and HG(PG,171) fragments", "");
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Select only FA1(+O) and HG(PG,171) fragments", "");
                     
                     creatorGUI.ms2fragmentsForm.labelPositiveDeselectAll.Enabled = true;
                     creatorGUI.ms2fragmentsForm.labelPositiveSelectAll.Enabled = true;
@@ -1809,6 +1859,31 @@ namespace LipidCreator
                     
                     creatorGUI.ms2fragmentsForm.newFragment.addButton.Enabled = true;
                     tutorialWindow.update(new Size(500, 200), new Point(620, 34), "Click on 'OK'", "");
+                    
+                    break;
+                    
+                    
+                    
+                case (int)HLSteps.EditFragmentSecond:
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
+                    
+                    
+                    CheckedListBox negCLB_4 = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
+                    tutorialArrow.update(new Point(negCLB_4.Location.X + negCLB_4.Size.Width, negCLB_4.Location.Y + (negCLB_4.Size.Height >> 1)), "tl");
+                    creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.Enabled = true;
+                    
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Right click on HG(PG,171) and 'Edit fragment'", "Here, HG(PG,171) has monoisotopic carbons subtracted which need to be changed.");
+                    
+                    break;
+                    
+                    
+                    
+                case (int)HLSteps.SetFragElementSecond:
+                    setTutorialControls((TabPage)creatorGUI.ms2fragmentsForm.tabPages[pgIndex], creatorGUI.ms2fragmentsForm);
+                    initAddFragmentForm();
+                    
+                    creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements.Enabled = true;
+                    tutorialWindow.update(new Size(500, 200), new Point(500, 200), "Set isotopic count of 13C to -3 and count of C to 0 and click on 'OK'", "", false);
                     
                     break;
                     

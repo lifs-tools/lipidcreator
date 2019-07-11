@@ -63,7 +63,7 @@ namespace LipidCreator
         public const int STEP_SLEEP = 500;
         public const int KEY_SLEEP = 100;
         public const int ANIMATION_SLEEP = 10;
-        public const double ANIMATION_STEPS = 1.0;
+        public const double ANIMATION_STEPS = 100.0;
         
         
         // Keyboard keys
@@ -960,6 +960,8 @@ namespace LipidCreator
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelPositiveDeselectAll);
                             DoMouseClick();
                             int hgtp = creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemHeight;
+                            
+                            /*
                             int i = 0;
                             foreach (string itemName in creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.Items)
                             {
@@ -974,6 +976,7 @@ namespace LipidCreator
                                 }
                                 ++i;
                             }
+                            */
                         
                         
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
@@ -1006,6 +1009,10 @@ namespace LipidCreator
                             Cursor.Position = getMiddle(tutorialWindow.next);
                             DoMouseClick();
                             break;
+                            
+                            
+                            
+                            
                             
                         case (int)HLSteps.EditFragment:
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
@@ -1041,6 +1048,10 @@ namespace LipidCreator
                             }
                             break;
                             
+                            
+                            
+                            
+                            
                         case (int)HLSteps.SetFragElement:
                             relocateForm(creatorGUI.ms2fragmentsForm.newFragment);
                             DataGridView dgvFrag = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
@@ -1071,10 +1082,88 @@ namespace LipidCreator
                             DoMouseClick();
                             break;
                             
+                            
+                            
                         case (int)HLSteps.ConfirmEdit:
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.addButton);
                             DoMouseClick();
                             break;
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        case (int)HLSteps.EditFragmentSecond:
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.labelNegativeDeselectAll);
+                            DoMouseClick();
+                            CheckedListBox clb2 = creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments;
+                            int hgtn2 = clb2.ItemHeight;
+                            int i5 = 0;
+                            foreach (string itemName in clb2.Items)
+                            {
+                                if (itemName == "HG(PG,171)")
+                                {
+                                    
+                                    keyPress(KEY_ESC);
+                                    Point p3 = getOrigin(clb2);
+                                    p3.X += creatorGUI.ms2fragmentsForm.tabControlFragments.ItemSize.Width >> 2;
+                                    p3.Y += (int)(hgtn2 * (i5 + 0.5));
+                                    Cursor.Position = p3;
+                                    DoMouseRightClick();
+                                    Thread.Sleep(200);
+                                    if (creatorGUI.ms2fragmentsForm.menuFragmentItem1.Enabled)
+                                    {
+                                        p3.X += 20;
+                                        p3.Y += 10;
+                                        Cursor.Position = p3;
+                                        DoMouseClick();
+                                    }
+                                    break;
+                                    
+                                }
+                                ++i5;
+                            }
+                            break;
+                            
+                            
+                            
+                            
+                            
+                        case (int)HLSteps.SetFragElementSecond:
+                            relocateForm(creatorGUI.ms2fragmentsForm.newFragment);
+                            DataGridView dgvFrag2 = creatorGUI.ms2fragmentsForm.newFragment.dataGridViewElements;
+                            int x4 = dgvFrag2.Columns[0].Width + (dgvFrag2.Columns[2].Width >> 1);
+                            int y4 = dgvFrag2.ColumnHeadersHeight;
+                            foreach (DataGridViewRow dgvRow in dgvFrag2.Rows)
+                            {
+                                
+                                if ((string)dgvRow.Cells[0].Value == "C")
+                                {   
+                                    Cursor.Position = getOrigin(dgvFrag2, new Point(x4, y4 + (dgvRow.Height >> 1)));
+                                    DoMouseClick();
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
+                                    keyPress('0');
+                                    keyPress(KEY_ENTER);
+                                    Cursor.Position = getOrigin(dgvFrag2, new Point(x4 + dgvFrag2.Columns[1].Width, y4 + (dgvRow.Height >> 1)));
+                                    DoMouseClick();
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
+                                    keyPress(KEY_DASH);
+                                    keyPress('3');
+                                    keyPress(KEY_ENTER);
+                                    break;
+                                }
+                                y4 += dgvRow.Height;
+                            }
+                            
+                            Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.addButton);
+                            DoMouseClick();
+                            break;
+                            
                             
                         case (int)HLSteps.CloseFragment:
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.buttonOK);

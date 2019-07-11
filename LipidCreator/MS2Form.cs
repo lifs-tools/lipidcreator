@@ -431,6 +431,7 @@ namespace LipidCreator
                                 if (fragmentName.Equals((string)clb.Items[k]))
                                 {
                                     clb.SelectedIndex = k;
+                                    editDeleteIndex = k;
                                     newFragment = new NewFragment(this, true, lipidException);
                                     newFragment.Owner = this;
                                     newFragment.ShowInTaskbar = false;

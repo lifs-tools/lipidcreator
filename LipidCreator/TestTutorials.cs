@@ -63,14 +63,17 @@ namespace LipidCreator
         public const int STEP_SLEEP = 500;
         public const int KEY_SLEEP = 100;
         public const int ANIMATION_SLEEP = 10;
-        public const double ANIMATION_STEPS = 100.0;
+        public const double ANIMATION_STEPS = 1.0;
         
         
         // Keyboard keys
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001; //Key down flag
         public const int KEYEVENTF_KEYUP = 0x0002; //Key up flag
         public const int VK_RCONTROL = 0xA3; //Right Control key code
+        public const int VK_LCONTROL = 0xA2; //Left Control key code
         public const int VK_SHIFT = 0x10;
+        public const int VK_END = 0x23;
+        public const int VK_HOME = 0x24;
         
         public const int KEY_6 = 0x36;
         public const int KEY_COMMA = 0xBC;
@@ -94,6 +97,23 @@ namespace LipidCreator
             keybd_event((byte)key, 0, 0, 0);
             keybd_event((byte)key, 0, KEYEVENTF_KEYUP, 0);
             if (shift) keybd_event((byte)VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
+        }
+        
+        public void selectAllText()
+        {
+            Thread.Sleep(KEY_SLEEP);
+            
+            keybd_event(VK_HOME, 0, 0, 0);
+            Thread.Sleep(10);
+            keybd_event(VK_HOME, 0, KEYEVENTF_KEYUP, 0);
+            Thread.Sleep(10);
+            keybd_event(VK_SHIFT,0x2A,0,0);
+            Thread.Sleep(10);
+            keybd_event(VK_END,0x4F,KEYEVENTF_EXTENDEDKEY | 0,0);
+            Thread.Sleep(10);
+            keybd_event(VK_END,0x4F,KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP,0);
+            Thread.Sleep(10);
+            keybd_event(VK_SHIFT,0x2A,KEYEVENTF_KEYUP,0); 
         }
         
         
@@ -259,8 +279,8 @@ namespace LipidCreator
                         case (int)PRMSteps.SetFA:
                             moveMouse(getMiddle(creatorGUI.plFA1Textbox));
                             DoMouseClick();
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             
                             keyPress('1');
                             keyPress('4');
@@ -277,8 +297,8 @@ namespace LipidCreator
                         case (int)PRMSteps.SetDB:
                             moveMouse(getMiddle(creatorGUI.plDB1Textbox));
                             DoMouseClick();
-                            for (int i = 0; i < 10; ++i) keyPress(KEY_BACKSPACE);
-                            for (int i = 0; i < 10; ++i) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('0');
                             keyPress(KEY_DASH);
                             keyPress('1');
@@ -299,16 +319,16 @@ namespace LipidCreator
                         case (int)PRMSteps.SecondFADB:
                             moveMouse(getMiddle(creatorGUI.plFA2Textbox));
                             DoMouseClick();
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('8');
                             keyPress(KEY_DASH);
                             keyPress('1');
                             keyPress('0');
                             moveMouse(getMiddle(creatorGUI.plDB2Textbox));
                             DoMouseClick();
-                            for (int i = 0; i < 10; ++i) keyPress(KEY_BACKSPACE);
-                            for (int i = 0; i < 10; ++i) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('2');
                             moveMouse(getMiddle(tutorialWindow.next));
                             DoMouseClick();
@@ -355,8 +375,8 @@ namespace LipidCreator
                         case (int)PRMSteps.SetGLFA:
                             moveMouse(getMiddle(creatorGUI.glFA1Textbox));
                             DoMouseClick();
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_BACKSPACE);
-                            for (int i = 0; i < 20; ++i) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             
                             keyPress('1');
                             keyPress('6');
@@ -426,6 +446,15 @@ namespace LipidCreator
                             relocateForm(creatorGUI.lipidsReview);
                             moveMouse(getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList));
                             DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            
+                            relocateForm(creatorGUI.lipidsReview.exportParameters);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.exportParameters.button1));
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
                             Thread.Sleep(STEP_SLEEP);
                             keyPress(KEY_ESC);
                             break;
@@ -573,8 +602,8 @@ namespace LipidCreator
                         case (int)SRMSteps.NameFragment:
                             Cursor.Position = getMiddle(creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName);
                             DoMouseClick();
-                            for (int i2 = 0; i2 < 10; ++i2) keyPress(KEY_BACKSPACE);
-                            for (int i2 = 0; i2 < 10; ++i2) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('T');
                             keyPress('E');
                             keyPress('S');
@@ -618,8 +647,8 @@ namespace LipidCreator
                                 {   
                                     Cursor.Position = getOrigin(dgv, new Point(x1, y1 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_BACKSPACE);
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_DEL);
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
                                     keyPress('3');
                                     keyPress(KEY_ENTER);
                                 }
@@ -627,8 +656,8 @@ namespace LipidCreator
                                 {   
                                     Cursor.Position = getOrigin(dgv, new Point(x1, y1 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_BACKSPACE);
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_DEL);
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
                                     keyPress('2');
                                     keyPress(KEY_ENTER);
                                 }
@@ -684,11 +713,21 @@ namespace LipidCreator
                             
                         case (int)SRMSteps.StoreList:
                             relocateForm(creatorGUI.lipidsReview);
-                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList));
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            
+                            relocateForm(creatorGUI.lipidsReview.exportParameters);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.exportParameters.button1));
                             DoMouseClick();
                             Thread.Sleep(STEP_SLEEP);
                             keyPress(KEY_ESC);
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
                             break;
+                            
                             
                         case (int)SRMSteps.Finish:
                             Cursor.Position = getMiddle(tutorialWindow.next);
@@ -805,8 +844,8 @@ namespace LipidCreator
                             }
                             Cursor.Position = getOrigin(creatorGUI.addHeavyPrecursor.textBox1);
                             DoMouseClick();
-                            for (int i2 = 0; i2 < 10; ++i2) keyPress(KEY_BACKSPACE);
-                            for (int i2 = 0; i2 < 10; ++i2) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('1');
                             keyPress('3');
                             keyPress('C', true);
@@ -1014,14 +1053,14 @@ namespace LipidCreator
                                 {   
                                     Cursor.Position = getOrigin(dgvFrag, new Point(x3, y3 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_BACKSPACE);
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_DEL);
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
                                     keyPress('0');
                                     keyPress(KEY_ENTER);
                                     Cursor.Position = getOrigin(dgvFrag, new Point(x3 + dgvFrag.Columns[1].Width, y3 + (dgvRow.Height >> 1)));
                                     DoMouseClick();
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_BACKSPACE);
-                                    for (int i2 = 0; i2 < 2; ++i2) keyPress(KEY_DEL);
+                                    DoMouseClick();
+                                    keyPress(KEY_BACKSPACE);
                                     keyPress('1');
                                     keyPress(KEY_ENTER);
                                     break;
@@ -1074,11 +1113,21 @@ namespace LipidCreator
                             
                         case (int)HLSteps.StoreList:
                             relocateForm(creatorGUI.lipidsReview);
-                            Cursor.Position = getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.buttonStoreTransitionList));
+                            DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
+                            
+                            relocateForm(creatorGUI.lipidsReview.exportParameters);
+                            moveMouse(getMiddle(creatorGUI.lipidsReview.exportParameters.button1));
                             DoMouseClick();
                             Thread.Sleep(STEP_SLEEP);
                             keyPress(KEY_ESC);
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
+                            Thread.Sleep(STEP_SLEEP);
+                            keyPress(KEY_ESC);
                             break;
+                            
                             
                         case (int)HLSteps.Finish:
                             Cursor.Position = getMiddle(tutorialWindow.next);
@@ -1232,8 +1281,8 @@ namespace LipidCreator
                         case (int)CESteps.CEto20:
                             Cursor.Position = getMiddle(creatorGUI.ceInspector.numericalUpDownCurrentCE);
                             DoMouseClick();
-                            for (int i2 = 0; i2 < 5; ++i2) keyPress(KEY_BACKSPACE);
-                            for (int i2 = 0; i2 < 5; ++i2) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('2');
                             keyPress('0');
                             keyPress(KEY_ENTER);
@@ -1252,8 +1301,8 @@ namespace LipidCreator
                             Thread.Sleep(10);
                             Cursor.Position = getMiddle(creatorGUI.ceInspector.numericalUpDownCurrentCE);
                             DoMouseClick();
-                            for (int i2 = 0; i2 < 5; ++i2) keyPress(KEY_BACKSPACE);
-                            for (int i2 = 0; i2 < 5; ++i2) keyPress(KEY_DEL);
+                            selectAllText();
+                            keyPress(KEY_BACKSPACE);
                             keyPress('2');
                             keyPress('0');
                             keyPress(KEY_ENTER);

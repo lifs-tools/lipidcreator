@@ -53,6 +53,7 @@ namespace LipidCreator
         public IonFormulaParserEventHandler ionFormulaParserEventHandler;
         public Parser ionFormulaParser;
         public bool inEditingCheck;
+        public ExportParameters exportParameters;
         
         
 
@@ -759,7 +760,7 @@ namespace LipidCreator
             
             int[] parameterValues = new int[]{0, 0, 1};
             
-            ExportParameters exportParameters = new ExportParameters(parameterValues);
+            exportParameters = new ExportParameters(parameterValues);
             exportParameters.Owner = this;
             exportParameters.ShowInTaskbar = false;
             exportParameters.ShowDialog();

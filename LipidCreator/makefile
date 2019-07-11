@@ -23,13 +23,14 @@ main: setup
 	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
 
 tests: setup
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
+	resgen2 -compile $(RESX_FILES)
+	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
+	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
+	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
+	mcs $(RES_FILES) -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
 
 complete:
 	$(MAKE) setup

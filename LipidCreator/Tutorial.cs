@@ -1275,7 +1275,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review' window", "");
+                    tutorialWindow.update(new Size(450, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review' window", "");
                     break;
                     
                     
@@ -1533,7 +1533,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
+                    tutorialWindow.update(new Size(450, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     
@@ -1883,7 +1883,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
+                    tutorialWindow.update(new Size(450, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     
@@ -2086,7 +2086,7 @@ namespace LipidCreator
                     lilb.Enabled = true;
                     tutorialArrow.update(new Point(lilb.Location.X + (lilb.Size.Width >> 1), lilb.Location.Y), "rb");
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
+                    tutorialWindow.update(new Size(450, 250), new Point(40, 200), "Click on 'Continue' in 'Lipid Precursor Review'", "");
                     break;
                     
                     

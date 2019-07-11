@@ -24,11 +24,11 @@ main: setup
 
 tests: setup
 	resgen2 -compile $(RESX_FILES)
-	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	#mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 	
 	mcs $(RES_FILES) -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
 

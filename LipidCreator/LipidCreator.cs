@@ -942,7 +942,7 @@ namespace LipidCreator
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
-                            log.Info("Processing lipid "+ String.Join(",", lipid.headGroupNames.ToArray()));
+                            log.Info("Processing lipid " + String.Join(",", lipid.headGroupNames.ToArray()));
                             if (lipid == null || (lipid is UnsupportedLipid)) continue;
                             
                             if (filterParameters != null)
@@ -963,11 +963,10 @@ namespace LipidCreator
                             {
                                 registeredLipidDictionary.Add(lipidHash, lipid);
                                 registeredLipids.Add(lipidHash);
-                                ++valid;
                             } else {
                                 registeredLipids.Add(lipidHash);
-                                ++valid;
                             }
+                            ++valid;
                         }
                     }
                 }
@@ -1537,9 +1536,9 @@ namespace LipidCreator
             ArrayList parsedLipids = new ArrayList();
             foreach (string lipidName in lipidNamesList)
             {
-                Lipid lipid = null;
                 if (lipidName.Length > 0)
                 {
+                    Lipid lipid = null;
                     lipidNamesParser.parse(lipidName);
                     if (lipidNamesParser.wordInGrammar)
                     {
@@ -1574,8 +1573,8 @@ namespace LipidCreator
                             log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                         }
                     }
+                    parsedLipids.Add(lipid);
                 }
-                parsedLipids.Add(lipid);
             }
             return parsedLipids;
         }

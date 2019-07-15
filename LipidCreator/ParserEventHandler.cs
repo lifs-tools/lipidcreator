@@ -525,6 +525,7 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
+                if (headgroup == "GB3") headgroup = "Hex3Cer";
                 lipid.headGroupNames.Add(headgroup);
             }
         }

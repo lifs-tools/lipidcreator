@@ -3371,41 +3371,47 @@ namespace LipidCreator
             row["Filters"] = filtersStr;
             
             string optionsStr = "";
-            foreach (string headGroupName in headGroupNames)
+            if (currentRegisteredLipid.onlyHeavyLabeled != 0)
             {
-                if (lipidCreator.headgroups.ContainsKey(headGroupName) && lipidCreator.headgroups[headGroupName].heavyLabeledPrecursors.Count > 0)
+                foreach (string headGroupName in headGroupNames)
                 {
-                    optionsStr = "with heavy isotopes";
-                    break;
-                }
-            }
-            
-            bool containsUserDefined = false;
-            foreach (string headGroupName in currentRegisteredLipid.positiveFragments.Keys)
-            {
-                foreach(string fragmentName in currentRegisteredLipid.positiveFragments[headGroupName])
-                {
-                    containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][true].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][true][fragmentName].userDefined;
-                    if (containsUserDefined) break;
-                }
-                if (containsUserDefined) break;
-            }
-            
-            if (!containsUserDefined)
-            {
-                foreach (string headGroupName in currentRegisteredLipid.negativeFragments.Keys)
-                {
-                    foreach(string fragmentName in currentRegisteredLipid.negativeFragments[headGroupName])
+                    if (lipidCreator.headgroups.ContainsKey(headGroupName) && lipidCreator.headgroups[headGroupName].heavyLabeledPrecursors.Count > 0)
                     {
-                        containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][false].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][false][fragmentName].userDefined;
+                        optionsStr = "+ heavy isotopes";
+                        break;
+                    }
+                }
+            }
+            
+            if (currentRegisteredLipid.onlyPrecursors != 1)
+            {
+                bool containsUserDefined = false;
+                foreach (string headGroupName in currentRegisteredLipid.positiveFragments.Keys)
+                {
+                    foreach(string fragmentName in currentRegisteredLipid.positiveFragments[headGroupName])
+                    {
+                        containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][true].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][true][fragmentName].userDefined;
                         if (containsUserDefined) break;
                     }
                     if (containsUserDefined) break;
                 }
-            }
-            if (containsUserDefined)
-            {
-                optionsStr = (optionsStr.Length > 0 ? ",\n" : "") + "with user-defined fragments";
+                
+                if (!containsUserDefined)
+                {
+                    foreach (string headGroupName in currentRegisteredLipid.negativeFragments.Keys)
+                    {
+                        foreach(string fragmentName in currentRegisteredLipid.negativeFragments[headGroupName])
+                        {
+                            containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][false].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][false][fragmentName].userDefined;
+                            if (containsUserDefined) break;
+                        }
+                        if (containsUserDefined) break;
+                    }
+                }
+                if (containsUserDefined)
+                {
+                    optionsStr += (optionsStr.Length > 0 ? ",\n" : "") + "+ new fragments";
+                }
             }
             
             row["Options"] = optionsStr;

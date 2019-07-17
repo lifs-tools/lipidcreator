@@ -2794,7 +2794,7 @@ namespace LipidCreator
                 }
                 else if (((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && !((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                 {
-                    MessageBox.Show("Please select the middle fatty acid for DG!", "Not registrable");
+                    MessageBox.Show("Please select the middle fatty acid for DAG!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 
@@ -3267,16 +3267,17 @@ namespace LipidCreator
                 Glycerolipid currentGlycerolipid = (Glycerolipid)currentRegisteredLipid;
                 row["Category"] = "Glycerolipid";
                 
-                if (!currentGlycerolipid.fag3.faTypes["FAx"])
+                if (currentGlycerolipid.containsSugar)
+                {
+                    row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
+                    headGroupNames.AddRange(currentGlycerolipid.headGroupNames);
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                }
+                else if (!currentGlycerolipid.fag3.faTypes["FAx"])
                 {
                     row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
                     row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
                     headGroupNames.Add("TAG");
-                }
-                else if (currentGlycerolipid.containsSugar)
-                {
-                    row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
-                    headGroupNames.AddRange(currentGlycerolipid.headGroupNames);
                 }
                 else if (!currentGlycerolipid.fag2.faTypes["FAx"])
                 {

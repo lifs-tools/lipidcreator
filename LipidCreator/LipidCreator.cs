@@ -705,16 +705,16 @@ namespace LipidCreator
         public static long HashCode(string read)
         {
             unchecked {
-				long hashedValue = 0;
-				int i = 0;
-				long multiplier = 1;
-				while (i < read.Length)
-				{
-				    hashedValue += randomNumbers[(int)read[i] & 255] * multiplier;
-				    multiplier *= 37;
-				    i++;
-				}
-				return hashedValue;
+                long hashedValue = 0;
+                int i = 0;
+                long multiplier = 1;
+                while (i < read.Length)
+                {
+                    hashedValue += randomNumbers[(int)read[i] & 255] * multiplier;
+                    multiplier *= 37;
+                    i++;
+                }
+                return hashedValue;
             }
         }
         
@@ -1005,7 +1005,6 @@ namespace LipidCreator
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
-                            //log.Info("Processing lipid " + String.Join(",", lipid.headGroupNames.ToArray()));
                             if (lipid == null || (lipid is UnsupportedLipid)) continue;
                             
                             if (filterParameters != null)
@@ -1027,7 +1026,7 @@ namespace LipidCreator
                                 registeredLipidDictionary.Add(lipidHash, lipid);
                                 registeredLipids.Add(lipidHash);
                                 ++valid;
-                            } 
+                            }
                         }
                     }
                 }

@@ -668,14 +668,56 @@ namespace LipidCreator
                     }
                 }
                 
-                
+                /*
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
                 double massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
                 string fragName = fragment.fragmentName;
                 
+                
+                
+                
+                
+                
                 if (precursorData.lipidCategory == LipidCategory.LipidMediator)
+                {
+                    massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
+                    chemFormFragment = "";
+                }
+                
+                
+                */
+                
+                
+                
+                
+                
+                
+                
+                
+                string fragName = fragment.fragmentName;
+                string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
+                string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
+                MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
+                double massFragment = 0;
+                
+                // Exceptions for mediators
+                if (precursorData.lipidCategory != LipidCategory.LipidMediator)
+                {
+                    try
+                    {
+                        massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                    }
+                    catch (LipidException lipidException)
+                    {
+                        lipidException.precursorData = precursorData;
+                        lipidException.fragment = fragment;
+                        lipidException.heavyIsotope = LipidCreator.precursorNameSplit(precursorData.fullMoleculeListName)[1];
+                        throw lipidException;
+                    }
+                }
+                else
                 {
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";

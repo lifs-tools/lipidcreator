@@ -98,6 +98,7 @@ namespace LipidCreator
             registeredLipidsDatatable.Columns.Add(new DataColumn("Building Block 4"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Adducts"));
             registeredLipidsDatatable.Columns.Add(new DataColumn("Filters"));
+            registeredLipidsDatatable.Columns.Add(new DataColumn("Options"));
         
             InitializeComponent();
             
@@ -3253,23 +3254,40 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
+        
         public DataRow createLipidsGridviewRow(Lipid currentRegisteredLipid)
         {
             DataRow row = registeredLipidsDatatable.NewRow();
+            ArrayList headGroupNames = new ArrayList();
             if (currentRegisteredLipid is Glycerolipid)
             {
                 Glycerolipid currentGlycerolipid = (Glycerolipid)currentRegisteredLipid;
                 row["Category"] = "Glycerolipid";
-                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + "; OH: " + currentGlycerolipid.fag1.hydroxylInfo;
-                if (!currentGlycerolipid.fag2.faTypes["FAx"]) row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
-                if (currentGlycerolipid.containsSugar)
+                
+                if (!currentGlycerolipid.fag3.faTypes["FAx"])
+                {
+                    row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                    headGroupNames.Add("TAG");
+                }
+                else if (currentGlycerolipid.containsSugar)
                 {
                     row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
+                    headGroupNames.AddRange(currentGlycerolipid.headGroupNames);
+                }
+                else if (!currentGlycerolipid.fag2.faTypes["FAx"])
+                {
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                    headGroupNames.Add("DAG"); 
                 }
                 else
                 {
-                    if (!currentGlycerolipid.fag3.faTypes["FAx"]) row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
+                    headGroupNames.Add("MAG");
                 }
+                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + "; OH: " + currentGlycerolipid.fag1.hydroxylInfo;
             }
             else if (currentRegisteredLipid is Phospholipid)
             {
@@ -3281,10 +3299,12 @@ namespace LipidCreator
                     row["Building Block 2"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
                     row["Building Block 3"] = FARepresentation(currentPhospholipid.fag3) + currentPhospholipid.fag3.lengthInfo + "; DB: " + currentPhospholipid.fag3.dbInfo + "; OH: " + currentPhospholipid.fag3.hydroxylInfo;
                     if (!currentPhospholipid.fag4.faTypes["FAx"]) row["Building Block 4"] = FARepresentation(currentPhospholipid.fag4) + currentPhospholipid.fag4.lengthInfo + "; DB: " + currentPhospholipid.fag4.dbInfo + "; OH: " + currentPhospholipid.fag4.hydroxylInfo;
+                    headGroupNames.Add("CL");
                 }
                 else
                 {
                     row["Category"] = "Glycerophospholipid";
+                    headGroupNames.AddRange(currentPhospholipid.headGroupNames);
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPhospholipid.headGroupNames);
                     row["Building Block 2"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + "; OH: " + currentPhospholipid.fag1.hydroxylInfo;
                     if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
@@ -3295,6 +3315,7 @@ namespace LipidCreator
                 Sphingolipid currentSphingolipid = (Sphingolipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
+                    row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
                 row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
                 if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
             }
@@ -3303,7 +3324,16 @@ namespace LipidCreator
             {
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
-                row["Building Block 1"] = "Ch" + (currentCHLipid.containsEster ? "E" : "");
+                if (currentCHLipid.containsEster)
+                {
+                    row["Building Block 1"] = "ChE";
+                    headGroupNames.Add("ChE");
+                }
+                else
+                {
+                    row["Building Block 1"] = "Ch";
+                    headGroupNames.Add("Ch");
+                }
                 if (currentCHLipid.containsEster) row["Building Block 2"] = FARepresentation(currentCHLipid.fag) + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             
@@ -3312,6 +3342,7 @@ namespace LipidCreator
                 Mediator currentMedLipid = (Mediator)currentRegisteredLipid;
                 row["Building Block 1"] = String.Join(", ", currentMedLipid.headGroupNames);
                 row["Category"] = "Mediator";
+                headGroupNames.AddRange(currentMedLipid.headGroupNames);
             }
             
             
@@ -3336,11 +3367,53 @@ namespace LipidCreator
                 case 1: filtersStr += "only heavy"; break;
                 case 2: filtersStr += "with heavy"; break;
             }
-            
             row["Filters"] = filtersStr;
             
+            string optionsStr = "";
+            foreach (string headGroupName in headGroupNames)
+            {
+                if (lipidCreator.headgroups.ContainsKey(headGroupName) && lipidCreator.headgroups[headGroupName].heavyLabeledPrecursors.Count > 0)
+                {
+                    optionsStr = "with heavy isotopes";
+                    break;
+                }
+            }
+            
+            bool containsUserDefined = false;
+            foreach (string headGroupName in currentRegisteredLipid.positiveFragments.Keys)
+            {
+                foreach(string fragmentName in currentRegisteredLipid.positiveFragments[headGroupName])
+                {
+                    containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][true].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][true][fragmentName].userDefined;
+                    if (containsUserDefined) break;
+                }
+                if (containsUserDefined) break;
+            }
+            
+            if (!containsUserDefined)
+            {
+                foreach (string headGroupName in currentRegisteredLipid.negativeFragments.Keys)
+                {
+                    foreach(string fragmentName in currentRegisteredLipid.negativeFragments[headGroupName])
+                    {
+                        containsUserDefined |= lipidCreator.allFragments.ContainsKey(headGroupName) && lipidCreator.allFragments[headGroupName][false].ContainsKey(fragmentName) && lipidCreator.allFragments[headGroupName][false][fragmentName].userDefined;
+                        if (containsUserDefined) break;
+                    }
+                    if (containsUserDefined) break;
+                }
+            }
+            if (containsUserDefined)
+            {
+                optionsStr = (optionsStr.Length > 0 ? ",\n" : "") + "with user-defined fragments";
+            }
+            
+            row["Options"] = optionsStr;
             return row;
         }
+        
+        
+        
+        
         
         
         

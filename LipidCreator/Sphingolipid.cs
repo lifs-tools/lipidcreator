@@ -228,7 +228,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;
                                     heavyPrecursorData.precursorName = heavyKey + key;
-                                    heavyPrecursorData.precursorSpeciesName = speciesName;
+                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + speciesFA.ToString();
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

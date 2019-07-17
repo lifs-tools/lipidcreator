@@ -79,9 +79,9 @@ namespace LipidCreator
             unchecked
             {
                 long hashCode = base.getHashCode() + 77489593927525L;
-                hashCode += fag1.getHashCode();
-                hashCode += fag2.getHashCode();
-                hashCode += fag3.getHashCode();
+                hashCode += LipidCreator.rotateHash(fag1.getHashCode(), 5);
+                hashCode += LipidCreator.rotateHash(fag2.getHashCode(), 29);
+                hashCode += LipidCreator.rotateHash(fag3.getHashCode(), 59);
                 hashCode += containsSugar ? (1L << 18) : (1L << 58);
                 if (hashCode == 0) hashCode += 1;
                 return hashCode;

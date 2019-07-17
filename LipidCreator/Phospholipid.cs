@@ -84,10 +84,10 @@ namespace LipidCreator
         {
             unchecked {
                 long hashCode = base.getHashCode() + 13034653259202L;
-                hashCode += fag1.getHashCode();
-                hashCode += fag2.getHashCode();
-                hashCode += fag3.getHashCode();
-                hashCode += fag4.getHashCode();
+                hashCode += LipidCreator.rotateHash(fag1.getHashCode(), 13);
+                hashCode += LipidCreator.rotateHash(fag2.getHashCode(), 23);
+                hashCode += LipidCreator.rotateHash(fag3.getHashCode(), 37);
+                hashCode += LipidCreator.rotateHash(fag4.getHashCode(), 53);
                 hashCode += isLyso ? (1L << 21) : (1L << 55);
                 hashCode += isCL ? (1L << 13) : (1L << 44);
                 if (hashCode == 0) hashCode += 1;

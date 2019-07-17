@@ -593,7 +593,7 @@ namespace LipidCreator
         {
             if (lipid != null && !(lipid is UnsupportedLipid) && fag != null)
             {
-                string carbonCount = node.right.getText(); // omit the C e.g. for C16
+                string carbonCount = node.right.getText();
                 int carbonCountInt = Convert.ToInt32(carbonCount);
                 if (0 <= carbonCountInt && carbonCountInt <= LipidCreator.MAX_CARBON_LENGTH) fag.carbonCounts.Add(carbonCountInt);
                 else fag = null;
@@ -709,12 +709,17 @@ namespace LipidCreator
                 }
                 else
                 {
-                    if (headgroup.Equals("PE-Cer")) headgroup = "EPC";
-                    else if (headgroup.Equals("PI-Cer")) headgroup = "IPC";
-                    else if (headgroup.Equals("LacCer")) headgroup = "Hex2Cer";
-                    else if (headgroup.Equals("GalCer")) headgroup = "HexCer";
-                    else if (headgroup.Equals("GlcCer")) headgroup = "HexCer";
-                    else if (headgroup.Equals("(3'-sulfo)Galbeta-Cer")) headgroup = "SHexCer";
+                    switch (headgroup)
+                    {
+                        case "PE-Cer": headgroup = "EPC"; break;
+                        case "PI-Cer": headgroup = "IPC"; break;
+                        case "LacCer": headgroup = "Hex2Cer"; break;
+                        case "GalCer": headgroup = "HexCer"; break;
+                        case "GB3": headgroup = "Hex3Cer"; break;
+                        case "GlcCer": headgroup = "HexCer"; break;
+                        case "(3'-sulfo)Galbeta-Cer": headgroup = "SHexCer"; break;
+                        default: break;
+                    }
                     lipid.headGroupNames.Add(headgroup);
                 }
             }

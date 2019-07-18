@@ -42,14 +42,14 @@ namespace LipidCreator
             Console.WriteLine("----------------");
         }
         
-        public long getHashCode()
+        public ulong getHashCode()
         {
             unchecked
             {
-                long hashCode = 0;
+                ulong hashCode = 0;
                 foreach (KeyValuePair<Molecule, int> kvp in this)
                 {
-                    hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (kvp.Value + 7);
+                    hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (ulong)(kvp.Value + 7);
                 }
                 return hashCode;
             }

@@ -27,22 +27,41 @@ SOFTWARE.
 using System;
 using System.Windows.Forms;
 using System.Diagnostics;
+using log4net;
+using log4net.Config;
+using System.IO;
 
 namespace LipidCreator
 {
     public partial class AboutDialog : Form
     {
-        public AboutDialog()
+        public LipidCreator lipidCreator;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AboutDialog));
+    
+        public AboutDialog(LipidCreator _lipidCreator, bool log = false)
         {
+            lipidCreator = _lipidCreator;
+        
             InitializeComponent();
-            InitializeDialogText();
+            if (log)
+            {
+                showLogFile();
+            }
+            else
+            {
+                InitializeDialogText();
+            }
         }
 
+        
+        
         private void buttonOKClick(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        
+        
         private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string url;
@@ -57,6 +76,33 @@ namespace LipidCreator
             var si = new ProcessStartInfo(url);
             Process.Start(si);
             linkLabel.LinkVisited = true;
+        }
+        
+
+        
+        private void showLogFile()
+        {
+            
+            try
+            {
+                string logFile = lipidCreator.prefixPath + "data/lipidcreator.log";
+                Console.WriteLine(logFile);
+                if (File.Exists(logFile))
+                {
+                    using (FileStream fileStream = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (StreamReader streamReader = new StreamReader(fileStream))
+                        {
+                        this.textLibraryName.Text = streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                this.textLibraryName.Text = "Log file could not be opened." + e;
+                log.Error("Log file could not be opened.");
+            }
         }
     }
 }

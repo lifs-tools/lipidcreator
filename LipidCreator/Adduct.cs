@@ -56,12 +56,12 @@ namespace LipidCreator
         }
         
         
-        public long getHashCode()
+        public ulong getHashCode()
         {
             unchecked {
-				long hashCode = LipidCreator.HashCode(name);
+				ulong hashCode = LipidCreator.HashCode(name);
 				hashCode += LipidCreator.HashCode(visualization);
-				hashCode += 3896323L << (charge + 5);
+				hashCode += 3896323UL << (charge + 5);
 				return hashCode;
             }
         }

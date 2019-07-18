@@ -68,14 +68,14 @@ namespace LipidCreator
         
         
         
-        public override long getHashCode()
+        public override ulong getHashCode()
         {
             unchecked
             {
-                long hashCode = base.getHashCode() + 6930302729454L;
+                ulong hashCode = base.getHashCode() + 6930302729454UL;
                 hashCode += LipidCreator.rotateHash(lcb.getHashCode(), 17);
                 hashCode += LipidCreator.rotateHash(fag.getHashCode(), 43);
-                hashCode += isLyso ? (1L << 12) : (1L << 54);
+                hashCode += isLyso ? (1UL << 12) : (1UL << 54);
                 if (hashCode == 0) hashCode += 1;
                 return hashCode;
             }

@@ -89,6 +89,8 @@ namespace LipidCreator
             this.textLibraryName.Name = "textLibraryName";
             this.textLibraryName.Size = new System.Drawing.Size(456, 260);
             this.textLibraryName.TabIndex = 1;
+            this.textLibraryName.ReadOnly = true;
+            this.textLibraryName.BackColor = Color.White;
             this.textLibraryName.Text = "";
             // 
             // AboutDialog
@@ -106,7 +108,6 @@ namespace LipidCreator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-
         }
 
         #endregion

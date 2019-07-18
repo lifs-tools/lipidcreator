@@ -316,7 +316,7 @@ namespace LipidCreator
             foreach(Lipid currentLipid in parsedLipids)
             {
                 
-                long lipidHash = 0;
+                ulong lipidHash = 0;
                 if (currentLipid is Glycerolipid) lipidHash = ((Glycerolipid)currentLipid).getHashCode();
                 else if (currentLipid is Phospholipid) lipidHash = ((Phospholipid)currentLipid).getHashCode();
                 else if (currentLipid is Sphingolipid) lipidHash = ((Sphingolipid)currentLipid).getHashCode();

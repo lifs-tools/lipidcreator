@@ -57,7 +57,7 @@ namespace LipidCreator
         public string precursorSpeciesName;
         public string precursorIonFormula;
         public Adduct precursorAdduct;
-        public long lipidHash = 0;
+        public ulong lipidHash = 0;
         public string precursorAdductFormula;
         public double precursorM_Z;
         public bool addPrecursor;
@@ -228,13 +228,13 @@ namespace LipidCreator
         
         
         
-        public virtual long getHashCode()
+        public virtual ulong getHashCode()
         {
             unchecked
             {
-                long hashCode = representativeFA ? (1L << 26) : (1L << 61);
-                hashCode += (long)(onlyPrecursors + 23) << 14;
-                hashCode += (long)(onlyHeavyLabeled + 37) << 33;
+                ulong hashCode = representativeFA ? (1UL << 26) : (1UL << 61);
+                hashCode += (((ulong)onlyPrecursors + 23UL) << 14);
+                hashCode += (((ulong)onlyHeavyLabeled + 37UL) << 33);
 
                 foreach (string adduct in adducts.Keys.Where(x => adducts[x]))
                 {
@@ -944,11 +944,11 @@ namespace LipidCreator
         
         
         
-        public override long getHashCode()
+        public override ulong getHashCode()
         {
             unchecked
             {
-                return 0L;
+                return 0UL;
             }
         }
         

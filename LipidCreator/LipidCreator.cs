@@ -61,58 +61,53 @@ namespace LipidCreator
     public class LipidCreator : IDisposable
     {
     
-    public static long[] randomNumbers = new long[]{64906194448661730L, -7087960785676136074L, 1149370606324377140L, -242146255827718834L, -6673520156982055293L,
-        -1906501695622028161L, 3186687457551316157L, 6068171422024127412L, -8428625510799766667L, -4668157812269996151L,
-        -8769956259234702069L, 6119087968751560008L, -3459942900018622844L, 7303038859355330737L, -384907263340439936L, 
-        7851689872170892611L, -2713035301580260724L, -8991941249795849780L, -1080915454103540085L, -871226945435226044L,
-        -3716714677795717645L, 8371142040953977465L, 7816666478816400429L, 2084689448116683837L, -7349013243720190950L,
-        -3869931644785258422L, 3819770283060199029L, 6696304451757418671L, 7302231869797591851L, -6002782944957800313L,
-        -8196794966470171751L, 8417121340856194917L, -3677548163940897152L, 5242540740339080241L, -8822029399555855658L,
-        3224626419502228601L, -1121864323408366856L, 3382027434278705901L, 2155329917231123642L, -7596471078151766661L,
-        -7212174156061685569L, -4303180252428701109L, 2159863449875447898L, 777030935567840229L, 178353561979298534L,
-        -4534192612142811726L, 3472040771587202553L, 825247719178089839L, -8319138053840107579L, 9178031361476062731L,
-        -4725972344172774250L, 4163375074008162252L, -3264057887049142121L, 8341273621132551444L, -6953255921236472168L,
-        5213121469601713646L, 5693071454128037406L, -8573048461349400459L, 1915706744823919333L, -4289800778145931889L,
-        6844527404885994610L, -3569303255651075082L, -9018947871209485734L, -4522739313226581594L, 6745833829362713436L,
-        4038759966111335766L, 3327219999085786339L, -7885736648783596257L, -5738465469644737049L, 1416984098497185154L,
-        4948063053951184636L, 2664187332111234812L, 5981246598040879165L, -8332516068973075105L, 5826620849315722215L,
-        4632111504584180116L, -3422171254973972514L, -2931890551719118418L, 1801187682314691875L, 7376166927517818793L,
-        6648469565250972292L, 2941549548948340197L, 909749716179202762L, 7118242706496355494L, -5255116225677401134L,
-        -4741204878055057681L, -13236979754348165L, 6062429104366932635L, 1926411363212472673L, 3577851106294295075L,
-        5677601390690190162L, 8153392900820479801L, 9098324583858009416L, 2129829352888572703L, 7930518932346021243L,
-        6082761632161834524L, -5568150954648183821L, -6457268616459166635L, 4275161082547015897L, 6307162647841882680L,
-        6274537270168032654L, 5103515493667398681L, -2720821621595510382L, -6123704095024497683L, 3799730126421139008L,
-        7511442572540922703L, 5930736405910728523L, -8348106130857231802L, 6023297006464382888L, 9078945680646890609L,
-        -2514127890793411754L, 6192318017233670625L, -3608008723253701224L, -8302186771844516056L, 9004818376083909313L,
-        1957115485901742686L, -1999368820797676109L, 4879797692858435586L, -5652976644455092686L, -1172318109096844885L,
-        -6663090458599113849L, 3640413976615417188L, 373453855040671489L, -8437900561344325313L, 2269133516881592435L,
-        -4163881216278821004L, -5303743235476041943L, -3065341176510139686L, -6304438694121133010L, 43593999031343729L,
-        -2994032416882622692L, 6785381617769220137L, 2613863536438375563L, 4176312462631791925L, -624783751880147603L,
-        -7827534037407664969L, 5542609068368912090L, -6329482078024928604L, -1432858038540224607L, 547315519364437930L,
-        -3369022859264409769L, 8076661822989449244L, 474726199070026826L, 7649312268083937250L, -7403658901780010352L,
-        -5090920414006300413L, -7416225158070496376L, 9214340254314878544L, 2180790213765278865L, 7772868233872461885L,
-        -6138579805582636383L, -5736495793530052745L, -2083203491095409865L, -4050695040119611337L, -8162192414256042328L,
-        4605981898825276841L, 4446011191461482258L, -787654509582777514L, 1355111434436815423L, 2941349001829535611L,
-        6366121372350064266L, -5147551171841640469L, -6457280991367471140L, -22836930807877987L, -3480531660142515976L,
-        8462262332945260554L, 5207327479222721678L, 5224220827208346490L, -1213085429522378691L, 8605571598273264721L,
-        -6582573691985045720L, 2336095310139468643L, 7660403834602846236L, 6708551232115461392L, 7903546480407121378L,
-        1159330449861114915L, -3847914557048236L, 4721627950819632424L, 9184306347294308787L, -1446202548765550534L,
-        2329786629061775162L, 3303764257055796743L, -6748462017917349847L, 3480411873439992630L, -2384751613510058656L,
-        78276353525839677L, -6545506454778931767L, 7702664349900894278L, -1172936524432255717L, 5531124470158970406L,
-        6863041195738616159L, 4998548524408891804L, -3520490174073061165L, -9101044484584884615L, -574652275470629456L,
-        -4773809391238070547L, -8438333446637984028L, -3951082636155413742L, -4982075165996151150L, 8897624186177895385L,
-        -3905778557457969936L, 8246920806610167101L, -3907481607632753461L, 1517109470230649281L, -1293804176459962309L,
-        -4326897236312029363L, 4495159222715871090L, -2795910664458370860L, 3699952883054699110L, -3335618820093963121L,
-        -3780049284210924285L, -308746282400641558L, -3885260538625105697L, 7915758020666602386L, 765409481298430925L,
-        1138059945322268035L, -6161662549773151490L, -3260761053247161458L, -8073986823722730924L, 6389497023817209739L,
-        3569600473979640396L, -3964324130739309344L, 6102051451857280043L, -1191366091343299500L, 7811069540767337906L,
-        1189122732514411080L, 2628239729621174668L, -1474053519209769343L, 4505903324498905925L, -820211035836384863L,
-        6723482215047487211L, -8589574909312963679L, -4761075197476435378L, -579035129633704435L, 582960481084425405L,
-        -9125057092594881228L, -8058892358832989247L, -1201954387228990142L, 1730965439577819845L, 8699807945874605742L,
-        527895083108377066L, -1892896020088696101L, 2352974215723706871L, -2183143246366275460L, -6943593224320267020L,
-        1011080188615317939L, 4561812652242503586L, -5891301323227676290L, -1718693783323383413L, 7772545360558817908L,
-        7888057109556372959L, 4167403752336321462L, 1850078686427162150L, 2919458271479310582L, 8992691182816240786L,
-        8385976505798404291L};
+        public static ulong[] randomNumbers = new ulong[]{16807150758674723352UL, 18380906593123320808UL, 10904761884376654311UL, 10745964062774488409UL,
+        1477742828810578406UL, 10519320949126946937UL, 11030906738578929825UL, 12635038863694672147UL, 14304249027662503881UL, 6964281971512434030UL,
+        2679151693283468822UL, 2300026694507559385UL, 1819401041445280820UL, 4270096456899532719UL, 17426196741770376557UL, 11165407358403899727UL,
+        7828390098543334859UL, 4050257391773162037UL, 2487637855913540098UL, 424358752090507202UL, 10768969052967860320UL, 17999041374394552468UL,
+        17856537863126535733UL, 16702631510435194271UL, 8263450723793119231UL, 3708358241415535940UL, 6612400824029941941UL, 185530014611949143UL,
+        8002454166152003334UL, 10236481197016626696UL, 16826237072142700970UL, 6903162163581243070UL, 18405029556144673699UL, 13901940633555148780UL,
+        8778079944963829512UL, 14429119810236517923UL, 8504334224814318867UL, 7381148444504089035UL, 4245763182153447575UL, 2331337917526136819UL,
+        5187917052044459358UL, 14096012894957178830UL, 2541795040692595450UL, 16923377782882173568UL, 7200521235738866156UL, 14446522450846959811UL,
+        13882517757923439868UL, 11274960922420591833UL, 6408857322110013215UL, 8642075982579781082UL, 15816174529094065300UL, 13528139965271641745UL,
+        11580479105977173941UL, 15102509459008191503UL, 11900985445198891977UL, 2950602033259726422UL, 10268661860614386000UL, 12588537465885050556UL,
+        11493927009216324668UL, 6527967174358692590UL, 16071548974863358206UL, 10299794865126268035UL, 5454257948945925433UL, 16525205695480020497UL,
+        8513817709506097994UL, 2550108408333906874UL, 3597104687517840085UL, 4299267286374698493UL, 13550924828287738234UL, 15627873880739776478UL,
+        10088680658906872276UL, 11409150671976976417UL, 9869420137798167817UL, 9036013467956520348UL, 7043194715064298538UL, 9247625790632119692UL,
+        12690043328767387385UL, 596881122425133249UL, 12721391113849492412UL, 16470704714425363448UL, 4933076311134968660UL, 15889416548279853309UL,
+        997614334416192174UL, 16258471700169306381UL, 8033654069971195015UL, 17108991492795806580UL, 12304192172737976855UL, 4985864093587574921UL,
+        15678754966697846769UL, 8730226029791095013UL, 12235228227547942533UL, 4769260588757930796UL, 14908830437339460602UL, 3791044379752043267UL,
+        439424475377392669UL, 4836717676278630141UL, 5212419530217883565UL, 8429083707185764800UL, 8036348313981835132UL, 15146735687663783218UL,
+        3390489960780566875UL, 3541784339832885676UL, 3653007312126123727UL, 13040542232139922304UL, 4979920891752463728UL, 14157059194484443025UL,
+        100528671685960349UL, 17283933488090986460UL, 9589927182238962941UL, 13903822936444454038UL, 4375242081042513086UL, 558232238979648290UL,
+        3921321761634178388UL, 16768617361348621604UL, 9123593725759821580UL, 10524620538689731525UL, 17927196608635849398UL, 7745103811979872953UL,
+        2840961359444212731UL, 6091302967271321075UL, 6020000853250164232UL, 2801507103568297471UL, 16385454618756120836UL, 240421038822945121UL,
+        8150462995568946585UL, 2340880963274631806UL, 9235942972392796480UL, 14367805199185879800UL, 9649885745533891859UL, 4104410131642614781UL,
+        16264415569876607061UL, 8472935929154242895UL, 5873551638636789430UL, 8733842113130075884UL, 9569541749883751099UL, 9079326546102769198UL,
+        8516290259689424080UL, 15173923686801901965UL, 9283129041254871628UL, 8148912079220243340UL, 1853719968177222996UL, 8836061648630136231UL,
+        16119451308555599199UL, 12954151328630286754UL, 13498212397713005290UL, 5463566494404915327UL, 4971008001620975904UL, 1264294178831772980UL,
+        15811161317337784707UL, 12288050732234978250UL, 3146914450423541806UL, 5659056307336275195UL, 10775148524726850712UL, 15494842369846397113UL,
+        755565377338115738UL, 4917349309261870513UL, 7227320185735164408UL, 9147286504013119902UL, 16307563271633745658UL, 2755749258344453374UL,
+        6435029354440230184UL, 4783757494917542337UL, 14836880971218361355UL, 8140436285097923622UL, 7039825332040979031UL, 12910585605474600499UL,
+        1920686530662189765UL, 14448963877239521541UL, 16360916242782234245UL, 6100457520125886672UL, 6444623436511568719UL, 11922455215220158531UL,
+        4915308021930651631UL, 5807278771263518256UL, 17100559908711363256UL, 17073752192943094348UL, 9461825633735739973UL, 4716347389694471166UL,
+        13912546171005294212UL, 17033598898739140801UL, 7539353736296478915UL, 60707008043128237UL, 4754878873380621176UL, 4956301288698507752UL,
+        7905253879873204995UL, 17554683518495934887UL, 17466836722169679802UL, 2428190730212555036UL, 15185262551162906858UL, 6064665547249522474UL,
+        13460043258424803300UL, 13351750144973980328UL, 11774482013592334805UL, 7859657083387626724UL, 15473173895844495849UL, 11895064531415259713UL,
+        4617838824069827831UL, 811726663598549068UL, 12474302672309933090UL, 16574788097907188536UL, 4257433997804339263UL, 6749110809434063654UL,
+        18165456995984348190UL, 14378946344628038976UL, 6811173383523789832UL, 5667487623485043496UL, 3536800482707365495UL, 17591141204708801405UL,
+        6977474560021256736UL, 5932657912110149414UL, 12273863937376769424UL, 17306792478417188810UL, 8682535496818977133UL, 17374731144386165601UL,
+        12168575791821870397UL, 8129218082305553708UL, 8184220132885308663UL, 6210702783292772432UL, 1299774539127078803UL, 15349174242287575026UL,
+        11490516500691563669UL, 15115657733172637150UL, 9965010338504166621UL, 8585328825346392464UL, 15741403707058832724UL, 5093164849686130822UL,
+        2581863853800775776UL, 2432821876630702361UL, 8516484757619764917UL, 637353305406653542UL, 18010145320006943266UL, 11620399768242138285UL,
+        16940839711272558753UL, 10247239853093979895UL, 8991818386597954085UL, 11973203399350422891UL, 11030391833171691347UL, 8990782562592772292UL,
+        6864461297567087099UL, 768771744534228381UL, 18351610601692375553UL, 7313791788864058345UL, 16964833660821363169UL, 17217215165008873750UL,
+        3854629591884091096UL, 661918874110758118UL, 4225300857789402865UL, 9891526117196313403UL, 2132585740689585242UL, 4741162551429069715UL,
+        15741431012590207644UL, 9141399840687874692UL, 11485938865337797944UL, 2731325884363612863UL, 5366797957289071769UL, 10350121429669397365UL};
+        
+        
+        
+        
     
         [NonSerialized]
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
@@ -120,7 +115,7 @@ namespace LipidCreator
         public static string LC_VERSION_NUMBER = "1.0.0";
         public static PlatformID LC_OS;
         public ArrayList registeredLipids;
-        public Dictionary<long, Lipid> registeredLipidDictionary;
+        public Dictionary<ulong, Lipid> registeredLipidDictionary;
         public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
         public IDictionary<string, Precursor> headgroups;
@@ -138,6 +133,7 @@ namespace LipidCreator
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
+        public bool errorOccurred = false;
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -264,6 +260,7 @@ namespace LipidCreator
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 log.Error("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
+                                errorOccurred = true;
                             }
                             int charge = Convert.ToInt32(tokens[4]);
                             Adduct adduct = Lipid.chargeToAdduct[charge];
@@ -274,11 +271,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    errorOccurred = true;
                 }
             }
             else
             {
                 log.Error("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
+                errorOccurred = true;
             }
             
             
@@ -372,11 +371,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    errorOccurred = true;
                 }
             }
             else
             {
                 log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+                errorOccurred = true;
             }
             
             HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
@@ -403,6 +404,7 @@ namespace LipidCreator
                     if (blocks.Count > 0)
                     {
                         log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
+                        errorOccurred = true;
                     }
                 }
             }
@@ -443,11 +445,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    errorOccurred = true;
                 }
             }
             else
             {
                 log.Error("Error: file " + instrumentsFile + " does not exist or can not be opened.");
+                errorOccurred = true;
             }
             
             
@@ -487,7 +491,6 @@ namespace LipidCreator
 
                                     if (tokens.Length != nTokens)
                                     {
-                                        log.Error("Mismatch on line " + lineCounter + "! Should have " + nTokens + " columns, but had " + tokens.Length);
                                         throw new Exception("Invalid line in file, number of columns in line must equal number of columns in header!");
                                     }
 
@@ -535,13 +538,15 @@ namespace LipidCreator
                     }
                     catch (Exception e)
                     {
-                        log.Error("Encountered an error in file '" + ceParametersFile + "' on line '" + lineCounter + "':", e);
+                        log.Error("Encountered an error in file '" + ceParametersFile + "' on line '" + lineCounter + "': ", e);
+                        errorOccurred = true;
                     }
                 }
             }
             else
             {
                 log.Error("Error: directory " + ceParametersDir + " does not exist or can not be opened.");
+                errorOccurred = true;
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";
@@ -568,6 +573,7 @@ namespace LipidCreator
         
         public LipidCreator(string pipe)
         {
+        
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
@@ -577,7 +583,7 @@ namespace LipidCreator
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
             registeredLipids = new ArrayList();
-            registeredLipidDictionary = new Dictionary<long, Lipid>();
+            registeredLipidDictionary = new Dictionary<ulong, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();
             allFragments = new Dictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>>();
             headgroups = new Dictionary<String, Precursor>();
@@ -589,6 +595,7 @@ namespace LipidCreator
             readInputFiles();
             collisionEnergyHandler.addCollisionEnergyFields();
             
+            
             foreach(string instrument in collisionEnergyHandler.instrumentParameters.Keys)
             {
                 availableInstruments.Add(instrument);
@@ -599,6 +606,7 @@ namespace LipidCreator
                 if (!headgroups.ContainsKey(lipidClass))
                 {
                     log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
+                    errorOccurred = true;
                 }
             }
             
@@ -607,6 +615,7 @@ namespace LipidCreator
                 if (!allFragments.ContainsKey(lipidClass))
                 {
                     log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
+                    errorOccurred = true;
                 }
             }
             
@@ -702,16 +711,14 @@ namespace LipidCreator
         
         
         
-        public static long HashCode(string read)
+        public static ulong HashCode(string read)
         {
             unchecked {
-                long hashedValue = 0;
+                ulong hashedValue = 0;
                 int i = 0;
-                long multiplier = 1;
                 while (i < read.Length)
                 {
-                    hashedValue += randomNumbers[(int)read[i] & 255] * multiplier;
-                    multiplier *= 37;
+                    hashedValue += rotateHash(randomNumbers[(int)read[i] & 255], i & 63);
                     i++;
                 }
                 return hashedValue;
@@ -721,7 +728,7 @@ namespace LipidCreator
         
         
         
-        public static long rotateHash(long hash, int length)
+        public static ulong rotateHash(ulong hash, int length)
         {
             unchecked {
                 if (length <= 0 || 64 <= length) return hash;
@@ -761,7 +768,7 @@ namespace LipidCreator
             precursorDataList.Clear();
             
             // create precursor list
-            foreach (long lipidHash in registeredLipids)
+            foreach (ulong lipidHash in registeredLipids)
             {
                 Lipid currentLipid = registeredLipidDictionary[lipidHash];
                 currentLipid.computePrecursorData(headgroups, usedKeys, precursorDataList);
@@ -1013,7 +1020,7 @@ namespace LipidCreator
                                 lipid.onlyHeavyLabeled = filterParameters[1];
                             }
                             
-                            long lipidHash = 0;
+                            ulong lipidHash = 0;
                             if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                             else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
                             else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
@@ -1034,12 +1041,14 @@ namespace LipidCreator
                 catch (Exception ee)
                 {
                     log.Error("Reading lipids from file " + lipidListFile + " failed on line " + total, ee);
+                    throw new Exception();
                 }
                 return new int[]{valid, total};
             }
             else
             {
-                throw new Exception("Could not read file, " + lipidListFile);
+                log.Error("Could not read file, " + lipidListFile);
+                throw new Exception();
             }
         }
         
@@ -1348,10 +1357,11 @@ namespace LipidCreator
         
         
         
-        public void sendToSkyline(DataTable dt, string blibName, string blibFile)
+        public bool sendToSkyline(DataTable dt, string blibName, string blibFile)
         {
-            if (skylineToolClient == null) return;
+            if (skylineToolClient == null) return false;
             
+            bool success = true;
             
             Dictionary<string, string> nameToExportName = new Dictionary<string, string>();
             foreach (PrecursorData precursorData in precursorDataList)
@@ -1391,8 +1401,8 @@ namespace LipidCreator
                 } 
                 catch(Exception e)
                 {
-                    MessageBox.Show("An error occured during creation of the transition list!");
                     log.Error("An error occured during creation of the transition list: ", e);
+                    success = false;
                 }
             }
             try
@@ -1402,9 +1412,11 @@ namespace LipidCreator
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass.ToString(CultureInfo.InvariantCulture) + "Da.");
                 log.Error("An error occured, data could not be sent to Skyline, please check if your Skyline parameters allow precursor masses up to " + maxMass.ToString(CultureInfo.InvariantCulture) + "Da.", e);
+                success = false;
             }
+            
+            return success;
         }
         
         
@@ -1566,7 +1578,7 @@ namespace LipidCreator
             }
             if (!onlySettings)
             {
-                foreach (long lipidHash in registeredLipids)
+                foreach (ulong lipidHash in registeredLipids)
                 {
                     registeredLipidDictionary[lipidHash].serialize(sb);
                 }
@@ -1749,7 +1761,7 @@ namespace LipidCreator
             foreach ( var lipid in lipids )
             {
                 string lipidType = lipid.Attribute("type").Value;
-                long lipidHash = 0;
+                ulong lipidHash = 0;
                 switch (lipidType)
                 {
                     case "GL":

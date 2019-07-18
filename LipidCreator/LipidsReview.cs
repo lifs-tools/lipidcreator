@@ -658,12 +658,24 @@ namespace LipidCreator
                 if (specName [0].Length > 0) {
                     string blibPath = Application.StartupPath + "\\..\\Temp\\" + specName[0] + ".blib";
                     creatorGUI.lipidCreator.createBlib (blibPath);
-                    creatorGUI.lipidCreator.sendToSkyline (currentView, specName[0], blibPath);
-                    MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
+                    if(creatorGUI.lipidCreator.sendToSkyline (currentView, specName[0], blibPath))
+                    {
+                        MessageBox.Show ("Sending transition list and spectral library to Skyline is complete.", "Sending complete");
+                    }
+                    else
+                    {
+                        MessageBox.Show ("An error occurred while sending the spectral library to Skyline. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                    }
                 }
             } else {
-                creatorGUI.lipidCreator.sendToSkyline (currentView, "", "");
-                MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
+                if(creatorGUI.lipidCreator.sendToSkyline (currentView, "", ""))
+                {
+                    MessageBox.Show ("Sending transition list to Skyline is complete.", "Sending complete");
+                }
+                else
+                {
+                    MessageBox.Show ("An error occurred while sending the spectral library to Skyline. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                }
             }
             this.Enabled = true;
         }

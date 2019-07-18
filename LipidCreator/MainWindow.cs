@@ -169,7 +169,8 @@ namespace LipidCreator
                 log.Warn("Warning: Analytics file could not be opened for writing at " + analyticsFile + ". LipidCreator will continue without analytics enabled!", e);
             }
             
-            try {
+            try
+            {
                 if (File.Exists(analyticsFile))
                 {
                     string analyticsContent = "";
@@ -236,6 +237,7 @@ namespace LipidCreator
         [STAThread]
         public static void Main(string[] args)
         {
+        
             if (args.Length > 0)
             {
         
@@ -247,6 +249,7 @@ namespace LipidCreator
                         case "dev":
                             runMode = RunMode.standalone;
                             checkForAnalytics(runMode, false);
+                            System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
                             CreatorGUI creatorGUIDev = new CreatorGUI(null);
                             creatorGUIDev.lipidCreator.runMode = runMode;
                             creatorGUIDev.asDeveloper = true;
@@ -257,6 +260,7 @@ namespace LipidCreator
                         
                         case "external":
                             runMode = RunMode.external;
+                            System.IO.File.WriteAllText(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log", string.Empty); // Clearing the log file
                             checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
                             creatorGUI.lipidCreator.runMode = runMode;
@@ -454,7 +458,15 @@ namespace LipidCreator
                                 }
                                 catch
                                 {
-                                    lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                    try
+                                    {
+                                        lc.importLipidList(inputCSV, new int[]{parameterPrecursor, parameterHeavy});
+                                    }
+                                    catch
+                                    {
+                                        log.Warn("Closing LipidCreator.");
+                                        return;
+                                    }
                                 }
                                 
                                 
@@ -537,6 +549,7 @@ namespace LipidCreator
             {
                 runMode = RunMode.standalone;
                 checkForAnalytics(runMode, false);
+                System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
                 CreatorGUI creatorGUI = new CreatorGUI(null);
                 creatorGUI.lipidCreator.runMode = runMode;
                 creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);

@@ -141,10 +141,10 @@ namespace LipidCreator
 
 
 
-        public long getHashCode()
+        public ulong getHashCode()
         {
             unchecked {
-                long hashCode = LipidCreator.HashCode(fragmentName);
+                ulong hashCode = LipidCreator.HashCode(fragmentName);
                 hashCode += LipidCreator.HashCode(fragmentOutputName);
                 hashCode += LipidCreator.HashCode(fragmentFile);
                 hashCode += fragmentElements.getHashCode();
@@ -153,8 +153,8 @@ namespace LipidCreator
                 {
                     hashCode += LipidCreator.HashCode(fragBase);
                 }
-                hashCode += specific ? (1L << 23) : (1L << 60);
-                hashCode += userDefined ? (1L << 35) : (1L << 48);
+                hashCode += specific ? (1UL << 23) : (1UL << 60);
+                hashCode += userDefined ? (1UL << 35) : (1UL << 48);
                 return hashCode;
             }            
         }

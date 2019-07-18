@@ -55,7 +55,7 @@ namespace LipidCreator
         public AboutDialog aboutDialog;
         public Lipid currentLipid;
         public DataTable registeredLipidsDatatable;
-        public long[] lipidModifications;
+        public ulong[] lipidModifications;
         public Color alertColor = Color.FromArgb(255, 180, 180);
         public bool settingListbox = false;
         public Dictionary<System.Windows.Forms.MenuItem, string> predefinedFiles;
@@ -86,6 +86,10 @@ namespace LipidCreator
             
             this.inputParameters = inputParameters;
             this.lipidCreator = new LipidCreator(this.inputParameters);
+            if (lipidCreator.errorOccurred)
+            {
+                MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+            }
             currentIndex = LipidCategory.NoLipid;
             resetAllLipids();
             
@@ -103,7 +107,7 @@ namespace LipidCreator
             InitializeComponent();
             
             // add predefined menu
-            lipidModifications = Enumerable.Repeat(0L, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
+            lipidModifications = Enumerable.Repeat(0UL, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
             string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
             if(Directory.Exists(predefinedFolder)) 
@@ -213,7 +217,8 @@ namespace LipidCreator
                                 break;
                                 
                             default:
-                                throw new Exception("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
+                                log.Error("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
+                                break;
                         }
                         menuCollisionEnergy.MenuItems.Add(instrumentItem);
                     }
@@ -251,7 +256,7 @@ namespace LipidCreator
             }
             catch (Exception ex)
             {
-                log.Warn("Could not write to data/analytics.txt:", ex);
+                log.Warn("Could not write to data/analytics.txt: " + ex);
             }
         }
         
@@ -273,6 +278,10 @@ namespace LipidCreator
             if (!verify || (verify && mbr == DialogResult.Yes))
             {
                 lipidCreator = new LipidCreator(inputParameters);
+                if (lipidCreator.errorOccurred)
+                {
+                    MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                }
                 resetAllLipids();
                 updateCECondition();
                 refreshRegisteredLipidsTable();
@@ -967,7 +976,7 @@ namespace LipidCreator
                     break;                
             }
             lipidTabList[index] = newLipid;
-            lipidModifications[index] = -1;
+            lipidModifications[index] = 0;
             changeTab(index);
         }
         
@@ -1043,7 +1052,7 @@ namespace LipidCreator
         
         private void homeText3LinkClicked(Object sender, EventArgs e)
         {
-            string url = "http://www.google.de";
+            string url = "http://www.whateverjournal.com/doi/or/whatever";
             var si = new ProcessStartInfo(url);
             Process.Start(si);
         }
@@ -3064,7 +3073,7 @@ namespace LipidCreator
                 
                 if (result == LipidCategory.NoLipid) return;
                 
-                long lipidHash = lipidModifications[(int)result];
+                ulong lipidHash = lipidModifications[(int)result];
                 if (!lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
                 {
                     MessageBox.Show("An error happened during the modification of a lipid.", "Error during modification");
@@ -3073,7 +3082,7 @@ namespace LipidCreator
                 }
                 
                 int lipidRow = 0;
-                while (lipidRow < lipidCreator.registeredLipids.Count && (long)lipidCreator.registeredLipids[lipidRow] != lipidHash) lipidRow++;
+                while (lipidRow < lipidCreator.registeredLipids.Count && (ulong)lipidCreator.registeredLipids[lipidRow] != lipidHash) lipidRow++;
                 if (lipidRow >= lipidCreator.registeredLipids.Count)
                 {
                     MessageBox.Show("An error happened during the modification of a lipid. Lipid is not in list any more.", "Error during modification");
@@ -3081,7 +3090,7 @@ namespace LipidCreator
                     return;
                 }
                 
-                long newHash = 0;
+                ulong newHash = 0;
                 int tabIndex = 0;
                 switch (result)
                 {
@@ -3154,7 +3163,7 @@ namespace LipidCreator
                 LipidCategory result = checkPropertiesValid();
                 if (result == LipidCategory.NoLipid) return;
                 int tabIndex = 0;
-                long lipidHash = 0;
+                ulong lipidHash = 0;
                 
                 try {
                     switch (result)
@@ -3430,7 +3439,7 @@ namespace LipidCreator
             {
                 log.Debug("Refreshing lipids table");
                 registeredLipidsDatatable.Clear();
-                foreach (long lipidHash in lipidCreator.registeredLipids)
+                foreach (ulong lipidHash in lipidCreator.registeredLipids)
                 {
                     if (!lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
                     {
@@ -3456,7 +3465,7 @@ namespace LipidCreator
             int colIndex = ((DataGridView)sender).CurrentCell.ColumnIndex;
             if (((DataGridView)sender).Columns[colIndex].Name == "Edit")
             {
-                loadLipid((long)lipidCreator.registeredLipids[rowIndex]);
+                loadLipid((ulong)lipidCreator.registeredLipids[rowIndex]);
                 
             }
             else if (((DataGridView)sender).Columns[colIndex].Name == "Delete")
@@ -3469,7 +3478,7 @@ namespace LipidCreator
         
         
         
-        public void loadLipid(long lipidHash)
+        public void loadLipid(ulong lipidHash)
         {
             Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[lipidHash];
             int tabIndex = 0;
@@ -3536,7 +3545,7 @@ namespace LipidCreator
             lipidsGridview.InvokeIfRequired(() =>
             {
                 log.Debug("Deleting row " + rowIndex + " from lipids table");
-                long lipidHash = (long)lipidCreator.registeredLipids[rowIndex];
+                ulong lipidHash = (ulong)lipidCreator.registeredLipids[rowIndex];
                 Lipid currentRegisteredLipid = lipidCreator.registeredLipidDictionary[lipidHash];
                 int tabIndex = 0;
                 if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.Glycerolipid;
@@ -3562,7 +3571,7 @@ namespace LipidCreator
                     lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
                     lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
-                lipidCreator.registeredLipidDictionary.Remove((long)lipidCreator.registeredLipids[rowIndex]);
+                lipidCreator.registeredLipidDictionary.Remove((ulong)lipidCreator.registeredLipids[rowIndex]);
                 lipidCreator.registeredLipids.RemoveAt(rowIndex);
             });
 
@@ -3812,9 +3821,16 @@ namespace LipidCreator
             System.Windows.Forms.MenuItem PredefItem = (System.Windows.Forms.MenuItem)sender;
             string filePath = (string)PredefItem.Tag;
             
-            int[] importNumbers = lipidCreator.importLipidList(filePath, filterParameters);
-            refreshRegisteredLipidsTable();
-            MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
+            try
+            {
+                int[] importNumbers = lipidCreator.importLipidList(filePath, filterParameters);
+                refreshRegisteredLipidsTable();
+                MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
+            }
+            catch
+            {
+                MessageBox.Show ("An error occurred while importing the lipid list. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+            }
         }
         
         
@@ -3859,6 +3875,7 @@ namespace LipidCreator
                 else
                 {
                     MessageBox.Show("Could not read file, " + openFileDialog1.FileName, "Lipid list import");
+                    log.Error("Could not read file, " + openFileDialog1.FileName);
                 }
             }
         }
@@ -3872,6 +3889,7 @@ namespace LipidCreator
             if (lipidException == null || lipidException.precursorData.lipidHash == 0 || !lipidCreator.registeredLipidDictionary.ContainsKey(lipidException.precursorData.lipidHash))
             {
                 MessageBox.Show("Could not open fragment, it seems that the lipid assembly is not registered any more.");
+                log.Error("Could not open fragment, it seems that the lipid assembly is not registered any more.");
                 return;
             }
             loadLipid(lipidException.precursorData.lipidHash);
@@ -4060,7 +4078,18 @@ namespace LipidCreator
         
         protected void menuAboutClick(object sender, System.EventArgs e)
         {
-            AboutDialog aboutDialog = new AboutDialog ();
+            AboutDialog aboutDialog = new AboutDialog (lipidCreator);
+            aboutDialog.Owner = this;
+            aboutDialog.ShowInTaskbar = false;
+            aboutDialog.ShowDialog();
+            aboutDialog.Dispose();
+        }
+        
+
+        
+        protected void menuLogClick(object sender, System.EventArgs e)
+        {
+            AboutDialog aboutDialog = new AboutDialog (lipidCreator, true);
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
             aboutDialog.ShowDialog();

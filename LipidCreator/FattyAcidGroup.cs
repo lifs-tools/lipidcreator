@@ -128,19 +128,36 @@ namespace LipidCreator
         
         
         
-        public long getHashCode()
+        public ulong getHashCode()
         {
             unchecked
             {
-                long hashCode = chainType << 10;
-                hashCode += LipidCreator.HashCode(lengthInfo);
-                hashCode += LipidCreator.HashCode(dbInfo);
-                hashCode += LipidCreator.HashCode(hydroxylInfo);
-                hashCode += isLCB ? 2 : 8;
+                ulong hashCode = (ulong)(chainType << 10);
+                
+                int i = 1;
+                foreach(int c in carbonCounts)
+                {
+                    hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[c & 255], i & 63);
+                    i++;
+                }
+                foreach(int db in doubleBondCounts)
+                {
+                    hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[db & 255], i & 63);
+                    i++;
+                }
+                foreach(int h in hydroxylCounts)
+                {
+                    hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[h & 255], i & 63);
+                    i++;
+                }
+                
+                hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[isLCB ? 2 : 8], i & 63);
+                
                 foreach (string faType in faTypes.Keys.Where(x => faTypes[x]))
                 {
                     hashCode += LipidCreator.HashCode(faType);
                 }
+                
                 return hashCode;
             }
         }

@@ -96,7 +96,7 @@ namespace LipidCreator
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
                             
-                            long lipidHash = 0;
+                            ulong lipidHash = 0;
                             if (peh.lipid is Glycerolipid) lipidHash = ((Glycerolipid)peh.lipid).getHashCode();
                             else if (peh.lipid is Phospholipid) lipidHash = ((Phospholipid)peh.lipid).getHashCode();
                             else if (peh.lipid is Sphingolipid) lipidHash = ((Sphingolipid)peh.lipid).getHashCode();

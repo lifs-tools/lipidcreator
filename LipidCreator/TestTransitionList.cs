@@ -170,7 +170,7 @@ namespace LipidCreator
                     if (!lipid.adducts[adduct] || !lcf.headgroups[headgroup].adductRestrictions[adduct]) throw new Exception("Error: combination '" + headgroup + "' and '" + unitTestRow[3] + "' are not valid");
                     
                     
-                    long lipidHash = 0;
+                    ulong lipidHash = 0;
                     if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                     else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
                     else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();

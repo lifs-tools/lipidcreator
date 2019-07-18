@@ -106,6 +106,7 @@ namespace LipidCreator
         
             InitializeComponent();
             
+            
             // add predefined menu
             lipidModifications = Enumerable.Repeat(0UL, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
             changingTabForced = false;
@@ -136,7 +137,7 @@ namespace LipidCreator
                 }
             }
             tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
-            tutorial = new Tutorial(this);
+            if (!lipidCreator.errorOccurred) tutorial = new Tutorial(this);
             
             Rectangle r = Screen.FromControl(this).Bounds;
             double hgt = r.Height * 0.9;
@@ -226,6 +227,12 @@ namespace LipidCreator
             }
             lastCEInstrumentChecked = menuCollisionEnergyNone;
             
+            if (lipidCreator.errorOccurred)
+            {
+                menuFile.Enabled = false;
+                menuOptions.Enabled = false;
+                tabControl.Enabled = false;
+            }
         }
         
         

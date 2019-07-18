@@ -987,78 +987,82 @@ namespace LipidCreator
             int topGroupboxes = 30;
 
             
-            deleteImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/delete.png"), 32, 26);
-            editImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/edit.png"), 32, 26);
-            addImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/add.png"), 24, 24);
-            
             glHgListbox = new ListBox();
             plHgListbox = new ListBox();
             slHgListbox = new ListBox();
             medHgListbox = new ListBox();
-            
-            List<String> glHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerolipid])
+                
+            if (!lipidCreator.errorOccurred)
             {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && headgroup.Length > 3) glHgList.Add(headgroup);
-            }
-            glHgList.Sort();
+                deleteImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/delete.png"), 32, 26);
+                editImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/edit.png"), 32, 26);
+                addImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/add.png"), 24, 24);
             
-            List<String> medHgList = new List<String>();
-            foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.LipidMediator])
-            {
-                if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")) medHgList.Add(headgroup);
-            }
-            medHgList.Sort();
-            
-            
-            
-            glHgListbox.Items.AddRange(glHgList.ToArray());
-            //plHgListbox.Items.AddRange(plHgList.ToArray());
-            medHgListbox.Items.AddRange(medHgList.ToArray());
-            
-            cardioBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_backbones.png");
-            cardioBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe1.png");
-            cardioBackboneImageFA2e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe2.png");
-            cardioBackboneImageFA3e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe3.png");
-            cardioBackboneImageFA4e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe4.png");
-            cardioBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp1.png");
-            cardioBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp2.png");
-            cardioBackboneImageFA3p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp3.png");
-            cardioBackboneImageFA4p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp4.png");
-            glyceroBackboneImageOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_backbones.png");
-            glyceroBackboneImageFA1eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe1.png");
-            glyceroBackboneImageFA2eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe2.png");
-            glyceroBackboneImageFA3eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe3.png");
-            glyceroBackboneImageFA1pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp1.png");
-            glyceroBackboneImageFA2pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp2.png");
-            glyceroBackboneImageFA3pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp3.png");
-            glyceroBackboneImagePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_backbones_plant.png");
-            glyceroBackboneImageFA1ePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAe1.png");
-            glyceroBackboneImageFA2ePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAe2.png");
-            glyceroBackboneImageFA1pPlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAp1.png");
-            glyceroBackboneImageFA2pPlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAp2.png");
-            phosphoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_backbones.png");
-            phosphoBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAe1.png");
-            phosphoBackboneImageFA2e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAe2.png");
-            phosphoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp1.png");
-            phosphoBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp2.png");
-            phosphoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_backbone.png");
-            phosphoLysoBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAe.png");
-            phosphoLysoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAp.png");
-            sphingoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones.png");
-            sphingoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones_onlyLCB.png");
-            cholesterolBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/Ch.png");
-            cholesterolEsterBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/ChE.png");
-            glArrowImage = Image.FromFile(lipidCreator.prefixPath + "images/arrow.png");
+                
+                List<String> glHgList = new List<String>();
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerolipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && headgroup.Length > 3) glHgList.Add(headgroup);
+                }
+                glHgList.Sort();
+                
+                List<String> medHgList = new List<String>();
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.LipidMediator])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")) medHgList.Add(headgroup);
+                }
+                medHgList.Sort();
+                
+                
+                
+                glHgListbox.Items.AddRange(glHgList.ToArray());
+                //plHgListbox.Items.AddRange(plHgList.ToArray());
+                medHgListbox.Items.AddRange(medHgList.ToArray());
+                
+                cardioBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_backbones.png");
+                cardioBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe1.png");
+                cardioBackboneImageFA2e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe2.png");
+                cardioBackboneImageFA3e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe3.png");
+                cardioBackboneImageFA4e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAe4.png");
+                cardioBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp1.png");
+                cardioBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp2.png");
+                cardioBackboneImageFA3p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp3.png");
+                cardioBackboneImageFA4p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/CL_FAp4.png");
+                glyceroBackboneImageOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_backbones.png");
+                glyceroBackboneImageFA1eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe1.png");
+                glyceroBackboneImageFA2eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe2.png");
+                glyceroBackboneImageFA3eOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAe3.png");
+                glyceroBackboneImageFA1pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp1.png");
+                glyceroBackboneImageFA2pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp2.png");
+                glyceroBackboneImageFA3pOrig = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_FAp3.png");
+                glyceroBackboneImagePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_backbones_plant.png");
+                glyceroBackboneImageFA1ePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAe1.png");
+                glyceroBackboneImageFA2ePlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAe2.png");
+                glyceroBackboneImageFA1pPlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAp1.png");
+                glyceroBackboneImageFA2pPlant = Image.FromFile(lipidCreator.prefixPath + "images/backbones/GL_plant_FAp2.png");
+                phosphoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_backbones.png");
+                phosphoBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAe1.png");
+                phosphoBackboneImageFA2e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAe2.png");
+                phosphoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp1.png");
+                phosphoBackboneImageFA2p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_FAp2.png");
+                phosphoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_backbone.png");
+                phosphoLysoBackboneImageFA1e = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAe.png");
+                phosphoLysoBackboneImageFA1p = Image.FromFile(lipidCreator.prefixPath + "images/backbones/PL_lyso_FAp.png");
+                sphingoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones.png");
+                sphingoLysoBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/SL_backbones_onlyLCB.png");
+                cholesterolBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/Ch.png");
+                cholesterolEsterBackboneImage = Image.FromFile(lipidCreator.prefixPath + "images/backbones/ChE.png");
+                glArrowImage = Image.FromFile(lipidCreator.prefixPath + "images/arrow.png");
 
-            
-            glyceroBackboneImage = glyceroBackboneImageOrig;
-            glyceroBackboneImageFAe = glyceroBackboneImageFA1eOrig;
-            glyceroBackboneImageFA2e = glyceroBackboneImageFA2eOrig;
-            glyceroBackboneImageFA3e = glyceroBackboneImageFA3eOrig;
-            glyceroBackboneImageFA1p = glyceroBackboneImageFA1pOrig;
-            glyceroBackboneImageFA2p = glyceroBackboneImageFA2pOrig;
-            glyceroBackboneImageFA3p = glyceroBackboneImageFA3pOrig;
+                
+                glyceroBackboneImage = glyceroBackboneImageOrig;
+                glyceroBackboneImageFAe = glyceroBackboneImageFA1eOrig;
+                glyceroBackboneImageFA2e = glyceroBackboneImageFA2eOrig;
+                glyceroBackboneImageFA3e = glyceroBackboneImageFA3eOrig;
+                glyceroBackboneImageFA1p = glyceroBackboneImageFA1pOrig;
+                glyceroBackboneImageFA2p = glyceroBackboneImageFA2pOrig;
+                glyceroBackboneImageFA3p = glyceroBackboneImageFA3pOrig;
+            }
             
             
             clFA3Textbox = new TextBox();
@@ -1259,6 +1263,7 @@ namespace LipidCreator
             
             
             
+            
 
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
@@ -1285,10 +1290,11 @@ namespace LipidCreator
             
             
             homeTab.Text = "Home";
-            homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
+            if (!lipidCreator.errorOccurred) homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
             homeTab.Font = Font;
             
 
+            
             // tab for cardiolipins
             phospholipidsTab.Controls.Add(plStep1);
             plStep1.Controls.Add(clFA3Checkbox3);
@@ -1617,6 +1623,7 @@ namespace LipidCreator
             glHGLabel.Visible = false;
             
             
+            
 
             glPositiveAdduct.Width = 120;
             glPositiveAdduct.Location = new Point(leftGroupboxes - glPositiveAdduct.Width, topGroupboxes);
@@ -1819,7 +1826,6 @@ namespace LipidCreator
             plFA2Checkbox1.Text = "FA";
             plFA2Checkbox1.Checked = true;
             plFA2Checkbox1.CheckedChanged += new EventHandler(plF2Checkbox1CheckedChanged);
-            
             
             
             plTypeGroup.Location = new Point(400, 8);
@@ -2081,10 +2087,14 @@ namespace LipidCreator
             slNegAdductCheckbox4.Text = "+CH3COO⁻";
             slNegAdductCheckbox4.CheckedChanged += new EventHandler(slNegAdductCheckbox4CheckedChanged);
 
-            slPictureBox.Image = sphingoBackboneImage;
-            slPictureBox.Location = new Point(214 - (sphingoBackboneImage.Width >> 1), 159 - (sphingoBackboneImage.Height >> 1));
-            slPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-            slPictureBox.SendToBack();
+            if (!lipidCreator.errorOccurred)
+            {
+                slPictureBox.Image = sphingoBackboneImage;
+                slPictureBox.Location = new Point(214 - (sphingoBackboneImage.Width >> 1), 159 - (sphingoBackboneImage.Height >> 1));
+                slPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                slPictureBox.SendToBack();
+            }
+            
             
             
             
@@ -2172,6 +2182,7 @@ namespace LipidCreator
             chContainsEster.CheckedChanged += new EventHandler(chContainsEsterCheckedChanged);
             chContainsEster.BringToFront();
             
+            
             chFACombobox.BringToFront();
             chFATextbox.BringToFront();
             chFATextbox.Location = new Point(616, 258);
@@ -2205,7 +2216,6 @@ namespace LipidCreator
             chDBLabel.Visible = false;
             chHydroxylTextbox.Visible = false;
             chFAHydroxyLabel.Visible = false;
-            
             
             
             
@@ -2253,6 +2263,7 @@ namespace LipidCreator
             medNegAdductCheckbox4.Location = new Point(10, 75);
             medNegAdductCheckbox4.Text = "+CH3COO⁻";
             medNegAdductCheckbox4.Enabled = false;
+            
             
             medHgListbox.Location = new Point(34, 35);
             medHgListbox.Size = new Size(140, 260);
@@ -2349,6 +2360,7 @@ namespace LipidCreator
             filtersButton.Location = new Point(310, topLowButtons);
             filtersButton.BackColor = SystemColors.Control;
             filtersButton.Click += openFilterDialog;
+            
             
             
 

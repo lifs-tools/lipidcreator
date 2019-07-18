@@ -619,15 +619,38 @@ namespace LipidCreator
                 }
             }
             
-            
-            lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-            lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/goslin/LipidMaps.g4", PARSER_QUOTE);
-            
-            parserEventHandler = new ParserEventHandler(this);
-            lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/goslin/Goslin.g4", PARSER_QUOTE);
-            
-            listingParserEventHandler = new ListingParserEventHandler();
-            listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", PARSER_QUOTE);
+            try 
+            {
+                lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
+                lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/goslin/LipidMaps.g4", PARSER_QUOTE);
+            }
+            catch (Exception e)
+            {
+                log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/LipidMaps.g4': " + e);
+                errorOccurred = true;
+            }
+                
+            try 
+            {
+                parserEventHandler = new ParserEventHandler(this);
+                lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/goslin/Goslin.g4", PARSER_QUOTE);
+            }
+            catch (Exception e)
+            {
+                log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/Goslin.g4': " + e);
+                errorOccurred = true;
+            }
+                
+            try 
+            {
+                listingParserEventHandler = new ListingParserEventHandler();
+                listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", PARSER_QUOTE);
+            }
+            catch (Exception e)
+            {
+                log.Error("Unable to read grammar file '" + prefixPath + "data/listing.grammar': " + e);
+                errorOccurred = true;
+            }
             
         }
         

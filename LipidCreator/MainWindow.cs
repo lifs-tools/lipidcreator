@@ -263,9 +263,12 @@ namespace LipidCreator
                                 System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
                             }
                             CreatorGUI creatorGUIDev = new CreatorGUI(null);
-                            creatorGUIDev.lipidCreator.runMode = runMode;
-                            creatorGUIDev.asDeveloper = true;
-                            creatorGUIDev.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                            if (!creatorGUIDev.lipidCreatorInitError)
+                            {
+                                creatorGUIDev.lipidCreator.runMode = runMode;
+                                creatorGUIDev.asDeveloper = true;
+                                creatorGUIDev.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                            }
                             Application.Run(creatorGUIDev);
                             break;
                             
@@ -278,8 +281,11 @@ namespace LipidCreator
                             }
                             checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
-                            creatorGUI.lipidCreator.runMode = runMode;
-                            creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                            if (!creatorGUI.lipidCreatorInitError)
+                            {
+                                creatorGUI.lipidCreator.runMode = runMode;
+                                creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                            }
                             Application.Run(creatorGUI);
                             break;
                             

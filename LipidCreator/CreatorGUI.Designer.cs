@@ -2395,7 +2395,7 @@ namespace LipidCreator
             this.Controls.Add(lipidsGroupbox);
             if (!lipidCreatorInitError)
             {
-                this.Text = "LipidCreator  v" + LipidCreator.LC_RELEASE_NUMBER;
+                this.Text = "LipidCreator  v" + LipidCreator.LC_VERSION_NUMBER;
             }
             else
             {

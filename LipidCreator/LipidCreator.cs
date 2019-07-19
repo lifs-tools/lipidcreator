@@ -112,7 +112,9 @@ namespace LipidCreator
         [NonSerialized]
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
-        public static string LC_VERSION_NUMBER = "1.0.0";
+        public static string LC_VERSION_NUMBER = "1.0.0.0";
+        public static string LC_RELEASE_NUMBER = "1.0.0";
+        public static string LC_BUILD_NUMBER = "0";
         public static PlatformID LC_OS;
         public ArrayList registeredLipids;
         public Dictionary<ulong, Lipid> registeredLipidDictionary;
@@ -576,12 +578,13 @@ namespace LipidCreator
         
         public LipidCreator(string pipe)
         {
-        
             openedAsExternal = (pipe != null);
             skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
-            LC_VERSION_NUMBER = Application.ProductVersion;
+            LC_RELEASE_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString();
+            LC_BUILD_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString();
+            LC_VERSION_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LC_OS = Environment.OSVersion.Platform;
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());

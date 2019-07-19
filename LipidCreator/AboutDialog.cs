@@ -45,6 +45,7 @@ namespace LipidCreator
             InitializeComponent();
             if (log)
             {
+                Text = "Log messages";
                 showLogFile();
             }
             else

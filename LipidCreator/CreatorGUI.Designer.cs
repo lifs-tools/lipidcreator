@@ -932,7 +932,7 @@ namespace LipidCreator
             this.menuAbout.Click += new System.EventHandler (menuAboutClick);
 
             this.menuLog = new System.Windows.Forms.MenuItem ();
-            this.menuLog.Text = "Log";
+            this.menuLog.Text = "Log messages";
             this.menuLog.Click += new System.EventHandler (menuLogClick);
 
             this.menuDocs = new System.Windows.Forms.MenuItem();
@@ -2395,7 +2395,7 @@ namespace LipidCreator
             this.Controls.Add(lipidsGroupbox);
             if (!lipidCreatorInitError)
             {
-                this.Text = "LipidCreator  v" + LipidCreator.LC_VERSION_NUMBER;
+                this.Text = "LipidCreator  v" + LipidCreator.LC_RELEASE_NUMBER;
             }
             else
             {

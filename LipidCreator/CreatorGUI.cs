@@ -99,7 +99,7 @@ namespace LipidCreator
             catch
             {
                 lipidCreatorInitError = true;
-                MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message (Menu -> Help -> Log messages) and get in contact with the developers.", "LipidCreator: error occurred");
             }
             
             
@@ -306,7 +306,7 @@ namespace LipidCreator
                 catch
                 {
                     lipidCreatorInitError = true;
-                    MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                    MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message (Menu -> Help -> Log messages) and contact the developers.", "LipidCreator: error occurred");
                 }
                 resetAllLipids();
                 updateCECondition();
@@ -3855,7 +3855,7 @@ namespace LipidCreator
             }
             catch
             {
-                MessageBox.Show ("An error occurred while importing the lipid list. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
+                MessageBox.Show ("An error occurred while importing the lipid list. For more details, please read the log message and contact the developers.", "LipidCreator: error occurred");
             }
         }
         

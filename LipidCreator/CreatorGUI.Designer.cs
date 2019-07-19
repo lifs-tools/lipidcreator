@@ -932,7 +932,7 @@ namespace LipidCreator
             this.menuAbout.Click += new System.EventHandler (menuAboutClick);
 
             this.menuLog = new System.Windows.Forms.MenuItem ();
-            this.menuLog.Text = "Log";
+            this.menuLog.Text = "Log messages";
             this.menuLog.Click += new System.EventHandler (menuLogClick);
 
             this.menuDocs = new System.Windows.Forms.MenuItem();

@@ -876,7 +876,6 @@ namespace LipidCreator
             this.menuExit.Click += new System.EventHandler (menuExitClick);
             
             
-            
             this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.menuTranslate.Text = "Lipid name tr&anslator";
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
@@ -922,7 +921,7 @@ namespace LipidCreator
             this.menuStatistics.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
             this.menuStatistics.Text = "Send &anonymous statistics";
             this.menuStatistics.Click += new System.EventHandler (statisticsMenu);
-            this.menuStatistics.Checked = lipidCreator.enableAnalytics;
+            if (!lipidCreatorInitError) this.menuStatistics.Checked = lipidCreator.enableAnalytics;
 
             this.menuHelp = new System.Windows.Forms.MenuItem ();
             this.menuHelp.Text = "&Help";
@@ -947,6 +946,8 @@ namespace LipidCreator
             tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(tabControl_DrawItem);
 
+            
+            
             
             this.Size = new System.Drawing.Size(windowWidth, minWindowHeight);
             this.MinimumSize = new System.Drawing.Size(windowWidth, minWindowHeight);
@@ -992,7 +993,7 @@ namespace LipidCreator
             slHgListbox = new ListBox();
             medHgListbox = new ListBox();
                 
-            if (!lipidCreator.errorOccurred)
+            if (!lipidCreatorInitError)
             {
                 deleteImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/delete.png"), 32, 26);
                 editImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/edit.png"), 32, 26);
@@ -1290,7 +1291,7 @@ namespace LipidCreator
             
             
             homeTab.Text = "Home";
-            if (!lipidCreator.errorOccurred) homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
+            if (!lipidCreatorInitError) homeTab.BackgroundImage = Image.FromFile(lipidCreator.prefixPath + "images/LIFS/hometab.png");
             homeTab.Font = Font;
             
 
@@ -2087,7 +2088,7 @@ namespace LipidCreator
             slNegAdductCheckbox4.Text = "+CH3COO⁻";
             slNegAdductCheckbox4.CheckedChanged += new EventHandler(slNegAdductCheckbox4CheckedChanged);
 
-            if (!lipidCreator.errorOccurred)
+            if (!lipidCreatorInitError)
             {
                 slPictureBox.Image = sphingoBackboneImage;
                 slPictureBox.Location = new Point(214 - (sphingoBackboneImage.Width >> 1), 159 - (sphingoBackboneImage.Height >> 1));
@@ -2275,7 +2276,7 @@ namespace LipidCreator
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             
             medPictureBox.Location = new Point(210, 30);
-            if (medHgListbox.Items.Count > 0)
+            if (!lipidCreatorInitError && medHgListbox.Items.Count > 0)
             {
                 medPictureBox.Image = Image.FromFile(lipidCreator.headgroups[medHgListbox.Items[0].ToString()].pathToImage);
                 medPictureBox.Top = mediatorMiddleHeight - (medPictureBox.Image.Height >> 1);
@@ -2293,13 +2294,16 @@ namespace LipidCreator
             lipidsGridview.MultiSelect = false;
             lipidsGridview.RowTemplate.Height = 34;
             lipidsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
-            lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
-            lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
             lipidsGridview.RowHeadersVisible = false;
             lipidsGridview.ScrollBars = ScrollBars.Vertical;
-            lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
-
+            if (!lipidCreatorInitError)
+            {
+                lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
+                lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
+                lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
+                lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
+            }
+            
             lipidsGridviewPanel = new Panel();
             lipidsGridviewPanel.Dock = DockStyle.Fill;
             lipidsGridviewPanel.AutoSize = true;
@@ -2313,9 +2317,9 @@ namespace LipidCreator
             lipidsReviewButtonPanel.Dock = DockStyle.Bottom;
             lipidsReviewButtonPanel.Controls.Add(openReviewFormButton);
 
-			lipidsGroupbox.Dock = DockStyle.Bottom;
-			lipidsGroupbox.Text = "Lipid list";
-			lipidsGroupbox.Height = minLipidGridHeight;
+            lipidsGroupbox.Dock = DockStyle.Bottom;
+            lipidsGroupbox.Text = "Lipid list";
+            lipidsGroupbox.Height = minLipidGridHeight;
             lipidsGroupbox.Controls.Add(lipidsGridviewPanel);
             lipidsGroupbox.Controls.Add(lipidsReviewButtonPanel);
 
@@ -2389,7 +2393,14 @@ namespace LipidCreator
 
             this.Controls.Add(tabControl);
             this.Controls.Add(lipidsGroupbox);
-            this.Text = "LipidCreator  v" + LipidCreator.LC_VERSION_NUMBER;
+            if (!lipidCreatorInitError)
+            {
+                this.Text = "LipidCreator  v" + LipidCreator.LC_VERSION_NUMBER;
+            }
+            else
+            {
+                this.Text = "LipidCreator  -  error mode";
+            }
             this.MaximizeBox = false;
             this.Padding = new Padding(5);
 

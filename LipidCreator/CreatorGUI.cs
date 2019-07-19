@@ -78,20 +78,29 @@ namespace LipidCreator
         public bool asDeveloper = false;
         public static float FONT_SIZE_FACTOR;
         public static readonly float REGULAR_FONT_SIZE = 8.25f;
+        public bool lipidCreatorInitError = false;
+        public bool openedAsExternal = false;
+        public string prefixPath = "";
         
-        public CreatorGUI(string inputParameters)
+        public CreatorGUI(string _inputParameters)
         {
         
             FONT_SIZE_FACTOR = 96.0f / CreateGraphics().DpiX;
+            inputParameters = _inputParameters;
+            openedAsExternal = (inputParameters != null);
+            prefixPath = (openedAsExternal ? LipidCreator.EXTERNAL_PREFIX_PATH : "");
             
-            this.inputParameters = inputParameters;
-            this.lipidCreator = new LipidCreator(this.inputParameters);
-            if (lipidCreator.errorOccurred)
+            try
             {
+                this.lipidCreator = new LipidCreator(inputParameters);
+                currentIndex = LipidCategory.NoLipid;
+                resetAllLipids();
+            }
+            catch
+            {
+                lipidCreatorInitError = true;
                 MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
             }
-            currentIndex = LipidCategory.NoLipid;
-            resetAllLipids();
             
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -107,131 +116,136 @@ namespace LipidCreator
             InitializeComponent();
             
             
-            // add predefined menu
-            lipidModifications = Enumerable.Repeat(0UL, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
-            changingTabForced = false;
-            string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
-            if(Directory.Exists(predefinedFolder)) 
+            if (!lipidCreatorInitError)
             {
-                string [] subdirectoryEntries = Directory.GetDirectories(predefinedFolder);
-                foreach (string subdirectoryEntry in subdirectoryEntries)
+            
+                // add predefined menu
+                lipidModifications = Enumerable.Repeat(0UL, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
+                changingTabForced = false;
+                string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
+                if(Directory.Exists(predefinedFolder)) 
                 {
-                    string subEntry = subdirectoryEntry.Replace(predefinedFolder + Path.DirectorySeparatorChar, "");   
-                    System.Windows.Forms.MenuItem predefFolder = new System.Windows.Forms.MenuItem();
-                    predefFolder.Text = subEntry;
-                    menuImportPredefined.MenuItems.Add(predefFolder);
-                    string [] subdirectoryFiles = Directory.GetFiles(subdirectoryEntry);
-                    foreach(string subdirectoryFile in subdirectoryFiles)
+                    string [] subdirectoryEntries = Directory.GetDirectories(predefinedFolder);
+                    foreach (string subdirectoryEntry in subdirectoryEntries)
                     {
-                        string subFile = subdirectoryFile.Replace(subdirectoryEntry + Path.DirectorySeparatorChar, "");
-                        string upperFile = subFile.ToUpper();
-                        if (upperFile.EndsWith(".CSV"))
+                        string subEntry = subdirectoryEntry.Replace(predefinedFolder + Path.DirectorySeparatorChar, "");   
+                        System.Windows.Forms.MenuItem predefFolder = new System.Windows.Forms.MenuItem();
+                        predefFolder.Text = subEntry;
+                        menuImportPredefined.MenuItems.Add(predefFolder);
+                        string [] subdirectoryFiles = Directory.GetFiles(subdirectoryEntry);
+                        foreach(string subdirectoryFile in subdirectoryFiles)
                         {
-                            System.Windows.Forms.MenuItem predefFile = new System.Windows.Forms.MenuItem();
-                            predefFile.Text = subFile.Remove(subFile.Length - 4);
-                            predefFile.Tag = subdirectoryFile;
-                            predefFile.Click += new System.EventHandler (menuImportPredefinedClick);
-                            predefFolder.MenuItems.Add(predefFile);
+                            string subFile = subdirectoryFile.Replace(subdirectoryEntry + Path.DirectorySeparatorChar, "");
+                            string upperFile = subFile.ToUpper();
+                            if (upperFile.EndsWith(".CSV"))
+                            {
+                                System.Windows.Forms.MenuItem predefFile = new System.Windows.Forms.MenuItem();
+                                predefFile.Text = subFile.Remove(subFile.Length - 4);
+                                predefFile.Tag = subdirectoryFile;
+                                predefFile.Click += new System.EventHandler (menuImportPredefinedClick);
+                                predefFolder.MenuItems.Add(predefFile);
+                            }
                         }
                     }
                 }
-            }
-            tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
-            if (!lipidCreator.errorOccurred) tutorial = new Tutorial(this);
-            
-            Rectangle r = Screen.FromControl(this).Bounds;
-            double hgt = r.Height * 0.9;
-            if (hgt > minWindowHeight)
-            {
-                this.Width = (int)hgt;
-            }
-            glPosAdductCheckbox1.Enabled = false;
-            glPosAdductCheckbox2.Enabled = false;
-            glPosAdductCheckbox3.Enabled = false;
-            glNegAdductCheckbox1.Enabled = false;
-            glNegAdductCheckbox2.Enabled = false;
-            glNegAdductCheckbox3.Enabled = false;
-            glNegAdductCheckbox4.Enabled = false;
-            
-            plPosAdductCheckbox1.Enabled = false;
-            plPosAdductCheckbox2.Enabled = false;
-            plPosAdductCheckbox3.Enabled = false;
-            plNegAdductCheckbox1.Enabled = false;
-            plNegAdductCheckbox2.Enabled = false;
-            plNegAdductCheckbox3.Enabled = false;
-            plNegAdductCheckbox4.Enabled = false;
-            
-            slPosAdductCheckbox1.Enabled = false;
-            slPosAdductCheckbox2.Enabled = false;
-            slPosAdductCheckbox3.Enabled = false;
-            slNegAdductCheckbox1.Enabled = false;
-            slNegAdductCheckbox2.Enabled = false;
-            slNegAdductCheckbox3.Enabled = false;
-            slNegAdductCheckbox4.Enabled = false;
-            
-            chPosAdductCheckbox1.Enabled = false;
-            chPosAdductCheckbox2.Enabled = false;
-            chPosAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox1.Enabled = false;
-            chNegAdductCheckbox2.Enabled = false;
-            chNegAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox4.Enabled = false;
-            
-            medNegAdductCheckbox1.Enabled = false;
-            medNegAdductCheckbox2.Enabled = false;
-            medNegAdductCheckbox3.Enabled = false;
-            medNegAdductCheckbox4.Enabled = false;
-            changeTab(0);
-            
-            // add instruments into menu for collision energy optimization
-            for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
-            {
-                string instrument = (string)lipidCreator.availableInstruments[i];
-                if (lipidCreator.msInstruments.ContainsKey(instrument)){
-                    int numModes = lipidCreator.msInstruments[instrument].modes.Count;
-                    
-                    foreach (string instrumentMode in lipidCreator.msInstruments[instrument].modes)
-                    {
-                        MenuItem instrumentItem = new MenuItem();
-                        instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
-                        instrumentItem.RadioCheck = true;
-                        instrumentItem.Tag = new string[]{instrument, ""};
+                tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
+                if (!lipidCreatorInitError) tutorial = new Tutorial(this);
+                
+                Rectangle r = Screen.FromControl(this).Bounds;
+                double hgt = r.Height * 0.9;
+                if (hgt > minWindowHeight)
+                {
+                    this.Width = (int)hgt;
+                }
+                glPosAdductCheckbox1.Enabled = false;
+                glPosAdductCheckbox2.Enabled = false;
+                glPosAdductCheckbox3.Enabled = false;
+                glNegAdductCheckbox1.Enabled = false;
+                glNegAdductCheckbox2.Enabled = false;
+                glNegAdductCheckbox3.Enabled = false;
+                glNegAdductCheckbox4.Enabled = false;
+                
+                plPosAdductCheckbox1.Enabled = false;
+                plPosAdductCheckbox2.Enabled = false;
+                plPosAdductCheckbox3.Enabled = false;
+                plNegAdductCheckbox1.Enabled = false;
+                plNegAdductCheckbox2.Enabled = false;
+                plNegAdductCheckbox3.Enabled = false;
+                plNegAdductCheckbox4.Enabled = false;
+                
+                slPosAdductCheckbox1.Enabled = false;
+                slPosAdductCheckbox2.Enabled = false;
+                slPosAdductCheckbox3.Enabled = false;
+                slNegAdductCheckbox1.Enabled = false;
+                slNegAdductCheckbox2.Enabled = false;
+                slNegAdductCheckbox3.Enabled = false;
+                slNegAdductCheckbox4.Enabled = false;
+                
+                chPosAdductCheckbox1.Enabled = false;
+                chPosAdductCheckbox2.Enabled = false;
+                chPosAdductCheckbox3.Enabled = false;
+                chNegAdductCheckbox1.Enabled = false;
+                chNegAdductCheckbox2.Enabled = false;
+                chNegAdductCheckbox3.Enabled = false;
+                chNegAdductCheckbox4.Enabled = false;
+                
+                medNegAdductCheckbox1.Enabled = false;
+                medNegAdductCheckbox2.Enabled = false;
+                medNegAdductCheckbox3.Enabled = false;
+                medNegAdductCheckbox4.Enabled = false;
+                changeTab(0);
+                
+                // add instruments into menu for collision energy optimization
+                for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
+                {
+                    string instrument = (string)lipidCreator.availableInstruments[i];
+                    if (lipidCreator.msInstruments.ContainsKey(instrument)){
+                        int numModes = lipidCreator.msInstruments[instrument].modes.Count;
                         
-                        switch (instrumentMode)
+                        foreach (string instrumentMode in lipidCreator.msInstruments[instrument].modes)
                         {
-                            case "PRM":
-                                if (numModes > 1) instrumentItem.Text += " (PRM)";
-                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
-                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.PRM.ToString();
-                                break;
-                                
-                            case "SRM":
-                                if (numModes > 1) instrumentItem.Text += " (SRM)";
-                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
-                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
-                                break;
+                            MenuItem instrumentItem = new MenuItem();
+                            instrumentItem.Text = lipidCreator.msInstruments[instrument].model;
+                            instrumentItem.RadioCheck = true;
+                            instrumentItem.Tag = new string[]{instrument, ""};
                             
-                            case "SIM/SRM":
-                                if (numModes > 1) instrumentItem.Text += " (SIM/SRM)";
-                                instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
-                                ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
-                                break;
+                            switch (instrumentMode)
+                            {
+                                case "PRM":
+                                    if (numModes > 1) instrumentItem.Text += " (PRM)";
+                                    instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypePRM);
+                                    ((string[])instrumentItem.Tag)[1] = MonitoringTypes.PRM.ToString();
+                                    break;
+                                    
+                                case "SRM":
+                                    if (numModes > 1) instrumentItem.Text += " (SRM)";
+                                    instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                    ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
+                                    break;
                                 
-                            default:
-                                log.Error("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
-                                break;
+                                case "SIM/SRM":
+                                    if (numModes > 1) instrumentItem.Text += " (SIM/SRM)";
+                                    instrumentItem.Click += new System.EventHandler (changeInstrumentForCEtypeSRM);
+                                    ((string[])instrumentItem.Tag)[1] = MonitoringTypes.SRM.ToString();
+                                    break;
+                                    
+                                default:
+                                    log.Error("Error: monitoring mode '" + instrumentMode + "' not supported for instrument '" + lipidCreator.msInstruments[instrument].model + "'");
+                                    break;
+                            }
+                            menuCollisionEnergy.MenuItems.Add(instrumentItem);
                         }
-                        menuCollisionEnergy.MenuItems.Add(instrumentItem);
                     }
                 }
+                lastCEInstrumentChecked = menuCollisionEnergyNone;
             }
-            lastCEInstrumentChecked = menuCollisionEnergyNone;
-            
-            if (lipidCreator.errorOccurred)
+            else
             {
                 menuFile.Enabled = false;
                 menuOptions.Enabled = false;
                 tabControl.Enabled = false;
+                openReviewFormButton.Enabled = false;
+                lipidsGridview.Enabled = false;
             }
         }
         
@@ -284,9 +298,14 @@ namespace LipidCreator
             if (verify) mbr = MessageBox.Show ("You are going to reset LipidCreator. All information and settings will be discarded. Are you sure?", "Reset LipidCreator", MessageBoxButtons.YesNo);
             if (!verify || (verify && mbr == DialogResult.Yes))
             {
-                lipidCreator = new LipidCreator(inputParameters);
-                if (lipidCreator.errorOccurred)
+                lipidCreatorInitError = false;
+                try
                 {
+                    lipidCreator = new LipidCreator(inputParameters);
+                }
+                catch
+                {
+                    lipidCreatorInitError = true;
                     MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message and get in contact with the developers.", "LipidCreator: error occurred");
                 }
                 resetAllLipids();
@@ -4085,7 +4104,7 @@ namespace LipidCreator
         
         protected void menuAboutClick(object sender, System.EventArgs e)
         {
-            AboutDialog aboutDialog = new AboutDialog (lipidCreator);
+            AboutDialog aboutDialog = new AboutDialog (this);
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
             aboutDialog.ShowDialog();
@@ -4096,7 +4115,7 @@ namespace LipidCreator
         
         protected void menuLogClick(object sender, System.EventArgs e)
         {
-            AboutDialog aboutDialog = new AboutDialog (lipidCreator, true);
+            AboutDialog aboutDialog = new AboutDialog (this, true);
             aboutDialog.Owner = this;
             aboutDialog.ShowInTaskbar = false;
             aboutDialog.ShowDialog();

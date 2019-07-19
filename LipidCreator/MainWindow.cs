@@ -49,8 +49,17 @@ namespace LipidCreator
         
         public static void printHelp(string option = "")
         {
-            LipidCreator lc = new LipidCreator(null);
-            lc.runMode = runMode;
+            LipidCreator lc = null;
+            try
+            {
+                lc = new LipidCreator(null);
+                lc.runMode = runMode;
+            }
+            catch
+            {
+                log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidreator.log' and get in contact with the developers.");
+                return;
+            }
             StringBuilder b;
             switch (option)
             {
@@ -147,7 +156,7 @@ namespace LipidCreator
                     break;
             }
             
-            System.Environment.Exit(1);
+            Environment.Exit(1);
         }
         
         
@@ -249,7 +258,10 @@ namespace LipidCreator
                         case "dev":
                             runMode = RunMode.standalone;
                             checkForAnalytics(runMode, false);
-                            System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
+                            if (File.Exists("data/lipidcreator.log"))
+                            {
+                                System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
+                            }
                             CreatorGUI creatorGUIDev = new CreatorGUI(null);
                             creatorGUIDev.lipidCreator.runMode = runMode;
                             creatorGUIDev.asDeveloper = true;
@@ -260,7 +272,10 @@ namespace LipidCreator
                         
                         case "external":
                             runMode = RunMode.external;
-                            System.IO.File.WriteAllText(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log", string.Empty); // Clearing the log file
+                            if (File.Exists(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log"))
+                            {
+                                System.IO.File.WriteAllText(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log", string.Empty); // Clearing the log file
+                            }
                             checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
                             creatorGUI.lipidCreator.runMode = runMode;
@@ -321,10 +336,18 @@ namespace LipidCreator
                                             }
                                         }
                                         
-                                        LipidCreator lc = new LipidCreator(null);
-                                        lc.runMode = RunMode.commandline;
-                                        lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
-                                        
+                                        LipidCreator lc = null;
+                                        try
+                                        {
+                                            lc = new LipidCreator(null);
+                                            lc.runMode = RunMode.commandline;
+                                            lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                                        }
+                                        catch
+                                        {
+                                            log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidreator.log' and get in contact with the developers.");
+                                            return;
+                                        }
                                         ArrayList parsedLipids = lc.translate(lipidNames);
                                         
                                         
@@ -440,10 +463,19 @@ namespace LipidCreator
                                 }
                                 
                                 
+                                LipidCreator lc = null;
+                                try
+                                {
+                                    lc = new LipidCreator(null);
+                                    lc.runMode = runMode;
+                                    lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                                }
+                                catch
+                                {
+                                    log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidreator.log' and get in contact with the developers.");
+                                    return;
+                                }
                                 
-                                LipidCreator lc = new LipidCreator(null);
-                                lc.runMode = runMode;
-                                lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 
                                 if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
                                 
@@ -523,15 +555,31 @@ namespace LipidCreator
                                 string outputCSV = args[2];
                                 string instrument = args[3];
                                 
+                                LipidCreator lc = null;
+                                try
+                                {
+                                    lc = new LipidCreator(null);
+                                    lc.runMode = runMode;
+                                    lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                                }
+                                catch
+                                {
+                                    log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidreator.log' and get in contact with the developers.");
+                                    return;
+                                }
                                 
-                                LipidCreator lc = new LipidCreator(null);
-                                lc.runMode = runMode;
-                                lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
-                                
-                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("transitionlist");
+                                if (instrument != "" && (!lc.msInstruments.ContainsKey(instrument) || lc.msInstruments[instrument].minCE < 0)) printHelp("library");
                                 
                                 lc.selectedInstrumentForCE = instrument;
-                                lc.importLipidList(inputCSV);
+                                try 
+                                {
+                                    lc.importLipidList(inputCSV);
+                                }
+                                catch
+                                {
+                                    log.Error("An error occurred while importing the lipid list. Please check if the file exists and if has the correct formatting.");
+                                    return;
+                                }
                                 lc.createPrecursorList();
                                 lc.createBlib(outputCSV);
                             }
@@ -549,10 +597,13 @@ namespace LipidCreator
             {
                 runMode = RunMode.standalone;
                 checkForAnalytics(runMode, false);
-                System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
+                if (File.Exists("data/lipidcreator.log")) System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
                 CreatorGUI creatorGUI = new CreatorGUI(null);
-                creatorGUI.lipidCreator.runMode = runMode;
-                creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                if (!creatorGUI.lipidCreatorInitError)
+                {
+                    creatorGUI.lipidCreator.runMode = runMode;
+                    creatorGUI.lipidCreator.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
+                }
                 Application.Run(creatorGUI);
             }
         }

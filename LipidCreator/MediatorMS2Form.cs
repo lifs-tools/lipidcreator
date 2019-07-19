@@ -207,7 +207,6 @@ namespace LipidCreator
             string lipidClass = deleteList.Name.Equals("checkedListBoxMonoIsotopicFragments") ? medHgListbox.SelectedItem.ToString() : deuteratedMediatorHeadgroups.SelectedItem.ToString();
             string fragmentName = (string)deleteList.Items[deleteIndex];
             bool userDefined = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName].userDefined;
-            Console.WriteLine(lipidClass + " " + fragmentName);
             if (userDefined){
                 if (isMonoisotopic){
                     currentLipid.positiveFragments[lipidClass].Remove(fragmentName);

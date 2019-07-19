@@ -35,12 +35,12 @@ namespace LipidCreator
 {
     public partial class AboutDialog : Form
     {
-        public LipidCreator lipidCreator;
+        public CreatorGUI creatorGUI;
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutDialog));
     
-        public AboutDialog(LipidCreator _lipidCreator, bool log = false)
+        public AboutDialog(CreatorGUI _creatorGUI, bool log = false)
         {
-            lipidCreator = _lipidCreator;
+            creatorGUI = _creatorGUI;
         
             InitializeComponent();
             if (log)
@@ -85,22 +85,29 @@ namespace LipidCreator
             
             try
             {
-                string logFile = lipidCreator.prefixPath + "data/lipidcreator.log";
-                Console.WriteLine(logFile);
+                string logFile = creatorGUI.prefixPath + "data/lipidcreator.log";
                 if (File.Exists(logFile))
                 {
                     using (FileStream fileStream = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
                         using (StreamReader streamReader = new StreamReader(fileStream))
                         {
-                        this.textLibraryName.Text = streamReader.ReadToEnd();
+                            this.textLibraryName.Text = streamReader.ReadToEnd();
                         }
                     }
+                }
+                else {
+                    throw new Exception("");
                 }
             }
             catch (Exception e)
             {
                 this.textLibraryName.Text = "Log file could not be opened." + e;
+                
+                if (creatorGUI.openedAsExternal)
+                {
+                    this.textLibraryName.Text = "\n\nPlease be sure, that you installed LipidCreator in Skyline using the zip file with the name 'LipidCreator.zip'. Any renaming of the file before installation will cause a malfunction of LipidCreator. In case, please uninstall LipidCreator in Skyline, rename the zip file and re-install LipidCreator again.";
+                }
                 log.Error("Log file could not be opened.");
             }
         }

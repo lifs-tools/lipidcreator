@@ -133,7 +133,6 @@ namespace LipidCreator
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
-        public bool errorOccurred = false;
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -259,8 +258,8 @@ namespace LipidCreator
                             string fragmentFile = prefixPath + tokens[3];
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
-                                log.Error("Error in line (" + lineCounter + "): file '" + fragmentFile + "' does not exist or can not be opened.");
-                                errorOccurred = true;
+                                log.Error("At line " + lineCounter + ": file '" + fragmentFile + "' does not exist or can not be opened.");
+                                throw new Exception();
                             }
                             int charge = Convert.ToInt32(tokens[4]);
                             Adduct adduct = Lipid.chargeToAdduct[charge];
@@ -271,13 +270,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + ms2FragmentsFile + "' in line '" + lineCounter + "' could not be read:", e);
-                    errorOccurred = true;
+                    throw new Exception();
                 }
             }
             else
             {
                 log.Error("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
-                errorOccurred = true;
+                throw new Exception();
             }
             
             
@@ -336,7 +335,8 @@ namespace LipidCreator
                             string precursorFile = prefixPath + tokens[9];
                             if (!File.Exists(precursorFile))
                             {
-                                throw new Exception("Error (" + lineCounter + "): precursor file " + precursorFile + " does not exist or can not be opened.");
+                                log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
+                                throw new Exception();
                             }
                             headgroup.pathToImage = precursorFile;
                             headgroup.adductRestrictions.Add("+H", tokens[10].Equals("Yes"));
@@ -360,7 +360,8 @@ namespace LipidCreator
                                 }
                                 else
                                 {
-                                    throw new Exception("cannot find monoisotopic class");
+                                    log.Error("cannot find monoisotopic class in headgroups file.");
+                                    throw new Exception();
                                 }
                             }
                             
@@ -371,13 +372,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:", e);
-                    errorOccurred = true;
+                    throw new Exception();
                 }
             }
             else
             {
                 log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
-                errorOccurred = true;
+                throw new Exception();
             }
             
             HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
@@ -404,7 +405,7 @@ namespace LipidCreator
                     if (blocks.Count > 0)
                     {
                         log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
-                        errorOccurred = true;
+                        throw new Exception();
                     }
                 }
             }
@@ -445,13 +446,13 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     log.Error("The file '" + instrumentsFile + "' in line '" + lineCounter + "' could not be read:", e);
-                    errorOccurred = true;
+                    throw new Exception();
                 }
             }
             else
             {
                 log.Error("Error: file " + instrumentsFile + " does not exist or can not be opened.");
-                errorOccurred = true;
+                throw new Exception();
             }
             
             
@@ -491,7 +492,8 @@ namespace LipidCreator
 
                                     if (tokens.Length != nTokens)
                                     {
-                                        throw new Exception("Invalid line in file, number of columns in line must equal number of columns in header!");
+                                        log.Error("Invalid line in file, number of columns in line must equal number of columns in header!");
+                                        throw new Exception();
                                     }
 
                                     string instrument = tokens[columnKeys["instrument"]];
@@ -528,7 +530,8 @@ namespace LipidCreator
                                     }
                                     else
                                     {
-                                        throw new Exception("ParamKey for " + instrument + " " + lipidClass + " " + precursorAdduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
+                                        log.Error("ParamKey for " + instrument + " " + lipidClass + " " + precursorAdduct + " " + fragment + " " + paramKey + " was already assigned! ParamKeys can only be assigned once for any unique combination!");
+                                        throw new Exception();
                                     }
                                 }
                             }
@@ -539,14 +542,14 @@ namespace LipidCreator
                     catch (Exception e)
                     {
                         log.Error("Encountered an error in file '" + ceParametersFile + "' on line '" + lineCounter + "': ", e);
-                        errorOccurred = true;
+                        throw new Exception();
                     }
                 }
             }
             else
             {
                 log.Error("Error: directory " + ceParametersDir + " does not exist or can not be opened.");
-                errorOccurred = true;
+                throw new Exception();
             }
             
             string analyticsFile = prefixPath + "data/analytics.txt";
@@ -606,7 +609,7 @@ namespace LipidCreator
                 if (!headgroups.ContainsKey(lipidClass))
                 {
                     log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in headgroups table");
-                    errorOccurred = true;
+                    throw new Exception();
                 }
             }
             
@@ -615,7 +618,7 @@ namespace LipidCreator
                 if (!allFragments.ContainsKey(lipidClass))
                 {
                     log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
-                    errorOccurred = true;
+                    throw new Exception();
                 }
             }
             
@@ -627,7 +630,7 @@ namespace LipidCreator
             catch (Exception e)
             {
                 log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/LipidMaps.g4': " + e);
-                errorOccurred = true;
+                throw new Exception();
             }
                 
             try 
@@ -638,7 +641,7 @@ namespace LipidCreator
             catch (Exception e)
             {
                 log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/Goslin.g4': " + e);
-                errorOccurred = true;
+                throw new Exception();
             }
                 
             try 
@@ -649,7 +652,7 @@ namespace LipidCreator
             catch (Exception e)
             {
                 log.Error("Unable to read grammar file '" + prefixPath + "data/listing.grammar': " + e);
-                errorOccurred = true;
+                throw new Exception();
             }
             
         }

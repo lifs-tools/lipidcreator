@@ -176,7 +176,7 @@ namespace LipidCreator
         private void checkedListBoxPositiveMouseHover(object sender, MouseEventArgs e)
         {
 
-            toolTip1.Hide(this.checkedListBoxPositiveFragments);
+            
             toolTip1.SetToolTip(this.checkedListBoxNegativeFragments, "");
             Point point = checkedListBoxPositiveFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxPositiveFragments.IndexFromPoint(point);
@@ -226,6 +226,7 @@ namespace LipidCreator
             }
             else
             {
+                toolTip1.Hide(this.checkedListBoxPositiveFragments);
                 this.checkedListBoxPositiveFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
                 hoveredIndex = -1;
@@ -238,7 +239,6 @@ namespace LipidCreator
         private void checkedListBoxNegativeMouseHover(object sender, MouseEventArgs e)
         {
 
-            toolTip1.Hide(this.checkedListBoxNegativeFragments);
             toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
@@ -288,6 +288,7 @@ namespace LipidCreator
             }
             else
             {
+                toolTip1.Hide(this.checkedListBoxNegativeFragments);
                 this.checkedListBoxNegativeFragments.ContextMenu = null;
                 pictureBoxFragments.Image = fragmentComplete;
                 hoveredIndex = -1;

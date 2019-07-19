@@ -69,6 +69,10 @@ namespace LipidCreator
             this.menuFragmentItem1 = new System.Windows.Forms.MenuItem();
             this.menuFragmentItem2 = new System.Windows.Forms.MenuItem();
             toolTip1 = new System.Windows.Forms.ToolTip();
+            //toolTip1.ShowAlways = true;
+            toolTip1.InitialDelay = 2000;
+            //toolTip1.ReshowDelay = 500;
+            //toolTip1.AutoPopDelay = 2000;
             this.tabPages = new ArrayList();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).BeginInit();
             this.tabControlFragments.SuspendLayout();

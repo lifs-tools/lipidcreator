@@ -29,14 +29,14 @@ SOFTWARE.
 
 Requirements:
  - either Windows Vista / 7 / 8 / 10 (only 64 bit)
- - or Ubuntu 16.04 or higher (with 'mono-complete' package installed, only 64 bit)
+ - or Ubuntu 16.04 or higher (with 'mono-complete' package installed [1], only 64 bit)
  - at least 256MB main memory or higher
  
 
 Installation for standalone mode:
 No installation required, please click on 'LipidCreator.exe' to run the software.
 
-Installation as external program in Skyline [1]:
+Installation as external program in Skyline [2]:
  1) Open Skyline with a blank document
  2) Go in the menu on 'Tools' -> 'External Tools...'
  3) Click on 'Add' -> 'From File'
@@ -44,8 +44,8 @@ Installation as external program in Skyline [1]:
  5) Confirm your selection two times
  6) To run LipidCreator, go in the menu on 'Tools' -> 'LipidCreator'
  
- 
-[1] https://skyline.ms
+[1] https://www.mono-project.com/download/stable 
+[2] https://skyline.ms
 
 
 ============================== Demo ========================================
@@ -69,5 +69,5 @@ from the 'Home' tab, namely:
  - heavy labeled isotope tutorial
  - collision energy tutorial
 
-Additionally, a text version (pdf) is available in LipidCreator, please click in
-the menu on 'Help' -> 'Documentation'.
+Additionally, a text version (pdf) is available in LipidCreator, please click
+on 'Help' -> 'Documentation' within LipidCreator's menu.

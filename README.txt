@@ -27,25 +27,33 @@ SOFTWARE.
 
 ============================== Installation ==================================
 
-Requirements:
- - either Windows Vista / 7 / 8 / 10 (only 64 bit)
- - or Ubuntu 16.04 or higher (with 'mono-complete' package installed [1], only 64 bit)
+System Requirements:
+ - either Windows Vista / 7 / 8 / 10 (only 64 bit) with .NET framwork 4.5.1 or higher [1]
+ - or Ubuntu 16.04 or higher* (with 'mono-complete' package installed [2], only 64 bit)
  - at least 256MB main memory or higher
  
+* LipidCreator has been tested on Ubuntu 16.04 and 18.04, as well as on 
+  Debian 10 (Buster). Other Linux distributions *should* also work, but have not 
+  been tested.
+
+Note: If you install Skyline first, all necessary .NET framework libraries will be installed
+automatically! Later versions of Windows 8 and 10 already ship with up-to-date versions of .NET
+installed. These also do not require additional installation.
 
 Installation for standalone mode:
 No installation required, please click on 'LipidCreator.exe' to run the software.
 
-Installation as external program in Skyline [2]:
+Installation as external program in Skyline [3]:
  1) Open Skyline with a blank document
  2) Go in the menu on 'Tools' -> 'External Tools...'
  3) Click on 'Add' -> 'From File'
  4) Browse to the 'LipidCreator.zip' archive and select it
  5) Confirm your selection two times
  6) To run LipidCreator, go in the menu on 'Tools' -> 'LipidCreator'
- 
-[1] https://www.mono-project.com/download/stable 
-[2] https://skyline.ms
+
+[1] https://dotnet.microsoft.com/download/dotnet-framework/net452
+[2] https://www.mono-project.com/download/stable 
+[3] https://skyline.ms
 
 
 ============================== Demo ========================================
@@ -71,3 +79,11 @@ from the 'Home' tab, namely:
 
 Additionally, a text version (pdf) is available in LipidCreator, please click
 on 'Help' -> 'Documentation' within LipidCreator's menu.
+
+============================ Help & Support ==================================
+
+If you experience any issues with LipidCreator, we kindly ask you to report them
+using our support form at https://lifs.isas.de/support with the support category
+'Lipid Creator'. Please include your Operating System, Skyline version (if 
+applicable), and the full LipidCreator version, which is available from the 
+'Help' -> 'About' menu dialog.

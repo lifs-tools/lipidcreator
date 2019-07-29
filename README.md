@@ -22,7 +22,7 @@ After installation of the Git client, you need to restart VisualStudio so that G
 
 To build and/or run the project, simply select the appropriate menu entry in VisualStudio.
 
-### Ubuntu ###
+### Linux / Ubuntu ###
 
 LipidCreator requires the Mono development and runtime libraries. 
 Please follow the official guidelines to install the [latest stable Mono](https://www.mono-project.com/download/stable/).
@@ -44,6 +44,9 @@ will build the default Debug-enabled version of LipidCreator with output below `
 
 which will produce output in `bin/Release`. 
 
+Please note: we have developed and tested LipidCreator using Mono under Ubuntu 16.04 and 18.04 and Debian 10 (Buster). 
+Other Linux distributions should also work, but were not tested.
+
 ## Usage ##
 
 ### Windows ###
@@ -55,9 +58,12 @@ installation completes. Click "OK" on the "External Tools" dialog. LipidCreator 
 #### Stand-Alone ####
 If you locate the LipidCreator.exe file, either in your Skyline installation under the "Tools" folder, or within the LipidCreator folder extracted from the zip archive, you need to double click on it to start in stand-alone mode. It is also possible to start LipidCreator from the command line.
 
-### Ubuntu ###
+### Linux / Ubuntu ###
 To run LipidCreator, locate the directory containing LipidCreator.exe, open a terminal and type
 
     mono LipidCreator.exe
 
-Please note that there are sometimes issues with the repainting of certain windows and controls (scrollable areas) due to the not 100% compatible Mono implementation.
+Please note that there may be issues with the repainting of certain windows and controls (scrollable areas) due to the not 100% compatible Mono implementation.
+
+## Reporting issues ##
+If you encounter any issues with LipidCreator, please report them via https://lifs.isas.de/support, using the 'Support category' LipidCreator.

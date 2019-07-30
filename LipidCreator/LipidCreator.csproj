@@ -337,6 +337,8 @@
   </ItemGroup>
   <ItemGroup>
     <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx" />
+    <ReadmeFile Include="$(ProjectDir)..\README.txt" />
+    <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
   </ItemGroup>
@@ -458,6 +460,8 @@
   </Target>
   <Target Name="BeforeBuild">
     <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data\%(RecursiveDir)" />
+    <Copy SourceFiles="@(ReadmeFile)" DestinationFolder="$(TargetDir)" />
+    <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(TargetDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
   </Target>

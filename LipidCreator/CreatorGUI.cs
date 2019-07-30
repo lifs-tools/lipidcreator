@@ -3851,7 +3851,14 @@ namespace LipidCreator
             {
                 int[] importNumbers = lipidCreator.importLipidList(filePath, filterParameters);
                 refreshRegisteredLipidsTable();
-                MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
+                if (importNumbers[0] != importNumbers[1])
+                {
+                    MessageBox.Show("Only " + importNumbers[0] + " of " + importNumbers[1] + " lipid names were imported successfully! Please check the output at 'Help' -> 'Log messages' for details!", "Lipid list import");
+                }
+                else
+                {
+                    MessageBox.Show("All " + importNumbers[0] + " of " + importNumbers[1] + " lipid names were imported successfully!", "Lipid list import");
+                }
             }
             catch
             {
@@ -3896,7 +3903,15 @@ namespace LipidCreator
                     
                     int[] importNumbers = lipidCreator.importLipidList(openFileDialog1.FileName, filterParameters);
                     refreshRegisteredLipidsTable();
-                    MessageBox.Show("Here, " + importNumbers[0] + " of " + importNumbers[1] + " lipid names could be successfully imported!", "Lipid list import");
+                    if (importNumbers[0] != importNumbers[1])
+                    {
+                        MessageBox.Show("Only " + importNumbers[0] + " of " + importNumbers[1] + " lipid names were imported successfully! Please check the output at 'Help' -> 'Log messages' for details!", "Lipid list import");
+                    }
+                    else
+                    {
+                        MessageBox.Show("All " + importNumbers[0] + " of " + importNumbers[1] + " lipid names were successfully imported!", "Lipid list import");
+                    }
+
                 }
                 else
                 {

@@ -1038,6 +1038,7 @@ namespace LipidCreator
                             }
                         }
 
+                        int lipidNameIndex = 0;
                         ArrayList importedLipids = translate(lipidsToImport, true);
                         foreach (Lipid lipid in importedLipids)
                         {
@@ -1056,13 +1057,22 @@ namespace LipidCreator
                             else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
                             else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
                             else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
-                            
+
                             if (!registeredLipidDictionary.ContainsKey(lipidHash))
                             {
                                 registeredLipidDictionary.Add(lipidHash, lipid);
                                 registeredLipids.Add(lipidHash);
                                 ++valid;
                             }
+                            else
+                            {
+                                StringBuilder lipidXml = new StringBuilder(50);
+                                lipid.serialize(lipidXml);
+                                StringBuilder lipidDictXml = new StringBuilder(50);
+                                registeredLipidDictionary[lipidHash].serialize(lipidDictXml);
+                                log.Warn("Lipid " + lipidsToImport[lipidNameIndex] + " was already defined! Please check your input for duplicates!");
+                            }
+                            ++lipidNameIndex;
                         }
                     }
                 }

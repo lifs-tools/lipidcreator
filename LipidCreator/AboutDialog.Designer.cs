@@ -61,9 +61,9 @@ namespace LipidCreator
             this.linkLabel = new System.Windows.Forms.LinkLabel();
             this.textLibraryName = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
+            //
             // buttonOK
-            // 
+            //
             this.buttonOK.Location = new System.Drawing.Point(12, 278);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(99, 30);
@@ -71,9 +71,9 @@ namespace LipidCreator
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOKClick);
-            // 
+            //
             // linkLabel
-            // 
+            //
             this.linkLabel.AutoSize = true;
             this.linkLabel.Location = new System.Drawing.Point(275, 287);
             this.linkLabel.Name = "linkLabel";
@@ -82,9 +82,9 @@ namespace LipidCreator
             this.linkLabel.TabStop = true;
             this.linkLabel.Text = "https://lifs.isas.de/lipidcreator";
             this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
-            // 
+            //
             // textLibraryName
-            // 
+            //
             this.textLibraryName.Location = new System.Drawing.Point(12, 12);
             this.textLibraryName.Name = "textLibraryName";
             this.textLibraryName.Size = new System.Drawing.Size(456, 260);
@@ -92,7 +92,8 @@ namespace LipidCreator
             this.textLibraryName.ReadOnly = true;
             this.textLibraryName.BackColor = Color.White;
             this.textLibraryName.Text = "";
-            // 
+
+            //
             // AboutDialog
             //
             this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
@@ -123,7 +124,7 @@ namespace LipidCreator
         private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
             "MIT License\n\n" +
 
-            "Copyright(c) 2018\n"+
+            "Copyright(c) 2018\n" +
             "Dominik Kopczynski   -   dominik.kopczynski {at} isas.de\n" +
             "Bing Peng   -   bing.peng {at} isas.de\n" +
             "Nils Hoffmann  -  nils.hoffmann {at} isas.de\n\n" +

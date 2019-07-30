@@ -78,8 +78,6 @@ namespace LipidCreator
         public Label labelSlashPositive;
         [NonSerialized]
         public Label labelSlashNegative;
-        [NonSerialized]
-        public TabControl tabControlFragments;
         public ArrayList tabPages;
         [NonSerialized]
         public ToolTip toolTip1;
@@ -111,7 +109,6 @@ namespace LipidCreator
             deuteratedMediatorHeadgroups = new System.Windows.Forms.ComboBox();
             this.menuFragmentItem1 = new System.Windows.Forms.MenuItem();
             this.contextMenuFragment = new System.Windows.Forms.ContextMenu();
-            this.pictureBoxFragments = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             
             medHgListbox.Location = new System.Drawing.Point(12, 22);
@@ -297,10 +294,8 @@ namespace LipidCreator
             // 
             // MediatorMS2Form
             // 
-            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1168, 420);
-            this.Controls.Add(this.tabControlFragments);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonAddFragment);
@@ -312,6 +307,13 @@ namespace LipidCreator
             this.Text = "Mediator MS2 Fragments";
             
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFragments)).EndInit();
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
     }
 }

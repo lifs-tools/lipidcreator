@@ -37,21 +37,23 @@ namespace LipidCreator
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.timerText = new System.Timers.Timer();
+            ((System.ComponentModel.ISupportInitialize)(this.timerText)).BeginInit();
             this.SuspendLayout();
             // 
             // richTextBox1
             // 
             this.richTextBox1.AutoSize = true;
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Location = new System.Drawing.Point(13, 13);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.TabIndex = 2;
-            this.richTextBox1.Size = new System.Drawing.Size(484, 60);
-            this.richTextBox1.BackColor = SystemColors.Control;
             this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(484, 60);
+            this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "123456";
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox1.GotFocus += new System.EventHandler(richTextBox1_Focus);
-            this.richTextBox1.MouseEnter += new System.EventHandler(richTextBox1_MouseEnter);
+            this.richTextBox1.GotFocus += new System.EventHandler(this.richTextBox1_Focus);
+            this.richTextBox1.MouseEnter += new System.EventHandler(this.richTextBox1_MouseEnter);
             // 
             // button1
             // 
@@ -62,10 +64,6 @@ namespace LipidCreator
             this.button1.Text = "Merge";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.mergeClick);
-            
-            this.timerText = new System.Timers.Timer(150);
-            this.timerText.Elapsed += this.timer_Elapsed;
-            this.timerText.Enabled = true;
             // 
             // button2
             // 
@@ -76,6 +74,12 @@ namespace LipidCreator
             this.button2.Text = "Replace";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.replaceClick);
+            // 
+            // timerText
+            // 
+            this.timerText.Enabled = true;
+            this.timerText.Interval = 150D;
+            this.timerText.SynchronizingObject = this;
             // 
             // LCMessageBox
             // 
@@ -89,7 +93,9 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LCMessageBox";
+            this.ShowIcon = false;
             this.Text = "Merge or Replace?";
+            ((System.ComponentModel.ISupportInitialize)(this.timerText)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

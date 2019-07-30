@@ -1447,7 +1447,14 @@ namespace LipidCreator
             try
             {
                 skylineToolClient.InsertSmallMoleculeTransitionList(sb.ToString());
-                if (blibName.Length > 0 && blibFile.Length > 0) skylineToolClient.AddSpectralLibrary(blibName, blibFile);
+                try
+                {
+                    if (blibName.Length > 0 && blibFile.Length > 0) skylineToolClient.AddSpectralLibrary(blibName, blibFile);
+                } catch (IOException ioex)
+                {
+                    log.Error("An error occured, the spectral library could not be created by Skyline. Please check that your spectral library name is unique or delete an existing spectral library with the same name in Skyline!", ioex);
+                    success = false;
+                }
             }
             catch (Exception e)
             {

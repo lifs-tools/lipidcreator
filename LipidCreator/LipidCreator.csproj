@@ -299,6 +299,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SpectralName.resx">
+      <DependentUpon>SpectralName.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TranslatorDialog.resx">
       <DependentUpon>TranslatorDialog.cs</DependentUpon>
     </EmbeddedResource>

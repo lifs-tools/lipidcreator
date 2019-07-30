@@ -109,7 +109,7 @@ namespace LipidCreator
             this.radioButton2.TabIndex = 1;
             this.radioButton2.Text = ".csv";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new EventHandler(rb2CheckedChanged);
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.rb2CheckedChanged);
             // 
             // radioButton1
             // 
@@ -122,7 +122,7 @@ namespace LipidCreator
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = ".xls";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new EventHandler(rb1CheckedChanged);
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.rb1CheckedChanged);
             // 
             // groupBox2
             // 
@@ -145,7 +145,7 @@ namespace LipidCreator
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "Yes";
             this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new EventHandler(rb3CheckedChanged);
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.rb3CheckedChanged);
             // 
             // radioButton4
             // 
@@ -158,7 +158,7 @@ namespace LipidCreator
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "No";
             this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new EventHandler(rb4CheckedChanged);
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.rb4CheckedChanged);
             // 
             // ExportParameters
             // 
@@ -172,6 +172,7 @@ namespace LipidCreator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ExportParameters";
+            this.ShowIcon = false;
             this.Text = "Export Parameters";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

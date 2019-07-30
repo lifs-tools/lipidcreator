@@ -78,7 +78,8 @@ namespace LipidCreator
             ionFormulaParser = new Parser(ionFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/ion-formula.grammar", LipidCreator.PARSER_QUOTE);
             
             
-            InitializeComponent ();
+            InitializeComponent();
+            InitializeCustom();
             dataGridViewTransitions.DataSource = currentView;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             updateCountLabel();

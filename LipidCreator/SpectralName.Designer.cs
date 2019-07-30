@@ -105,14 +105,21 @@ namespace LipidCreator
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SpectralName";
+            this.ShowIcon = false;
             this.Text = "Spectral library name";
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
 
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new System.Drawing.Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion

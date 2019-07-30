@@ -989,10 +989,14 @@ namespace LipidCreator
 
             
             glHgListbox = new ListBox();
+            glHgListbox.SelectionMode = SelectionMode.MultiExtended;
             plHgListbox = new ListBox();
+            plHgListbox.SelectionMode = SelectionMode.MultiExtended;
             slHgListbox = new ListBox();
+            slHgListbox.SelectionMode = SelectionMode.MultiExtended;
             medHgListbox = new ListBox();
-                
+            medHgListbox.SelectionMode = SelectionMode.MultiExtended;
+
             if (!lipidCreatorInitError)
             {
                 deleteImage = ScaleImage(Image.FromFile(lipidCreator.prefixPath + "images/delete.png"), 32, 26);

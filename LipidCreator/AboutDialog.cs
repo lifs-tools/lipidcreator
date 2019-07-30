@@ -43,6 +43,8 @@ namespace LipidCreator
             creatorGUI = _creatorGUI;
 
             InitializeComponent();
+            InitializeCustom();
+
             if (log)
             {
                 Text = "Log messages";

@@ -133,15 +133,6 @@ namespace LipidCreator
             this.label4.TabIndex = 5;
             this.label4.Text = "Elements";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(268, 94);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(10, 13);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "}";
-            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToDeleteRows = false;
@@ -163,6 +154,15 @@ namespace LipidCreator
             this.label5.Size = new System.Drawing.Size(73, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Building block";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(268, 94);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(11, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "}";
             // 
             // comboBox2
             // 
@@ -213,8 +213,8 @@ namespace LipidCreator
             this.button3.TabIndex = 10;
             this.button3.Text = "Edit Isotope";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -224,8 +224,8 @@ namespace LipidCreator
             this.button4.TabIndex = 11;
             this.button4.Text = "Delete Isotope";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             this.button4.Visible = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // groupBox1
             // 
@@ -263,8 +263,7 @@ namespace LipidCreator
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
             // 
             // AddHeavyPrecursor
-            //
-            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(397, 549);
             this.Controls.Add(this.groupBox1);
@@ -283,18 +282,25 @@ namespace LipidCreator
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddHeavyPrecursor";
+            this.ShowIcon = false;
             this.Text = "Manage heavy isotopes";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
 
-            controlElements = new ArrayList(){comboBox1, textBox1, dataGridView1, comboBox2, comboBox3, button1, button2, button3, button4, groupBox1, radioButton2, radioButton1};
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion

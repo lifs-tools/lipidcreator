@@ -206,7 +206,6 @@ namespace LipidCreator
             // LipidsReview
             //
             this.FormClosing += new FormClosingEventHandler(closingInteraction);
-            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1079, 540);
             this.Controls.Add(this.labelNumberOfTransitions);
@@ -227,6 +226,13 @@ namespace LipidCreator
             this.MinimizeBox = false;
             
             controlElements = new ArrayList(){buttonSendToSkyline, buttonBack, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxEditMode, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary, buttonCheckValues};
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion

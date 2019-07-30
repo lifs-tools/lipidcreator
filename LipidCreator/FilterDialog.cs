@@ -38,7 +38,8 @@ namespace LipidCreator
             lipid = _lipid;
             
             InitializeComponent();
-            
+            InitializeCustom();
+
             switch (lipid.onlyPrecursors){
                 case 0: radioButton1.Checked = true; break;
                 case 1: radioButton2.Checked = true; break;

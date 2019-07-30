@@ -86,7 +86,7 @@ namespace LipidCreator
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(606, 235);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
+            this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabIndexChanged);
             // 
             // tabPage1
             // 
@@ -115,7 +115,7 @@ namespace LipidCreator
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(98, 20);
             this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new EventHandler(textBox1TextChanged);
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1TextChanged);
             // 
             // tabPage2
             // 
@@ -130,21 +130,18 @@ namespace LipidCreator
             // 
             // dataGridView1
             // 
-            
-            
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.Size = new System.Drawing.Size(604, 209);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1CellValueChanged);
-            
             // 
             // label1
             // 
@@ -177,13 +174,13 @@ namespace LipidCreator
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(56, 6);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(142, 21);
             this.comboBox1.TabIndex = 6;
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.comboBox1.SelectedIndexChanged += new EventHandler(comboBox1ValueChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1ValueChanged);
             // 
             // label3
             // 
@@ -204,8 +201,7 @@ namespace LipidCreator
             this.label4.Text = "preview";
             // 
             // NewMediatorFragment
-            //
-            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(628, 308);
             this.Controls.Add(this.label4);
@@ -216,6 +212,7 @@ namespace LipidCreator
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tabControl1);
             this.Name = "NewMediatorFragment";
+            this.ShowIcon = false;
             this.Text = "New Mediator Fragment";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -225,6 +222,13 @@ namespace LipidCreator
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion

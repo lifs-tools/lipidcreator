@@ -54,7 +54,8 @@ namespace LipidCreator
             
         
             InitializeComponent();
-            
+            InitializeCustom();
+
             updating = true;
             dataGridView1.ColumnCount = 3;
             dataGridView1.Columns[0].Name = "Element";

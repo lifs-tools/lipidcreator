@@ -56,7 +56,8 @@ namespace LipidCreator
             edit = _edit;
             elements = createGridData(MS2Fragment.createEmptyElementDict());
             InitializeComponent();
-            
+            InitializeCustom();
+
             updating = true;
             dataGridViewElements.ColumnCount = 3;
             dataGridViewElements.Columns[0].Name = "Element";

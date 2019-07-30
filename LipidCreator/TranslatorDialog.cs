@@ -63,6 +63,7 @@ namespace LipidCreator
             lipidNamesList.Columns[1].ReadOnly = true;
             
             InitializeComponent();
+            InitializeCustom();
             disableImport();
         }
         

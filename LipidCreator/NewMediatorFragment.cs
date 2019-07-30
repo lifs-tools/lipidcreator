@@ -54,7 +54,8 @@ namespace LipidCreator
             headgroup = _headgroup;
         
             InitializeComponent();
-            
+            InitializeCustom();
+
             elementDict = AddHeavyPrecursor.createGridData(MS2Fragment.createEmptyElementDict());
             
             updating = true;

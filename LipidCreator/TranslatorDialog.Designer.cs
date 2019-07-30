@@ -125,7 +125,6 @@ namespace LipidCreator
             // 
             // TranslatorDialog
             // 
-            this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(798, 413);
             this.Controls.Add(this.lipidNamesGridView);
@@ -141,6 +140,13 @@ namespace LipidCreator
             ((System.ComponentModel.ISupportInitialize)(this.lipidNamesGridView)).EndInit();
             this.ResumeLayout(false);
 
+        }
+        private void InitializeCustom()
+        {
+            this.SuspendLayout();
+            this.Font = new System.Drawing.Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion

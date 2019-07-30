@@ -36,6 +36,7 @@ namespace LipidCreator
         {
             this.specName = specName;
             InitializeComponent();
+            InitializeCustom();
         }
 
         private void buttonOKClick(object sender, EventArgs e)

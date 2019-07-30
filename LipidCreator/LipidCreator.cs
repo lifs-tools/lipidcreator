@@ -579,7 +579,13 @@ namespace LipidCreator
         public LipidCreator(string pipe)
         {
             openedAsExternal = (pipe != null);
-            skylineToolClient = openedAsExternal ? new SkylineToolClient(pipe, "LipidCreator") : null;
+            skylineToolClient = null;
+            if (openedAsExternal)
+            {
+                skylineToolClient = new SkylineToolClient(pipe, "LipidCreator");
+                skylineToolClient.DocumentChanged += OnDocumentChanged;
+                skylineToolClient.SelectionChanged += OnSelectionChanged;
+            }
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
             XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
             LC_RELEASE_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString();
@@ -2083,13 +2089,26 @@ namespace LipidCreator
                 log.Info("Disposing SkylineToolClient!");
                 try
                 {
+                    skylineToolClient.DocumentChanged -= OnDocumentChanged;
+                    skylineToolClient.SelectionChanged -= OnSelectionChanged;
                     ((IDisposable)skylineToolClient).Dispose();
+                    skylineToolClient = null;
                 }
                 catch
                 {
                     log.Warn("Disposing SkylineToolClient timed out!");
                 }
             }
+        }
+
+        private void OnDocumentChanged(object sender, EventArgs eventArgs)
+        {
+            log.Debug("Received a document changed event from Skyline!");
+        }
+
+        private void OnSelectionChanged(object sender, EventArgs eventArgs)
+        {
+            log.Debug("Received a selection changed event from Skyline!");
         }
     }
     

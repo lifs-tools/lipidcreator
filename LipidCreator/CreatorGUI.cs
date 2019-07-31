@@ -4152,14 +4152,14 @@ namespace LipidCreator
                     log.Debug("Running on Linux");
                     string openCmd = "xdg-open";
                     Process process = System.Diagnostics.Process.Start(openCmd, docsDir);
-                    process.WaitForExit();
+                    process?.WaitForExit();
                     log.Debug("Finished starting process '" + openCmd + " " + docsDir + "' with code " + process.ExitCode);
                 }
                 else
                 {
                     log.Debug("Running on Windows");
                     Process process = System.Diagnostics.Process.Start(docsDir);
-                    process.WaitForExit();
+                    process?.WaitForExit();
                     log.Debug("Finished starting process '"+ docsDir);
                 }
             }

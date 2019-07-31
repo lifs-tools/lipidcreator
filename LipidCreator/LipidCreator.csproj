@@ -341,6 +341,7 @@
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
+    <LinuxNativeFiles Include="$(ProjectDir)*.so" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -464,6 +465,7 @@
     <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(TargetDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
+    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' "/>
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="echo -1 &gt; &quot;$(TargetDir)data\analytics.txt&quot;" />
@@ -493,7 +495,7 @@
     <!-- create zip distribution on Windows -->
     <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create zip distribution on Linux / OSX -->
-    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
   <Target Name="AfterClean" AfterTargets="Clean">
     <RemoveDir Directories="$(IntermediateOutputPath)" />

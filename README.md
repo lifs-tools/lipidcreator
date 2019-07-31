@@ -44,8 +44,23 @@ will build the default Debug-enabled version of LipidCreator with output below `
 
 which will produce output in `bin/Release`. 
 
+In order to use the blib spectral library export functionality, please install the appropriate sqlite (>3) package for your distribution.
+For Debian and Ubuntu, the following command installs them:
+
+    sudo apt install sqlite3 
+
+We ship a precompiled native sqLite.Interop.so library with LipidCreator for Debian and Ubuntu. 
+If that fails to work under your Linux distribution, please follow these steps to build a custom one:
+
+1. Install a GCC compilation toolchain, on Ubuntu: `sudo apt-get install build-essential`
+2. Download https://system.data.sqlite.org/downloads/1.0.111.0/sqlite-netFx-source-1.0.111.0.zip
+3. Unzip the downloaded zip archive and change into the `/Setup` folder
+4. Run `bash compile-interop-assembly-release.sh`
+5. Copy `../bin/2013/Release/bin/libSQLite.Interop.so` into the directory containing LipidCreator.exe
+6. Try to export a blib file (after activating the collision energy module) from the lipid review dialog after adding some transitions.
+
 Please note: we have developed and tested LipidCreator using Mono under Ubuntu 16.04 and 18.04 and Debian 10 (Buster). 
-Other Linux distributions should also work, but were not tested.
+Other Linux distributions should also work, but were not tested. If you encounter any issues, please let us know!
 
 ## Usage ##
 

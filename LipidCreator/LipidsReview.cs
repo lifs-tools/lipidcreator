@@ -774,8 +774,11 @@ namespace LipidCreator
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
-            exportParameters.Owner = this;
-            exportParameters.ShowInTaskbar = false;
+            exportParameters = new ExportParameters(parameterValues)
+            {
+                Owner = this,
+                ShowInTaskbar = false
+            };
             exportParameters.ShowDialog();
             exportParameters.Dispose();
             

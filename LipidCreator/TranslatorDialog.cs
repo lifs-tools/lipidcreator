@@ -31,7 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
+using System.IO;
 
 namespace LipidCreator
 {
@@ -53,7 +53,7 @@ namespace LipidCreator
             parsedLipids = new ArrayList();
             creatorGUI = _creatorGUI;
             
-            whiteImage = Image.FromFile(creatorGUI.lipidCreator.prefixPath + "images/white.png");
+            whiteImage = Image.FromFile(Path.Combine(creatorGUI.lipidCreator.prefixPath, "images", "white.png"));
 
             lipidNamesList = new DataTable("lipidNamesList");
             lipidNamesList.Columns.Add(new DataColumn(FIRST_HEADER));

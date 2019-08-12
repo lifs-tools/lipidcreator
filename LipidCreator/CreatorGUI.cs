@@ -122,7 +122,7 @@ namespace LipidCreator
                 // add predefined menu
                 lipidModifications = Enumerable.Repeat(0UL, Enum.GetNames(typeof(LipidCategory)).Length).ToArray();
                 changingTabForced = false;
-                string predefinedFolder = lipidCreator.prefixPath + "data/predefined";
+                string predefinedFolder = Path.Combine(lipidCreator.prefixPath, "data", "predefined");
                 if(Directory.Exists(predefinedFolder)) 
                 {
                     string [] subdirectoryEntries = Directory.GetDirectories(predefinedFolder);
@@ -268,7 +268,7 @@ namespace LipidCreator
         {
             menuStatistics.Checked = !menuStatistics.Checked;
             lipidCreator.enableAnalytics = menuStatistics.Checked;
-            string analyticsFile = lipidCreator.prefixPath + "data/analytics.txt";
+            string analyticsFile = Path.Combine(lipidCreator.prefixPath, "data", "analytics.txt");
             try {
                 using (StreamWriter outputFile = new StreamWriter (analyticsFile))
                 {
@@ -277,7 +277,7 @@ namespace LipidCreator
             }
             catch (Exception ex)
             {
-                log.Warn("Could not write to data/analytics.txt: " + ex);
+                log.Warn("Could not write to '"+ analyticsFile + "': " + ex);
             }
         }
         

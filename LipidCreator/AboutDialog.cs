@@ -106,7 +106,7 @@ namespace LipidCreator
 
             try
             {
-                string logFile = creatorGUI.prefixPath + "data/lipidcreator.log";
+                string logFile = Path.Combine(creatorGUI.prefixPath, "data", "lipidcreator.log");
                 if (File.Exists(logFile))
                 {
                     using (FileStream fileStream = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

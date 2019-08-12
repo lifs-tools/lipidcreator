@@ -131,7 +131,7 @@ namespace LipidCreator
         public ArrayList availableInstruments;
         public CollisionEnergy collisionEnergyHandler;
         public bool enableAnalytics = false;
-        public static string EXTERNAL_PREFIX_PATH = "Tools/LipidCreator/";
+        public static string EXTERNAL_PREFIX_PATH = Path.Combine("Tools", "LipidCreator");
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
@@ -228,7 +228,7 @@ namespace LipidCreator
         public void readInputFiles()
         {
             int lineCounter = 1;
-            string ms2FragmentsFile = prefixPath + "data/ms2fragments.csv";
+            string ms2FragmentsFile = Path.Combine(prefixPath, "data", "ms2fragments.csv");
             if (File.Exists(ms2FragmentsFile))
             {
                 try
@@ -257,7 +257,7 @@ namespace LipidCreator
                             atomsCount[Molecule.N] = Convert.ToInt32(tokens[9]);
                             atomsCount[Molecule.P] = Convert.ToInt32(tokens[10]);
                             atomsCount[Molecule.S] = Convert.ToInt32(tokens[11]);
-                            string fragmentFile = prefixPath + tokens[3];
+                            string fragmentFile = Path.Combine(prefixPath, tokens[3]);
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 log.Error("At line " + lineCounter + ": file '" + fragmentFile + "' does not exist or can not be opened.");
@@ -283,7 +283,7 @@ namespace LipidCreator
             
             
             
-            string headgroupsFile = prefixPath + "data/headgroups.csv";
+            string headgroupsFile = Path.Combine(prefixPath, "data", "headgroups.csv");
             if (File.Exists(headgroupsFile))
             {
                 lineCounter = 1;
@@ -334,7 +334,7 @@ namespace LipidCreator
                             headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[5]); // nytrogen
                             headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[6]); // phosphor
                             headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[7]); // sulfor
-                            string precursorFile = prefixPath + tokens[9];
+                            string precursorFile = Path.Combine(prefixPath, tokens[9]);
                             if (!File.Exists(precursorFile))
                             {
                                 log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
@@ -415,7 +415,7 @@ namespace LipidCreator
             
             
             
-            string instrumentsFile = prefixPath + "data/ms-instruments.csv";
+            string instrumentsFile = Path.Combine(prefixPath, "data", "ms-instruments.csv");
             if (File.Exists(instrumentsFile))
             {
                 lineCounter = 1;
@@ -459,10 +459,10 @@ namespace LipidCreator
             
             
             
-            string ceParametersDir = prefixPath + "data/ce-parameters";
+            string ceParametersDir = Path.Combine(prefixPath, "data", "ce-parameters");
             if (Directory.Exists(ceParametersDir))
             {
-                string[] ceFilePaths = Directory.GetFiles(prefixPath + "data/ce-parameters/", "*.csv", SearchOption.TopDirectoryOnly);
+                string[] ceFilePaths = Directory.GetFiles(Path.Combine(prefixPath, "data", "ce-parameters"), "*.csv", SearchOption.TopDirectoryOnly);
                 foreach(string ceParametersFile in ceFilePaths)
                 {
                     lineCounter = 0;
@@ -554,7 +554,7 @@ namespace LipidCreator
                 throw new Exception();
             }
             
-            string analyticsFile = prefixPath + "data/analytics.txt";
+            string analyticsFile = Path.Combine(prefixPath, "data", "analytics.txt");
             try {
                 if (File.Exists(analyticsFile))
                 {
@@ -586,14 +586,15 @@ namespace LipidCreator
                 skylineToolClient.DocumentChanged += OnDocumentChanged;
                 skylineToolClient.SelectionChanged += OnSelectionChanged;
             }
-            prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : "");
-            XmlConfigurator.Configure(new System.IO.FileInfo(prefixPath + "data/log4net.xml"));
+            prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
+            XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));
             LC_RELEASE_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString();
             LC_BUILD_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString();
             LC_VERSION_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LC_OS = Environment.OSVersion.Platform;
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
             log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
+            log.Info("Using " + prefixPath + " as base directory for relative resource lookup. Resolved executing assembly location: " + new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location));
             registeredLipids = new ArrayList();
             registeredLipidDictionary = new Dictionary<ulong, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();
@@ -634,33 +635,33 @@ namespace LipidCreator
             try 
             {
                 lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-                lipidMapsParser = new Parser(lipidMapsParserEventHandler, prefixPath + "data/goslin/LipidMaps.g4", PARSER_QUOTE);
+                lipidMapsParser = new Parser(lipidMapsParserEventHandler, Path.Combine(prefixPath, "data", "goslin", "LipidMaps.g4"), PARSER_QUOTE);
             }
             catch (Exception e)
             {
-                log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/LipidMaps.g4': " + e);
+                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "LipidMaps.g4") + "': " + e);
                 throw new Exception();
             }
                 
             try 
             {
                 parserEventHandler = new ParserEventHandler(this);
-                lipidNamesParser = new Parser(parserEventHandler, prefixPath + "data/goslin/Goslin.g4", PARSER_QUOTE);
+                lipidNamesParser = new Parser(parserEventHandler, Path.Combine(prefixPath, "data", "goslin", "Goslin.g4"), PARSER_QUOTE);
             }
             catch (Exception e)
             {
-                log.Error("Unable to read grammar file '" + prefixPath + "data/goslin/Goslin.g4': " + e);
+                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "Goslin.g4") + "': " + e);
                 throw new Exception();
             }
                 
             try 
             {
                 listingParserEventHandler = new ListingParserEventHandler();
-                listingParser = new Parser(listingParserEventHandler, prefixPath + "data/listing.grammar", PARSER_QUOTE);
+                listingParser = new Parser(listingParserEventHandler, Path.Combine(prefixPath, "data", "listing.grammar"), PARSER_QUOTE);
             }
             catch (Exception e)
             {
-                log.Error("Unable to read grammar file '" + prefixPath + "data/listing.grammar': " + e);
+                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "listing.grammar") + "': " + e);
                 throw new Exception();
             }
             

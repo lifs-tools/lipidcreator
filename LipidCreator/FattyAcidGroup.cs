@@ -176,8 +176,6 @@ namespace LipidCreator
             doubleBondCounts = LipidCreator.parseRange(dbInfo, LipidCreator.MIN_DB_LENGTH,  LipidCreator.MAX_DB_LENGTH, ChainType.dbLength);
             hydroxylCounts = LipidCreator.parseRange(hydroxylInfo, LipidCreator.MIN_HYDROXY_LENGTH,  LipidCreator.MAX_HYDROXY_LENGTH, ChainType.hydroxylLength);
             
-            
-        
             foreach(XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

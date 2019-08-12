@@ -486,10 +486,10 @@ namespace LipidCreator
             {
                 throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
             }
-            grammar = strip(sb.ToString().Replace("\n", ""), ' ');
+            grammar = strip(sb.ToString().Replace("\r\n", "").Replace("\n", "").Replace("\r", ""), ' ');
             if (grammar[grammar.Length - 1] != RULE_TERMINAL)
             {
-                throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign");
+                throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign, was: '" + grammar[grammar.Length-1] + "'");
             }
             ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
             

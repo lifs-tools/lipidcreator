@@ -1819,8 +1819,8 @@ namespace LipidCreator
                 {
                     case "GL":
                         Glycerolipid gll = new Glycerolipid(this);
-                        lipidHash = gll.getHashCode();
                         gll.import(lipid, importVersion);
+                        lipidHash = gll.getHashCode();
                         if (!registeredLipidDictionary.ContainsKey(lipidHash))
                         {
                             registeredLipidDictionary.Add(lipidHash, gll);
@@ -1830,8 +1830,8 @@ namespace LipidCreator
                         
                     case "PL":
                         Phospholipid pll = new Phospholipid(this);
-                        lipidHash = pll.getHashCode();
                         pll.import(lipid, importVersion);
+                        lipidHash = pll.getHashCode();
                         if (!registeredLipidDictionary.ContainsKey(lipidHash))
                         {
                             registeredLipidDictionary.Add(lipidHash, pll);
@@ -1841,8 +1841,8 @@ namespace LipidCreator
                         
                     case "SL":
                         Sphingolipid sll = new Sphingolipid(this);
-                        lipidHash = sll.getHashCode();
                         sll.import(lipid, importVersion);
+                        lipidHash = sll.getHashCode();
                         if (!registeredLipidDictionary.ContainsKey(lipidHash))
                         {
                             registeredLipidDictionary.Add(lipidHash, sll);
@@ -1852,8 +1852,8 @@ namespace LipidCreator
                         
                     case "Cholesterol":
                         Cholesterol chl = new Cholesterol(this);
-                        lipidHash = chl.getHashCode();
                         chl.import(lipid, importVersion);
+                        lipidHash = chl.getHashCode();
                         if (!registeredLipidDictionary.ContainsKey(lipidHash))
                         {
                             registeredLipidDictionary.Add(lipidHash, chl);
@@ -1863,8 +1863,8 @@ namespace LipidCreator
                         
                     case "Mediator":
                         Mediator med = new Mediator(this);
-                        lipidHash = med.getHashCode();
                         med.import(lipid, importVersion);
+                        lipidHash = med.getHashCode();
                         if (!registeredLipidDictionary.ContainsKey(lipidHash))
                         {
                             registeredLipidDictionary.Add(lipidHash, med);

@@ -2575,12 +2575,14 @@ namespace LipidCreator
         {
             ((Sphingolipid)currentLipid).lcb.hydroxylCounts.Clear();
             ((Sphingolipid)currentLipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
+            ((Sphingolipid)currentLipid).lcb.hydroxylInfo = (((ComboBox)sender).SelectedIndex + 2).ToString();
         }
         
         public void slFAHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
             ((Sphingolipid)currentLipid).fag.hydroxylCounts.Clear();
             ((Sphingolipid)currentLipid).fag.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex);
+            ((Sphingolipid)currentLipid).fag.hydroxylInfo = (((ComboBox)sender).SelectedIndex).ToString();
         }
         
         private void slHGListboxSelectedValueChanged(object sender, System.EventArgs e)

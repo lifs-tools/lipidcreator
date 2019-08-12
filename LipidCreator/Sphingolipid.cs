@@ -47,7 +47,9 @@ namespace LipidCreator
             lcb = new FattyAcidGroup(true);
             fag = new FattyAcidGroup();
             lcb.hydroxylCounts.Add(2);
+            lcb.hydroxylInfo = "2";
             fag.hydroxylCounts.Add(0);
+            fag.hydroxylInfo = "0";
             isLyso = false;
             adducts["+H"] = true;
             adducts["-H"] = false;

@@ -73,9 +73,9 @@ namespace LipidCreator
             
             
             moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
-            moleculeFormulaParser = new Parser(moleculeFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/molecule-formula.grammar", LipidCreator.PARSER_QUOTE);
+            moleculeFormulaParser = new Parser(moleculeFormulaParserEventHandler, Path.Combine(creatorGUI.lipidCreator.prefixPath, "data", "molecule-formula.grammar"), LipidCreator.PARSER_QUOTE);
             ionFormulaParserEventHandler = new IonFormulaParserEventHandler();
-            ionFormulaParser = new Parser(ionFormulaParserEventHandler, creatorGUI.lipidCreator.prefixPath + "data/ion-formula.grammar", LipidCreator.PARSER_QUOTE);
+            ionFormulaParser = new Parser(ionFormulaParserEventHandler, Path.Combine(creatorGUI.lipidCreator.prefixPath, "data", "ion-formula.grammar"), LipidCreator.PARSER_QUOTE);
             
             
             InitializeComponent();

@@ -92,7 +92,7 @@ namespace LipidCreator
             
             try
             {
-                this.lipidCreator = new LipidCreator(inputParameters);
+                this.lipidCreator = new LipidCreator(inputParameters, true);
                 currentIndex = LipidCategory.NoLipid;
                 resetAllLipids();
             }
@@ -264,6 +264,7 @@ namespace LipidCreator
         
         
         
+        
         public void statisticsMenu(Object sender, EventArgs e)
         {
             menuStatistics.Checked = !menuStatistics.Checked;
@@ -283,6 +284,9 @@ namespace LipidCreator
         
         
         
+        
+        
+        
         public void clearLipidList(Object sender, EventArgs e)
         {
             lipidCreator.registeredLipidDictionary.Clear();
@@ -290,6 +294,11 @@ namespace LipidCreator
             registeredLipidsDatatable.Rows.Clear();
             refreshRegisteredLipidsTable();
         }
+        
+        
+        
+        
+        
         
         
         public bool resetLipidCreator(bool verify = true)
@@ -316,6 +325,12 @@ namespace LipidCreator
             }
             return false;
         }
+        
+        
+        
+        
+        
+        
         
         
         public void updateCECondition()
@@ -349,6 +364,11 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
+        
+        
         public void resetAllLipids()
         {
             lipidTabList = new ArrayList(new Lipid[] {null,
@@ -358,6 +378,8 @@ namespace LipidCreator
                                                       new Cholesterol(lipidCreator),
                                                       new Mediator(lipidCreator)});
         }
+        
+        
         
         
         
@@ -1034,17 +1056,9 @@ namespace LipidCreator
         
         
         
-        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectType)
-        {
-            updateRanges(fag, tb, objectType, false);
-        }
-        
-        
-        
-        
         
         // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
-        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectTypeI, bool isLCB)
+        public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectTypeI, bool isLCB = false)
         {
             ChainType objectType = (ChainType)objectTypeI;
             int minRange = 0, maxRange = 0;
@@ -1143,66 +1157,6 @@ namespace LipidCreator
         {
             ((Phospholipid)currentLipid).fag4.hydroxylInfo = ((TextBox)sender).Text;
             updateRanges(((Phospholipid)currentLipid).fag4, (TextBox)sender, 4);
-        }
-        
-        
-        
-        
-        
-        public void clFA3Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag3.faTypes["FAx"] = !((Phospholipid)currentLipid).fag3.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void clFA3Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag3.faTypes["FAx"] = !((Phospholipid)currentLipid).fag3.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void clFA3Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag3.faTypes["FAx"] = !((Phospholipid)currentLipid).fag3.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void clFA4Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag4.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag4.faTypes["FAx"] = !((Phospholipid)currentLipid).fag4.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void clFA4Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag4.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag4.faTypes["FAx"] = !((Phospholipid)currentLipid).fag4.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void clFA4Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag4.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag4.faTypes["FAx"] = !((Phospholipid)currentLipid).fag4.anyFAChecked();
         }
         
         
@@ -1425,6 +1379,11 @@ namespace LipidCreator
                 glFA3Textbox.Text = ((TextBox)sender).Text;
             }
         }
+        
+        
+        
+        
+        
         public void glFA2TextboxValueChanged(Object sender, EventArgs e)
         {
             ((Glycerolipid)currentLipid).fag2.lengthInfo = ((TextBox)sender).Text;
@@ -1476,60 +1435,11 @@ namespace LipidCreator
         
         
         
-        
-        public void glPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
+        protected virtual void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
         {
-            ((Glycerolipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
+            currentLipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
         }
         
-        
-        
-        
-        
-        public void glPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void glPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void glNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void glNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void glNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void glNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
-        }
         
         
         
@@ -1577,58 +1487,15 @@ namespace LipidCreator
         
         
         
-        public void glFA2Checkbox1CheckedChanged(Object sender, EventArgs e)
+        
+        
+        public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidEventArgs e)
         {
-            ((Glycerolipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
+            e.fag.faTypes[e.fType] = ((CheckBox)sender).Checked;
+            e.fag.faTypes["FAx"] = !e.fag.anyFAChecked();
         }
         
         
-        
-        
-        
-        public void glFA2Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
-        }
-        
-        
-        
-        
-        public void glFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag2.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void glFA3Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag3.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
-        }
-        
-        
-        
-        
-        public void glFA3Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag3.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
-        }
-        
-        
-        
-        
-        public void glFA3Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag3.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag3.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag3.anyFAChecked();
-        }
         
         
         
@@ -1647,7 +1514,7 @@ namespace LipidCreator
         
         
         
-        public void glHydroxyl2TextboxValueChanged(Object sender, EventArgs e)
+        public void FattyAcidValueChanged(Object sender, EventArgs e)
         {
             ((Glycerolipid)currentLipid).fag2.hydroxylInfo = ((TextBox)sender).Text;
             updateRanges(((Glycerolipid)currentLipid).fag2, (TextBox)sender, 4);
@@ -2051,59 +1918,6 @@ namespace LipidCreator
         
         
         
-        public void plPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        public void plNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
-        }
-        
         
         
         
@@ -2159,32 +1973,6 @@ namespace LipidCreator
         }
         
         
-        
-        
-        public void plF2Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag2.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag2.faTypes["FAx"] = !((Phospholipid)currentLipid).fag2.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        public void plFA2Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag2.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag2.faTypes["FAx"] = !((Phospholipid)currentLipid).fag2.anyFAChecked();
-        }
-        
-        
-        
-        
-        public void plFA2Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag2.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag2.faTypes["FAx"] = !((Phospholipid)currentLipid).fag2.anyFAChecked();
-        }
         
         
         
@@ -2341,6 +2129,8 @@ namespace LipidCreator
                 {
                     plFA2Checkbox2.Enabled = false;
                     plFA2Checkbox3.Enabled = false;
+                    plFA2Checkbox2.Checked = plFA1Checkbox2.Checked;
+                    plFA2Checkbox3.Checked = plFA1Checkbox3.Checked;
                     
                     clFA3Textbox.Enabled = false;
                     clDB3Textbox.Enabled = false;
@@ -2507,34 +2297,6 @@ namespace LipidCreator
         
         
         
-        public void slPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
-        }
-        public void slPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
-        }
-        public void slPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
-        }
-        public void slNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
-        }
-        public void slNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
-        }
-        public void slNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
-        }
-        public void slNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Sphingolipid)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
-        }
         
         public void slDB1TextboxValueChanged(Object sender, EventArgs e)
         {
@@ -2690,34 +2452,6 @@ namespace LipidCreator
         
         
         
-        public void chPosAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["+H"] = ((CheckBox)sender).Checked;
-        }
-        public void chPosAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["+2H"] = ((CheckBox)sender).Checked;
-        }
-        public void chPosAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["+NH4"] = ((CheckBox)sender).Checked;
-        }
-        public void chNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
-        }
-        public void chNegAdductCheckbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["-2H"] = ((CheckBox)sender).Checked;
-        }
-        public void chNegAdductCheckbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["+HCOO"] = ((CheckBox)sender).Checked;
-        }
-        public void chNegAdductCheckbox4CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Cholesterol)currentLipid).adducts["+CH3COO"] = ((CheckBox)sender).Checked;
-        }
         
         public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
         {
@@ -2770,10 +2504,7 @@ namespace LipidCreator
         
         ////////////////////// Mediators ////////////////////////////////
         
-        public void medNegAdductCheckbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Mediator)currentLipid).adducts["-H"] = ((CheckBox)sender).Checked;
-        }
+        
         
         private void medHGListboxSelectedValueChanged(object sender, System.EventArgs e)
         {
@@ -3605,6 +3336,9 @@ namespace LipidCreator
 
         }
         
+        
+        
+        
         public void unsetInstrument(Object sender, EventArgs e)
         {
             if (sender == null) { return; }
@@ -3615,6 +3349,9 @@ namespace LipidCreator
             lastCEInstrumentChecked = (MenuItem)sender;
             lastCEInstrumentChecked.Checked = true;
         }
+        
+        
+        
         
         
         public void changeInstrumentForCEtypePRM(Object sender, EventArgs e)
@@ -3631,6 +3368,9 @@ namespace LipidCreator
                 lastCEInstrumentChecked.Checked = true;
             }
         }
+        
+        
+        
         
         
         public void changeInstrumentForCEtypeSRM(Object sender, EventArgs e)
@@ -3684,6 +3424,9 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public void openFilterDialog(Object sender, EventArgs e)
         {
             filterDialog = new FilterDialog((Lipid)currentLipid);
@@ -3700,6 +3443,9 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
         public void windowOnClosing(Object sender, FormClosingEventArgs e)
         {
             if (lipidCreator != null)
@@ -3709,10 +3455,15 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
         public void windowSizeChanged(Object sender, EventArgs e)
         {
             lipidsGroupbox.Height = minLipidGridHeight + this.Height - minWindowHeight;
         }
+        
+        
         
         
         
@@ -3723,10 +3474,14 @@ namespace LipidCreator
         
         
         
+        
+        
         public void startSecondTutorial(Object sender, EventArgs e)
         {
             tutorial.startTutorial(Tutorials.TutorialSRM);
         }
+        
+        
         
         
         
@@ -3737,10 +3492,14 @@ namespace LipidCreator
         
         
         
+        
+        
         public void startFourthTutorial(Object sender, EventArgs e)
         {
             tutorial.startTutorial(Tutorials.TutorialCE);
         }
+        
+        
         
         
         
@@ -3762,6 +3521,7 @@ namespace LipidCreator
             }
             
         }
+        
         
         
         
@@ -3867,6 +3627,7 @@ namespace LipidCreator
                 MessageBox.Show ("An error occurred while importing the lipid list. For more details, please read the log message and contact the developers.", "LipidCreator: error occurred");
             }
         }
+        
         
         
         

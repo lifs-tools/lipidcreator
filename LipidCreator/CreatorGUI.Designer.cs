@@ -268,6 +268,32 @@ namespace LipidCreator
     }
     
     
+    
+    public class AdductCheckedEventArgs : EventArgs
+    {
+        public string adduct;
+        
+        public AdductCheckedEventArgs(string _adduct) : base()
+        {
+            adduct = _adduct;
+        }
+    }
+    
+    
+    
+    public class FattyAcidEventArgs : EventArgs
+    {
+        public FattyAcidGroup fag;
+        public string fType;
+        
+        public FattyAcidEventArgs(FattyAcidGroup _fag, string _fType) : base()
+        {
+            fag = _fag;
+            fType = _fType;
+        }
+    }
+    
+    
     partial class CreatorGUI
     {
 
@@ -275,6 +301,8 @@ namespace LipidCreator
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        
+        
         
         
         #region Windows Form Designer generated code
@@ -1367,19 +1395,19 @@ namespace LipidCreator
 
             clFA3Checkbox3.Location = new Point(clFA3Textbox.Left + 90, clFA3Textbox.Top + clFA3Textbox.Height);
             clFA3Checkbox3.Text = "FAa";
-            clFA3Checkbox3.CheckedChanged += new EventHandler(clFA3Checkbox3CheckedChanged);
+            clFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, "FAa" )); };
             clFA3Checkbox3.MouseLeave += new System.EventHandler(clFA3Checkbox3MouseLeave);
             clFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA3Checkbox3MouseHover);
             clFA3Checkbox2.Location = new Point(clFA3Textbox.Left + 40, clFA3Textbox.Top + clFA3Textbox.Height);
             clFA3Checkbox2.Text = "FAp";
             toolTip.SetToolTip(clFA3Checkbox2, FApInformation);
-            clFA3Checkbox2.CheckedChanged += new EventHandler(clFA3Checkbox2CheckedChanged);
+            clFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, "FAp" )); };
             clFA3Checkbox2.MouseLeave += new System.EventHandler(clFA3Checkbox2MouseLeave);
             clFA3Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA3Checkbox2MouseHover);
             clFA3Checkbox1.Location = new Point(clFA3Textbox.Left, clFA3Textbox.Top + clFA3Textbox.Height);
             clFA3Checkbox1.Text = "FA";
             clFA3Checkbox1.Checked = true;
-            clFA3Checkbox1.CheckedChanged += new EventHandler(clFA3Checkbox1CheckedChanged);
+            clFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, "FA" )); };
 
 
 
@@ -1411,19 +1439,19 @@ namespace LipidCreator
 
             clFA4Checkbox3.Location = new Point(clFA4Textbox.Left + 90, clFA4Textbox.Top + clFA4Textbox.Height);
             clFA4Checkbox3.Text = "FAa";
-            clFA4Checkbox3.CheckedChanged += new EventHandler(clFA4Checkbox3CheckedChanged);
+            clFA4Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, "FAa" )); };
             clFA4Checkbox3.MouseLeave += new System.EventHandler(clFA4Checkbox3MouseLeave);
             clFA4Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA4Checkbox3MouseHover);
             clFA4Checkbox2.Location = new Point(clFA4Textbox.Left + 40, clFA4Textbox.Top + clFA4Textbox.Height);
             clFA4Checkbox2.Text = "FAp";
             toolTip.SetToolTip(clFA4Checkbox2, FApInformation);
-            clFA4Checkbox2.CheckedChanged += new EventHandler(clFA4Checkbox2CheckedChanged);
+            clFA4Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, "FAp" )); };
             clFA4Checkbox2.MouseLeave += new System.EventHandler(clFA4Checkbox2MouseLeave);
             clFA4Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(clFA4Checkbox2MouseHover);
             clFA4Checkbox1.Location = new Point(clFA4Textbox.Left, clFA4Textbox.Top + clFA4Textbox.Height);
             clFA4Checkbox1.Text = "FA";
             clFA4Checkbox1.Checked = true;
-            clFA4Checkbox1.CheckedChanged += new EventHandler(clFA4Checkbox1CheckedChanged);
+            clFA4Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, "FA" )); };
 
 
 
@@ -1557,19 +1585,20 @@ namespace LipidCreator
 
             glFA2Checkbox3.Location = new Point(glFA2Textbox.Left + 90, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox3.Text = "FAa";
-            glFA2Checkbox3.CheckedChanged += new EventHandler(glFA2Checkbox3CheckedChanged);
+            glFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, "FAa" )); };
             glFA2Checkbox3.MouseLeave += new System.EventHandler(glFA2Checkbox3MouseLeave);
             glFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA2Checkbox3MouseHover);
             glFA2Checkbox2.Location = new Point(glFA2Textbox.Left + 40, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox2.Text = "FAp";
             toolTip.SetToolTip(glFA2Checkbox2, FApInformation);
-            glFA2Checkbox2.CheckedChanged += new EventHandler(glFA2Checkbox2CheckedChanged);
+            glFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, "FAp" )); };
             glFA2Checkbox2.MouseLeave += new System.EventHandler(glFA2Checkbox2MouseLeave);
             glFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA2Checkbox2MouseHover);
             glFA2Checkbox1.Location = new Point(glFA2Textbox.Left, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox1.Text = "FA";
             glFA2Checkbox1.Checked = true;
-            glFA2Checkbox1.CheckedChanged += new EventHandler(glFA2Checkbox1CheckedChanged);
+            //glFA2Checkbox1.CheckedChanged += new EventHandler(glFA2Checkbox1CheckedChanged);
+            glFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, "FA" )); };
 
             glFA3Combobox.BringToFront();
             glFA3Textbox.BringToFront();
@@ -1601,19 +1630,19 @@ namespace LipidCreator
 
             glFA3Checkbox3.Location = new Point(glFA3Textbox.Left + 90, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox3.Text = "FAa";
-            glFA3Checkbox3.CheckedChanged += new EventHandler(glFA3Checkbox3CheckedChanged);
+            glFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, "FAa" )); };
             glFA3Checkbox3.MouseLeave += new System.EventHandler(glFA3Checkbox3MouseLeave);
             glFA3Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA3Checkbox3MouseHover);
             glFA3Checkbox2.Location = new Point(glFA3Textbox.Left + 40, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox2.Text = "FAp";
             toolTip.SetToolTip(glFA3Checkbox2, FApInformation);
-            glFA3Checkbox2.CheckedChanged += new EventHandler(glFA3Checkbox2CheckedChanged);
+            glFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, "FAp" )); };
             glFA3Checkbox2.MouseLeave += new System.EventHandler(glFA3Checkbox2MouseLeave);
             glFA3Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(glFA3Checkbox2MouseHover);
             glFA3Checkbox1.Location = new Point(glFA3Textbox.Left, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox1.Text = "FA";
             glFA3Checkbox1.Checked = true;
-            glFA3Checkbox1.CheckedChanged += new EventHandler(glFA3Checkbox1CheckedChanged);
+            glFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, "FA" )); };
 
             
             glHgListbox.Location = new Point(172, 228);
@@ -1638,18 +1667,18 @@ namespace LipidCreator
             glPosAdductCheckbox1.Parent = glPositiveAdduct;
             glPosAdductCheckbox1.Location = new Point(10, 15);
             glPosAdductCheckbox1.Text = "+H⁺";
-            glPosAdductCheckbox1.CheckedChanged += new EventHandler(glPosAdductCheckbox1CheckedChanged);
+            glPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
             glPosAdductCheckbox1.Enabled = false;
             glPosAdductCheckbox2.Parent = glPositiveAdduct;
             glPosAdductCheckbox2.Location = new Point(10, 35);
             glPosAdductCheckbox2.Text = "+2H⁺⁺";
             glPosAdductCheckbox2.Enabled = false;
-            glPosAdductCheckbox2.CheckedChanged += new EventHandler(glPosAdductCheckbox2CheckedChanged);
+            glPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
             glPosAdductCheckbox3.Parent = glPositiveAdduct;
             glPosAdductCheckbox3.Location = new Point(10, 55);
             glPosAdductCheckbox3.Text = "+NH4⁺";
             glPosAdductCheckbox3.Checked = true;
-            glPosAdductCheckbox3.CheckedChanged += new EventHandler(glPosAdductCheckbox3CheckedChanged);
+            glPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
             glNegativeAdduct.Width = 120;
             glNegativeAdduct.Location = new Point(leftGroupboxes - glNegativeAdduct.Width, glPositiveAdduct.Top + 140);
             glNegativeAdduct.Height = 120;
@@ -1658,22 +1687,22 @@ namespace LipidCreator
             glNegAdductCheckbox1.Location = new Point(10, 15);
             glNegAdductCheckbox1.Text = "-H⁻";
             glNegAdductCheckbox1.Enabled = false;
-            glNegAdductCheckbox1.CheckedChanged += new EventHandler(glNegAdductCheckbox1CheckedChanged);
+            glNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
             glNegAdductCheckbox2.Parent = glNegativeAdduct;
             glNegAdductCheckbox2.Location = new Point(10, 35);
             glNegAdductCheckbox2.Text = "-2H⁻ ⁻";
             glNegAdductCheckbox2.Enabled = false;
-            glNegAdductCheckbox2.CheckedChanged += new EventHandler(glNegAdductCheckbox2CheckedChanged);
+            glNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
             glNegAdductCheckbox3.Parent = glNegativeAdduct;
             glNegAdductCheckbox3.Location = new Point(10, 55);
             glNegAdductCheckbox3.Text = "+HCOO⁻";
             glNegAdductCheckbox3.Enabled = false;
-            glNegAdductCheckbox3.CheckedChanged += new EventHandler(glNegAdductCheckbox3CheckedChanged);
+            glNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
             glNegAdductCheckbox4.Parent = glNegativeAdduct;
             glNegAdductCheckbox4.Location = new Point(10, 75);
             glNegAdductCheckbox4.Text = "+CH3COO⁻";
             glNegAdductCheckbox4.Enabled = false;
-            glNegAdductCheckbox4.CheckedChanged += new EventHandler(glNegAdductCheckbox4CheckedChanged);
+            glNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
 
             glPictureBox.Image = glyceroBackboneImage;
             glPictureBox.Location = new Point(117, 19);
@@ -1819,19 +1848,19 @@ namespace LipidCreator
 
             plFA2Checkbox3.Location = new Point(plFA2Textbox.Left + 90, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox3.Text = "FAa";
-            plFA2Checkbox3.CheckedChanged += new EventHandler(plFA2Checkbox3CheckedChanged);
+            plFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, "FAa" )); };
             plFA2Checkbox3.MouseLeave += new System.EventHandler(plFA2Checkbox3MouseLeave);
             plFA2Checkbox3.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2Checkbox3MouseHover);
             plFA2Checkbox2.Location = new Point(plFA2Textbox.Left + 40, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox2.Text = "FAp";
             toolTip.SetToolTip(plFA1Checkbox2, FApInformation);
-            plFA2Checkbox2.CheckedChanged += new EventHandler(plFA2Checkbox2CheckedChanged);
+            plFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, "FAp" )); };
             plFA2Checkbox2.MouseLeave += new System.EventHandler(plFA2Checkbox2MouseLeave);
             plFA2Checkbox2.MouseMove += new System.Windows.Forms.MouseEventHandler(plFA2checkbox2MouseHover);
             plFA2Checkbox1.Location = new Point(plFA2Textbox.Left, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox1.Text = "FA";
             plFA2Checkbox1.Checked = true;
-            plFA2Checkbox1.CheckedChanged += new EventHandler(plF2Checkbox1CheckedChanged);
+            plFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, "FA" )); };
             
             
             plTypeGroup.Location = new Point(400, 8);
@@ -1883,16 +1912,16 @@ namespace LipidCreator
             plPosAdductCheckbox1.Location = new Point(10, 15);
             plPosAdductCheckbox1.Text = "+H⁺";
             plPosAdductCheckbox1.Checked = true;
-            plPosAdductCheckbox1.CheckedChanged += new EventHandler(plPosAdductCheckbox1CheckedChanged);
+            plPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
             plPosAdductCheckbox2.Parent = plPositiveAdduct;
             plPosAdductCheckbox2.Location = new Point(10, 35);
             plPosAdductCheckbox2.Text = "+2H⁺⁺";
             plPosAdductCheckbox2.Enabled = false;
-            plPosAdductCheckbox2.CheckedChanged += new EventHandler(plPosAdductCheckbox2CheckedChanged);
+            plPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
             plPosAdductCheckbox3.Parent = plPositiveAdduct;
             plPosAdductCheckbox3.Location = new Point(10, 55);
             plPosAdductCheckbox3.Text = "+NH4⁺";
-            plPosAdductCheckbox3.CheckedChanged += new EventHandler(plPosAdductCheckbox3CheckedChanged);
+            plPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
             plNegativeAdduct.Width = 120;
             plNegativeAdduct.Location = new Point(leftGroupboxes - plNegativeAdduct.Width, plPositiveAdduct.Top + 140);
             plNegativeAdduct.Height = 120;
@@ -1900,19 +1929,19 @@ namespace LipidCreator
             plNegAdductCheckbox1.Parent = plNegativeAdduct;
             plNegAdductCheckbox1.Location = new Point(10, 15);
             plNegAdductCheckbox1.Text = "-H⁻";
-            plNegAdductCheckbox1.CheckedChanged += new EventHandler(plNegAdductCheckbox1CheckedChanged);
+            plNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
             plNegAdductCheckbox2.Parent = plNegativeAdduct;
             plNegAdductCheckbox2.Location = new Point(10, 35);
             plNegAdductCheckbox2.Text = "-2H⁻ ⁻";
-            plNegAdductCheckbox2.CheckedChanged += new EventHandler(plNegAdductCheckbox2CheckedChanged);
+            plNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
             plNegAdductCheckbox3.Parent = plNegativeAdduct;
             plNegAdductCheckbox3.Location = new Point(10, 55);
             plNegAdductCheckbox3.Text = "+HCOO⁻";
-            plNegAdductCheckbox3.CheckedChanged += new EventHandler(plNegAdductCheckbox3CheckedChanged);
+            plNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
             plNegAdductCheckbox4.Parent = plNegativeAdduct;
             plNegAdductCheckbox4.Location = new Point(10, 75);
             plNegAdductCheckbox4.Text = "+CH3COO⁻";
-            plNegAdductCheckbox4.CheckedChanged += new EventHandler(plNegAdductCheckbox4CheckedChanged);
+            plNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
 
 
             plPictureBox.Image = phosphoBackboneImage;
@@ -2061,16 +2090,16 @@ namespace LipidCreator
             slPosAdductCheckbox1.Location = new Point(10, 15);
             slPosAdductCheckbox1.Text = "+H⁺";
             slPosAdductCheckbox1.Checked = true;
-            slPosAdductCheckbox1.CheckedChanged += new EventHandler(slPosAdductCheckbox1CheckedChanged);
+            slPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
             slPosAdductCheckbox2.Parent = slPositiveAdduct;
             slPosAdductCheckbox2.Location = new Point(10, 35);
             slPosAdductCheckbox2.Text = "+2H⁺⁺";
             slPosAdductCheckbox2.Enabled = false;
-            slPosAdductCheckbox2.CheckedChanged += new EventHandler(slPosAdductCheckbox2CheckedChanged);
+            slPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
             slPosAdductCheckbox3.Parent = slPositiveAdduct;
             slPosAdductCheckbox3.Location = new Point(10, 55);
             slPosAdductCheckbox3.Text = "+NH4⁺";
-            slPosAdductCheckbox3.CheckedChanged += new EventHandler(slPosAdductCheckbox3CheckedChanged);
+            slPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
             slNegativeAdduct.Width = 120;
             slNegativeAdduct.Location = new Point(leftGroupboxes - slNegativeAdduct.Width, slPositiveAdduct.Top + 140);
             slNegativeAdduct.Height = 120;
@@ -2078,20 +2107,20 @@ namespace LipidCreator
             slNegAdductCheckbox1.Parent = slNegativeAdduct;
             slNegAdductCheckbox1.Location = new Point(10, 15);
             slNegAdductCheckbox1.Text = "-H⁻";
-            slNegAdductCheckbox1.CheckedChanged += new EventHandler(slNegAdductCheckbox1CheckedChanged);
+            slNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
             slNegAdductCheckbox2.Parent = slNegativeAdduct;
             slNegAdductCheckbox2.Location = new Point(10, 35);
             slNegAdductCheckbox2.Text = "-2H⁻⁻";
             slNegAdductCheckbox2.Enabled = false;
-            slNegAdductCheckbox2.CheckedChanged += new EventHandler(slNegAdductCheckbox2CheckedChanged);
+            slNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
             slNegAdductCheckbox3.Parent = slNegativeAdduct;
             slNegAdductCheckbox3.Location = new Point(10, 55);
             slNegAdductCheckbox3.Text = "+HCOO⁻";
-            slNegAdductCheckbox3.CheckedChanged += new EventHandler(slNegAdductCheckbox3CheckedChanged);
+            slNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
             slNegAdductCheckbox4.Parent = slNegativeAdduct;
             slNegAdductCheckbox4.Location = new Point(10, 75);
             slNegAdductCheckbox4.Text = "+CH3COO⁻";
-            slNegAdductCheckbox4.CheckedChanged += new EventHandler(slNegAdductCheckbox4CheckedChanged);
+            slNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
 
             if (!lipidCreatorInitError)
             {
@@ -2141,17 +2170,17 @@ namespace LipidCreator
             chPosAdductCheckbox1.Location = new Point(10, 15);
             chPosAdductCheckbox1.Text = "+H⁺";
             chPosAdductCheckbox1.Enabled = false;
-            chPosAdductCheckbox1.CheckedChanged += new EventHandler(chPosAdductCheckbox1CheckedChanged);
+            chPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
             chPosAdductCheckbox2.Parent = chPositiveAdduct;
             chPosAdductCheckbox2.Location = new Point(10, 35);
             chPosAdductCheckbox2.Text = "+2H⁺⁺";
             chPosAdductCheckbox2.Enabled = false;
-            chPosAdductCheckbox2.CheckedChanged += new EventHandler(chPosAdductCheckbox2CheckedChanged);
+            chPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
             chPosAdductCheckbox3.Parent = chPositiveAdduct;
             chPosAdductCheckbox3.Location = new Point(10, 55);
             chPosAdductCheckbox3.Text = "+NH4⁺";
             chPosAdductCheckbox3.Checked = true;
-            chPosAdductCheckbox3.CheckedChanged += new EventHandler(chPosAdductCheckbox3CheckedChanged);
+            chPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
             chNegativeAdduct.Width = 120;
             chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, chPositiveAdduct.Top + 140);
             chNegativeAdduct.Height = 120;
@@ -2160,22 +2189,22 @@ namespace LipidCreator
             chNegAdductCheckbox1.Location = new Point(10, 15);
             chNegAdductCheckbox1.Text = "-H⁻";
             chNegAdductCheckbox1.Enabled = false;
-            chNegAdductCheckbox1.CheckedChanged += new EventHandler(chNegAdductCheckbox1CheckedChanged);
+            chNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
             chNegAdductCheckbox2.Parent = chNegativeAdduct;
             chNegAdductCheckbox2.Location = new Point(10, 35);
             chNegAdductCheckbox2.Text = "-2H⁻⁻";
             chNegAdductCheckbox2.Enabled = false;
-            chNegAdductCheckbox2.CheckedChanged += new EventHandler(chNegAdductCheckbox2CheckedChanged);
+            chNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
             chNegAdductCheckbox3.Parent = chNegativeAdduct;
             chNegAdductCheckbox3.Location = new Point(10, 55);
             chNegAdductCheckbox3.Text = "+HCOO⁻";
             chNegAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox3.CheckedChanged += new EventHandler(chNegAdductCheckbox3CheckedChanged);
+            chNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
             chNegAdductCheckbox4.Parent = chNegativeAdduct;
             chNegAdductCheckbox4.Location = new Point(10, 75);
             chNegAdductCheckbox4.Text = "+CH3COO⁻";
             chNegAdductCheckbox4.Enabled = false;
-            chNegAdductCheckbox4.CheckedChanged += new EventHandler(chNegAdductCheckbox4CheckedChanged);
+            chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
             
             chPictureBox.Image = cholesterolBackboneImage;
             chPictureBox.Location = new Point(30, 30);
@@ -2256,7 +2285,7 @@ namespace LipidCreator
             medNegAdductCheckbox1.Parent = medNegativeAdduct;
             medNegAdductCheckbox1.Location = new Point(10, 15);
             medNegAdductCheckbox1.Text = "-H⁻";
-            medNegAdductCheckbox1.CheckedChanged += new EventHandler(medNegAdductCheckbox1CheckedChanged);
+            medNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
             medNegAdductCheckbox2.Parent = medNegativeAdduct;
             medNegAdductCheckbox2.Location = new Point(10, 35);
             medNegAdductCheckbox2.Text = "-2H⁻⁻";

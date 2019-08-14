@@ -281,7 +281,43 @@ namespace LipidCreator
                 log.Warn("Could not write to '"+ analyticsFile + "': " + ex);
             }
         }
+
+        public void toolDirectoryMenu(Object sender, EventArgs e)
+        {
+            string dataDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase));
+            openDirectory(dataDir);
+        }
         
+        private void openDirectory(string dataDir)
+        {
+            log.Debug("LipidCreator dir to open is " + dataDir);
+
+            try
+            {
+                log.Debug("Opening directory " + System.IO.Path.GetDirectoryName(dataDir));
+                int p = (int)Environment.OSVersion.Platform;
+                if ((p == 4) || (p == 6) || (p == 128))
+                {
+                    log.Debug("Running on Linux");
+                    string openCmd = "xdg-open";
+                    Process process = System.Diagnostics.Process.Start(openCmd, dataDir);
+                    process?.WaitForExit();
+                    log.Debug("Finished starting process '" + openCmd + " " + dataDir + "' with code " + process.ExitCode);
+                }
+                else
+                {
+                    log.Debug("Running on Windows");
+                    Process process = System.Diagnostics.Process.Start(dataDir);
+                    process?.WaitForExit();
+                    log.Debug("Finished starting process '" + dataDir);
+                }
+            }
+            catch (Exception exception)
+            {
+                log.Error("Error while opening dataDir folder " + dataDir + ":", exception);
+                log.Error(exception.StackTrace);
+            }
+        }
         
         
         
@@ -3463,33 +3499,7 @@ namespace LipidCreator
         protected void menuDocsClick(object sender, System.EventArgs e)
         {
             string docsDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), "data", "docs");
-            log.Debug("docsDir is " + docsDir);
-                
-            try
-            {
-                log.Debug("Opening directory " + System.IO.Path.GetDirectoryName(docsDir));
-                int p = (int)Environment.OSVersion.Platform;
-                if ((p == 4) || (p == 6) || (p == 128))
-                {
-                    log.Debug("Running on Linux");
-                    string openCmd = "xdg-open";
-                    Process process = System.Diagnostics.Process.Start(openCmd, docsDir);
-                    process?.WaitForExit();
-                    log.Debug("Finished starting process '" + openCmd + " " + docsDir + "' with code " + process.ExitCode);
-                }
-                else
-                {
-                    log.Debug("Running on Windows");
-                    Process process = System.Diagnostics.Process.Start(docsDir);
-                    process?.WaitForExit();
-                    log.Debug("Finished starting process '"+ docsDir);
-                }
-            }
-            catch (Exception exception)
-            {
-                log.Error("Error while opening docs folder " + docsDir + ":", exception);
-                log.Error(exception.StackTrace);
-            }
+            openDirectory(docsDir);
         }
         
         

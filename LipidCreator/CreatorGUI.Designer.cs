@@ -363,6 +363,8 @@ namespace LipidCreator
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuStatistics;
         [NonSerialized]
+        public System.Windows.Forms.MenuItem menuToolDirectory;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuOptions;
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuTranslate;
@@ -881,6 +883,7 @@ namespace LipidCreator
             this.menuDash4 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
             this.menuStatistics = new System.Windows.Forms.MenuItem ();
+            this.menuToolDirectory = new System.Windows.Forms.MenuItem();
             this.menuClearLipidList = new System.Windows.Forms.MenuItem ();
             this.menuResetCategory = new System.Windows.Forms.MenuItem ();
             this.menuResetLipidCreator = new System.Windows.Forms.MenuItem ();
@@ -929,9 +932,8 @@ namespace LipidCreator
             this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.menuTranslate.Text = "Lipid name tr&anslator";
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
-            
-            
-            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics});
+
+            this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics, menuToolDirectory});
             this.menuOptions.Text = "Options";
             
             this.menuCollisionEnergy.MenuItems.AddRange(new MenuItem[]{ menuCollisionEnergyNone});
@@ -972,6 +974,9 @@ namespace LipidCreator
             this.menuStatistics.Text = "Send &anonymous statistics";
             this.menuStatistics.Click += new System.EventHandler (statisticsMenu);
             if (!lipidCreatorInitError) this.menuStatistics.Checked = lipidCreator.enableAnalytics;
+
+            this.menuToolDirectory.Text = "Open tool directory";
+            this.menuToolDirectory.Click += new System.EventHandler (toolDirectoryMenu);
 
             this.menuHelp = new System.Windows.Forms.MenuItem ();
             this.menuHelp.Text = "&Help";

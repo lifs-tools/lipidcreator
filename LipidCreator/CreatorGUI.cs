@@ -1170,6 +1170,88 @@ namespace LipidCreator
         
         
         
+        
+        
+        
+        
+        public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidEventArgs e)
+        {
+            e.fag.faTypes[e.fType] = ((CheckBox)sender).Checked;
+            e.fag.faTypes["FAx"] = !e.fag.anyFAChecked();
+        }
+        
+        
+        
+        
+        
+        protected virtual void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
+        {
+            currentLipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
+        }
+        
+        
+        
+        
+        public void updateGLRepresentative()
+        {
+            if (((Glycerolipid)currentLipid).representativeFA)
+            {
+                glFA2Combobox.SelectedIndex = glFA1Combobox.SelectedIndex;
+                glFA3Combobox.SelectedIndex = glFA1Combobox.SelectedIndex;
+                glFA2Textbox.Text = glFA1Textbox.Text;
+                glFA3Textbox.Text = glFA1Textbox.Text;
+                glDB2Textbox.Text = glDB1Textbox.Text;
+                glDB3Textbox.Text = glDB1Textbox.Text;
+                glHydroxyl2Textbox.Text = glHydroxyl1Textbox.Text;
+                glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
+                //if (((Glycerolipid)currentLipid).fag2.anyFAChecked())
+                //{
+                    glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
+                    glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
+                    glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
+                //}
+                //if (((Glycerolipid)currentLipid).fag3.anyFAChecked())
+                //{
+                    glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
+                    glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
+                    glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
+                //}
+            }
+        }
+        
+        
+        
+        
+        public void updatePLRepresentative()
+        {
+            if (((Phospholipid)currentLipid).representativeFA)
+            {
+                plFA2Combobox.SelectedIndex = plFA1Combobox.SelectedIndex;
+                clFA3Combobox.SelectedIndex = plFA1Combobox.SelectedIndex;
+                clFA4Combobox.SelectedIndex = plFA1Combobox.SelectedIndex;
+                plFA2Textbox.Text = plFA1Textbox.Text;
+                clFA3Textbox.Text = plFA1Textbox.Text;
+                clFA4Textbox.Text = plFA1Textbox.Text;
+                plDB2Textbox.Text = plDB1Textbox.Text;
+                clDB3Textbox.Text = plDB1Textbox.Text;
+                clDB4Textbox.Text = plDB1Textbox.Text;
+                plHydroxyl2Textbox.Text = plHydroxyl1Textbox.Text;
+                clHydroxyl3Textbox.Text = plHydroxyl1Textbox.Text;
+                clHydroxyl4Textbox.Text = plHydroxyl1Textbox.Text;
+                plFA2Checkbox1.Checked = plFA1Checkbox1.Checked;
+                plFA2Checkbox2.Checked = plFA1Checkbox2.Checked;
+                plFA2Checkbox3.Checked = plFA1Checkbox3.Checked;
+                clFA3Checkbox1.Checked = plFA1Checkbox1.Checked;
+                clFA3Checkbox2.Checked = plFA1Checkbox2.Checked;
+                clFA3Checkbox3.Checked = plFA1Checkbox3.Checked;
+                clFA4Checkbox1.Checked = plFA1Checkbox1.Checked;
+                clFA4Checkbox2.Checked = plFA1Checkbox2.Checked;
+                clFA4Checkbox3.Checked = plFA1Checkbox3.Checked;
+            }
+        }
+        
+        
+        
         public void clRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
             ((Phospholipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
@@ -1255,138 +1337,6 @@ namespace LipidCreator
         }
         
         
-        
-        
-        
-        ////////////////////// GL ////////////////////////////////
-        
-        public void glFA1ComboboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((Glycerolipid)currentLipid).fag1, glFA1Textbox, ((ComboBox)sender).SelectedIndex);
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                glFA2Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
-                glFA3Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        public void glFA1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, glFA1Combobox.SelectedIndex);
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                glFA2Textbox.Text = ((TextBox)sender).Text;
-                glFA3Textbox.Text = ((TextBox)sender).Text;
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
-        public void glDB1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, 3);
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                glDB2Textbox.Text = ((TextBox)sender).Text;
-                glDB3Textbox.Text = ((TextBox)sender).Text;
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
-        protected virtual void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
-        {
-            currentLipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
-        }
-        
-        
-        
-        
-        
-        public void glFA1Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked =  ((CheckBox)sender).Checked;
-            }
-        }
-        
-        
-        
-        
-        public void glFA1Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = ((CheckBox)sender).Checked;
-            }
-        }
-        
-        
-        
-        
-        
-        public void glFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Glycerolipid)currentLipid).fag1.faTypes["FAx"] = !((Glycerolipid)currentLipid).fag1.anyFAChecked();
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = ((CheckBox)sender).Checked;
-            }
-        }
-        
-        
-        
-        
-        
-        
-        public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidEventArgs e)
-        {
-            e.fag.faTypes[e.fType] = ((CheckBox)sender).Checked;
-            e.fag.faTypes["FAx"] = !e.fag.anyFAChecked();
-        }
-        
-        
-        
-        
-        
-        
-        public void glHydroxyl1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Glycerolipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(((Glycerolipid)currentLipid).fag1, (TextBox)sender, 4);
-            if (((Glycerolipid)currentLipid).representativeFA)
-            {
-                glHydroxyl2Textbox.Text = ((TextBox)sender).Text;
-                glHydroxyl3Textbox.Text = ((TextBox)sender).Text;
-            }
-        }
         
         
         
@@ -1561,137 +1511,6 @@ namespace LipidCreator
         
         
     
-        public void plFA1ComboboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(((Phospholipid)currentLipid).fag1, plFA1Textbox, ((ComboBox)sender).SelectedIndex);
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plFA2Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
-                if (plIsCL.Checked)
-                {
-                    clFA3Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
-                    clFA4Combobox.SelectedIndex = ((ComboBox)sender).SelectedIndex;
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        public void plFA1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(((Phospholipid)currentLipid).fag1, (TextBox)sender, plFA1Combobox.SelectedIndex);
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plFA2Textbox.Text = ((TextBox)sender).Text;
-                if (plIsCL.Checked)
-                {
-                    clFA3Textbox.Text = ((TextBox)sender).Text;
-                    clFA4Textbox.Text = ((TextBox)sender).Text;
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        public void plDB1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.dbInfo = ((TextBox)sender).Text;
-            updateRanges(((Phospholipid)currentLipid).fag1, (TextBox)sender, 3);
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plDB2Textbox.Text = ((TextBox)sender).Text;
-                if (plIsCL.Checked)
-                {
-                    clDB3Textbox.Text = ((TextBox)sender).Text;
-                    clDB4Textbox.Text = ((TextBox)sender).Text;
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        public void plHydroxyl1TextboxValueChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(((Phospholipid)currentLipid).fag1, (TextBox)sender, 4);
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plHydroxyl2Textbox.Text = ((TextBox)sender).Text;
-                if (plIsCL.Checked)
-                {
-                    clHydroxyl3Textbox.Text = ((TextBox)sender).Text;
-                    clHydroxyl4Textbox.Text = ((TextBox)sender).Text;
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        
-        public void plFA1Checkbox1CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.faTypes["FA"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag1.faTypes["FAx"] = !((Phospholipid)currentLipid).fag1.anyFAChecked();
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plFA2Checkbox1.Checked = ((CheckBox)sender).Checked;
-                if (plIsCL.Checked)
-                {
-                    clFA3Checkbox1.Checked = ((CheckBox)sender).Checked;
-                    clFA4Checkbox1.Checked = ((CheckBox)sender).Checked;
-                }
-            }
-        }
-        
-        
-        
-        
-        public void plFA1Checkbox2CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.faTypes["FAp"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag1.faTypes["FAx"] = !((Phospholipid)currentLipid).fag1.anyFAChecked();
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plFA2Checkbox2.Checked = ((CheckBox)sender).Checked;
-                if (plIsCL.Checked)
-                {
-                    clFA3Checkbox2.Checked = ((CheckBox)sender).Checked;
-                    clFA4Checkbox2.Checked = ((CheckBox)sender).Checked;
-                }
-            }
-        }
-        
-        
-        
-        
-        public void plFA1Checkbox3CheckedChanged(Object sender, EventArgs e)
-        {
-            ((Phospholipid)currentLipid).fag1.faTypes["FAa"] = ((CheckBox)sender).Checked;
-            ((Phospholipid)currentLipid).fag1.faTypes["FAx"] = !((Phospholipid)currentLipid).fag1.anyFAChecked();
-            if (((Phospholipid)currentLipid).representativeFA)
-            {
-                plFA2Checkbox3.Checked = ((CheckBox)sender).Checked;
-                if (plIsCL.Checked)
-                {
-                    clFA3Checkbox3.Checked = ((CheckBox)sender).Checked;
-                    clFA4Checkbox3.Checked = ((CheckBox)sender).Checked;
-                }
-            }
-        }
-        
         
         
         
@@ -1702,6 +1521,7 @@ namespace LipidCreator
             ((Phospholipid)currentLipid).isCL = plIsCL.Checked;
             ((Phospholipid)currentLipid).isLyso = plIsLyso.Checked;
 
+            plRepresentativeFA.Visible = !((Phospholipid)currentLipid).isLyso;
             changeTab((int)LipidCategory.Glycerophospholipid);
         }
         
@@ -1901,6 +1721,9 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
         void plChangeLyso(bool lyso)
         {
             
@@ -1924,6 +1747,7 @@ namespace LipidCreator
                 plDB2Label.Visible = false;
                 plHydroxyl2Label.Visible = false;
                 plFA2Checkbox1.Visible = false;
+                plRepresentativeFA.Visible = false;
             }
             else
             {
@@ -1933,11 +1757,16 @@ namespace LipidCreator
                 }
                 plPictureBox.Left = 107;
                 plPictureBox.Image = phosphoBackboneImage;
+                plRepresentativeFA.Visible = true;
             }
             plPictureBox.SendToBack();
             plHgList.Sort();
             plHgListbox.Items.AddRange(plHgList.ToArray());
             enableDisableAdducts((int)currentIndex);
+            
+            
+            
+            
         }
         
         ////////////////////// SL ////////////////////////////////

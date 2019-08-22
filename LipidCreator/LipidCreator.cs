@@ -587,7 +587,7 @@ namespace LipidCreator
         
 
         
-        public LipidCreator(string pipe)
+        public LipidCreator(string pipe, bool firstInit = false)
         {
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
             XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));
@@ -627,8 +627,11 @@ namespace LipidCreator
             LC_VERSION_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LC_OS = Environment.OSVersion.Platform;
             ANALYTICS_CATEGORY = "lipidcreator-" + LC_VERSION_NUMBER;
-            log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
-            log.Info("Using " + prefixPath + " as base directory for relative resource lookup. Resolved executing assembly location: " + new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            if (firstInit)
+            {
+                log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
+                log.Info("Using " + prefixPath + " as base directory for relative resource lookup. Resolved executing assembly location: " + new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            }
             registeredLipids = new ArrayList();
             registeredLipidDictionary = new Dictionary<ulong, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();

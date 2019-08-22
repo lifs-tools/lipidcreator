@@ -214,6 +214,7 @@ namespace LipidCreator
             sb.Append(" lengthInfo=\"" + lengthInfo + "\"");
             sb.Append(" dbInfo=\"" + dbInfo + "\"");
             sb.Append(" hydroxylInfo=\"" + hydroxylInfo + "\">\n");
+            
             foreach (KeyValuePair<String, bool> item in faTypes)
             {
                 sb.Append("<faType");

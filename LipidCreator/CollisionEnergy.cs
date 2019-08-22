@@ -104,22 +104,26 @@ namespace LipidCreator
                         IDictionary<string, IDictionary<string, string>> d3 = d2[adductType];
                         double ce = Convert.ToDouble(adductXML.Attribute("ce").Value, CultureInfo.InvariantCulture);
                         if (ce2.ContainsKey(adductType)) ce2[adductType] = ce;
+                        
+                        foreach (string fragType in d3.Keys)
+                        {
+                            IDictionary<string, string> d4 = d3[fragType];
+                            if (!d4.ContainsKey("selected"))
+                            {
+                                d4.Add("selected", "1");
+                            }
+                            else 
+                            {
+                                d4["selected"] = "1";
+                            }
+                        }
                                                 
                         foreach (var fragmentXML in adductXML.Descendants("fr"))
                         {
                             string fragmentType = fragmentXML.Attribute("type").Value;
                             if (!d3.ContainsKey(fragmentType)) continue;
                             IDictionary<string, string> d4 = d3[fragmentType];
-                            
-                            string fragmentSelected = fragmentXML.Attribute("sel").Value;
-                            if (!d4.ContainsKey("selected"))
-                            {
-                                d4.Add("selected", fragmentSelected);
-                            }
-                            else 
-                            {
-                                d4["selected"] = fragmentSelected;
-                            }
+                            d4["selected"] = "0";
                         }
                     }
                 }
@@ -144,11 +148,12 @@ namespace LipidCreator
                     // foreach adduct
                     foreach(KeyValuePair<string, IDictionary<string, IDictionary<string, string>>> kvp3 in kvp2.Value)
                     {
+                        
                         sb.Append("<adt type=\"" + kvp3.Key + "\" ce=\""+ string.Format(new CultureInfo("en-US"), "{0:0.000}", collisionEnergies[kvp1.Key][kvp2.Key][kvp3.Key]) + "\">\n");
                     
                         foreach(KeyValuePair<string, IDictionary<string, string>> kvp4 in kvp3.Value)
                         {
-                            sb.Append("<fr type=\"" + kvp4.Key + "\" sel=\"" + kvp4.Value["selected"] + "\" />\n");
+                            if (kvp4.Value["selected"] == "0") sb.Append("<fr type=\"" + kvp4.Key + "\" />\n");
                         }
                         sb.Append("</adt>\n");
                     }

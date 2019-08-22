@@ -345,7 +345,7 @@ namespace LipidCreator
                                         LipidCreator lc = null;
                                         try
                                         {
-                                            lc = new LipidCreator(null);
+                                            lc = new LipidCreator(null, true);
                                             lc.runMode = RunMode.commandline;
                                             lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                         }
@@ -472,7 +472,7 @@ namespace LipidCreator
                                 LipidCreator lc = null;
                                 try
                                 {
-                                    lc = new LipidCreator(null);
+                                    lc = new LipidCreator(null, true);
                                     lc.runMode = runMode;
                                     lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 }
@@ -564,7 +564,7 @@ namespace LipidCreator
                                 LipidCreator lc = null;
                                 try
                                 {
-                                    lc = new LipidCreator(null);
+                                    lc = new LipidCreator(null, true);
                                     lc.runMode = runMode;
                                     lc.analytics(LipidCreator.ANALYTICS_CATEGORY, "launch-" + runMode);
                                 }

@@ -2066,7 +2066,7 @@ namespace LipidCreator
             {
                 string precursorName = precursorData.fullMoleculeListName;
                 string adduct = precursorData.precursorAdductFormula;
-                log.Info("Adding precursor " + precursorName + " and adduct " + adduct);
+                log.Debug("Adding precursor " + precursorName + " and adduct " + adduct);
                 if (collisionEnergyHandler.getCollisionEnergy(selectedInstrumentForCE, precursorName, adduct) == -1)
                 {
                     collisionEnergyHandler.computeDefaultCollisionEnergy(msInstruments[selectedInstrumentForCE], precursorName, adduct);

@@ -1945,11 +1945,7 @@ namespace LipidCreator
             }
         }
         
-        void medHGListboxMouseLeave(object sender, EventArgs e)
-        {
-            //medPictureBox.Image = null;
-            //medPictureBox.SendToBack();
-        }
+        
         
         
         ////////////////////// Remaining parts ////////////////////////////////

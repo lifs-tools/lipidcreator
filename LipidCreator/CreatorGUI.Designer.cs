@@ -2332,7 +2332,6 @@ namespace LipidCreator
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectionMode = SelectionMode.MultiSimple;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
-            medHgListbox.MouseLeave += new System.EventHandler(medHGListboxMouseLeave);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             
             medPictureBox.Location = new Point(210, 30);

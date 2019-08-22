@@ -47,10 +47,14 @@ using System.Globalization;
 
 
 using ExcelLibrary.SpreadSheet;
+using System.IO.Pipes;
+using System.Threading.Tasks;
 
 namespace LipidCreator
 {   
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
+
+    public delegate void SkylineConnectionClosedEventHandler(object sender, EventArgs e);
 
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};
@@ -112,6 +116,7 @@ namespace LipidCreator
         [NonSerialized]
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
+        public event SkylineConnectionClosedEventHandler ConnectionClosed;
         public static string LC_VERSION_NUMBER = "1.0.0.0";
         public static string LC_RELEASE_NUMBER = "1.0.0";
         public static string LC_BUILD_NUMBER = "0";
@@ -222,6 +227,12 @@ namespace LipidCreator
         public virtual void OnUpdate(EventArgs e)
         {
             LipidUpdateEventHandler handler = Update;
+            if (handler != null) handler(this, e);
+        }
+
+        public virtual void OnSkylineConnectionClosed(EventArgs e)
+        {
+            SkylineConnectionClosedEventHandler handler = ConnectionClosed;
             if (handler != null) handler(this, e);
         }
         
@@ -578,6 +589,8 @@ namespace LipidCreator
         
         public LipidCreator(string pipe)
         {
+            prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
+            XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));
             openedAsExternal = (pipe != null);
             skylineToolClient = null;
             if (openedAsExternal)
@@ -585,9 +598,30 @@ namespace LipidCreator
                 skylineToolClient = new SkylineToolClient(pipe, "LipidCreator");
                 skylineToolClient.DocumentChanged += OnDocumentChanged;
                 skylineToolClient.SelectionChanged += OnSelectionChanged;
+                log.Info("LipidCreator is connected to Skyline file: '" + skylineToolClient.GetDocumentPath()+"'");
+                Task.Factory.StartNew(() =>
+                {
+                    var client = new NamedPipeClientStream(@".", pipe, PipeDirection.In);
+                    log.Info("Opening connection to Skyline through pipe " + pipe);
+                    client.Connect();
+                    log.Info("Connected to Skyline through pipe " + pipe);
+                    while (client.NumberOfServerInstances>0)
+                    {
+                        log.Debug("Checking Skyline pipe connection!");
+                        var nServers = client.NumberOfServerInstances;
+                        log.Debug(nServers+" servers available on other end of pipe!");
+                        Thread.Sleep(1000);
+                    }
+
+                    if (client.NumberOfServerInstances == 0)
+                    {
+                        OnSkylineConnectionClosed(new EventArgs());
+                        log.Info("Skyline connection was terminated from the other side! Bye bye!");
+                        client.Dispose();
+                    }
+                });
+                
             }
-            prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
-            XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));
             LC_RELEASE_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString();
             LC_BUILD_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString();
             LC_VERSION_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();

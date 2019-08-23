@@ -1952,7 +1952,7 @@ namespace LipidCreator
 
             log.Debug("Inserting LibInfo table data in sqlite " + filename);
             //fill in the LibInfo first
-            string lsid = "urn:lsid:isas.de:spectral_library:bibliospec:nr:1";
+            string lsid = "urn:lsid:lifs.isas.de:spectral_library:lipidcreator:nr:1";
             // Simulate ctime(d), which is what BlibBuild uses.
             var createTime = string.Format("{0:ddd MMM dd HH:mm:ss yyyy}", DateTime.Now); 
             sql = "INSERT INTO LibInfo values('" + lsid + "','" + createTime + "',-1,1,7)";

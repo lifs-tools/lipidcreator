@@ -589,6 +589,8 @@ namespace LipidCreator
         
         public LipidCreator(string pipe, bool firstInit = false)
         {
+        
+        
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
             XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));
             openedAsExternal = (pipe != null);

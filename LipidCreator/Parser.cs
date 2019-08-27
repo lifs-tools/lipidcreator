@@ -31,6 +31,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using log4net;
+using log4net.Config;
 
 namespace LipidCreator
 {    
@@ -221,6 +223,7 @@ namespace LipidCreator
         public const long START_RULE = 2;
         public bool usedEOF = false;
         public string grammarName = "";
+        private static readonly ILog log = LogManager.GetLogger(typeof(Parser));
     
     
         public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
@@ -254,6 +257,7 @@ namespace LipidCreator
                     
                     if (splitString((string)tokens_level_1[0], ' ', quote).Count > 1)
                     {
+                        log.Error("Error: several rule names on left hand side in grammar rule: '" + ruleLine + "'");
                         throw new Exception("Error: several rule names on left hand side in grammar rule: '" + ruleLine + "'");
                     }
 
@@ -261,6 +265,7 @@ namespace LipidCreator
                     
                     if (rule.Equals(EOF_RULE_NAME))
                     {
+                        log.Error("Error: rule name is not allowed to be called EOF");
                         throw new Exception("Error: rule name is not allowed to be called EOF");
                     }
                     
@@ -340,7 +345,11 @@ namespace LipidCreator
                         else if (nonTerminalRules.Count == 1)
                         {
                             long ruleIndex1 = nonTerminalRules.First.Value;
-                            if (ruleIndex1 == newRuleIndex) throw new Exception("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                            if (ruleIndex1 == newRuleIndex)
+                            {
+                                log.Error("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                                throw new Exception("Error: corrupted token in grammar: rule '" + rule + "' is not allowed to refer soleley to itself.");
+                            }
                             
                             if (!NTtoNT.ContainsKey(ruleIndex1)) NTtoNT.Add(ruleIndex1, new HashSet<long>());
                             NTtoNT[ruleIndex1].Add(newRuleIndex);
@@ -358,6 +367,7 @@ namespace LipidCreator
             }
             else
             {
+                log.Error("Error: file '" + grammarFilename + "' does not exist or can not be opened.");
                 throw new Exception("Error: file '" + grammarFilename + "' does not exist or can not be opened.");
             }
             
@@ -399,7 +409,6 @@ namespace LipidCreator
             string grammar = File.ReadAllText(grammarFilename) + "\n";
             int grammarLength = grammar.Length;
             
-            
             // deleting comments to prepare for splitting the grammar in rules.
             // Therefore, we have to consider three different contexts, namely
             // within a quote, within a line comment, within a long comment.
@@ -418,7 +427,6 @@ namespace LipidCreator
                     lastEscapedBackslash = i;
                     continue;
                 }
-            
                 if (grammar[i] == '/' && grammar[i + 1] == '/') match = MatchWords.LineCommentStart;
                 else if (grammar[i] == '\n') match = MatchWords.LineCommentEnd;
                 else if (grammar[i] == '/' && grammar[i + 1] == '*') match = MatchWords.LongCommentStart;
@@ -450,7 +458,7 @@ namespace LipidCreator
                                     break;
                             } 
                             break;
-                            
+                    
                             
                         case Context.InQuote:
                             if (match == MatchWords.Quote)
@@ -484,26 +492,35 @@ namespace LipidCreator
             }
             else
             {
+                log.Error("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
                 throw new Exception("Error: corrupted grammar '" + grammarFilename + "', ends either in comment or quote");
             }
             grammar = strip(sb.ToString().Replace("\r\n", "").Replace("\n", "").Replace("\r", ""), ' ');
             if (grammar[grammar.Length - 1] != RULE_TERMINAL)
             {
+                log.Error("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign, was: '" + grammar[grammar.Length-1] + "'");
                 throw new Exception("Error: corrupted grammar'" + grammarFilename + "', last rule has no termininating sign, was: '" + grammar[grammar.Length-1] + "'");
             }
             ArrayList rules = splitString(grammar, RULE_TERMINAL, quote);
             
-            if (rules.Count < 1) throw new Exception("Error: corrupted grammar'" + grammarFilename + "', grammar is empty");
+            if (rules.Count < 1)
+            {
+                log.Error("Error: corrupted grammar'" + grammarFilename + "', grammar is empty");
+                throw new Exception("Error: corrupted grammar'" + grammarFilename + "', grammar is empty");
+            }
             
             ArrayList grammarNameRule = splitString((string)rules[0], ' ', quote);
             if (!grammarNameRule[0].Equals("grammar"))
             {
+                log.Error("Error: first rule must start with the keyword 'grammar'");
                 throw new Exception("Error: first rule must start with the keyword 'grammar'");
             }
             else if (grammarNameRule.Count != 2)
             {
+                log.Error("Error: incorrect first rule");
                 throw new Exception("Error: incorrect first rule");
             }
+            
             return rules;
         }
         
@@ -883,15 +900,15 @@ namespace LipidCreator
             
         public void parseRegular(string textToParse)
         {
+        
+        
             wordInGrammar = false;
             parseTree = null;
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
             Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
             // Ks is a lookup, which fields in the dpTable are filled
-            Bitfield[] Ks = new Bitfield[n];
-            
-            
+            Bitfield[] Ks = new Bitfield[n];            
             
             for (int i = 0; i < n; ++i)
             {

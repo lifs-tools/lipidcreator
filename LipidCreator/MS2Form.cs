@@ -242,6 +242,7 @@ namespace LipidCreator
             toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
+            
 
             if (hIndex != -1)
             {

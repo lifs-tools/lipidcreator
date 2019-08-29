@@ -451,7 +451,7 @@ namespace LipidCreator
             try
             {
                 currentDict[key][e.ColumnIndex - 1] = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                Convert.ToInt32(currentDict[key][e.ColumnIndex - 1].ToString());
+                if (e.ColumnIndex != 3) Convert.ToInt32(currentDict[key][e.ColumnIndex - 1].ToString());
             }
             catch (Exception ee)
             {

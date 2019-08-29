@@ -334,6 +334,7 @@ namespace LipidCreator
                 }
             }
             else {
+                newFragment.fragmentFile = ms2Fragment.fragmentFile;
                 ms2form.creatorGUI.lipidCreator.allFragments[lipidClass][charge >= 0][textBoxFragmentName.Text] = newFragment;
             }
             this.Close();

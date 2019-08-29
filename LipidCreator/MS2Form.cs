@@ -208,6 +208,7 @@ namespace LipidCreator
                     }
                 }
                 
+                
                 foreach (KeyValuePair<Molecule, int> row in fragment.fragmentElements)
                 {
                     if (row.Value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));

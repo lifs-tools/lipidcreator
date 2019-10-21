@@ -795,7 +795,15 @@ namespace LipidCreator
 
                 if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
                     this.Enabled = false;
-                    creatorGUI.lipidCreator.storeTransitionList("", parameterValues[1] == 1, true, Path.GetFullPath (saveFileDialog1.FileName), currentView, ".xls");
+                    try
+                    {
+                        creatorGUI.lipidCreator.storeTransitionList("", parameterValues[1] == 1, true, Path.GetFullPath (saveFileDialog1.FileName), currentView, ".xls");
+                        MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show("Problem storing transition list: " + exception.Message, "Problem storing transition list");
+                    }
                     this.Enabled = true;
                 }
             }
@@ -816,11 +824,18 @@ namespace LipidCreator
                         separator = "\t";
                     }
                     this.Enabled = false;
-                    creatorGUI.lipidCreator.storeTransitionList(separator, parameterValues[1] == 1, false, Path.GetFullPath (saveFileDialog1.FileName), currentView, mode);
+                    try
+                    {
+                        creatorGUI.lipidCreator.storeTransitionList(separator, parameterValues[1] == 1, false, Path.GetFullPath(saveFileDialog1.FileName), currentView, mode);
+                        MessageBox.Show("Storing of transition list is complete.", "Storing complete");
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show("Problem storing transition list: " + exception.Message, "Problem storing transition list");
+                    }
                     this.Enabled = true;
                 }
             }
-                    MessageBox.Show ("Storing of transition list is complete.", "Storing complete");
         }
         
         

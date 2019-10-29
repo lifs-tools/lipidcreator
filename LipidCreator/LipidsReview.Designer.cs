@@ -59,6 +59,10 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
+        
+            int windowWidth = 1100;
+            int windowHeight = 580;
+        
             this.dataGridViewTransitions = new System.Windows.Forms.DataGridView();
             this.buttonSendToSkyline = new System.Windows.Forms.Button();
             this.buttonStoreTransitionList = new System.Windows.Forms.Button();
@@ -77,7 +81,7 @@ namespace LipidCreator
             // 
             this.dataGridViewTransitions.AllowUserToAddRows = false;
             this.dataGridViewTransitions.AllowUserToDeleteRows = false;
-            //this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridViewTransitions.AllowUserToResizeColumns = true;
             this.dataGridViewTransitions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTransitions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.None;
             this.dataGridViewTransitions.AllowUserToResizeRows = false;
@@ -94,6 +98,7 @@ namespace LipidCreator
             this.dataGridViewTransitions.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing; 
             this.dataGridViewTransitions.RowsAdded += new DataGridViewRowsAddedEventHandler(gridviewDataRowAdded);
             this.dataGridViewTransitions.RowsRemoved += new DataGridViewRowsRemovedEventHandler(gridviewDataRowRemoved);
+            this.dataGridViewTransitions.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
             // 
             // button1
             // 
@@ -114,12 +119,13 @@ namespace LipidCreator
             this.buttonStoreTransitionList.Text = "Store transition list";
             this.buttonStoreTransitionList.UseVisualStyleBackColor = true;
             this.buttonStoreTransitionList.Click += new System.EventHandler(this.buttonStoreTransitionListClick);
+            this.buttonStoreTransitionList.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
             // 
             // groupBoxOptions
             // 
             this.groupBoxOptions.Location = new System.Drawing.Point(120, 6);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(560, 40);
+            this.groupBoxOptions.Size = new System.Drawing.Size(580, 40);
             this.groupBoxOptions.TabIndex = 4;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
@@ -146,6 +152,7 @@ namespace LipidCreator
             this.buttonCheckValues.Text = "Check transition list";
             this.buttonCheckValues.UseVisualStyleBackColor = true;
             this.buttonCheckValues.Click += new System.EventHandler(this.buttonCheckValuesClick);
+            this.buttonCheckValues.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             // 
             // checkBox1
             // 
@@ -191,6 +198,7 @@ namespace LipidCreator
             this.buttonStoreSpectralLibrary.UseVisualStyleBackColor = true;
             this.buttonStoreSpectralLibrary.Click += new System.EventHandler(this.buttonStoreSpectralLibraryClick);
             this.buttonStoreSpectralLibrary.Enabled = false;
+            this.buttonStoreSpectralLibrary.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             // 
             // label1
             // 
@@ -202,12 +210,15 @@ namespace LipidCreator
             this.labelNumberOfTransitions.TabIndex = 5;
             this.labelNumberOfTransitions.Text = "Number of transitions:";
             this.labelNumberOfTransitions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelNumberOfTransitions.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             // 
             // LipidsReview
             //
             this.FormClosing += new FormClosingEventHandler(closingInteraction);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1079, 540);
+            this.Size = new System.Drawing.Size(windowWidth, windowHeight);
+            this.Resize += new EventHandler(formResize);
+            this.MinimumSize = new System.Drawing.Size(windowWidth, windowHeight);
             this.Controls.Add(this.labelNumberOfTransitions);
             this.Controls.Add(this.buttonStoreSpectralLibrary);
             this.Controls.Add(this.buttonBack);
@@ -221,12 +232,19 @@ namespace LipidCreator
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransitions)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             
             controlElements = new ArrayList(){buttonSendToSkyline, buttonBack, dataGridViewTransitions, buttonStoreTransitionList, checkBoxHideReplicates, checkBoxEditMode, checkBoxCreateSpectralLibrary, buttonStoreSpectralLibrary, buttonCheckValues};
+            
+            formResize(null, null);
         }
+        
+        
+        
+        
         private void InitializeCustom()
         {
             this.SuspendLayout();
@@ -235,6 +253,8 @@ namespace LipidCreator
             this.PerformLayout();
         }
 
+        
+        
         #endregion
 
         [NonSerialized]

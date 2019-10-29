@@ -100,6 +100,13 @@ namespace LipidCreator
         }
         
         
+        private void formResize(object sender, System.EventArgs e)
+        {
+            int left = (buttonStoreTransitionList.Location.X + buttonStoreSpectralLibrary.Location.X) >> 1;
+            int top = buttonStoreSpectralLibrary.Location.Y;
+            buttonSendToSkyline.Location = new System.Drawing.Point(left, top);
+        }
+        
         
         private void gridviewDataRowRemoved(object sender, System.Windows.Forms.DataGridViewRowsRemovedEventArgs e)
         {

@@ -478,7 +478,7 @@ namespace LipidCreator
         Image cholesterolEsterBackboneImage;
 
         [NonSerialized]
-        public PictureBox glPictureBox;
+        public CustomPictureBox glPictureBox;
         [NonSerialized]
         public CustomPictureBox plPictureBox;
         [NonSerialized]
@@ -791,7 +791,7 @@ namespace LipidCreator
         Label homeText3;
 
         [NonSerialized]
-        PictureBox glArrow;
+        public CustomPictureBox glArrow;
         [NonSerialized]
         Image glArrowImage;
         [NonSerialized]
@@ -1025,12 +1025,12 @@ namespace LipidCreator
             openReviewFormButton = new Button();
             
 
-            glPictureBox = new PictureBox();
+            glPictureBox = new CustomPictureBox();
             plPictureBox = new CustomPictureBox();
             slPictureBox = new PictureBox();
             chPictureBox = new PictureBox();
             medPictureBox = new CustomPictureBox();
-            glArrow = new PictureBox();
+            glArrow = new CustomPictureBox();
             
             String dbText = "No. DB";
             String hydroxylText = "No. Hydroxy";
@@ -2544,10 +2544,7 @@ namespace LipidCreator
             this.SizeChanged += new EventHandler(windowSizeChanged);
             this.FormClosing += new FormClosingEventHandler(windowOnClosing);
             
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics};
-            
-            
-            
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics, glFA1Checkbox3, glFA1Checkbox2, glFA1Checkbox1, glFA2Checkbox3, glFA2Checkbox2, glFA2Checkbox1, glFA3Checkbox3, glFA3Checkbox2, glFA3Checkbox1, glPictureBox, glArrow, glFA1Textbox, glFA2Textbox, glFA3Textbox, glDB1Textbox, glDB2Textbox, glDB3Textbox, glHydroxyl1Textbox, glHydroxyl2Textbox, glHydroxyl3Textbox, glFA1Combobox, glFA2Combobox, glFA3Combobox, glHgListbox, glHGLabel, glContainsSugar, glRepresentativeFA, glPositiveAdduct, glNegativeAdduct};
             
             
         }

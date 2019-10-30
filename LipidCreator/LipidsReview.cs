@@ -53,8 +53,6 @@ namespace LipidCreator
         public IonFormulaParserEventHandler ionFormulaParserEventHandler;
         public Parser ionFormulaParser;
         public bool inEditingCheck;
-        public ExportParameters exportParameters;
-        public int[] parameterValues;
         
 
         public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
@@ -68,8 +66,6 @@ namespace LipidCreator
             pressedBackButton = false;
             inEditingCheck = false;
             
-            parameterValues = new int[]{0, 0, 1};
-            exportParameters = new ExportParameters(parameterValues);
             
             
             moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
@@ -781,65 +777,33 @@ namespace LipidCreator
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
-            exportParameters = new ExportParameters(parameterValues)
-            {
-                Owner = this,
-                ShowInTaskbar = false
-            };
-            exportParameters.ShowDialog();
-            exportParameters.Dispose();
+        
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
+            saveFileDialog1.InitialDirectory = "c:\\";
+            saveFileDialog1.Filter = "xls files (*.xls)|*.xls|xls files / separate polarities (*.xls)|*.xls|csv files (*.csv)|*.csv|csv files / separate polarities (*.csv)|*.csv|tsv files (*.tsv)|*.tsv|tsv files / separate polarities (*.tsv)|*.tsv";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
             
-            if (parameterValues[2] == 1) return;
             
-            if (parameterValues[0] == 0) // xls
-            {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
+            
+            if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                string mode = saveFileDialog1.FilterIndex <= 2 ? ".xls" : saveFileDialog1.FilterIndex <= 4 ? ".csv" : ".tsv";
+                string separator_sign = saveFileDialog1.FilterIndex <= 2 ? "" : saveFileDialog1.FilterIndex <= 4 ? "," : "\t";
+                bool separate_files = (saveFileDialog1.FilterIndex & 1) == 0;
+                bool isXLS = saveFileDialog1.FilterIndex <= 2;
                 
-                saveFileDialog1.InitialDirectory = "c:\\";
-                saveFileDialog1.Filter = "xls files (*.xls)|*.xls|All files (*.*)|*.*";
-                saveFileDialog1.FilterIndex = 0;
-                saveFileDialog1.RestoreDirectory = true;
-
-                if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                try
+                {
                     this.Enabled = false;
-                    try
-                    {
-                        creatorGUI.lipidCreator.storeTransitionList("", parameterValues[1] == 1, true, Path.GetFullPath (saveFileDialog1.FileName), currentView, ".xls");
-                        MessageBox.Show("Storing of transition list is complete.", "Storing complete");
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show("Problem storing transition list: " + exception.Message, "Problem storing transition list");
-                    }
-                    this.Enabled = true;
+                    creatorGUI.lipidCreator.storeTransitionList(separator_sign, separate_files, isXLS, Path.GetFullPath (saveFileDialog1.FileName), currentView, mode);
+                    MessageBox.Show("Storing of transition list is complete.", "Storing complete");
                 }
-            }
-            else // csv
-            {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
-                
-                saveFileDialog1.InitialDirectory = "c:\\";
-                saveFileDialog1.Filter = "csv files (*.csv)|*.csv|tsv files (*.tsv)|*.tsv|All files (*.*)|*.*";
-                saveFileDialog1.FilterIndex = 0;
-                saveFileDialog1.RestoreDirectory = true;
-
-                if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
-                    string mode = ".csv";
-                    string separator = ",";
-                    if(saveFileDialog1.FilterIndex==2) {
-                        mode = ".tsv";
-                        separator = "\t";
-                    }
-                    this.Enabled = false;
-                    try
-                    {
-                        creatorGUI.lipidCreator.storeTransitionList(separator, parameterValues[1] == 1, false, Path.GetFullPath(saveFileDialog1.FileName), currentView, mode);
-                        MessageBox.Show("Storing of transition list is complete.", "Storing complete");
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show("Problem storing transition list: " + exception.Message, "Problem storing transition list");
-                    }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Problem storing transition list: " + exception.Message, "Problem storing transition list");
+                }
+                finally
+                {
                     this.Enabled = true;
                 }
             }

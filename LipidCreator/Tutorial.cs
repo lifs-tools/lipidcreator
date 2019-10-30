@@ -49,6 +49,8 @@ namespace LipidCreator
     
     public enum CESteps {Null, Welcome, ActivateCE, OpenCEDialog, SelectTXB2, ExplainBlackCurve, ChangeManually, CEto20, SameForD4, CloseCE, ChangeToMediators, SelectTXB2HG, AddLipid, OpenInterlist, ReviewLipids, ExplainLCasExternal, StoreBlib, Finish};
     
+    
+    
 
     [Serializable]
     public class Tutorial
@@ -95,6 +97,9 @@ namespace LipidCreator
         }
         
         
+        
+        
+        
         public void startTutorial(Tutorials t)
         {
             if (!creatorGUI.resetLipidCreator()) return;
@@ -104,6 +109,7 @@ namespace LipidCreator
             inTutorial = true;
             quitting = false;
             
+            creatorGUI.MouseMove += mouseHoverInteraction;
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
@@ -117,7 +123,13 @@ namespace LipidCreator
             creatorGUI.plPosAdductCheckbox1.CheckedChanged += new EventHandler(checkBoxInteraction);
             creatorGUI.plPosAdductCheckbox3.CheckedChanged += new EventHandler(checkBoxInteraction);
             creatorGUI.MS2fragmentsLipidButton.MouseUp += new MouseEventHandler(buttonInteraction);
+            creatorGUI.glPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
+            creatorGUI.glPictureBox.MouseHover += new EventHandler(mouseHoverInteraction);
+            creatorGUI.glArrow.MouseHover += new EventHandler(mouseHoverInteraction);
+            creatorGUI.plPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
+            creatorGUI.plPictureBox.MouseHover += new EventHandler(mouseHoverInteraction);
             creatorGUI.medPictureBox.ImageChanged += new EventHandler(mouseHoverInteraction);
+            creatorGUI.medPictureBox.MouseHover += new EventHandler(mouseHoverInteraction);
             creatorGUI.addLipidButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.addHeavyIsotopeButton.Click += new EventHandler(buttonInteraction);
             creatorGUI.openReviewFormButton.Click += new EventHandler(buttonInteraction);
@@ -166,7 +178,7 @@ namespace LipidCreator
             ms2tc.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
             ms2tc.SelectedIndexChanged += new EventHandler(tabSelectedInteraction);
             
-            
+            creatorGUI.ms2fragmentsForm.MouseMove += mouseHoverInteraction;
             creatorGUI.ms2fragmentsForm.FormClosing += new FormClosingEventHandler(closingInteraction);
             creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemCheck += new ItemCheckEventHandler(checkedListBoxInteraction);
             creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck += new ItemCheckEventHandler(checkedListBoxInteraction);
@@ -184,7 +196,8 @@ namespace LipidCreator
         
         public void mouseHoverInteraction(object sender, EventArgs e)
         {
-            //tutorialArrow.BringToFront();
+            tutorialArrow.Focus();
+            tutorialArrow.BringToFront();
             tutorialArrow.Refresh();
         }
         
@@ -194,6 +207,7 @@ namespace LipidCreator
         
         public void initAddFragmentForm()
         {
+            creatorGUI.ms2fragmentsForm.newFragment.MouseMove += mouseHoverInteraction;
             creatorGUI.ms2fragmentsForm.newFragment.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
             creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.TextChanged += new EventHandler(textBoxInteraction);
             creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
@@ -207,6 +221,7 @@ namespace LipidCreator
         
         public void initHeavyLabeled()
         {
+            creatorGUI.addHeavyPrecursor.MouseMove += mouseHoverInteraction;
             creatorGUI.addHeavyPrecursor.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
             creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
             creatorGUI.addHeavyPrecursor.comboBox2.SelectedIndexChanged += new EventHandler(comboBoxInteraction);
@@ -224,6 +239,7 @@ namespace LipidCreator
         
         public void initInterList()
         {
+            creatorGUI.lipidsInterList.MouseMove += mouseHoverInteraction;
             creatorGUI.lipidsInterList.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
             creatorGUI.lipidsInterList.continueReviewButton.Click += buttonInteraction;
             creatorGUI.lipidsInterList.continueReviewButton.MouseDown += mouseDownInteraction;
@@ -232,6 +248,7 @@ namespace LipidCreator
         
         public void initFilterDialog()
         {
+            creatorGUI.filterDialog.MouseMove += mouseHoverInteraction;
             creatorGUI.filterDialog.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
             creatorGUI.filterDialog.button2.MouseDown += mouseDownInteraction;
             creatorGUI.filterDialog.button2.Click += buttonInteraction;
@@ -247,16 +264,16 @@ namespace LipidCreator
         
         public void initLipidReview()
         {
+            creatorGUI.lipidsReview.MouseMove += mouseHoverInteraction;
             creatorGUI.lipidsReview.buttonStoreTransitionList.Click += buttonInteraction;
             creatorGUI.lipidsReview.buttonStoreSpectralLibrary.Click += buttonInteraction;
             creatorGUI.lipidsReview.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
-            creatorGUI.lipidsReview.exportParameters.FormClosing += new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
-            creatorGUI.lipidsReview.exportParameters.button1.MouseDown += mouseDownInteraction;
         }
         
         
         public void initCEInspector()
         {
+            creatorGUI.ceInspector.MouseMove += mouseHoverInteraction;
             creatorGUI.ceInspector.fragmentsGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
             creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged += new EventHandler(radioButtonInteraction);
             creatorGUI.ceInspector.button2.Click += buttonInteraction;
@@ -290,11 +307,11 @@ namespace LipidCreator
             tutorialStep = 0;
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
-            //tutorialWindow.KeyPress -= keyPressInteraction;
             
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             
+            creatorGUI.MouseMove -= mouseHoverInteraction;
             creatorGUI.plHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.MouseMove -= new MouseEventHandler(dragInteraction);
@@ -305,7 +322,13 @@ namespace LipidCreator
             creatorGUI.plDB1Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plFA2Textbox.TextChanged -= new EventHandler(textBoxInteraction);
             creatorGUI.plDB2Textbox.TextChanged -= new EventHandler(textBoxInteraction);
+            creatorGUI.glPictureBox.ImageChanged -= new EventHandler(mouseHoverInteraction);
+            creatorGUI.glPictureBox.MouseHover -= new EventHandler(mouseHoverInteraction);
+            creatorGUI.glArrow.MouseHover -= new EventHandler(mouseHoverInteraction);
+            creatorGUI.plPictureBox.ImageChanged -= new EventHandler(mouseHoverInteraction);
+            creatorGUI.plPictureBox.MouseHover -= new EventHandler(mouseHoverInteraction);
             creatorGUI.medPictureBox.ImageChanged -= new EventHandler(mouseHoverInteraction);
+            creatorGUI.medPictureBox.MouseHover -= new EventHandler(mouseHoverInteraction);
             creatorGUI.plPosAdductCheckbox1.CheckedChanged -= new EventHandler(checkBoxInteraction);
             creatorGUI.plPosAdductCheckbox3.CheckedChanged -= new EventHandler(checkBoxInteraction);
             creatorGUI.MS2fragmentsLipidButton.Click -= new EventHandler(buttonInteraction);
@@ -324,16 +347,16 @@ namespace LipidCreator
             
             if (creatorGUI.lipidsReview != null)
             {
+                creatorGUI.lipidsReview.MouseMove -= mouseHoverInteraction;
                 creatorGUI.lipidsReview.buttonStoreTransitionList.Click -= buttonInteraction;
                 creatorGUI.lipidsReview.buttonStoreSpectralLibrary.Click -= buttonInteraction;
                 creatorGUI.lipidsReview.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
-                creatorGUI.lipidsReview.exportParameters.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
-                creatorGUI.lipidsReview.exportParameters.button1.MouseDown -= mouseDownInteraction;
                 creatorGUI.lipidsReview.Close();
             }
             
             if (creatorGUI.ms2fragmentsForm != null)
             {
+                creatorGUI.ms2fragmentsForm.MouseMove -= mouseHoverInteraction;
                 creatorGUI.ms2fragmentsForm.checkedListBoxPositiveFragments.ItemCheck -= new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
                 creatorGUI.ms2fragmentsForm.checkedListBoxNegativeFragments.ItemCheck -= new System.Windows.Forms.ItemCheckEventHandler(checkedListBoxInteraction);
                 creatorGUI.ms2fragmentsForm.buttonAddFragment.Click -= buttonInteraction;
@@ -346,6 +369,7 @@ namespace LipidCreator
                 
                 if (creatorGUI.ms2fragmentsForm.newFragment != null)
                 {
+                    creatorGUI.ms2fragmentsForm.newFragment.MouseMove -= mouseHoverInteraction;
                     creatorGUI.ms2fragmentsForm.newFragment.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                     creatorGUI.ms2fragmentsForm.newFragment.textBoxFragmentName.TextChanged -= new EventHandler(textBoxInteraction);
                     creatorGUI.ms2fragmentsForm.newFragment.selectBaseCombobox.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
@@ -359,6 +383,7 @@ namespace LipidCreator
             }
             if (creatorGUI.lipidsInterList != null)
             {
+                creatorGUI.lipidsInterList.MouseMove -= mouseHoverInteraction;
                 creatorGUI.lipidsInterList.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                 creatorGUI.lipidsInterList.continueReviewButton.Click -= buttonInteraction;
                 creatorGUI.lipidsInterList.continueReviewButton.MouseDown -= mouseDownInteraction;
@@ -367,6 +392,7 @@ namespace LipidCreator
             
             if (creatorGUI.ceInspector != null)
             {
+                creatorGUI.ceInspector.MouseMove -= mouseHoverInteraction;
                 creatorGUI.ceInspector.fragmentsGridView.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(tableCellChanged);
                 creatorGUI.ceInspector.radioButtonPRMArbitrary.CheckedChanged -= new EventHandler(radioButtonInteraction);
                 creatorGUI.ceInspector.button2.Click -= buttonInteraction;
@@ -379,6 +405,7 @@ namespace LipidCreator
             
             if (creatorGUI.filterDialog != null)
             {
+                creatorGUI.filterDialog.MouseMove -= mouseHoverInteraction;
                 creatorGUI.filterDialog.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                 creatorGUI.filterDialog.button2.MouseDown -= mouseDownInteraction;
                 creatorGUI.filterDialog.button2.Click -= buttonInteraction;
@@ -393,6 +420,7 @@ namespace LipidCreator
             
             if (creatorGUI.addHeavyPrecursor != null)
             {
+                creatorGUI.addHeavyPrecursor.MouseMove -= mouseHoverInteraction;
                 creatorGUI.addHeavyPrecursor.FormClosing -= new System.Windows.Forms.FormClosingEventHandler(closingInteraction);
                 creatorGUI.addHeavyPrecursor.comboBox1.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
                 creatorGUI.addHeavyPrecursor.comboBox2.SelectedIndexChanged -= new EventHandler(comboBoxInteraction);
@@ -441,7 +469,7 @@ namespace LipidCreator
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             continueTutorial = false;
             
-            foreach (Object element in creatorGUI.controlElements)
+            foreach (Object element in creatorGUI.controlElements.ToArray().Where(x => x != null))
             {
                 if (element is MenuItem)  ((MenuItem)element).Enabled = false;
                 else ((Control)element).Enabled = false;
@@ -449,11 +477,12 @@ namespace LipidCreator
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
             creatorGUI.Refresh();
+            Console.WriteLine(1);
             if (creatorGUI.ms2fragmentsForm != null)
             {
             
             
-                foreach (Object element in creatorGUI.ms2fragmentsForm.controlElements)
+                foreach (Object element in creatorGUI.ms2fragmentsForm.controlElements.ToArray().Where(x => x != null))
                 {
                     if (element is MenuItem){
                         ((MenuItem)element).Enabled = false;
@@ -466,47 +495,55 @@ namespace LipidCreator
                 if (creatorGUI.ms2fragmentsForm.newFragment != null)
                 {
                     NewFragment newFrag = creatorGUI.ms2fragmentsForm.newFragment;
-                    foreach (Control control in newFrag.controlElements) control.Enabled = false;
+                    foreach (Control control in newFrag.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                     creatorGUI.ms2fragmentsForm.Refresh();
                 }
             }
+            Console.WriteLine(2);
             
             if (creatorGUI.addHeavyPrecursor != null)
             {
-                foreach (Control control in creatorGUI.addHeavyPrecursor.controlElements) control.Enabled = false;
+                foreach (Control control in creatorGUI.addHeavyPrecursor.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.addHeavyPrecursor.Refresh();
             }
+            Console.WriteLine(3);
             
             if (creatorGUI.lipidsReview != null)
             {
-                foreach (Control control in creatorGUI.lipidsReview.controlElements) control.Enabled = false;
+                foreach (Control control in creatorGUI.lipidsReview.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.lipidsReview.Refresh();
             }
+            Console.WriteLine(4);
             
             if (creatorGUI.ceInspector != null)
             {
-                foreach (Control control in creatorGUI.ceInspector.controlElements) control.Enabled = false;
+                foreach (Control control in creatorGUI.ceInspector.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.ceInspector.Refresh();
             }
+            Console.WriteLine(5);
             
             if (creatorGUI.filterDialog != null)
             {
-                foreach (Control control in creatorGUI.filterDialog.controlElements) control.Enabled = false;
+                foreach (Control control in creatorGUI.filterDialog.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.filterDialog.Refresh();
             }
+            Console.WriteLine(6);
             
             if (creatorGUI.lipidsInterList != null)
             {
-                foreach (Control control in creatorGUI.lipidsInterList.controlElements) control.Enabled = false;
+                foreach (Control control in creatorGUI.lipidsInterList.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.lipidsInterList.Refresh();
             }
+            Console.WriteLine(7);
         }
         
         
         public void setTutorialControls(Control controlForArrow, Control controlForWindow = null)
         {
             if (controlForWindow == null) controlForWindow = controlForArrow;
-                
+            
+            if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
+            if (tutorialArrow.Parent != null && tutorialArrow.Parent.Controls.Contains(tutorialArrow)) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             controlForWindow.Controls.Add(tutorialWindow);
             controlForArrow.Controls.Add(tutorialArrow);
         }
@@ -1222,20 +1259,24 @@ namespace LipidCreator
                     break;
                     
                     
+                    
                 case (int)PRMSteps.ChangeGlycero:
                     setTutorialControls(creatorGUI.phospholipidsTab);
                     
                     tutorialArrow.update(new Point((int)(creatorGUI.tabControl.ItemSize.Width * 1.5), 0), "lt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(340, 200), "Click on 'Glycerolipids' tab", "That was easy, let's add some more lipids. Click on 'Glycerolipids' tab to change the lipid category.");
+                    tutorialWindow.update(new Size(540, 200), new Point(340, 200), "Click on 'Glycerolipids' tab", "That was easy, let's add some more lipids. Click on 'Glycerolipids' tab to change the lipid category.", false);
 
                     break;
+                    
+                    
                     
                     
                 case (int)PRMSteps.SetGLFA:
                     setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
                     
                     TextBox glFA1 = creatorGUI.glFA1Textbox;
+                    glFA1.Enabled = true;
                     tutorialArrow.update(new Point(glFA1.Location.X, glFA1.Location.Y + (glFA1.Size.Height >> 1)), "tr");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Set first fatty acyl chain lengths to '16-20'", "For the second lipid, please set the first fatty acyl carbon lengths from 16 til 20.", false);
@@ -1250,6 +1291,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
                     
                     ComboBox glFA1cb = creatorGUI.glFA1Combobox;
+                    glFA1cb.Enabled = true;
                     tutorialArrow.update(new Point(glFA1cb.Location.X, glFA1cb.Location.Y + (glFA1cb.Size.Height >> 1)), "tr");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(460, 200), "Select 'Fatty acyl chain - even' for FA1", "When selecting 'Fatty acyl chain - even', only even carbon lengths will be computed, for odd respectively.", false);
@@ -1264,6 +1306,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.glStep1, creatorGUI.glycerolipidsTab);
                     
                     CheckBox glRep = creatorGUI.glRepresentativeFA;
+                    glRep.Enabled = true;
                     tutorialArrow.update(new Point(glRep.Location.X, glRep.Location.Y + (glRep.Size.Height >> 1)), "tr");
                     
                     tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Enable 'First FA representative'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
@@ -1276,6 +1319,7 @@ namespace LipidCreator
                     setTutorialControls(creatorGUI.glycerolipidsTab);
                     
                     CheckBox glFA3C1 = creatorGUI.glFA3Checkbox1;
+                    glFA3C1.Enabled = true;
                     tutorialArrow.update(new Point(glFA3C1.Location.X, glFA3C1.Location.Y + (glFA3C1.Size.Height >> 1)), "br");
                     tutorialWindow.update(new Size(440, 200), new Point(560, 200), "Deselect 'FA' on third fatty acyl", "To create diacylglycerols, one has simply deselect all fatty acyl options on the third fatty acyl. To create monoacylglycerols, on second fatty acyl, respectively. Please deselect all fatty acyl options on the third fatty acyl.");
                     glFA3C1.Enabled = true;
@@ -1284,7 +1328,7 @@ namespace LipidCreator
                     
                     
                 case (int)PRMSteps.AddGL:
-                    setTutorialControls(creatorGUI.phospholipidsTab);
+                    setTutorialControls(creatorGUI.glycerolipidsTab);
                     
                     
                     Button alb2 = creatorGUI.addLipidButton;
@@ -1312,7 +1356,7 @@ namespace LipidCreator
                     initInterList();
                     setTutorialControls(creatorGUI.lipidsInterList);
                     
-                    tutorialWindow.update(new Size(500, 250), new Point(40, 200), "Click on 'Continue'", "The precursors can be select/deselect from this list for the generation of transition list in next step. The 'options' allows to display lipid names further between subspecies and species level.", false);
+                    tutorialWindow.update(new Size(450, 250), new Point(40, 200), "Click on 'Continue'", "The precursors can be select/deselect from this list for the generation of transition list in next step. The 'options' allows to display lipid names further between subspecies and species level.", false);
                     nextEnabled = true;
                     
                     break;

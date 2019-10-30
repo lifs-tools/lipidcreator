@@ -184,12 +184,6 @@
     <Compile Include="LCMessageBox.Designer.cs">
       <DependentUpon>LCMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExportParameters.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ExportParameters.Designer.cs">
-      <DependentUpon>ExportParameters.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.cs" />
     <Compile Include="MoleculeFormulaParserEventHandler.cs" />
     <Compile Include="NewMediatorFragment.cs">

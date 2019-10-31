@@ -1343,7 +1343,7 @@ namespace LipidCreator
         
         public static string computeChemicalFormula(ElementDictionary elements)
         {
-            String chemForm = "";            
+            String chemForm = "";
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
                 int numElements = elements[molecule];

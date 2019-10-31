@@ -293,6 +293,10 @@ namespace LipidCreator
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+            
+            controlElements = new ArrayList(){comboBox1, textBox1, dataGridView1, comboBox2, comboBox3, button1, button2, button3, button4, groupBox1, radioButton2, radioButton1};
+        
+
 
         }
         private void InitializeCustom()

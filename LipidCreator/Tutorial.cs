@@ -477,7 +477,6 @@ namespace LipidCreator
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
             creatorGUI.Refresh();
-            Console.WriteLine(1);
             if (creatorGUI.ms2fragmentsForm != null)
             {
             
@@ -499,42 +498,37 @@ namespace LipidCreator
                     creatorGUI.ms2fragmentsForm.Refresh();
                 }
             }
-            Console.WriteLine(2);
             
             if (creatorGUI.addHeavyPrecursor != null)
             {
+            
                 foreach (Control control in creatorGUI.addHeavyPrecursor.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.addHeavyPrecursor.Refresh();
             }
-            Console.WriteLine(3);
             
             if (creatorGUI.lipidsReview != null)
             {
                 foreach (Control control in creatorGUI.lipidsReview.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.lipidsReview.Refresh();
             }
-            Console.WriteLine(4);
             
             if (creatorGUI.ceInspector != null)
             {
                 foreach (Control control in creatorGUI.ceInspector.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.ceInspector.Refresh();
             }
-            Console.WriteLine(5);
             
             if (creatorGUI.filterDialog != null)
             {
                 foreach (Control control in creatorGUI.filterDialog.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.filterDialog.Refresh();
             }
-            Console.WriteLine(6);
             
             if (creatorGUI.lipidsInterList != null)
             {
                 foreach (Control control in creatorGUI.lipidsInterList.controlElements.ToArray().Where(x => x != null)) control.Enabled = false;
                 creatorGUI.lipidsInterList.Refresh();
             }
-            Console.WriteLine(7);
         }
         
         

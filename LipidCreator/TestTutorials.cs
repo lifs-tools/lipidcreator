@@ -63,7 +63,7 @@ namespace LipidCreator
         public const int STEP_SLEEP = 500;
         public const int KEY_SLEEP = 100;
         public const int ANIMATION_SLEEP = 10;
-        public const double ANIMATION_STEPS = 100.0;
+        public const double ANIMATION_STEP = 15.0;
         
         
         // Keyboard keys
@@ -88,6 +88,7 @@ namespace LipidCreator
         public const int KEY_RIGHT = 0x27;
         public const int KEY_UP = 0x26;
         public const int KEY_F10 = 0x79;
+        public const int PAGE_DOWN = 0x22;
         
         
         public void keyPress(int key, bool shift = false)
@@ -203,7 +204,7 @@ namespace LipidCreator
         {
             int sourceX = Cursor.Position.X;
             int sourceY = Cursor.Position.Y;
-            double lenUnit = 10.0;
+            double lenUnit = ANIMATION_STEP;
             
             double len = Math.Sqrt(Math.Pow(((double)(destination.X - sourceX)), 2.0) + Math.Pow(((double)(destination.Y - sourceY)), 2.0));
             int i = 0;
@@ -1407,8 +1408,20 @@ namespace LipidCreator
                         case (int)CESteps.SelectTXB2HG:
                             moveMouse(getOrigin(creatorGUI.medHgListbox, new Point(10, 10)));
                             DoMouseClick();
-                            Thread.Sleep(10);
-                            
+                            Thread.Sleep(50);
+                            DoMouseClick();
+                            keyPress(PAGE_DOWN);
+                            Thread.Sleep(50);
+                            keyPress(PAGE_DOWN);
+                            Thread.Sleep(50);
+                            keyPress(PAGE_DOWN);
+                            Thread.Sleep(50);
+                            keyPress(PAGE_DOWN);
+                            Thread.Sleep(50);
+                            keyPress(PAGE_DOWN);
+                            Thread.Sleep(50);
+                            keyPress(KEY_SPACE);
+                            Thread.Sleep(100);
                             
                             string lastSelectedHG = "";
                             bool clickNextHG = false;
@@ -1428,15 +1441,34 @@ namespace LipidCreator
                                         {
                                             clickNextHG = false;
                                             keyPress(KEY_SPACE);
-                                            keyPress(KEY_DOWN);
+                                            Thread.Sleep(30);
+                                            keyPress(KEY_UP);
+                                            Thread.Sleep(30);
                                             keyPress(KEY_SPACE);
                                             Thread.Sleep(30);
                                         }
                                         else if (lastSelectedHG != (string)creatorGUI.medHgListbox.SelectedItems[0])
                                         {
                                             clickNextHG = true;
+                                            lastSelectedHG = (string)creatorGUI.medHgListbox.SelectedItems[0];
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    creatorGUI.medHgListbox.Focus();
+                                    keyPress(PAGE_DOWN);
+                                    Thread.Sleep(50);
+                                    keyPress(PAGE_DOWN);
+                                    Thread.Sleep(50);
+                                    keyPress(PAGE_DOWN);
+                                    Thread.Sleep(50);
+                                    keyPress(PAGE_DOWN);
+                                    Thread.Sleep(50);
+                                    keyPress(PAGE_DOWN);
+                                    Thread.Sleep(50);
+                                    keyPress(KEY_SPACE);
+                                    Thread.Sleep(100);
                                 }
                             }
                             moveMouse(getMiddle(tutorialWindow.next));
@@ -1475,7 +1507,9 @@ namespace LipidCreator
                             
                         case (int)CESteps.Finish:
                             moveMouse(getMiddle(tutorialWindow.next));
+                            Thread.Sleep(STEP_SLEEP);
                             DoMouseClick();
+                            Thread.Sleep(STEP_SLEEP);
                             passed = true;
                             break;
                     

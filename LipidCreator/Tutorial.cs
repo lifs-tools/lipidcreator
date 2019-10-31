@@ -75,6 +75,8 @@ namespace LipidCreator
         public bool quitting = false;
         public bool inTutorial = false;
         private static readonly ILog log = LogManager.GetLogger(typeof(Tutorial));
+        public System.Timers.Timer timerFront;
+        
         
         public Tutorial(CreatorGUI creatorGUI)
         {
@@ -94,9 +96,15 @@ namespace LipidCreator
             tutorialWindow = new TutorialWindow(this, creatorGUI.lipidCreator.prefixPath);
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
+            timerFront = new System.Timers.Timer(15);
+            timerFront.Elapsed += timerFrontTick;
         }
         
-        
+        private void timerFrontTick(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            tutorialArrow.BringToFront();
+            tutorialArrow.Refresh();
+        }
         
         
         
@@ -108,8 +116,8 @@ namespace LipidCreator
             tutorialStep = 0;
             inTutorial = true;
             quitting = false;
+            timerFront.Enabled = true;
             
-            creatorGUI.MouseMove += mouseHoverInteraction;
             creatorGUI.plHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged += new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.Deselecting += new TabControlCancelEventHandler(tabDeselectingInteraction);
@@ -161,6 +169,9 @@ namespace LipidCreator
             }
             nextTutorialStep(true);
         }
+        
+        
+        
         
         
         
@@ -307,11 +318,11 @@ namespace LipidCreator
             tutorialStep = 0;
             tutorialArrow.Visible = false;
             tutorialWindow.Visible = false;
+            timerFront.Enabled = false;
             
             if (tutorialArrow.Parent != null) tutorialArrow.Parent.Controls.Remove(tutorialArrow);
             if (tutorialWindow.Parent != null) tutorialWindow.Parent.Controls.Remove(tutorialWindow);
             
-            creatorGUI.MouseMove -= mouseHoverInteraction;
             creatorGUI.plHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.medHgListbox.SelectedValueChanged -= new EventHandler(listBoxInteraction);
             creatorGUI.tabControl.MouseMove -= new MouseEventHandler(dragInteraction);
@@ -650,8 +661,8 @@ namespace LipidCreator
                     break;
                 }
             }
-            tutorialArrow.Refresh();
-            tutorialWindow.Refresh();
+            //tutorialArrow.Refresh();
+            //tutorialWindow.Refresh();
         }
         
         
@@ -1107,6 +1118,7 @@ namespace LipidCreator
                     
                     tutorialWindow.update(new Size(540, 200), new Point(140, 200), "Click on 'Glycerophospholipids' tab", "LipidCreator offers computation for five lipid categories, namely glycerolipids, glycerophospholipids, sphingolipids, sterol lipids and lipid mediators.");
                     
+                    
                     break;
                     
                     
@@ -1136,7 +1148,6 @@ namespace LipidCreator
                     
                     plFA1.Text = "12-15";
                     plFA1.Enabled = true;
-                    
                     break;
                     
                     
@@ -1163,19 +1174,6 @@ namespace LipidCreator
                     
                     nextEnabled = true;
                     break;
-                    
-                    /*
-                case (int)PRMSteps.RepresentitativeFA:
-                    setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
-                    
-                    CheckBox plRep = creatorGUI.plRepresentativeFA;
-                    tutorialArrow.update(new Point(plRep.Location.X, plRep.Location.Y + (plRep.Size.Height >> 1)), "tr");
-                    
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "When selecting this check box, all FA parameters will be copied from the first FA to all remaining FAs.");
-                    
-                    nextEnabled = true;
-                    break;
-                    */
                     
                     
                 case (int)PRMSteps.Ether:
@@ -1395,6 +1393,8 @@ namespace LipidCreator
                     quitTutorial(true);
                     break;
             }
+            tutorialArrow.BringToFront();
+            tutorialWindow.BringToFront();
             tutorialArrow.Refresh();
             tutorialWindow.Refresh();
         }

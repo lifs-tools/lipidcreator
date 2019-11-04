@@ -164,7 +164,7 @@ namespace LipidCreator
         
         public static void checkForAnalytics(RunMode runMode, bool withPrefix)
         {
-            string analyticsFile = (withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : "") + "data/analytics.txt";
+            string analyticsFile = Path.Combine((withPrefix ? LipidCreator.EXTERNAL_PREFIX_PATH : ""), "data", "analytics.txt");
             try {
                 if (!File.Exists(analyticsFile))
                 {
@@ -258,9 +258,9 @@ namespace LipidCreator
                         case "dev":
                             runMode = RunMode.standalone;
                             checkForAnalytics(runMode, false);
-                            if (File.Exists("data/lipidcreator.log"))
+                            if (File.Exists(Path.Combine("data", "lipidcreator.log")))
                             {
-                                System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
+                                System.IO.File.WriteAllText(Path.Combine("data", "lipidcreator.log"), string.Empty); // Clearing the log file
                             }
                             CreatorGUI creatorGUIDev = new CreatorGUI(null);
                             if (!creatorGUIDev.lipidCreatorInitError)
@@ -275,9 +275,9 @@ namespace LipidCreator
                         
                         case "external":
                             runMode = RunMode.external;
-                            if (File.Exists(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log"))
+                            if (File.Exists(Path.Combine(LipidCreator.EXTERNAL_PREFIX_PATH, "data", "lipidcreator.log")))
                             {
-                                System.IO.File.WriteAllText(LipidCreator.EXTERNAL_PREFIX_PATH + "data/lipidcreator.log", string.Empty); // Clearing the log file
+                                System.IO.File.WriteAllText(Path.Combine(LipidCreator.EXTERNAL_PREFIX_PATH, "data", "lipidcreator.log"), string.Empty); // Clearing the log file
                             }
                             checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
@@ -603,7 +603,7 @@ namespace LipidCreator
             {
                 runMode = RunMode.standalone;
                 checkForAnalytics(runMode, false);
-                if (File.Exists("data/lipidcreator.log")) System.IO.File.WriteAllText("data/lipidcreator.log", string.Empty); // Clearing the log file
+                if (File.Exists(Path.Combine("data", "lipidcreator.log"))) System.IO.File.WriteAllText(Path.Combine("data", "lipidcreator.log"), string.Empty); // Clearing the log file
                 CreatorGUI creatorGUI = new CreatorGUI(null);
                 if (!creatorGUI.lipidCreatorInitError)
                 {

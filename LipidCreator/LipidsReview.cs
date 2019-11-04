@@ -659,8 +659,8 @@ namespace LipidCreator
                 spectralName.ShowInTaskbar = false;
                 spectralName.ShowDialog ();
                 spectralName.Dispose ();
-                if (specName [0].Length > 0) {
-                    string blibPath = Application.StartupPath + "\\..\\Temp\\" + specName[0] + ".blib";
+                if (specName[0].Length > 0) {
+                    string blibPath = Path.Combine(Application.StartupPath, "..", "Temp", specName[0] + ".blib");
                     creatorGUI.lipidCreator.createBlib (blibPath);
                     if(creatorGUI.lipidCreator.sendToSkyline (currentView, specName[0], blibPath))
                     {

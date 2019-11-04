@@ -268,7 +268,8 @@ namespace LipidCreator
                             atomsCount[Molecule.N] = Convert.ToInt32(tokens[9]);
                             atomsCount[Molecule.P] = Convert.ToInt32(tokens[10]);
                             atomsCount[Molecule.S] = Convert.ToInt32(tokens[11]);
-                            string fragmentFile = Path.Combine(prefixPath, tokens[3]);
+                            
+                            string fragmentFile = Path.Combine(prefixPath, Path.Combine(tokens[3].Split(new char[]{'/'})));
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
                             {
                                 log.Error("At line " + lineCounter + ": file '" + fragmentFile + "' does not exist or can not be opened.");
@@ -345,7 +346,7 @@ namespace LipidCreator
                             headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[5]); // nytrogen
                             headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[6]); // phosphor
                             headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[7]); // sulfor
-                            string precursorFile = Path.Combine(prefixPath, tokens[9]);
+                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[9].Split(new char[]{'/'})));
                             if (!File.Exists(precursorFile))
                             {
                                 log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
@@ -1528,7 +1529,7 @@ namespace LipidCreator
             IDictionary<long, ArrayList> rules = new Dictionary<long, ArrayList>();
             IDictionary<long, string> terminals = new Dictionary<long, string>();
             
-            string grammarFilename = "data/goslin/Goslin.g4";
+            string grammarFilename = Path.Combine("data", "goslin", "Goslin.g4");
             char quote = '\'';
             
             if (File.Exists(grammarFilename))

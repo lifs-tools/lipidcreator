@@ -424,7 +424,6 @@ namespace LipidCreator
                                 
                             
                                 FattyAcid heavyFA1 = new FattyAcid(fa1);
-                                
                                 heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
                                 
                                 ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
@@ -436,6 +435,7 @@ namespace LipidCreator
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                 
                                 string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
                                 PrecursorData heavyPrecursorData = new PrecursorData();

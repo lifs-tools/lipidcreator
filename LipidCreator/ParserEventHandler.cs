@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace LipidCreator
@@ -42,6 +43,14 @@ namespace LipidCreator
         public bool expectsEther;
         public int ethers;
         public bool makeUnsupported = false;
+        
+        public int heavyIsotope = 0;
+        public string heavyElement = "";
+        public int heavyCount = 1;
+        public ElementDictionary heavyElementCounts = null;
+        public ArrayList heavyElementCountList = new ArrayList();
+        public string heavyName = "";
+        public bool addHeavy = false;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -97,7 +106,13 @@ namespace LipidCreator
             registeredEvents.Add("charge_sign_pre_event", charge_signPreEvent);
             registeredEvents.Add("sorted_fa_separator_pre_event", sortedFASeparatorPreEvent);
             
-            registeredEvents.Add("heavy_pre_event", unsupportedEvent);
+            registeredEvents.Add("heavy_pre_event", resetHeavy);
+            registeredEvents.Add("isotope_pre_event", resetHeavyIsotope);
+            registeredEvents.Add("isotope_post_event", addHeavyElement);
+            registeredEvents.Add("isotope_number_pre_event", addIsotopeNumber);
+            registeredEvents.Add("isotope_element_pre_event", addIsotopeElement);
+            registeredEvents.Add("isotope_count_pre_event", addIsotopeCount);
+            registeredEvents.Add("heavy_hg_post_event", setHGIsotopes);
             registeredEvents.Add("gl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("pl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("sl_species_pre_event", unsupportedEvent);
@@ -115,6 +130,100 @@ namespace LipidCreator
             sortedSeparator = false;
             expectsEther = false;
             ethers = 0;
+            
+            heavyIsotope = 0;
+            heavyElement = "";
+            heavyCount = 1;
+            heavyElementCounts = null;
+            heavyElementCountList = new ArrayList();
+            heavyElementCountList.Add(MS2Fragment.createEmptyElementDict());
+            heavyName = "";
+            addHeavy = false;
+        }
+        
+        
+        
+        
+        public void resetHeavy(Parser.TreeNode node)
+        {
+            heavyIsotope = 0;
+            heavyElement = "";
+            heavyCount = 1;
+            heavyElementCounts = MS2Fragment.createEmptyElementDict();
+            heavyName += node.getText();
+            addHeavy = true;
+        }
+        
+        
+        
+        
+        public void resetHeavyIsotope(Parser.TreeNode node)
+        {
+            heavyIsotope = 0;
+            heavyElement = "";
+            heavyCount = 1;
+        }
+        
+        
+        
+        
+        public void addIsotopeNumber(Parser.TreeNode node)
+        {
+            heavyIsotope = Convert.ToInt32(node.getText());
+        }
+        
+        
+        
+        
+        public void addIsotopeElement(Parser.TreeNode node)
+        {
+            heavyElement = node.getText();
+        }
+        
+        
+        
+        
+        public void setHGIsotopes(Parser.TreeNode node)
+        {
+            heavyElementCountList[0] = heavyElementCounts;
+        }
+        
+        
+        
+        
+        public void addIsotopeCount(Parser.TreeNode node)
+        {
+            heavyCount = Convert.ToInt32(node.getText());
+        }
+        
+        
+        
+        
+        public void addHeavyElement(Parser.TreeNode node)
+        {
+            if (heavyCount < 1)
+            {
+                lipid = null;
+                return;
+            }
+            
+            string key = heavyElement + heavyIsotope.ToString();
+            if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(key))
+            {
+                Molecule m = MS2Fragment.ELEMENT_POSITIONS[key];
+                if (heavyElementCounts.ContainsKey(m))
+                {
+                    heavyElementCounts[m] = heavyCount;
+                }
+                else
+                {
+                    heavyElementCounts.Add(m, heavyCount);
+                }
+            }
+            else
+            {
+                lipid = null;
+            }            
         }
         
         
@@ -153,6 +262,30 @@ namespace LipidCreator
             if (lipid == null && makeUnsupported)
             {
                 lipid = new UnsupportedLipid(lipidCreator);
+            }
+            
+            
+            // adding heavy labeled isotopes (if present)
+            if (lipid != null && !makeUnsupported && addHeavy)
+            {
+                
+                ElementDictionary hgDictionary = new ElementDictionary(lipidCreator.headgroups[lipid.headGroupNames[0]].elements);
+                foreach (KeyValuePair<Molecule, int> kvp in (ElementDictionary)heavyElementCountList[0]) 
+                {
+                    hgDictionary[kvp.Key] -= kvp.Value;
+                    if (hgDictionary[kvp.Key] < 0)
+                    {
+                        lipid = null;
+                        break;
+                    }
+                }
+            
+            
+                if (lipid != null)
+                {
+                    heavyElementCountList[0] = hgDictionary;
+                    AddHeavyPrecursor.addHeavyPrecursor(lipidCreator, lipid.headGroupNames[0], heavyName, heavyElementCountList);
+                }
             }
         }
         
@@ -219,11 +352,16 @@ namespace LipidCreator
             fagEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
         }
         
+        
+        
+        
         public void CholesterolPreEvent(Parser.TreeNode node)
         {
             lipid = new Cholesterol(lipidCreator);
             fagEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
         }
+        
+        
         
         
         public void MediatorPreEvent(Parser.TreeNode node)
@@ -233,10 +371,16 @@ namespace LipidCreator
             lipid.headGroupNames.Add(headgroup);
         }
         
+        
+        
+        
         public void LCBPreEvent(Parser.TreeNode node)
         {
             fag = ((Sphingolipid)lipid).lcb;
         }
+        
+        
+        
         
         
         public void LCBPostEvent(Parser.TreeNode node)
@@ -244,15 +388,33 @@ namespace LipidCreator
             FALCBvalidationCheck();
         }
         
+        
+        
+        
         public void FAPreEvent(Parser.TreeNode node)
         {
             fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
+            heavyElementCounts = null;
         }
+        
+        
+        
         
         public void FAPostEvent(Parser.TreeNode node)
         {
             FALCBvalidationCheck();
+            if (heavyElementCounts != null)
+            {
+                heavyElementCountList.Add(heavyElementCounts);
+            }
+            else
+            {
+                heavyElementCountList.Add(MS2Fragment.createEmptyElementDict());
+            }
         }
+        
+        
+        
         
         public void FALCBvalidationCheck()
         {

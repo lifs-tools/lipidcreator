@@ -33,6 +33,19 @@ using System.Data;
 namespace LipidCreator
 {
     public class ElementDictionary : Dictionary<Molecule, int> {
+        public ElementDictionary(ElementDictionary elementDictionary)
+        {
+            foreach (KeyValuePair<Molecule, int> kvp in elementDictionary) 
+            {
+                this[kvp.Key] = kvp.Value;
+            }
+        }
+        
+        public ElementDictionary()
+        {
+        
+        }
+        
         public void print()
         {
             foreach (KeyValuePair<Molecule, int> kvp in this)

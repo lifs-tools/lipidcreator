@@ -1779,6 +1779,107 @@ namespace LipidCreator
         
         
         
+        
+
+        
+        
+        public void addHeavyPrecursor(string headgroup, string name, ArrayList buildingBlocks)
+        {
+            name = headgroup + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + name + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
+            
+            if (headgroups.ContainsKey(name)) return;
+            
+            
+            // create and set precursor properties
+            Precursor precursor = headgroups[headgroup];
+            Precursor heavyPrecursor = new Precursor();
+            if (buildingBlocks[0] is ElementDictionary)
+            {
+                heavyPrecursor.elements = (ElementDictionary)buildingBlocks[0];
+            }
+            else
+            {
+                heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlocks[0]);
+            }
+            
+            heavyPrecursor.name = name;
+            heavyPrecursor.category = precursor.category;
+            heavyPrecursor.pathToImage = precursor.pathToImage;
+            heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
+            foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions) heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
+            heavyPrecursor.derivative = precursor.derivative;
+            heavyPrecursor.attributes.Add("heavy");
+            heavyPrecursor.userDefined = true;
+            heavyPrecursor.userDefinedFattyAcids = new ArrayList();
+            for (int i = 1; i < buildingBlocks.Count; ++i)
+            {
+                ElementDictionary newElements = null;
+                if (buildingBlocks[i] is ElementDictionary)
+                {
+                    newElements = (ElementDictionary)buildingBlocks[i];
+                }
+                else
+                {
+                    newElements = createElementData((Dictionary<string, object[]>)buildingBlocks[i]);
+                }
+                heavyPrecursor.userDefinedFattyAcids.Add(newElements);
+            }
+        
+            headgroups.Add(name, heavyPrecursor);
+            precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
+            
+            categoryToClass[(int)heavyPrecursor.category].Add(name);
+            
+            // copy all MS2Fragments
+            allFragments.Add(name, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
+            allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
+            allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
+            
+            
+            if (heavyPrecursor.category != LipidCategory.LipidMediator)
+            {
+                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in allFragments[precursor.name][true])
+                {
+                    MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
+                    fragment.userDefined = true;
+                    allFragments[name][true].Add(ms2Fragment.Key, fragment);
+                    
+                }
+                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in allFragments[precursor.name][false])
+                {
+                    MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
+                    fragment.userDefined = true;
+                    allFragments[name][false].Add(ms2Fragment.Key, fragment);
+                }
+            }
+            OnUpdate(new EventArgs());
+        }
+        
+        
+        
+        
+        
+        
+        
+        public static ElementDictionary createElementData(Dictionary<string, object[]> input)
+        {
+            ElementDictionary elements = MS2Fragment.createEmptyElementDict();
+            foreach (KeyValuePair<string, object[]> row in input)
+            {
+                Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
+                Molecule heavyIndex = MS2Fragment.ELEMENT_POSITIONS[(string)row.Value[2]];
+                
+                elements[elementIndex] = (int)row.Value[0];
+                elements[heavyIndex] = (int)row.Value[1];
+                
+            }
+            return elements;
+        }
+        
+        
+        
+        
+        
         public void import(XDocument doc, bool onlySettings = false)
         {
             string importVersion = doc.Element("LipidCreator").Attribute("version").Value;

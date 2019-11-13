@@ -186,6 +186,7 @@ namespace LipidCreator
         public void setHGIsotopes(Parser.TreeNode node)
         {
             heavyElementCountList[0] = heavyElementCounts;
+            heavyName += "HG" + node.getText();
         }
         
         
@@ -284,7 +285,7 @@ namespace LipidCreator
                 if (lipid != null)
                 {
                     heavyElementCountList[0] = hgDictionary;
-                    AddHeavyPrecursor.addHeavyPrecursor(lipidCreator, lipid.headGroupNames[0], heavyName, heavyElementCountList);
+                    lipidCreator.addHeavyPrecursor(lipid.headGroupNames[0], heavyName, heavyElementCountList);
                 }
             }
         }

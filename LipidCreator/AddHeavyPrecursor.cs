@@ -169,22 +169,6 @@ namespace LipidCreator
         }
         
         
-        public static ElementDictionary createElementData(Dictionary<string, object[]> input)
-        {
-            ElementDictionary elements = MS2Fragment.createEmptyElementDict();
-            foreach (KeyValuePair<string, object[]> row in input)
-            {
-                Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
-                Molecule heavyIndex = MS2Fragment.ELEMENT_POSITIONS[(string)row.Value[2]];
-                
-                elements[elementIndex] = (int)row.Value[0];
-                elements[heavyIndex] = (int)row.Value[1];
-                
-            }
-            return elements;
-        }
-        
-        
         public void clearData()
         {
             currentDict = null;
@@ -504,7 +488,7 @@ namespace LipidCreator
             ArrayList tmp = new ArrayList();
             foreach (Dictionary<string, object[]> bbdt in buildingBlockElementDicts)
             {
-                ElementDictionary elements = createElementData(bbdt);
+                ElementDictionary elements = LipidCreator.createElementData(bbdt);
                 foreach(KeyValuePair<Molecule, int> row in elements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 tmp.Add(elements);
                 
@@ -558,80 +542,6 @@ namespace LipidCreator
                 updateAvailableIsotopes();
             }
         }
-
-        
-        
-        public static void addHeavyPrecursor(LipidCreator lipidCreator, string headgroup, string name, ArrayList buildingBlocks)
-        {
-            name = headgroup + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + name + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
-            
-            if (lipidCreator.headgroups.ContainsKey(name)) return;
-            
-            
-            // create and set precursor properties
-            Precursor precursor = lipidCreator.headgroups[headgroup];
-            Precursor heavyPrecursor = new Precursor();
-            if (buildingBlocks[0] is ElementDictionary)
-            {
-                heavyPrecursor.elements = (ElementDictionary)buildingBlocks[0];
-            }
-            else
-            {
-                heavyPrecursor.elements = createElementData((Dictionary<string, object[]>)buildingBlocks[0]);
-            }
-            
-            heavyPrecursor.name = name;
-            heavyPrecursor.category = precursor.category;
-            heavyPrecursor.pathToImage = precursor.pathToImage;
-            heavyPrecursor.buildingBlockType = precursor.buildingBlockType;
-            foreach (KeyValuePair<string, bool> kvp in precursor.adductRestrictions) heavyPrecursor.adductRestrictions.Add(kvp.Key, kvp.Value);
-            heavyPrecursor.derivative = precursor.derivative;
-            heavyPrecursor.attributes.Add("heavy");
-            heavyPrecursor.userDefined = true;
-            heavyPrecursor.userDefinedFattyAcids = new ArrayList();
-            for (int i = 1; i < buildingBlocks.Count; ++i)
-            {
-                ElementDictionary newElements = null;
-                if (buildingBlocks[i] is ElementDictionary)
-                {
-                    newElements = (ElementDictionary)buildingBlocks[i];
-                }
-                else
-                {
-                    newElements = createElementData((Dictionary<string, object[]>)buildingBlocks[i]);
-                }
-                heavyPrecursor.userDefinedFattyAcids.Add(newElements);
-            }
-        
-            lipidCreator.headgroups.Add(name, heavyPrecursor);
-            precursor.heavyLabeledPrecursors.Add(heavyPrecursor);
-            
-            lipidCreator.categoryToClass[(int)heavyPrecursor.category].Add(name);
-            
-            // copy all MS2Fragments
-            lipidCreator.allFragments.Add(name, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
-            lipidCreator.allFragments[name].Add(true, new Dictionary<string, MS2Fragment>());
-            lipidCreator.allFragments[name].Add(false, new Dictionary<string, MS2Fragment>());
-            
-            
-            if (heavyPrecursor.category != LipidCategory.LipidMediator)
-            {
-                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in lipidCreator.allFragments[precursor.name][true])
-                {
-                    MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
-                    fragment.userDefined = true;
-                    lipidCreator.allFragments[name][true].Add(ms2Fragment.Key, fragment);
-                    
-                }
-                foreach (KeyValuePair<string, MS2Fragment> ms2Fragment in lipidCreator.allFragments[precursor.name][false])
-                {
-                    MS2Fragment fragment = new MS2Fragment(ms2Fragment.Value);
-                    fragment.userDefined = true;
-                    lipidCreator.allFragments[name][false].Add(ms2Fragment.Key, fragment);
-                }
-            }
-            lipidCreator.OnUpdate(new EventArgs());
-        }
         
         
         
@@ -653,10 +563,10 @@ namespace LipidCreator
             {
                 int numHeavyElements = 0;
                 
-                foreach(KeyValuePair<Molecule, int> row in createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0])) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
+                foreach(KeyValuePair<Molecule, int> row in LipidCreator.createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0])) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 for (int i = 1; i < buildingBlockElementDicts.Count; ++i)
                 {
-                    ElementDictionary newElements = createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
+                    ElementDictionary newElements = LipidCreator.createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
                     foreach(KeyValuePair<Molecule, int> row in newElements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
                 }
                 
@@ -668,7 +578,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    addHeavyPrecursor(creatorGUI.lipidCreator, headgroup, textBox1.Text, buildingBlockElementDicts);
+                    creatorGUI.lipidCreator.addHeavyPrecursor(headgroup, textBox1.Text, buildingBlockElementDicts);
                     
                     MessageBox.Show("Heavy isotope was successfully added!", "Isotope added");
                 }

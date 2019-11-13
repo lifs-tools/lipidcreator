@@ -120,7 +120,7 @@ namespace LipidCreator
             }
             
             
-            ElementDictionary newElements = AddHeavyPrecursor.createElementData(elementDict);
+            ElementDictionary newElements = LipidCreator.createElementData(elementDict);
             MS2Fragment newFragment = new MS2Fragment(fragmentName, fragmentName, Lipid.chargeToAdduct[-1], "", newElements, "HG");
             newFragment.userDefined = true;
             
@@ -170,7 +170,7 @@ namespace LipidCreator
                 }
             }
             else {
-                double fragmentMass = LipidCreator.computeMass(AddHeavyPrecursor.createElementData(elementDict), -1);
+                double fragmentMass = LipidCreator.computeMass(LipidCreator.createElementData(elementDict), -1);
                 if (fragmentMass > MS2Fragment.ALL_ELEMENTS[Molecule.H].mass)
                 {
                     fragmentName += String.Format(new CultureInfo("en-US"), "{0:0.0000}", fragmentMass);

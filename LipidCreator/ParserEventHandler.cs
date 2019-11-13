@@ -157,6 +157,7 @@ namespace LipidCreator
         
         
         
+        
         public void resetHeavyIsotope(Parser.TreeNode node)
         {
             heavyIsotope = 0;

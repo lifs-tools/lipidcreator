@@ -213,15 +213,18 @@ namespace LipidCreator
                                 String headgroup = (containsMonoLyso == 0) ? "CL" : "MLCL";
                                 
                                 // create species id i.e. key for avoiding double entries
-                                String key = " ";
-                                int i = 0;
-                                foreach (FattyAcid fa in sortedAcids)
-                                {
-                                    if (fa.length > 0 && fa.suffix != "x"){
-                                        if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
-                                        key += fa.ToString();
-                                    }
-                                }
+                                var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
+                                
+                                    
+                                    
+                                // species name
+                                FattyAcid speciesFA = new FattyAcid(fa1);
+                                speciesFA.merge(fa2);
+                                speciesFA.merge(fa3);
+                                speciesFA.merge(fa4);
+                                string speciesName = headgroup + " " + speciesFA.ToString();
+                                
                                 
                                 foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                                 {
@@ -243,14 +246,6 @@ namespace LipidCreator
                                     int charge = adduct.charge;
                                     MS2Fragment.addCounts(atomsCount, adduct.elements);
                                     double mass = LipidCreator.computeMass(atomsCount, charge);
-                                    
-                                    
-                                    // species name
-                                    FattyAcid speciesFA = new FattyAcid(fa1);
-                                    speciesFA.merge(fa2);
-                                    speciesFA.merge(fa3);
-                                    speciesFA.merge(fa4);
-                                    string speciesName = headgroup + " " + speciesFA.ToString();
                                     
                                     
                                     // filling information on MS1 level for cardiolipin
@@ -309,16 +304,27 @@ namespace LipidCreator
                                         MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                         double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                         
-                                        string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                        string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                        
+                                        
+                                        // species name
+                                        FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
+                                        heavySpeciesFA.merge(heavyFA2);
+                                        heavySpeciesFA.merge(heavyFA3);
+                                        heavySpeciesFA.merge(heavyFA4);
+                                        
+                                        
+                                        var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                        string heavyFattyComp = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, heavyFattys);
                                                                             
                                         // filling information on MS1 level for heavy cardiolipin
                                         PrecursorData heavyPrecursorData = new PrecursorData();
                                         heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
                                         heavyPrecursorData.moleculeListName = headgroup;
                                         heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                        heavyPrecursorData.precursorExportName = headgroup + key;
-                                        heavyPrecursorData.precursorName = heavyKey + key;
-                                        heavyPrecursorData.precursorSpeciesName = heavyKey + " " + speciesFA.ToString();
+                                        heavyPrecursorData.precursorExportName = headgroup + heavyFattyComp;
+                                        heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
+                                        heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavySpeciesFA.ToString();
                                         heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                         heavyPrecursorData.precursorAdduct = adduct;
                                         heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -434,7 +440,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                 
-                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                 
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
@@ -443,8 +449,8 @@ namespace LipidCreator
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = completeKey;
-                                heavyPrecursorData.precursorName = heavyKey + key;
-                                heavyPrecursorData.precursorSpeciesName = heavyKey + key;
+                                heavyPrecursorData.precursorName = heavyKey + " " + heavyFA1.ToString();
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavyFA1.ToString();
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -497,7 +503,7 @@ namespace LipidCreator
                         sortedAcids.Add(fa2);
                         unsortedAcids.Add(fa1);
                         unsortedAcids.Add(fa2);
-                        sortedAcids.Sort();
+                        if (!isFAa && !isPlamalogen) sortedAcids.Sort();
                         
                         foreach(string headgroupIter in headGroupNames)
                         {   
@@ -519,29 +525,15 @@ namespace LipidCreator
                                 }
                             }
                             
+                            var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                            string key = " " + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                             
-                            String key = " ";
-                            int i = 0;
-                            if (isSorted){
-                                foreach (FattyAcid fa in sortedAcids)
-                                {
-                                    if (fa.length > 0 && fa.suffix != "x"){
-                                        if (i++ > 0) key += ID_SEPARATOR_UNSPECIFIC;
-                                        key += fa.ToString();
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                foreach (FattyAcid fa in unsortedAcids)
-                                {
-                                    if (fa.length > 0 && fa.suffix != "x"){
-                                        if (i++ > 0) key += ID_SEPARATOR_SPECIFIC;
-                                        key += fa.ToString();
-                                    }
-                                }
-                            }
-                            
+                        
+                            // species name
+                            FattyAcid speciesFA = new FattyAcid(fa1);
+                            speciesFA.merge(fa2);
+                            string speciesName = headgroup + " " + speciesFA.ToString();
+
                           
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
@@ -567,10 +559,6 @@ namespace LipidCreator
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                                     
-                                // species name
-                                FattyAcid speciesFA = new FattyAcid(fa1);
-                                speciesFA.merge(fa2);
-                                string speciesName = headgroup + " " + speciesFA.ToString();
                                                                     
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
@@ -605,7 +593,7 @@ namespace LipidCreator
                                 if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
                                 
                                 if (onlyHeavyLabeled == 0) continue;
-                                foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
+                                foreach (Precursor heavyPrecursor in headgroups[headgroup].heavyLabeledPrecursors)
                                 {
                                     
                                     string heavyHeadgroup = heavyPrecursor.name;
@@ -618,8 +606,11 @@ namespace LipidCreator
                                     heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
                                     heavyFA2.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[1]);
                                     List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
+                                    List<FattyAcid> heavyUnsortedAcids = new List<FattyAcid>();
                                     heavySortedAcids.Add(heavyFA1);
                                     heavySortedAcids.Add(heavyFA2);
+                                    heavyUnsortedAcids.Add(heavyFA1);
+                                    heavyUnsortedAcids.Add(heavyFA2);
                                     if (!isFAa && !isPlamalogen) heavySortedAcids.Sort();
                         
                                     ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
@@ -631,7 +622,17 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                     double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                     
-                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                    
+                                    
+                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                    string heavyFattyComp = " " + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
+                                    
+                                    
+                                    // species name
+                                    FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
+                                    heavySpeciesFA.merge(heavyFA2);
+                                    
                                                                         
                                     // filling information on MS1 level for heavy phospholipid
                                     PrecursorData heavyPrecursorData = new PrecursorData();
@@ -639,8 +640,8 @@ namespace LipidCreator
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = completeKey;
-                                    heavyPrecursorData.precursorName = heavyKey + key;
-                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + speciesFA.ToString();
+                                    heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
+                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavySpeciesFA.ToString();
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

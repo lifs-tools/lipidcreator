@@ -28,6 +28,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Xml.Linq;
+using System.Linq;
 
 
 namespace LipidCreator
@@ -44,6 +46,15 @@ namespace LipidCreator
         public ElementDictionary()
         {
         
+        }
+        
+        public bool hasHeavy()
+        {
+            foreach (KeyValuePair<Molecule, Element> kvp in MS2Fragment.ALL_ELEMENTS.Where(x => x.Value.isHeavy)) 
+            {
+                if (this[kvp.Key] > 0) return true;
+            }
+            return false;
         }
         
         public void print()

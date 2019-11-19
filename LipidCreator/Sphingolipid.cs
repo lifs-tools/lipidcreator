@@ -146,13 +146,12 @@ namespace LipidCreator
                         foreach (FattyAcid fa in fag.getFattyAcids())
                         {
                     
-                            String key = " ";
-                            key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
-                            key += ID_SEPARATOR_SPECIFIC;                            
-                            key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
-                            if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
-                            
-
+                            string key = " " + lcbType.ToString() + ID_SEPARATOR_SPECIFIC + fa.ToString();
+                                
+                            // species name
+                            FattyAcid speciesFA = new FattyAcid(lcbType);
+                            speciesFA.merge(fa);
+                            string speciesName = headgroup + " " + speciesFA.ToString();
                             
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
@@ -172,11 +171,6 @@ namespace LipidCreator
                                 int charge = adduct.charge;
                                 MS2Fragment.addCounts(atomsCount, adduct.elements);
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
-                                
-                                // species name
-                                FattyAcid speciesFA = new FattyAcid(lcbType);
-                                speciesFA.merge(fa);
-                                string speciesName = headgroup + " " + speciesFA.ToString();
                             
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Sphingolipid;
@@ -221,7 +215,13 @@ namespace LipidCreator
                                     double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                     
                                     
-                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                    
+                                    string heavyFattyComp = " " + heavyLCB.ToString() + ID_SEPARATOR_SPECIFIC + heavyFA.ToString();
+                                    
+                                    // species name
+                                    FattyAcid heavySpeciesFA = new FattyAcid(heavyLCB);
+                                    heavySpeciesFA.merge(heavyFA); 
                                                                         
 
                                     PrecursorData heavyPrecursorData = new PrecursorData();
@@ -229,8 +229,8 @@ namespace LipidCreator
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = headgroup + key;
-                                    heavyPrecursorData.precursorName = heavyKey + key;
-                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + speciesFA.ToString();
+                                    heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
+                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavySpeciesFA.ToString();
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -250,8 +250,7 @@ namespace LipidCreator
                     }
                     else
                     {
-                        String key = " ";
-                        key += Convert.ToString(lcbType.length) + ":" + Convert.ToString(lcbType.db) + ";" + Convert.ToString(lcbType.hydroxyl);
+                        String key = " " + lcbType.ToString();
                         
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
@@ -314,7 +313,9 @@ namespace LipidCreator
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                     
                                 
-                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
+                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                
+                                String heavyFattyComp = " " + heavyLCB.ToString();
                                                                     
 
                                 PrecursorData heavyPrecursorData = new PrecursorData();
@@ -322,8 +323,8 @@ namespace LipidCreator
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = headgroup + key;
-                                heavyPrecursorData.precursorName = heavyKey + key;
-                                heavyPrecursorData.precursorSpeciesName = heavyKey + key;
+                                heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + heavyFattyComp;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

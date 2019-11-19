@@ -127,6 +127,7 @@ namespace LipidCreator
                     key += suffix;
                 }
             }
+            key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
             return key;
         }
         
@@ -140,18 +141,23 @@ namespace LipidCreator
                 int c = atomsCount[row.Key] + row.Value;
                 if (c < 0)
                 {
-                    if (row.Key != Molecule.S && row.Key != Molecule.O) atomsCount[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
-                    else
+                    if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
                     {
-                        if (row.Key == Molecule.S)
-                        {
-                            if(atomsCount[Molecule.S33] != 0) atomsCount[Molecule.S33] += c;
-                            else atomsCount[Molecule.S34] += c;
+                        if (row.Key != Molecule.S && row.Key != Molecule.O){
+                            atomsCount[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
                         }
                         else
                         {
-                            if(atomsCount[Molecule.O17] != 0) atomsCount[Molecule.O17] += c;
-                            else atomsCount[Molecule.O18] += c;
+                            if (row.Key == Molecule.S)
+                            {
+                                if(heavyAtomsCount[Molecule.S33] != 0) atomsCount[Molecule.S33] += c;
+                                else atomsCount[Molecule.S34] += c;
+                            }
+                            else
+                            {
+                                if(heavyAtomsCount[Molecule.O17] != 0) atomsCount[Molecule.O17] += c;
+                                else atomsCount[Molecule.O18] += c;
+                            }
                         }
                     }
                     c = 0;

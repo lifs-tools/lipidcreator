@@ -510,24 +510,16 @@ namespace LipidCreator
                             string headgroup = headgroupIter;
                             bool isSorted = true;
                             
+                            if (isPlamalogen || isFAa) isSorted = false;
                             
                             if (headgroup.Equals("PC") || headgroup.Equals("PE"))
                             {
-                                if (isPlamalogen)
-                                {
-                                    headgroup += " O-p";
-                                    isSorted = false;
-                                }
-                                else if (isFAa)
-                                {
-                                    headgroup += " O-a";
-                                    isSorted = false;
-                                }
+                                if (isPlamalogen) headgroup += " O-p";
+                                else if (isFAa) headgroup += " O-a";
                             }
                             
                             var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
                             string key = " " + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
-                            
                         
                             // species name
                             FattyAcid speciesFA = new FattyAcid(fa1);

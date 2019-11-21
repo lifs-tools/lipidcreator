@@ -74,7 +74,7 @@ namespace LipidCreator
         public string dbInfo;
         public string hydroxylInfo;
         public bool isLCB;
-        public Dictionary<String, bool> faTypes;
+        public Dictionary<string, bool> faTypes;
         public HashSet<int> carbonCounts;
         public HashSet<int> doubleBondCounts;
         public HashSet<int> hydroxylCounts;

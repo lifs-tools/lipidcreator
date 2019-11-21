@@ -49,6 +49,8 @@ namespace LipidCreator
         public ArrayList userDefinedFattyAcids;
         public HashSet<string> attributes;
         
+        public static int[] fattyAcidCount = new int[]{4, 3, 2, 1, 2, 1, 0};
+        
         
         public Precursor()
         {

@@ -88,10 +88,21 @@ namespace LipidCreator
                         string line;
                         while((line = sr.ReadLine()) != null)
                         {
-                            Console.WriteLine("testing: " + line);
-                            p.parse(line);
+                            
+                            
+                            string[] tokens = LipidCreator.parseLine(line, ',', '"');
+                            if (tokens.Length < 2 || tokens[1].Equals(""))
+                            {
+                                Console.WriteLine("Error, corrupted line: " + line);
+                            }
+                            
+                            string lipidForTest = tokens[0];
+                            string expectedLipid = tokens[1];
+                            Console.WriteLine("testing: " + lipidForTest);
+                            
+                            p.parse(lipidForTest);
                             p.raiseEvents();
-                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + line + "' was not parsed.");
+                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + lipidForTest + "' was not parsed.");
                             
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
@@ -111,9 +122,9 @@ namespace LipidCreator
                                 lcf.assembleLipids(false, new ArrayList(){false, 0});
                                 
                                 DataRow row = lcf.transitionList.Rows[0];
-                                if (!line.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                                if (!expectedLipid.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
                                 {
-                                    throw new Exception("Error: inserted lipid name '" + line + "' does not equal to computed name '" + row[LipidCreator.PRECURSOR_NAME] + "'.");
+                                    throw new Exception("Error: inserted lipid name '" + lipidForTest + "' does not match with computed name '" + row[LipidCreator.PRECURSOR_NAME] + "', expected '" + expectedLipid + "'.");
                                 }
                             }
                         }
@@ -140,7 +151,11 @@ namespace LipidCreator
                         {
                             Console.WriteLine("testing: " + line);
                             p.parse(line);
-                            if (p.wordInGrammar) throw new Exception("Error: lipid name '" + line + "' was parsed.");
+                            if (p.wordInGrammar)
+                            {
+                                p.raiseEvents();
+                                if (peh.lipid != null) throw new Exception("Error: lipid name '" + line + "' was parsed.");
+                            }
                         }
                     }
                 }

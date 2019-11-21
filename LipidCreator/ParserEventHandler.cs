@@ -26,6 +26,7 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LipidCreator
 {    
@@ -51,6 +52,9 @@ namespace LipidCreator
         public ArrayList heavyElementCountList = new ArrayList();
         public string heavyName = "";
         public bool addHeavy = false;
+        
+        public string fragmentName = "";
+        public bool heavyFragment = false;
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -116,6 +120,10 @@ namespace LipidCreator
             registeredEvents.Add("gl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("pl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("sl_species_pre_event", unsupportedEvent);
+            
+            
+            registeredEvents.Add("fragment_name_pre_event", setFragmentName);
+            registeredEvents.Add("heavy_fragment_pre_event", setHeavyFragment);
         }
         
         
@@ -139,7 +147,24 @@ namespace LipidCreator
             heavyElementCountList.Add(MS2Fragment.createEmptyElementDict());
             heavyName = "";
             addHeavy = false;
+        
+            fragmentName = "";
+            heavyFragment = false;
         }
+        
+        
+        
+        
+        public void setFragmentName(Parser.TreeNode node)
+        {
+            fragmentName = node.getText();
+        }
+        
+        public void setHeavyFragment(Parser.TreeNode node)
+        {
+            heavyFragment = true;
+        }
+        
         
         
         
@@ -265,7 +290,6 @@ namespace LipidCreator
                 lipid = new UnsupportedLipid(lipidCreator);
             }
             
-            
             // adding heavy labeled isotopes (if present)
             if (lipid != null && !makeUnsupported && addHeavy)
             {
@@ -288,6 +312,134 @@ namespace LipidCreator
                     lipidCreator.addHeavyPrecursor(lipid.headGroupNames[0], heavyName, heavyElementCountList);
                 }
             }
+            
+            if ((lipid != null) && (lipid is Phospholipid))
+            {
+                bool firstFAHasPlamalogen = false;
+                bool secondFAHasPlamalogen = false;
+                foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
+                {
+                    firstFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                }
+                foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
+                {
+                    secondFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                }
+                
+                // flip fatty acids
+                if (!firstFAHasPlamalogen && secondFAHasPlamalogen)
+                {
+                    FattyAcidGroup tmp = ((Phospholipid)lipid).fag1;
+                    ((Phospholipid)lipid).fag1 = ((Phospholipid)lipid).fag2;
+                    ((Phospholipid)lipid).fag2 = tmp;
+                }
+                
+                else if (firstFAHasPlamalogen && secondFAHasPlamalogen)
+                {
+                    lipid = new UnsupportedLipid(lipidCreator);
+                }
+            }
+            
+            
+            // add fragment
+            if (lipid != null && fragmentName.Length > 0)
+            {
+            
+                string lipidClass = lipid.headGroupNames[0];
+                FattyAcidGroupEnumerator fragmentFAGEnum = null;
+                
+                
+                // check for PE O, PC O, LPE O, LPC O
+                if (lipidClass.Equals("PC") || lipidClass.Equals("PE"))
+                {
+                    if (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag2.faTypes["FAp"]) lipidClass = lipidClass + " O-p";
+                    else if (((Phospholipid)lipid).fag1.faTypes["FAa"] || ((Phospholipid)lipid).fag2.faTypes["FAa"]) lipidClass = lipidClass + " O-a";
+                }
+                else if  (lipidClass.Equals("LPC") || lipidClass.Equals("LPE"))
+                {
+                    if (((Phospholipid)lipid).fag1.faTypes["FAp"]) lipidClass = lipidClass + " O-p";
+                    else if (((Phospholipid)lipid).fag1.faTypes["FAa"]) lipidClass = lipidClass + " O-a";
+                }
+                
+                 
+                ArrayList possibleFragmentNames = new ArrayList();
+                possibleFragmentNames.Add(new string[]{fragmentName, fragmentName});
+                string[] faWildcards = new string[]{"[xx:x]", "[yy:y]", "[zz:z]", "[uu:u]"};
+                
+                
+                for (int j = 0; j < possibleFragmentNames.Count; ++j)
+                {
+                    
+                    if (lipid is Glycerolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
+                    else if (lipid is Phospholipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
+                    else if (lipid is Sphingolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
+                    else if (lipid is Cholesterol) fragmentFAGEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
+                    else if (lipid is Mediator) fragmentFAGEnum = new FattyAcidGroupEnumerator((Mediator)lipid);
+                    int faCNT = 0;
+                
+                    string currentFragmentName = ((string[])possibleFragmentNames[j])[0];
+                    string currentOutputFragmentName = ((string[])possibleFragmentNames[j])[1];
+                    for (int i = 0; i < Precursor.fattyAcidCount[lipidCreator.headgroups[lipidClass].buildingBlockType]; ++i)
+                    {
+                        if (i == 0 && lipid is Sphingolipid)
+                        {
+                            string lcb_key = ((Sphingolipid)lipid).lcb.getFattyAcids().First().ToString();
+                            if (currentFragmentName.IndexOf(lcb_key) >= 0)
+                            {
+                                possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(" " + lcb_key, ""), currentOutputFragmentName.Replace(lcb_key, "[xx:x;x]")});
+                            }
+                        }
+                        else
+                        {
+                            fragmentFAGEnum.MoveNext();
+                            string fa_key = (fragmentFAGEnum.Current).getFattyAcids().First().ToString();
+                            if (currentFragmentName.IndexOf(fa_key) >= 0)
+                            {
+                                possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(" " + fa_key, (faCNT + 1).ToString()), currentOutputFragmentName.Replace(fa_key, faWildcards[faCNT])});
+                            }
+                            ++faCNT;
+                        }
+                    }
+                    
+                    foreach (Adduct adduct in Lipid.ALL_ADDUCTS.Values)
+                    {
+                        if (currentFragmentName.IndexOf(adduct.name) >= 0)
+                        {
+                            possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(adduct.name, "[adduct]"), currentOutputFragmentName.Replace(adduct.name, "[adduct]")});
+                        }
+                    }
+                }
+                
+                
+                
+                ArrayList foundPosFragmentNames = new ArrayList();
+                ArrayList foundNegFragmentNames = new ArrayList();
+                foreach (string[] fragment in possibleFragmentNames)
+                {
+                
+                    if (lipidCreator.allFragments[lipidClass][true].ContainsKey(fragment[0]) && lipidCreator.allFragments[lipidClass][true][fragment[0]].fragmentOutputName.Equals(fragment[1]))
+                    {
+                        foundPosFragmentNames.Add(fragment[0]);
+                    }
+                    if (lipidCreator.allFragments[lipidClass][false].ContainsKey(fragment[0]) && lipidCreator.allFragments[lipidClass][false][fragment[0]].fragmentOutputName.Equals(fragment[1]))
+                    {
+                        foundNegFragmentNames.Add(fragment[0]);
+                    }
+                }
+                
+                if (foundNegFragmentNames.Count == 0 && foundPosFragmentNames.Count == 0)
+                {
+                    lipid = null;
+                }
+                else
+                {   
+                    foreach (HashSet<string> sh in lipid.positiveFragments.Values) sh.Clear();
+                    foreach (HashSet<string> sh in lipid.negativeFragments.Values) sh.Clear();
+                    foreach (string posFragment in foundPosFragmentNames) lipid.positiveFragments[lipidClass].Add(posFragment);
+                    foreach (string negFragment in foundNegFragmentNames) lipid.negativeFragments[lipidClass].Add(negFragment);
+                }
+                
+            }
         }
         
         
@@ -300,10 +452,13 @@ namespace LipidCreator
         
         
         
+        
         public void sortedFASeparatorPreEvent(Parser.TreeNode node)
         {
             sortedSeparator = true;
         }
+        
+        
         
         
         public void GLPreEvent(Parser.TreeNode node)
@@ -312,11 +467,17 @@ namespace LipidCreator
             fagEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
         }
         
+        
+        
+        
         public void PLPreEvent(Parser.TreeNode node)
         {
             lipid = new Phospholipid(lipidCreator);
             fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
         }
+        
+        
+        
         
         public void DPLPostEvent(Parser.TreeNode node)
         {
@@ -343,6 +504,8 @@ namespace LipidCreator
                 }
             }
         }
+        
+        
         
         
         public void SLPreEvent(Parser.TreeNode node)

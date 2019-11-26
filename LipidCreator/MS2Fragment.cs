@@ -136,6 +136,44 @@ namespace LipidCreator
             }
             return true;
         }
+        
+        
+        
+        
+        public static void updateForHeavyLabeled(ElementDictionary originElements, ElementDictionary updateELements)
+        {
+            foreach (KeyValuePair<Molecule, int> row in updateELements)
+            {
+                int c = originElements[row.Key] + row.Value;
+                if (c < 0)
+                {
+                    if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
+                    {
+                        if (row.Key != Molecule.S && row.Key != Molecule.O){
+                            originElements[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
+                        }
+                        else
+                        {
+                            if (row.Key == Molecule.S)
+                            {
+                                if(updateELements[Molecule.S33] != 0) originElements[Molecule.S33] += c;
+                                else originElements[Molecule.S34] += c;
+                            }
+                            else
+                            {
+                                if(updateELements[Molecule.O17] != 0) originElements[Molecule.O17] += c;
+                                else originElements[Molecule.O18] += c;
+                            }
+                        }
+                    }
+                    c = 0;
+                }
+                originElements[row.Key] = c;
+            }
+        }
+        
+        
+        
 
 
 
@@ -238,11 +276,12 @@ namespace LipidCreator
         
         
     
-        public static void addCounts(ElementDictionary counts1, ElementDictionary counts2)
+        public static void addCounts(ElementDictionary counts1, ElementDictionary counts2, bool subtract = false)
         {
+            int sign = subtract ? -1 : 1;
             foreach (KeyValuePair<Molecule, int> kvp in counts2)
             {
-                counts1[kvp.Key] += kvp.Value;
+                counts1[kvp.Key] += sign * kvp.Value;
             }
         }
         

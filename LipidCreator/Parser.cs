@@ -817,7 +817,7 @@ namespace LipidCreator
             parseTree = null;
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
-            Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
+            SortedDictionary<long, DPNode>[][] dpTable = new SortedDictionary<long, DPNode>[n][];
             // V (vertical) and Diag (diagonal) are lookups, which fields in the dpTable are filled
             long[] V = new long[n];
             long[] Diag = new long[n];
@@ -826,8 +826,8 @@ namespace LipidCreator
             
             for (int i = 0; i < n; ++i)
             {
-                dpTable[i] = new Dictionary<long, DPNode>[n - i];
-                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<long, DPNode>();
+                dpTable[i] = new SortedDictionary<long, DPNode>[n - i];
+                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new SortedDictionary<long, DPNode>();
                 V[i] = 0;
                 Diag[i] = 0;
             }
@@ -853,8 +853,8 @@ namespace LipidCreator
                 int im1 = i - 1;
                 for (int j = 0; j < n - i; ++j)
                 {
-                    Dictionary<long, DPNode>[] D = dpTable[j];
-                    Dictionary<long, DPNode> Di = D[i];
+                    SortedDictionary<long, DPNode>[] D = dpTable[j];
+                    SortedDictionary<long, DPNode> Di = D[i];
                     int jp1 = j + 1;
                     
                     // checking if at least one k is valid
@@ -900,8 +900,6 @@ namespace LipidCreator
             
         public void parseRegular(string textToParse)
         {
-        
-        
             wordInGrammar = false;
             parseTree = null;
             int n = textToParse.Length;
@@ -945,7 +943,6 @@ namespace LipidCreator
                     {
                         if (k >= i) break;
                         if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
-                        
                         foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
                         {
                             foreach (KeyValuePair<long, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
@@ -973,6 +970,84 @@ namespace LipidCreator
                     fillTree(parseTree, dpTable[0][i][START_RULE]);
                     break;
                 }
+            }
+        }
+            
+            
+            
+            
+            
+        public void parseSubstring(string textToParse)
+        {
+            wordInGrammar = false;
+            parseTree = null;
+            int n = textToParse.Length;
+            // dp stands for dynamic programming, nothing else
+            Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
+            // Ks is a lookup, which fields in the dpTable are filled
+            Bitfield[] Ks = new Bitfield[n];
+            DPNode startNode = null;
+            
+            for (int i = 0; i < n; ++i)
+            {
+                dpTable[i] = new Dictionary<long, DPNode>[n - i];
+                Ks[i] = new Bitfield(n - 1);
+                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<long, DPNode>();
+            }
+            
+            for (int i = 0; i < n; ++i)
+            {
+                char c = textToParse[i];
+                if (!TtoNT.ContainsKey(c)) continue;
+                
+                foreach (long ruleIndex in TtoNT[c])
+                {
+                    long newKey = ruleIndex >> SHIFT;
+                    long oldKey = ruleIndex & MASK;
+                    DPNode dpNode = new DPNode((long)c, oldKey, null, null);
+                    dpTable[i][0][newKey] =  dpNode;
+                    Ks[i].set(0);
+                }
+            }
+            
+            for (int i = 1; i < n; ++i)
+            {
+                int im1 = i - 1;
+                for (int j = 0; j < n - i; ++j)
+                {
+                    Dictionary<long, DPNode>[] D = dpTable[j];
+                    Dictionary<long, DPNode> Di = D[i];
+                    int jp1 = j + 1;
+                    
+                    foreach(int k in Ks[j].getBitPositions())
+                    {
+                        if (k >= i) break;
+                        if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
+                        foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
+                        {
+                            foreach (KeyValuePair<long, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
+                            {
+                                long key = computeRuleKey(indexPair1.Key, indexPair2.Key);
+                                if (!NTtoNT.ContainsKey(key)) continue;
+                                
+                                DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
+                                Ks[j].set(i);
+                                foreach (long ruleIndex in NTtoNT[key])
+                                {
+                                    Di[ruleIndex] = content;
+                                    if (START_RULE == ruleIndex) startNode = content; 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (startNode != null)
+            {
+                wordInGrammar = true;
+                parseTree = new TreeNode(START_RULE, NTtoRule.ContainsKey(START_RULE));
+                fillTree(parseTree, startNode);
             }
         }
     }    

@@ -136,34 +136,7 @@ namespace LipidCreator
         
         public void updateForHeavyLabeled(ElementDictionary heavyAtomsCount)
         {
-            foreach (KeyValuePair<Molecule, int> row in heavyAtomsCount)
-            {
-                int c = atomsCount[row.Key] + row.Value;
-                if (c < 0)
-                {
-                    if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
-                    {
-                        if (row.Key != Molecule.S && row.Key != Molecule.O){
-                            atomsCount[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[0]] += c;
-                        }
-                        else
-                        {
-                            if (row.Key == Molecule.S)
-                            {
-                                if(heavyAtomsCount[Molecule.S33] != 0) atomsCount[Molecule.S33] += c;
-                                else atomsCount[Molecule.S34] += c;
-                            }
-                            else
-                            {
-                                if(heavyAtomsCount[Molecule.O17] != 0) atomsCount[Molecule.O17] += c;
-                                else atomsCount[Molecule.O18] += c;
-                            }
-                        }
-                    }
-                    c = 0;
-                }
-                atomsCount[row.Key] = c;
-            }
+            MS2Fragment.updateForHeavyLabeled(atomsCount, heavyAtomsCount);
         }
         
 

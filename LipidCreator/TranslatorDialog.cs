@@ -37,10 +37,11 @@ namespace LipidCreator
 {
     public partial class TranslatorDialog : Form
     {
-        public CreatorGUI creatorGUI;
-        public DataTable lipidNamesList;
-        public ArrayList parsedLipids;
-        public Image whiteImage;
+        public CreatorGUI creatorGUI = null;
+        public DataTable lipidNamesList = null;
+        public ArrayList parsedLipids = null;
+        public ArrayList parsedLipidList = null;
+        public Image whiteImage = null;
         public bool tableInitialized = false;
             
         public const string FIRST_HEADER = "Old lipid name";
@@ -234,7 +235,7 @@ namespace LipidCreator
             }
             
             parsedLipids = creatorGUI.lipidCreator.translate(lipidNames);
-            
+            parsedLipidList = new ArrayList();
             
             lipidNamesList.Columns[1].ReadOnly = false;
             HashSet<String> usedKeys = new HashSet<String>();
@@ -243,26 +244,51 @@ namespace LipidCreator
             int correctlyParsed = 0;
             foreach (Lipid currentLipid in parsedLipids)
             {
+                string newLipidName = "";
                 if (currentLipid != null)
                 {
                     currentLipid.computePrecursorData(creatorGUI.lipidCreator.headgroups, usedKeys, precursorDataList);
-                    string newLipidName = "";
                     if (!(currentLipid is UnsupportedLipid))
                     {
-                        newLipidName = ((PrecursorData)precursorDataList[0]).precursorName;
-                        string adductName = "";
-                        foreach (string addct in currentLipid.adducts.Keys)
+                        if (precursorDataList.Count == 0)
                         {
-                            if (currentLipid.adducts[addct])
-                            {
-                                adductName = addct;
-                                break;
-                            }
+                            newLipidName = "Unrecognized molecule";
+                            lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                         }
-                        Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductName]];
-                        ElementDictionary precursorElements = creatorGUI.lipidCreator.headgroups[((PrecursorData)precursorDataList[0]).moleculeListName].elements;
-                        newLipidName += LipidCreator.computeAdductFormula(precursorElements, adduct);
-                        ++correctlyParsed;
+                        else
+                        {
+                            int pdc = 0;
+                            /*
+                            if  (precursorDataList.Count > 1 && lipid.onlyHeavyLabeled == 1)
+                            {
+                                
+                                for (int j = 0; j < precursorDataList.Count; ++j)
+                                {
+                                    if (LipidCreator.precursorNameSplit((string)precursorDataList[j])[1] == currentLipid.heavyName)
+                                    {
+                                        pdc = j;
+                                        break;
+                                    }
+                                }
+                            }
+                            */
+                            Console.WriteLine("huhu: " + currentLipid.headGroupNames[0]);
+                        
+                            newLipidName = ((PrecursorData)precursorDataList[pdc]).precursorName;
+                            string adductName = "";
+                            foreach (string addct in currentLipid.adducts.Keys)
+                            {
+                                if (currentLipid.adducts[addct])
+                                {
+                                    adductName = addct;
+                                    break;
+                                }
+                            }
+                            Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductName]];
+                            ElementDictionary precursorElements = creatorGUI.lipidCreator.headgroups[((PrecursorData)precursorDataList[pdc]).moleculeListName].elements;
+                            newLipidName += LipidCreator.computeAdductFormula(precursorElements, adduct);
+                            ++correctlyParsed;
+                        }
                     }
                     else
                     {
@@ -271,14 +297,16 @@ namespace LipidCreator
                     }
                     usedKeys.Clear();
                     precursorDataList.Clear();
-                    lipidNamesList.Rows[i][SECOND_HEADER] = newLipidName;
                     
                 }
                 else
                 {
-                    lipidNamesList.Rows[i][SECOND_HEADER] = "Unrecognized molecule";
+                    newLipidName = "Unrecognized molecule";
                     lipidNamesGridView.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                 }
+                
+                lipidNamesList.Rows[i][SECOND_HEADER] = newLipidName;
+                parsedLipidList.Add(new object[]{newLipidName, currentLipid});
                 ++i;
             }
             lipidNamesList.Columns[1].ReadOnly = true;
@@ -295,6 +323,7 @@ namespace LipidCreator
         private void button3_Click(object sender, EventArgs e)
         {
             int[] filterParameters = {2, 2};
+            Dictionary<string, Lipid> parsedLipidsDict = new Dictionary<string, Lipid>();
             FilterDialog importFilterDialog = new FilterDialog(filterParameters);
             importFilterDialog.Owner = this;
             importFilterDialog.ShowInTaskbar = false;
@@ -313,10 +342,35 @@ namespace LipidCreator
                 creatorGUI.lipidCreator.registeredLipidDictionary.Clear(); // replace
                 creatorGUI.lipidCreator.registeredLipids.Clear(); // replace
             }
-        
-            foreach(Lipid currentLipid in parsedLipids)
+            
+            // merge lipids if Precursor names match
+            ArrayList lipidListForInsertion = new ArrayList();
+            foreach(object[] lipidRow in parsedLipidList)
             {
-                
+                string lipidName = (string)lipidRow[0];
+                Lipid currentLipid = (Lipid)lipidRow[1];
+                if (!parsedLipidsDict.ContainsKey(lipidName))
+                {
+                    parsedLipidsDict.Add(lipidName, currentLipid);
+                    lipidListForInsertion.Add(currentLipid);
+                }
+                else
+                {
+                    Lipid lipidForMerging = parsedLipidsDict[lipidName];
+                    foreach (string lipidClass in lipidForMerging.positiveFragments.Keys)
+                    {
+                        lipidForMerging.positiveFragments[lipidClass].UnionWith(currentLipid.positiveFragments[lipidClass]);
+                    }
+                    foreach (string lipidClass in lipidForMerging.negativeFragments.Keys)
+                    {
+                        lipidForMerging.negativeFragments[lipidClass].UnionWith(currentLipid.negativeFragments[lipidClass]);
+                    }
+                }
+            }
+            
+        
+            foreach(Lipid currentLipid in lipidListForInsertion)
+            {
                 ulong lipidHash = 0;
                 if (currentLipid is Glycerolipid) lipidHash = ((Glycerolipid)currentLipid).getHashCode();
                 else if (currentLipid is Phospholipid) lipidHash = ((Phospholipid)currentLipid).getHashCode();

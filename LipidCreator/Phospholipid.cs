@@ -551,6 +551,7 @@ namespace LipidCreator
                                 double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
                                     
+                                    
                                                                     
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
@@ -624,6 +625,8 @@ namespace LipidCreator
                                     // species name
                                     FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
                                     heavySpeciesFA.merge(heavyFA2);
+                                    
+                                    Console.WriteLine("huhu: " + heavyKey);
                                     
                                                                         
                                     // filling information on MS1 level for heavy phospholipid

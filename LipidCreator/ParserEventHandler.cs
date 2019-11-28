@@ -246,7 +246,7 @@ namespace LipidCreator
                 return;
             }
             
-            string key = heavyElement + heavyIsotope.ToString();
+            string key = heavyIsotope.ToString() + heavyElement;
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(key))
             {
                 Molecule m = MS2Fragment.ELEMENT_POSITIONS[key];
@@ -270,6 +270,7 @@ namespace LipidCreator
         // handling all events
         public void lipidPostEvent(Parser.TreeNode node)
         {
+        
             if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
@@ -471,28 +472,32 @@ namespace LipidCreator
                 lipid = null;
             }
             
+            if (lipid != null)
+            {
+                lipid.onlyHeavyLabeled = 0;
+            }
+            
+            
+            
             
             
             // adding heavy labeled isotopes if present
             if (lipid != null && !makeUnsupported && addHeavyPrecursor)
             {
-                
                 ElementDictionary hgDictionary = new ElementDictionary(lipidCreator.headgroups[lipid.headGroupNames[0]].elements);
-                foreach (KeyValuePair<Molecule, int> kvp in (ElementDictionary)heavyElementCountList[0]) 
-                {
-                    hgDictionary[kvp.Key] -= kvp.Value;
-                    if (hgDictionary[kvp.Key] < 0)
-                    {
-                        lipid = null;
-                        break;
-                    }
-                }
+                
+                MS2Fragment.updateForHeavyLabeled(hgDictionary, (ElementDictionary)heavyElementCountList[0]);
+                if (!MS2Fragment.validElementDict(hgDictionary)) lipid = null;
+                
+                
                 
             
                 if (lipid != null)
                 {
+                    
                     string lipidClass = lipid.headGroupNames[0];
                     heavyElementCountList[0] = hgDictionary;
+                    lipid.onlyHeavyLabeled = 1;
                     lipidCreator.addHeavyPrecursor(lipid.headGroupNames[0], heavyName, heavyElementCountList);
                     
                     if (heavyFragment != null)
@@ -519,22 +524,19 @@ namespace LipidCreator
                         foreach (ElementDictionary ed in heavyElementCountList)
                         {
                             MS2Fragment.addCounts(totalHeavy, ed);
-                            ed.print();
                         }
                         MS2Fragment.addCounts(totalHeavy, heavyFragment, true);
-                        heavyFragment.print();
-                        totalHeavy.print();
                         
                         if (!MS2Fragment.validElementDict(totalHeavy))
                         {
                             lipid = null;
                         }
                     }
-                    
-                    
-                    
                 }
+                
             }
+            
+            Console.WriteLine("hg: " + lipid.headGroupNames[0]);
         }
         
         
@@ -636,6 +638,7 @@ namespace LipidCreator
         public void LCBPreEvent(Parser.TreeNode node)
         {
             fag = ((Sphingolipid)lipid).lcb;
+            heavyElementCounts = null;
         }
         
         

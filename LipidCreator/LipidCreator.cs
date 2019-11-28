@@ -1417,7 +1417,7 @@ namespace LipidCreator
             {
                 if (elements[molecule] > 0)
                 {
-                    label += MS2Fragment.ALL_ELEMENTS[molecule].shortcutNomenclature + Convert.ToString(elements[molecule]);
+                    label += MS2Fragment.ALL_ELEMENTS[molecule].shortcutNomenclature + ((elements[molecule] > 1) ? Convert.ToString(elements[molecule]) : "");
                 }
             }
             if (label.Length > 0) label = "(+" + label + ")";

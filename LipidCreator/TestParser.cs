@@ -90,6 +90,8 @@ namespace LipidCreator
                         while((line = sr.ReadLine()) != null)
                         {
                             
+                            if (line.IndexOf("#") > -1) line = line.Substring(0, line.IndexOf("#"));
+                            if (line.Length < 2 || line.Equals("")) continue;
                             
                             string[] tokens = LipidCreator.parseLine(line, ',', '"');
                             if (tokens.Length < 2 || tokens[1].Equals(""))
@@ -102,8 +104,12 @@ namespace LipidCreator
                             Console.WriteLine("testing: " + lipidForTest);
                             
                             p.parse(lipidForTest);
+                            if (!p.wordInGrammar)
+                            {
+                                throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be parsed.");
+                            }
                             p.raiseEvents();
-                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + lipidForTest + "' was not parsed.");
+                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be handled.");
                             
                             peh.lipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
@@ -116,16 +122,38 @@ namespace LipidCreator
                             else if (peh.lipid is Mediator) lipidHash = ((Mediator)peh.lipid).getHashCode();
                             else if (peh.lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)peh.lipid).getHashCode();
                             
+                            
                             if (!lcf.registeredLipidDictionary.ContainsKey(lipidHash))
                             {
                                 lcf.registeredLipidDictionary.Add(lipidHash, peh.lipid);
                                 lcf.registeredLipids.Add(lipidHash);
                                 lcf.assembleLipids(false, new ArrayList(){false, 0});
                                 
-                                DataRow row = lcf.transitionList.Rows[0];
-                                if (!expectedLipid.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                                if (lcf.transitionList.Rows.Count < 1)
                                 {
-                                    throw new Exception("Error: inserted lipid name '" + lipidForTest + "' does not match with computed name '" + row[LipidCreator.PRECURSOR_NAME] + "', expected '" + expectedLipid + "'.");
+                                    throw new Exception("Error: inserted lipid name '" + lipidForTest + "' could not be created");
+                                }
+                                else if (lcf.transitionList.Rows.Count == 1)
+                                {
+                                    DataRow row = lcf.transitionList.Rows[0];
+                                    if (!expectedLipid.Equals((string)row[LipidCreator.PRECURSOR_NAME]))
+                                    {
+                                        throw new Exception("Error: inserted lipid name '" + lipidForTest + "' does not match with computed name '" + row[LipidCreator.PRECURSOR_NAME] + "', expected '" + expectedLipid + "'.");
+                                    }
+                                }
+                                else
+                                {
+                                    bool found = false;
+                                    foreach (DataRow row in lcf.transitionList.Rows)
+                                    {
+                                        Console.WriteLine("found: " + (string)row[LipidCreator.PRECURSOR_NAME]);
+                                        found |= expectedLipid.Equals((string)row[LipidCreator.PRECURSOR_NAME]);
+                                    }
+                                    if (!found)
+                                    {   
+                                        throw new Exception("Error: inserted lipid name '" + lipidForTest + "' does not match with any computed name, expected '" + expectedLipid + "'.");
+                                    
+                                    }
                                 }
                             }
                         }

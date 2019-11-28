@@ -1087,7 +1087,40 @@ namespace LipidCreator
 
                         int lipidNameIndex = 0;
                         ArrayList importedLipids = translate(lipidsToImport, true);
-                        foreach (Lipid lipid in importedLipids)
+                        
+                        
+                        
+                        Dictionary<string, Lipid> parsedLipidsDict = new Dictionary<string, Lipid>();
+                        ArrayList lipidListForInsertion = new ArrayList();
+                        
+                        foreach (object[] lipidRow in importedLipids)
+                        {
+                            Lipid currentLipid = (Lipid)lipidRow[0];
+                            string lipidName = (string)lipidRow[2];
+                            if (currentLipid == null || (currentLipid is UnsupportedLipid)) continue;
+                            ++valid;
+                            
+                            if (!parsedLipidsDict.ContainsKey(lipidName))
+                            {
+                                parsedLipidsDict.Add(lipidName, currentLipid);
+                                lipidListForInsertion.Add(currentLipid);
+                            }
+                            else
+                            {
+                                Lipid lipidForMerging = parsedLipidsDict[lipidName];
+                                foreach (string lipidClass in lipidForMerging.positiveFragments.Keys)
+                                {
+                                    lipidForMerging.positiveFragments[lipidClass].UnionWith(currentLipid.positiveFragments[lipidClass]);
+                                }
+                                foreach (string lipidClass in lipidForMerging.negativeFragments.Keys)
+                                {
+                                    lipidForMerging.negativeFragments[lipidClass].UnionWith(currentLipid.negativeFragments[lipidClass]);
+                                }
+                            }
+                        }
+                        
+                        
+                        foreach (Lipid lipid in lipidListForInsertion)
                         {
                             if (lipid == null || (lipid is UnsupportedLipid)) continue;
                             
@@ -1109,10 +1142,10 @@ namespace LipidCreator
                             {
                                 registeredLipidDictionary.Add(lipidHash, lipid);
                                 registeredLipids.Add(lipidHash);
-                                ++valid;
                             }
                             else
                             {
+                                --valid;
                                 StringBuilder lipidXml = new StringBuilder(50);
                                 lipid.serialize(lipidXml);
                                 StringBuilder lipidDictXml = new StringBuilder(50);
@@ -1704,6 +1737,8 @@ namespace LipidCreator
                 if (lipidName.Length > 0)
                 {
                     Lipid lipid = null;
+                    string heavyName = "";
+                    string purePrecursor = "";
                     lipidNamesParser.parse(lipidName);
                     if (lipidNamesParser.wordInGrammar)
                     {
@@ -1711,6 +1746,8 @@ namespace LipidCreator
                         if (parserEventHandler.lipid != null)
                         {
                             lipid = parserEventHandler.lipid;
+                            purePrecursor = parserEventHandler.purePrecursor;
+                            heavyName = parserEventHandler.heavyName;
                         }
                         else if (reportError)
                         {
@@ -1738,7 +1775,7 @@ namespace LipidCreator
                             log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                         }
                     }
-                    parsedLipids.Add(lipid);
+                    parsedLipids.Add(new object[]{lipid, heavyName, purePrecursor});
                 }
             }
             return parsedLipids;

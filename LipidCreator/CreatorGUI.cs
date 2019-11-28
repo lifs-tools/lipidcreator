@@ -1742,9 +1742,9 @@ namespace LipidCreator
                     {
                         if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
                     }
-                    plFA1Checkbox1.Checked = true;
-                    plFA1Checkbox2.Checked = false;
-                    plFA1Checkbox3.Checked = false;
+                    plFA1Checkbox1.Checked = false;
+                    plFA1Checkbox2.Checked = true;
+                    plFA1Checkbox3.Checked = true;
                     
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;
@@ -1780,9 +1780,9 @@ namespace LipidCreator
                     {
                         if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
                     }
-                    plFA1Checkbox1.Checked = true;
-                    plFA1Checkbox2.Checked = false;
-                    plFA1Checkbox3.Checked = false;
+                    plFA1Checkbox1.Checked = false;
+                    plFA1Checkbox2.Checked = true;
+                    plFA1Checkbox3.Checked = true;
                     
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;

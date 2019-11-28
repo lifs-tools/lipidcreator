@@ -520,16 +520,6 @@ namespace LipidCreator
                     
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
-                        /*
-                        bool isPlamalogen = isPlamalogen1;
-                        bool isFAa = isFAa1;
-                        switch (fa2.suffix)
-                        {
-                            case "a": isFAa = true; break;
-                            case "p": isPlamalogen = true; break;
-                            default: break;
-                        }
-                        */
                         List<FattyAcid> sortedAcids = new List<FattyAcid>();
                         List<FattyAcid> unsortedAcids = new List<FattyAcid>();
                         sortedAcids.Add(fa1);
@@ -550,14 +540,14 @@ namespace LipidCreator
                             
                             if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
                             {
+                                if (isFAa) continue;
                                 isPlamalogen = true;
-                                isFAa = false;
                                 fa1.suffix = "p";
                             }
                             else if (headgroup.Equals("PC O-a") || headgroup.Equals("PE O-a"))
                             {
+                                if (isPlamalogen) continue;
                                 isFAa = true;
-                                isPlamalogen = false;
                                 fa1.suffix = "a";
                             }
                             if (isPlamalogen || isFAa) isSorted = false;

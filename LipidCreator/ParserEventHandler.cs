@@ -65,6 +65,7 @@ namespace LipidCreator
         
         public IsotopeParserEventHandler ipeh = null;
         public Parser ip = null;
+        public string purePrecursor = "";
     
     
         public ParserEventHandler(LipidCreator _lipidCreator) : base()
@@ -81,6 +82,7 @@ namespace LipidCreator
             
             registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
             registeredEvents.Add("lipid_post_event", lipidPostEvent);
+            registeredEvents.Add("just_lipid_pre_event", readPurePrecursor);
             
             registeredEvents.Add("fa_pre_event", FAPreEvent);
             registeredEvents.Add("fa_post_event", FAPostEvent);
@@ -192,7 +194,10 @@ namespace LipidCreator
         }
         
         
-        
+        public void readPurePrecursor(Parser.TreeNode node)
+        {
+            purePrecursor = node.getText();
+        }
         
         
         public void resetHeavyIsotope(Parser.TreeNode node)
@@ -309,14 +314,10 @@ namespace LipidCreator
                         {
                             if (((Phospholipid)lipid).fag1.faTypes["FAp"])
                             {
-                                ((Phospholipid)lipid).fag1.faTypes["FAp"] = false;
-                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
                                 lipidClass = lipidClass + "-p";
                             }
                             else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
                             {
-                                ((Phospholipid)lipid).fag1.faTypes["FAa"] = false;
-                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
                                 lipidClass = lipidClass + "-a";
                             }
                         }
@@ -324,14 +325,10 @@ namespace LipidCreator
                         {
                             if (((Phospholipid)lipid).fag1.faTypes["FAp"])
                             {
-                                ((Phospholipid)lipid).fag1.faTypes["FAp"] = false;
-                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
                                 lipidClass = lipidClass + "-p";
                             }
                             else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
                             {   
-                                ((Phospholipid)lipid).fag1.faTypes["FAa"] = false;
-                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
                                 lipidClass = lipidClass + "-a";
                             }
                         }

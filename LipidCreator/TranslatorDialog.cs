@@ -242,8 +242,11 @@ namespace LipidCreator
             ArrayList precursorDataList = new ArrayList();
             i = 0;
             int correctlyParsed = 0;
-            foreach (Lipid currentLipid in parsedLipids)
+            foreach (object[] currentLipidRow in parsedLipids)
             {
+                Lipid currentLipid = (Lipid)currentLipidRow[0];
+                string currentHeavyName = (string)currentLipidRow[1];
+                
                 string newLipidName = "";
                 if (currentLipid != null)
                 {
@@ -258,21 +261,18 @@ namespace LipidCreator
                         else
                         {
                             int pdc = 0;
-                            /*
-                            if  (precursorDataList.Count > 1 && lipid.onlyHeavyLabeled == 1)
+                            if  (precursorDataList.Count > 1 && currentLipid.onlyHeavyLabeled == 1)
                             {
-                                
                                 for (int j = 0; j < precursorDataList.Count; ++j)
                                 {
-                                    if (LipidCreator.precursorNameSplit((string)precursorDataList[j])[1] == currentLipid.heavyName)
+                                    string fullMoleculeListName = ((PrecursorData)precursorDataList[j]).fullMoleculeListName;
+                                    if (LipidCreator.precursorNameSplit(fullMoleculeListName)[1] == currentHeavyName)
                                     {
                                         pdc = j;
                                         break;
                                     }
                                 }
                             }
-                            */
-                            Console.WriteLine("huhu: " + currentLipid.headGroupNames[0]);
                         
                             newLipidName = ((PrecursorData)precursorDataList[pdc]).precursorName;
                             string adductName = "";

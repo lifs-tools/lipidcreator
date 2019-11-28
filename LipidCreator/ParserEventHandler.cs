@@ -279,34 +279,36 @@ namespace LipidCreator
             // flip fatty acids if necessary
             if (lipid != null && lipid.headGroupNames.Count > 0 && (lipid is Phospholipid))
             {
-                bool firstFAHasPlamalogen = false;
-                bool secondFAHasPlamalogen = false;
-                foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
+                if (!((Phospholipid)lipid).isLyso && !((Phospholipid)lipid).isCL)
                 {
-                    firstFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
-                }
-                foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
-                {
-                    secondFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
-                }
-                
-                // flip fatty acids
-                if (!firstFAHasPlamalogen && secondFAHasPlamalogen)
-                {
-                    FattyAcidGroup tmp = ((Phospholipid)lipid).fag1;
-                    ((Phospholipid)lipid).fag1 = ((Phospholipid)lipid).fag2;
-                    ((Phospholipid)lipid).fag2 = tmp;
-                }
-                
-                else if (firstFAHasPlamalogen && secondFAHasPlamalogen)
-                {
-                    lipid = new UnsupportedLipid(lipidCreator);
+                    bool firstFAHasPlamalogen = false;
+                    bool secondFAHasPlamalogen = false;
+                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
+                    {
+                        firstFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                    }
+                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
+                    {
+                        secondFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                    }
+                    
+                    // flip fatty acids
+                    if (!firstFAHasPlamalogen && secondFAHasPlamalogen)
+                    {
+                        FattyAcidGroup tmp = ((Phospholipid)lipid).fag1;
+                        ((Phospholipid)lipid).fag1 = ((Phospholipid)lipid).fag2;
+                        ((Phospholipid)lipid).fag2 = tmp;
+                    }
+                    
+                    else if (firstFAHasPlamalogen && secondFAHasPlamalogen)
+                    {
+                        lipid = new UnsupportedLipid(lipidCreator);
+                    }
                 }
             
                 // check for PE O, PC O, LPE O, LPC O
                 if (lipid != null)
                 {
-                
                     if ((new HashSet<string>(){"PC O", "PE O", "LPC O", "LPE O"}).Contains(lipid.headGroupNames[0]))
                     {
                         string lipidClass = lipid.headGroupNames[0];
@@ -334,15 +336,13 @@ namespace LipidCreator
                         }
                         lipid.headGroupNames[0] = lipidClass;
                     }
-                    else
+                    if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(lipid.headGroupNames[0]) && (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag1.faTypes["FAa"]))
                     {
-                        if (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag1.faTypes["FAa"])
-                        {
-                            lipid = null;
-                        }
+                        lipid = null;
                     }
                 }
             }
+            
         
         
             if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))

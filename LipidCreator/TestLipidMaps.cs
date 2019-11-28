@@ -98,7 +98,7 @@ namespace LipidCreator
                                 if (tokens[1] != translatedName)
                                 {
                                     Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', got '" + translatedName + "'!");
-                                    Environment.Exit(-1);
+                                    //Environment.Exit(-1);
                                 }
                             }
                             

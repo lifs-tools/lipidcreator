@@ -372,30 +372,24 @@ namespace LipidCreator
                         bool isPlamalogen = isPlamalogen1;
                         bool isFAa = isFAa1;
                         string headgroup = headgroupIter;
+                        
+                        
+                        string PLsep = " ";
+                        string modifiedHeadgroup = headgroup;
+                        if ((isFAa || isPlamalogen) && (headgroup.Equals("LPC") || headgroup.Equals("LPE"))) continue;
                         if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
                         {
-                            isPlamalogen = true;
-                            isFAa = false;
+                            if (isFAa || !isPlamalogen) continue;
+                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                            PLsep = "";
                             fa1.suffix = "p";
                         }
                         else if (headgroup.Equals("LPC O-a") || headgroup.Equals("LPE O-a"))
                         {
-                            isFAa = true;
-                            isPlamalogen = false;
-                            fa1.suffix = "a";
-                        }
-                        
-                        string PLsep = " ";
-                        string modifiedHeadgroup = headgroup;
-                        if (isPlamalogen)
-                        {
-                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
-                            PLsep = "";
-                        }
-                        else if (isFAa)
-                        {
+                            if (!isFAa || isPlamalogen) continue;
                             modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
                             PLsep = "";
+                            fa1.suffix = "a";
                         }
                         
                         
@@ -529,7 +523,6 @@ namespace LipidCreator
                         sortedAcids.Sort();
                         
                         
-                        
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;
@@ -537,6 +530,9 @@ namespace LipidCreator
                             bool isFAa = isFAa1;
                             
                             bool isSorted = true;
+                            
+                            
+                            if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
                             
                             if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
                             {

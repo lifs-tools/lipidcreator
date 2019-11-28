@@ -146,7 +146,6 @@ namespace LipidCreator
                                     bool found = false;
                                     foreach (DataRow row in lcf.transitionList.Rows)
                                     {
-                                        Console.WriteLine("found: " + (string)row[LipidCreator.PRECURSOR_NAME]);
                                         found |= expectedLipid.Equals((string)row[LipidCreator.PRECURSOR_NAME]);
                                     }
                                     if (!found)

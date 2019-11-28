@@ -585,6 +585,8 @@ namespace LipidCreator
         public CheckBox glContainsSugar;
         [NonSerialized]
         public CheckBox chContainsEster;
+        [NonSerialized]
+        public CheckBox plHasPlasmalogen;
 
         [NonSerialized]
         public GroupBox glPositiveAdduct;
@@ -1245,6 +1247,7 @@ namespace LipidCreator
             plRepresentativeFA = new CheckBox();
             glContainsSugar = new CheckBox();
             chContainsEster = new CheckBox();
+            plHasPlasmalogen = new CheckBox();
             
             plTypeGroup = new GroupBox();
             plRegular = new RadioButton();
@@ -1890,11 +1893,13 @@ namespace LipidCreator
             
             
             plTypeGroup.Location = new Point(400, 8);
-            plTypeGroup.Size = new Size(240, 40);
+            plTypeGroup.Size = new Size(360, 40);
             plTypeGroup.Text = "Type";
             plTypeGroup.Controls.Add(plIsCL);
             plTypeGroup.Controls.Add(plIsLyso);
             plTypeGroup.Controls.Add(plRegular);
+            plTypeGroup.Controls.Add(plHasPlasmalogen);
+            
             
             plRegular.Location = new Point(10, 14);
             plRegular.Text = "Regular";
@@ -1908,6 +1913,11 @@ namespace LipidCreator
             plIsCL.Text = "Cardiolipin";
             plIsCL.Width = 80;
             plIsCL.CheckedChanged += new EventHandler(plTypeCheckedChanged);
+            
+            plHasPlasmalogen.Location = new Point(260, 14);
+            plHasPlasmalogen.Text = "Plasmalogen";
+            plHasPlasmalogen.Width = 90;
+            plHasPlasmalogen.CheckedChanged += new EventHandler(plTypeCheckedChanged);
 
             
             plHgListbox.Location = new Point(25, 50);

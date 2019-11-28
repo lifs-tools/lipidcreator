@@ -44,6 +44,7 @@ namespace LipidCreator
         public FattyAcidGroup fag4;
         public bool isCL;
         public bool isLyso;
+        public bool hasPlasmalogen;
     
         public Phospholipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Glycerophospholipid)
         {
@@ -53,6 +54,7 @@ namespace LipidCreator
             fag4 = new FattyAcidGroup();
             isCL = false;
             isLyso = false;
+            hasPlasmalogen = false;
             adducts["-H"] = true;
         }
     
@@ -67,6 +69,7 @@ namespace LipidCreator
             fag4 = new FattyAcidGroup(copy.fag4);
             isCL = copy.isCL;
             isLyso = copy.isLyso;
+            hasPlasmalogen = copy.hasPlasmalogen;
         }
         
         
@@ -106,7 +109,7 @@ namespace LipidCreator
         
         public override void serialize(StringBuilder sb)
         {
-            sb.Append("<lipid type=\"PL\" isCL=\"" + isCL + "\" isLyso=\"" + isLyso + "\">\n");
+            sb.Append("<lipid type=\"PL\" isCL=\"" + isCL + "\" isLyso=\"" + isLyso + "\" hasPlasmalogen=\"" + hasPlasmalogen + "\">\n");
             fag1.serialize(sb);
             fag2.serialize(sb);
             fag3.serialize(sb);
@@ -127,6 +130,7 @@ namespace LipidCreator
             headGroupNames.Clear();
             isCL = node.Attribute("isCL").Value == "True";
             isLyso = node.Attribute("isLyso").Value == "True";
+            hasPlasmalogen = node.Attribute("hasPlasmalogen").Value == "True";
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -352,37 +356,55 @@ namespace LipidCreator
                 if (headGroupNames.Count == 0) return;
                 if (fag1.faTypes["FAx"]) return;
                 
-                bool isPlamalogen = false;
-                bool isFAa = false;
+                bool isPlamalogen1 = false;
+                bool isFAa1 = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     switch (fa1.suffix)
                     {
-                        case "a": isFAa = true; break;
-                        case "p": isPlamalogen = true; break;
+                        case "a": isFAa1 = true; break;
+                        case "p": isPlamalogen1 = true; break;
                         default: break;
                     }
                     
                     foreach(string headgroupIter in headGroupNames)
                     {   
+                        bool isPlamalogen = isPlamalogen1;
+                        bool isFAa = isFAa1;
                         string headgroup = headgroupIter;
-                        
-                        if (headgroup.Equals("LPC") || headgroup.Equals("LPE"))
+                        if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
                         {
-                            if (isPlamalogen) headgroup = headgroup + " O-p";
-                            else if (isFAa) headgroup = headgroup + " O-a";
+                            isPlamalogen = true;
+                            isFAa = false;
+                            fa1.suffix = "p";
+                        }
+                        else if (headgroup.Equals("LPC O-a") || headgroup.Equals("LPE O-a"))
+                        {
+                            isFAa = true;
+                            isPlamalogen = false;
+                            fa1.suffix = "a";
                         }
                         
-                        String key = " " + fa1.ToString();
+                        string PLsep = " ";
+                        string modifiedHeadgroup = headgroup;
+                        if (isPlamalogen)
+                        {
+                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                            PLsep = "";
+                        }
+                        else if (isFAa)
+                        {
+                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
+                            PLsep = "";
+                        }
                         
+                        
+                        String key = PLsep + fa1.ToString();
+                        string completeKey = modifiedHeadgroup + key;
                         
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
-                            string completeKey = headgroup;
-                            completeKey += key;
-                            if (isPlamalogen) completeKey = completeKey.Replace("O-p ", "O-");
-                            else if (isFAa) completeKey = completeKey.Replace("O-a ", "O-");
-                            
+                        
                             if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
                             if (usedKeys.Contains(completeKey + adductKey)) continue;
                             
@@ -425,6 +447,15 @@ namespace LipidCreator
                             {
                                 
                                 string heavyHeadgroup = heavyPrecursor.name;
+                                string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
+                                if (isPlamalogen)
+                                {
+                                    heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-p", "O-");
+                                }
+                                else if (isFAa)
+                                {
+                                    heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-a", "O-");
+                                }
                                 
                                 if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
                                 
@@ -440,7 +471,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                 
-                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                string heavyKey = heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                 
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
@@ -449,8 +480,8 @@ namespace LipidCreator
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                 heavyPrecursorData.precursorExportName = completeKey;
-                                heavyPrecursorData.precursorName = heavyKey + " " + heavyFA1.ToString();
-                                heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavyFA1.ToString();
+                                heavyPrecursorData.precursorName = heavyKey + PLsep+ heavyFA1.ToString();
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + PLsep + heavyFA1.ToString();
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                 heavyPrecursorData.precursorAdduct = adduct;
                                 heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
@@ -489,6 +520,7 @@ namespace LipidCreator
                     
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
+                        /*
                         bool isPlamalogen = isPlamalogen1;
                         bool isFAa = isFAa1;
                         switch (fa2.suffix)
@@ -496,43 +528,68 @@ namespace LipidCreator
                             case "a": isFAa = true; break;
                             case "p": isPlamalogen = true; break;
                             default: break;
-                        }        
+                        }
+                        */
                         List<FattyAcid> sortedAcids = new List<FattyAcid>();
                         List<FattyAcid> unsortedAcids = new List<FattyAcid>();
                         sortedAcids.Add(fa1);
                         sortedAcids.Add(fa2);
                         unsortedAcids.Add(fa1);
                         unsortedAcids.Add(fa2);
-                        if (!isFAa && !isPlamalogen) sortedAcids.Sort();
+                        sortedAcids.Sort();
+                        
+                        
                         
                         foreach(string headgroupIter in headGroupNames)
                         {   
                             string headgroup = headgroupIter;
+                            bool isPlamalogen = isPlamalogen1;
+                            bool isFAa = isFAa1;
+                            
                             bool isSorted = true;
                             
+                            if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
+                            {
+                                isPlamalogen = true;
+                                isFAa = false;
+                                fa1.suffix = "p";
+                            }
+                            else if (headgroup.Equals("PC O-a") || headgroup.Equals("PE O-a"))
+                            {
+                                isFAa = true;
+                                isPlamalogen = false;
+                                fa1.suffix = "a";
+                            }
                             if (isPlamalogen || isFAa) isSorted = false;
                             
-                            if (headgroup.Equals("PC") || headgroup.Equals("PE"))
+                            
+                            string PLsep = " ";
+                            string modifiedHeadgroup = headgroup;
+                            if (isPlamalogen)
                             {
-                                if (isPlamalogen) headgroup += " O-p";
-                                else if (isFAa) headgroup += " O-a";
+                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                                PLsep = "";
+                            }
+                            else if (isFAa)
+                            {
+                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
+                                PLsep = "";
                             }
                             
+                            
+                            
                             var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
-                            string key = " " + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
+                            string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                         
                             // species name
                             FattyAcid speciesFA = new FattyAcid(fa1);
                             speciesFA.merge(fa2);
-                            string speciesName = headgroup + " " + speciesFA.ToString();
+                            string speciesName = modifiedHeadgroup + PLsep + speciesFA.ToString();
+                            string completeKey = modifiedHeadgroup + key;
 
                           
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
-                                string completeKey = headgroup;
-                                completeKey += key;
-                                if (isPlamalogen) completeKey = completeKey.Replace("O-p ", "O-");
-                                else if (isFAa) completeKey = completeKey.Replace("O-a ", "O-");
                                 
                                 if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
                                 if (usedKeys.Contains(completeKey + adductKey)) continue;
@@ -590,6 +647,15 @@ namespace LipidCreator
                                 {
                                     
                                     string heavyHeadgroup = heavyPrecursor.name;
+                                    string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
+                                    if (isPlamalogen)
+                                    {
+                                        heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-p", "O-");
+                                    }
+                                    else if (isFAa)
+                                    {
+                                        heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-a", "O-");
+                                    }
                                     
                                     if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
                                 
@@ -615,18 +681,16 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                     double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                     
-                                    string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                    string heavyKey = heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                     
                                     
                                     var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
-                                    string heavyFattyComp = " " + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
+                                    string heavyFattyComp = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
                                     
                                     
                                     // species name
                                     FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
                                     heavySpeciesFA.merge(heavyFA2);
-                                    
-                                    Console.WriteLine("huhu: " + heavyKey);
                                     
                                                                         
                                     // filling information on MS1 level for heavy phospholipid
@@ -636,7 +700,7 @@ namespace LipidCreator
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
                                     heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
-                                    heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavySpeciesFA.ToString();
+                                    heavyPrecursorData.precursorSpeciesName = heavyKey + PLsep + heavySpeciesFA.ToString();
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
                                     heavyPrecursorData.precursorAdduct = adduct;
                                     heavyPrecursorData.precursorAdductFormula = heavyAdductForm;

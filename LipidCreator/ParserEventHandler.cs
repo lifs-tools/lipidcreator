@@ -270,43 +270,9 @@ namespace LipidCreator
         // handling all events
         public void lipidPostEvent(Parser.TreeNode node)
         {
-        
-            if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
-            {
-            
-                foreach (string adduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[adduct] = false;
-            
-                
-                if (charge != 0)
-                {
-                    if (Lipid.ADDUCT_POSITIONS.ContainsKey(adduct) && Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adduct]].charge == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
-                    {
-                        lipid.adducts[adduct] = true;
-                    }
-                    else
-                    {
-                        lipid = null;
-                    }
-                }
-                else
-                {
-                    lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
-                }
-            }
-            
-            if (lipid != null && expectsEther && ethers != 1)
-            {
-                lipid = null;
-            }
-            
-            if (lipid == null && makeUnsupported)
-            {
-                lipid = new UnsupportedLipid(lipidCreator);
-            }
-            
-            
-            // flip fatty acids on phospholipids if necessary
-            if ((lipid != null) && (lipid is Phospholipid))
+            // first of all, finish ether PC, PE, LPC, LPE
+            // flip fatty acids if necessary
+            if (lipid != null && lipid.headGroupNames.Count > 0 && (lipid is Phospholipid))
             {
                 bool firstFAHasPlamalogen = false;
                 bool secondFAHasPlamalogen = false;
@@ -331,7 +297,95 @@ namespace LipidCreator
                 {
                     lipid = new UnsupportedLipid(lipidCreator);
                 }
+            
+                // check for PE O, PC O, LPE O, LPC O
+                if (lipid != null)
+                {
+                
+                    if ((new HashSet<string>(){"PC O", "PE O", "LPC O", "LPE O"}).Contains(lipid.headGroupNames[0]))
+                    {
+                        string lipidClass = lipid.headGroupNames[0];
+                        if (lipidClass.Equals("PC O") || lipidClass.Equals("PE O"))
+                        {
+                            if (((Phospholipid)lipid).fag1.faTypes["FAp"])
+                            {
+                                ((Phospholipid)lipid).fag1.faTypes["FAp"] = false;
+                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
+                                lipidClass = lipidClass + "-p";
+                            }
+                            else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
+                            {
+                                ((Phospholipid)lipid).fag1.faTypes["FAa"] = false;
+                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
+                                lipidClass = lipidClass + "-a";
+                            }
+                        }
+                        else if  (lipidClass.Equals("LPC O") || lipidClass.Equals("LPE O"))
+                        {
+                            if (((Phospholipid)lipid).fag1.faTypes["FAp"])
+                            {
+                                ((Phospholipid)lipid).fag1.faTypes["FAp"] = false;
+                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
+                                lipidClass = lipidClass + "-p";
+                            }
+                            else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
+                            {   
+                                ((Phospholipid)lipid).fag1.faTypes["FAa"] = false;
+                                ((Phospholipid)lipid).fag1.faTypes["FA"] = true;
+                                lipidClass = lipidClass + "-a";
+                            }
+                        }
+                        lipid.headGroupNames[0] = lipidClass;
+                    }
+                    else
+                    {
+                        if (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag1.faTypes["FAa"])
+                        {
+                            lipid = null;
+                        }
+                    }
+                }
             }
+        
+        
+            if (lipid != null && lipid.headGroupNames.Count > 0 && lipidCreator.headgroups.ContainsKey(lipid.headGroupNames[0]))
+            {
+            
+                foreach (string adduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[adduct] = false;
+            
+                
+                if (charge != 0)
+                {
+                    if (Lipid.ADDUCT_POSITIONS.ContainsKey(adduct) && Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adduct]].charge == charge && lipidCreator.headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    {
+                        lipid.adducts[adduct] = true;
+                    }
+                    else
+                    {
+                        lipid = null;
+                    }
+                }
+                else
+                {
+                    lipid.adducts[lipidCreator.headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+                }
+            }
+            else 
+            {
+                lipid = null;
+            }
+            
+            if (lipid != null && expectsEther && ethers != 1)
+            {
+                lipid = null;
+            }
+            
+            if (lipid == null && makeUnsupported)
+            {
+                lipid = new UnsupportedLipid(lipidCreator);
+            }
+            
+            
             
             
             ElementDictionary heavyFragment = null;
@@ -366,17 +420,6 @@ namespace LipidCreator
                 
                 if (lipid != null)
                 {
-                    // check for PE O, PC O, LPE O, LPC O
-                    if (lipidClass.Equals("PC") || lipidClass.Equals("PE"))
-                    {
-                        if (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag2.faTypes["FAp"]) lipidClass = lipidClass + " O-p";
-                        else if (((Phospholipid)lipid).fag1.faTypes["FAa"] || ((Phospholipid)lipid).fag2.faTypes["FAa"]) lipidClass = lipidClass + " O-a";
-                    }
-                    else if  (lipidClass.Equals("LPC") || lipidClass.Equals("LPE"))
-                    {
-                        if (((Phospholipid)lipid).fag1.faTypes["FAp"]) lipidClass = lipidClass + " O-p";
-                        else if (((Phospholipid)lipid).fag1.faTypes["FAa"]) lipidClass = lipidClass + " O-a";
-                    }
                     
                     
                     ArrayList possibleFragmentNames = new ArrayList();
@@ -536,7 +579,6 @@ namespace LipidCreator
                 
             }
             
-            Console.WriteLine("hg: " + lipid.headGroupNames[0]);
         }
         
         
@@ -908,14 +950,8 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                if (headgroup == "PE O")
+                if (headgroup == "PE O" || headgroup == "PC O")
                 {
-                    headgroup = "PE";
-                    expectsEther = true;
-                }
-                else if (headgroup == "PC O")
-                {
-                    headgroup = "PC";
                     expectsEther = true;
                 }
                 lipid.headGroupNames.Add(headgroup);
@@ -927,14 +963,8 @@ namespace LipidCreator
             if (lipid != null)
             {
                 string headgroup = node.getText();
-                if (headgroup == "LPE O")
+                if (headgroup == "LPE O" || headgroup == "LPC O")
                 {
-                    headgroup = "LPE";
-                    expectsEther = true;
-                }
-                else if (headgroup == "LPC O")
-                {
-                    headgroup = "LPC";
                     expectsEther = true;
                 }
                 lipid.headGroupNames.Add(headgroup);

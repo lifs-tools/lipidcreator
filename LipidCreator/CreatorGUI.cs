@@ -787,6 +787,7 @@ namespace LipidCreator
                         addLipidButton.Text = "Add cardiolipins";
                         
                         plIsCL.Checked = true;
+                        plHasPlasmalogen.Checked = false;
                         
                         updateRanges(currentPhospholipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag1, plDB1Textbox, 3);
@@ -898,6 +899,7 @@ namespace LipidCreator
                             updateRanges(currentPhospholipid.fag2, plHydroxyl2Textbox, 4);
                         }
                         plRepresentativeFA.Checked = currentPhospholipid.representativeFA;
+                        plHasPlasmalogen.Checked = currentPhospholipid.hasPlasmalogen;
                     }
                     break;
                     
@@ -1520,6 +1522,7 @@ namespace LipidCreator
         {
             ((Phospholipid)currentLipid).isCL = plIsCL.Checked;
             ((Phospholipid)currentLipid).isLyso = plIsLyso.Checked;
+            ((Phospholipid)currentLipid).hasPlasmalogen = plHasPlasmalogen.Checked;
 
             plRepresentativeFA.Visible = !((Phospholipid)currentLipid).isLyso;
             changeTab((int)LipidCategory.Glycerophospholipid);
@@ -1733,9 +1736,29 @@ namespace LipidCreator
             
             if (lyso)
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                if (plHasPlasmalogen.Checked)
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
+                    foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                    {
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
+                    }
+                    plFA1Checkbox1.Checked = true;
+                    plFA1Checkbox2.Checked = false;
+                    plFA1Checkbox3.Checked = false;
+                    
+                    plFA1Checkbox3.Visible = false;
+                    plFA1Checkbox2.Visible = false;
+                    plFA1Checkbox1.Visible = false;
+                }
+                else
+                {
+                    foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                    {
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
+                    }
+                    plFA1Checkbox3.Visible = true;
+                    plFA1Checkbox2.Visible = true;
+                    plFA1Checkbox1.Visible = true;
                 }
                 plPictureBox.Left = 106;
                 plPictureBox.Image = phosphoLysoBackboneImage;
@@ -1751,9 +1774,29 @@ namespace LipidCreator
             }
             else
             {
-                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                if (plHasPlasmalogen.Checked)
                 {
-                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                    foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                    {
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                    }
+                    plFA1Checkbox1.Checked = true;
+                    plFA1Checkbox2.Checked = false;
+                    plFA1Checkbox3.Checked = false;
+                    
+                    plFA1Checkbox3.Visible = false;
+                    plFA1Checkbox2.Visible = false;
+                    plFA1Checkbox1.Visible = false;
+                }
+                else
+                {
+                    foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
+                    {
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                    }
+                    plFA1Checkbox3.Visible = true;
+                    plFA1Checkbox2.Visible = true;
+                    plFA1Checkbox1.Visible = true;
                 }
                 plPictureBox.Left = 107;
                 plPictureBox.Image = phosphoBackboneImage;

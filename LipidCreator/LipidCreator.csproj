@@ -226,6 +226,8 @@
     <Compile Include="MS2Fragment.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserEventHandler.cs" />
+    <Compile Include="ParserEventHandlerFragment.cs" />
+    <Compile Include="IsotopeParserEventHandler.cs" />
     <Compile Include="BaseParserEventHandler.cs" />
     <Compile Include="LipidMapsParserEventHandler.cs" />
     <Compile Include="NewFragment.cs">

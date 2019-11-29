@@ -69,15 +69,17 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
             
-            string grammarFilename = "data/goslin/Goslin.g4";
+            string grammarFilename = Path.Combine("data", "goslin", "Goslin.g4");
+            string grammarFragmentFilename = Path.Combine("data", "goslin", "Goslin-Fragments.g4");
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);
             Parser p = new Parser(peh, grammarFilename, '\'');
             
+            ParserEventHandlerFragment pehf = new ParserEventHandlerFragment(lcf);
+            Parser fp = new Parser(pehf, grammarFragmentFilename, '\'');
             
             
-            bool continueTesting = true;
             
             Console.WriteLine("testing valid lipid names:");
             if (File.Exists("test/lipidnames.txt"))
@@ -103,29 +105,62 @@ namespace LipidCreator
                             string expectedLipid = tokens[1];
                             Console.WriteLine("testing: " + lipidForTest);
                             
+                            peh.resetLipidBuilder(null);
                             p.parse(lipidForTest);
+                            Lipid resultlipid = null;
+                            bool exec = true;
+                            
+                            // testing with precursor parser
                             if (!p.wordInGrammar)
                             {
-                                throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be parsed.");
+                                exec = false;
                             }
-                            p.raiseEvents();
-                            if (peh.lipid == null) throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be handled.");
+                            if (exec)
+                            {
+                                p.raiseEvents();
+                            }
+                            if (peh.lipid != null)
+                            {
+                                resultlipid = peh.lipid;
+                            }
+                            else
+                            {
+                                // testing with fragment parser
+                                pehf.resetLipidBuilder(null);
+                                fp.parse(lipidForTest);
+                                if (!fp.wordInGrammar)
+                                {
+                                    throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be parsed.");
+                                }
+                                fp.raiseEvents();
+                                if (pehf.lipid != null)
+                                {
+                                    resultlipid = pehf.lipid;
+                                }
+                                else 
+                                {
+                                    throw new Exception("Error: lipid name '" + lipidForTest + "' couldn't be handled.");
+                                }
+                            }
                             
-                            peh.lipid.onlyPrecursors = 1;
+                            
+                                
+                            
+                            resultlipid.onlyPrecursors = 1;
                             lcf.registeredLipids.Clear();
                             
                             ulong lipidHash = 0;
-                            if (peh.lipid is Glycerolipid) lipidHash = ((Glycerolipid)peh.lipid).getHashCode();
-                            else if (peh.lipid is Phospholipid) lipidHash = ((Phospholipid)peh.lipid).getHashCode();
-                            else if (peh.lipid is Sphingolipid) lipidHash = ((Sphingolipid)peh.lipid).getHashCode();
-                            else if (peh.lipid is Cholesterol) lipidHash = ((Cholesterol)peh.lipid).getHashCode();
-                            else if (peh.lipid is Mediator) lipidHash = ((Mediator)peh.lipid).getHashCode();
-                            else if (peh.lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)peh.lipid).getHashCode();
+                            if (resultlipid is Glycerolipid) lipidHash = ((Glycerolipid)resultlipid).getHashCode();
+                            else if (resultlipid is Phospholipid) lipidHash = ((Phospholipid)resultlipid).getHashCode();
+                            else if (resultlipid is Sphingolipid) lipidHash = ((Sphingolipid)resultlipid).getHashCode();
+                            else if (resultlipid is Cholesterol) lipidHash = ((Cholesterol)resultlipid).getHashCode();
+                            else if (resultlipid is Mediator) lipidHash = ((Mediator)resultlipid).getHashCode();
+                            else if (resultlipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)resultlipid).getHashCode();
                             
                             
                             if (!lcf.registeredLipidDictionary.ContainsKey(lipidHash))
                             {
-                                lcf.registeredLipidDictionary.Add(lipidHash, peh.lipid);
+                                lcf.registeredLipidDictionary.Add(lipidHash, resultlipid);
                                 lcf.registeredLipids.Add(lipidHash);
                                 lcf.assembleLipids(false, new ArrayList(){false, 0});
                                 
@@ -162,11 +197,10 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    continueTesting = false;
+                    return;
                 }
             }
             
-            if (!continueTesting) return;
             Console.WriteLine("\ntesting invalid lipid names:");
             if (File.Exists("test/lipidnames-invalid.txt"))
             {
@@ -182,7 +216,19 @@ namespace LipidCreator
                             if (p.wordInGrammar)
                             {
                                 p.raiseEvents();
-                                if (peh.lipid != null) throw new Exception("Error: lipid name '" + line + "' was parsed.");
+                                if (peh.lipid == null)
+                                {
+                                    fp.parse(line);
+                                    if (fp.wordInGrammar)
+                                    {
+                                        fp.raiseEvents();
+                                        if (pehf.lipid != null) throw new Exception("Error: lipid name '" + line + "' was parsed by fragment parser.");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception("Error: lipid name '" + line + "' was parsed by precursor parser.");
+                                }
                             }
                         }
                     }
@@ -191,11 +237,9 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    continueTesting = false;
+                    return;
                 }
             }
-            
-            if (!continueTesting) return;
             
             Console.WriteLine();
             Console.WriteLine("Test passed, no errors found");

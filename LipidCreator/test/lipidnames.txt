@@ -1,5 +1,7 @@
 # regular lipid names on precursor level
 LPA 16:1p,LPA 16:1p
+LPS 12:0a,LPS 12:0a
+LPE O-20:1p,LPE O-20:1p
 PE 16:2-18:3;1,PE 16:2-18:3;1
 CL 18:1-18:1-18:1-18:1,CL 18:1-18:1-18:1-18:1
 MLCL 18:1-18:1-18:1,MLCL 18:1-18:1-18:1

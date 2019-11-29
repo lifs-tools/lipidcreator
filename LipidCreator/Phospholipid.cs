@@ -530,37 +530,26 @@ namespace LipidCreator
                             bool isFAa = isFAa1;
                             
                             bool isSorted = true;
-                            
-                            
+                            string PLsep = " ";
+                            string modifiedHeadgroup = headgroup;
                             if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
                             
                             if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
                             {
-                                if (isFAa) continue;
-                                isPlamalogen = true;
+                                if (isFAa || !isPlamalogen) continue;
+                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                                PLsep = "";
                                 fa1.suffix = "p";
                             }
                             else if (headgroup.Equals("PC O-a") || headgroup.Equals("PE O-a"))
                             {
-                                if (isPlamalogen) continue;
-                                isFAa = true;
+                                if (!isFAa || isPlamalogen) continue;
+                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
+                                PLsep = "";
                                 fa1.suffix = "a";
                             }
                             if (isPlamalogen || isFAa) isSorted = false;
                             
-                            
-                            string PLsep = " ";
-                            string modifiedHeadgroup = headgroup;
-                            if (isPlamalogen)
-                            {
-                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
-                                PLsep = "";
-                            }
-                            else if (isFAa)
-                            {
-                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
-                                PLsep = "";
-                            }
                             
                             
                             

@@ -229,9 +229,10 @@ namespace LipidCreator
                     }
                 
                     string hg = lipid.headGroupNames[0];
-                    if (((Phospholipid)lipid).fag2.faTypes["FAx"] && (new HashSet<string>{"PA", "PC", "PE", "PI", "PS"}).Contains(hg))
+                    if (((Phospholipid)lipid).fag2.faTypes["FAx"] && (new HashSet<string>{"PA", "PC", "PE", "PG", "PI", "PS"}).Contains(hg))
                     {
                         lipid.headGroupNames[0] = "L" + lipid.headGroupNames[0];
+                        ((Phospholipid)lipid).isLyso = true;
                     }
                     
                     if ((new HashSet<string>{"LPC", "PC", "LPE", "PE"}).Contains(hg))

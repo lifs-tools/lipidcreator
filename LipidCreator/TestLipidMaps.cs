@@ -45,7 +45,7 @@ namespace LipidCreator
         public static void Main(string[] args)
         {
         
-            string grammarFilename = "data/goslin/LipidMaps.g4";
+            string grammarFilename = Path.Combine("data", "goslin", "LipidMaps.g4");
             char quote = '\'';
             int lineCounter;
             
@@ -54,7 +54,7 @@ namespace LipidCreator
             Parser parser = new Parser(lipidMapsParserEventHandler, grammarFilename, quote);
             
                         
-            string headgroupsFile = "test/lipidmaps.csv";
+            string headgroupsFile = Path.Combine("test", "lipidmaps.csv");
             if (File.Exists(headgroupsFile))
             {
                 lineCounter = 0;
@@ -74,7 +74,10 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = LipidCreator.parseLine(line, ',', '"');
-                            if (tokens.Length < 2 || tokens[1].Equals("")) continue;
+                            if (tokens.Length < 2 || tokens[1].Equals(""))
+                            {
+                                continue;
+                            }
                             parser.parse(tokens[0]);
                             string translatedName = "";
                             if (parser.wordInGrammar)
@@ -98,7 +101,7 @@ namespace LipidCreator
                                 if (tokens[1] != translatedName)
                                 {
                                     Console.WriteLine("Error: could not correctly translate '" + tokens[0] + "' into '" + tokens[1] + "', got '" + translatedName + "'!");
-                                    //Environment.Exit(-1);
+                                    Environment.Exit(-1);
                                 }
                             }
                             

@@ -38,7 +38,7 @@ namespace LipidCreator
 {    
     
     [Serializable]
-    public class ParserEventHandler : BaseParserEventHandler
+    public class ParserEventHandlerFragment : BaseParserEventHandler
     {
         public LipidCreator lipidCreator;
         public Lipid lipid;
@@ -58,17 +58,31 @@ namespace LipidCreator
         public ArrayList heavyElementCountList = new ArrayList();
         public string heavyName = "";
         public bool addHeavyPrecursor = false;
+        
+        public string fragmentName = "";
+        public bool addHeavyFragment = false;
+        
+        
+        public IsotopeParserEventHandler ipeh = null;
+        public Parser ip = null;
+        public string purePrecursor = "";
     
     
-        public ParserEventHandler(LipidCreator _lipidCreator) : base()
+        public ParserEventHandlerFragment(LipidCreator _lipidCreator) : base()
         {
             lipidCreator = _lipidCreator;
             resetLipidBuilder(null);
             
             
+            string isotopeGrammarFilename = Path.Combine(lipidCreator.prefixPath, "data", "isotope-formula.grammar");
+            ipeh = new IsotopeParserEventHandler();
+            ip = new Parser(ipeh, isotopeGrammarFilename, '\'');
+            
+            
             
             registeredEvents.Add("lipid_pre_event", resetLipidBuilder);
             registeredEvents.Add("lipid_post_event", lipidPostEvent);
+            registeredEvents.Add("just_lipid_pre_event", readPurePrecursor);
             
             registeredEvents.Add("fa_pre_event", FAPreEvent);
             registeredEvents.Add("fa_post_event", FAPostEvent);
@@ -125,6 +139,9 @@ namespace LipidCreator
             registeredEvents.Add("gl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("pl_species_pre_event", unsupportedEvent);
             registeredEvents.Add("sl_species_pre_event", unsupportedEvent);
+            
+            
+            registeredEvents.Add("fragment_name_pre_event", setFragmentName);
         }
         
         
@@ -149,11 +166,18 @@ namespace LipidCreator
             heavyName = "";
             addHeavyPrecursor = false;
         
+            fragmentName = "";
+            addHeavyFragment = false;
         }
         
         
         
         
+        public void setFragmentName(Parser.TreeNode node)
+        {
+            fragmentName = node.getText();
+            heavyElementCounts = null;
+        }
         
         
         
@@ -169,7 +193,11 @@ namespace LipidCreator
             addHeavyPrecursor = true;
         }
         
-
+        
+        public void readPurePrecursor(Parser.TreeNode node)
+        {
+            purePrecursor = node.getText();
+        }
         
         
         public void resetHeavyIsotope(Parser.TreeNode node)
@@ -356,7 +384,7 @@ namespace LipidCreator
             
             
             
-            /*
+            
             ElementDictionary heavyFragment = null;
             string heavyPosFragmentKey = "";
             string heavyNegFragmentKey = "";
@@ -477,14 +505,12 @@ namespace LipidCreator
                     }
                 }
             }
-            */
             
-            /*
+            
             if (lipid != null && !makeUnsupported && heavyFragment != null && !addHeavyPrecursor)
             {
                 lipid = null;
             }
-            */
             
             if (lipid != null)
             {
@@ -514,7 +540,6 @@ namespace LipidCreator
                     lipid.onlyHeavyLabeled = 1;
                     lipidCreator.addHeavyPrecursor(lipid.headGroupNames[0], heavyName, heavyElementCountList);
                     
-                    /*
                     if (heavyFragment != null)
                     {
                         string fullHeavyName = lipidClass + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + heavyName + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
@@ -547,7 +572,6 @@ namespace LipidCreator
                             lipid = null;
                         }
                     }
-                    */
                 }
                 
             }

@@ -152,6 +152,9 @@ namespace LipidCreator
         public ParserEventHandler parserEventHandler;
         public Parser lipidNamesParser;
         
+        public ParserEventHandlerFragment parserEventHandlerFragment;
+        public Parser lipidFragmentsParser;
+        
         public static ListingParserEventHandler listingParserEventHandler;
         public static Parser listingParser;
         
@@ -687,6 +690,17 @@ namespace LipidCreator
             {
                 parserEventHandler = new ParserEventHandler(this);
                 lipidNamesParser = new Parser(parserEventHandler, Path.Combine(prefixPath, "data", "goslin", "Goslin.g4"), PARSER_QUOTE);
+            }
+            catch (Exception e)
+            {
+                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "Goslin.g4") + "': " + e);
+                throw new Exception();
+            }
+                
+            try 
+            {
+                parserEventHandlerFragment = new ParserEventHandlerFragment(this);
+                lipidFragmentsParser = new Parser(parserEventHandlerFragment, Path.Combine(prefixPath, "data", "goslin", "Goslin-Fragments.g4"), PARSER_QUOTE);
             }
             catch (Exception e)
             {
@@ -1738,7 +1752,9 @@ namespace LipidCreator
                 {
                     Lipid lipid = null;
                     string heavyName = "";
-                    string purePrecursor = "";
+                    string purePrecursor = lipidName;
+                    
+                    
                     lipidNamesParser.parse(lipidName);
                     if (lipidNamesParser.wordInGrammar)
                     {
@@ -1746,7 +1762,6 @@ namespace LipidCreator
                         if (parserEventHandler.lipid != null)
                         {
                             lipid = parserEventHandler.lipid;
-                            purePrecursor = parserEventHandler.purePrecursor;
                             heavyName = parserEventHandler.heavyName;
                         }
                         else if (reportError)
@@ -1756,7 +1771,49 @@ namespace LipidCreator
                     }
                     else {
                     
+                    
+                        lipidFragmentsParser.parse(lipidName);
+                        if (lipidFragmentsParser.wordInGrammar)
+                        {
+                            lipidFragmentsParser.raiseEvents();
+                            if (parserEventHandlerFragment.lipid != null)
+                            {
+                                lipid = parserEventHandlerFragment.lipid;
+                                purePrecursor = parserEventHandlerFragment.purePrecursor;
+                                heavyName = parserEventHandlerFragment.heavyName;
+                            }
+                            else if (reportError)
+                            {
+                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                            }
+                        }
+                        else {
                         
+                            
+                            lipidMapsParser.parse(lipidName);
+                            if (lipidMapsParser.wordInGrammar)
+                            {
+                                lipidMapsParser.raiseEvents();
+                                if (lipidMapsParserEventHandler.lipid != null)
+                                {
+                                    lipid = lipidMapsParserEventHandler.lipid;
+                                }
+                                else if (reportError)
+                                {
+                                    log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                                }
+                            }
+                            else if (reportError)
+                            {
+                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
+                            }
+                        }
+                    
+                    
+                    
+                    
+                    
+                        /*
                         lipidMapsParser.parse(lipidName);
                         if (lipidMapsParser.wordInGrammar)
                         {
@@ -1774,7 +1831,10 @@ namespace LipidCreator
                         {
                             log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                         }
+                        */
                     }
+                    
+                    
                     parsedLipids.Add(new object[]{lipid, heavyName, purePrecursor});
                 }
             }

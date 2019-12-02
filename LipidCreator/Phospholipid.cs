@@ -465,7 +465,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                 double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                 
-                                string heavyKey = heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                 
                                                                     
                                 // filling information on MS1 level for heavy phospholipid
@@ -656,7 +656,7 @@ namespace LipidCreator
                                     MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                                     double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
                                     
-                                    string heavyKey = heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                    string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                     
                                     
                                     var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();

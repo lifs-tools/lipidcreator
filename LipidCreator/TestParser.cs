@@ -98,7 +98,7 @@ namespace LipidCreator
                             string[] tokens = LipidCreator.parseLine(line, ',', '"');
                             if (tokens.Length < 2 || tokens[1].Equals(""))
                             {
-                                Console.WriteLine("Error, corrupted line: " + line);
+                                throw new Exception("Error, corrupted line: '" + line + "', second value is missing.");
                             }
                             
                             string lipidForTest = tokens[0];

@@ -356,135 +356,6 @@ namespace LipidCreator
             
             
             
-            /*
-            ElementDictionary heavyFragment = null;
-            string heavyPosFragmentKey = "";
-            string heavyNegFragmentKey = "";
-            
-            // add fragment
-            if (lipid != null && fragmentName.Length > 0)
-            {
-            
-                string lipidClass = lipid.headGroupNames[0];
-                FattyAcidGroupEnumerator fragmentFAGEnum = null;
-                
-                
-                // check if fragment name contains heavy isotope label
-                ip.parseSubstring(fragmentName);
-                if (ip.wordInGrammar)
-                {
-                    ip.raiseEvents();
-                    if (ipeh.heavyElementCounts != null)
-                    {
-                        heavyFragment = ipeh.heavyElementCounts;
-                        fragmentName = fragmentName.Replace(ipeh.heavyIsotopeLabel, "");
-                    }
-                    else
-                    {
-                        lipid = null;
-                    }
-                }
-                
-                
-                
-                if (lipid != null)
-                {
-                    
-                    
-                    ArrayList possibleFragmentNames = new ArrayList();
-                    possibleFragmentNames.Add(new string[]{fragmentName, fragmentName});
-                    string[] faWildcards = new string[]{"[xx:x]", "[yy:y]", "[zz:z]", "[uu:u]"};
-                    
-                    
-                    for (int j = 0; j < possibleFragmentNames.Count; ++j)
-                    {
-                        
-                        if (lipid is Glycerolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
-                        else if (lipid is Phospholipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
-                        else if (lipid is Sphingolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
-                        else if (lipid is Cholesterol) fragmentFAGEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
-                        else if (lipid is Mediator) fragmentFAGEnum = new FattyAcidGroupEnumerator((Mediator)lipid);
-                        int faCNT = 0;
-                    
-                        string currentFragmentName = ((string[])possibleFragmentNames[j])[0];
-                        string currentOutputFragmentName = ((string[])possibleFragmentNames[j])[1];
-                        for (int i = 0; i < Precursor.fattyAcidCount[lipidCreator.headgroups[lipidClass].buildingBlockType]; ++i)
-                        {
-                            if (i == 0 && lipid is Sphingolipid)
-                            {
-                                string lcb_key = ((Sphingolipid)lipid).lcb.getFattyAcids().First().ToString();
-                                if (currentFragmentName.IndexOf(lcb_key) >= 0)
-                                {
-                                    possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(" " + lcb_key, ""), currentOutputFragmentName.Replace(lcb_key, "[xx:x;x]")});
-                                }
-                            }
-                            else
-                            {
-                                fragmentFAGEnum.MoveNext();
-                                string fa_key = (fragmentFAGEnum.Current).getFattyAcids().First().ToString();
-                                if (currentFragmentName.IndexOf(fa_key) >= 0)
-                                {
-                                    possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(" " + fa_key, (faCNT + 1).ToString()), currentOutputFragmentName.Replace(fa_key, faWildcards[faCNT])});
-                                }
-                                ++faCNT;
-                            }
-                        }
-                        
-                        foreach (Adduct adduct in Lipid.ALL_ADDUCTS.Values)
-                        {
-                            if (currentFragmentName.IndexOf(adduct.name) >= 0)
-                            {
-                                possibleFragmentNames.Add(new string[]{currentFragmentName.Replace(adduct.name, "[adduct]"), currentOutputFragmentName.Replace(adduct.name, "[adduct]")});
-                            }
-                        }
-                    }
-                    
-                    
-                    
-                    ArrayList foundPosFragmentNames = new ArrayList();
-                    ArrayList foundNegFragmentNames = new ArrayList();
-                    foreach (string[] fragment in possibleFragmentNames)
-                    {
-                    
-                        if (lipidCreator.allFragments[lipidClass][true].ContainsKey(fragment[0]) && lipidCreator.allFragments[lipidClass][true][fragment[0]].fragmentOutputName.Equals(fragment[1]))
-                        {
-                            foundPosFragmentNames.Add(fragment[0]);
-                        }
-                        if (lipidCreator.allFragments[lipidClass][false].ContainsKey(fragment[0]) && lipidCreator.allFragments[lipidClass][false][fragment[0]].fragmentOutputName.Equals(fragment[1]))
-                        {
-                            foundNegFragmentNames.Add(fragment[0]);
-                        }
-                    }
-                    
-                    if (foundNegFragmentNames.Count == 0 && foundPosFragmentNames.Count == 0)
-                    {
-                        lipid = null;
-                    }
-                    else
-                    {
-                        foreach (HashSet<string> sh in lipid.positiveFragments.Values) sh.Clear();
-                        foreach (HashSet<string> sh in lipid.negativeFragments.Values) sh.Clear();
-                        foreach (string posFragment in foundPosFragmentNames)
-                        {
-                            lipid.positiveFragments[lipidClass].Add(posFragment);
-                            heavyPosFragmentKey = posFragment;
-                        }
-                        foreach (string negFragment in foundNegFragmentNames)
-                        {
-                            lipid.negativeFragments[lipidClass].Add(negFragment);
-                            heavyNegFragmentKey = negFragment;
-                        }
-                    }
-                }
-            }
-            */
-            
-            /*
-            if (lipid != null && !makeUnsupported && heavyFragment != null && !addHeavyPrecursor)
-            {
-                lipid = null;
-            }
-            */
             
             if (lipid != null)
             {
@@ -514,40 +385,6 @@ namespace LipidCreator
                     lipid.onlyHeavyLabeled = 1;
                     lipidCreator.addHeavyPrecursor(lipid.headGroupNames[0], heavyName, heavyElementCountList);
                     
-                    /*
-                    if (heavyFragment != null)
-                    {
-                        string fullHeavyName = lipidClass + LipidCreator.HEAVY_LABEL_OPENING_BRACKET + heavyName + LipidCreator.HEAVY_LABEL_CLOSING_BRACKET;
-                        if (lipidCreator.allFragments[fullHeavyName][true].ContainsKey(heavyPosFragmentKey))
-                        {
-                            MS2Fragment.updateForHeavyLabeled(lipidCreator.allFragments[fullHeavyName][true][heavyPosFragmentKey].fragmentElements, heavyFragment);
-                        }
-                        
-                        if  (lipidCreator.allFragments[fullHeavyName][false].ContainsKey(heavyNegFragmentKey))
-                        {
-                            MS2Fragment.updateForHeavyLabeled(lipidCreator.allFragments[fullHeavyName][false][heavyNegFragmentKey].fragmentElements, heavyFragment);
-                        }
-                        
-                        lipid.positiveFragments[fullHeavyName].Clear();
-                        lipid.negativeFragments[fullHeavyName].Clear();
-                        
-                        if (heavyPosFragmentKey.Length > 0) lipid.positiveFragments[fullHeavyName].Add(heavyPosFragmentKey);
-                        if (heavyNegFragmentKey.Length > 0) lipid.negativeFragments[fullHeavyName].Add(heavyNegFragmentKey);
-                        
-                        
-                        ElementDictionary totalHeavy = MS2Fragment.createEmptyElementDict();
-                        foreach (ElementDictionary ed in heavyElementCountList)
-                        {
-                            MS2Fragment.addCounts(totalHeavy, ed);
-                        }
-                        MS2Fragment.addCounts(totalHeavy, heavyFragment, true);
-                        
-                        if (!MS2Fragment.validElementDict(totalHeavy))
-                        {
-                            lipid = null;
-                        }
-                    }
-                    */
                 }
                 
             }
@@ -922,11 +759,8 @@ namespace LipidCreator
         {
             if (lipid != null)
             {
-                string headgroup = node.getText();
-                if (headgroup == "PE O" || headgroup == "PC O")
-                {
-                    expectsEther = true;
-                }
+                string headgroup = node.getText() + " O";
+                expectsEther = true;
                 lipid.headGroupNames.Add(headgroup);
             }
         }
@@ -935,11 +769,8 @@ namespace LipidCreator
         {
             if (lipid != null)
             {
-                string headgroup = node.getText();
-                if (headgroup == "LPE O" || headgroup == "LPC O")
-                {
-                    expectsEther = true;
-                }
+                string headgroup = node.getText() + " O";
+                expectsEther = true;
                 lipid.headGroupNames.Add(headgroup);
                 ((Phospholipid)lipid).isLyso = true;
             }

@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LipidCreator
 {    
@@ -133,10 +134,24 @@ namespace LipidCreator
         
         
         
-        
+        // this function is different to the one from MS2Fragment class
         public void updateForHeavyLabeled(ElementDictionary heavyAtomsCount)
         {
-            MS2Fragment.updateForHeavyLabeled(atomsCount, heavyAtomsCount);
+            foreach (KeyValuePair<Molecule, int> row in heavyAtomsCount.Where(kvp => MS2Fragment.ALL_ELEMENTS[kvp.Key].isHeavy))
+            {
+                Molecule monoIsotopic = MS2Fragment.ALL_ELEMENTS[row.Key].lightOrigin;
+                //int updateValue = updateElements.;
+                if (atomsCount[monoIsotopic] >= row.Value)
+                {
+                    atomsCount[monoIsotopic] -= row.Value;
+                    atomsCount[row.Key] += row.Value;
+                }
+                else
+                {
+                    atomsCount[row.Key] = atomsCount[monoIsotopic];
+                    atomsCount[monoIsotopic] = 0;
+                }
+            }
         }
         
 

@@ -275,6 +275,7 @@ namespace LipidCreator
         // handling all events
         public void lipidPostEvent(Parser.TreeNode node)
         {
+        
             // first of all, finish ether PC, PE, LPC, LPE
             // flip fatty acids if necessary
             if (lipid != null && lipid.headGroupNames.Count > 0 && (lipid is Phospholipid))
@@ -946,11 +947,8 @@ namespace LipidCreator
         {
             if (lipid != null)
             {
-                string headgroup = node.getText();
-                if (headgroup == "PE O" || headgroup == "PC O")
-                {
-                    expectsEther = true;
-                }
+                string headgroup = node.getText() + " O";
+                expectsEther = true;
                 lipid.headGroupNames.Add(headgroup);
             }
         }
@@ -959,11 +957,8 @@ namespace LipidCreator
         {
             if (lipid != null)
             {
-                string headgroup = node.getText();
-                if (headgroup == "LPE O" || headgroup == "LPC O")
-                {
-                    expectsEther = true;
-                }
+                string headgroup = node.getText() + " O";
+                expectsEther = true;
                 lipid.headGroupNames.Add(headgroup);
                 ((Phospholipid)lipid).isLyso = true;
             }

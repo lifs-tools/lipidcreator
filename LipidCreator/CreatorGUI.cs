@@ -281,12 +281,22 @@ namespace LipidCreator
                 log.Warn("Could not write to '"+ analyticsFile + "': " + ex);
             }
         }
+        
+        
+        
+        
+        
+        
 
         public void toolDirectoryMenu(Object sender, EventArgs e)
         {
             string dataDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase));
             openDirectory(dataDir);
         }
+        
+        
+        
+        
         
         private void openDirectory(string dataDir)
         {
@@ -1122,6 +1132,9 @@ namespace LipidCreator
         
         
         
+        
+        
+        
         private void homeText3LinkClicked(Object sender, EventArgs e)
         {
             string url = "http://www.whateverjournal.com/doi/or/whatever";
@@ -1206,18 +1219,12 @@ namespace LipidCreator
                 glDB3Textbox.Text = glDB1Textbox.Text;
                 glHydroxyl2Textbox.Text = glHydroxyl1Textbox.Text;
                 glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
-                //if (((Glycerolipid)currentLipid).fag2.anyFAChecked())
-                //{
-                    glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
-                    glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
-                    glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
-                //}
-                //if (((Glycerolipid)currentLipid).fag3.anyFAChecked())
-                //{
-                    glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
-                    glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
-                    glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
-                //}
+                glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
+                glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
+                glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
+                glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
+                glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
+                glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
             }
         }
         
@@ -1883,6 +1890,10 @@ namespace LipidCreator
         
         
         
+        
+        
+        
+        
         void slIsLysoCheckedChanged(object sender, EventArgs e)
         {
             ((Sphingolipid)currentLipid).isLyso = slIsLyso.Checked;
@@ -2167,6 +2178,37 @@ namespace LipidCreator
                     {
                         MessageBox.Show("No head group selected!", "Not registrable");
                         return  LipidCategory.NoLipid;                    
+                    }
+                    
+                    HashSet<string> selectedPLs =  new HashSet<string>(currentLipid.headGroupNames);
+                    if ((((Phospholipid)currentLipid).fag1.faTypes["FAa"] || ((Phospholipid)currentLipid).fag1.faTypes["FAp"]) && ((Phospholipid)currentLipid).isLyso && (new HashSet<string>(){"LPC", "LPE"}).Intersect(selectedPLs).Any())
+                    {
+                        HashSet<string> intersectLipids = new HashSet<string>((new HashSet<string>(){"LPC", "LPE"}).Intersect(selectedPLs));
+                        string selectedLipids = string.Join(" and ", intersectLipids);
+                        
+                        HashSet<string> FAs = new HashSet<string>();
+                        if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) FAs.Add("FAa");
+                        if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) FAs.Add("FAp");
+                        string selectedFAs = string.Join(" and ", FAs);
+                        
+                        string suggestedLipids = string.Join(" and ", (from hg in intersectLipids select hg + " O-"));
+                        MessageBox.Show("Warning, you selected among others the headgroups " + selectedLipids + " along with the fatty acyl chains " + selectedFAs + ". Be aware that you have to check the 'Plasmalogen' option to create " + suggestedLipids + " lipids.");
+                        
+                    }
+                    
+                    else if ((((Phospholipid)currentLipid).fag1.faTypes["FAa"] || ((Phospholipid)currentLipid).fag1.faTypes["FAp"]) && !((Phospholipid)currentLipid).isCL && (new HashSet<string>(){"PC", "PE"}).Intersect(selectedPLs).Any())
+                    {
+                        HashSet<string> intersectLipids = new HashSet<string>((new HashSet<string>(){"PC", "PE"}).Intersect(selectedPLs));
+                        string selectedLipids = string.Join(" and ", intersectLipids);
+                        
+                        HashSet<string> FAs = new HashSet<string>();
+                        if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) FAs.Add("FAa");
+                        if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) FAs.Add("FAp");
+                        string selectedFAs = string.Join(" and ", FAs);
+                        
+                        string suggestedLipids = string.Join(" and ", (from hg in intersectLipids select hg + " O-"));
+                        MessageBox.Show("Warning, you selected among others the headgroups " + selectedLipids + " along with the fatty acyl chains " + selectedFAs + ". Be aware that you have to check the 'Plasmalogen' option to create " + suggestedLipids + " lipids.");
+                        
                     }
                     
                     if (((Phospholipid)currentLipid).fag1.faTypes["FAx"])
@@ -2459,28 +2501,13 @@ namespace LipidCreator
             string faRepresentation = "";
             if (fag.isLCB)
             {
-                if (faRepresentation.Length > 0) faRepresentation += ", ";
-                faRepresentation += "LCB";
+                faRepresentation = "LCB";
             }
-            else if (fag.faTypes["FA"])
+            else
             {
-                if (faRepresentation.Length > 0) faRepresentation += ", ";
-                faRepresentation += "FA";
+                faRepresentation = string.Join(", ",(from faType in fag.faTypes.Keys where fag.faTypes[faType] select faType));
             }
-            else if (fag.faTypes["FAp"])
-            {
-                if (faRepresentation.Length > 0) faRepresentation += ", ";
-                faRepresentation += "FAp";
-            }
-            else if (fag.faTypes["FAa"])
-            {
-                if (faRepresentation.Length > 0) faRepresentation += ", ";
-                faRepresentation += "FAa";
-            }
-            if (fag.chainType == 0) faRepresentation += ":";
-            else if (fag.chainType == 1) faRepresentation += " (odd):";
-            else if (fag.chainType == 2) faRepresentation += " (even):";
-            
+            faRepresentation += (new string[]{":", " (odd):", " (even):"})[fag.chainType];
             return faRepresentation;
         }
         
@@ -2680,6 +2707,11 @@ namespace LipidCreator
             });
         }
         
+        
+        
+        
+        
+        
         public void lipidsGridviewDoubleClick(Object sender, EventArgs e)
         {
             if (sender == null) { return; }
@@ -2798,6 +2830,8 @@ namespace LipidCreator
             });
 
         }
+        
+        
         
         
         

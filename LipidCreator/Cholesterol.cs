@@ -131,6 +131,7 @@ namespace LipidCreator
         {
             int fattyAcidCounter = 0;
             containsEster = node.Attribute("containsEster").Value == "True";
+            clearAdducts();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

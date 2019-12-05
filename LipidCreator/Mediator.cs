@@ -79,6 +79,7 @@ namespace LipidCreator
         
         public override void import(XElement node, string importVersion)
         {
+            clearAdducts();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

@@ -1,0 +1,3901 @@
+<LipidCreator version="1.0.0.626" CEinstrument="" monitoringType="NoMonitoring"  PRMMode="PRMAutomatically">
+<CE>
+<ins type="MS:1002523">
+<lCl type="10-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HHTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="16-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="18-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE{d7}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,12-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,6-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA{d14}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Maresin 1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d9}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGI2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D5">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="tetranor-12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+</ins>
+<ins type="MS:1002791">
+<lCl type="10-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HHTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="16-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="18-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE{d7}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,6-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA{d14}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d9}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGI2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D5">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="tetranor-12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+</ins>
+</CE>
+<Precursor name="PC{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PC_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="True" />
+<AdductRestriction key="+CH3COO" value="True" />
+<Element type="C">8</Element>
+<Element type="H">18</Element>
+<Element type="N">1</Element>
+<Element type="O">6</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="PE{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PE_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="False" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">5</Element>
+<Element type="H">12</Element>
+<Element type="N">1</Element>
+<Element type="O">6</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="PS{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PS_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="False" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">6</Element>
+<Element type="H">12</Element>
+<Element type="N">1</Element>
+<Element type="O">8</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="PG{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PG_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">6</Element>
+<Element type="H">6</Element>
+<Element type="N">0</Element>
+<Element type="O">8</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="PI{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PI_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">9</Element>
+<Element type="H">17</Element>
+<Element type="N">0</Element>
+<Element type="O">11</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="PA{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\PA_neg_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="True" />
+<AdductRestriction key="+CH3COO" value="True" />
+<Element type="C">3</Element>
+<Element type="H">7</Element>
+<Element type="N">0</Element>
+<Element type="O">6</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="Ch{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\Ch_pos_pre.png" buildingBlockType="6" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">27</Element>
+<Element type="H">39</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="LPC{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\LPC_pos_pre.png" buildingBlockType="3" derivative="True" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="False" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="True" />
+<AdductRestriction key="+CH3COO" value="True" />
+<Element type="C">8</Element>
+<Element type="H">19</Element>
+<Element type="N">1</Element>
+<Element type="O">6</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="LPE{d7}" category="2" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\LPE_neg_pre.png" buildingBlockType="3" derivative="True" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="False" />
+<AdductRestriction key="-H" value="True" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">5</Element>
+<Element type="H">13</Element>
+<Element type="N">1</Element>
+<Element type="O">6</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="ChE{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\ChE_pos_pre.png" buildingBlockType="3" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">27</Element>
+<Element type="H">45</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="MAG{d7}" category="1" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\MG_pos_pre.png" buildingBlockType="3" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">3</Element>
+<Element type="H">7</Element>
+<Element type="N">0</Element>
+<Element type="O">3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="DAG{d7}" category="1" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\DG_pos_pre.png" buildingBlockType="2" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">3</Element>
+<Element type="H">6</Element>
+<Element type="N">0</Element>
+<Element type="O">3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="TAG{d7}" category="1" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\TG_pos_pre.png" buildingBlockType="1" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="True" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="False" />
+<AdductRestriction key="+CH3COO" value="False" />
+<Element type="C">3</Element>
+<Element type="H">5</Element>
+<Element type="N">0</Element>
+<Element type="O">3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-7</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">7</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<Precursor name="SM{d9}" category="3" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\SM_pos_pre.png" buildingBlockType="4" derivative="False" userDefined="True">
+<AdductRestriction key="+H" value="True" />
+<AdductRestriction key="+2H" value="False" />
+<AdductRestriction key="+NH4" value="False" />
+<AdductRestriction key="-H" value="False" />
+<AdductRestriction key="-2H" value="False" />
+<AdductRestriction key="+HCOO" value="True" />
+<AdductRestriction key="+CH3COO" value="True" />
+<Element type="C">5</Element>
+<Element type="H">12</Element>
+<Element type="N">1</Element>
+<Element type="O">3</Element>
+<Element type="P">1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+<Attribute>heavy</Attribute>
+<userDefinedFattyAcids>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+<DataTable>
+<Element type="C">0</Element>
+<Element type="H">-9</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">9</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</DataTable>
+</userDefinedFattyAcids>
+</Precursor>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="HG(PC,184)" fragmentOutputName="HG(PC,184)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_pos_HG.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-4</Element>
+<Element type="N">0</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="-(CH3[adduct])" fragmentOutputName="-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-2</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)-(CH3[adduct])" fragmentOutputName="-FA [xx:x](+HO)-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-3</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)-(CH3[adduct])" fragmentOutputName="-FA [yy:y](+HO)-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-3</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="-FA1(-H)-(CH3[adduct])" fragmentOutputName="-FA [xx:x](-H)-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PC{d7}">
+<MS2Fragment fragmentName="-FA2(-H)-(CH3[adduct])" fragmentOutputName="-FA [yy:y](-H)-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PC\PC_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="-HG(PE,141)" fragmentOutputName="-HG(PE,141)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-2</Element>
+<Element type="H">-8</Element>
+<Element type="N">-1</Element>
+<Element type="O">-4</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="HG(PE,196)" fragmentOutputName="HG(PE,196)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_HG.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-2</Element>
+<Element type="H">-5</Element>
+<Element type="N">-1</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)" fragmentOutputName="-FA [xx:x](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)" fragmentOutputName="-FA [yy:y](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="-FA1(-H)" fragmentOutputName="-FA [xx:x](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PE{d7}">
+<MS2Fragment fragmentName="-FA2(-H)" fragmentOutputName="-FA [yy:y](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PE\PE_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-HG(PS,185)" fragmentOutputName="-HG(PS,185)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-8</Element>
+<Element type="N">-1</Element>
+<Element type="O">-6</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-FA1(-H)-(C3H5NO2)" fragmentOutputName="-FA [xx:x](-H)-(C3H5NO2)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-4</Element>
+<Element type="N">-1</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)-(C3H5NO2)" fragmentOutputName="-FA [xx:x](+HO)-(C3H5NO2)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">-1</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-FA2(-H)-(C3H5NO2)" fragmentOutputName="-FA [yy:y](-H)-(C3H5NO2)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-4</Element>
+<Element type="N">-1</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)-(C3H5NO2)" fragmentOutputName="-FA [yy:y](+HO)-(C3H5NO2)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">-1</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-5</Element>
+<Element type="N">-1</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PS{d7}">
+<MS2Fragment fragmentName="-(C3H5NO2,87)" fragmentOutputName="-(C3H5NO2,87)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PS\PS_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-5</Element>
+<Element type="N">-1</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="-HG(PG,172)" fragmentOutputName="-HG(PG,172)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-9</Element>
+<Element type="N">0</Element>
+<Element type="O">-6</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA1_complete.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)" fragmentOutputName="-FA [xx:x](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="-FA1(-H)" fragmentOutputName="-FA [xx:x](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA2_complete.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)" fragmentOutputName="-FA [yy:y](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="-FA2(-H)" fragmentOutputName="-FA [yy:y](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">0</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="HG(PG,171)" fragmentOutputName="HG(PG,171)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_HG(PG).png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-4</Element>
+<Element type="N">0</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PG{d7}">
+<MS2Fragment fragmentName="HG(PG,227)" fragmentOutputName="HG(PG,227)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PG\PG_neg_HG(GPG).png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="-HG(PI,260)" fragmentOutputName="-HG(PI,260)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">-6</Element>
+<Element type="H">-13</Element>
+<Element type="N">0</Element>
+<Element type="O">-9</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="-FA1(-H)" fragmentOutputName="-FA [xx:x](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)" fragmentOutputName="-FA [xx:x](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="-FA2(-H)" fragmentOutputName="-FA [yy:y](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)" fragmentOutputName="-FA [yy:y](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-6</Element>
+<Element type="H">-10</Element>
+<Element type="N">0</Element>
+<Element type="O">-6</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="HG(PI,241)" fragmentOutputName="HG(PI,241)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_HG.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">0</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PI{d7}">
+<MS2Fragment fragmentName="P(79)" fragmentOutputName="P(79)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PI\PI_neg_P.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-9</Element>
+<Element type="H">-16</Element>
+<Element type="N">0</Element>
+<Element type="O">-8</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="P(79)" fragmentOutputName="P(79)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_P.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">0</Element>
+<Element type="O">-3</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="FA2(+O)" fragmentOutputName="FA [yy:y](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)" fragmentOutputName="-FA [xx:x](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)" fragmentOutputName="-FA [yy:y](+HO)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="-FA1(-H)" fragmentOutputName="-FA [xx:x](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA1'+O.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="PA{d7}">
+<MS2Fragment fragmentName="-FA2(-H)" fragmentOutputName="-FA [yy:y](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\PA\PA_neg_FA2'+O.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="Ch{d7}">
+<MS2Fragment fragmentName="-Cholesterol(35)" fragmentOutputName="-Cholesterol(35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Cholesterols\Ch\Ch_pos_HG.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-2</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPC{d7}">
+<MS2Fragment fragmentName="HG(PC,184)" fragmentOutputName="HG(PC,184)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPC\LPC_pos_HG(PC).png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-5</Element>
+<Element type="N">0</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPC{d7}">
+<MS2Fragment fragmentName="(C5H13NO,104)" fragmentOutputName="(C5H13NO,104)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPC\LPC_pos_HG(C).png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-3</Element>
+<Element type="H">-6</Element>
+<Element type="N">0</Element>
+<Element type="O">-5</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPC{d7}">
+<MS2Fragment fragmentName="HG(PC,224)" fragmentOutputName="HG(PC,224)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPC\LPC_neg_FA'.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-3</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPC{d7}">
+<MS2Fragment fragmentName="-(CH3[adduct])" fragmentOutputName="-(CH3[adduct])" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPC\LPC_neg_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">-2</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPC{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPC\LPC_neg_FA.png" specific="0" userDefined="True"><fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPE{d7}">
+<MS2Fragment fragmentName="-HG(PE,141)" fragmentOutputName="-HG(PE,141)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPE\LPE_pos_NL(PE).png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA</fragmentBase>
+<Element type="C">-2</Element>
+<Element type="H">-8</Element>
+<Element type="N">-1</Element>
+<Element type="O">-4</Element>
+<Element type="P">-1</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPE{d7}">
+<MS2Fragment fragmentName="-FA1(-H)-(H2O)" fragmentOutputName="-FA [xx:x](-H)-(H2O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPE\LPE_neg_FA'.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPE{d7}">
+<MS2Fragment fragmentName="-FA1(-H)" fragmentOutputName="-FA [xx:x](-H)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPE\LPE_neg_HG.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPE{d7}">
+<MS2Fragment fragmentName="GP(153)" fragmentOutputName="GP(153)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPE\LPE_neg_GP.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-2</Element>
+<Element type="H">-6</Element>
+<Element type="N">-1</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="LPE{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Phospholipids\LPE\LPE_neg_FA.png" specific="0" userDefined="True"><fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="ChE{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)-Cholesterol(35)" fragmentOutputName="-FA [xx:x](+HO)-Cholesterol(35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Cholesterols\ChE\ChE_pos_HG.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="MAG{d7}">
+<MS2Fragment fragmentName="-(H2O+NH3,35)" fragmentOutputName="-(H2O+NH3,35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\MG\MG_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-2</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="MAG{d7}">
+<MS2Fragment fragmentName="FA1" fragmentOutputName="FA [xx:x]" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\MG\MG_pos_FA1.png" specific="0" userDefined="True"><fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="MAG{d7}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\MG\MG_pos_FA1+O.png" specific="0" userDefined="True"><fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="DAG{d7}">
+<MS2Fragment fragmentName="-(H2O+NH3,35)" fragmentOutputName="-(H2O+NH3,35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\DG\DG_pos_NL.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-2</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="DAG{d7}">
+<MS2Fragment fragmentName="-FA1(-H)-(H2O+NH3)" fragmentOutputName="-FA [xx:x](-H)-(H2O+NH3)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\DG\DG_pos_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="DAG{d7}">
+<MS2Fragment fragmentName="-FA2(-H)-(H2O+NH3)" fragmentOutputName="-FA [yy:y](-H)-(H2O+NH3)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\DG\DG_pos_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="FA1" fragmentOutputName="FA [xx:x]" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA1.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="FA2" fragmentOutputName="FA [yy:y]" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA2.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="FA3" fragmentOutputName="FA [zz:z]" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA3.png" specific="0" userDefined="True"><fragmentBase>FA3</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="-FA1(+HO)-(NH3)" fragmentOutputName="-FA [xx:x](+HO)-(NH3)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA1'.png" specific="0" userDefined="True"><fragmentBase>FA2</fragmentBase>
+<fragmentBase>FA3</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="-FA2(+HO)-(NH3)" fragmentOutputName="-FA [yy:y](+HO)-(NH3)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA2'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA3</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="TAG{d7}">
+<MS2Fragment fragmentName="-FA4(+HO)-(NH3)" fragmentOutputName="-FA [zz:z](+HO)-(NH3)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Glycerolipids\TG\TG_pos_FA3'.png" specific="0" userDefined="True"><fragmentBase>FA1</fragmentBase>
+<fragmentBase>FA2</fragmentBase>
+<fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-1</Element>
+<Element type="N">0</Element>
+<Element type="O">-1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="SM{d9}">
+<MS2Fragment fragmentName="HG(PC,184)" fragmentOutputName="HG(PC,184)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Sphingolipids\SM\SM_pos_HG.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">2</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="SM{d9}">
+<MS2Fragment fragmentName="LCB(-H3O2)" fragmentOutputName="LCB [xx:x;x](-H3O2)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Sphingolipids\SM\SM_pos_W''.png" specific="0" userDefined="True"><fragmentBase>LCB</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">-3</Element>
+<Element type="N">0</Element>
+<Element type="O">-2</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="SM{d9}">
+<MS2Fragment fragmentName="HG(PC,168)" fragmentOutputName="HG(PC,168)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Sphingolipids\SM\SM_neg_HG.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-1</Element>
+<Element type="H">0</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="SM{d9}">
+<MS2Fragment fragmentName="P(79)" fragmentOutputName="P(79)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Sphingolipids\SM\SM_neg_P.png" specific="1" userDefined="True"><fragmentBase>HG</fragmentBase>
+<Element type="C">-5</Element>
+<Element type="H">-11</Element>
+<Element type="N">-1</Element>
+<Element type="O">0</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<userDefinedFragment headgroup="SM{d9}">
+<MS2Fragment fragmentName="FA1(+O)" fragmentOutputName="FA [xx:x](+O)" fragmentAdduct="-H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Sphingolipids\SM\SM_neg_FA.png" specific="0" userDefined="True"><fragmentBase>FA</fragmentBase>
+<Element type="C">0</Element>
+<Element type="H">1</Element>
+<Element type="N">0</Element>
+<Element type="O">1</Element>
+<Element type="P">0</Element>
+<Element type="S">0</Element>
+<Element type="H'">0</Element>
+<Element type="C'">0</Element>
+<Element type="N'">0</Element>
+<Element type="O'">0</Element>
+<Element type="O''">0</Element>
+<Element type="P'">0</Element>
+<Element type="S'">0</Element>
+<Element type="S''">0</Element>
+</MS2Fragment>
+</userDefinedFragment>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+HCOO" />
+<headGroup>PC</headGroup>
+<positiveFragments lipidClass="PC">
+<fragment>HG(PC,184)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PC{d7}">
+<fragment>HG(PC,184)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PC">
+<fragment>-(CH3[adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)-(CH3[adduct])</fragment>
+<fragment>-FA2(+HO)-(CH3[adduct])</fragment>
+<fragment>-FA1(-H)-(CH3[adduct])</fragment>
+<fragment>-FA2(-H)-(CH3[adduct])</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PC{d7}">
+<fragment>-(CH3[adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)-(CH3[adduct])</fragment>
+<fragment>-FA2(+HO)-(CH3[adduct])</fragment>
+<fragment>-FA1(-H)-(CH3[adduct])</fragment>
+<fragment>-FA2(-H)-(CH3[adduct])</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PE</headGroup>
+<positiveFragments lipidClass="PE">
+<fragment>-HG(PE,141)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PE{d7}">
+<fragment>-HG(PE,141)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PE">
+<fragment>HG(PE,196)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PE{d7}">
+<fragment>HG(PE,196)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PS</headGroup>
+<positiveFragments lipidClass="PS">
+<fragment>-HG(PS,185)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PS{d7}">
+<fragment>-HG(PS,185)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PS">
+<fragment>-FA1(-H)-(C3H5NO2)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)-(C3H5NO2)</fragment>
+<fragment>-FA2(-H)-(C3H5NO2)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)-(C3H5NO2)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>-(C3H5NO2,87)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PS{d7}">
+<fragment>-FA1(-H)-(C3H5NO2)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)-(C3H5NO2)</fragment>
+<fragment>-FA2(-H)-(C3H5NO2)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)-(C3H5NO2)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>-(C3H5NO2,87)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PG</headGroup>
+<positiveFragments lipidClass="PG">
+<fragment>-HG(PG,172)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PG{d7}">
+<fragment>-HG(PG,172)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PG">
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PG,171)</fragment>
+<fragment>HG(PG,227)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PG{d7}">
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PG,171)</fragment>
+<fragment>HG(PG,227)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PI</headGroup>
+<positiveFragments lipidClass="PI">
+<fragment>-HG(PI,260)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PI{d7}">
+<fragment>-HG(PI,260)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PI">
+<fragment>-FA1(-H)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PI,241)</fragment>
+<fragment>P(79)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PI{d7}">
+<fragment>-FA1(-H)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PI,241)</fragment>
+<fragment>P(79)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PA</headGroup>
+<positiveFragments lipidClass="PA">
+</positiveFragments>
+<positiveFragments lipidClass="PA{d7}">
+</positiveFragments>
+<negativeFragments lipidClass="PA">
+<fragment>P(79)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PA{d7}">
+<fragment>P(79)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="Cholesterol" containsEster="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="Ch">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="Ch{d7}">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE{d7}">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="Ch">
+</negativeFragments>
+<negativeFragments lipidClass="ChE">
+</negativeFragments>
+<negativeFragments lipidClass="Ch{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="ChE{d7}">
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="True">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+HCOO" />
+<headGroup>LPC</headGroup>
+<positiveFragments lipidClass="LPC">
+<fragment>HG(PC,184)</fragment>
+<fragment>(C5H13NO,104)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="LPC{d7}">
+<fragment>HG(PC,184)</fragment>
+<fragment>(C5H13NO,104)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="LPC">
+<fragment>HG(PC,224)</fragment>
+<fragment>-(CH3[adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="LPC{d7}">
+<fragment>HG(PC,224)</fragment>
+<fragment>-(CH3[adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="True">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>LPE</headGroup>
+<positiveFragments lipidClass="LPE">
+<fragment>-HG(PE,141)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="LPE{d7}">
+<fragment>-HG(PE,141)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="LPE">
+<fragment>-FA1(-H)-(H2O)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="LPE{d7}">
+<fragment>-FA1(-H)-(H2O)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="Cholesterol" containsEster="True">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="Ch">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="Ch{d7}">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE{d7}">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="Ch">
+</negativeFragments>
+<negativeFragments lipidClass="ChE">
+</negativeFragments>
+<negativeFragments lipidClass="Ch{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="ChE{d7}">
+</negativeFragments>
+</lipid>
+<lipid type="GL">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">0</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">1</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">0</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">1</faType>
+</FattyAcidGroup>
+<containsSugar>0</containsSugar>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="DAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SQDG">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(SHex,226)</fragment>
+<fragment>-HG(SHex,244)</fragment>
+<fragment>-HG(SHex,256)</fragment>
+<fragment>FA2(+C3H8O3)</fragment>
+<fragment>FA1(+C3H8O3)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+<fragment>FA1 + HG(SHex,226)</fragment>
+<fragment>FA2 + HG(SHex,226)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG{d7}">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="DAG">
+</negativeFragments>
+<negativeFragments lipidClass="DGDG">
+<fragment>HG(DGDG,415)</fragment>
+<fragment>HG(DGDG,397)</fragment>
+<fragment>HG(DGDG,379)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="MAG">
+</negativeFragments>
+<negativeFragments lipidClass="MGDG">
+<fragment>HG(MGDG,253)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SQDG">
+<fragment>HG(SQDG,225)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="TAG">
+</negativeFragments>
+<negativeFragments lipidClass="MAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="DAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="TAG{d7}">
+</negativeFragments>
+</lipid>
+<lipid type="GL">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">0</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">1</faType>
+</FattyAcidGroup>
+<containsSugar>0</containsSugar>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="DAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SQDG">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(SHex,226)</fragment>
+<fragment>-HG(SHex,244)</fragment>
+<fragment>-HG(SHex,256)</fragment>
+<fragment>FA2(+C3H8O3)</fragment>
+<fragment>FA1(+C3H8O3)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+<fragment>FA1 + HG(SHex,226)</fragment>
+<fragment>FA2 + HG(SHex,226)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG{d7}">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="DAG">
+</negativeFragments>
+<negativeFragments lipidClass="DGDG">
+<fragment>HG(DGDG,415)</fragment>
+<fragment>HG(DGDG,397)</fragment>
+<fragment>HG(DGDG,379)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="MAG">
+</negativeFragments>
+<negativeFragments lipidClass="MGDG">
+<fragment>HG(MGDG,253)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SQDG">
+<fragment>HG(SQDG,225)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="TAG">
+</negativeFragments>
+<negativeFragments lipidClass="MAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="DAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="TAG{d7}">
+</negativeFragments>
+</lipid>
+<lipid type="GL">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<containsSugar>0</containsSugar>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="DAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SQDG">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(SHex,226)</fragment>
+<fragment>-HG(SHex,244)</fragment>
+<fragment>-HG(SHex,256)</fragment>
+<fragment>FA2(+C3H8O3)</fragment>
+<fragment>FA1(+C3H8O3)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+<fragment>FA1 + HG(SHex,226)</fragment>
+<fragment>FA2 + HG(SHex,226)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DAG{d7}">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG{d7}">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="DAG">
+</negativeFragments>
+<negativeFragments lipidClass="DGDG">
+<fragment>HG(DGDG,415)</fragment>
+<fragment>HG(DGDG,397)</fragment>
+<fragment>HG(DGDG,379)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="MAG">
+</negativeFragments>
+<negativeFragments lipidClass="MGDG">
+<fragment>HG(MGDG,253)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SQDG">
+<fragment>HG(SQDG,225)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="TAG">
+</negativeFragments>
+<negativeFragments lipidClass="MAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="DAG{d7}">
+</negativeFragments>
+<negativeFragments lipidClass="TAG{d7}">
+</negativeFragments>
+</lipid>
+<lipid type="SL" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="True" lengthInfo="18" dbInfo="1" hydroxylInfo="2">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>1</onlyHeavyLabeled>
+<adduct type="+H" />
+<headGroup>SM</headGroup>
+<positiveFragments lipidClass="SM">
+<fragment>HG(PC,184)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SM{d9}">
+<fragment>HG(PC,184)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="SM">
+<fragment>HG(PC,168)</fragment>
+<fragment>P(79)</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SM{d9}">
+<fragment>HG(PC,168)</fragment>
+<fragment>P(79)</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+</lipid>
+</LipidCreator>

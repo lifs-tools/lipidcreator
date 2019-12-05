@@ -166,11 +166,11 @@ namespace LipidCreator
         
         public void import(XElement node, string importVersion)
         {
-            chainType = Convert.ToInt32(node.Attribute("chainType").Value);
-            lengthInfo = node.Attribute("lengthInfo").Value;
-            dbInfo = node.Attribute("dbInfo").Value;
-            hydroxylInfo = node.Attribute("hydroxylInfo").Value;
-            isLCB = node.Attribute("isLCB").Value == "True";
+            chainType = ((string)node.Attribute("chainType") != null) ? Convert.ToInt32(node.Attribute("chainType").Value) : 0;
+            lengthInfo = ((string)node.Attribute("lengthInfo") != null) ? node.Attribute("lengthInfo").Value : "0";
+            dbInfo = ((string)node.Attribute("dbInfo") != null) ? node.Attribute("dbInfo").Value : "0";
+            hydroxylInfo = ((string)node.Attribute("hydroxylInfo") != null) ? node.Attribute("hydroxylInfo").Value : "0";
+            isLCB = ((string)node.Attribute("isLCB") != null) ? node.Attribute("isLCB").Value == "True" : false;
             
             carbonCounts = LipidCreator.parseRange(lengthInfo, LipidCreator.MIN_CARBON_LENGTH,  LipidCreator.MAX_CARBON_LENGTH, (ChainType)chainType);
             doubleBondCounts = LipidCreator.parseRange(dbInfo, LipidCreator.MIN_DB_LENGTH,  LipidCreator.MAX_DB_LENGTH, ChainType.dbLength);
@@ -181,7 +181,7 @@ namespace LipidCreator
                 switch (child.Name.ToString())
                 {
                     case "faType":
-                        faTypes[child.Attribute("type").Value.ToString()] = child.Value == "1";
+                        if ((string)child.Attribute("type") != null) faTypes[child.Attribute("type").Value.ToString()] = child.Value == "1";
                         break;
                     /*
                     case "length":
@@ -197,7 +197,7 @@ namespace LipidCreator
                         break;
                     */
                     default:
-                        throw new Exception("Error for fatty acid group import");
+                        break;
                 }
             }
         }

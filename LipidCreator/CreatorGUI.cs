@@ -3241,11 +3241,9 @@ namespace LipidCreator
                 lcmb.Dispose();
                 if (returnMessage[0] == 1) resetLipidCreator(false); // replace
                 
-                XDocument doc;
                 try 
                 {
-                    doc = XDocument.Load(openFileDialog1.FileName);
-                    lipidCreator.import(doc);
+                    lipidCreator.import(openFileDialog1.FileName);
                     resetAllLipids();
                     updateCECondition();
                     changeTab((int)currentIndex);
@@ -3281,11 +3279,9 @@ namespace LipidCreator
                 lcmb.Dispose();
                 if (returnMessage[0] == 1) resetLipidCreator(false); // replace
             
-                XDocument doc;
                 try 
                 {
-                    doc = XDocument.Load(openFileDialog1.FileName);
-                    lipidCreator.import(doc, true);
+                    lipidCreator.import(openFileDialog1.FileName, true);
                     resetAllLipids();
                     updateCECondition();
                     changeTab((int)currentIndex);

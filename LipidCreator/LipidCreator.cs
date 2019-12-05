@@ -1977,145 +1977,154 @@ namespace LipidCreator
         
         
         
-        public void import(XDocument doc, bool onlySettings = false)
+        public void import(string importFilename, bool onlySettings = false)
         {
-            string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
-            
-            // CE information
-            string instrument = doc.Element("LipidCreator").Attribute("CEinstrument").Value;
-            monitoringType = (MonitoringTypes)Enum.Parse(typeof(MonitoringTypes), doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString(), true);
-            PRMMode = (PRMTypes)Enum.Parse(typeof(PRMTypes), doc.Element("LipidCreator").Attribute("PRMMode").Value.ToString(), true);
-            
-            if (instrument == "" || (instrument != "" && msInstruments.ContainsKey(instrument)))
+            if (File.Exists(importFilename))
             {
-                selectedInstrumentForCE = instrument;
-            }
-            
-            var CESettings = doc.Descendants("CE");
-            foreach ( var ceXML in CESettings )
-            {
-                collisionEnergyHandler.import(ceXML, importVersion);
-            }
-            
-            
-            
-            var precursors = doc.Descendants("Precursor");
-            bool precursorImportIgnored = false;
-            foreach ( var precursorXML in precursors )
-            {
-                Precursor precursor = new Precursor();
-                precursor.import(precursorXML, importVersion);
-                string monoisotopic = precursorNameSplit(precursor.name)[0];
-                if (categoryToClass.ContainsKey((int)precursor.category) && !headgroups.ContainsKey(precursor.name) && headgroups.ContainsKey(monoisotopic))
+                XDocument doc = XDocument.Load(importFilename);
+                string importVersion = doc.Element("LipidCreator").Attribute("version").Value;
+                
+                // CE information
+                string instrument = doc.Element("LipidCreator").Attribute("CEinstrument").Value;
+                monitoringType = (MonitoringTypes)Enum.Parse(typeof(MonitoringTypes), doc.Element("LipidCreator").Attribute("monitoringType").Value.ToString(), true);
+                PRMMode = (PRMTypes)Enum.Parse(typeof(PRMTypes), doc.Element("LipidCreator").Attribute("PRMMode").Value.ToString(), true);
+                
+                if (instrument == "" || (instrument != "" && msInstruments.ContainsKey(instrument)))
                 {
-                    categoryToClass[(int)precursor.category].Add(precursor.name);
-                    headgroups.Add(precursor.name, precursor);
-                    headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
+                    selectedInstrumentForCE = instrument;
                 }
-                else
+                
+                var CESettings = doc.Descendants("CE");
+                foreach ( var ceXML in CESettings )
                 {
-                    precursorImportIgnored = true;
+                    collisionEnergyHandler.import(ceXML, importVersion);
                 }
-            }
-            if (precursorImportIgnored)
-            {
-                MessageBox.Show("Some precursors are already registered and thus ignored during import.", "Warning");
-            }
-            
-            var userDefinedFragments = doc.Descendants("userDefinedFragment");
-            bool fragmentImportIgnored = false;
-            foreach ( var userDefinedFragment in userDefinedFragments )
-            {
-                string headgroup = userDefinedFragment.Attribute("headgroup").Value;
-                if (!allFragments.ContainsKey(headgroup))
+                
+                
+                
+                var precursors = doc.Descendants("Precursor");
+                bool precursorImportIgnored = false;
+                foreach ( var precursorXML in precursors )
                 {
-                    allFragments.Add(headgroup, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
-                    allFragments[headgroup].Add(true, new Dictionary<string, MS2Fragment>());
-                    allFragments[headgroup].Add(false, new Dictionary<string, MS2Fragment>());
+                    Precursor precursor = new Precursor();
+                    precursor.import(precursorXML, importVersion);
+                    string monoisotopic = precursorNameSplit(precursor.name)[0];
+                    if (categoryToClass.ContainsKey((int)precursor.category) && !headgroups.ContainsKey(precursor.name) && headgroups.ContainsKey(monoisotopic))
+                    {
+                        categoryToClass[(int)precursor.category].Add(precursor.name);
+                        headgroups.Add(precursor.name, precursor);
+                        headgroups[monoisotopic].heavyLabeledPrecursors.Add(precursor);
+                    }
+                    else
+                    {
+                        precursorImportIgnored = true;
+                    }
                 }
-                foreach (var ms2fragmentXML in userDefinedFragment.Descendants("MS2Fragment"))
+                if (precursorImportIgnored)
                 {
-                    MS2Fragment ms2fragment = new MS2Fragment();
-                    ms2fragment.import(ms2fragmentXML, importVersion);
-                    if (!allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].ContainsKey(ms2fragment.fragmentName)) allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
-                    else fragmentImportIgnored = true;
+                    MessageBox.Show("Some precursors are already registered and thus ignored during import.", "Warning");
                 }
-            }
-            if (fragmentImportIgnored)
-            {
-                MessageBox.Show("Some fragments are already registered and thus ignored during import.", "Warning");
-            }
-            
-            if (onlySettings) return;
-            
-            var lipids = doc.Descendants("lipid");
-            foreach ( var lipid in lipids )
-            {
-                string lipidType = lipid.Attribute("type").Value;
-                ulong lipidHash = 0;
-                switch (lipidType)
+                
+                var userDefinedFragments = doc.Descendants("userDefinedFragment");
+                bool fragmentImportIgnored = false;
+                foreach ( var userDefinedFragment in userDefinedFragments )
                 {
-                    case "GL":
-                        Glycerolipid gll = new Glycerolipid(this);
-                        gll.import(lipid, importVersion);
-                        lipidHash = gll.getHashCode();
-                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
-                        {
-                            registeredLipidDictionary.Add(lipidHash, gll);
-                            registeredLipids.Add(lipidHash);
-                        }
-                        break;
-                        
-                    case "PL":
-                        Phospholipid pll = new Phospholipid(this);
-                        pll.import(lipid, importVersion);
-                        lipidHash = pll.getHashCode();
-                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
-                        {
-                            registeredLipidDictionary.Add(lipidHash, pll);
-                            registeredLipids.Add(lipidHash);
-                        }
-                        break;
-                        
-                    case "SL":
-                        Sphingolipid sll = new Sphingolipid(this);
-                        sll.import(lipid, importVersion);
-                        lipidHash = sll.getHashCode();
-                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
-                        {
-                            registeredLipidDictionary.Add(lipidHash, sll);
-                            registeredLipids.Add(lipidHash);
-                        }
-                        break;
-                        
-                    case "Cholesterol":
-                        Cholesterol chl = new Cholesterol(this);
-                        chl.import(lipid, importVersion);
-                        lipidHash = chl.getHashCode();
-                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
-                        {
-                            registeredLipidDictionary.Add(lipidHash, chl);
-                            registeredLipids.Add(lipidHash);
-                        }
-                        break;
-                        
-                    case "Mediator":
-                        Mediator med = new Mediator(this);
-                        med.import(lipid, importVersion);
-                        lipidHash = med.getHashCode();
-                        if (!registeredLipidDictionary.ContainsKey(lipidHash))
-                        {
-                            registeredLipidDictionary.Add(lipidHash, med);
-                            registeredLipids.Add(lipidHash);
-                        }
-                        break;
-                        
-                    default:
-                        log.Error("Encountered unknown lipid type '"+lipidType+"' during global import!");
-                        throw new Exception("Encountered unknown lipid type '" + lipidType + "' during global import!");
+                    string headgroup = userDefinedFragment.Attribute("headgroup").Value;
+                    if (!allFragments.ContainsKey(headgroup))
+                    {
+                        allFragments.Add(headgroup, new Dictionary<bool, IDictionary<string, MS2Fragment>>());
+                        allFragments[headgroup].Add(true, new Dictionary<string, MS2Fragment>());
+                        allFragments[headgroup].Add(false, new Dictionary<string, MS2Fragment>());
+                    }
+                    foreach (var ms2fragmentXML in userDefinedFragment.Descendants("MS2Fragment"))
+                    {
+                        MS2Fragment ms2fragment = new MS2Fragment();
+                        ms2fragment.import(ms2fragmentXML, importVersion);
+                        if (!allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].ContainsKey(ms2fragment.fragmentName)) allFragments[headgroup][ms2fragment.fragmentAdduct.charge >= 0].Add(ms2fragment.fragmentName, ms2fragment);
+                        else fragmentImportIgnored = true;
+                    }
                 }
+                if (fragmentImportIgnored)
+                {
+                    MessageBox.Show("Some fragments are already registered and thus ignored during import.", "Warning");
+                }
+                
+                if (onlySettings) return;
+                
+                var lipids = doc.Descendants("lipid");
+                foreach ( var lipid in lipids )
+                {
+                    string lipidType = lipid.Attribute("type").Value;
+                    ulong lipidHash = 0;
+                    switch (lipidType)
+                    {
+                        case "GL":
+                            Glycerolipid gll = new Glycerolipid(this);
+                            gll.import(lipid, importVersion);
+                            lipidHash = gll.getHashCode();
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, gll);
+                                registeredLipids.Add(lipidHash);
+                            }
+                            break;
+                            
+                        case "PL":
+                            Phospholipid pll = new Phospholipid(this);
+                            pll.import(lipid, importVersion);
+                            lipidHash = pll.getHashCode();
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, pll);
+                                registeredLipids.Add(lipidHash);
+                            }
+                            break;
+                            
+                        case "SL":
+                            Sphingolipid sll = new Sphingolipid(this);
+                            sll.import(lipid, importVersion);
+                            lipidHash = sll.getHashCode();
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, sll);
+                                registeredLipids.Add(lipidHash);
+                            }
+                            break;
+                            
+                        case "Cholesterol":
+                            Cholesterol chl = new Cholesterol(this);
+                            chl.import(lipid, importVersion);
+                            lipidHash = chl.getHashCode();
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, chl);
+                                registeredLipids.Add(lipidHash);
+                            }
+                            break;
+                            
+                        case "Mediator":
+                            Mediator med = new Mediator(this);
+                            med.import(lipid, importVersion);
+                            lipidHash = med.getHashCode();
+                            if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                            {
+                                registeredLipidDictionary.Add(lipidHash, med);
+                                registeredLipids.Add(lipidHash);
+                            }
+                            break;
+                            
+                        default:
+                            log.Error("Encountered unknown lipid type '"+lipidType+"' during global import!");
+                            throw new Exception("Encountered unknown lipid type '" + lipidType + "' during global import!");
+                    }
+                }
+                OnUpdate(new EventArgs());
             }
-            OnUpdate(new EventArgs());
+            else
+            {
+                log.Error("File '"+importFilename+"' not found.");
+                throw new Exception("File '"+importFilename+"' not found.");
+            }
         }
         
         

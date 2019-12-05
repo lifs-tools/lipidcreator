@@ -488,11 +488,9 @@ namespace LipidCreator
                                 if (mode != "" && mode != "PRM" && mode != "SRM") printHelp("transitionlist");
                                 
                                 
-                                XDocument doc;
                                 try 
                                 {
-                                    doc = XDocument.Load(inputCSV);
-                                    lc.import(doc);
+                                    lc.import(inputCSV);
                                 }
                                 catch
                                 {

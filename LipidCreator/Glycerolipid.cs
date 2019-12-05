@@ -143,6 +143,7 @@ namespace LipidCreator
         {
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
+            clearAdducts();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

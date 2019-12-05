@@ -224,15 +224,19 @@ namespace LipidCreator
             sb.Append("</MS2Fragment>\n");
         }
         
+        
+        
+        
+        
         public void import(XElement node, string importVersion)
         {
             fragmentBase.Clear();
-            fragmentName = node.Attribute("fragmentName").Value.ToString();
-            fragmentOutputName = node.Attribute("fragmentOutputName").Value.ToString();
-            fragmentAdduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[node.Attribute("fragmentAdduct").Value.ToString()]];
-            fragmentFile = node.Attribute("fragmentFile").Value.ToString();
-            specific = node.Attribute("specific").Value.ToString() == "1";
-            userDefined = node.Attribute("userDefined").Value.Equals("True");
+            fragmentName = ((string)node.Attribute("fragmentName") != null) ? node.Attribute("fragmentName").Value.ToString() : "";
+            fragmentOutputName = ((string)node.Attribute("fragmentOutputName") != null) ? node.Attribute("fragmentOutputName").Value.ToString() : "";
+            fragmentAdduct = ((string)node.Attribute("fragmentAdduct") != null) ? Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[node.Attribute("fragmentAdduct").Value.ToString()]] : Lipid.ALL_ADDUCTS[AdductType.Hp];
+            fragmentFile = ((string)node.Attribute("fragmentFile") != null) ? node.Attribute("fragmentFile").Value.ToString() : "";
+            specific = ((string)node.Attribute("specific") != null) ? node.Attribute("specific").Value.ToString() == "1" : false;
+            userDefined = ((string)node.Attribute("userDefined") != null) ? node.Attribute("userDefined").Value.Equals("True") : false;
             
             
             foreach(XElement child in node.Elements())
@@ -248,10 +252,13 @@ namespace LipidCreator
                         break;
                         
                     default:
-                        throw new Exception();
+                        break;
                 }
             }
         }
+        
+        
+        
         
         
     

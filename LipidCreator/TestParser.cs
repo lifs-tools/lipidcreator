@@ -82,11 +82,11 @@ namespace LipidCreator
             
             
             Console.WriteLine("testing valid lipid names:");
-            if (File.Exists("test/lipidnames.txt"))
+            if (File.Exists(Path.Combine("test", "lipidnames.txt")))
             {
                 try
                 {
-                    using (StreamReader sr = new StreamReader("test/lipidnames.txt"))
+                    using (StreamReader sr = new StreamReader(Path.Combine("test", "lipidnames.txt")))
                     {
                         string line;
                         while((line = sr.ReadLine()) != null)
@@ -197,16 +197,16 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    return;
+                    Environment.Exit(-1);
                 }
             }
             
             Console.WriteLine("\ntesting invalid lipid names:");
-            if (File.Exists("test/lipidnames-invalid.txt"))
+            if (File.Exists(Path.Combine("test", "lipidnames-invalid.txt")))
             {
                 try
                 {
-                    using (StreamReader sr = new StreamReader("test/lipidnames-invalid.txt"))
+                    using (StreamReader sr = new StreamReader(Path.Combine("test", "lipidnames-invalid.txt")))
                     {
                         string line;
                         while((line = sr.ReadLine()) != null)
@@ -237,7 +237,7 @@ namespace LipidCreator
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    return;
+                    Environment.Exit(-1);
                 }
             }
             

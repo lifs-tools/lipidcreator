@@ -118,7 +118,8 @@ namespace LipidCreator
         public static int MEDIATOR_PREFIX_LENGTH = 4;
         
         
-        public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>(){
+        public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>()
+        {
             {AdductType.Hp, new Adduct("+H", "+H⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 1}}))},
             {AdductType.HHp, new Adduct("+2H", "+2H⁺⁺", 2, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 2}}))},
             {AdductType.NHHHHp, new Adduct("+NH4", "+NH4⁺", 1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 4}, {"N", 1}}))},
@@ -872,6 +873,13 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        public void clearAdducts()
+        {
+            List<string> keys = new List<string>(adducts.Keys);
+            foreach (string adductKey in keys) adducts[adductKey] = false;
+        }
         
         
         

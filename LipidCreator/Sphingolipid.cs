@@ -104,6 +104,7 @@ namespace LipidCreator
             int fattyAcidCounter = 0;
             isLyso = node.Attribute("isLyso").Value == "True";
             headGroupNames.Clear();
+            clearAdducts();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())

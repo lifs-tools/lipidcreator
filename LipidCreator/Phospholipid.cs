@@ -124,13 +124,17 @@ namespace LipidCreator
             Updating((int)LipidCategory.Glycerophospholipid);
         }
         
+        
+        
         public override void import(XElement node, string importVersion)
         {
             int fattyAcidCounter = 0;
             headGroupNames.Clear();
-            isCL = node.Attribute("isCL").Value == "True";
-            isLyso = node.Attribute("isLyso").Value == "True";
-            hasPlasmalogen = node.Attribute("hasPlasmalogen").Value == "True";
+            isCL = ((string)node.Attribute("isCL") != null) ? node.Attribute("isCL").Value == "True" : false;
+            isLyso = ((string)node.Attribute("isLyso") != null) ? node.Attribute("isLyso").Value == "True" : false;
+            hasPlasmalogen = ((string)node.Attribute("hasPlasmalogen") != null) ? node.Attribute("hasPlasmalogen").Value == "True" : false;
+            
+            clearAdducts();
             foreach (XElement child in node.Elements())
             {
                 switch (child.Name.ToString())
@@ -533,6 +537,7 @@ namespace LipidCreator
                             string PLsep = " ";
                             string modifiedHeadgroup = headgroup;
                             if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
+                            
                             
                             if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
                             {

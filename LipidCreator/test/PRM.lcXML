@@ -1,0 +1,1212 @@
+<LipidCreator version="1.0.0.626" CEinstrument="" monitoringType="NoMonitoring"  PRMMode="PRMAutomatically">
+<CE>
+<ins type="MS:1002523">
+<lCl type="10-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HHTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="16-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="18-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE{d7}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,12-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,6-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA{d14}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Maresin 1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d9}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGI2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D5">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="tetranor-12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+</ins>
+<ins type="MS:1002791">
+<lCl type="10-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11,12-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="11(12)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-HHTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="12(13)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HODE{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="13-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14,15-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="14(15)-EpETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="15d-PGJ2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="16-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="18-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-HETE{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5-OxoETE{d7}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5,6-DiHETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="5(6)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HDoHE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8,9-DHET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="8(9)-EET{d11}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HEPE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HODE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9-HOTrE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="9(10)-EpOME{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="AA{d8}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="ALA{d14}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="DHA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="EPA{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTB4{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTC4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="LTD4{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGD2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGE2{d9}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGF2alpha{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="PGI2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D1{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D2{d5}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="Resolvin D5">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="tetranor-12-HETE">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB1">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB2{d4}">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+<lCl type="TXB3">
+<adt type="[M-H]1-" ce="-1.000">
+</adt>
+</lCl>
+</ins>
+</CE>
+<lipid type="GL">
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<containsSugar>0</containsSugar>
+<representativeFA>1</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="DAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SQDG">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(SHex,226)</fragment>
+<fragment>-HG(SHex,244)</fragment>
+<fragment>-HG(SHex,256)</fragment>
+<fragment>FA2(+C3H8O3)</fragment>
+<fragment>FA1(+C3H8O3)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+<fragment>FA1 + HG(SHex,226)</fragment>
+<fragment>FA2 + HG(SHex,226)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="DAG">
+</negativeFragments>
+<negativeFragments lipidClass="DGDG">
+<fragment>HG(DGDG,415)</fragment>
+<fragment>HG(DGDG,397)</fragment>
+<fragment>HG(DGDG,379)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="MAG">
+</negativeFragments>
+<negativeFragments lipidClass="MGDG">
+<fragment>HG(MGDG,253)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SQDG">
+<fragment>HG(SQDG,225)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="TAG">
+</negativeFragments>
+</lipid>
+<lipid type="GL">
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-20" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">0</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">1</faType>
+</FattyAcidGroup>
+<containsSugar>0</containsSugar>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="DAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>-FA1(-H)-(H2O+NH3)</fragment>
+<fragment>-FA2(-H)-(H2O+NH3)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="DGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MAG">
+<fragment>-(H2O+NH3,35)</fragment>
+<fragment>FA1</fragment>
+<fragment>FA1(+O)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="MGDG">
+<fragment>-(NH3,17)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SQDG">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(SHex,226)</fragment>
+<fragment>-HG(SHex,244)</fragment>
+<fragment>-HG(SHex,256)</fragment>
+<fragment>FA2(+C3H8O3)</fragment>
+<fragment>FA1(+C3H8O3)</fragment>
+<fragment>FA2(+C3H6O2)</fragment>
+<fragment>FA1(+C3H6O2)</fragment>
+<fragment>FA1 + HG(SHex,226)</fragment>
+<fragment>FA2 + HG(SHex,226)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="TAG">
+<fragment>FA1</fragment>
+<fragment>FA2</fragment>
+<fragment>FA3</fragment>
+<fragment>-FA1(+HO)-(NH3)</fragment>
+<fragment>-FA2(+HO)-(NH3)</fragment>
+<fragment>-FA4(+HO)-(NH3)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="DAG">
+</negativeFragments>
+<negativeFragments lipidClass="DGDG">
+<fragment>HG(DGDG,415)</fragment>
+<fragment>HG(DGDG,397)</fragment>
+<fragment>HG(DGDG,379)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="MAG">
+</negativeFragments>
+<negativeFragments lipidClass="MGDG">
+<fragment>HG(MGDG,253)</fragment>
+<fragment>-([adduct])</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SQDG">
+<fragment>HG(SQDG,225)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="TAG">
+</negativeFragments>
+</lipid>
+<lipid type="PL" isCL="False" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="16,18" dbInfo="0-1" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="20" dbInfo="4" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>PA</headGroup>
+<headGroup>PE</headGroup>
+<headGroup>PG</headGroup>
+<headGroup>PI</headGroup>
+<headGroup>PS</headGroup>
+<positiveFragments lipidClass="PA">
+</positiveFragments>
+<positiveFragments lipidClass="PE">
+<fragment>-HG(PE,141)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PG">
+<fragment>-HG(PG,172)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PI">
+<fragment>-HG(PI,260)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="PS">
+<fragment>-HG(PS,185)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="PA">
+<fragment>P(79)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PE">
+<fragment>HG(PE,196)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>-FA2(-H)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PG">
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA1(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PG,171)</fragment>
+<fragment>HG(PG,227)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PI">
+<fragment>-FA1(-H)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)</fragment>
+<fragment>-FA2(-H)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>HG(PI,241)</fragment>
+<fragment>P(79)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="PS">
+<fragment>-FA1(-H)-(C3H5NO2)</fragment>
+<fragment>FA1(+O)</fragment>
+<fragment>-FA1(+HO)-(C3H5NO2)</fragment>
+<fragment>-FA2(-H)-(C3H5NO2)</fragment>
+<fragment>FA2(+O)</fragment>
+<fragment>-FA2(+HO)-(C3H5NO2)</fragment>
+<fragment>GP(153)</fragment>
+<fragment>-(C3H5NO2,87)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="SL" isLyso="False">
+<FattyAcidGroup chainType="0" isLCB="True" lengthInfo="18" dbInfo="1" hydroxylInfo="2">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<FattyAcidGroup chainType="2" isLCB="False" lengthInfo="16-24" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="+H" />
+<headGroup>Cer</headGroup>
+<headGroup>Hex2Cer</headGroup>
+<headGroup>HexCer</headGroup>
+<headGroup>SM</headGroup>
+<positiveFragments lipidClass="Cer">
+<fragment>-(H2O,18)</fragment>
+<fragment>LCB(-HO)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+<fragment>LCB(-CH3O2)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="Hex2Cer">
+<fragment>-(H2O,18)</fragment>
+<fragment>LCB(-HO)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+<fragment>LCB(-CH3O2)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>-HG(Hex2,360)</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="HexCer">
+<fragment>-(H2O,18)</fragment>
+<fragment>LCB(-HO)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+<fragment>LCB(-CH3O2)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>-HG(Hex,198)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="SM">
+<fragment>HG(PC,184)</fragment>
+<fragment>LCB(-H3O2)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="Cer">
+<fragment>-([adduct])</fragment>
+<fragment>LCB(-H6NO)</fragment>
+<fragment>LCB(-CH3O)</fragment>
+<fragment>LCB(-C2H8NO)</fragment>
+<fragment>FA1(+C2H3N)</fragment>
+<fragment>FA1(-CH2O)</fragment>
+<fragment>FA1(+HN)</fragment>
+<fragment>FA1(+C2H3NO)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="Hex2Cer">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(Hex2,324)</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex2,342)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>LCB(-CH3O)</fragment>
+<fragment>LCB(-C2H8NO)</fragment>
+<fragment>FA1(+C2H3N)</fragment>
+<fragment>FA1(+HN)</fragment>
+<fragment>FA1(+C2H3NO)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="HexCer">
+<fragment>-([adduct])</fragment>
+<fragment>-HG(Hex,162)</fragment>
+<fragment>-HG(Hex,180)</fragment>
+<fragment>LCB(-H6NO)</fragment>
+<fragment>LCB(-CH3O)</fragment>
+<fragment>LCB(-C2H8NO)</fragment>
+<fragment>FA1(+C2H3N)</fragment>
+<fragment>FA1(+HN)</fragment>
+<fragment>FA1(+C2H3NO)</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="SM">
+<fragment>HG(PC,168)</fragment>
+<fragment>P(79)</fragment>
+<fragment>FA1(+O)</fragment>
+</negativeFragments>
+</lipid>
+<lipid type="Cholesterol" containsEster="False">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="Ch">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="Ch">
+</negativeFragments>
+<negativeFragments lipidClass="ChE">
+</negativeFragments>
+</lipid>
+<lipid type="Cholesterol" containsEster="True">
+<FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="0-2" hydroxylInfo="0">
+<faType type="FA">1</faType>
+<faType type="FAp">0</faType>
+<faType type="FAa">0</faType>
+<faType type="FAx">0</faType>
+</FattyAcidGroup>
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="+NH4" />
+<positiveFragments lipidClass="Ch">
+<fragment>-Cholesterol(35)</fragment>
+</positiveFragments>
+<positiveFragments lipidClass="ChE">
+<fragment>-FA1(+HO)-Cholesterol(35)</fragment>
+</positiveFragments>
+<negativeFragments lipidClass="Ch">
+</negativeFragments>
+<negativeFragments lipidClass="ChE">
+</negativeFragments>
+</lipid>
+<lipid type="Mediator">
+<representativeFA>0</representativeFA>
+<onlyPrecursors>1</onlyPrecursors>
+<onlyHeavyLabeled>2</onlyHeavyLabeled>
+<adduct type="-H" />
+<headGroup>12-HETE</headGroup>
+<headGroup>AA</headGroup>
+<headGroup>DHA</headGroup>
+<positiveFragments lipidClass="12-HETE">
+</positiveFragments>
+<positiveFragments lipidClass="12-HETE{d8}">
+</positiveFragments>
+<positiveFragments lipidClass="AA">
+</positiveFragments>
+<positiveFragments lipidClass="AA{d8}">
+</positiveFragments>
+<positiveFragments lipidClass="DHA">
+</positiveFragments>
+<positiveFragments lipidClass="DHA{d5}">
+</positiveFragments>
+<negativeFragments lipidClass="12-HETE">
+<fragment>m/z 301.2172</fragment>
+<fragment>m/z 275.2377</fragment>
+<fragment>m/z 257.2272</fragment>
+<fragment>m/z 229.1960</fragment>
+<fragment>m/z 208.1104</fragment>
+<fragment>m/z 179.1076</fragment>
+<fragment>m/z 163.1127</fragment>
+<fragment>m/z 135.1179</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="12-HETE{d8}">
+<fragment>m/z 309.2674</fragment>
+<fragment>m/z 283.2879</fragment>
+<fragment>m/z 265.2774</fragment>
+<fragment>m/z 237.2462</fragment>
+<fragment>m/z 214.1481</fragment>
+<fragment>m/z 184.1390</fragment>
+<fragment>m/z 169.1504</fragment>
+<fragment>m/z 140.1493</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="AA">
+<fragment>m/z 259.2427</fragment>
+<fragment>m/z 231.2116</fragment>
+<fragment>m/z 205.1961</fragment>
+<fragment>m/z 177.1647</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="AA{d8}">
+<fragment>m/z 267.2929</fragment>
+<fragment>m/z 239.2618</fragment>
+<fragment>m/z 212.240</fragment>
+<fragment>m/z 183.2024</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="DHA">
+<fragment>m/z 309.2224</fragment>
+<fragment>m/z 283.2430</fragment>
+<fragment>m/z 255.2115</fragment>
+<fragment>m/z 229.1960</fragment>
+<fragment>m/z 177.1647</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+<negativeFragments lipidClass="DHA{d5}">
+<fragment>m/z 314.2538</fragment>
+<fragment>m/z 288.2744</fragment>
+<fragment>m/z 260.2429</fragment>
+<fragment>m/z 234.2274</fragment>
+<fragment>m/z 182.1961</fragment>
+<fragment>m/z 59.0139</fragment>
+</negativeFragments>
+</lipid>
+</LipidCreator>

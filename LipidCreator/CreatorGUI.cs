@@ -1551,6 +1551,11 @@ namespace LipidCreator
                 plStep1.Height = step1HeightExtended;
                 lcStep2.Top = plStep1.Height + 20;
                 lcStep3.Top = plStep1.Height + 20;
+                    
+                plFA1Checkbox3.Visible = true;
+                plFA1Checkbox2.Visible = true;
+                plFA1Checkbox1.Visible = true;
+                
             }
             else if (!isCL && windowExtended)
             {
@@ -1756,6 +1761,7 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;
                     plFA1Checkbox1.Visible = false;
+                    plPictureBox.Image = phosphoLysoBackboneImageFA1e;
                 }
                 else
                 {
@@ -1766,9 +1772,9 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = true;
                     plFA1Checkbox2.Visible = true;
                     plFA1Checkbox1.Visible = true;
+                    plPictureBox.Image = phosphoLysoBackboneImage;
                 }
                 plPictureBox.Left = 106;
-                plPictureBox.Image = phosphoLysoBackboneImage;
                 
                 plFA2Combobox.Visible = false;
                 plFA2Textbox.Visible = false;
@@ -1794,6 +1800,7 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;
                     plFA1Checkbox1.Visible = false;
+                    plPictureBox.Image = phosphoBackboneImageFA1e;
                 }
                 else
                 {
@@ -1804,9 +1811,9 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = true;
                     plFA1Checkbox2.Visible = true;
                     plFA1Checkbox1.Visible = true;
+                    plPictureBox.Image = phosphoBackboneImage;
                 }
                 plPictureBox.Left = 107;
-                plPictureBox.Image = phosphoBackboneImage;
                 plRepresentativeFA.Visible = true;
             }
             plPictureBox.SendToBack();

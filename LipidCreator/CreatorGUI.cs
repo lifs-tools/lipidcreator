@@ -2307,16 +2307,24 @@ namespace LipidCreator
                                 List<string> HGs = new List<string>(); 
                                 foreach (string hg in specialPLs)
                                 {
-                                    foreach (string faX in (new string[]{"FAp", "FAa"}))
-                                    {
-                                        if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) HGs.Add(hg + " O-p");
-                                        if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) HGs.Add(hg + " O-a");
-                                    }
+                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) HGs.Add(hg + " O-p");
+                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) HGs.Add(hg + " O-a");
                                 }
                                 
-                                if (split)
+                                if (split && regularWarn)
                                 {
                                     Phospholipid newLipid = new Phospholipid((Phospholipid)currentLipid);
+                                    Phospholipid pureLipid = null;
+                                    if (((Phospholipid)currentLipid).fag1.faTypes["FA"])
+                                    {
+                                        pureLipid = new Phospholipid((Phospholipid)currentLipid);
+                                        pureLipid.headGroupNames.Clear();
+                                        pureLipid.fag1.faTypes["FA"] = true;
+                                        pureLipid.fag1.faTypes["FAa"] = false;
+                                        pureLipid.fag1.faTypes["FAp"] = false;
+                                        foreach (string hg in specialPLs) pureLipid.headGroupNames.Add(hg);
+                                    }
+                                    
                                     foreach (string hg in supposedPLs) plHgListbox.SelectedItems.Remove(hg);
                                     newLipid.headGroupNames.Clear();
                                     
@@ -2328,6 +2336,16 @@ namespace LipidCreator
                                         lipidCreator.registeredLipidDictionary.Add(lipidHash, newLipid);
                                         lipidCreator.registeredLipids.Add(lipidHash);
                                         registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(newLipid));
+                                        
+                                        if (((Phospholipid)currentLipid).fag1.faTypes["FA"])
+                                        {
+                                            lipidHash = pureLipid.getHashCode();
+                                            lipidCreator.registeredLipidDictionary.Add(lipidHash, pureLipid);
+                                            lipidCreator.registeredLipids.Add(lipidHash);
+                                            registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(pureLipid));
+                                        }
+                                        
+                                        refreshRegisteredLipidsTable();
                                     }
                                     catch
                                     {
@@ -2335,6 +2353,31 @@ namespace LipidCreator
                                         MessageBox.Show("A lipid with this set of parameters is already registered.", "Lipid registered");
                                     }
                                     
+                                }
+                                else if (split && !regularWarn)
+                                {
+                                    Phospholipid newLipid = new Phospholipid((Phospholipid)currentLipid);
+                                    plFA1Checkbox1.Checked = true;
+                                    plFA1Checkbox2.Checked = false;
+                                    plFA1Checkbox3.Checked = false;
+                                    newLipid.headGroupNames.Clear();
+                                    
+                                    foreach (string hg in HGs) newLipid.headGroupNames.Add(hg);
+                                    newLipid.hasPlasmalogen = true;
+                                    
+                                    try {
+                                        ulong lipidHash = newLipid.getHashCode();
+                                        lipidCreator.registeredLipidDictionary.Add(lipidHash, newLipid);
+                                        lipidCreator.registeredLipids.Add(lipidHash);
+                                        registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(newLipid));
+                                        
+                                        refreshRegisteredLipidsTable();
+                                    }
+                                    catch
+                                    {
+                                        log.Debug("A lipid with this set of parameters is already registered.");
+                                        MessageBox.Show("A lipid with this set of parameters is already registered.", "Lipid registered");
+                                    }
                                 }
                                 else if (!regularWarn)
                                 {
@@ -2350,41 +2393,6 @@ namespace LipidCreator
                             }
                         }
                     }
-                    
-                    
-                    
-                    /*
-                    HashSet<string> selectedPLs =  new HashSet<string>(currentLipid.headGroupNames);
-                    if ((((Phospholipid)currentLipid).fag1.faTypes["FAa"] || ((Phospholipid)currentLipid).fag1.faTypes["FAp"]) && ((Phospholipid)currentLipid).isLyso && (new HashSet<string>(){"LPC", "LPE"}).Intersect(selectedPLs).Any())
-                    {
-                        HashSet<string> intersectLipids = new HashSet<string>((new HashSet<string>(){"LPC", "LPE"}).Intersect(selectedPLs));
-                        string selectedLipids = string.Join(" and ", intersectLipids);
-                        
-                        HashSet<string> FAs = new HashSet<string>();
-                        if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) FAs.Add("FAa");
-                        if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) FAs.Add("FAp");
-                        string selectedFAs = string.Join(" and ", FAs);
-                        
-                        string suggestedLipids = string.Join(" and ", (from hg in intersectLipids select hg + " O-"));
-                        MessageBox.Show("Warning, you selected among others the headgroups " + selectedLipids + " along with the fatty acyl chains " + selectedFAs + ". Be aware that you have to check the 'Plasmalogen' option to create " + suggestedLipids + " lipids.");
-                    }
-                    
-                    else if ((((Phospholipid)currentLipid).fag1.faTypes["FAa"] || ((Phospholipid)currentLipid).fag1.faTypes["FAp"]) && !((Phospholipid)currentLipid).isCL && (new HashSet<string>(){"PC", "PE"}).Intersect(selectedPLs).Any())
-                    {
-                        HashSet<string> intersectLipids = new HashSet<string>((new HashSet<string>(){"PC", "PE"}).Intersect(selectedPLs));
-                        string selectedLipids = string.Join(" and ", intersectLipids);
-                        
-                        HashSet<string> FAs = new HashSet<string>();
-                        if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) FAs.Add("FAa");
-                        if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) FAs.Add("FAp");
-                        string selectedFAs = string.Join(" and ", FAs);
-                        
-                        string suggestedLipids = string.Join(" and ", (from hg in intersectLipids select hg + " O-"));
-                        MessageBox.Show("Warning, you selected among others the headgroups " + selectedLipids + " along with the fatty acyl chains " + selectedFAs + ". Be aware that you have to check the 'Plasmalogen' option to create " + suggestedLipids + " lipids.");
-                        
-                    }
-                    */
-                    
                     
                 }
                 return LipidCategory.Glycerophospholipid;

@@ -31,12 +31,12 @@
     <ReleaseVersion>1.1.0</ReleaseVersion>
     <AppVersion>$(ReleaseVersion).$(BuildNumber)</AppVersion>
     <AppFileVersion>$(AppVersion)</AppFileVersion>
-	<ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <CodePage>65001</CodePage>
     <PackageId>C82A580E-D9D9-40A6-8890-D93211920552</PackageId>
     <NeutralLanguage>en-US</NeutralLanguage>
     <SynchReleaseVersion>false</SynchReleaseVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -47,11 +47,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>anycpu</PlatformTarget>
@@ -104,6 +104,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>lipidcreator.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <!--  <PropertyGroup>
     <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
@@ -259,9 +263,6 @@
     <EmbeddedResource Include="AddHeavyPrecursor.resx">
       <DependentUpon>AddHeavyPrecursor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExportParameters.resx">
-      <DependentUpon>ExportParameters.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -342,7 +343,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -461,7 +462,7 @@
     <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(TargetDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
-    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' "/>
+    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="echo -1 &gt; &quot;$(TargetDir)data\analytics.txt&quot;" />
@@ -483,7 +484,7 @@
     <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\yeast-lipidome.csv&quot; &quot;$(TargetDir)data\predefined\Yeast\Lipidome.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " /> -->
     <!-- remove generated log file and predefined template directory -->
     <Delete Files="$(TargetDir)data\lipidcreator.log" />
-	<Delete Files="$(TargetDir)data\docs\*.docx" />
+    <Delete Files="$(TargetDir)data\docs\*.docx" />
     <RemoveDir Directories="$(TargetDir)data\predefined-lists" />
   </Target>
   <Target Name="ZipDist" AfterTargets="CopySQLiteInteropFiles">

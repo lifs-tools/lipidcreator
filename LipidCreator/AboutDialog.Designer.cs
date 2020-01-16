@@ -57,7 +57,6 @@ namespace LipidCreator
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDialog));
             this.buttonOK = new System.Windows.Forms.Button();
             this.linkLabel = new System.Windows.Forms.LinkLabel();
             this.textLibraryName = new System.Windows.Forms.RichTextBox();
@@ -102,7 +101,7 @@ namespace LipidCreator
             this.Controls.Add(this.linkLabel);
             this.Controls.Add(this.buttonOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutDialog";

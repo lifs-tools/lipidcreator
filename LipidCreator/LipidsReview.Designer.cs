@@ -63,7 +63,6 @@ namespace LipidCreator
         private void InitializeComponent()
         {
         
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LipidsReview));
             int windowWidth = 1100;
             int windowHeight = 580;
         
@@ -238,7 +237,7 @@ namespace LipidCreator
             this.PerformLayout();
             
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             

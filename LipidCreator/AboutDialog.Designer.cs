@@ -78,7 +78,7 @@ namespace LipidCreator
             this.linkLabel.AutoSize = true;
             this.linkLabel.Location = new System.Drawing.Point(275, 287);
             this.linkLabel.Name = "linkLabel";
-            this.linkLabel.Size = new System.Drawing.Size(198, 13);
+            this.linkLabel.Size = new System.Drawing.Size(147, 13);
             this.linkLabel.TabIndex = 2;
             this.linkLabel.TabStop = true;
             this.linkLabel.Text = "https://lifs.isas.de/lipidcreator";

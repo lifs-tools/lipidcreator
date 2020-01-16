@@ -624,6 +624,8 @@ namespace LipidCreator
                         OnSkylineConnectionClosed(new EventArgs());
                         log.Info("Skyline connection was terminated from the other side! Bye bye!");
                         client.Dispose();
+                        MessageBox.Show("The Skyline connection was closed! Please save your work (File -> Export Project), close LipidCreator and restart it from the Skyline Tool menu! Then import the saved project again (File -> Import Project).", "Skyline was closed",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 });
                 

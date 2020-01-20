@@ -2978,7 +2978,6 @@ namespace LipidCreator
         {
             if (sender == null) { return; }
             lipidCreator.selectedInstrumentForCE = "";
-            menuCollisionEnergyOpt.Enabled = false;
             lipidCreator.monitoringType = MonitoringTypes.NoMonitoring;
             lastCEInstrumentChecked.Checked = false;
             lastCEInstrumentChecked = (MenuItem)sender;
@@ -2996,7 +2995,6 @@ namespace LipidCreator
                 string instrument = ((string[])((MenuItem)sender).Tag)[0];
                 lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-                menuCollisionEnergyOpt.Enabled = tutorial.tutorial == Tutorials.NoTutorial;
                 lipidCreator.monitoringType = MonitoringTypes.PRM;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
@@ -3015,7 +3013,6 @@ namespace LipidCreator
                 string instrument = ((string[])((MenuItem)sender).Tag)[0];
                 lipidCreator.selectedInstrumentForCE = (string)lipidCreator.msInstruments[instrument].CVTerm;
             
-                menuCollisionEnergyOpt.Enabled = false;
                 lipidCreator.monitoringType = MonitoringTypes.SRM;
                 lastCEInstrumentChecked.Checked = false;
                 lastCEInstrumentChecked = (MenuItem)sender;
@@ -3438,17 +3435,24 @@ namespace LipidCreator
         
         protected void menuCollisionEnergyOptClick(object sender, System.EventArgs e)
         {
-            ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
-            ceInspector.Owner = this;
-            ceInspector.ShowInTaskbar = false;
-            if (tutorial.tutorial == Tutorials.NoTutorial)
+            if (lipidCreator.selectedInstrumentForCE == "")
             {
-                ceInspector.ShowDialog();
-                ceInspector.Dispose();
+                MessageBox.Show ("To use the collision energy optimization function, an MS device has to be selected before. Please go on Menu -> Options -> Collision Energy computation to select a device.", "LipidCreator: no device selected");
             }
             else
             {
-                ceInspector.Show();
+                ceInspector = new CEInspector(this, lipidCreator.selectedInstrumentForCE);
+                ceInspector.Owner = this;
+                ceInspector.ShowInTaskbar = false;
+                if (tutorial.tutorial == Tutorials.NoTutorial)
+                {
+                    ceInspector.ShowDialog();
+                    ceInspector.Dispose();
+                }
+                else
+                {
+                    ceInspector.Show();
+                }
             }
         }
         

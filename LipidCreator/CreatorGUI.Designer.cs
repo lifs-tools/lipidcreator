@@ -944,7 +944,6 @@ namespace LipidCreator
             this.menuCollisionEnergyOpt.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.menuCollisionEnergyOpt.Text = "Collision Energy &optimization";
             this.menuCollisionEnergyOpt.Click += new System.EventHandler (menuCollisionEnergyOptClick);
-            this.menuCollisionEnergyOpt.Enabled = false;
             
             this.menuCollisionEnergyNone.Text = "No computation";
             this.menuCollisionEnergyNone.RadioCheck = true;

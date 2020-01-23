@@ -85,13 +85,16 @@ namespace LipidCreator
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
             
+            bool enableCBCSL = false;
+            
             if (creatorGUI.lipidCreator.selectedInstrumentForCE.Length > 0)
             {
                 InstrumentData instrumentData = creatorGUI.lipidCreator.msInstruments[creatorGUI.lipidCreator.selectedInstrumentForCE];
-                buttonStoreSpectralLibrary.Enabled = instrumentData.minCE > 0 && instrumentData.maxCE > 0 && instrumentData.minCE < instrumentData.maxCE;
+                enableCBCSL = instrumentData.minCE > 0 && instrumentData.maxCE > 0 && instrumentData.minCE < instrumentData.maxCE;
             }
             
-            checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && buttonStoreSpectralLibrary.Enabled;
+            
+            checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && enableCBCSL;
             
         }
         
@@ -815,25 +818,48 @@ namespace LipidCreator
 
         private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
+            bool enableSpectralLibrary = false;
+            if (creatorGUI.lipidCreator.selectedInstrumentForCE.Length > 0)
+            {
+                enableSpectralLibrary = true;
+            }
             
-            saveFileDialog1.InitialDirectory = "c:\\";
-            saveFileDialog1.Filter = "blib files (*.blib)|*.blib|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 0;
-            saveFileDialog1.RestoreDirectory = true;
+            if (enableSpectralLibrary)
+            {
+                InstrumentData instrumentData = creatorGUI.lipidCreator.msInstruments[creatorGUI.lipidCreator.selectedInstrumentForCE];
+                if (!(instrumentData.minCE > 0 && instrumentData.maxCE > 0 && instrumentData.minCE < instrumentData.maxCE))
+                {
+                    enableSpectralLibrary = false;
+                }
+            }
+            
+            
+            if (enableSpectralLibrary)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
+                
+                saveFileDialog1.InitialDirectory = "c:\\";
+                saveFileDialog1.Filter = "blib files (*.blib)|*.blib|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 0;
+                saveFileDialog1.RestoreDirectory = true;
 
-            if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
-                this.Enabled = false;
-                try
-                {
-                    creatorGUI.lipidCreator.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
-                    MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
+                if (saveFileDialog1.ShowDialog () == DialogResult.OK) {
+                    this.Enabled = false;
+                    try
+                    {
+                        creatorGUI.lipidCreator.createBlib(Path.GetFullPath(saveFileDialog1.FileName));
+                        MessageBox.Show("Storing of spectral library is complete.", "Storing complete");
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show("Problem storing spectral library: " + exception.Message, "Problem storing spectral library");
+                    }
+                    this.Enabled = true;
                 }
-                catch (Exception exception)
-                {
-                    MessageBox.Show("Problem storing spectral library: " + exception.Message, "Problem storing spectral library");
-                }
-                this.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("To store a spectral library, an MS device has to be selected before. Please go back to the main window and click on Menu -> Options -> Collision Energy computation to select a device.", "LipidCreator: no MS device selected");
             }
         }
     }

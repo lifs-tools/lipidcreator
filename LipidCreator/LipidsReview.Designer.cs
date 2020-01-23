@@ -200,7 +200,6 @@ namespace LipidCreator
             this.buttonStoreSpectralLibrary.Text = "Store spectral library";
             this.buttonStoreSpectralLibrary.UseVisualStyleBackColor = true;
             this.buttonStoreSpectralLibrary.Click += new System.EventHandler(this.buttonStoreSpectralLibraryClick);
-            this.buttonStoreSpectralLibrary.Enabled = false;
             this.buttonStoreSpectralLibrary.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             // 
             // label1

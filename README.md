@@ -1,10 +1,16 @@
 # LipidCreator #
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3529484.svg)](https://doi.org/10.5281/zenodo.3529484)
 
 LipidCreator is a plugin for [Skyline](https://skyline.ms/project/home/software/Skyline/begin.view) supporting targeted workflow development in lipidomics.
 It can be used to create user-defined target lists and fragment libraries for PRM and MRM experiments in Skyline.
 It also supports standalone and command-line operation.
 
 It has been tested with Thermo QExactive HF and Waters QTof instruments.
+
+## Latest Release ##
+The LipidCreator releases are available [here](https://github.com/lifs-tools/lipidcreator/releases). 
+
+**Please see the release specific page first for instructions on how to install LipidCreator.**
 
 ## Installation ##
 

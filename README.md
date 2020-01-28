@@ -1,6 +1,6 @@
 # LipidCreator #
 
-LipidCreator is a plugin for Skyline supporting targeted workflow development in lipidomics.
+LipidCreator is a plugin for [Skyline](https://skyline.ms/project/home/software/Skyline/begin.view) supporting targeted workflow development in lipidomics.
 It can be used to create user-defined target lists and fragment libraries for PRM and MRM experiments in Skyline.
 It also supports standalone and command-line operation.
 
@@ -67,6 +67,8 @@ Other Linux distributions should also work, but were not tested. If you encounte
 ### Windows ###
 
 #### With Skyline ####
+LipidCreator has been tested with [Skyline 19.1, 64 bit](https://skyline.ms/project/home/software/Skyline/begin.view). Please follow the installation instructions on the Skyline homepage if you do not have Skyline installed already.
+
 You can install the LipidCreator zip file (name must be LipidCreator.zip) as an external tool. Go to "Tools" &gt; "External Tools" and click on "Add". Select the LipidCreator.zip file and wait until 
 installation completes. Click "OK" on the "External Tools" dialog. LipidCreator can now be started via "Tools" &gt; "LipidCreator".
 

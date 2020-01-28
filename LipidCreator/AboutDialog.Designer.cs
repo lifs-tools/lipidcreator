@@ -134,7 +134,7 @@ namespace LipidCreator
 
             "Copyright(c) 2018\n" +
             "Dominik Kopczynski   -   dominik.kopczynski {at} isas.de\n" +
-            "Bing Peng   -   bing.peng {at} isas.de\n" +
+            "Bing Peng   -   bing.peng {at} ki.se\n" +
             "Nils Hoffmann  -  nils.hoffmann {at} isas.de\n\n" +
 
             "Permission is hereby granted, free of charge, to any person obtaining a copy " +

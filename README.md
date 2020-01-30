@@ -8,7 +8,9 @@ It also supports standalone and command-line operation.
 It has been tested with Thermo QExactive HF and Waters QTOF instruments.
 
 ## Latest Release ##
-The LipidCreator releases are available from the [LIFS Portal](https://github.com/lifs-tools/lipidcreator/releases) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).
+The LipidCreator releases are available from the [LIFS Portal](https://lifs.isas.de/lipidcreator) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).
+
+Source releases are available from the [Github release page](https://github.com/lifs-tools/lipidcreator/releases).
 
 **Please see the release specific page first for instructions on how to install LipidCreator.**
 

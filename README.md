@@ -5,14 +5,49 @@ LipidCreator is a plugin for [Skyline](https://skyline.ms/project/home/software/
 It can be used to create user-defined target lists and fragment libraries for PRM and MRM experiments in Skyline.
 It also supports standalone and command-line operation.
 
-It has been tested with Thermo QExactive HF and Waters QTof instruments.
+It has been tested with Thermo QExactive HF and Waters QTOF instruments.
 
 ## Latest Release ##
-The LipidCreator releases are available [here](https://github.com/lifs-tools/lipidcreator/releases). 
+The LipidCreator releases are available from the [LIFS Portal](https://github.com/lifs-tools/lipidcreator/releases) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).
 
 **Please see the release specific page first for instructions on how to install LipidCreator.**
 
-## Installation ##
+## Installation and Usage ##
+
+### Windows ###
+
+#### With Skyline ####
+LipidCreator has been tested with [Skyline 19.1, 64 bit](https://skyline.ms/project/home/software/Skyline/begin.view). Please follow the installation instructions on the Skyline homepage if you do not have Skyline installed already.
+
+**Installation from the Skyline Tool Store:**
+The preferred way to install the latest release versions of LipidCreator is to install it from the Skyline Tool Store:
+
+1. Open Skyline with a blank document
+2. Go to the "Tools" &gt; "Tool Store..." menu
+3. Scroll down and select "LipidCreator" for installation
+4. Wait for the installation to complete
+5. LipidCreator can now be started via "Tools" &gt; "LipidCreator"
+
+**Manual Installation from ZIP:**
+You can install the LipidCreator zip file (name must be LipidCreator.zip), e.g. for testing purposes, as an external tool:
+
+1. Go to "Tools" &gt; "External Tools" and click on "Add"
+2. Select the LipidCreator.zip file
+3. Wait for the installation to complete
+4. Click "OK" on the "External Tools" dialog.
+5. LipidCreator can now be started via "Tools" &gt; "LipidCreator"
+
+#### Stand-Alone ####
+If you locate the LipidCreator.exe file, either in your Skyline installation under the "Tools" folder, or within the LipidCreator folder extracted from the zip archive, you need to double click on it to start in stand-alone mode. It is also possible to start LipidCreator from the command line.
+
+### Linux / Ubuntu ###
+To run LipidCreator, locate the directory containing LipidCreator.exe, open a terminal and type
+
+    mono LipidCreator.exe
+
+Please note that there may be issues with the repainting of certain windows and controls (scrollable areas) due to the not 100% compatible Mono implementation.
+
+## Building from Source ##
 
 LipidCreator has been written in the C# programming language but can be compiled and run using the Mono framework on Linux (Ubuntu 18.04 tested) and MacOS (untested) as well.
 
@@ -67,26 +102,6 @@ If that fails to work under your Linux distribution, please follow these steps t
 
 Please note: we have developed and tested LipidCreator using Mono under Ubuntu 16.04 and 18.04 and Debian 10 (Buster). 
 Other Linux distributions should also work, but were not tested. If you encounter any issues, please let us know!
-
-## Usage ##
-
-### Windows ###
-
-#### With Skyline ####
-LipidCreator has been tested with [Skyline 19.1, 64 bit](https://skyline.ms/project/home/software/Skyline/begin.view). Please follow the installation instructions on the Skyline homepage if you do not have Skyline installed already.
-
-You can install the LipidCreator zip file (name must be LipidCreator.zip) as an external tool. Go to "Tools" &gt; "External Tools" and click on "Add". Select the LipidCreator.zip file and wait until 
-installation completes. Click "OK" on the "External Tools" dialog. LipidCreator can now be started via "Tools" &gt; "LipidCreator".
-
-#### Stand-Alone ####
-If you locate the LipidCreator.exe file, either in your Skyline installation under the "Tools" folder, or within the LipidCreator folder extracted from the zip archive, you need to double click on it to start in stand-alone mode. It is also possible to start LipidCreator from the command line.
-
-### Linux / Ubuntu ###
-To run LipidCreator, locate the directory containing LipidCreator.exe, open a terminal and type
-
-    mono LipidCreator.exe
-
-Please note that there may be issues with the repainting of certain windows and controls (scrollable areas) due to the not 100% compatible Mono implementation.
 
 ## Reporting issues ##
 If you encounter any issues with LipidCreator, please report them via https://lifs.isas.de/support, using the 'Support category' LipidCreator.

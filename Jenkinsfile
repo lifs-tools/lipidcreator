@@ -1,7 +1,7 @@
 node {
     def artifactoryServer = Artifactory.server 'Lipidomics'
-    def emailOnSuccess = "${emailRecipients?:''}"
-    def emailOnFailure = "${emailRecipients?:''}"
+    def emailOnSuccess = "${jobEmailRecipients?:''}"
+    def emailOnFailure = "${jobEmailRecipients?:''}"
     def gitRepo = "lifs-tools/lipidcreator"
     def gitHoster = "github.com"
     def gitUrl = "https://${gitHoster}/${gitRepo}"

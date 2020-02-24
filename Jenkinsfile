@@ -38,7 +38,7 @@ node {
                 try {
                     stage 'Checkout'
                     def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
-                        userRemoteConfigs: [[credentialsId: gitUserCrendentialsId, url: gitUrl]]])
+                        userRemoteConfigs: [[credentialsId: gitUserCredentialsId, url: gitUrl]]])
                     stage 'Build'
                     sh 'export PATH="$PATH:/bin/:/sbin/:/usr/bin/:/usr/sbin/" && /usr/bin/msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}'
                     stage 'Test'
@@ -54,8 +54,6 @@ node {
                         sh("git tag -a '${BUILD_NUMBER}' -m 'Automatic tag for successful build number ${BUILD_NUMBER} from commit ${scmVars.GIT_COMMIT} on branch ${scmVars.GIT_BRANCH}'")
                         script {
                             env.encodedPass=URLEncoder.encode("${GIT_PASSWORD}", "UTF-8")
-                            env.gitHoster=gitHoster
-                            env.gitRepo=gitRepo
                         }
                         sh('git push https://${GIT_USERNAME}:${encodedPass}@${gitHoster}/${gitRepo} --tags')
                     }

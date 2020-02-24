@@ -54,6 +54,8 @@ node {
                         sh("git tag -a '${BUILD_NUMBER}' -m 'Automatic tag for successful build number ${BUILD_NUMBER} from commit ${scmVars.GIT_COMMIT} on branch ${scmVars.GIT_BRANCH}'")
                         script {
                             env.encodedPass=URLEncoder.encode("${GIT_PASSWORD}", "UTF-8")
+                            env.gitHoster=gitHoster
+                            env.gitRepo=gitRepo
                         }
                         sh('git push https://${GIT_USERNAME}:${encodedPass}@${gitHoster}/${gitRepo} --tags')
                     }

@@ -37,7 +37,8 @@ node {
             docker.image(dockerBuildImage).inside {
                 try {
                     stage 'Checkout'
-                    def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
+                    def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+			extensions: scm.extensions + [[$class: 'WipeWorkspace']],
                         userRemoteConfigs: [[credentialsId: gitUserCredentialsId, url: gitUrl]]])
                     stage 'Build'
                     sh 'export PATH="$PATH:/bin/:/sbin/:/usr/bin/:/usr/sbin/" && /usr/bin/msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}'

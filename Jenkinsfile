@@ -40,6 +40,10 @@ node {
                     def scmVars = checkout([$class: 'GitSCM', branches: [[name: '*/master']],
 			extensions: scm.extensions + [[$class: 'WipeWorkspace']],
                         userRemoteConfigs: [[credentialsId: gitUserCredentialsId, url: gitUrl]]])
+		    script {
+			env.GIT_COMMIT = scmVars.GIT_COMMIT
+			env.GIT_BRANCH = scmVars.GIT_BRANCH
+                    }
                     stage 'Build'
                     sh 'export PATH="$PATH:/bin/:/sbin/:/usr/bin/:/usr/sbin/" && /usr/bin/msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}'
                     stage 'Test'
@@ -52,7 +56,7 @@ node {
                     withCredentials([usernamePassword(credentialsId: gitUserCredentialsId, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh("git config user.email '${jobGitUserEmail}'")
                         sh("git config user.name '${jobGitUserName}'")
-                        sh("git tag -a '${BUILD_NUMBER}' -m 'Automatic tag for successful build number ${BUILD_NUMBER} from commit ${scmVars.GIT_COMMIT} on branch ${scmVars.GIT_BRANCH}'")
+                        sh("git tag -a '${BUILD_NUMBER}' -m 'Automatic tag for successful build number ${BUILD_NUMBER} from commit ${GIT_COMMIT} on branch ${GIT_BRANCH}'")
                         script {
                             env.encodedPass=URLEncoder.encode("${GIT_PASSWORD}", "UTF-8")
                             env.gitHoster=gitHoster

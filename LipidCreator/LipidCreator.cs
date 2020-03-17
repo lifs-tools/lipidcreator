@@ -140,6 +140,7 @@ namespace LipidCreator
         public string prefixPath = "";
         public RunMode runMode;
         public static string ANALYTICS_CATEGORY;
+        public HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
         
         // collision energy parameters
         public string selectedInstrumentForCE = "";
@@ -398,14 +399,6 @@ namespace LipidCreator
                 throw new Exception();
             }
             
-            HashSet<string>[] buildingBlockSets = new HashSet<string>[7];
-            buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
-            buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
-            buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
-            buildingBlockSets[3] = new HashSet<string>{"FA", "HG"};
-            buildingBlockSets[4] = new HashSet<string>{"LCB", "FA", "HG"};
-            buildingBlockSets[5] = new HashSet<string>{"LCB", "HG"};
-            buildingBlockSets[6] = new HashSet<string>{"HG"};
             
             // check fragment building block list against precursor type
             foreach (KeyValuePair<string, Precursor> kvpHeadgroups in headgroups)
@@ -593,7 +586,13 @@ namespace LipidCreator
         
         public LipidCreator(string pipe, bool firstInit = false)
         {
-        
+            buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
+            buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
+            buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
+            buildingBlockSets[3] = new HashSet<string>{"FA", "HG"};
+            buildingBlockSets[4] = new HashSet<string>{"LCB", "FA", "HG"};
+            buildingBlockSets[5] = new HashSet<string>{"LCB", "HG"};
+            buildingBlockSets[6] = new HashSet<string>{"HG"};
         
             prefixPath = (openedAsExternal ? EXTERNAL_PREFIX_PATH : new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName);
             XmlConfigurator.Configure(new System.IO.FileInfo(Path.Combine(prefixPath, "data", "log4net.xml")));

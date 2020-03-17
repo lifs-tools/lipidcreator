@@ -41,8 +41,14 @@ namespace LipidCreator
         //private static readonly ILog log = LogManager.GetLogger(typeof(Wizard));
         public CreatorGUI creatorGUI;
         public int wizardStep;
+        public Lipid lipid;
+        public int currentFA = -1;
+        public FattyAcidGroup fag = null;
+        public int headgroupCategory = -1;
+        public ArrayList faList = new ArrayList();
         
-        public enum WizardSteps {Welcome, SelectCategory, SelectSpecies, Finish};
+        
+        public enum WizardSteps {Welcome, SelectCategory, SelectClass, SelectFA, SelectAdduct, SelectFragmentMode, SelectFragments, AddLipid, Finish};
 
         public Wizard(CreatorGUI _creatorGUI)
         {
@@ -54,11 +60,17 @@ namespace LipidCreator
         
         
         
-        private void resetAllControls(){
+        private void resetAllControls()
+        {
             cancelButton.Enabled = true;
             continueButton.Enabled = true;
             cancelButton.Text = "Cancel";
             continueButton.Text = "Continue";
+            
+            foreach (Control control in controlElements)
+            {
+                control.Visible = false;
+            }
         }
         
         
@@ -70,33 +82,225 @@ namespace LipidCreator
         
         
         
+        private void selectFAG()
+        {
+            fag = null;
+            if (currentFA <= -1 || faList.Count <= currentFA) return;
+            switch (headgroupCategory)
+            {
+                case (int)LipidCategory.Glycerolipid:
+                    if ((string)faList[currentFA] == "FA1") fag = ((Glycerolipid)lipid).fag1;
+                    else if ((string)faList[currentFA] == "FA2") fag = ((Glycerolipid)lipid).fag2;
+                    else if ((string)faList[currentFA] == "FA3") fag = ((Glycerolipid)lipid).fag3;
+                    break;
+                    
+                case (int)LipidCategory.Glycerophospholipid:
+                    if ((string)faList[currentFA] == "FA1") fag = ((Phospholipid)lipid).fag1;
+                    else if ((string)faList[currentFA] == "FA2") fag = ((Phospholipid)lipid).fag2;
+                    else if ((string)faList[currentFA] == "FA3") fag = ((Phospholipid)lipid).fag3;
+                    else if ((string)faList[currentFA] == "FA4") fag = ((Phospholipid)lipid).fag4;
+                    break;
+                    
+                case (int)LipidCategory.Sphingolipid:
+                    if ((string)faList[currentFA] == "LCB") fag = ((Sphingolipid)lipid).lcb;
+                    else if ((string)faList[currentFA] == "FA") fag = ((Sphingolipid)lipid).fag;
+                    break;
+                    
+                case (int)LipidCategory.Sterollipid:
+                    if ((string)faList[currentFA] == "FA") fag = ((Cholesterol)lipid).fag;
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+        
+        
         
 
         private void continueClick(object sender, EventArgs e)
         {
-            if (wizardStep == (int)WizardSteps.Finish) wizardStep = 0;
-            wizardStep += 1;
+            if (wizardStep == (int)WizardSteps.Finish) wizardStep = 0; // restart wizard
+            else if (wizardStep == (int)WizardSteps.SelectClass)
+            {
+                if (faList.Count == 0) wizardStep += 1;
+                else selectFAG();
+            }
+            else if (wizardStep == (int)WizardSteps.SelectFA)
+            {
+                currentFA += 1;
+                if (currentFA < faList.Count)
+                {
+                    wizardStep -= 1;
+                    selectFAG();
+                }
+            }
             
+            wizardStep += 1;
             processWizardSteps();
         }
         
         
-        public void processWizardSteps(){
+        private void hgListboxSelectedValueChanged(object sender, System.EventArgs e)
+        {
+            lipid.headGroupNames.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                string headgroup = itemChecked.ToString();
+                lipid.headGroupNames.Add(headgroup);
+                if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
+                {
+                    int bbt = creatorGUI.lipidCreator.headgroups[headgroup].buildingBlockType;
+                    if (0 <= bbt && bbt < creatorGUI.lipidCreator.buildingBlockSets.Length)
+                    {
+                        faList.Clear();
+                        foreach (string bbType in creatorGUI.lipidCreator.buildingBlockSets[bbt])
+                        {
+                            if (bbType != "HG") faList.Add(bbType);
+                        }
+                        currentFA = 0;
+                    }
+                    else 
+                    {
+                        // TODO: Exception
+                    }
+                }
+                else
+                {
+                    // TODO: Exception
+                }
+                break;
+            }
+        }
+        
+        
+        
+        public void processWizardSteps()
+        {
             resetAllControls();
-            switch (wizardStep){
+            switch (wizardStep)
+            {
                 case (int)WizardSteps.Welcome:
                     labelInformation.Text = "Welcome to the magic world of LipidCreator. This wizard will guide you.";
                     break;
                     
                 case (int)WizardSteps.SelectCategory:
-                    cancelButton.Enabled = false;
+                    labelInformation.Text = "Every journey begins with the first step. Let us begin draw your lipids. Which category do you desire?";
+                    categoryCombobox.Visible = true;
+                    categoryCombobox.SelectedIndex = 0;
                     break;
                     
-                case (int)WizardSteps.SelectSpecies:
-                    cancelButton.Text = "Close";
+                case (int)WizardSteps.SelectClass:
+                    labelInformation.Text = "What lipid class do you wish to select?";
+                    switch((string)categoryCombobox.Items[categoryCombobox.SelectedIndex])
+                    {
+                        case "Glycero lipid":
+                            headgroupCategory = (int)LipidCategory.Glycerolipid;
+                            lipid = new Glycerolipid(creatorGUI.lipidCreator);
+                            break;
+                        case "Glycerophosho lipid":
+                            headgroupCategory = (int)LipidCategory.Glycerophospholipid;
+                            lipid = new Phospholipid(creatorGUI.lipidCreator);
+                            break;
+                        case "Sphingo lipid":
+                            headgroupCategory = (int)LipidCategory.Sphingolipid;
+                            lipid = new Sphingolipid(creatorGUI.lipidCreator);
+                            break;
+                        case "Sterol lipid":
+                            headgroupCategory = (int)LipidCategory.Sterollipid;
+                            lipid = new Cholesterol(creatorGUI.lipidCreator);
+                            break;
+                        case "Lipid mediator":
+                            headgroupCategory = (int)LipidCategory.LipidMediator;
+                            lipid = new Mediator(creatorGUI.lipidCreator);
+                            break;
+                        default:
+                            throw new Exception("invalid lipid category");
+                    }
+                    // clear all adducts
+                    ArrayList adducts = new ArrayList();
+                    foreach (string adduct in lipid.adducts.Keys) adducts.Add(adduct);
+                    foreach (string adduct in adducts) lipid.adducts[adduct] = false;
+                    
+                    hgListbox.Visible = true;
+                    hgListbox.Items.Clear();
+                    foreach (string hg in creatorGUI.lipidCreator.categoryToClass[headgroupCategory])
+                    {
+                        hgListbox.Items.Add(hg);
+                    }
+                    hgListbox.SelectedIndex = 0;
                     break;
+                    
+                    
+                case (int)WizardSteps.SelectFA:
+                    labelInformation.Text = "Please select for '" + (string)faList[currentFA] + "' carbon length, number of double bonds and number of hydroxyl groups?";
+                    faCombobox.Visible = true;
+                    faCheckbox1.Visible = true;
+                    faCheckbox2.Visible = true;
+                    faCheckbox3.Visible = true;
+                    faTextbox.Visible = true;
+                    dbTextbox.Visible = true;
+                    dbLabel.Visible = true;
+                    hydroxylTextbox.Visible = true;
+                    hydroxylLabel.Visible = true;
+                    faTextbox.Text = "12-15";
+                    dbTextbox.Text = "0";
+                    hydroxylTextbox.Text = "0";
+                    faCombobox.SelectedIndex = 0;
+                    faCheckbox1.Checked = true;
+                    faCheckbox2.Checked = false;
+                    faCheckbox3.Checked = false;
+                    break;
+                    
+                    
+                case (int)WizardSteps.SelectAdduct:
+                    labelInformation.Text = "Select adduct(s)";
+                    positiveAdduct.Visible = true;
+                    negativeAdduct.Visible = true;
+                    posAdductCheckbox1.Checked = false;
+                    posAdductCheckbox2.Checked = false;
+                    posAdductCheckbox3.Checked = false;
+                    negAdductCheckbox1.Checked = false;
+                    negAdductCheckbox2.Checked = false;
+                    negAdductCheckbox3.Checked = false;
+                    negAdductCheckbox4.Checked = false;
+                    break;
+                    
+                    
+                case (int)WizardSteps.SelectFragmentMode:
+                    labelInformation.Text = "Select fragment mode";
+                    break;
+                    
+                    
+                case (int)WizardSteps.SelectFragments:
+                    labelInformation.Text = "Select fragment";
+                    break;
+                    
+                    
+                case (int)WizardSteps.AddLipid:
+                    labelInformation.Text = "Please continue to add the lipid now into LipidCreator";
+                    break;
+                    
                     
                 case (int)WizardSteps.Finish:
+                    ulong lipidHash = 0;
+                    if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
+                    else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
+                    else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
+                    else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
+                    else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
+                    else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
+                
+                    if (!creatorGUI.lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
+                    {
+                        lipid.onlyPrecursors = 2;
+                        lipid.onlyHeavyLabeled = 0;
+                        creatorGUI.lipidCreator.registeredLipidDictionary.Add(lipidHash, lipid);
+                        creatorGUI.lipidCreator.registeredLipids.Add(lipidHash);
+                    }
+                        
+                    creatorGUI.refreshRegisteredLipidsTable();
+                    labelInformation.Text = "Do you want to add another lipid?";
                     break;
         
             }

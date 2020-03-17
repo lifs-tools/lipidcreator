@@ -1191,6 +1191,7 @@ namespace LipidCreator
         
         public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidEventArgs e)
         {
+            if (sender == null || e.fag == null) return;
             e.fag.faTypes[e.fType] = ((CheckBox)sender).Checked;
             e.fag.faTypes["FAx"] = !e.fag.anyFAChecked();
         }
@@ -1199,9 +1200,9 @@ namespace LipidCreator
         
         
         
-        protected virtual void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
+        public void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
         {
-            currentLipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
+            e.lipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
         }
         
         

@@ -272,10 +272,12 @@ namespace LipidCreator
     public class AdductCheckedEventArgs : EventArgs
     {
         public string adduct;
+        public Lipid lipid;
         
-        public AdductCheckedEventArgs(string _adduct) : base()
+        public AdductCheckedEventArgs(string _adduct, Lipid _lipid) : base()
         {
             adduct = _adduct;
+            lipid = _lipid;
         }
     }
     
@@ -1706,18 +1708,18 @@ namespace LipidCreator
             glPosAdductCheckbox1.Parent = glPositiveAdduct;
             glPosAdductCheckbox1.Location = new Point(10, 15);
             glPosAdductCheckbox1.Text = "+H⁺";
-            glPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
+            glPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
             glPosAdductCheckbox1.Enabled = false;
             glPosAdductCheckbox2.Parent = glPositiveAdduct;
             glPosAdductCheckbox2.Location = new Point(10, 35);
             glPosAdductCheckbox2.Text = "+2H⁺⁺";
             glPosAdductCheckbox2.Enabled = false;
-            glPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
+            glPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
             glPosAdductCheckbox3.Parent = glPositiveAdduct;
             glPosAdductCheckbox3.Location = new Point(10, 55);
             glPosAdductCheckbox3.Text = "+NH4⁺";
             glPosAdductCheckbox3.Checked = true;
-            glPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
+            glPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
             glNegativeAdduct.Width = 120;
             glNegativeAdduct.Location = new Point(leftGroupboxes - glNegativeAdduct.Width, glPositiveAdduct.Top + 140);
             glNegativeAdduct.Height = 120;
@@ -1726,22 +1728,22 @@ namespace LipidCreator
             glNegAdductCheckbox1.Location = new Point(10, 15);
             glNegAdductCheckbox1.Text = "-H⁻";
             glNegAdductCheckbox1.Enabled = false;
-            glNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
+            glNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
             glNegAdductCheckbox2.Parent = glNegativeAdduct;
             glNegAdductCheckbox2.Location = new Point(10, 35);
             glNegAdductCheckbox2.Text = "-2H⁻ ⁻";
             glNegAdductCheckbox2.Enabled = false;
-            glNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
+            glNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
             glNegAdductCheckbox3.Parent = glNegativeAdduct;
             glNegAdductCheckbox3.Location = new Point(10, 55);
             glNegAdductCheckbox3.Text = "+HCOO⁻";
             glNegAdductCheckbox3.Enabled = false;
-            glNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
+            glNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
             glNegAdductCheckbox4.Parent = glNegativeAdduct;
             glNegAdductCheckbox4.Location = new Point(10, 75);
             glNegAdductCheckbox4.Text = "+CH3COO⁻";
             glNegAdductCheckbox4.Enabled = false;
-            glNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
+            glNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
 
             glPictureBox.Image = glyceroBackboneImage;
             glPictureBox.Location = new Point(117, 19);
@@ -1958,16 +1960,16 @@ namespace LipidCreator
             plPosAdductCheckbox1.Location = new Point(10, 15);
             plPosAdductCheckbox1.Text = "+H⁺";
             plPosAdductCheckbox1.Checked = true;
-            plPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
+            plPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
             plPosAdductCheckbox2.Parent = plPositiveAdduct;
             plPosAdductCheckbox2.Location = new Point(10, 35);
             plPosAdductCheckbox2.Text = "+2H⁺⁺";
             plPosAdductCheckbox2.Enabled = false;
-            plPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
+            plPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
             plPosAdductCheckbox3.Parent = plPositiveAdduct;
             plPosAdductCheckbox3.Location = new Point(10, 55);
             plPosAdductCheckbox3.Text = "+NH4⁺";
-            plPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
+            plPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
             plNegativeAdduct.Width = 120;
             plNegativeAdduct.Location = new Point(leftGroupboxes - plNegativeAdduct.Width, plPositiveAdduct.Top + 140);
             plNegativeAdduct.Height = 120;
@@ -1975,19 +1977,19 @@ namespace LipidCreator
             plNegAdductCheckbox1.Parent = plNegativeAdduct;
             plNegAdductCheckbox1.Location = new Point(10, 15);
             plNegAdductCheckbox1.Text = "-H⁻";
-            plNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
+            plNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
             plNegAdductCheckbox2.Parent = plNegativeAdduct;
             plNegAdductCheckbox2.Location = new Point(10, 35);
             plNegAdductCheckbox2.Text = "-2H⁻ ⁻";
-            plNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
+            plNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
             plNegAdductCheckbox3.Parent = plNegativeAdduct;
             plNegAdductCheckbox3.Location = new Point(10, 55);
             plNegAdductCheckbox3.Text = "+HCOO⁻";
-            plNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
+            plNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
             plNegAdductCheckbox4.Parent = plNegativeAdduct;
             plNegAdductCheckbox4.Location = new Point(10, 75);
             plNegAdductCheckbox4.Text = "+CH3COO⁻";
-            plNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
+            plNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
 
 
             plPictureBox.Image = phosphoBackboneImage;
@@ -2136,16 +2138,16 @@ namespace LipidCreator
             slPosAdductCheckbox1.Location = new Point(10, 15);
             slPosAdductCheckbox1.Text = "+H⁺";
             slPosAdductCheckbox1.Checked = true;
-            slPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
+            slPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
             slPosAdductCheckbox2.Parent = slPositiveAdduct;
             slPosAdductCheckbox2.Location = new Point(10, 35);
             slPosAdductCheckbox2.Text = "+2H⁺⁺";
             slPosAdductCheckbox2.Enabled = false;
-            slPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
+            slPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
             slPosAdductCheckbox3.Parent = slPositiveAdduct;
             slPosAdductCheckbox3.Location = new Point(10, 55);
             slPosAdductCheckbox3.Text = "+NH4⁺";
-            slPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
+            slPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
             slNegativeAdduct.Width = 120;
             slNegativeAdduct.Location = new Point(leftGroupboxes - slNegativeAdduct.Width, slPositiveAdduct.Top + 140);
             slNegativeAdduct.Height = 120;
@@ -2153,20 +2155,20 @@ namespace LipidCreator
             slNegAdductCheckbox1.Parent = slNegativeAdduct;
             slNegAdductCheckbox1.Location = new Point(10, 15);
             slNegAdductCheckbox1.Text = "-H⁻";
-            slNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
+            slNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
             slNegAdductCheckbox2.Parent = slNegativeAdduct;
             slNegAdductCheckbox2.Location = new Point(10, 35);
             slNegAdductCheckbox2.Text = "-2H⁻⁻";
             slNegAdductCheckbox2.Enabled = false;
-            slNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
+            slNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
             slNegAdductCheckbox3.Parent = slNegativeAdduct;
             slNegAdductCheckbox3.Location = new Point(10, 55);
             slNegAdductCheckbox3.Text = "+HCOO⁻";
-            slNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
+            slNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
             slNegAdductCheckbox4.Parent = slNegativeAdduct;
             slNegAdductCheckbox4.Location = new Point(10, 75);
             slNegAdductCheckbox4.Text = "+CH3COO⁻";
-            slNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
+            slNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
 
             if (!lipidCreatorInitError)
             {
@@ -2216,17 +2218,17 @@ namespace LipidCreator
             chPosAdductCheckbox1.Location = new Point(10, 15);
             chPosAdductCheckbox1.Text = "+H⁺";
             chPosAdductCheckbox1.Enabled = false;
-            chPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H"));};
+            chPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
             chPosAdductCheckbox2.Parent = chPositiveAdduct;
             chPosAdductCheckbox2.Location = new Point(10, 35);
             chPosAdductCheckbox2.Text = "+2H⁺⁺";
             chPosAdductCheckbox2.Enabled = false;
-            chPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H"));};
+            chPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
             chPosAdductCheckbox3.Parent = chPositiveAdduct;
             chPosAdductCheckbox3.Location = new Point(10, 55);
             chPosAdductCheckbox3.Text = "+NH4⁺";
             chPosAdductCheckbox3.Checked = true;
-            chPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4"));};
+            chPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
             chNegativeAdduct.Width = 120;
             chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, chPositiveAdduct.Top + 140);
             chNegativeAdduct.Height = 120;
@@ -2235,22 +2237,22 @@ namespace LipidCreator
             chNegAdductCheckbox1.Location = new Point(10, 15);
             chNegAdductCheckbox1.Text = "-H⁻";
             chNegAdductCheckbox1.Enabled = false;
-            chNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
+            chNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
             chNegAdductCheckbox2.Parent = chNegativeAdduct;
             chNegAdductCheckbox2.Location = new Point(10, 35);
             chNegAdductCheckbox2.Text = "-2H⁻⁻";
             chNegAdductCheckbox2.Enabled = false;
-            chNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H"));};
+            chNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
             chNegAdductCheckbox3.Parent = chNegativeAdduct;
             chNegAdductCheckbox3.Location = new Point(10, 55);
             chNegAdductCheckbox3.Text = "+HCOO⁻";
             chNegAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO"));};
+            chNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
             chNegAdductCheckbox4.Parent = chNegativeAdduct;
             chNegAdductCheckbox4.Location = new Point(10, 75);
             chNegAdductCheckbox4.Text = "+CH3COO⁻";
             chNegAdductCheckbox4.Enabled = false;
-            chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO"));};
+            chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
             
             chPictureBox.Image = cholesterolBackboneImage;
             chPictureBox.Location = new Point(30, 30);
@@ -2331,7 +2333,7 @@ namespace LipidCreator
             medNegAdductCheckbox1.Parent = medNegativeAdduct;
             medNegAdductCheckbox1.Location = new Point(10, 15);
             medNegAdductCheckbox1.Text = "-H⁻";
-            medNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H"));};
+            medNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
             medNegAdductCheckbox2.Parent = medNegativeAdduct;
             medNegAdductCheckbox2.Location = new Point(10, 35);
             medNegAdductCheckbox2.Text = "-2H⁻⁻";

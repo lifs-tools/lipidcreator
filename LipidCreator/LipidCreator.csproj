@@ -234,6 +234,12 @@
     <Compile Include="IsotopeParserEventHandler.cs" />
     <Compile Include="BaseParserEventHandler.cs" />
     <Compile Include="LipidMapsParserEventHandler.cs" />
+    <Compile Include="Wizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard.Designer.cs">
+      <DependentUpon>Wizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewFragment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -280,6 +286,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="NewFragment.resx">
       <DependentUpon>NewFragment.cs</DependentUpon>
+    </EmbeddedResource>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard.resx">
+      <DependentUpon>Wizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CEInspector.resx">
       <DependentUpon>CEInspector.resx</DependentUpon>

@@ -3459,6 +3459,18 @@ namespace LipidCreator
         
         
         
+        protected void menuWizardClick(object sender, System.EventArgs e)
+        {
+            Wizard wizard = new Wizard(this);
+            wizard.Owner = this;
+            wizard.ShowInTaskbar = false;
+            wizard.ShowDialog();
+            wizard.Dispose();
+        }
+        
+        
+        
+        
         protected void menuExportClick(object sender, System.EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();

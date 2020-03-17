@@ -349,6 +349,8 @@ namespace LipidCreator
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuExport;
         [NonSerialized]
+        public System.Windows.Forms.MenuItem menuWizard;
+        [NonSerialized]
         public System.Windows.Forms.MenuItem menuExportSettings;
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash;
@@ -358,6 +360,8 @@ namespace LipidCreator
         public System.Windows.Forms.MenuItem menuDash3;
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuDash4;
+        [NonSerialized]
+        public System.Windows.Forms.MenuItem menuDash5;
         [NonSerialized]
         public System.Windows.Forms.MenuItem menuExit;
         [NonSerialized]
@@ -878,11 +882,13 @@ namespace LipidCreator
             this.menuImportSettings = new System.Windows.Forms.MenuItem ();
             this.menuImportPredefined = new System.Windows.Forms.MenuItem();
             this.menuExport = new System.Windows.Forms.MenuItem ();
+            this.menuWizard = new System.Windows.Forms.MenuItem ();
             this.menuExportSettings = new System.Windows.Forms.MenuItem ();
             this.menuDash = new System.Windows.Forms.MenuItem ();
             this.menuDash2 = new System.Windows.Forms.MenuItem ();
             this.menuDash3 = new System.Windows.Forms.MenuItem ();
             this.menuDash4 = new System.Windows.Forms.MenuItem ();
+            this.menuDash5 = new System.Windows.Forms.MenuItem ();
             this.menuExit = new System.Windows.Forms.MenuItem ();
             this.menuStatistics = new System.Windows.Forms.MenuItem ();
             this.menuToolDirectory = new System.Windows.Forms.MenuItem();
@@ -896,7 +902,7 @@ namespace LipidCreator
             this.menuCollisionEnergyNone = new System.Windows.Forms.MenuItem ();
             this.menuMS2Fragments = new System.Windows.Forms.MenuItem ();
             this.menuIsotopes = new System.Windows.Forms.MenuItem ();
-            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportList, menuImportPredefined, menuExport, menuDash, menuImportSettings, menuExportSettings, menuDash3, menuExit});
+            this.menuFile.MenuItems.AddRange(new MenuItem[]{ menuImport, menuImportList, menuImportPredefined, menuExport, menuDash, menuWizard, menuDash5, menuImportSettings, menuExportSettings, menuDash3, menuExit});
             this.menuFile.Text = "File";
             
             this.menuImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
@@ -921,10 +927,15 @@ namespace LipidCreator
             this.menuExportSettings.Text = "Expor&t Settings";
             this.menuExportSettings.Click += new System.EventHandler (menuExportSettingsClick);
             
+            this.menuWizard.Shortcut = System.Windows.Forms.Shortcut.CtrlW;
+            this.menuWizard.Text = "Run &Wizard";
+            this.menuWizard.Click += new System.EventHandler (menuWizardClick);
+            
             this.menuDash.Text = "-";
             this.menuDash2.Text = "-";
             this.menuDash3.Text = "-";
             this.menuDash4.Text = "-";
+            this.menuDash5.Text = "-";
             
             this.menuExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
             this.menuExit.Text = "E&xit";
@@ -2553,7 +2564,7 @@ namespace LipidCreator
             this.SizeChanged += new EventHandler(windowSizeChanged);
             this.FormClosing += new FormClosingEventHandler(windowOnClosing);
             
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics, glFA1Checkbox3, glFA1Checkbox2, glFA1Checkbox1, glFA2Checkbox3, glFA2Checkbox2, glFA2Checkbox1, glFA3Checkbox3, glFA3Checkbox2, glFA3Checkbox1, glPictureBox, glArrow, glFA1Textbox, glFA2Textbox, glFA3Textbox, glDB1Textbox, glDB2Textbox, glDB3Textbox, glHydroxyl1Textbox, glHydroxyl2Textbox, glHydroxyl3Textbox, glFA1Combobox, glFA2Combobox, glFA3Combobox, glHgListbox, glHGLabel, glContainsSugar, glRepresentativeFA, glPositiveAdduct, glNegativeAdduct, plHasPlasmalogen};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuWizard, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics, glFA1Checkbox3, glFA1Checkbox2, glFA1Checkbox1, glFA2Checkbox3, glFA2Checkbox2, glFA2Checkbox1, glFA3Checkbox3, glFA3Checkbox2, glFA3Checkbox1, glPictureBox, glArrow, glFA1Textbox, glFA2Textbox, glFA3Textbox, glDB1Textbox, glDB2Textbox, glDB3Textbox, glHydroxyl1Textbox, glHydroxyl2Textbox, glHydroxyl3Textbox, glFA1Combobox, glFA2Combobox, glFA3Combobox, glHgListbox, glHGLabel, glContainsSugar, glRepresentativeFA, glPositiveAdduct, glNegativeAdduct, plHasPlasmalogen};
             
             
         }

@@ -287,7 +287,6 @@
     <EmbeddedResource Include="NewFragment.resx">
       <DependentUpon>NewFragment.cs</DependentUpon>
     </EmbeddedResource>
-    </EmbeddedResource>
     <EmbeddedResource Include="Wizard.resx">
       <DependentUpon>Wizard.cs</DependentUpon>
     </EmbeddedResource>

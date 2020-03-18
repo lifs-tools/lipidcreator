@@ -84,6 +84,11 @@ namespace LipidCreator
             this.negAdductCheckbox4 = new System.Windows.Forms.CheckBox();
             this.positiveAdduct = new System.Windows.Forms.GroupBox();
             this.negativeAdduct = new System.Windows.Forms.GroupBox();
+            this.filterGroupbox = new System.Windows.Forms.GroupBox();
+            
+            this.noPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
+            this.onlyPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
+            this.withPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
             
             
             String dbText = "No. DB";
@@ -155,6 +160,7 @@ namespace LipidCreator
             this.Controls.Add(this.negAdductCheckbox4);
             this.Controls.Add(this.positiveAdduct);
             this.Controls.Add(this.negativeAdduct);
+            this.Controls.Add(this.filterGroupbox);
             
             this.Name = "MagicLipidWizard";
             this.Text = "Magic Lipid Wizard";
@@ -275,9 +281,58 @@ namespace LipidCreator
             
             
             
+            // 
+            // filterGroupbox
+            // 
+            this.filterGroupbox.Controls.Add(this.withPrecursorRadiobutton);
+            this.filterGroupbox.Controls.Add(this.onlyPrecursorRadiobutton);
+            this.filterGroupbox.Controls.Add(this.noPrecursorRadiobutton);
+            this.filterGroupbox.Name = "filterGroupbox";
+            this.filterGroupbox.Size = new System.Drawing.Size(260, 93);
+            this.filterGroupbox.Location = new System.Drawing.Point((ClientSize.Width - filterGroupbox.Width) >> 1, 60);
+            this.filterGroupbox.TabIndex = 4;
+            this.filterGroupbox.TabStop = false;
+            this.filterGroupbox.Text = "Precursor filter";
+            // 
+            // withPrecursorRadiobutton
+            // 
+            this.withPrecursorRadiobutton.AutoSize = true;
+            this.withPrecursorRadiobutton.Location = new System.Drawing.Point(6, 65);
+            this.withPrecursorRadiobutton.Name = "withPrecursorRadiobutton";
+            this.withPrecursorRadiobutton.Size = new System.Drawing.Size(186, 17);
+            this.withPrecursorRadiobutton.TabIndex = 2;
+            this.withPrecursorRadiobutton.TabStop = true;
+            this.withPrecursorRadiobutton.Text = "Compute with precursor transitions";
+            this.withPrecursorRadiobutton.UseVisualStyleBackColor = true;
+            this.withPrecursorRadiobutton.CheckedChanged += new EventHandler(filterChanged);
+            this.withPrecursorRadiobutton.Checked = true;
+            // 
+            // onlyPrecursorRadiobutton
+            // 
+            this.onlyPrecursorRadiobutton.AutoSize = true;
+            this.onlyPrecursorRadiobutton.Location = new System.Drawing.Point(6, 42);
+            this.onlyPrecursorRadiobutton.Name = "onlyPrecursorRadiobutton";
+            this.onlyPrecursorRadiobutton.Size = new System.Drawing.Size(186, 17);
+            this.onlyPrecursorRadiobutton.TabIndex = 1;
+            this.onlyPrecursorRadiobutton.TabStop = true;
+            this.onlyPrecursorRadiobutton.Text = "Compute only precursor transitions";
+            this.onlyPrecursorRadiobutton.UseVisualStyleBackColor = true;
+            this.onlyPrecursorRadiobutton.CheckedChanged += new EventHandler(filterChanged);
+            // 
+            // noPrecursorRadiobutton
+            // 
+            this.noPrecursorRadiobutton.AutoSize = true;
+            this.noPrecursorRadiobutton.Location = new System.Drawing.Point(6, 19);
+            this.noPrecursorRadiobutton.Name = "noPrecursorRadiobutton";
+            this.noPrecursorRadiobutton.Size = new System.Drawing.Size(179, 17);
+            this.noPrecursorRadiobutton.TabIndex = 0;
+            this.noPrecursorRadiobutton.TabStop = true;
+            this.noPrecursorRadiobutton.Text = "Compute no precursor transitions";
+            this.noPrecursorRadiobutton.UseVisualStyleBackColor = true;
+            this.noPrecursorRadiobutton.CheckedChanged += new EventHandler(filterChanged);
             
 
-            controlElements = new ArrayList(){categoryCombobox, hgListbox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct};
+            controlElements = new ArrayList(){categoryCombobox, hgListbox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox};
         }
         
         
@@ -341,6 +396,14 @@ namespace LipidCreator
         public GroupBox positiveAdduct;
         [NonSerialized]
         public GroupBox negativeAdduct;
+        [NonSerialized]
+        public GroupBox filterGroupbox;
+        [NonSerialized]
+        public RadioButton noPrecursorRadiobutton;
+        [NonSerialized]
+        public RadioButton onlyPrecursorRadiobutton;
+        [NonSerialized]
+        public RadioButton withPrecursorRadiobutton;
         
         public ArrayList controlElements;
     }

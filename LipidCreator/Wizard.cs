@@ -463,13 +463,14 @@ namespace LipidCreator
             switch (wizardStep)
             {
                 case (int)WizardSteps.Welcome:
-                    labelInformation.Text = "Welcome to the magic world of LipidCreator. This wizard will guide you.";
+                    labelInformation.Text = "Welcome to the magic world of LipidCreator. This wizard will guide you through" + Environment.NewLine +
+                    "the enchanted world of lipids. Please continue if feel ready to face the challenge.";
                     break;
                     
                     
                     
                 case (int)WizardSteps.SelectCategory:
-                    labelInformation.Text = "Every journey begins with the first step. Let us begin draw your lipids." + Environment.NewLine +
+                    labelInformation.Text = "Every journey begins with the first step. Let us begin to draw your lipids." + Environment.NewLine +
                     "Which category do you desire?";
                     categoryCombobox.Visible = true;
                     headgroup = "";
@@ -479,7 +480,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectClass:
-                    labelInformation.Text = "What lipid class do you wish to select?";
+                    labelInformation.Text = "Thou go deeper into the matter. Choose your lipid class, but choose wisely.";
                     backButton.Enabled = true;
                     switch((string)categoryCombobox.Items[categoryCombobox.SelectedIndex])
                     {
@@ -532,8 +533,8 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFA:
-                    labelInformation.Text = "Please select for '" + (string)faList[currentFA] + "' carbon length, number of double bonds and" + Environment.NewLine +
-                    "number of hydroxyl groups?";
+                    labelInformation.Text = "It's the inner attributes that matter. Please select for '" + (string)faList[currentFA] + "' carbon length," + Environment.NewLine +
+                    "number of double bonds and number of hydroxyl groups?";
                     backButton.Enabled = true;
                     faCombobox.Visible = true;
                     faCheckbox1.Visible = true;
@@ -615,7 +616,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectAdduct:
-                    labelInformation.Text = "Select adduct(s)";
+                    labelInformation.Text = "We need fellows for the battle. Please select at least one young adduct.";
                     backButton.Enabled = true;
                     positiveAdduct.Visible = true;
                     negativeAdduct.Visible = true;
@@ -639,7 +640,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFragmentMode:
-                    labelInformation.Text = "Select filter mode";
+                    labelInformation.Text = "To be or not be fragmented. Please choose the right filter mode.";
                     backButton.Enabled = true;
                     filterGroupbox.Visible = true;
                     noPrecursorRadiobutton.Checked = filter == 0;
@@ -650,7 +651,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFragments:
-                    labelInformation.Text = "Select fragments.";
+                    labelInformation.Text = "The encounter requires a quick selection of trading fragments.";
                     backButton.Enabled = true;
                     
                     if (lipid.adducts["+H"] || lipid.adducts["+2H"] || lipid.adducts["+NH4"])
@@ -691,7 +692,8 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.AddLipid:
-                    labelInformation.Text = "Please continue to add the lipid now into LipidCreator";
+                    labelInformation.Text = "You shall not pass to add the lipid now into LipidCreator before you" + Environment.NewLine +
+                    "confirm to continue. Is it really what you want?";
                     backButton.Enabled = true;
                     break;
                     
@@ -714,7 +716,7 @@ namespace LipidCreator
                     }
                         
                     creatorGUI.refreshRegisteredLipidsTable();
-                    labelInformation.Text = "Do you want to add another lipid?";
+                    labelInformation.Text = "Contragtulations, it was a great advanture. Do you wish to repeat the journey?";
                     break;
         
             }

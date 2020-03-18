@@ -2030,23 +2030,23 @@ namespace LipidCreator
             {
                 if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"])
                 {
-                    MessageBox.Show("Please always select the top fatty acid!", "Not registrable");
+                    MessageBox.Show("Please always select the top fatty acyl!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 else if (((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && !((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                 {
-                    MessageBox.Show("Please select the middle fatty acid for DAG!", "Not registrable");
+                    MessageBox.Show("Please select the middle fatty acyl for DAG!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 
                 if (glFA1Textbox.BackColor == alertColor)
                 {
-                    MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
+                    MessageBox.Show("First fatty acyl length content not valid!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 if (glFA2Textbox.BackColor == alertColor)
                 {
-                    MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
+                    MessageBox.Show("Second fatty acyl length content not valid!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 if (glDB1Textbox.BackColor == alertColor)
@@ -2078,7 +2078,7 @@ namespace LipidCreator
                     }
                     if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"] || ((Glycerolipid)currentLipid).fag2.faTypes["FAx"])
                     {
-                        MessageBox.Show("Both fatty acids must be selected!", "Not registrable");
+                        MessageBox.Show("Both fatty acyls must be selected!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                 }
@@ -2086,12 +2086,12 @@ namespace LipidCreator
                 {
                     if (((Glycerolipid)currentLipid).fag1.faTypes["FAx"] && ((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && ((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                     {
-                        MessageBox.Show("No fatty acid selected!", "Not registrable");
+                        MessageBox.Show("No fatty acyl selected!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (glFA3Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("Third fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("Third fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (glDB3Textbox.BackColor == alertColor)
@@ -2115,28 +2115,28 @@ namespace LipidCreator
                 {
                     if (((Phospholipid)currentLipid).fag1.faTypes["FAx"] || ((Phospholipid)currentLipid).fag2.faTypes["FAx"] || ((Phospholipid)currentLipid).fag3.faTypes["FAx"])
                     {
-                        MessageBox.Show("At least the top three fatty acids must be selected!", "Not registrable");
+                        MessageBox.Show("At least the top three fatty acyls must be selected!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                 
                     if (plFA1Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("First fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (plFA2Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("Second fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (clFA3Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("Third fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("Third fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (clFA4Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("Fourth fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("Fourth fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     if (plDB1Textbox.BackColor == alertColor)
@@ -2233,13 +2233,13 @@ namespace LipidCreator
                     
                     if (((Phospholipid)currentLipid).fag1.faTypes["FAx"])
                     {
-                        MessageBox.Show("Please select at least the top fatty acid!", "Not registrable");
+                        MessageBox.Show("Please select at least the top fatty acyl!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     
                     if (plFA1Textbox.BackColor == alertColor)
                     {
-                        MessageBox.Show("First fatty acid length content not valid!", "Not registrable");
+                        MessageBox.Show("First fatty acyl length content not valid!", "Not registrable");
                         return  LipidCategory.NoLipid;
                     }
                     
@@ -2259,7 +2259,7 @@ namespace LipidCreator
                     {
                         if (plFA2Textbox.BackColor == alertColor)
                         {
-                            MessageBox.Show("Second fatty acid length content not valid!", "Not registrable");
+                            MessageBox.Show("Second fatty acyl length content not valid!", "Not registrable");
                             return  LipidCategory.NoLipid;
                         }
                     
@@ -2415,7 +2415,7 @@ namespace LipidCreator
                 }
                 if (slFATextbox.BackColor == alertColor)
                 {
-                    MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
+                    MessageBox.Show("Fatty acyl length content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
                 if (slDB1Textbox.BackColor == alertColor)
@@ -2436,7 +2436,7 @@ namespace LipidCreator
             {
                 if (chContainsEster.Checked && chFATextbox.BackColor == alertColor)
                 {
-                    MessageBox.Show("Fatty acid length content not valid!", "Not registrable");
+                    MessageBox.Show("Fatty acyl length content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
                 if (chContainsEster.Checked && chDBTextbox.BackColor == alertColor)

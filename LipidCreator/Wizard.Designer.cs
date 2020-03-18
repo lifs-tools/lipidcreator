@@ -66,7 +66,7 @@ namespace LipidCreator
             this.backButton = new System.Windows.Forms.Button();
             this.labelInformation = new System.Windows.Forms.Label();
             this.categoryCombobox = new System.Windows.Forms.ComboBox();
-            this.hgListbox = new System.Windows.Forms.ListBox();
+            this.hgCombobox = new System.Windows.Forms.ComboBox();
             this.faCombobox = new System.Windows.Forms.ComboBox();
             this.faHydroxyCombobox = new System.Windows.Forms.ComboBox();
             this.lcbHydroxyCombobox = new System.Windows.Forms.ComboBox();
@@ -88,6 +88,17 @@ namespace LipidCreator
             this.positiveAdduct = new System.Windows.Forms.GroupBox();
             this.negativeAdduct = new System.Windows.Forms.GroupBox();
             this.filterGroupbox = new System.Windows.Forms.GroupBox();
+            this.checkedListBoxPositiveFragments = new System.Windows.Forms.CheckedListBox();
+            this.checkedListBoxNegativeFragments = new System.Windows.Forms.CheckedListBox();
+            this.labelPositiveFragments = new System.Windows.Forms.Label();
+            this.labelNegativeFragments = new System.Windows.Forms.Label();
+            this.labelPositiveSelectAll = new System.Windows.Forms.Label();
+            this.labelPositiveDeselectAll = new System.Windows.Forms.Label();
+            this.labelNegativeSelectAll = new System.Windows.Forms.Label();
+            this.labelNegativeDeselectAll = new System.Windows.Forms.Label();
+            this.labelSlashPositive = new System.Windows.Forms.Label();
+            this.labelSlashNegative = new System.Windows.Forms.Label();
+            
             
             this.noPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
             this.onlyPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
@@ -164,7 +175,7 @@ namespace LipidCreator
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.categoryCombobox);
-            this.Controls.Add(this.hgListbox);
+            this.Controls.Add(this.hgCombobox);
             this.Controls.Add(this.faCombobox);
             this.Controls.Add(this.faHydroxyCombobox);
             this.Controls.Add(this.lcbHydroxyCombobox);
@@ -186,6 +197,16 @@ namespace LipidCreator
             this.Controls.Add(this.positiveAdduct);
             this.Controls.Add(this.negativeAdduct);
             this.Controls.Add(this.filterGroupbox);
+            this.Controls.Add(this.checkedListBoxPositiveFragments);
+            this.Controls.Add(this.checkedListBoxNegativeFragments);
+            this.Controls.Add(this.labelPositiveFragments);
+            this.Controls.Add(this.labelNegativeFragments);
+            this.Controls.Add(this.labelPositiveSelectAll);
+            this.Controls.Add(this.labelPositiveDeselectAll);
+            this.Controls.Add(this.labelNegativeSelectAll);
+            this.Controls.Add(this.labelNegativeDeselectAll);
+            this.Controls.Add(this.labelSlashPositive);
+            this.Controls.Add(this.labelSlashNegative);
             
             this.Name = "MagicLipidWizard";
             this.Text = "Magic Lipid Wizard";
@@ -196,12 +217,10 @@ namespace LipidCreator
             this.MinimizeBox = false;
             
             
-            hgListbox.Size = new Size(180, 160);
-            hgListbox.Location = new Point((ClientSize.Width - hgListbox.Width) >> 1, 40);
-            hgListbox.BringToFront();
-            hgListbox.BorderStyle = BorderStyle.Fixed3D;
-            hgListbox.SelectionMode = SelectionMode.One;
-            hgListbox.SelectedValueChanged += new System.EventHandler(hgListboxSelectedValueChanged);
+            hgCombobox.Size = new Size(180, 20);
+            hgCombobox.Location = new Point((ClientSize.Width - hgCombobox.Width) >> 1, 100);
+            hgCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            hgCombobox.SelectedIndexChanged += new System.EventHandler(hgComboboxSelectedValueChanged);
             
             
             categoryCombobox.Items.Add("Glycero lipid");
@@ -218,9 +237,6 @@ namespace LipidCreator
             
             toolTip = new ToolTip();
             
-            faCombobox.Items.Add("Fatty acyl chain");
-            faCombobox.Items.Add("Fatty acyl chain - odd");
-            faCombobox.Items.Add("Fatty acyl chain - even");
             
             
             faTextbox.Location = new Point(100, 80);
@@ -367,8 +383,93 @@ namespace LipidCreator
             this.noPrecursorRadiobutton.UseVisualStyleBackColor = true;
             this.noPrecursorRadiobutton.CheckedChanged += new EventHandler(filterChanged);
             
+            
+            
+            this.checkedListBoxPositiveFragments.CheckOnClick = true;
+            this.checkedListBoxPositiveFragments.FormattingEnabled = true;
+            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 48);
+            this.checkedListBoxPositiveFragments.Name = "checkedListBoxPositive";
+            this.checkedListBoxPositiveFragments.ScrollAlwaysVisible = true;
+            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(240, 180);
+            this.checkedListBoxPositiveFragments.TabIndex = 2;
+            this.checkedListBoxPositiveFragments.ThreeDCheckBoxes = true;
+            this.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
+            
+            
+            this.checkedListBoxNegativeFragments.CheckOnClick = true;
+            this.checkedListBoxNegativeFragments.FormattingEnabled = true;
+            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(280, 48);
+            this.checkedListBoxNegativeFragments.Name = "checkedListBoxNegative";
+            this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
+            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(240, 180);
+            this.checkedListBoxNegativeFragments.TabIndex = 5;
+            this.checkedListBoxNegativeFragments.ThreeDCheckBoxes = true;
+            this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
+            
+            
+            this.labelPositiveFragments.AutoSize = true;
+            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 32);
+            this.labelPositiveFragments.Name = "label1";
+            this.labelPositiveFragments.TabIndex = 3;
+            this.labelPositiveFragments.Text = "Positive Fragments";
+            
+            this.labelNegativeFragments.AutoSize = true;
+            this.labelNegativeFragments.Location = new System.Drawing.Point(280, 32);
+            this.labelNegativeFragments.Name = "label2";
+            this.labelNegativeFragments.TabIndex = 4;
+            this.labelNegativeFragments.Text = "Negative Fragments";
+            
+            
+            
+            
+            this.labelPositiveSelectAll.AutoSize = true;
+            this.labelPositiveSelectAll.Location = new System.Drawing.Point(12, 224);
+            this.labelPositiveSelectAll.Name = "label6";
+            this.labelPositiveSelectAll.TabIndex = 6;
+            this.labelPositiveSelectAll.Text = "select all";
+            this.labelPositiveSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelPositiveSelectAll.Click += new System.EventHandler(checkedListBoxPositiveSelectAll);
+            
+            this.labelNegativeSelectAll.AutoSize = true;
+            this.labelNegativeSelectAll.Location = new System.Drawing.Point(280, 224);
+            this.labelNegativeSelectAll.Name = "label8";
+            this.labelNegativeSelectAll.TabIndex = 6;
+            this.labelNegativeSelectAll.Text = "select all";
+            this.labelNegativeSelectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelNegativeSelectAll.Click += new System.EventHandler(checkedListBoxNegativeSelectAll);
+            
+            this.labelSlashPositive.AutoSize = true;
+            this.labelSlashPositive.Location = new System.Drawing.Point(labelPositiveSelectAll.Left + 55, labelPositiveSelectAll.Top);
+            this.labelSlashPositive.Name = "label10";
+            this.labelSlashPositive.Text = "/";
+            
+            this.labelSlashNegative.AutoSize = true;
+            this.labelSlashNegative.Location = new System.Drawing.Point(labelNegativeSelectAll.Left + 55, labelNegativeSelectAll.Top);
+            this.labelSlashNegative.Name = "label11";
+            this.labelSlashNegative.Text = "/";
+            
+            this.labelPositiveDeselectAll.AutoSize = true;
+            this.labelPositiveDeselectAll.Location = new System.Drawing.Point(labelSlashPositive.Left + 7, labelPositiveSelectAll.Top);
+            this.labelPositiveDeselectAll.Name = "label7";
+            this.labelPositiveDeselectAll.TabIndex = 6;
+            this.labelPositiveDeselectAll.Text = "deselect all";
+            this.labelPositiveDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelPositiveDeselectAll.Click += new System.EventHandler(checkedListBoxPositiveDeselectAll);
+            
+            
+            this.labelNegativeDeselectAll.AutoSize = true;
+            this.labelNegativeDeselectAll.Location = new System.Drawing.Point(labelSlashNegative.Left + 7, labelNegativeSelectAll.Top);
+            this.labelNegativeDeselectAll.Name = "label9";
+            this.labelNegativeDeselectAll.TabIndex = 6;
+            this.labelNegativeDeselectAll.Text = "deselect all";
+            this.labelNegativeDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
+            this.labelNegativeDeselectAll.Click += new System.EventHandler(checkedListBoxNegativeDeselectAll);
+            
+            
+            
+            
 
-            controlElements = new ArrayList(){categoryCombobox, hgListbox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox, faHydroxyCombobox, lcbHydroxyCombobox};
+            controlElements = new ArrayList(){categoryCombobox, hgCombobox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox, faHydroxyCombobox, lcbHydroxyCombobox, checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, labelPositiveFragments, labelNegativeFragments, labelPositiveSelectAll, labelPositiveDeselectAll, labelNegativeSelectAll, labelNegativeDeselectAll, labelSlashPositive, labelSlashNegative};
         }
         
         
@@ -394,7 +495,7 @@ namespace LipidCreator
         [NonSerialized]
         public System.Windows.Forms.ComboBox categoryCombobox;
         [NonSerialized]
-        public System.Windows.Forms.ListBox hgListbox;
+        public System.Windows.Forms.ComboBox hgCombobox;
         [NonSerialized]
         public System.Windows.Forms.CheckBox faCheckbox1;
         [NonSerialized]
@@ -446,6 +547,26 @@ namespace LipidCreator
         public RadioButton onlyPrecursorRadiobutton;
         [NonSerialized]
         public RadioButton withPrecursorRadiobutton;
+        [NonSerialized]
+        public CheckedListBox checkedListBoxPositiveFragments;
+        [NonSerialized]
+        public CheckedListBox checkedListBoxNegativeFragments;
+        [NonSerialized]
+        public Label labelPositiveFragments;
+        [NonSerialized]
+        public Label labelNegativeFragments;
+        [NonSerialized]
+        public Label labelPositiveSelectAll;
+        [NonSerialized]
+        public Label labelPositiveDeselectAll;
+        [NonSerialized]
+        public Label labelNegativeSelectAll;
+        [NonSerialized]
+        public Label labelNegativeDeselectAll;
+        [NonSerialized]
+        public Label labelSlashPositive;
+        [NonSerialized]
+        public Label labelSlashNegative;
         
         public ArrayList controlElements;
     }

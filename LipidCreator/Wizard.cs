@@ -49,6 +49,7 @@ namespace LipidCreator
         public string headgroup = "";
         public int filter = 2;
         public bool hasPlasmalogen = false;
+        public bool senderInterupt = false;
         
         
         public enum WizardSteps {Welcome, SelectCategory, SelectClass, SelectFA, SelectAdduct, SelectFragmentMode, SelectFragments, AddLipid, Finish};
@@ -100,6 +101,11 @@ namespace LipidCreator
                 }
             }
             
+            else if (wizardStep == (int)WizardSteps.AddLipid)
+            {
+                if (filter == 1) wizardStep -= 1;
+            }
+            
             wizardStep -= 1;
             processWizardSteps();
         }
@@ -129,7 +135,7 @@ namespace LipidCreator
                     break;
                     
                 case (int)LipidCategory.Glycerophospholipid:
-                    if ((string)faList[currentFA] == "FA1") fag = ((Phospholipid)lipid).fag1;
+                    if ((string)faList[currentFA] == "FA1" || (string)faList[currentFA] == "FA") fag = ((Phospholipid)lipid).fag1;
                     else if ((string)faList[currentFA] == "FA2") fag = ((Phospholipid)lipid).fag2;
                     else if ((string)faList[currentFA] == "FA3") fag = ((Phospholipid)lipid).fag3;
                     else if ((string)faList[currentFA] == "FA4") fag = ((Phospholipid)lipid).fag4;
@@ -151,6 +157,34 @@ namespace LipidCreator
         
         
         
+        
+        public bool faCheck()
+        {
+            if (faTextbox.BackColor == creatorGUI.alertColor)
+            {
+                MessageBox.Show("Fatty acyl length content not valid!", "Values not valid");
+                return  false;
+            }
+            if (dbTextbox.BackColor == creatorGUI.alertColor)
+            {
+                MessageBox.Show("Double bond content not valid!", "Values not valid");
+                return  false;
+            }
+            if (hydroxylTextbox.BackColor == creatorGUI.alertColor)
+            {
+                MessageBox.Show("Hydroxyl content not valid!", "Values not valid");
+                return  false;
+            }
+            if (!faCheckbox1.Checked && !faCheckbox2.Checked && !faCheckbox3.Checked)
+            {
+                MessageBox.Show("Please select at least fatty acyl type!", "Values not valid");
+                return  false;
+            }
+            return true;
+        }
+        
+        
+        
 
         private void continueClick(object sender, EventArgs e)
         {
@@ -160,6 +194,8 @@ namespace LipidCreator
                     break;
                     
                 case (int)WizardSteps.SelectClass:
+                    hgComboboxSelectedValueChanged(null, null);
+                    
                     if (faList.Count == 0) wizardStep += 1;
                     else selectFAG();
                     
@@ -242,6 +278,13 @@ namespace LipidCreator
                     
             
                 case (int)WizardSteps.SelectFA:
+                    if (!faCheck()) return;
+                    // update ranges
+                    creatorGUI.updateRanges(fag, faTextbox, faCombobox.SelectedIndex);
+                    creatorGUI.updateRanges(fag, dbTextbox, 3);
+                    if (headgroupCategory != (int)LipidCategory.Sphingolipid) creatorGUI.updateRanges(fag, hydroxylTextbox, 4);
+                    
+                    
                     currentFA += 1;
                     if (currentFA < faList.Count)
                     {
@@ -272,12 +315,17 @@ namespace LipidCreator
         }
         
         
+        
+        
         public void lcbHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
             ((Sphingolipid)lipid).lcb.hydroxylCounts.Clear();
             ((Sphingolipid)lipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
             ((Sphingolipid)lipid).lcb.hydroxylInfo = (((ComboBox)sender).SelectedIndex + 2).ToString();
         }
+        
+        
+        
         
         public void faHydroxyComboboxValueChanged(Object sender, EventArgs e)
         {
@@ -287,10 +335,94 @@ namespace LipidCreator
         }
         
         
-        private void hgListboxSelectedValueChanged(object sender, System.EventArgs e)
+        void checkedListBoxPositiveSelectAll(object sender, EventArgs e)
         {
+            senderInterupt = true;
+            lipid.positiveFragments[headgroup].Clear();
+            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
+            {
+                lipid.positiveFragments[headgroup].Add((string)checkedListBoxPositiveFragments.Items[i]);
+                checkedListBoxPositiveFragments.SetItemChecked(i, true);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        
+        void checkedListBoxNegativeSelectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            lipid.negativeFragments[headgroup].Clear();
+            for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
+            {
+                lipid.negativeFragments[headgroup].Add((string)checkedListBoxNegativeFragments.Items[i]);
+                checkedListBoxNegativeFragments.SetItemChecked(i, true);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        
+        void checkedListBoxPositiveDeselectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            lipid.positiveFragments[headgroup].Clear();
+            for (int i = 0; i < checkedListBoxPositiveFragments.Items.Count; ++i)
+            {
+                checkedListBoxPositiveFragments.SetItemChecked(i, false);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        
+        void checkedListBoxNegativeDeselectAll(object sender, EventArgs e)
+        {
+            senderInterupt = true;
+            lipid.negativeFragments[headgroup].Clear();
+            for (int i = 0; i < checkedListBoxNegativeFragments.Items.Count; ++i)
+            {
+                checkedListBoxNegativeFragments.SetItemChecked(i, false);
+            }
+            senderInterupt = false;
+        }
+        
+        
+        
+        public void CheckedListBoxPositiveItemCheck(Object sender, ItemCheckEventArgs e)
+        {
+            if (senderInterupt) return;
+            if (e.NewValue == CheckState.Checked)
+            {
+                lipid.positiveFragments[headgroup].Add((string)checkedListBoxPositiveFragments.Items[e.Index]);
+            }
+            else
+            {
+                lipid.positiveFragments[headgroup].Remove((string)checkedListBoxPositiveFragments.Items[e.Index]);
+            }
+        }
+        
+        
+        public void CheckedListBoxNegativeItemCheck(Object sender, ItemCheckEventArgs e)
+        {
+            if (senderInterupt) return;
+            if (e.NewValue == CheckState.Checked)
+            {
+                lipid.negativeFragments[headgroup].Add((string)checkedListBoxNegativeFragments.Items[e.Index]);
+            }
+            else
+            {
+                lipid.negativeFragments[headgroup].Remove((string)checkedListBoxNegativeFragments.Items[e.Index]);
+            }
+        }
+        
+        
+        
+        private void hgComboboxSelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (senderInterupt) return;
             lipid.headGroupNames.Clear();
-            headgroup = ((ListBox)sender).Items[((ListBox)sender).SelectedIndex].ToString();
+            headgroup = (string)hgCombobox.Items[hgCombobox.SelectedIndex];
             lipid.headGroupNames.Add(headgroup);
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(headgroup))
             {
@@ -337,7 +469,8 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectCategory:
-                    labelInformation.Text = "Every journey begins with the first step. Let us begin draw your lipids. Which category do you desire?";
+                    labelInformation.Text = "Every journey begins with the first step. Let us begin draw your lipids." + Environment.NewLine +
+                    "Which category do you desire?";
                     categoryCombobox.Visible = true;
                     headgroup = "";
                     categoryCombobox.SelectedIndex = 0;
@@ -378,8 +511,9 @@ namespace LipidCreator
                     foreach (string adduct in lipid.adducts.Keys) adducts.Add(adduct);
                     foreach (string adduct in adducts) lipid.adducts[adduct] = false;
                     
-                    hgListbox.Visible = true;
-                    hgListbox.Items.Clear();
+                    hgCombobox.Visible = true;
+                    senderInterupt = true;
+                    hgCombobox.Items.Clear();
                     int hgListSelect = 0;
                     int ii = 0;
                     foreach (string hg in creatorGUI.lipidCreator.categoryToClass[headgroupCategory])
@@ -387,17 +521,19 @@ namespace LipidCreator
                         if (!creatorGUI.lipidCreator.headgroups[hg].attributes.Contains("heavy"))
                         {
                             if (hg == headgroup) hgListSelect = ii;
-                            hgListbox.Items.Add(hg);
+                            hgCombobox.Items.Add(hg);
                         }
                         ii += 1;
                     }
-                    hgListbox.SelectedIndex = hgListSelect;
+                    hgCombobox.SelectedIndex = hgListSelect;
+                    senderInterupt = false;
                     break;
                     
                     
                     
                 case (int)WizardSteps.SelectFA:
-                    labelInformation.Text = "Please select for '" + (string)faList[currentFA] + "' carbon length, number of double bonds and number of hydroxyl groups?";
+                    labelInformation.Text = "Please select for '" + (string)faList[currentFA] + "' carbon length, number of double bonds and" + Environment.NewLine +
+                    "number of hydroxyl groups?";
                     backButton.Enabled = true;
                     faCombobox.Visible = true;
                     faCheckbox1.Visible = true;
@@ -416,11 +552,15 @@ namespace LipidCreator
                     faTextbox.Text = fag.lengthInfo;
                     dbTextbox.Text = fag.dbInfo;
                     hydroxylTextbox.Text = fag.hydroxylInfo;
-                    faCombobox.SelectedIndex = fag.chainType;
                     
                     faCheckbox1.Checked = fag.faTypes["FA"];
                     faCheckbox2.Checked = fag.faTypes["FAp"];
                     faCheckbox3.Checked = fag.faTypes["FAa"];
+                    
+                    faCombobox.Items.Clear();
+                    faCombobox.Items.Add("Fatty acyl chain");
+                    faCombobox.Items.Add("Fatty acyl chain - odd");
+                    faCombobox.Items.Add("Fatty acyl chain - even");
                     
                     if (headgroupCategory == (int)LipidCategory.Glycerophospholipid)
                     {
@@ -447,11 +587,19 @@ namespace LipidCreator
                         faCheckbox2.Visible = false;
                         faCheckbox3.Visible = false;
                         hydroxylTextbox.Visible = false;
+                    
                         
                         lcbHydroxyCombobox.SelectedIndex = ((Sphingolipid)lipid).lcb.hydroxylCounts.First() - 2;
                         faHydroxyCombobox.SelectedIndex = ((Sphingolipid)lipid).fag.hydroxylCounts.First();
                         
-                        if ((string)faList[currentFA] == "LCB") lcbHydroxyCombobox.Visible = true;
+                        if ((string)faList[currentFA] == "LCB")
+                        {
+                            faCombobox.Items.Clear();
+                            faCombobox.Items.Add("Long chain base");
+                            faCombobox.Items.Add("Long chain base - odd");
+                            faCombobox.Items.Add("Long chain base - even");
+                            lcbHydroxyCombobox.Visible = true;
+                        }
                         else faHydroxyCombobox.Visible = true;
                     }
                     
@@ -461,6 +609,7 @@ namespace LipidCreator
                         faCheckbox2.Visible = false;
                         faCheckbox3.Visible = false;
                     }
+                    faCombobox.SelectedIndex = fag.chainType;
                     break;
                     
                     
@@ -499,9 +648,45 @@ namespace LipidCreator
                     break;
                     
                     
+                    
                 case (int)WizardSteps.SelectFragments:
-                    labelInformation.Text = "Select fragment";
+                    labelInformation.Text = "Select fragments.";
                     backButton.Enabled = true;
+                    
+                    if (lipid.adducts["+H"] || lipid.adducts["+2H"] || lipid.adducts["+NH4"])
+                    {
+                        checkedListBoxPositiveFragments.Visible = true;
+                        labelPositiveFragments.Visible = true;
+                        labelPositiveSelectAll.Visible = true;
+                        labelPositiveDeselectAll.Visible = true;
+                        labelSlashPositive.Visible = true;
+                    
+                        checkedListBoxPositiveFragments.Items.Clear();
+                        foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[headgroup][true])
+                        {
+                            checkedListBoxPositiveFragments.Items.Add(currentFragment.Value.fragmentName);
+                            checkedListBoxPositiveFragments.SetItemChecked(checkedListBoxPositiveFragments.Items.Count - 1, lipid.positiveFragments[headgroup].Contains(currentFragment.Value.fragmentName));
+                        }
+                    }
+                    
+                    if (lipid.adducts["-H"] || lipid.adducts["-2H"] || lipid.adducts["+HCOO"] || lipid.adducts["+CH3COO"])
+                    {
+                    
+                        checkedListBoxNegativeFragments.Visible = true;
+                        labelNegativeFragments.Visible = true;
+                        labelNegativeSelectAll.Visible = true;
+                        labelNegativeDeselectAll.Visible = true;
+                        labelSlashNegative.Visible = true;
+                        
+                        checkedListBoxNegativeFragments.Items.Clear();
+                        foreach (KeyValuePair<string, MS2Fragment> currentFragment in creatorGUI.lipidCreator.allFragments[headgroup][false])
+                        {
+                            checkedListBoxNegativeFragments.Items.Add(currentFragment.Value.fragmentName);
+                            checkedListBoxNegativeFragments.SetItemChecked(checkedListBoxNegativeFragments.Items.Count - 1, lipid.negativeFragments[headgroup].Contains(currentFragment.Value.fragmentName));
+                        }
+                    }
+                    
+                    
                     break;
                     
                     

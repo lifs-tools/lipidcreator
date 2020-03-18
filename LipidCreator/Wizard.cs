@@ -67,6 +67,7 @@ namespace LipidCreator
         {
             cancelButton.Enabled = true;
             continueButton.Enabled = true;
+            backButton.Enabled = false;
             cancelButton.Text = "Cancel";
             continueButton.Text = "Continue";
             
@@ -74,6 +75,33 @@ namespace LipidCreator
             {
                 control.Visible = false;
             }
+        }
+        
+        
+
+        private void backClick(object sender, EventArgs e)
+        {
+            if (wizardStep == (int)WizardSteps.SelectAdduct)
+            {
+                if (faList.Count == 0) wizardStep -= 1;
+                else 
+                {
+                    currentFA = faList.Count - 1;
+                    selectFAG();
+                }
+            }
+            else if (wizardStep == (int)WizardSteps.SelectFA)
+            {
+                currentFA -= 1;
+                if (currentFA >= 0)
+                {
+                    wizardStep += 1;
+                    selectFAG();
+                }
+            }
+            
+            wizardStep -= 1;
+            processWizardSteps();
         }
         
         
@@ -168,14 +196,6 @@ namespace LipidCreator
                     }
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     else if (headgroupCategory == (int)LipidCategory.Glycerophospholipid)
                     {
                         if (creatorGUI.lipidCreator.headgroups[headgroup].attributes.Contains("lyso"))
@@ -199,13 +219,27 @@ namespace LipidCreator
                     }
                     
                     
+                    else if (headgroupCategory == (int)LipidCategory.Sphingolipid)
+                    {
+                        if (creatorGUI.lipidCreator.headgroups[headgroup].attributes.Contains("lyso"))
+                        {
+                            ((Sphingolipid)lipid).isLyso = true;
+                        }
+                    }
                     
                     
-                    
+                    else if (headgroupCategory == (int)LipidCategory.Sterollipid)
+                    {
+                        if (headgroup == "ChE")
+                        {
+                            ((Cholesterol)lipid).containsEster = true;
+                        }
+                    }
                     
                     hasPlasmalogen = creatorGUI.lipidCreator.headgroups[headgroup].attributes.Contains("ether");
-                    
                     break;
+                    
+                    
             
                 case (int)WizardSteps.SelectFA:
                     currentFA += 1;
@@ -215,6 +249,8 @@ namespace LipidCreator
                         selectFAG();
                     }
                     break;
+                    
+                    
                 
                 case (int)WizardSteps.SelectAdduct:
                     bool adductSelected = false;
@@ -233,6 +269,21 @@ namespace LipidCreator
             
             wizardStep += 1;
             processWizardSteps();
+        }
+        
+        
+        public void lcbHydroxyComboboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Sphingolipid)lipid).lcb.hydroxylCounts.Clear();
+            ((Sphingolipid)lipid).lcb.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex + 2);
+            ((Sphingolipid)lipid).lcb.hydroxylInfo = (((ComboBox)sender).SelectedIndex + 2).ToString();
+        }
+        
+        public void faHydroxyComboboxValueChanged(Object sender, EventArgs e)
+        {
+            ((Sphingolipid)lipid).fag.hydroxylCounts.Clear();
+            ((Sphingolipid)lipid).fag.hydroxylCounts.Add(((ComboBox)sender).SelectedIndex);
+            ((Sphingolipid)lipid).fag.hydroxylInfo = (((ComboBox)sender).SelectedIndex).ToString();
         }
         
         
@@ -283,14 +334,20 @@ namespace LipidCreator
                     labelInformation.Text = "Welcome to the magic world of LipidCreator. This wizard will guide you.";
                     break;
                     
+                    
+                    
                 case (int)WizardSteps.SelectCategory:
                     labelInformation.Text = "Every journey begins with the first step. Let us begin draw your lipids. Which category do you desire?";
                     categoryCombobox.Visible = true;
+                    headgroup = "";
                     categoryCombobox.SelectedIndex = 0;
                     break;
                     
+                    
+                    
                 case (int)WizardSteps.SelectClass:
                     labelInformation.Text = "What lipid class do you wish to select?";
+                    backButton.Enabled = true;
                     switch((string)categoryCombobox.Items[categoryCombobox.SelectedIndex])
                     {
                         case "Glycero lipid":
@@ -323,20 +380,25 @@ namespace LipidCreator
                     
                     hgListbox.Visible = true;
                     hgListbox.Items.Clear();
+                    int hgListSelect = 0;
+                    int ii = 0;
                     foreach (string hg in creatorGUI.lipidCreator.categoryToClass[headgroupCategory])
                     {
                         if (!creatorGUI.lipidCreator.headgroups[hg].attributes.Contains("heavy"))
                         {
-                            
+                            if (hg == headgroup) hgListSelect = ii;
                             hgListbox.Items.Add(hg);
                         }
+                        ii += 1;
                     }
-                    hgListbox.SelectedIndex = 0;
+                    hgListbox.SelectedIndex = hgListSelect;
                     break;
+                    
                     
                     
                 case (int)WizardSteps.SelectFA:
                     labelInformation.Text = "Please select for '" + (string)faList[currentFA] + "' carbon length, number of double bonds and number of hydroxyl groups?";
+                    backButton.Enabled = true;
                     faCombobox.Visible = true;
                     faCheckbox1.Visible = true;
                     faCheckbox2.Visible = true;
@@ -351,14 +413,14 @@ namespace LipidCreator
                     dbLabel.Visible = true;
                     hydroxylTextbox.Visible = true;
                     hydroxylLabel.Visible = true;
-                    faTextbox.Text = "12-15";
-                    dbTextbox.Text = "0";
-                    hydroxylTextbox.Text = "0";
-                    faCombobox.SelectedIndex = 0;
+                    faTextbox.Text = fag.lengthInfo;
+                    dbTextbox.Text = fag.dbInfo;
+                    hydroxylTextbox.Text = fag.hydroxylInfo;
+                    faCombobox.SelectedIndex = fag.chainType;
                     
-                    faCheckbox1.Checked = true;
-                    faCheckbox2.Checked = false;
-                    faCheckbox3.Checked = false;
+                    faCheckbox1.Checked = fag.faTypes["FA"];
+                    faCheckbox2.Checked = fag.faTypes["FAp"];
+                    faCheckbox3.Checked = fag.faTypes["FAa"];
                     
                     if (headgroupCategory == (int)LipidCategory.Glycerophospholipid)
                     {
@@ -379,20 +441,42 @@ namespace LipidCreator
                             faCheckbox3.Visible = false;
                         }
                     }
+                    else if (headgroupCategory == (int)LipidCategory.Sphingolipid)
+                    {
+                        faCheckbox1.Visible = false;
+                        faCheckbox2.Visible = false;
+                        faCheckbox3.Visible = false;
+                        hydroxylTextbox.Visible = false;
+                        
+                        lcbHydroxyCombobox.SelectedIndex = ((Sphingolipid)lipid).lcb.hydroxylCounts.First() - 2;
+                        faHydroxyCombobox.SelectedIndex = ((Sphingolipid)lipid).fag.hydroxylCounts.First();
+                        
+                        if ((string)faList[currentFA] == "LCB") lcbHydroxyCombobox.Visible = true;
+                        else faHydroxyCombobox.Visible = true;
+                    }
+                    
+                    else if (headgroupCategory == (int)LipidCategory.Sterollipid)
+                    {
+                        faCheckbox1.Visible = false;
+                        faCheckbox2.Visible = false;
+                        faCheckbox3.Visible = false;
+                    }
                     break;
+                    
                     
                     
                 case (int)WizardSteps.SelectAdduct:
                     labelInformation.Text = "Select adduct(s)";
+                    backButton.Enabled = true;
                     positiveAdduct.Visible = true;
                     negativeAdduct.Visible = true;
-                    posAdductCheckbox1.Checked = false;
-                    posAdductCheckbox2.Checked = false;
-                    posAdductCheckbox3.Checked = false;
-                    negAdductCheckbox1.Checked = false;
-                    negAdductCheckbox2.Checked = false;
-                    negAdductCheckbox3.Checked = false;
-                    negAdductCheckbox4.Checked = false;
+                    posAdductCheckbox1.Checked = lipid.adducts["+H"];
+                    posAdductCheckbox2.Checked = lipid.adducts["+2H"];
+                    posAdductCheckbox3.Checked = lipid.adducts["+NH4"];
+                    negAdductCheckbox1.Checked = lipid.adducts["-H"];
+                    negAdductCheckbox2.Checked = lipid.adducts["-2H"];
+                    negAdductCheckbox3.Checked = lipid.adducts["+HCOO"];
+                    negAdductCheckbox4.Checked = lipid.adducts["+CH3COO"];
                     
                     posAdductCheckbox1.Enabled = creatorGUI.lipidCreator.headgroups[headgroup].adductRestrictions["+H"];
                     posAdductCheckbox2.Enabled = creatorGUI.lipidCreator.headgroups[headgroup].adductRestrictions["+2H"];
@@ -404,19 +488,26 @@ namespace LipidCreator
                     break;
                     
                     
+                    
                 case (int)WizardSteps.SelectFragmentMode:
                     labelInformation.Text = "Select filter mode";
+                    backButton.Enabled = true;
                     filterGroupbox.Visible = true;
+                    noPrecursorRadiobutton.Checked = filter == 0;
+                    onlyPrecursorRadiobutton.Checked = filter == 1;
+                    withPrecursorRadiobutton.Checked = filter == 2;
                     break;
                     
                     
                 case (int)WizardSteps.SelectFragments:
                     labelInformation.Text = "Select fragment";
+                    backButton.Enabled = true;
                     break;
                     
                     
                 case (int)WizardSteps.AddLipid:
                     labelInformation.Text = "Please continue to add the lipid now into LipidCreator";
+                    backButton.Enabled = true;
                     break;
                     
                     

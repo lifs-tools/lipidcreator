@@ -63,10 +63,13 @@ namespace LipidCreator
         {
             this.cancelButton = new System.Windows.Forms.Button();
             this.continueButton = new System.Windows.Forms.Button();
+            this.backButton = new System.Windows.Forms.Button();
             this.labelInformation = new System.Windows.Forms.Label();
             this.categoryCombobox = new System.Windows.Forms.ComboBox();
             this.hgListbox = new System.Windows.Forms.ListBox();
             this.faCombobox = new System.Windows.Forms.ComboBox();
+            this.faHydroxyCombobox = new System.Windows.Forms.ComboBox();
+            this.lcbHydroxyCombobox = new System.Windows.Forms.ComboBox();
             this.faCheckbox1 = new System.Windows.Forms.CheckBox();
             this.faCheckbox2 = new System.Windows.Forms.CheckBox();
             this.faCheckbox3 = new System.Windows.Forms.CheckBox();
@@ -91,6 +94,15 @@ namespace LipidCreator
             this.withPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
             
             
+            lcbHydroxyCombobox.Items.Add("2");
+            lcbHydroxyCombobox.Items.Add("3");
+            
+            faHydroxyCombobox.Items.Add("0");
+            faHydroxyCombobox.Items.Add("1");
+            faHydroxyCombobox.Items.Add("2");
+            faHydroxyCombobox.Items.Add("3");
+            
+            
             String dbText = "No. DB";
             String hydroxylText = "No. Hydroxy";
             int dbLength = 70;
@@ -106,7 +118,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(306, 239);
+            this.cancelButton.Location = new System.Drawing.Point(12, 239);
             this.cancelButton.Name = "cancel";
             this.cancelButton.Size = new System.Drawing.Size(101, 32);
             this.cancelButton.TabIndex = 1;
@@ -117,12 +129,22 @@ namespace LipidCreator
             // button2
             // 
             this.continueButton.Location = new System.Drawing.Point(413, 239);
-            this.continueButton.Name = "add";
+            this.continueButton.Name = "continue";
             this.continueButton.Size = new System.Drawing.Size(101, 32);
             this.continueButton.TabIndex = 0;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
             this.continueButton.Click += new System.EventHandler(this.continueClick);
+            // 
+            // button3
+            // 
+            this.backButton.Location = new System.Drawing.Point(306, 239);
+            this.backButton.Name = "back";
+            this.backButton.Size = new System.Drawing.Size(101, 32);
+            this.backButton.TabIndex = 2;
+            this.backButton.Text = "Back";
+            this.backButton.UseVisualStyleBackColor = true;
+            this.backButton.Click += new System.EventHandler(this.backClick);
             // 
             // label1
             // 
@@ -140,9 +162,12 @@ namespace LipidCreator
             this.Controls.Add(this.labelInformation);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.backButton);
             this.Controls.Add(this.categoryCombobox);
             this.Controls.Add(this.hgListbox);
             this.Controls.Add(this.faCombobox);
+            this.Controls.Add(this.faHydroxyCombobox);
+            this.Controls.Add(this.lcbHydroxyCombobox);
             this.Controls.Add(this.faCheckbox1);
             this.Controls.Add(this.faCheckbox2);
             this.Controls.Add(this.faCheckbox3);
@@ -240,6 +265,17 @@ namespace LipidCreator
             faCheckbox1.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, "FA" )); };
             faCheckbox1.Checked = true;
             
+            faHydroxyCombobox.Location = new Point(dbTextbox.Left + dbTextbox.Width + sep, dbTextbox.Top);
+            faHydroxyCombobox.SelectedItem = "2";
+            faHydroxyCombobox.Width = dbLength;
+            faHydroxyCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            faHydroxyCombobox.SelectedIndexChanged += new EventHandler(faHydroxyComboboxValueChanged);
+            
+            lcbHydroxyCombobox.Location = new Point(dbTextbox.Left + dbTextbox.Width + sep, dbTextbox.Top);
+            lcbHydroxyCombobox.SelectedItem = "2";
+            lcbHydroxyCombobox.Width = dbLength;
+            lcbHydroxyCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            lcbHydroxyCombobox.SelectedIndexChanged += new EventHandler(lcbHydroxyComboboxValueChanged);
             
             
             positiveAdduct.Width = 120;
@@ -332,7 +368,7 @@ namespace LipidCreator
             this.noPrecursorRadiobutton.CheckedChanged += new EventHandler(filterChanged);
             
 
-            controlElements = new ArrayList(){categoryCombobox, hgListbox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox};
+            controlElements = new ArrayList(){categoryCombobox, hgListbox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox, faHydroxyCombobox, lcbHydroxyCombobox};
         }
         
         
@@ -352,6 +388,8 @@ namespace LipidCreator
         [NonSerialized]
         public System.Windows.Forms.Button continueButton;
         [NonSerialized]
+        public System.Windows.Forms.Button backButton;
+        [NonSerialized]
         public System.Windows.Forms.Label labelInformation;
         [NonSerialized]
         public System.Windows.Forms.ComboBox categoryCombobox;
@@ -365,6 +403,10 @@ namespace LipidCreator
         public System.Windows.Forms.CheckBox faCheckbox3;
         [NonSerialized]
         public System.Windows.Forms.ComboBox faCombobox;
+        [NonSerialized]
+        public System.Windows.Forms.ComboBox faHydroxyCombobox;
+        [NonSerialized]
+        public System.Windows.Forms.ComboBox lcbHydroxyCombobox;
         [NonSerialized]
         public System.Windows.Forms.TextBox faTextbox;
         [NonSerialized]

@@ -129,7 +129,7 @@ namespace LipidCreator
             switch (headgroupCategory)
             {
                 case (int)LipidCategory.Glycerolipid:
-                    if ((string)faList[currentFA] == "FA1") fag = ((Glycerolipid)lipid).fag1;
+                    if ((string)faList[currentFA] == "FA1" || (string)faList[currentFA] == "FA") fag = ((Glycerolipid)lipid).fag1;
                     else if ((string)faList[currentFA] == "FA2") fag = ((Glycerolipid)lipid).fag2;
                     else if ((string)faList[currentFA] == "FA3") fag = ((Glycerolipid)lipid).fag3;
                     break;

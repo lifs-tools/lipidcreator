@@ -27,6 +27,7 @@ SOFTWARE.
 using System.Collections;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 using System;
 
 namespace LipidCreator
@@ -98,7 +99,8 @@ namespace LipidCreator
             this.labelNegativeDeselectAll = new System.Windows.Forms.Label();
             this.labelSlashPositive = new System.Windows.Forms.Label();
             this.labelSlashNegative = new System.Windows.Forms.Label();
-            
+            this.wizardPictureBox = new System.Windows.Forms.PictureBox();
+            this.labelLine = new System.Windows.Forms.Label();
             
             this.noPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
             this.onlyPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
@@ -113,6 +115,12 @@ namespace LipidCreator
             faHydroxyCombobox.Items.Add("2");
             faHydroxyCombobox.Items.Add("3");
             
+            
+            
+            wizardPictureBox.Image = Image.FromFile(Path.Combine(creatorGUI.lipidCreator.prefixPath, "images", "wizard_banner.png"));
+            wizardPictureBox.Location = new Point(0, 0);
+            wizardPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            wizardPictureBox.BackColor = Color.White;
             
             String dbText = "No. DB";
             String hydroxylText = "No. Hydroxy";
@@ -129,7 +137,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(12, 239);
+            this.cancelButton.Location = new System.Drawing.Point(12, 303);
             this.cancelButton.Name = "cancel";
             this.cancelButton.Size = new System.Drawing.Size(101, 32);
             this.cancelButton.TabIndex = 1;
@@ -139,7 +147,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.continueButton.Location = new System.Drawing.Point(413, 239);
+            this.continueButton.Location = new System.Drawing.Point(413, 303);
             this.continueButton.Name = "continue";
             this.continueButton.Size = new System.Drawing.Size(101, 32);
             this.continueButton.TabIndex = 0;
@@ -149,7 +157,7 @@ namespace LipidCreator
             // 
             // button3
             // 
-            this.backButton.Location = new System.Drawing.Point(306, 239);
+            this.backButton.Location = new System.Drawing.Point(306, 303);
             this.backButton.Name = "back";
             this.backButton.Size = new System.Drawing.Size(101, 32);
             this.backButton.TabIndex = 2;
@@ -160,7 +168,7 @@ namespace LipidCreator
             // label1
             // 
             this.labelInformation.AutoSize = true;
-            this.labelInformation.Location = new System.Drawing.Point(12, 12);
+            this.labelInformation.Location = new System.Drawing.Point(12, 70);
             this.labelInformation.Name = "label1";
             this.labelInformation.Size = new System.Drawing.Size(500, 14);
             this.labelInformation.TabIndex = 3;
@@ -169,7 +177,7 @@ namespace LipidCreator
             // Wizard
             //
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(526, 283);
+            this.ClientSize = new System.Drawing.Size(526, 347);
             this.Controls.Add(this.labelInformation);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.cancelButton);
@@ -207,6 +215,8 @@ namespace LipidCreator
             this.Controls.Add(this.labelNegativeDeselectAll);
             this.Controls.Add(this.labelSlashPositive);
             this.Controls.Add(this.labelSlashNegative);
+            this.Controls.Add(this.wizardPictureBox);
+            this.Controls.Add(this.labelLine);
             
             this.Name = "MagicLipidWizard";
             this.Text = "Magic Lipid Wizard";
@@ -218,9 +228,15 @@ namespace LipidCreator
             
             
             hgCombobox.Size = new Size(180, 20);
-            hgCombobox.Location = new Point((ClientSize.Width - hgCombobox.Width) >> 1, 100);
+            hgCombobox.Location = new Point((ClientSize.Width - hgCombobox.Width) >> 1, 164);
             hgCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             hgCombobox.SelectedIndexChanged += new System.EventHandler(hgComboboxSelectedValueChanged);
+            
+            labelLine.AutoSize = false;
+            labelLine.Height = 2;
+            labelLine.BorderStyle = BorderStyle.Fixed3D;
+            labelLine.Location = new System.Drawing.Point(12, 292);
+            labelLine.Width = 504;
             
             
             categoryCombobox.Items.Add("Glycero lipid");
@@ -230,7 +246,7 @@ namespace LipidCreator
             categoryCombobox.Items.Add("Lipid mediator");
             
             categoryCombobox.Size = new System.Drawing.Size(180, 20);
-            categoryCombobox.Location = new Point((ClientSize.Width - categoryCombobox.Width) >> 1, 100);
+            categoryCombobox.Location = new Point((ClientSize.Width - categoryCombobox.Width) >> 1, 164);
             categoryCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             categoryCombobox.SelectedIndex = 0;
             
@@ -239,7 +255,7 @@ namespace LipidCreator
             
             
             
-            faTextbox.Location = new Point(100, 80);
+            faTextbox.Location = new Point(100, 144);
             faTextbox.Width = faLength;
             faTextbox.Text = "12-15";
             faTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateCarbon(s, new FattyAcidEventArgs(fag, "" )); };
@@ -295,7 +311,7 @@ namespace LipidCreator
             
             
             positiveAdduct.Width = 120;
-            positiveAdduct.Location = new Point(120, 60);
+            positiveAdduct.Location = new Point(120, 124);
             positiveAdduct.Height = 120;
             positiveAdduct.Text = "Positive adducts";
             posAdductCheckbox1.Parent = positiveAdduct;
@@ -311,7 +327,7 @@ namespace LipidCreator
             posAdductCheckbox3.Text = "+NH4⁺";
             posAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){creatorGUI.AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", lipid));};
             negativeAdduct.Width = 120;
-            negativeAdduct.Location = new Point(280, 60);
+            negativeAdduct.Location = new Point(280, 124);
             negativeAdduct.Height = 120;
             negativeAdduct.Text = "Negative adducts";
             negAdductCheckbox1.Parent = negativeAdduct;
@@ -341,7 +357,7 @@ namespace LipidCreator
             this.filterGroupbox.Controls.Add(this.noPrecursorRadiobutton);
             this.filterGroupbox.Name = "filterGroupbox";
             this.filterGroupbox.Size = new System.Drawing.Size(260, 93);
-            this.filterGroupbox.Location = new System.Drawing.Point((ClientSize.Width - filterGroupbox.Width) >> 1, 60);
+            this.filterGroupbox.Location = new System.Drawing.Point((ClientSize.Width - filterGroupbox.Width) >> 1, 124);
             this.filterGroupbox.TabIndex = 4;
             this.filterGroupbox.TabStop = false;
             this.filterGroupbox.Text = "Precursor filter";
@@ -387,10 +403,10 @@ namespace LipidCreator
             
             this.checkedListBoxPositiveFragments.CheckOnClick = true;
             this.checkedListBoxPositiveFragments.FormattingEnabled = true;
-            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 48);
+            this.checkedListBoxPositiveFragments.Location = new System.Drawing.Point(12, 112);
             this.checkedListBoxPositiveFragments.Name = "checkedListBoxPositive";
             this.checkedListBoxPositiveFragments.ScrollAlwaysVisible = true;
-            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(240, 180);
+            this.checkedListBoxPositiveFragments.Size = new System.Drawing.Size(240, 160);
             this.checkedListBoxPositiveFragments.TabIndex = 2;
             this.checkedListBoxPositiveFragments.ThreeDCheckBoxes = true;
             this.checkedListBoxPositiveFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxPositiveItemCheck);
@@ -398,23 +414,23 @@ namespace LipidCreator
             
             this.checkedListBoxNegativeFragments.CheckOnClick = true;
             this.checkedListBoxNegativeFragments.FormattingEnabled = true;
-            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(280, 48);
+            this.checkedListBoxNegativeFragments.Location = new System.Drawing.Point(280, 112);
             this.checkedListBoxNegativeFragments.Name = "checkedListBoxNegative";
             this.checkedListBoxNegativeFragments.ScrollAlwaysVisible = true;
-            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(240, 180);
+            this.checkedListBoxNegativeFragments.Size = new System.Drawing.Size(240, 160);
             this.checkedListBoxNegativeFragments.TabIndex = 5;
             this.checkedListBoxNegativeFragments.ThreeDCheckBoxes = true;
             this.checkedListBoxNegativeFragments.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxNegativeItemCheck);
             
             
             this.labelPositiveFragments.AutoSize = true;
-            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 32);
+            this.labelPositiveFragments.Location = new System.Drawing.Point(12, 96);
             this.labelPositiveFragments.Name = "label1";
             this.labelPositiveFragments.TabIndex = 3;
             this.labelPositiveFragments.Text = "Positive Fragments";
             
             this.labelNegativeFragments.AutoSize = true;
-            this.labelNegativeFragments.Location = new System.Drawing.Point(280, 32);
+            this.labelNegativeFragments.Location = new System.Drawing.Point(280, 96);
             this.labelNegativeFragments.Name = "label2";
             this.labelNegativeFragments.TabIndex = 4;
             this.labelNegativeFragments.Text = "Negative Fragments";
@@ -423,7 +439,7 @@ namespace LipidCreator
             
             
             this.labelPositiveSelectAll.AutoSize = true;
-            this.labelPositiveSelectAll.Location = new System.Drawing.Point(12, 224);
+            this.labelPositiveSelectAll.Location = new System.Drawing.Point(12, 274);
             this.labelPositiveSelectAll.Name = "label6";
             this.labelPositiveSelectAll.TabIndex = 6;
             this.labelPositiveSelectAll.Text = "select all";
@@ -431,7 +447,7 @@ namespace LipidCreator
             this.labelPositiveSelectAll.Click += new System.EventHandler(checkedListBoxPositiveSelectAll);
             
             this.labelNegativeSelectAll.AutoSize = true;
-            this.labelNegativeSelectAll.Location = new System.Drawing.Point(280, 224);
+            this.labelNegativeSelectAll.Location = new System.Drawing.Point(280, 274);
             this.labelNegativeSelectAll.Name = "label8";
             this.labelNegativeSelectAll.TabIndex = 6;
             this.labelNegativeSelectAll.Text = "select all";
@@ -492,6 +508,8 @@ namespace LipidCreator
         public System.Windows.Forms.Button backButton;
         [NonSerialized]
         public System.Windows.Forms.Label labelInformation;
+        [NonSerialized]
+        public System.Windows.Forms.Label labelLine;
         [NonSerialized]
         public System.Windows.Forms.ComboBox categoryCombobox;
         [NonSerialized]
@@ -567,6 +585,8 @@ namespace LipidCreator
         public Label labelSlashPositive;
         [NonSerialized]
         public Label labelSlashNegative;
+        [NonSerialized]
+        public PictureBox wizardPictureBox;
         
         public ArrayList controlElements;
     }

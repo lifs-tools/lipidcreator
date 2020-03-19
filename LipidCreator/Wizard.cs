@@ -70,6 +70,7 @@ namespace LipidCreator
             continueButton.Enabled = true;
             backButton.Enabled = false;
             cancelButton.Text = "Cancel";
+            backButton.Text = "Back";
             continueButton.Text = "Continue";
             
             foreach (Control control in controlElements)
@@ -114,10 +115,7 @@ namespace LipidCreator
 
         private void cancelClick(object sender, EventArgs e)
         {
-            if (MessageBox.Show ("Do you want to close the wizard?", "Close Wizard", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                this.Close();
-            }
+            closing(null, null);
         }
         
         
@@ -438,14 +436,31 @@ namespace LipidCreator
                 }
                 else 
                 {
-                    // TODO: Exception
+                    throw new Exception("invalid lipid type");
                 }
             }
             else
             {
-                // TODO: Exception
+                throw new Exception("invalid lipid '" + headgroup + "'");
             }
         }
+        
+        
+        private void closing(Object sender, FormClosingEventArgs e)
+        {
+            bool closingCondition = (wizardStep == (int)WizardSteps.Welcome) || (wizardStep == (int)WizardSteps.Finish);
+            if (!closingCondition) closingCondition = MessageBox.Show ("Do you want to close the wizard?", "Close Wizard", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            
+            if (closingCondition)
+            {
+                this.Close();
+            }
+            else
+            {
+                if (e != null) e.Cancel = true;
+            }
+        }
+        
         
         
         void filterChanged(object sender, EventArgs e)
@@ -463,13 +478,16 @@ namespace LipidCreator
             switch (wizardStep)
             {
                 case (int)WizardSteps.Welcome:
+                    labelTitle.Text = "LipidCreator Wizard";
                     labelInformation.Text = "Welcome to the magic world of LipidCreator. This wizard will guide you through" + Environment.NewLine +
-                    "the enchanted world of lipids. Please continue if feel ready to face the challenge.";
+                    "the enchanted world of lipids. Please continue if you feel ready to face the challenge.";
+                    cancelButton.Text = "Close";
                     break;
                     
                     
                     
                 case (int)WizardSteps.SelectCategory:
+                    labelTitle.Text = "Select a lipid category";
                     labelInformation.Text = "Every journey begins with the first step. Let us begin to draw your lipids." + Environment.NewLine +
                     "Which category do you desire?";
                     categoryCombobox.Visible = true;
@@ -480,6 +498,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectClass:
+                    labelTitle.Text = "Select a lipid class";
                     labelInformation.Text = "Thou go deeper into the matter. Choose your lipid class, but choose wisely.";
                     backButton.Enabled = true;
                     switch((string)categoryCombobox.Items[categoryCombobox.SelectedIndex])
@@ -533,8 +552,39 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFA:
+                    labelTitle.Text = "Select parameters for ";
+                    
+                    switch((string)faList[currentFA])
+                    {
+                        case "LCB":
+                            labelTitle.Text += "long chain base";
+                            break;
+                            
+                        case "FA":
+                            labelTitle.Text += "fatty acyl chain";
+                            break;
+                            
+                        case "FA1":
+                            labelTitle.Text += "first fatty acyl chain";
+                            break;
+                            
+                        case "FA2":
+                            labelTitle.Text += "second fatty acyl chain";
+                            break;
+                            
+                        case "FA3":
+                            labelTitle.Text += "third fatty acyl chain";
+                            break;
+                            
+                        case "FA4":
+                            labelTitle.Text += "fourth fatty acyl chain";
+                            break;
+                    }
+                    
+                
+                
                     labelInformation.Text = "It's the inner attributes that matter. Please select for '" + (string)faList[currentFA] + "' carbon length," + Environment.NewLine +
-                    "number of double bonds and number of hydroxyl groups?";
+                    "number of double bonds and number of hydroxyl groups.";
                     backButton.Enabled = true;
                     faCombobox.Visible = true;
                     faCheckbox1.Visible = true;
@@ -616,6 +666,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectAdduct:
+                    labelTitle.Text = "Select adducts";
                     labelInformation.Text = "We need fellows for the battle. Please select at least one young adduct.";
                     backButton.Enabled = true;
                     positiveAdduct.Visible = true;
@@ -640,6 +691,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFragmentMode:
+                    labelTitle.Text = "Select precursor filter mode";
                     labelInformation.Text = "To be or not be fragmented. Please choose the right filter mode.";
                     backButton.Enabled = true;
                     filterGroupbox.Visible = true;
@@ -651,6 +703,7 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.SelectFragments:
+                    labelTitle.Text = "Select fragments";
                     labelInformation.Text = "The encounter requires a quick selection of trading fragments.";
                     backButton.Enabled = true;
                     
@@ -692,13 +745,15 @@ namespace LipidCreator
                     
                     
                 case (int)WizardSteps.AddLipid:
-                    labelInformation.Text = "You shall not pass to add the lipid now into LipidCreator before you" + Environment.NewLine +
-                    "confirm to continue. Is it really what you want?";
+                    labelTitle.Text = "Confirm your selection";
+                    labelInformation.Text = "You shall not pass to add the lipid into LipidCreator before you" + Environment.NewLine +
+                    "confirm to continue. Do you really want to perform this action?";
                     backButton.Enabled = true;
                     break;
                     
                     
                 case (int)WizardSteps.Finish:
+                    cancelButton.Text = "Close";
                     ulong lipidHash = 0;
                     if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                     else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
@@ -716,7 +771,8 @@ namespace LipidCreator
                     }
                         
                     creatorGUI.refreshRegisteredLipidsTable();
-                    labelInformation.Text = "Contragtulations, it was a great advanture. Do you wish to repeat the journey?";
+                    labelTitle.Text = "Lipid was added";
+                    labelInformation.Text = "Congratulations, it was a great adventure. Do you wish to repeat your journey?";
                     break;
         
             }

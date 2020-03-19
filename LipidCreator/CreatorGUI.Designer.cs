@@ -1690,7 +1690,6 @@ namespace LipidCreator
             glHgListbox.Size = new Size(70, 50);
             glHgListbox.BringToFront();
             glHgListbox.BorderStyle = BorderStyle.Fixed3D;
-            glHgListbox.SelectionMode = SelectionMode.MultiSimple;
             glHgListbox.SelectedValueChanged += new System.EventHandler(glHGListboxSelectedValueChanged);
             glHgListbox.Visible = false;
             
@@ -1936,7 +1935,6 @@ namespace LipidCreator
             plHgListbox.Size = new Size(70, 190);
             plHgListbox.BringToFront();
             plHgListbox.BorderStyle = BorderStyle.Fixed3D;
-            plHgListbox.SelectionMode = SelectionMode.MultiSimple;
             plHgListbox.SelectedValueChanged += new System.EventHandler(plHGListboxSelectedValueChanged);
             plHgListbox.MouseLeave += new System.EventHandler(plHGListboxMouseLeave);
             plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(plHGListboxMouseHover);
@@ -2122,7 +2120,6 @@ namespace LipidCreator
             slHgListbox.Size = new Size(80, 260);
             slHgListbox.BringToFront();
             slHgListbox.BorderStyle = BorderStyle.Fixed3D;
-            slHgListbox.SelectionMode = SelectionMode.MultiSimple;
             slHgListbox.SelectedValueChanged += new System.EventHandler(slHGListboxSelectedValueChanged);
             slHgListbox.MouseLeave += new System.EventHandler(slHGListboxMouseLeave);
             slHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(slHGListboxMouseHover);
@@ -2352,7 +2349,6 @@ namespace LipidCreator
             medHgListbox.Size = new Size(140, 260);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
-            medHgListbox.SelectionMode = SelectionMode.MultiSimple;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             

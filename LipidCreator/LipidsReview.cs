@@ -76,7 +76,33 @@ namespace LipidCreator
             
             InitializeComponent();
             InitializeCustom();
-            dataGridViewTransitions.DataSource = currentView;
+            //dataGridViewTransitions.DataSource = currentView;
+            
+            DataTable dt = new DataTable();
+            foreach (DataColumn dc in transitionList.Columns)
+            {
+                string n = dc.ColumnName;
+                if (n != "unique" && n != "specific")
+                {
+                    dt.Columns.Add(n);
+                }
+            }
+            
+                int i = 0;
+            foreach (DataRow dro in transitionList.Rows)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    dr[dc.ColumnName] = dro[dc.ColumnName];
+                }
+                dt.Rows.Add(dr);
+                if (i++ > 3) break;
+            }
+            dataGridViewTransitions.DataSource = dt;
+            
+            
+            
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
             updateCountLabel();
             
@@ -101,6 +127,7 @@ namespace LipidCreator
         
         private void formResize(object sender, System.EventArgs e)
         {
+            return;
             int left = (buttonStoreTransitionList.Location.X + buttonStoreSpectralLibrary.Location.X) >> 1;
             int top = buttonStoreSpectralLibrary.Location.Y;
             buttonSendToSkyline.Location = new System.Drawing.Point(left, top);
@@ -109,6 +136,7 @@ namespace LipidCreator
         
         private void gridviewDataRowRemoved(object sender, System.Windows.Forms.DataGridViewRowsRemovedEventArgs e)
         {
+            return;
             updateCountLabel();
         }
         
@@ -117,15 +145,34 @@ namespace LipidCreator
         
         private void gridviewDataRowAdded(object sender, System.Windows.Forms.DataGridViewRowsAddedEventArgs e)
         {
+            return;
             updateCountLabel();
         }
         
         
+        private void SetupDataGridView()
+    {
+        this.Controls.Add(dataGridViewTransitions);
+
+        dataGridViewTransitions.ColumnCount = 5;
+
         
-        
+
+        dataGridViewTransitions.Columns[0].Name = "Release Date";
+        dataGridViewTransitions.Columns[1].Name = "Track";
+        dataGridViewTransitions.Columns[2].Name = "Title";
+        dataGridViewTransitions.Columns[3].Name = "Artist";
+        dataGridViewTransitions.Columns[4].Name = "Album";
+        dataGridViewTransitions.Columns[4].DefaultCellStyle.Font =
+            new Font(dataGridViewTransitions.DefaultCellStyle.Font, FontStyle.Italic);
+
+
+    }
+
         
         public void updateCountLabel()
         {   
+            return;
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
             labelNumberOfTransitions.Text = "Number of transitions: " + (dataGridViewTransitions.Rows.Count - (checkBoxEditMode.Checked ? 1 : 0));
@@ -136,8 +183,8 @@ namespace LipidCreator
         private void gridviewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             gridviewDataColor();
-            dataGridViewTransitions.Columns[0].Visible = false;
-            dataGridViewTransitions.Columns[1].Visible = false;
+            //dataGridViewTransitions.Columns[0].Visible = false;
+            //dataGridViewTransitions.Columns[1].Visible = false;
             updateCountLabel();
         }
         
@@ -147,6 +194,7 @@ namespace LipidCreator
         
         private void gridviewDataSorted(object sender, EventArgs e)
         {
+            return;
             gridviewDataColor();
         }
         
@@ -155,6 +203,7 @@ namespace LipidCreator
         
         public void gridviewDataColor()
         {
+            return;
             if (currentView == transitionList)
             {
                 foreach (DataGridViewRow dataRow in dataGridViewTransitions.Rows)
@@ -174,6 +223,7 @@ namespace LipidCreator
         
         private void closingInteraction(Object sender, FormClosingEventArgs e)
         {
+            return;
             if (returnValues != null) returnValues[0] = !pressedBackButton;
         }
         
@@ -250,6 +300,7 @@ namespace LipidCreator
         
         public void selectCell(int r, string colName)
         {
+            return;
             int c = 0;
             foreach (DataColumn col in currentView.Columns)
             {
@@ -266,6 +317,8 @@ namespace LipidCreator
         
         public bool editedCheck()
         {
+            return true;
+            
             int rowLine = 0;
             foreach (DataRow row in currentView.Rows)
             {
@@ -647,6 +700,7 @@ namespace LipidCreator
 
         public void buttonSendToSkylineClick (Object sender, EventArgs e)
         {
+            return;
             this.Enabled = false;
             
             if (edited && !editedCheck())
@@ -693,6 +747,7 @@ namespace LipidCreator
         
         public void buttonCheckValuesClick (Object sender, EventArgs e)
         {
+            return;
             if (editedCheck())
             {
                 MessageBox.Show("All data are correct and valid.", "Sanity check");
@@ -749,6 +804,7 @@ namespace LipidCreator
         
         private void checkBoxCheckedChanged (object sender, EventArgs e)
         {
+            return;
             if (((CheckBox)sender).Checked)
             {            
                 currentView = this.transitionListUnique;
@@ -770,6 +826,7 @@ namespace LipidCreator
         
         private void buttonBackClick (object sender, EventArgs e)
         {
+            return;
             pressedBackButton = true;
             Close();
         }
@@ -780,6 +837,7 @@ namespace LipidCreator
 
         private void buttonStoreTransitionListClick (object sender, EventArgs e)
         {
+            return;
         
             SaveFileDialog saveFileDialog1 = new SaveFileDialog ();
             saveFileDialog1.InitialDirectory = "c:\\";
@@ -818,6 +876,7 @@ namespace LipidCreator
 
         private void buttonStoreSpectralLibraryClick (object sender, EventArgs e)
         {
+            return;
             bool enableSpectralLibrary = false;
             if (creatorGUI.lipidCreator.selectedInstrumentForCE.Length > 0)
             {

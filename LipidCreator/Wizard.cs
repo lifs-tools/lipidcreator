@@ -27,7 +27,7 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
@@ -89,7 +89,7 @@ namespace LipidCreator
                 else 
                 {
                     currentFA = faList.Count - 1;
-                    selectFAG();
+                    fag = selectFAG(currentFA);
                 }
             }
             else if (wizardStep == (int)WizardSteps.SelectFA)
@@ -98,7 +98,7 @@ namespace LipidCreator
                 if (currentFA >= 0)
                 {
                     wizardStep += 1;
-                    selectFAG();
+                    fag = selectFAG(currentFA);
                 }
             }
             
@@ -123,37 +123,39 @@ namespace LipidCreator
         
         
         
-        private void selectFAG()
+        private FattyAcidGroup selectFAG(int currFA)
         {
-            fag = null;
-            if (currentFA <= -1 || faList.Count <= currentFA) return;
+            FattyAcidGroup currFAG = null;
+            if (currFA <= -1 || faList.Count <= currFA) return currFAG;
             switch (headgroupCategory)
             {
                 case (int)LipidCategory.Glycerolipid:
-                    if ((string)faList[currentFA] == "FA1" || (string)faList[currentFA] == "FA") fag = ((Glycerolipid)lipid).fag1;
-                    else if ((string)faList[currentFA] == "FA2") fag = ((Glycerolipid)lipid).fag2;
-                    else if ((string)faList[currentFA] == "FA3") fag = ((Glycerolipid)lipid).fag3;
+                    if ((string)faList[currFA] == "FA1" || (string)faList[currFA] == "FA") currFAG = ((Glycerolipid)lipid).fag1;
+                    else if ((string)faList[currFA] == "FA2") currFAG = ((Glycerolipid)lipid).fag2;
+                    else if ((string)faList[currFA] == "FA3") currFAG = ((Glycerolipid)lipid).fag3;
                     break;
                     
                 case (int)LipidCategory.Glycerophospholipid:
-                    if ((string)faList[currentFA] == "FA1" || (string)faList[currentFA] == "FA") fag = ((Phospholipid)lipid).fag1;
-                    else if ((string)faList[currentFA] == "FA2") fag = ((Phospholipid)lipid).fag2;
-                    else if ((string)faList[currentFA] == "FA3") fag = ((Phospholipid)lipid).fag3;
-                    else if ((string)faList[currentFA] == "FA4") fag = ((Phospholipid)lipid).fag4;
+                    if ((string)faList[currFA] == "FA1" || (string)faList[currFA] == "FA") currFAG = ((Phospholipid)lipid).fag1;
+                    else if ((string)faList[currFA] == "FA2") currFAG = ((Phospholipid)lipid).fag2;
+                    else if ((string)faList[currFA] == "FA3") currFAG = ((Phospholipid)lipid).fag3;
+                    else if ((string)faList[currFA] == "FA4") currFAG = ((Phospholipid)lipid).fag4;
                     break;
                     
                 case (int)LipidCategory.Sphingolipid:
-                    if ((string)faList[currentFA] == "LCB") fag = ((Sphingolipid)lipid).lcb;
-                    else if ((string)faList[currentFA] == "FA") fag = ((Sphingolipid)lipid).fag;
+                    if ((string)faList[currFA] == "LCB") currFAG = ((Sphingolipid)lipid).lcb;
+                    else if ((string)faList[currFA] == "FA") currFAG = ((Sphingolipid)lipid).fag;
                     break;
                     
                 case (int)LipidCategory.Sterollipid:
-                    if ((string)faList[currentFA] == "FA") fag = ((Cholesterol)lipid).fag;
+                    if ((string)faList[currFA] == "FA") currFAG = ((Cholesterol)lipid).fag;
                     break;
                 
                 default:
                     break;
             }
+            
+            return currFAG;
         }
         
         
@@ -198,7 +200,7 @@ namespace LipidCreator
                     hgComboboxSelectedValueChanged(null, null);
                     
                     if (faList.Count == 0) wizardStep += 1;
-                    else selectFAG();
+                    else fag = selectFAG(currentFA);
                     
                     if (headgroupCategory == (int)LipidCategory.Glycerolipid)
                     {
@@ -286,11 +288,33 @@ namespace LipidCreator
                     if (headgroupCategory != (int)LipidCategory.Sphingolipid) creatorGUI.updateRanges(fag, hydroxylTextbox, 4);
                     
                     
+                    if (currentFA == 0 && faRepresentative.Checked && faList.Count > 1)
+                    {
+                        FattyAcidGroup repFAG = selectFAG(0);
+                        for(int j = 1; j < faList.Count; ++j)
+                        {
+                            FattyAcidGroup currFAG = selectFAG(j);
+                            currFAG.lengthInfo = repFAG.lengthInfo;
+                            currFAG.dbInfo = repFAG.dbInfo;
+                            currFAG.hydroxylInfo = repFAG.hydroxylInfo;
+                            currFAG.chainType = repFAG.chainType;
+                            
+                            
+                            creatorGUI.updateCarbon(faTextbox, new FattyAcidEventArgs(currFAG, "" ));
+                            creatorGUI.updateOddEven(faCombobox, new FattyAcidEventArgs(currFAG, faTextbox ));
+                            creatorGUI.updateDB(dbTextbox, new FattyAcidEventArgs(currFAG, "" ));
+                            creatorGUI.updateHydroxyl(hydroxylTextbox, new FattyAcidEventArgs(currFAG, "" ));
+                            
+                        }
+                    }
+                    
+                    
+                    
                     currentFA += 1;
                     if (currentFA < faList.Count)
                     {
                         wizardStep -= 1;
-                        selectFAG();
+                        fag = selectFAG(currentFA);
                     }
                     break;
                     
@@ -509,25 +533,26 @@ namespace LipidCreator
                     labelTitle.Text = "Select a lipid class";
                     labelInformation.Text = "Thou shalt delve deeper into the matter. Choose your lipid class, but choose wisely." + Environment.NewLine + "You may go back at any time to repent and revise.";
                     backButton.Enabled = true;
+                    faRepresentative.Checked = false;
                     switch((string)categoryCombobox.Items[categoryCombobox.SelectedIndex])
                     {
-                        case "Glycero lipid":
+                        case "Glycerolipids":
                             headgroupCategory = (int)LipidCategory.Glycerolipid;
                             lipid = new Glycerolipid(creatorGUI.lipidCreator);
                             break;
-                        case "Glycerophosho lipid":
+                        case "Glycerophospholipids":
                             headgroupCategory = (int)LipidCategory.Glycerophospholipid;
                             lipid = new Phospholipid(creatorGUI.lipidCreator);
                             break;
-                        case "Sphingo lipid":
+                        case "Sphingolipids":
                             headgroupCategory = (int)LipidCategory.Sphingolipid;
                             lipid = new Sphingolipid(creatorGUI.lipidCreator);
                             break;
-                        case "Sterol lipid":
+                        case "Sterol lipids":
                             headgroupCategory = (int)LipidCategory.Sterollipid;
                             lipid = new Cholesterol(creatorGUI.lipidCreator);
                             break;
-                        case "Lipid mediator":
+                        case "Lipid Mediators":
                             headgroupCategory = (int)LipidCategory.LipidMediator;
                             lipid = new Mediator(creatorGUI.lipidCreator);
                             break;
@@ -536,6 +561,7 @@ namespace LipidCreator
                     }
                     // clear all adducts
                     ArrayList adducts = new ArrayList();
+                    lipid.onlyHeavyLabeled = 0;
                     foreach (string adduct in lipid.adducts.Keys) adducts.Add(adduct);
                     foreach (string adduct in adducts) lipid.adducts[adduct] = false;
                     
@@ -602,6 +628,11 @@ namespace LipidCreator
                     faCheckbox1.Enabled = true;
                     faCheckbox2.Enabled = true;
                     faCheckbox3.Enabled = true;
+                    
+                    if (faList.Count > 1 && currentFA == 0 && (headgroupCategory == (int)LipidCategory.Glycerolipid) || (headgroupCategory == (int)LipidCategory.Glycerophospholipid) || (headgroupCategory == (int)LipidCategory.Sphingolipid))
+                    {
+                        faRepresentative.Visible = true;
+                    }
                     
                     faTextbox.Visible = true;
                     dbTextbox.Visible = true;
@@ -757,11 +788,91 @@ namespace LipidCreator
                     labelInformation.Text = "Thou shalt not pass with your party of lipids before you confirm to continue." + Environment.NewLine + 
                     "Do you really want to proceed beyond the realm and protection of this wizard?";
                     backButton.Enabled = true;
+                    lipidPreview.Visible = true;
+                    
+                    lipidDataTable.Rows.Clear();
+                    
+                    DataRow rowCategory = lipidDataTable.NewRow();
+                    rowCategory["Key"] = "Category";
+                    switch (headgroupCategory)
+                    {
+                        case (int)LipidCategory.Glycerolipid:
+                            rowCategory["Value"] = "Glycerolipids";
+                            break;
+                            
+                        case (int)LipidCategory.Glycerophospholipid:
+                            rowCategory["Value"] = "Glycerophospholipids";
+                            break;
+                            
+                        case (int)LipidCategory.Sphingolipid:
+                            rowCategory["Value"] = "Sphingolipids";
+                            break;
+                            
+                        case (int)LipidCategory.Sterollipid:
+                            rowCategory["Value"] = "Sterol lipids";
+                            break;
+                            
+                        case (int)LipidCategory.LipidMediator:
+                            rowCategory["Value"] = "Lipid Mediators";
+                            break;
+                    }
+                    
+                    lipidDataTable.Rows.Add(rowCategory);
+                    
+                    
+                    DataRow rowClass = lipidDataTable.NewRow();
+                    rowClass["Key"] = "Class";
+                    rowClass["Value"] = headgroup;
+                    lipidDataTable.Rows.Add(rowClass);
+                    
+                    for (int i = 0; i < faList.Count; ++i)
+                    {
+                        DataRow rowBlock = lipidDataTable.NewRow();
+                        rowBlock["Key"] = faList[i];
+                        
+                        FattyAcidGroup currFAG = selectFAG(i);
+                        rowBlock["Value"] = creatorGUI.FARepresentation(currFAG) + currFAG.lengthInfo + "; DB: " + currFAG.dbInfo + "; OH: " + currFAG.hydroxylInfo;
+                        lipidDataTable.Rows.Add(rowBlock);
+                    }
+                    
+                    string adductsStr = "";
+                    foreach (Adduct adduct in Lipid.ALL_ADDUCTS.Values)
+                    {
+                        if (lipid.adducts[adduct.name]) adductsStr += (adductsStr.Length > 0 ? ", " : "") + adduct.visualization;
+                    }
+                    DataRow rowAdduct = lipidDataTable.NewRow();
+                    rowAdduct["Key"] = "Adduct(s)";
+                    rowAdduct["Value"] = adductsStr;
+                    lipidDataTable.Rows.Add(rowAdduct);
+                    
+                    string filtersStr = "";
+                    switch (lipid.onlyPrecursors)
+                    {
+                        case 0: filtersStr = "no precursors, "; break;
+                        case 1: filtersStr = "only precursors, "; break;
+                        case 2: filtersStr = "with precursors, "; break;
+                    }
+                    
+                    switch (lipid.onlyHeavyLabeled)
+                    {
+                        case 0: filtersStr += "no heavy"; break;
+                        case 1: filtersStr += "only heavy"; break;
+                        case 2: filtersStr += "with heavy"; break;
+                    }
+                    DataRow rowFilter = lipidDataTable.NewRow();
+                    rowFilter["Key"] = "Filter";
+                    rowFilter["Value"] = filtersStr;
+                    lipidDataTable.Rows.Add(rowFilter);
+                    
+                    lipidPreview.Update ();
+                    lipidPreview.Refresh ();
+                    
                     break;
                     
                     
                 case (int)WizardSteps.Finish:
-                    cancelButton.Text = "Close";
+                    cancelButton.Text = "Cancel";
+                    continueButton.Text = "Yes";
                     ulong lipidHash = 0;
                     if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                     else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();

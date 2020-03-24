@@ -28,6 +28,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Data;
 using System;
 
 namespace LipidCreator
@@ -102,6 +103,9 @@ namespace LipidCreator
             this.labelSlashNegative = new System.Windows.Forms.Label();
             this.wizardPictureBox = new System.Windows.Forms.PictureBox();
             this.labelLine = new System.Windows.Forms.Label();
+            this.faRepresentative = new System.Windows.Forms.CheckBox();
+            this.lipidPreview = new System.Windows.Forms.DataGridView();
+            this.lipidDataTable = new DataTable();
             
             this.noPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
             this.onlyPrecursorRadiobutton = new System.Windows.Forms.RadioButton();
@@ -133,6 +137,8 @@ namespace LipidCreator
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
             string FApInformation = "Plasmenyl fatty acids need at least one double bond";
+            string repFAText = "All fatty acyl parameters will be copied from the first FA to all remaining FAs";
+
             
             this.SuspendLayout();
             // 
@@ -225,6 +231,8 @@ namespace LipidCreator
             this.Controls.Add(this.labelSlashNegative);
             this.Controls.Add(this.wizardPictureBox);
             this.Controls.Add(this.labelLine);
+            this.Controls.Add(this.faRepresentative);
+            this.Controls.Add(this.lipidPreview);
             
             this.Name = "MagicLipidWizard";
             this.Text = "Magic Lipid Wizard";
@@ -249,11 +257,11 @@ namespace LipidCreator
             labelLine.Width = 504;
             
             
-            categoryCombobox.Items.Add("Glycero lipid");
-            categoryCombobox.Items.Add("Glycerophosho lipid");
-            categoryCombobox.Items.Add("Sphingo lipid");
-            categoryCombobox.Items.Add("Sterol lipid");
-            categoryCombobox.Items.Add("Lipid mediator");
+            categoryCombobox.Items.Add("Glycerolipids");
+            categoryCombobox.Items.Add("Glycerophospholipids");
+            categoryCombobox.Items.Add("Sphingolipids");
+            categoryCombobox.Items.Add("Sterol lipids");
+            categoryCombobox.Items.Add("Lipid Mediators");
             
             categoryCombobox.Size = new System.Drawing.Size(180, 20);
             categoryCombobox.Location = new Point((ClientSize.Width - categoryCombobox.Width) >> 1, 184);
@@ -491,11 +499,33 @@ namespace LipidCreator
             this.labelNegativeDeselectAll.ForeColor = Color.FromArgb(0, 0, 255);
             this.labelNegativeDeselectAll.Click += new System.EventHandler(checkedListBoxNegativeDeselectAll);
             
+            this.lipidPreview.AllowUserToAddRows = false;
+            this.lipidPreview.AllowUserToDeleteRows = false;
+            this.lipidPreview.AllowUserToResizeColumns = false;
+            this.lipidPreview.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.lipidPreview.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.None;
+            this.lipidPreview.AllowUserToResizeRows = false;
+            this.lipidPreview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.lipidPreview.Size = new System.Drawing.Size(350, 180);
+            this.lipidPreview.Location = new System.Drawing.Point((ClientSize.Width - lipidPreview.Width) >> 1, 122);
+            this.lipidPreview.Name = "dataGridView1";
+            this.lipidPreview.ReadOnly = true;
+            this.lipidPreview.RowHeadersVisible = false;
+            this.lipidPreview.ColumnHeadersVisible = false;
+            this.lipidPreview.TabIndex = 0;
+            this.lipidPreview.DataSource = lipidDataTable;
+            
+            lipidDataTable.Columns.Add(new DataColumn("Key"));
+            lipidDataTable.Columns.Add(new DataColumn("Value"));
             
             
+            this.faRepresentative.Location = new Point(faCheckbox1.Left, faCheckbox1.Top + 40);
+            this.faRepresentative.Width = 150;
+            this.faRepresentative.Text = "First FA representative";
+            toolTip.SetToolTip(this.faRepresentative, repFAText);
             
 
-            controlElements = new ArrayList(){categoryCombobox, hgCombobox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox, faHydroxyCombobox, lcbHydroxyCombobox, checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, labelPositiveFragments, labelNegativeFragments, labelPositiveSelectAll, labelPositiveDeselectAll, labelNegativeSelectAll, labelNegativeDeselectAll, labelSlashPositive, labelSlashNegative};
+            controlElements = new ArrayList(){categoryCombobox, hgCombobox, faCombobox, faCheckbox1, faCheckbox2, faCheckbox3, faTextbox, dbTextbox, dbLabel, hydroxylTextbox, hydroxylLabel, positiveAdduct, negativeAdduct, filterGroupbox, faHydroxyCombobox, lcbHydroxyCombobox, checkedListBoxPositiveFragments, checkedListBoxNegativeFragments, labelPositiveFragments, labelNegativeFragments, labelPositiveSelectAll, labelPositiveDeselectAll, labelNegativeSelectAll, labelNegativeDeselectAll, labelSlashPositive, labelSlashNegative, faRepresentative, lipidPreview};
         }
         
         
@@ -510,6 +540,9 @@ namespace LipidCreator
 
         #endregion
 
+        public DataTable lipidDataTable;
+        [NonSerialized]
+        public System.Windows.Forms.DataGridView lipidPreview;
         [NonSerialized]
         public System.Windows.Forms.Button cancelButton;
         [NonSerialized]
@@ -532,6 +565,8 @@ namespace LipidCreator
         public System.Windows.Forms.CheckBox faCheckbox2;
         [NonSerialized]
         public System.Windows.Forms.CheckBox faCheckbox3;
+        [NonSerialized]
+        public System.Windows.Forms.CheckBox faRepresentative;
         [NonSerialized]
         public System.Windows.Forms.ComboBox faCombobox;
         [NonSerialized]

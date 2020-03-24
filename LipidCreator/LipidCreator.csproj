@@ -375,7 +375,7 @@
   </Target>
   <Target Name="WriteSkylineInfoProperties" AfterTargets="WriteGitHash">
     <PropertyGroup>
-      <InfoPropertiesFile>$(TargetDir)tool-inf\info.properties</InfoPropertiesFile>
+      <InfoPropertiesFile>$(_TargetDir)tool-inf\info.properties</InfoPropertiesFile>
     </PropertyGroup>
     <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="" />
     <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Name = $(AppTitle)" />

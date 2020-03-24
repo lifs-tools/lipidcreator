@@ -1,5 +1,5 @@
 node {
-    def artifactoryServer = Artifactory.server 'Lipidomics'
+    def artifactoryServer = Artifactory.server 'LipidomicsExternal'
     def emailOnSuccess = "${jobEmailRecipients?:''}"
     def emailOnFailure = "${jobEmailRecipients?:''}"
     def gitRepo = "lifs-tools/lipidcreator"
@@ -16,7 +16,7 @@ node {
         {
             "pattern": "LipidCreator/bin/x64/Release/LipidCreator.zip",
             "target": "libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator-${BUILD_NUMBER}.zip",
-            "props": "artifactId:lipidcreator;groupId:de.isas.lipidomics;type:zip;version:${BUILD_NUMBER}",
+            "props": "artifactId=lipidcreator;groupId=de.isas.lipidomics;type=zip;version=${BUILD_NUMBER}",
             "recursive": "false",
             "flat" : "true",
             "regexp": "false"
@@ -24,7 +24,7 @@ node {
         {
             "pattern": "LipidCreator/bin/x64/Release/LipidCreator.zip",
             "target": "libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator.zip",
-            "props": "artifactId:lipidcreator;groupId:de.isas.lipidomics;type:zip;version:${BUILD_NUMBER}",
+            "props": "artifactId=lipidcreator;groupId=de.isas.lipidomics;type=zip;version=${BUILD_NUMBER}",
             "recursive": "false",
             "flat" : "true",
             "regexp": "false"
@@ -67,7 +67,7 @@ node {
                     stage 'Notify'
                     mail to: emailOnSuccess,
                          subject: "LipidCreator build succeeded: ${currentBuild.fullDisplayName}",
-                         body: "Artifacts have been deployed to Artifactory, build tag was pushed to ${gitUrl}/releases/tag/${BUILD_NUMBER}."
+                         body: "Artifacts have been deployed to Artifactory at https://apps.lifs.isas.de/artifactory/libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator.zip , build tag was pushed to ${gitUrl}/releases/tag/${BUILD_NUMBER}."
                 } catch(e) {
                     mail to: emailOnFailure,
                          subject: "LipidCreator build failed: ${currentBuild.fullDisplayName}",

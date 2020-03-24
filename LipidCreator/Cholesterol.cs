@@ -163,22 +163,113 @@ namespace LipidCreator
             {   
                 foreach (FattyAcid fa in fag.getFattyAcids())
                 {
+                    foreach (string headgroup in headGroupNames)
+                    {
+                        string key = " ";
+                        key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
+                        if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                        key += fa.suffix;
+                        
+                        foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
+                        {
+                            if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                            if (usedKeys.Contains(headgroup + key + adductKey)) continue;
+                            
+                            usedKeys.Add(headgroup + key + adductKey);
+                            
+                            ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
+                            MS2Fragment.addCounts(atomsCount, fa.atomsCount);
+                            MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
+                            string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                            Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                            string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                            int charge = adduct.charge;
+                            MS2Fragment.addCounts(atomsCount, adduct.elements);
+                            double mass = LipidCreator.computeMass(atomsCount, charge);
+                        
+                            PrecursorData precursorData = new PrecursorData();
+                            precursorData.lipidCategory = LipidCategory.Sterollipid;
+                            precursorData.moleculeListName = headgroup;
+                            precursorData.fullMoleculeListName = headgroup;
+                            precursorData.precursorExportName = headgroup + key;
+                            precursorData.precursorName = headgroup + key;
+                            precursorData.precursorSpeciesName = headgroup + key;
+                            precursorData.precursorIonFormula = chemForm;
+                            precursorData.precursorAdduct = adduct;
+                            precursorData.precursorAdductFormula = adductForm;
+                            precursorData.precursorM_Z = mass;
+                            precursorData.fa1 = fa;
+                            precursorData.fa2 = null;
+                            precursorData.fa3 = null;
+                            precursorData.fa4 = null;
+                            precursorData.lcb = null;
+                            precursorData.addPrecursor = (onlyPrecursors != 0);
+                            precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
+                            
+                            if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
+                                    
+                            if (onlyHeavyLabeled == 0) continue;
+                            foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
+                            {
+                                string heavyHeadgroup = heavyPrecursor.name;
+                                
+                                if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
+                                
+                                
+                                FattyAcid heavyFA1 = new FattyAcid(fa);
+                                heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
                     
-                    String headgroup = "ChE";
-                    String key = " ";
-                    key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
-                    if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
-                    key += fa.suffix;
+                                ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
+                                MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
+                                MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
+                                string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
+                                string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
+                                MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
+                                double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
+                                
+                                string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                                                                    
+
+                                PrecursorData heavyPrecursorData = new PrecursorData();
+                                heavyPrecursorData.lipidCategory = LipidCategory.Sterollipid;
+                                heavyPrecursorData.moleculeListName = headgroup;
+                                heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
+                                heavyPrecursorData.precursorExportName = headgroup + key;
+                                heavyPrecursorData.precursorName = heavyKey + " " + heavyFA1.ToString();
+                                heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavyFA1.ToString();
+                                heavyPrecursorData.precursorIonFormula = heavyChemForm;
+                                heavyPrecursorData.precursorAdduct = adduct;
+                                heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
+                                heavyPrecursorData.precursorM_Z = heavyMass;
+                                heavyPrecursorData.fa1 = heavyFA1;
+                                heavyPrecursorData.fa2 = null;
+                                heavyPrecursorData.fa3 = null;
+                                heavyPrecursorData.fa4 = null;
+                                heavyPrecursorData.lcb = null;
+                                heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
+                                heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+                                
+                                precursorDataList.Add(heavyPrecursorData);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                
+                foreach (string headgroup in headGroupNames)
+                {
+                    string key = headgroup;
                     
                     foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                     {
                         if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
-                        if (usedKeys.Contains(headgroup + key + adductKey)) continue;
+                        if (usedKeys.Contains(key + adductKey)) continue;
                         
-                        usedKeys.Add(headgroup + key + adductKey);
+                        usedKeys.Add(key + adductKey);
                         
                         ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
-                        MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                         MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                         string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                         Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
@@ -186,19 +277,19 @@ namespace LipidCreator
                         int charge = adduct.charge;
                         MS2Fragment.addCounts(atomsCount, adduct.elements);
                         double mass = LipidCreator.computeMass(atomsCount, charge);
-                    
+                                        
                         PrecursorData precursorData = new PrecursorData();
                         precursorData.lipidCategory = LipidCategory.Sterollipid;
                         precursorData.moleculeListName = headgroup;
                         precursorData.fullMoleculeListName = headgroup;
-                        precursorData.precursorExportName = headgroup + key;
-                        precursorData.precursorName = headgroup + key;
-                        precursorData.precursorSpeciesName = headgroup + key;
+                        precursorData.precursorExportName = headgroup;
+                        precursorData.precursorName = key;
+                        precursorData.precursorSpeciesName = key;
                         precursorData.precursorIonFormula = chemForm;
                         precursorData.precursorAdduct = adduct;
                         precursorData.precursorAdductFormula = adductForm;
                         precursorData.precursorM_Z = mass;
-                        precursorData.fa1 = fa;
+                        precursorData.fa1 = null;
                         precursorData.fa2 = null;
                         precursorData.fa3 = null;
                         precursorData.fa4 = null;
@@ -207,41 +298,37 @@ namespace LipidCreator
                         precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
                         
                         if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
-                                
+                                    
                         if (onlyHeavyLabeled == 0) continue;
                         foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
                         {
                             string heavyHeadgroup = heavyPrecursor.name;
                             
                             if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
-                            
-                            
-                            FattyAcid heavyFA1 = new FattyAcid(fa);
-                            heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
                 
                             ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
-                            MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
                             MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
                             string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
                             string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
                             MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
                             double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
+                                        
                             
-                            string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+                            string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
                                                                 
 
                             PrecursorData heavyPrecursorData = new PrecursorData();
                             heavyPrecursorData.lipidCategory = LipidCategory.Sterollipid;
                             heavyPrecursorData.moleculeListName = headgroup;
                             heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                            heavyPrecursorData.precursorExportName = headgroup + key;
-                            heavyPrecursorData.precursorName = heavyKey + " " + heavyFA1.ToString();
-                            heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavyFA1.ToString();
+                            heavyPrecursorData.precursorExportName = headgroup;
+                            heavyPrecursorData.precursorName = heavyKey;
+                            heavyPrecursorData.precursorSpeciesName = heavyKey;
                             heavyPrecursorData.precursorIonFormula = heavyChemForm;
                             heavyPrecursorData.precursorAdduct = adduct;
                             heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
                             heavyPrecursorData.precursorM_Z = heavyMass;
-                            heavyPrecursorData.fa1 = heavyFA1;
+                            heavyPrecursorData.fa1 = null;
                             heavyPrecursorData.fa2 = null;
                             heavyPrecursorData.fa3 = null;
                             heavyPrecursorData.fa4 = null;
@@ -251,89 +338,6 @@ namespace LipidCreator
                             
                             precursorDataList.Add(heavyPrecursorData);
                         }
-                    }
-                }
-            }
-            else
-            {
-                String headgroup = "Ch";
-                String key = headgroup;
-                
-                foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
-                {
-                    if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
-                    if (usedKeys.Contains(key + adductKey)) continue;
-                    
-                    usedKeys.Add(key + adductKey);
-                    
-                    ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
-                    MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
-                    string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
-                    Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
-                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
-                    int charge = adduct.charge;
-                    MS2Fragment.addCounts(atomsCount, adduct.elements);
-                    double mass = LipidCreator.computeMass(atomsCount, charge);
-                                    
-                    PrecursorData precursorData = new PrecursorData();
-                    precursorData.lipidCategory = LipidCategory.Sterollipid;
-                    precursorData.moleculeListName = headgroup;
-                    precursorData.fullMoleculeListName = headgroup;
-                    precursorData.precursorExportName = headgroup;
-                    precursorData.precursorName = key;
-                    precursorData.precursorSpeciesName = key;
-                    precursorData.precursorIonFormula = chemForm;
-                    precursorData.precursorAdduct = adduct;
-                    precursorData.precursorAdductFormula = adductForm;
-                    precursorData.precursorM_Z = mass;
-                    precursorData.fa1 = null;
-                    precursorData.fa2 = null;
-                    precursorData.fa3 = null;
-                    precursorData.fa4 = null;
-                    precursorData.lcb = null;
-                    precursorData.addPrecursor = (onlyPrecursors != 0);
-                    precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
-                    
-                    if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
-                                
-                    if (onlyHeavyLabeled == 0) continue;
-                    foreach (Precursor heavyPrecursor  in headgroups[headgroup].heavyLabeledPrecursors)
-                    {
-                        string heavyHeadgroup = heavyPrecursor.name;
-                        
-                        if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
-            
-                        ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
-                        MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
-                        string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                        string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
-                        MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
-                        double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
-                                    
-                        
-                        string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(heavyAtomsCount);
-                                                            
-
-                        PrecursorData heavyPrecursorData = new PrecursorData();
-                        heavyPrecursorData.lipidCategory = LipidCategory.Sterollipid;
-                        heavyPrecursorData.moleculeListName = headgroup;
-                        heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                        heavyPrecursorData.precursorExportName = headgroup;
-                        heavyPrecursorData.precursorName = heavyKey;
-                        heavyPrecursorData.precursorSpeciesName = heavyKey;
-                        heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                        heavyPrecursorData.precursorAdduct = adduct;
-                        heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
-                        heavyPrecursorData.precursorM_Z = heavyMass;
-                        heavyPrecursorData.fa1 = null;
-                        heavyPrecursorData.fa2 = null;
-                        heavyPrecursorData.fa3 = null;
-                        heavyPrecursorData.fa4 = null;
-                        heavyPrecursorData.lcb = null;
-                        heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
-                        heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
-                        
-                        precursorDataList.Add(heavyPrecursorData);
                     }
                 }
             }

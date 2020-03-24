@@ -595,8 +595,6 @@ namespace LipidCreator
         [NonSerialized]
         public CheckBox glContainsSugar;
         [NonSerialized]
-        public CheckBox chContainsEster;
-        [NonSerialized]
         public CheckBox plHasPlasmalogen;
 
         [NonSerialized]
@@ -756,6 +754,13 @@ namespace LipidCreator
         public RadioButton slRegular;
         [NonSerialized]
         public RadioButton slIsLyso;
+
+        [NonSerialized]
+        public GroupBox stTypeGroup;
+        [NonSerialized]
+        public RadioButton stRegular;
+        [NonSerialized]
+        public RadioButton stIsEster;
 
         [NonSerialized]
         Label clDB3Label;
@@ -1276,7 +1281,6 @@ namespace LipidCreator
             glRepresentativeFA = new CheckBox();
             plRepresentativeFA = new CheckBox();
             glContainsSugar = new CheckBox();
-            chContainsEster = new CheckBox();
             plHasPlasmalogen = new CheckBox();
             
             plTypeGroup = new GroupBox();
@@ -1287,6 +1291,10 @@ namespace LipidCreator
             slTypeGroup = new GroupBox();
             slRegular = new RadioButton();
             slIsLyso = new RadioButton();
+            
+            stTypeGroup = new GroupBox();
+            stRegular = new RadioButton();
+            stIsEster = new RadioButton();
             
             glPositiveAdduct = new GroupBox();
             glNegativeAdduct = new GroupBox();
@@ -2201,10 +2209,10 @@ namespace LipidCreator
             cholesterollipidsTab.Controls.Add(chStep1);
             chStep1.Controls.Add(chPositiveAdduct);
             //chStep1.Controls.Add(chNegativeAdduct);
-            chStep1.Controls.Add(chContainsEster);
             chStep1.Controls.Add(chFACombobox);
             chStep1.Controls.Add(chFATextbox);
             chStep1.Controls.Add(chDBTextbox);
+            chStep1.Controls.Add(stTypeGroup);
             chStep1.Controls.Add(chDBLabel);
             chStep1.Controls.Add(chHydroxylTextbox);
             chStep1.Controls.Add(chFAHydroxyLabel);
@@ -2271,11 +2279,6 @@ namespace LipidCreator
             chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
             
             
-            chContainsEster.Location = new Point(490, 290);
-            chContainsEster.Width = 120;
-            chContainsEster.Text = "Contains Ester";
-            chContainsEster.CheckedChanged += new EventHandler(chContainsEsterCheckedChanged);
-            chContainsEster.BringToFront();
             
             
             chFACombobox.BringToFront();
@@ -2330,6 +2333,27 @@ namespace LipidCreator
             }
             stPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             stHgListbox.SendToBack();
+            
+            
+            
+            stTypeGroup.Location = new Point(400, 8);
+            stTypeGroup.Size = new Size(180, 40);
+            stTypeGroup.Text = "Type";
+            stTypeGroup.Controls.Add(stIsEster);
+            stTypeGroup.Controls.Add(stRegular);
+            
+            stRegular.Location = new Point(10, 14);
+            stRegular.Text = "Regular";
+            stRegular.CheckedChanged += new EventHandler(chContainsEsterCheckedChanged);
+            
+            stIsEster.Location = new Point(90, 14);
+            stIsEster.Text = "Ester";
+            stIsEster.Width = 70;
+            stIsEster.CheckedChanged += new EventHandler(chContainsEsterCheckedChanged);
+            
+            
+            
+            
             
             
             

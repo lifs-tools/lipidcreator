@@ -979,7 +979,8 @@ namespace LipidCreator
                     chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
                     chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
                     addLipidButton.Text = "Add cholesterols";
-                    chContainsEster.Checked = currentCHLipid.containsEster;
+                    stIsEster.Checked = currentCHLipid.containsEster;
+                    stRegular.Checked = !currentCHLipid.containsEster;
                     
                     chFATextbox.Text = currentCHLipid.fag.lengthInfo;
                     chDBTextbox.Text = currentCHLipid.fag.dbInfo;
@@ -1957,13 +1958,12 @@ namespace LipidCreator
         
         public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
         {
-            ((Cholesterol)currentLipid).containsEster = ((CheckBox)sender).Checked;
+            ((Cholesterol)currentLipid).containsEster = stIsEster.Checked;
             stHgListbox.Items.Clear();
             
             if (((Cholesterol)currentLipid).containsEster)
             {
                 stHgListbox.Items.AddRange(stEsterHgList.ToArray());
-                //chPictureBox.Image = cholesterolEsterBackboneImage;
             }
             else
             {
@@ -1991,6 +1991,8 @@ namespace LipidCreator
             }
         }
         
+        
+        
         void stHGListboxMouseHover(object sender, EventArgs e)
         {
             Point point = stHgListbox.PointToClient(Cursor.Position);
@@ -2004,6 +2006,7 @@ namespace LipidCreator
                 stPictureBox.SendToBack();
             }
         }
+        
         
         
         
@@ -2463,17 +2466,17 @@ namespace LipidCreator
             
             else if (currentLipid is Cholesterol)
             {
-                if (chContainsEster.Checked && chFATextbox.BackColor == alertColor)
+                if (stIsEster.Checked && chFATextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Fatty acyl length content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (chContainsEster.Checked && chDBTextbox.BackColor == alertColor)
+                if (stIsEster.Checked && chDBTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("FA double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (chContainsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
+                if (stIsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
@@ -2742,7 +2745,6 @@ namespace LipidCreator
                 Sphingolipid currentSphingolipid = (Sphingolipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
-                    row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
                 row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
                 if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
             }
@@ -2751,16 +2753,9 @@ namespace LipidCreator
             {
                 Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
-                if (currentCHLipid.containsEster)
-                {
-                    row["Building Block 1"] = "ChE";
-                    headGroupNames.Add("ChE");
-                }
-                else
-                {
-                    row["Building Block 1"] = "Ch";
-                    headGroupNames.Add("Ch");
-                }
+                headGroupNames.AddRange(currentCHLipid.headGroupNames);
+                row["Building Block 1"] = "HG: " + String.Join(", ", currentCHLipid.headGroupNames);
+
                 if (currentCHLipid.containsEster) row["Building Block 2"] = FARepresentation(currentCHLipid.fag) + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
             }
             

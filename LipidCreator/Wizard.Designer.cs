@@ -130,8 +130,8 @@ namespace LipidCreator
             String dbText = "No. DB";
             String hydroxylText = "No. Hydroxy";
             int dbLength = 70;
-            int sep = 20;
-            int sepText = 20;
+            int sep = 23;
+            int sepText = 25;
             int faLength = 150;
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";

@@ -16,7 +16,7 @@ node {
         {
             "pattern": "LipidCreator/bin/x64/Release/LipidCreator.zip",
             "target": "libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator-${BUILD_NUMBER}.zip",
-            "props": "artifactId:lipidcreator;groupId:de.isas.lipidomics;type:zip;version:${BUILD_NUMBER}",
+            "props": "artifactId=lipidcreator;groupId=de.isas.lipidomics;type=zip;version=${BUILD_NUMBER}",
             "recursive": "false",
             "flat" : "true",
             "regexp": "false"
@@ -24,7 +24,7 @@ node {
         {
             "pattern": "LipidCreator/bin/x64/Release/LipidCreator.zip",
             "target": "libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator.zip",
-            "props": "artifactId:lipidcreator;groupId:de.isas.lipidomics;type:zip;version:${BUILD_NUMBER}",
+            "props": "artifactId=lipidcreator;groupId=de.isas.lipidomics;type=zip;version=${BUILD_NUMBER}",
             "recursive": "false",
             "flat" : "true",
             "regexp": "false"

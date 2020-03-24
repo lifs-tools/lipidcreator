@@ -1,5 +1,5 @@
 node {
-    def artifactoryServer = Artifactory.server 'Lipidomics'
+    def artifactoryServer = Artifactory.server 'LipidomicsExternal'
     def emailOnSuccess = "${jobEmailRecipients?:''}"
     def emailOnFailure = "${jobEmailRecipients?:''}"
     def gitRepo = "lifs-tools/lipidcreator"

@@ -67,7 +67,7 @@ node {
                     stage 'Notify'
                     mail to: emailOnSuccess,
                          subject: "LipidCreator build succeeded: ${currentBuild.fullDisplayName}",
-                         body: "Artifacts have been deployed to Artifactory, build tag was pushed to ${gitUrl}/releases/tag/${BUILD_NUMBER}."
+                         body: "Artifacts have been deployed to Artifactory at https://apps.lifs.isas.de/artifactory/libs-release-local/de/isas/lipidomics/lipidcreator/${BUILD_NUMBER}/LipidCreator.zip , build tag was pushed to ${gitUrl}/releases/tag/${BUILD_NUMBER}."
                 } catch(e) {
                     mail to: emailOnFailure,
                          subject: "LipidCreator build failed: ${currentBuild.fullDisplayName}",

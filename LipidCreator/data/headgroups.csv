@@ -1,6 +1,14 @@
 Category,Precursor,C,H,O,N,P,S,d,File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
 Cholesterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
+Cholesterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Cholesterol,De,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Cholesterol,DeE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Cholesterol,St,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Cholesterol,StE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Cholesterol,Er,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Cholesterol,ErE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Cholesterol,La,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Cholesterol,LaE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 GL,DAG,3,6,3,0,0,0,0,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,15,26,13,0,0,0,0,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
 GL,MAG,3,7,3,0,0,0,0,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,

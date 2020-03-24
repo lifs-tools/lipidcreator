@@ -1958,24 +1958,53 @@ namespace LipidCreator
         public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
         {
             ((Cholesterol)currentLipid).containsEster = ((CheckBox)sender).Checked;
+            stHgListbox.Items.Clear();
             
-            chPictureBox.Visible = false;
             if (((Cholesterol)currentLipid).containsEster)
             {
-                chPictureBox.Image = cholesterolEsterBackboneImage;
+                stHgListbox.Items.AddRange(stEsterHgList.ToArray());
+                //chPictureBox.Image = cholesterolEsterBackboneImage;
             }
             else
             {
-                chPictureBox.Image = cholesterolBackboneImage;
+                stHgListbox.Items.AddRange(stHgList.ToArray());
             }
+            stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
             chFACombobox.Visible = ((Cholesterol)currentLipid).containsEster;
             chFATextbox.Visible = ((Cholesterol)currentLipid).containsEster;
             chDBTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
             chDBLabel.Visible = ((Cholesterol)currentLipid).containsEster;
             chHydroxylTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
             chFAHydroxyLabel.Visible = ((Cholesterol)currentLipid).containsEster;
-            chPictureBox.Visible = true;
         }
+        
+        
+        
+        
+        private void stHGListboxSelectedValueChanged(object sender, System.EventArgs e)
+        {
+            if (settingListbox) return;
+            currentLipid.headGroupNames.Clear();
+            foreach(object itemChecked in ((ListBox)sender).SelectedItems)
+            {
+                currentLipid.headGroupNames.Add(itemChecked.ToString());
+            }
+        }
+        
+        void stHGListboxMouseHover(object sender, EventArgs e)
+        {
+            Point point = stHgListbox.PointToClient(Cursor.Position);
+            int hoveredIndex = stHgListbox.IndexFromPoint(point);
+
+            if (hoveredIndex != -1)
+            {
+                string sterolFile = lipidCreator.headgroups[stHgListbox.Items[hoveredIndex].ToString()].pathToImage;
+                stPictureBox.Image = Image.FromFile(sterolFile);
+                stPictureBox.Top = mediatorMiddleHeight - (stPictureBox.Image.Height >> 1);
+                stPictureBox.SendToBack();
+            }
+        }
+        
         
         
         

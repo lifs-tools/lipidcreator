@@ -333,6 +333,9 @@ namespace LipidCreator
         public Image editImage;
         public Image addImage;
         public bool initialCall = true;
+        
+        List<String> stHgList = new List<String>();
+        List<String> stEsterHgList = new List<String>();
 
         [NonSerialized]
         public System.Timers.Timer timerEasterEgg;
@@ -480,8 +483,8 @@ namespace LipidCreator
         Image phosphoLysoBackboneImageFA1p;
         Image sphingoBackboneImage;
         Image sphingoLysoBackboneImage;
-        Image cholesterolBackboneImage;
-        Image cholesterolEsterBackboneImage;
+        //Image cholesterolBackboneImage;
+        //Image cholesterolEsterBackboneImage;
 
         [NonSerialized]
         public CustomPictureBox glPictureBox;
@@ -490,9 +493,9 @@ namespace LipidCreator
         [NonSerialized]
         public PictureBox slPictureBox;
         [NonSerialized]
-        public PictureBox chPictureBox;
-        [NonSerialized]
         public CustomPictureBox medPictureBox;
+        [NonSerialized]
+        public CustomPictureBox stPictureBox;
 
         [NonSerialized]
         public ListBox glHgListbox;
@@ -502,6 +505,8 @@ namespace LipidCreator
         public ListBox slHgListbox;
         [NonSerialized]
         public ListBox medHgListbox;
+        [NonSerialized]
+        public ListBox stHgListbox;
 
         [NonSerialized]
         public TextBox clFA3Textbox;
@@ -1042,8 +1047,8 @@ namespace LipidCreator
             glPictureBox = new CustomPictureBox();
             plPictureBox = new CustomPictureBox();
             slPictureBox = new PictureBox();
-            chPictureBox = new PictureBox();
             medPictureBox = new CustomPictureBox();
+            stPictureBox = new CustomPictureBox();
             glArrow = new CustomPictureBox();
             
             String dbText = "No. DB";
@@ -1065,6 +1070,8 @@ namespace LipidCreator
             slHgListbox.SelectionMode = SelectionMode.MultiExtended;
             medHgListbox = new ListBox();
             medHgListbox.SelectionMode = SelectionMode.MultiExtended;
+            stHgListbox = new ListBox();
+            stHgListbox.SelectionMode = SelectionMode.MultiExtended;
 
             if (!lipidCreatorInitError)
             {
@@ -1089,9 +1096,22 @@ namespace LipidCreator
                 
                 
                 
+                foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Sterollipid])
+                {
+                    if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")&& !lipidCreator.headgroups[headgroup].attributes.Contains("ester")) stHgList.Add(headgroup);
+                
+                    else if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].derivative && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy")&& lipidCreator.headgroups[headgroup].attributes.Contains("ester")) stEsterHgList.Add(headgroup);
+                }
+                stHgList.Sort();
+                stEsterHgList.Sort();
+                
+                
+                
                 glHgListbox.Items.AddRange(glHgList.ToArray());
-                //plHgListbox.Items.AddRange(plHgList.ToArray());
                 medHgListbox.Items.AddRange(medHgList.ToArray());
+                stHgListbox.Items.AddRange(stHgList.ToArray());
+                
+                
                 
                 cardioBackboneImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "CL_backbones.png"));
                 cardioBackboneImageFA1e = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "CL_FAe1.png"));
@@ -1124,8 +1144,6 @@ namespace LipidCreator
                 phosphoLysoBackboneImageFA1p = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "PL_lyso_FAp.png"));
                 sphingoBackboneImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "SL_backbones.png"));
                 sphingoLysoBackboneImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "SL_backbones_onlyLCB.png"));
-                cholesterolBackboneImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "Ch.png"));
-                cholesterolEsterBackboneImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "backbones", "ChE.png"));
                 glArrowImage = Image.FromFile(Path.Combine(lipidCreator.prefixPath, "images", "arrow.png"));
 
                 
@@ -2181,7 +2199,6 @@ namespace LipidCreator
             
             // tab for cholesterols
             cholesterollipidsTab.Controls.Add(chStep1);
-            chStep1.Controls.Add(chPictureBox);
             chStep1.Controls.Add(chPositiveAdduct);
             //chStep1.Controls.Add(chNegativeAdduct);
             chStep1.Controls.Add(chContainsEster);
@@ -2191,6 +2208,8 @@ namespace LipidCreator
             chStep1.Controls.Add(chDBLabel);
             chStep1.Controls.Add(chHydroxylTextbox);
             chStep1.Controls.Add(chFAHydroxyLabel);
+            chStep1.Controls.Add(stPictureBox);
+            chStep1.Controls.Add(stHgListbox);
             
             cholesterollipidsTab.Text = "Sterol lipids";
             //cholesterollipidsTab.ToolTipText = "Sterol lipids";
@@ -2251,10 +2270,6 @@ namespace LipidCreator
             chNegAdductCheckbox4.Enabled = false;
             chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
             
-            chPictureBox.Image = cholesterolBackboneImage;
-            chPictureBox.Location = new Point(30, 30);
-            chPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-            chPictureBox.SendToBack();
             
             chContainsEster.Location = new Point(490, 290);
             chContainsEster.Width = 120;
@@ -2296,6 +2311,25 @@ namespace LipidCreator
             chDBLabel.Visible = false;
             chHydroxylTextbox.Visible = false;
             chFAHydroxyLabel.Visible = false;
+            
+            
+            
+            
+            
+            stHgListbox.Location = new Point(34, 35);
+            stHgListbox.Size = new Size(140, 260);
+            stHgListbox.BringToFront();
+            stHgListbox.BorderStyle = BorderStyle.Fixed3D;
+            stHgListbox.SelectedValueChanged += new System.EventHandler(stHGListboxSelectedValueChanged);
+            stHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(stHGListboxMouseHover);
+            stPictureBox.Location = new Point(210, 30);
+            if (!lipidCreatorInitError && stHgListbox.Items.Count > 0)
+            {
+                stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
+                stPictureBox.Top = mediatorMiddleHeight - (stPictureBox.Image.Height >> 1);
+            }
+            stPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            stHgListbox.SendToBack();
             
             
             
@@ -2351,7 +2385,6 @@ namespace LipidCreator
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
-            
             medPictureBox.Location = new Point(210, 30);
             if (!lipidCreatorInitError && medHgListbox.Items.Count > 0)
             {

@@ -788,6 +788,14 @@ IPC,LCB [xx:x;x](-H6NO),LCB(-H6NO),images/MS2/Sphingolipids/CerPI/CerPI_neg_LCB-
 IPC,LCB [xx:x;x](-C2H10NO),LCB(-C2H10NO),images/MS2/Sphingolipids/CerPI/CerPI_neg_LCB-N-C2H4.png,-1,LCB,-2,-8,-1,-1,0,0,0
 Ch,-Cholesterol(35),-Cholesterol(35),images/MS2/Cholesterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
 ChE,-FA [xx:x](+HO)-Cholesterol(35),-FA1(+HO)-Cholesterol(35),images/MS2/Cholesterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+De,-Cholesterol(35),-Cholesterol(35),images/MS2/Cholesterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
+DeE,-FA [xx:x](+HO)-Cholesterol(35),-FA1(+HO)-Cholesterol(35),images/MS2/Cholesterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+St,-Cholesterol(35),-Cholesterol(35),images/MS2/Cholesterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
+StE,-FA [xx:x](+HO)-Cholesterol(35),-FA1(+HO)-Cholesterol(35),images/MS2/Cholesterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+Er,-Cholesterol(35),-Cholesterol(35),images/MS2/Cholesterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
+ErE,-FA [xx:x](+HO)-Cholesterol(35),-FA1(+HO)-Cholesterol(35),images/MS2/Cholesterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+La,-Cholesterol(35),-Cholesterol(35),images/MS2/Cholesterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
+LaE,-FA [xx:x](+HO)-Cholesterol(35),-FA1(+HO)-Cholesterol(35),images/MS2/Cholesterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 CL,FA [xx:x](+O),FA1(+O),images/MS2/Phospholipids/CL/CL_neg_FA1.png,-1,FA1,0,1,1,0,0,0,0
 CL,FA [yy:y](+O),FA2(+O),images/MS2/Phospholipids/CL/CL_neg_FA2.png,-1,FA2,0,1,1,0,0,0,0
 CL,FA [zz:z](+O),FA3(+O),images/MS2/Phospholipids/CL/CL_neg_FA3.png,-1,FA3,0,1,1,0,0,0,0

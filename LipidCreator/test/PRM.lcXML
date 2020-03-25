@@ -1092,7 +1092,7 @@
 <fragment>FA1(+O)</fragment>
 </negativeFragments>
 </lipid>
-<lipid type="Cholesterol" containsEster="False">
+<lipid type="Sterol" containsEster="False">
 <FattyAcidGroup chainType="0" isLCB="False" lengthInfo="12-15" dbInfo="0" hydroxylInfo="0">
 <faType type="FA">1</faType>
 <faType type="FAp">0</faType>
@@ -1103,6 +1103,7 @@
 <onlyPrecursors>1</onlyPrecursors>
 <onlyHeavyLabeled>2</onlyHeavyLabeled>
 <adduct type="+NH4" />
+<headGroup>Ch</headGroup>
 <positiveFragments lipidClass="Ch">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
@@ -1114,7 +1115,7 @@
 <negativeFragments lipidClass="ChE">
 </negativeFragments>
 </lipid>
-<lipid type="Cholesterol" containsEster="True">
+<lipid type="Sterol" containsEster="True">
 <FattyAcidGroup chainType="0" isLCB="False" lengthInfo="18" dbInfo="0-2" hydroxylInfo="0">
 <faType type="FA">1</faType>
 <faType type="FAp">0</faType>
@@ -1125,6 +1126,7 @@
 <onlyPrecursors>1</onlyPrecursors>
 <onlyHeavyLabeled>2</onlyHeavyLabeled>
 <adduct type="+NH4" />
+<headGroup>ChE</headGroup>
 <positiveFragments lipidClass="Ch">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>

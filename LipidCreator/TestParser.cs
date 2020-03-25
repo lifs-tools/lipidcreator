@@ -153,7 +153,7 @@ namespace LipidCreator
                             if (resultlipid is Glycerolipid) lipidHash = ((Glycerolipid)resultlipid).getHashCode();
                             else if (resultlipid is Phospholipid) lipidHash = ((Phospholipid)resultlipid).getHashCode();
                             else if (resultlipid is Sphingolipid) lipidHash = ((Sphingolipid)resultlipid).getHashCode();
-                            else if (resultlipid is Cholesterol) lipidHash = ((Cholesterol)resultlipid).getHashCode();
+                            else if (resultlipid is Sterol) lipidHash = ((Sterol)resultlipid).getHashCode();
                             else if (resultlipid is Mediator) lipidHash = ((Mediator)resultlipid).getHashCode();
                             else if (resultlipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)resultlipid).getHashCode();
                             

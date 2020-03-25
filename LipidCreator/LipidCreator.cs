@@ -701,7 +701,7 @@ namespace LipidCreator
             try 
             {
                 parserEventHandlerFragment = new ParserEventHandlerFragment(this);
-                lipidFragmentsParser = new Parser(parserEventHandlerFragment, Path.Combine(prefixPath, "data", "goslin", "Goslin-Fragments.g4"), PARSER_QUOTE);
+                lipidFragmentsParser = new Parser(parserEventHandlerFragment, Path.Combine(prefixPath, "data", "goslin", "GoslinFragments.g4"), PARSER_QUOTE);
             }
             catch (Exception e)
             {

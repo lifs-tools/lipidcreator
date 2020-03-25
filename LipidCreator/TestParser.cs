@@ -70,7 +70,7 @@ namespace LipidCreator
         {
             
             string grammarFilename = Path.Combine("data", "goslin", "Goslin.g4");
-            string grammarFragmentFilename = Path.Combine("data", "goslin", "Goslin-Fragments.g4");
+            string grammarFragmentFilename = Path.Combine("data", "goslin", "GoslinFragments.g4");
         
             LipidCreator lcf = new LipidCreator(null);
             ParserEventHandler peh = new ParserEventHandler(lcf);

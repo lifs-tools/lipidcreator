@@ -98,7 +98,7 @@ namespace LipidCreator
             registeredEvents.Add("gl_pre_event", GLPreEvent);
             registeredEvents.Add("pl_pre_event", PLPreEvent);
             registeredEvents.Add("sl_pre_event", SLPreEvent);
-            registeredEvents.Add("cholesterol_pre_event", SterolPreEvent);
+            registeredEvents.Add("sterol_pre_event", SterolPreEvent);
             registeredEvents.Add("mediator_pre_event", MediatorPreEvent);
             
             registeredEvents.Add("hg_mgl_pre_event", HG_MGLPreEvent);
@@ -116,8 +116,8 @@ namespace LipidCreator
             registeredEvents.Add("hg_lsl_pre_event", HG_LSLPreEvent);
             registeredEvents.Add("hg_dsl_pre_event", HG_DSLPreEvent);
             
-            registeredEvents.Add("ch_pre_event", ChPreEvent);
-            registeredEvents.Add("hg_che_pre_event", HG_ChEPreEvent);
+            registeredEvents.Add("st_pre_event", StPreEvent);
+            registeredEvents.Add("hg_ste_pre_event", HG_StEPreEvent);
             
             registeredEvents.Add("dpl_post_event", DPLPostEvent);
             registeredEvents.Add("dpl_o_post_event", DPLPostEvent);
@@ -984,11 +984,19 @@ namespace LipidCreator
             }
         }
         
-        public void ChPreEvent(Parser.TreeNode node)
+        
+        
+        public void StPreEvent(Parser.TreeNode node)
         {
             if (lipid != null)
             {
                 string headgroup = node.getText();
+                switch (headgroup)
+                {
+                    case "Cholesterol": headgroup = "Ch"; break;
+                    case "Desmosterol": headgroup = "Des"; break;
+                    default: break;
+                }
                 lipid.headGroupNames.Add(headgroup);
                 List<string> keys = new List<string>(((Sterol)lipid).fag.faTypes.Keys);
                 foreach(string faTypeKey in keys) ((Sterol)lipid).fag.faTypes[faTypeKey] = false;
@@ -998,11 +1006,16 @@ namespace LipidCreator
         
         
         
-        public void HG_ChEPreEvent(Parser.TreeNode node)
+        public void HG_StEPreEvent(Parser.TreeNode node)
         {
             if (lipid != null)
             {
                 string headgroup = node.getText();
+                switch (headgroup)
+                {
+                    case "CE": headgroup = "ChE"; break;
+                    default: break;
+                }
                 lipid.headGroupNames.Add(headgroup);
                 ((Sterol)lipid).containsEster = true;
             }

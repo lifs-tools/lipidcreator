@@ -421,7 +421,7 @@ namespace LipidCreator
                                                       new Glycerolipid(lipidCreator),
                                                       new Phospholipid(lipidCreator),
                                                       new Sphingolipid(lipidCreator),
-                                                      new Cholesterol(lipidCreator),
+                                                      new Sterol(lipidCreator),
                                                       new Mediator(lipidCreator)});
         }
         
@@ -970,7 +970,7 @@ namespace LipidCreator
                     
                     
                 case LipidCategory.Sterollipid:
-                    Cholesterol currentCHLipid = (Cholesterol)currentLipid;
+                    Sterol currentCHLipid = (Sterol)currentLipid;
                     chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
                     chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
                     chPosAdductCheckbox3.Checked = currentCHLipid.adducts["+NH4"];
@@ -1062,7 +1062,7 @@ namespace LipidCreator
                     break;
                     
                 case (int)LipidCategory.Sterollipid:
-                    newLipid = new Cholesterol(lipidCreator);
+                    newLipid = new Sterol(lipidCreator);
                     break;
                     
                 case (int)LipidCategory.LipidMediator:
@@ -1951,17 +1951,17 @@ namespace LipidCreator
             slHgListbox.Items.AddRange(slHgList.ToArray());
         }
         
-        ////////////////////// Cholesterols ////////////////////////////////
+        ////////////////////// Sterols ////////////////////////////////
         
         
         
         
         public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
         {
-            ((Cholesterol)currentLipid).containsEster = stIsEster.Checked;
+            ((Sterol)currentLipid).containsEster = stIsEster.Checked;
             stHgListbox.Items.Clear();
             
-            if (((Cholesterol)currentLipid).containsEster)
+            if (((Sterol)currentLipid).containsEster)
             {
                 stHgListbox.Items.AddRange(stEsterHgList.ToArray());
             }
@@ -1970,12 +1970,12 @@ namespace LipidCreator
                 stHgListbox.Items.AddRange(stHgList.ToArray());
             }
             stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
-            chFACombobox.Visible = ((Cholesterol)currentLipid).containsEster;
-            chFATextbox.Visible = ((Cholesterol)currentLipid).containsEster;
-            chDBTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
-            chDBLabel.Visible = ((Cholesterol)currentLipid).containsEster;
-            chHydroxylTextbox.Visible = ((Cholesterol)currentLipid).containsEster;
-            chFAHydroxyLabel.Visible = ((Cholesterol)currentLipid).containsEster;
+            chFACombobox.Visible = ((Sterol)currentLipid).containsEster;
+            chFATextbox.Visible = ((Sterol)currentLipid).containsEster;
+            chDBTextbox.Visible = ((Sterol)currentLipid).containsEster;
+            chDBLabel.Visible = ((Sterol)currentLipid).containsEster;
+            chHydroxylTextbox.Visible = ((Sterol)currentLipid).containsEster;
+            chFAHydroxyLabel.Visible = ((Sterol)currentLipid).containsEster;
         }
         
         
@@ -2464,7 +2464,7 @@ namespace LipidCreator
             }
             
             
-            else if (currentLipid is Cholesterol)
+            else if (currentLipid is Sterol)
             {
                 if (stIsEster.Checked && chFATextbox.BackColor == alertColor)
                 {
@@ -2555,10 +2555,10 @@ namespace LipidCreator
                         break;
                         
                     case LipidCategory.Sterollipid:
-                        newHash = ((Cholesterol)currentLipid).getHashCode();
+                        newHash = ((Sterol)currentLipid).getHashCode();
                         lipidCreator.registeredLipids[lipidRow] = newHash;
                         lipidCreator.registeredLipidDictionary.Remove(lipidHash);
-                        lipidCreator.registeredLipidDictionary.Add(newHash, new Cholesterol((Cholesterol)currentLipid));
+                        lipidCreator.registeredLipidDictionary.Add(newHash, new Sterol((Sterol)currentLipid));
                         tabIndex = (int)LipidCategory.Sterollipid;
                         break;
                         
@@ -2628,8 +2628,8 @@ namespace LipidCreator
                             break;
                             
                         case LipidCategory.Sterollipid:
-                            lipidHash = ((Cholesterol)currentLipid).getHashCode();
-                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Cholesterol((Cholesterol)currentLipid));
+                            lipidHash = ((Sterol)currentLipid).getHashCode();
+                            lipidCreator.registeredLipidDictionary.Add(lipidHash, new Sterol((Sterol)currentLipid));
                             lipidCreator.registeredLipids.Add(lipidHash);
                             registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(currentLipid));
                             tabIndex = (int)LipidCategory.Sterollipid;
@@ -2749,9 +2749,9 @@ namespace LipidCreator
                 if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
             }
             
-            else if (currentRegisteredLipid is Cholesterol)
+            else if (currentRegisteredLipid is Sterol)
             {
-                Cholesterol currentCHLipid = (Cholesterol)currentRegisteredLipid;
+                Sterol currentCHLipid = (Sterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
                 headGroupNames.AddRange(currentCHLipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentCHLipid.headGroupNames);
@@ -2919,11 +2919,11 @@ namespace LipidCreator
                 lipidTabList[tabIndex] = new Sphingolipid((Sphingolipid)currentRegisteredLipid);
                 currentLipid = (Sphingolipid)lipidTabList[tabIndex];
             }
-            else if (currentRegisteredLipid is Cholesterol)
+            else if (currentRegisteredLipid is Sterol)
             {
                 tabIndex = (int)LipidCategory.Sterollipid;
-                lipidTabList[tabIndex] = new Cholesterol((Cholesterol)currentRegisteredLipid);
-                currentLipid = (Cholesterol)lipidTabList[tabIndex];
+                lipidTabList[tabIndex] = new Sterol((Sterol)currentRegisteredLipid);
+                currentLipid = (Sterol)lipidTabList[tabIndex];
             }
             else if (currentRegisteredLipid is Mediator)
             {
@@ -2968,7 +2968,7 @@ namespace LipidCreator
                 if (currentRegisteredLipid is Glycerolipid) tabIndex = (int)LipidCategory.Glycerolipid;
                 else if (currentRegisteredLipid is Phospholipid) tabIndex = (int)LipidCategory.Glycerophospholipid;
                 else if (currentRegisteredLipid is Sphingolipid) tabIndex = (int)LipidCategory.Sphingolipid;
-                else if (currentRegisteredLipid is Cholesterol) tabIndex = (int)LipidCategory.Sterollipid;
+                else if (currentRegisteredLipid is Sterol) tabIndex = (int)LipidCategory.Sterollipid;
                 else if (currentRegisteredLipid is Mediator) tabIndex = (int)LipidCategory.LipidMediator;
                 
                 DataTable tmpTable = registeredLipidsDatatable.Clone();

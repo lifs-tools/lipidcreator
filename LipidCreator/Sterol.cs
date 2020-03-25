@@ -36,14 +36,14 @@ using log4net;
 namespace LipidCreator
 {   
     [Serializable]
-    public class Cholesterol : Lipid
+    public class Sterol : Lipid
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Cholesterol));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Sterol));
         public bool containsEster;
         public FattyAcidGroup fag;
     
     
-        public Cholesterol(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Sterollipid)
+        public Sterol(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Sterollipid)
         {
             fag = new FattyAcidGroup();
             containsEster = false;
@@ -51,7 +51,7 @@ namespace LipidCreator
             adducts["-H"] = false;
         }
     
-        public Cholesterol(Cholesterol copy) : base((Lipid)copy) 
+        public Sterol(Sterol copy) : base((Lipid)copy) 
         {
             fag = new FattyAcidGroup(copy.fag);
             containsEster = copy.containsEster;
@@ -82,7 +82,7 @@ namespace LipidCreator
         
         public override void serialize(StringBuilder sb)
         {
-            sb.Append("<lipid type=\"Cholesterol\" containsEster=\"" + containsEster + "\">\n");
+            sb.Append("<lipid type=\"Sterol\" containsEster=\"" + containsEster + "\">\n");
             fag.serialize(sb);
             base.serialize(sb);
             sb.Append("</lipid>\n");
@@ -143,7 +143,7 @@ namespace LipidCreator
                         }
                         else
                         {   
-                            log.Error("A Cholesterol can have at most 1 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
+                            log.Error("A Sterol can have at most 1 fatty acid chains. Found: " + (fattyAcidCounter + 1) + "");
                             throw new Exception();
                         }
                         ++fattyAcidCounter;

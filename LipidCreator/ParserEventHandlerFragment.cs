@@ -431,7 +431,7 @@ namespace LipidCreator
                         if (lipid is Glycerolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
                         else if (lipid is Phospholipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
                         else if (lipid is Sphingolipid) fragmentFAGEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
-                        else if (lipid is Cholesterol) fragmentFAGEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
+                        else if (lipid is Sterol) fragmentFAGEnum = new FattyAcidGroupEnumerator((Sterol)lipid);
                         else if (lipid is Mediator) fragmentFAGEnum = new FattyAcidGroupEnumerator((Mediator)lipid);
                         int faCNT = 0;
                     
@@ -658,8 +658,8 @@ namespace LipidCreator
         
         public void CholesterolPreEvent(Parser.TreeNode node)
         {
-            lipid = new Cholesterol(lipidCreator);
-            fagEnum = new FattyAcidGroupEnumerator((Cholesterol)lipid);
+            lipid = new Sterol(lipidCreator);
+            fagEnum = new FattyAcidGroupEnumerator((Sterol)lipid);
         }
         
         
@@ -990,9 +990,9 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                List<string> keys = new List<string>(((Cholesterol)lipid).fag.faTypes.Keys);
-                foreach(string faTypeKey in keys) ((Cholesterol)lipid).fag.faTypes[faTypeKey] = false;
-                ((Cholesterol)lipid).fag.faTypes["FAx"] = true;
+                List<string> keys = new List<string>(((Sterol)lipid).fag.faTypes.Keys);
+                foreach(string faTypeKey in keys) ((Sterol)lipid).fag.faTypes[faTypeKey] = false;
+                ((Sterol)lipid).fag.faTypes["FAx"] = true;
             }
         }
         
@@ -1004,7 +1004,7 @@ namespace LipidCreator
             {
                 string headgroup = node.getText();
                 lipid.headGroupNames.Add(headgroup);
-                ((Cholesterol)lipid).containsEster = true;
+                ((Sterol)lipid).containsEster = true;
             }
         }
         

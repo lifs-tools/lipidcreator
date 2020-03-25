@@ -333,7 +333,7 @@ namespace LipidCreator
                                 case "Mediator":
                                     headgroup.category = LipidCategory.LipidMediator;
                                     break;
-                                case "Cholesterol":
+                                case "Sterol":
                                     headgroup.category = LipidCategory.Sterollipid;
                                     break;
                                 default:
@@ -1149,7 +1149,7 @@ namespace LipidCreator
                             if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                             else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
                             else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
-                            else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
+                            else if (lipid is Sterol) lipidHash = ((Sterol)lipid).getHashCode();
                             else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
                             else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
 
@@ -2092,8 +2092,8 @@ namespace LipidCreator
                             }
                             break;
                             
-                        case "Cholesterol":
-                            Cholesterol chl = new Cholesterol(this);
+                        case "Sterol":
+                            Sterol chl = new Sterol(this);
                             chl.import(lipid, importVersion);
                             lipidHash = chl.getHashCode();
                             if (!registeredLipidDictionary.ContainsKey(lipidHash))

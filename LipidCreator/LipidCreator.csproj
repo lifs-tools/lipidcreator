@@ -160,7 +160,7 @@
     <Compile Include="AddHeavyPrecursor.Designer.cs">
       <DependentUpon>AddHeavyPrecursor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cholesterol.cs" />
+    <Compile Include="Sterol.cs" />
     <Compile Include="CreatorGUI.cs">
       <SubType>Form</SubType>
     </Compile>

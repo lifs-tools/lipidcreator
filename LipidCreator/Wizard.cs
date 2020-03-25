@@ -148,7 +148,7 @@ namespace LipidCreator
                     break;
                     
                 case (int)LipidCategory.Sterollipid:
-                    if ((string)faList[currFA] == "FA") currFAG = ((Cholesterol)lipid).fag;
+                    if ((string)faList[currFA] == "FA") currFAG = ((Sterol)lipid).fag;
                     break;
                 
                 default:
@@ -271,7 +271,7 @@ namespace LipidCreator
                     {
                         if (headgroup == "ChE")
                         {
-                            ((Cholesterol)lipid).containsEster = true;
+                            ((Sterol)lipid).containsEster = true;
                         }
                     }
                     
@@ -550,7 +550,7 @@ namespace LipidCreator
                             break;
                         case "Sterol lipids":
                             headgroupCategory = (int)LipidCategory.Sterollipid;
-                            lipid = new Cholesterol(creatorGUI.lipidCreator);
+                            lipid = new Sterol(creatorGUI.lipidCreator);
                             break;
                         case "Lipid Mediators":
                             headgroupCategory = (int)LipidCategory.LipidMediator;
@@ -877,7 +877,7 @@ namespace LipidCreator
                     if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
                     else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
                     else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
-                    else if (lipid is Cholesterol) lipidHash = ((Cholesterol)lipid).getHashCode();
+                    else if (lipid is Sterol) lipidHash = ((Sterol)lipid).getHashCode();
                     else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
                     else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
                 

@@ -98,7 +98,7 @@ namespace LipidCreator
             registeredEvents.Add("gl_pre_event", GLPreEvent);
             registeredEvents.Add("pl_pre_event", PLPreEvent);
             registeredEvents.Add("sl_pre_event", SLPreEvent);
-            registeredEvents.Add("cholesterol_pre_event", CholesterolPreEvent);
+            registeredEvents.Add("cholesterol_pre_event", SterolPreEvent);
             registeredEvents.Add("mediator_pre_event", MediatorPreEvent);
             
             registeredEvents.Add("hg_mgl_pre_event", HG_MGLPreEvent);
@@ -656,7 +656,7 @@ namespace LipidCreator
         
         
         
-        public void CholesterolPreEvent(Parser.TreeNode node)
+        public void SterolPreEvent(Parser.TreeNode node)
         {
             lipid = new Sterol(lipidCreator);
             fagEnum = new FattyAcidGroupEnumerator((Sterol)lipid);

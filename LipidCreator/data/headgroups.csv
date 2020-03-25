@@ -1,7 +1,7 @@
 Category,Precursor,C,H,O,N,P,S,d,File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
 Sterol,Ch,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
 Sterol,ChE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
-Sterol,De,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Sterol,Des,27,44,1,0,0,0,0,images/Precursors/ST 27_2_Desmosterol_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
 Sterol,DeE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,St,27,46,1,0,0,0,0,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
 Sterol,StE,27,45,1,0,0,0,0,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester

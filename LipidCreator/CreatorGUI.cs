@@ -148,7 +148,7 @@ namespace LipidCreator
                         }
                     }
                 }
-                tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, cholesterollipidsTab, mediatorlipidsTab});
+                tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, sterollipidsTab, mediatorlipidsTab});
                 if (!lipidCreatorInitError) tutorial = new Tutorial(this);
                 
                 Rectangle r = Screen.FromControl(this).Bounds;
@@ -181,13 +181,13 @@ namespace LipidCreator
                 slNegAdductCheckbox3.Enabled = false;
                 slNegAdductCheckbox4.Enabled = false;
                 
-                chPosAdductCheckbox1.Enabled = false;
-                chPosAdductCheckbox2.Enabled = false;
-                chPosAdductCheckbox3.Enabled = false;
-                chNegAdductCheckbox1.Enabled = false;
-                chNegAdductCheckbox2.Enabled = false;
-                chNegAdductCheckbox3.Enabled = false;
-                chNegAdductCheckbox4.Enabled = false;
+                stPosAdductCheckbox1.Enabled = false;
+                stPosAdductCheckbox2.Enabled = false;
+                stPosAdductCheckbox3.Enabled = false;
+                stNegAdductCheckbox1.Enabled = false;
+                stNegAdductCheckbox2.Enabled = false;
+                stNegAdductCheckbox3.Enabled = false;
+                stNegAdductCheckbox4.Enabled = false;
                 
                 medNegAdductCheckbox1.Enabled = false;
                 medNegAdductCheckbox2.Enabled = false;
@@ -552,13 +552,13 @@ namespace LipidCreator
             medNegAdductCheckbox3.Enabled = false;
             medNegAdductCheckbox4.Enabled = false;
             
-            chPosAdductCheckbox1.Enabled = false;
-            chPosAdductCheckbox2.Enabled = false;
-            chPosAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox1.Enabled = false;
-            chNegAdductCheckbox2.Enabled = false;
-            chNegAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox4.Enabled = false;
+            stPosAdductCheckbox1.Enabled = false;
+            stPosAdductCheckbox2.Enabled = false;
+            stPosAdductCheckbox3.Enabled = false;
+            stNegAdductCheckbox1.Enabled = false;
+            stNegAdductCheckbox2.Enabled = false;
+            stNegAdductCheckbox3.Enabled = false;
+            stNegAdductCheckbox4.Enabled = false;
         
             // enable all adduct checkboxes
             foreach (KeyValuePair<string, Precursor> row in lipidCreator.headgroups)
@@ -612,13 +612,13 @@ namespace LipidCreator
                         break;
                         
                     case (int)LipidCategory.Sterollipid:
-                        chPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
-                        chPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
-                        chPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
-                        chNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
-                        chNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
-                        chNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
-                        chNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
+                        stPosAdductCheckbox1.Enabled |= row.Value.adductRestrictions["+H"];
+                        stPosAdductCheckbox2.Enabled |= row.Value.adductRestrictions["+2H"];
+                        stPosAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+NH4"];
+                        stNegAdductCheckbox1.Enabled |= row.Value.adductRestrictions["-H"];
+                        stNegAdductCheckbox2.Enabled |= row.Value.adductRestrictions["-2H"];
+                        stNegAdductCheckbox3.Enabled |= row.Value.adductRestrictions["+HCOO"];
+                        stNegAdductCheckbox4.Enabled |= row.Value.adductRestrictions["+CH3COO"];
                         break;
                 }
                 
@@ -970,26 +970,27 @@ namespace LipidCreator
                     
                     
                 case LipidCategory.Sterollipid:
-                    Sterol currentCHLipid = (Sterol)currentLipid;
-                    chPosAdductCheckbox1.Checked = currentCHLipid.adducts["+H"];
-                    chPosAdductCheckbox2.Checked = currentCHLipid.adducts["+2H"];
-                    chPosAdductCheckbox3.Checked = currentCHLipid.adducts["+NH4"];
-                    chNegAdductCheckbox1.Checked = currentCHLipid.adducts["-H"];
-                    chNegAdductCheckbox2.Checked = currentCHLipid.adducts["-2H"];
-                    chNegAdductCheckbox3.Checked = currentCHLipid.adducts["+HCOO"];
-                    chNegAdductCheckbox4.Checked = currentCHLipid.adducts["+CH3COO"];
-                    addLipidButton.Text = "Add cholesterols";
-                    stIsEster.Checked = currentCHLipid.containsEster;
-                    stRegular.Checked = !currentCHLipid.containsEster;
+                    Sterol currentSTLipid = (Sterol)currentLipid;
+                    stPosAdductCheckbox1.Checked = currentSTLipid.adducts["+H"];
+                    stPosAdductCheckbox2.Checked = currentSTLipid.adducts["+2H"];
+                    stPosAdductCheckbox3.Checked = currentSTLipid.adducts["+NH4"];
+                    stNegAdductCheckbox1.Checked = currentSTLipid.adducts["-H"];
+                    stNegAdductCheckbox2.Checked = currentSTLipid.adducts["-2H"];
+                    stNegAdductCheckbox3.Checked = currentSTLipid.adducts["+HCOO"];
+                    stNegAdductCheckbox4.Checked = currentSTLipid.adducts["+CH3COO"];
+                    addLipidButton.Text = "Add sterol lipids";
+                    stIsEster.Checked = currentSTLipid.containsEster;
+                    stRegular.Checked = !currentSTLipid.containsEster;
                     
-                    chFATextbox.Text = currentCHLipid.fag.lengthInfo;
-                    chDBTextbox.Text = currentCHLipid.fag.dbInfo;
-                    chHydroxylTextbox.Text = currentCHLipid.fag.hydroxylInfo;
-                    chFACombobox.SelectedIndex = currentCHLipid.fag.chainType;
-                    updateRanges(currentCHLipid.fag, chFATextbox, chFACombobox.SelectedIndex);
-                    updateRanges(currentCHLipid.fag, chDBTextbox, 3);
-                    updateRanges(currentCHLipid.fag, chHydroxylTextbox, 4);
+                    stFATextbox.Text = currentSTLipid.fag.lengthInfo;
+                    stDBTextbox.Text = currentSTLipid.fag.dbInfo;
+                    stHydroxylTextbox.Text = currentSTLipid.fag.hydroxylInfo;
+                    stFACombobox.SelectedIndex = currentSTLipid.fag.chainType;
+                    updateRanges(currentSTLipid.fag, stFATextbox, stFACombobox.SelectedIndex);
+                    updateRanges(currentSTLipid.fag, stDBTextbox, 3);
+                    updateRanges(currentSTLipid.fag, stHydroxylTextbox, 4);
                     break;
+                    
                     
                 case LipidCategory.LipidMediator:
                     Mediator currentMedLipid = (Mediator)currentLipid;
@@ -1970,12 +1971,12 @@ namespace LipidCreator
                 stHgListbox.Items.AddRange(stHgList.ToArray());
             }
             stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
-            chFACombobox.Visible = ((Sterol)currentLipid).containsEster;
-            chFATextbox.Visible = ((Sterol)currentLipid).containsEster;
-            chDBTextbox.Visible = ((Sterol)currentLipid).containsEster;
-            chDBLabel.Visible = ((Sterol)currentLipid).containsEster;
-            chHydroxylTextbox.Visible = ((Sterol)currentLipid).containsEster;
-            chFAHydroxyLabel.Visible = ((Sterol)currentLipid).containsEster;
+            stFACombobox.Visible = ((Sterol)currentLipid).containsEster;
+            stFATextbox.Visible = ((Sterol)currentLipid).containsEster;
+            stDBTextbox.Visible = ((Sterol)currentLipid).containsEster;
+            stDBLabel.Visible = ((Sterol)currentLipid).containsEster;
+            stHydroxylTextbox.Visible = ((Sterol)currentLipid).containsEster;
+            stFAHydroxyLabel.Visible = ((Sterol)currentLipid).containsEster;
         }
         
         
@@ -2466,17 +2467,17 @@ namespace LipidCreator
             
             else if (currentLipid is Sterol)
             {
-                if (stIsEster.Checked && chFATextbox.BackColor == alertColor)
+                if (stIsEster.Checked && stFATextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Fatty acyl length content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (stIsEster.Checked && chDBTextbox.BackColor == alertColor)
+                if (stIsEster.Checked && stDBTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("FA double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (stIsEster.Checked && chHydroxylTextbox.BackColor == alertColor)
+                if (stIsEster.Checked && stHydroxylTextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
@@ -2751,12 +2752,12 @@ namespace LipidCreator
             
             else if (currentRegisteredLipid is Sterol)
             {
-                Sterol currentCHLipid = (Sterol)currentRegisteredLipid;
+                Sterol currentSTLipid = (Sterol)currentRegisteredLipid;
                 row["Category"] = "Sterol lipid";
-                headGroupNames.AddRange(currentCHLipid.headGroupNames);
-                row["Building Block 1"] = "HG: " + String.Join(", ", currentCHLipid.headGroupNames);
+                headGroupNames.AddRange(currentSTLipid.headGroupNames);
+                row["Building Block 1"] = "HG: " + String.Join(", ", currentSTLipid.headGroupNames);
 
-                if (currentCHLipid.containsEster) row["Building Block 2"] = FARepresentation(currentCHLipid.fag) + currentCHLipid.fag.lengthInfo + "; DB: " + currentCHLipid.fag.dbInfo + "; OH: " + currentCHLipid.fag.hydroxylInfo;
+                if (currentSTLipid.containsEster) row["Building Block 2"] = FARepresentation(currentSTLipid.fag) + currentSTLipid.fag.lengthInfo + "; DB: " + currentSTLipid.fag.dbInfo + "; OH: " + currentSTLipid.fag.hydroxylInfo;
             }
             
             else if (currentRegisteredLipid is Mediator)

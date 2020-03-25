@@ -414,7 +414,7 @@ namespace LipidCreator
         [NonSerialized]
         public TabPage sphingolipidsTab;
         [NonSerialized]
-        public TabPage cholesterollipidsTab;
+        public TabPage sterollipidsTab;
         [NonSerialized]
         public TabPage mediatorlipidsTab;
         [NonSerialized]
@@ -483,8 +483,6 @@ namespace LipidCreator
         Image phosphoLysoBackboneImageFA1p;
         Image sphingoBackboneImage;
         Image sphingoLysoBackboneImage;
-        //Image cholesterolBackboneImage;
-        //Image cholesterolEsterBackboneImage;
 
         [NonSerialized]
         public CustomPictureBox glPictureBox;
@@ -527,7 +525,7 @@ namespace LipidCreator
         [NonSerialized]
         public TextBox slFATextbox;
         [NonSerialized]
-        public TextBox chFATextbox;
+        public TextBox stFATextbox;
 
         [NonSerialized]
         public ComboBox clFA3Combobox;
@@ -548,7 +546,7 @@ namespace LipidCreator
         [NonSerialized]
         public ComboBox slFACombobox;
         [NonSerialized]
-        public ComboBox chFACombobox;
+        public ComboBox stFACombobox;
 
         [NonSerialized]
         public CheckBox clFA3Checkbox1;
@@ -610,9 +608,9 @@ namespace LipidCreator
         [NonSerialized]
         public GroupBox slNegativeAdduct;
         [NonSerialized]
-        public GroupBox chPositiveAdduct;
+        public GroupBox stPositiveAdduct;
         [NonSerialized]
-        public GroupBox chNegativeAdduct;
+        public GroupBox stNegativeAdduct;
         [NonSerialized]
         public GroupBox medNegativeAdduct;
 
@@ -623,7 +621,7 @@ namespace LipidCreator
         [NonSerialized]
         public GroupBox slStep1;
         [NonSerialized]
-        public GroupBox chStep1;
+        public GroupBox stStep1;
         [NonSerialized]
         public GroupBox medStep1;
         [NonSerialized]
@@ -674,19 +672,19 @@ namespace LipidCreator
         [NonSerialized]
         public CheckBox slNegAdductCheckbox4;
         [NonSerialized]
-        public CheckBox chPosAdductCheckbox1;
+        public CheckBox stPosAdductCheckbox1;
         [NonSerialized]
-        public CheckBox chPosAdductCheckbox2;
+        public CheckBox stPosAdductCheckbox2;
         [NonSerialized]
-        public CheckBox chPosAdductCheckbox3;
+        public CheckBox stPosAdductCheckbox3;
         [NonSerialized]
-        public CheckBox chNegAdductCheckbox1;
+        public CheckBox stNegAdductCheckbox1;
         [NonSerialized]
-        public CheckBox chNegAdductCheckbox2;
+        public CheckBox stNegAdductCheckbox2;
         [NonSerialized]
-        public CheckBox chNegAdductCheckbox3;
+        public CheckBox stNegAdductCheckbox3;
         [NonSerialized]
-        public CheckBox chNegAdductCheckbox4;
+        public CheckBox stNegAdductCheckbox4;
         [NonSerialized]
         public CheckBox medNegAdductCheckbox1;
         [NonSerialized]
@@ -720,7 +718,7 @@ namespace LipidCreator
         [NonSerialized]
         public TextBox slDB2Textbox;
         [NonSerialized]
-        public TextBox chDBTextbox;
+        public TextBox stDBTextbox;
 
         [NonSerialized]
         public TextBox clHydroxyl3Textbox;
@@ -737,7 +735,7 @@ namespace LipidCreator
         [NonSerialized]
         public TextBox plHydroxyl2Textbox;
         [NonSerialized]
-        public TextBox chHydroxylTextbox;
+        public TextBox stHydroxylTextbox;
 
         [NonSerialized]
         public GroupBox plTypeGroup;
@@ -781,7 +779,7 @@ namespace LipidCreator
         [NonSerialized]
         Label slDB2Label;
         [NonSerialized]
-        Label chDBLabel;
+        Label stDBLabel;
         [NonSerialized]
         Label slLCBHydroxyLabel;
         [NonSerialized]
@@ -801,7 +799,7 @@ namespace LipidCreator
         [NonSerialized]
         Label plHydroxyl2Label;
         [NonSerialized]
-        Label chFAHydroxyLabel;
+        Label stFAHydroxyLabel;
 
         [NonSerialized]
         Label homeText;
@@ -1035,7 +1033,7 @@ namespace LipidCreator
             glycerolipidsTab = new TabPage();
             phospholipidsTab = new TabPage();
             sphingolipidsTab = new TabPage();
-            cholesterollipidsTab = new TabPage();
+            sterollipidsTab = new TabPage();
             mediatorlipidsTab = new TabPage();
             lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
@@ -1245,15 +1243,15 @@ namespace LipidCreator
             slLCBHydroxyLabel = new Label();
             slFAHydroxyLabel = new Label();
             easterText = new Label();
-            chFACombobox = new ComboBox();
-            chFACombobox.Items.Add("Fatty acyl chain");
-            chFACombobox.Items.Add("Fatty acyl chain - odd");
-            chFACombobox.Items.Add("Fatty acyl chain - even");
-            chFATextbox = new TextBox();
-            chDBLabel = new Label();
-            chDBTextbox = new TextBox();
-            chHydroxylTextbox = new TextBox();
-            chFAHydroxyLabel = new Label();
+            stFACombobox = new ComboBox();
+            stFACombobox.Items.Add("Fatty acyl chain");
+            stFACombobox.Items.Add("Fatty acyl chain - odd");
+            stFACombobox.Items.Add("Fatty acyl chain - even");
+            stFATextbox = new TextBox();
+            stDBLabel = new Label();
+            stDBTextbox = new TextBox();
+            stHydroxylTextbox = new TextBox();
+            stFAHydroxyLabel = new Label();
             homeText = new Label();
             homeText3 = new Label();
 
@@ -1302,14 +1300,14 @@ namespace LipidCreator
             plNegativeAdduct = new GroupBox();
             slPositiveAdduct = new GroupBox();
             slNegativeAdduct = new GroupBox();
-            chPositiveAdduct = new GroupBox();
-            chNegativeAdduct = new GroupBox();
+            stPositiveAdduct = new GroupBox();
+            stNegativeAdduct = new GroupBox();
             medNegativeAdduct = new GroupBox();
             
             glStep1 = new GroupBox();
             plStep1 = new GroupBox();
             slStep1 = new GroupBox();
-            chStep1 = new GroupBox();
+            stStep1 = new GroupBox();
             medStep1 = new GroupBox();
             lcStep2 = new GroupBox();
             lcStep3 = new GroupBox();
@@ -1335,13 +1333,13 @@ namespace LipidCreator
             slNegAdductCheckbox2 = new CheckBox();
             slNegAdductCheckbox3 = new CheckBox();
             slNegAdductCheckbox4 = new CheckBox();
-            chPosAdductCheckbox1 = new CheckBox();
-            chPosAdductCheckbox2 = new CheckBox();
-            chPosAdductCheckbox3 = new CheckBox();
-            chNegAdductCheckbox1 = new CheckBox();
-            chNegAdductCheckbox2 = new CheckBox();
-            chNegAdductCheckbox3 = new CheckBox();
-            chNegAdductCheckbox4 = new CheckBox();
+            stPosAdductCheckbox1 = new CheckBox();
+            stPosAdductCheckbox2 = new CheckBox();
+            stPosAdductCheckbox3 = new CheckBox();
+            stNegAdductCheckbox1 = new CheckBox();
+            stNegAdductCheckbox2 = new CheckBox();
+            stNegAdductCheckbox3 = new CheckBox();
+            stNegAdductCheckbox4 = new CheckBox();
             medNegAdductCheckbox1 = new CheckBox();
             medNegAdductCheckbox2 = new CheckBox();
             medNegAdductCheckbox3 = new CheckBox();
@@ -1377,7 +1375,7 @@ namespace LipidCreator
             tabControl.Controls.Add(glycerolipidsTab);
             tabControl.Controls.Add(phospholipidsTab);
             tabControl.Controls.Add(sphingolipidsTab);
-            tabControl.Controls.Add(cholesterollipidsTab);
+            tabControl.Controls.Add(sterollipidsTab);
             tabControl.Controls.Add(mediatorlipidsTab);
             tabControl.ShowToolTips = true;
             tabControl.Dock = DockStyle.Fill;
@@ -2205,115 +2203,115 @@ namespace LipidCreator
             
             
             
-            // tab for cholesterols
-            cholesterollipidsTab.Controls.Add(chStep1);
-            chStep1.Controls.Add(chPositiveAdduct);
-            //chStep1.Controls.Add(chNegativeAdduct);
-            chStep1.Controls.Add(chFACombobox);
-            chStep1.Controls.Add(chFATextbox);
-            chStep1.Controls.Add(chDBTextbox);
-            chStep1.Controls.Add(stTypeGroup);
-            chStep1.Controls.Add(chDBLabel);
-            chStep1.Controls.Add(chHydroxylTextbox);
-            chStep1.Controls.Add(chFAHydroxyLabel);
-            chStep1.Controls.Add(stPictureBox);
-            chStep1.Controls.Add(stHgListbox);
+            // tab for sterols
+            sterollipidsTab.Controls.Add(stStep1);
+            stStep1.Controls.Add(stPositiveAdduct);
+            //stStep1.Controls.Add(stNegativeAdduct);
+            stStep1.Controls.Add(stFACombobox);
+            stStep1.Controls.Add(stFATextbox);
+            stStep1.Controls.Add(stDBTextbox);
+            stStep1.Controls.Add(stTypeGroup);
+            stStep1.Controls.Add(stDBLabel);
+            stStep1.Controls.Add(stHydroxylTextbox);
+            stStep1.Controls.Add(stFAHydroxyLabel);
+            stStep1.Controls.Add(stPictureBox);
+            stStep1.Controls.Add(stHgListbox);
             
-            cholesterollipidsTab.Text = "Sterol lipids";
-            //cholesterollipidsTab.ToolTipText = "Sterol lipids";
-            cholesterollipidsTab.Location = new Point(0, 0);
-            cholesterollipidsTab.Size = this.Size;
-            cholesterollipidsTab.AutoSize = true;
-            cholesterollipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            cholesterollipidsTab.BackColor = Color.White;
-            cholesterollipidsTab.Font = Font;
+            sterollipidsTab.Text = "Sterol lipids";
+            //sterollipidsTab.ToolTipText = "Sterol lipids";
+            sterollipidsTab.Location = new Point(0, 0);
+            sterollipidsTab.Size = this.Size;
+            sterollipidsTab.AutoSize = true;
+            sterollipidsTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            sterollipidsTab.BackColor = Color.White;
+            sterollipidsTab.Font = Font;
             
-            chStep1.SendToBack();
-            chStep1.Location = new Point(10, 10);
-            chStep1.Width = Width - 50;
-            chStep1.Height = step1Height;
-            chStep1.Text = "Step 1: Precursor selection";
+            stStep1.SendToBack();
+            stStep1.Location = new Point(10, 10);
+            stStep1.Width = Width - 50;
+            stStep1.Height = step1Height;
+            stStep1.Text = "Step 1: Precursor selection";
             
-            chPositiveAdduct.Width = 120;
-            chPositiveAdduct.Location = new Point(leftGroupboxes - chPositiveAdduct.Width, topGroupboxes);
-            chPositiveAdduct.Height = 120;
-            chPositiveAdduct.Text = "Positive adducts";
-            chPosAdductCheckbox1.Parent = chPositiveAdduct;
-            chPosAdductCheckbox1.Location = new Point(10, 15);
-            chPosAdductCheckbox1.Text = "+H⁺";
-            chPosAdductCheckbox1.Enabled = false;
-            chPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
-            chPosAdductCheckbox2.Parent = chPositiveAdduct;
-            chPosAdductCheckbox2.Location = new Point(10, 35);
-            chPosAdductCheckbox2.Text = "+2H⁺⁺";
-            chPosAdductCheckbox2.Enabled = false;
-            chPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
-            chPosAdductCheckbox3.Parent = chPositiveAdduct;
-            chPosAdductCheckbox3.Location = new Point(10, 55);
-            chPosAdductCheckbox3.Text = "+NH4⁺";
-            chPosAdductCheckbox3.Checked = true;
-            chPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
-            chNegativeAdduct.Width = 120;
-            chNegativeAdduct.Location = new Point(leftGroupboxes - chNegativeAdduct.Width, chPositiveAdduct.Top + 140);
-            chNegativeAdduct.Height = 120;
-            chNegativeAdduct.Text = "Negative adducts";
-            chNegAdductCheckbox1.Parent = chNegativeAdduct;
-            chNegAdductCheckbox1.Location = new Point(10, 15);
-            chNegAdductCheckbox1.Text = "-H⁻";
-            chNegAdductCheckbox1.Enabled = false;
-            chNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
-            chNegAdductCheckbox2.Parent = chNegativeAdduct;
-            chNegAdductCheckbox2.Location = new Point(10, 35);
-            chNegAdductCheckbox2.Text = "-2H⁻⁻";
-            chNegAdductCheckbox2.Enabled = false;
-            chNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
-            chNegAdductCheckbox3.Parent = chNegativeAdduct;
-            chNegAdductCheckbox3.Location = new Point(10, 55);
-            chNegAdductCheckbox3.Text = "+HCOO⁻";
-            chNegAdductCheckbox3.Enabled = false;
-            chNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
-            chNegAdductCheckbox4.Parent = chNegativeAdduct;
-            chNegAdductCheckbox4.Location = new Point(10, 75);
-            chNegAdductCheckbox4.Text = "+CH3COO⁻";
-            chNegAdductCheckbox4.Enabled = false;
-            chNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
-            
-            
+            stPositiveAdduct.Width = 120;
+            stPositiveAdduct.Location = new Point(leftGroupboxes - stPositiveAdduct.Width, topGroupboxes);
+            stPositiveAdduct.Height = 120;
+            stPositiveAdduct.Text = "Positive adducts";
+            stPosAdductCheckbox1.Parent = stPositiveAdduct;
+            stPosAdductCheckbox1.Location = new Point(10, 15);
+            stPosAdductCheckbox1.Text = "+H⁺";
+            stPosAdductCheckbox1.Enabled = false;
+            stPosAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+H", currentLipid));};
+            stPosAdductCheckbox2.Parent = stPositiveAdduct;
+            stPosAdductCheckbox2.Location = new Point(10, 35);
+            stPosAdductCheckbox2.Text = "+2H⁺⁺";
+            stPosAdductCheckbox2.Enabled = false;
+            stPosAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+2H", currentLipid));};
+            stPosAdductCheckbox3.Parent = stPositiveAdduct;
+            stPosAdductCheckbox3.Location = new Point(10, 55);
+            stPosAdductCheckbox3.Text = "+NH4⁺";
+            stPosAdductCheckbox3.Checked = true;
+            stPosAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+NH4", currentLipid));};
+            stNegativeAdduct.Width = 120;
+            stNegativeAdduct.Location = new Point(leftGroupboxes - stNegativeAdduct.Width, stPositiveAdduct.Top + 140);
+            stNegativeAdduct.Height = 120;
+            stNegativeAdduct.Text = "Negative adducts";
+            stNegAdductCheckbox1.Parent = stNegativeAdduct;
+            stNegAdductCheckbox1.Location = new Point(10, 15);
+            stNegAdductCheckbox1.Text = "-H⁻";
+            stNegAdductCheckbox1.Enabled = false;
+            stNegAdductCheckbox1.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-H", currentLipid));};
+            stNegAdductCheckbox2.Parent = stNegativeAdduct;
+            stNegAdductCheckbox2.Location = new Point(10, 35);
+            stNegAdductCheckbox2.Text = "-2H⁻⁻";
+            stNegAdductCheckbox2.Enabled = false;
+            stNegAdductCheckbox2.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("-2H", currentLipid));};
+            stNegAdductCheckbox3.Parent = stNegativeAdduct;
+            stNegAdductCheckbox3.Location = new Point(10, 55);
+            stNegAdductCheckbox3.Text = "+HCOO⁻";
+            stNegAdductCheckbox3.Enabled = false;
+            stNegAdductCheckbox3.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+HCOO", currentLipid));};
+            stNegAdductCheckbox4.Parent = stNegativeAdduct;
+            stNegAdductCheckbox4.Location = new Point(10, 75);
+            stNegAdductCheckbox4.Text = "+CH3COO⁻";
+            stNegAdductCheckbox4.Enabled = false;
+            stNegAdductCheckbox4.CheckedChanged += delegate(object s, EventArgs e){AdductCheckBoxChecked(s, new AdductCheckedEventArgs("+CH3COO", currentLipid));};
             
             
-            chFACombobox.BringToFront();
-            chFATextbox.BringToFront();
-            chFATextbox.Location = new Point(616, 258);
-            chFATextbox.Width = faLength;
-            chFATextbox.Text = "2, 5, 17-19";
-            chFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
-            toolTip.SetToolTip(chFATextbox, formattingFA);
-            chFACombobox.Location = new Point(chFATextbox.Left, chFATextbox.Top - sepText);
-            chFACombobox.Width = faLength;
-            chFACombobox.SelectedItem = "Fatty acyl chain";
-            chFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            chFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, chFATextbox )); };
-            chDBTextbox.Location = new Point(chFATextbox.Left + chFATextbox.Width + sep, chFATextbox.Top);
-            chDBTextbox.Width = dbLength;
-            chDBTextbox.Text = "5-6";
-            chDBTextbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
-            toolTip.SetToolTip(chDBTextbox, formattingDB);
-            chDBLabel.Location = new Point(chDBTextbox.Left, chDBTextbox.Top - sep);
-            chDBLabel.Width = dbLength;
-            chDBLabel.Text = dbText;
-            chHydroxylTextbox.Width = dbLength;
-            chHydroxylTextbox.Location = new Point(chDBTextbox.Left + chDBTextbox.Width + sep, chDBTextbox.Top);
-            chHydroxylTextbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
-            toolTip.SetToolTip(chHydroxylTextbox, formattingHydroxyl);
-            chFAHydroxyLabel.Location = new Point(chHydroxylTextbox.Left, chHydroxylTextbox.Top - sep);
-            chFAHydroxyLabel.Text = hydroxylText;
             
-            chFACombobox.Visible = false;
-            chFATextbox.Visible = false;
-            chDBTextbox.Visible = false;
-            chDBLabel.Visible = false;
-            chHydroxylTextbox.Visible = false;
-            chFAHydroxyLabel.Visible = false;
+            
+            stFACombobox.BringToFront();
+            stFATextbox.BringToFront();
+            stFATextbox.Location = new Point(616, 258);
+            stFATextbox.Width = faLength;
+            stFATextbox.Text = "2, 5, 17-19";
+            stFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
+            toolTip.SetToolTip(stFATextbox, formattingFA);
+            stFACombobox.Location = new Point(stFATextbox.Left, stFATextbox.Top - sepText);
+            stFACombobox.Width = faLength;
+            stFACombobox.SelectedItem = "Fatty acyl chain";
+            stFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            stFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, stFATextbox )); };
+            stDBTextbox.Location = new Point(stFATextbox.Left + stFATextbox.Width + sep, stFATextbox.Top);
+            stDBTextbox.Width = dbLength;
+            stDBTextbox.Text = "5-6";
+            stDBTextbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
+            toolTip.SetToolTip(stDBTextbox, formattingDB);
+            stDBLabel.Location = new Point(stDBTextbox.Left, stDBTextbox.Top - sep);
+            stDBLabel.Width = dbLength;
+            stDBLabel.Text = dbText;
+            stHydroxylTextbox.Width = dbLength;
+            stHydroxylTextbox.Location = new Point(stDBTextbox.Left + stDBTextbox.Width + sep, stDBTextbox.Top);
+            stHydroxylTextbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
+            toolTip.SetToolTip(stHydroxylTextbox, formattingHydroxyl);
+            stFAHydroxyLabel.Location = new Point(stHydroxylTextbox.Left, stHydroxylTextbox.Top - sep);
+            stFAHydroxyLabel.Text = hydroxylText;
+            
+            stFACombobox.Visible = false;
+            stFATextbox.Visible = false;
+            stDBTextbox.Visible = false;
+            stDBLabel.Visible = false;
+            stHydroxylTextbox.Visible = false;
+            stFAHydroxyLabel.Visible = false;
             
             
             

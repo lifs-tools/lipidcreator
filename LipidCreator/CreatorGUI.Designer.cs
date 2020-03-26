@@ -2283,7 +2283,7 @@ namespace LipidCreator
             
             stFACombobox.BringToFront();
             stFATextbox.BringToFront();
-            stFATextbox.Location = new Point(616, 258);
+            stFATextbox.Location = new Point(574, 270);
             stFATextbox.Width = faLength;
             stFATextbox.Text = "2, 5, 17-19";
             stFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, "" )); };
@@ -2319,14 +2319,14 @@ namespace LipidCreator
             
             
             
-            stHgListbox.Location = new Point(34, 35);
-            stHgListbox.Size = new Size(140, 260);
+            stHgListbox.Location = new Point(24, 35);
+            stHgListbox.Size = new Size(80, 260);
             stHgListbox.BringToFront();
             stHgListbox.BorderStyle = BorderStyle.Fixed3D;
             stHgListbox.SelectedValueChanged += new System.EventHandler(stHGListboxSelectedValueChanged);
             stHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(stHGListboxMouseHover);
             stHgListbox.KeyDown += stHgListboxKeyDown;
-            stPictureBox.Location = new Point(180, 60);
+            stPictureBox.Location = new Point(110, 40);
             if (!lipidCreatorInitError && stHgListbox.Items.Count > 0)
             {
                 stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToBackboneImage);

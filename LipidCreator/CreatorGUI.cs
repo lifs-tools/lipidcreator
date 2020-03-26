@@ -1592,6 +1592,25 @@ namespace LipidCreator
         
         
         
+        private void plHgListboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                plHgListbox.SelectedItems.Clear();
+                foreach(string itemChecked in plHgListbox.Items)
+                {
+                    plHgListbox.SelectedItems.Add(itemChecked);
+                }
+                /*
+                foreach (ListViewItem item in plHgListbox.Items)
+                {
+                    item.Selected = true;
+                }
+                */
+            }
+        }
+        
+        
         
         public void plRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
@@ -1968,6 +1987,18 @@ namespace LipidCreator
             slHgListbox.Items.AddRange(slHgList.ToArray());
         }
         
+        private void slHgListboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                slHgListbox.SelectedItems.Clear();
+                foreach(string itemChecked in slHgListbox.Items)
+                {
+                    slHgListbox.SelectedItems.Add(itemChecked);
+                }
+            }
+        }
+        
         ////////////////////// Sterols ////////////////////////////////
         
         
@@ -1986,7 +2017,7 @@ namespace LipidCreator
             {
                 stHgListbox.Items.AddRange(stHgList.ToArray());
             }
-            stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
+            stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToBackboneImage);
             stFACombobox.Visible = ((Sterol)currentLipid).containsEster;
             stFATextbox.Visible = ((Sterol)currentLipid).containsEster;
             stDBTextbox.Visible = ((Sterol)currentLipid).containsEster;
@@ -2017,9 +2048,8 @@ namespace LipidCreator
 
             if (hoveredIndex != -1)
             {
-                string sterolFile = lipidCreator.headgroups[stHgListbox.Items[hoveredIndex].ToString()].pathToImage;
+                string sterolFile = lipidCreator.headgroups[stHgListbox.Items[hoveredIndex].ToString()].pathToBackboneImage;
                 stPictureBox.Image = Image.FromFile(sterolFile);
-                stPictureBox.Top = mediatorMiddleHeight - (stPictureBox.Image.Height >> 1);
                 stPictureBox.SendToBack();
                 string trivialName = lipidCreator.headgroups[stHgListbox.Items[hoveredIndex].ToString()].trivialName;
                 if (trivialName.Length > 0) toolTip.SetToolTip(stHgListbox, trivialName);
@@ -2031,6 +2061,18 @@ namespace LipidCreator
             }
         }
         
+        
+        private void stHgListboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                stHgListbox.SelectedItems.Clear();
+                foreach(string itemChecked in stHgListbox.Items)
+                {
+                    stHgListbox.SelectedItems.Add(itemChecked);
+                }
+            }
+        }
         
         
         

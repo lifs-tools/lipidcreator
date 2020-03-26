@@ -923,8 +923,8 @@ namespace LipidCreator
             this.menuImportList.Text = "Import &Lipid List";
             this.menuImportList.Click += new System.EventHandler (menuImportListClick);
             
-            this.menuImportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
-            this.menuImportSettings.Text = "Import &Settings";
+            this.menuImportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftI;
+            this.menuImportSettings.Text = "&Import Settings";
             this.menuImportSettings.Click += new System.EventHandler (menuImportSettingsClick);
             
             this.menuImportPredefined.Text = "Import Predefined";
@@ -933,8 +933,8 @@ namespace LipidCreator
             this.menuExport.Text = "&Export Project";
             this.menuExport.Click += new System.EventHandler (menuExportClick);
             
-            this.menuExportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
-            this.menuExportSettings.Text = "Expor&t Settings";
+            this.menuExportSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftE;
+            this.menuExportSettings.Text = "&Export Settings";
             this.menuExportSettings.Click += new System.EventHandler (menuExportSettingsClick);
             
             this.menuWizard.Shortcut = System.Windows.Forms.Shortcut.CtrlW;
@@ -952,8 +952,8 @@ namespace LipidCreator
             this.menuExit.Click += new System.EventHandler (menuExitClick);
             
             
-            this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
-            this.menuTranslate.Text = "Lipid name tr&anslator";
+            this.menuTranslate.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
+            this.menuTranslate.Text = "Lipid name &translator";
             this.menuTranslate.Click += new System.EventHandler (menuTranslateClick);
 
             this.menuOptions.MenuItems.AddRange(new MenuItem[]{ menuTranslate, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuDash2, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuDash4, menuStatistics, menuToolDirectory});
@@ -1956,12 +1956,13 @@ namespace LipidCreator
 
             
             plHgListbox.Location = new Point(25, 50);
-            plHgListbox.Size = new Size(70, 190);
+            plHgListbox.Size = new Size(70, 150);
             plHgListbox.BringToFront();
             plHgListbox.BorderStyle = BorderStyle.Fixed3D;
             plHgListbox.SelectedValueChanged += new System.EventHandler(plHGListboxSelectedValueChanged);
             plHgListbox.MouseLeave += new System.EventHandler(plHGListboxMouseLeave);
             plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(plHGListboxMouseHover);
+            plHgListbox.KeyDown += plHgListboxKeyDown;
             
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";
@@ -2147,6 +2148,7 @@ namespace LipidCreator
             slHgListbox.SelectedValueChanged += new System.EventHandler(slHGListboxSelectedValueChanged);
             slHgListbox.MouseLeave += new System.EventHandler(slHGListboxMouseLeave);
             slHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(slHGListboxMouseHover);
+            slHgListbox.KeyDown += slHgListboxKeyDown;
             slHGLabel.Location = new Point(slHgListbox.Left, slHgListbox.Top - sep);
             slHGLabel.Text = "Head group";
             
@@ -2323,11 +2325,11 @@ namespace LipidCreator
             stHgListbox.BorderStyle = BorderStyle.Fixed3D;
             stHgListbox.SelectedValueChanged += new System.EventHandler(stHGListboxSelectedValueChanged);
             stHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(stHGListboxMouseHover);
-            stPictureBox.Location = new Point(210, 30);
+            stHgListbox.KeyDown += stHgListboxKeyDown;
+            stPictureBox.Location = new Point(180, 60);
             if (!lipidCreatorInitError && stHgListbox.Items.Count > 0)
             {
-                stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToImage);
-                stPictureBox.Top = mediatorMiddleHeight - (stPictureBox.Image.Height >> 1);
+                stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToBackboneImage);
             }
             stPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             stHgListbox.SendToBack();

@@ -315,7 +315,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length < 21) throw new Exception("invalid line in file, number of columns in line < 19");
+                            if (tokens.Length < 22) throw new Exception("invalid line in file, number of columns in line < 22");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -351,23 +351,33 @@ namespace LipidCreator
                             headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[6]); // nytrogen
                             headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[7]); // phosphor
                             headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[8]); // sulfor
-                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[10].Split(new char[]{'/'})));
+                            if (tokens[10].Length > 0)
+                            {
+                                string backboneFile = Path.Combine(prefixPath, Path.Combine(tokens[10].Split(new char[]{'/'})));
+                                if (!File.Exists(backboneFile))
+                                {
+                                    log.Error("At line " + lineCounter + ": backbone file " + backboneFile + " does not exist or can not be opened.");
+                                    throw new Exception();
+                                }
+                                headgroup.pathToBackboneImage = backboneFile;
+                            }
+                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[11].Split(new char[]{'/'})));
                             if (!File.Exists(precursorFile))
                             {
                                 log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
                                 throw new Exception();
                             }
                             headgroup.pathToImage = precursorFile;
-                            headgroup.adductRestrictions.Add("+H", tokens[11].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+2H", tokens[12].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+NH4", tokens[13].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-H", tokens[14].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-2H", tokens[15].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+HCOO", tokens[16].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+CH3COO", tokens[17].Equals("Yes"));
-                            headgroup.defaultAdduct = tokens[18];
-                            headgroup.buildingBlockType = Convert.ToInt32(tokens[19]);
-                            if (tokens[20].Length > 0) headgroup.attributes = new HashSet<string>(tokens[20].Split(new char[]{';'}));
+                            headgroup.adductRestrictions.Add("+H", tokens[12].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+2H", tokens[13].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+NH4", tokens[14].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-H", tokens[15].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-2H", tokens[16].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+HCOO", tokens[17].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+CH3COO", tokens[18].Equals("Yes"));
+                            headgroup.defaultAdduct = tokens[19];
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[20]);
+                            if (tokens[21].Length > 0) headgroup.attributes = new HashSet<string>(tokens[21].Split(new char[]{';'}));
                             headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             
                             if (headgroup.attributes.Contains("heavy"))

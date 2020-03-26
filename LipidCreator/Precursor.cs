@@ -40,6 +40,7 @@ namespace LipidCreator
         public LipidCategory category;
         public ElementDictionary elements;
         public string pathToImage;
+        public string pathToBackboneImage;
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
         public string trivialName;
@@ -60,6 +61,8 @@ namespace LipidCreator
             heavyLabeledPrecursors = new ArrayList();
             userDefined = false;
             trivialName = "";
+            pathToImage = "";
+            pathToBackboneImage = "";
             userDefinedFattyAcids = null;
             attributes = new HashSet<string>();
         }

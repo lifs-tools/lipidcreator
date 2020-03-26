@@ -846,6 +846,8 @@ namespace LipidCreator
                     lipidDataTable.Rows.Add(rowAdduct);
                     
                     string filtersStr = "";
+                    lipid.onlyPrecursors = filter;
+                    lipid.onlyHeavyLabeled = 0;
                     switch (lipid.onlyPrecursors)
                     {
                         case 0: filtersStr = "no precursors, "; break;
@@ -883,8 +885,6 @@ namespace LipidCreator
                 
                     if (!creatorGUI.lipidCreator.registeredLipidDictionary.ContainsKey(lipidHash))
                     {
-                        lipid.onlyPrecursors = filter;
-                        lipid.onlyHeavyLabeled = 0;
                         creatorGUI.lipidCreator.registeredLipidDictionary.Add(lipidHash, lipid);
                         creatorGUI.lipidCreator.registeredLipids.Add(lipidHash);
                     }

@@ -315,7 +315,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length < 20) throw new Exception("invalid line in file, number of columns in line < 19");
+                            if (tokens.Length < 21) throw new Exception("invalid line in file, number of columns in line < 19");
                             
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
@@ -343,30 +343,31 @@ namespace LipidCreator
                             categoryToClass[(int)headgroup.category].Add(tokens[1]);
                             
                             headgroup.name = tokens[1];
-                            headgroup.elements[Molecule.C] = Convert.ToInt32(tokens[2]); // carbon
-                            headgroup.elements[Molecule.H] = Convert.ToInt32(tokens[3]); // hydrogen
-                            headgroup.elements[Molecule.H2] = Convert.ToInt32(tokens[8]); // hydrogen 2
-                            headgroup.elements[Molecule.O] = Convert.ToInt32(tokens[4]); // oxygen
-                            headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[5]); // nytrogen
-                            headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[6]); // phosphor
-                            headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[7]); // sulfor
-                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[9].Split(new char[]{'/'})));
+                            headgroup.trivialName = tokens[2];
+                            headgroup.elements[Molecule.C] = Convert.ToInt32(tokens[3]); // carbon
+                            headgroup.elements[Molecule.H] = Convert.ToInt32(tokens[4]); // hydrogen
+                            headgroup.elements[Molecule.H2] = Convert.ToInt32(tokens[9]); // hydrogen 2
+                            headgroup.elements[Molecule.O] = Convert.ToInt32(tokens[5]); // oxygen
+                            headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[6]); // nytrogen
+                            headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[7]); // phosphor
+                            headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[8]); // sulfor
+                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[10].Split(new char[]{'/'})));
                             if (!File.Exists(precursorFile))
                             {
                                 log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
                                 throw new Exception();
                             }
                             headgroup.pathToImage = precursorFile;
-                            headgroup.adductRestrictions.Add("+H", tokens[10].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+2H", tokens[11].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+NH4", tokens[12].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-H", tokens[13].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-2H", tokens[14].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
-                            headgroup.defaultAdduct = tokens[17];
-                            headgroup.buildingBlockType = Convert.ToInt32(tokens[18]);
-                            if (tokens[19].Length > 0) headgroup.attributes = new HashSet<string>(tokens[19].Split(new char[]{';'}));
+                            headgroup.adductRestrictions.Add("+H", tokens[11].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+2H", tokens[12].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+NH4", tokens[13].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-H", tokens[14].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-2H", tokens[15].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+HCOO", tokens[16].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+CH3COO", tokens[17].Equals("Yes"));
+                            headgroup.defaultAdduct = tokens[18];
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[19]);
+                            if (tokens[20].Length > 0) headgroup.attributes = new HashSet<string>(tokens[20].Split(new char[]{';'}));
                             headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             
                             if (headgroup.attributes.Contains("heavy"))

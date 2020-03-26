@@ -1736,6 +1736,14 @@ namespace LipidCreator
                 
                 if (lipidCreator.headgroups[(string)plHgListbox.Items[hoveredIndex]].adductRestrictions["+CH3COO"]) plNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else plNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                string trivialName = lipidCreator.headgroups[plHgListbox.Items[hoveredIndex].ToString()].trivialName;
+                if (trivialName.Length > 0) toolTip.SetToolTip(plHgListbox, trivialName);
+                else toolTip.Hide(stHgListbox);
+            }
+            else
+            {
+                toolTip.Hide(stHgListbox);
             }
         }
         
@@ -1895,6 +1903,14 @@ namespace LipidCreator
                 
                 if (lipidCreator.headgroups[(string)slHgListbox.Items[hoveredIndex]].adductRestrictions["+CH3COO"]) slNegAdductCheckbox4.BackColor = highlightedCheckboxColor;
                 else slNegAdductCheckbox4.BackColor = Color.FromArgb(DefaultCheckboxBGR, DefaultCheckboxBGG, DefaultCheckboxBGB);
+                
+                string trivialName = lipidCreator.headgroups[slHgListbox.Items[hoveredIndex].ToString()].trivialName;
+                if (trivialName.Length > 0) toolTip.SetToolTip(slHgListbox, trivialName);
+                else toolTip.Hide(stHgListbox);
+            }
+            else
+            {
+                toolTip.Hide(stHgListbox);
             }
         }
         
@@ -2005,6 +2021,13 @@ namespace LipidCreator
                 stPictureBox.Image = Image.FromFile(sterolFile);
                 stPictureBox.Top = mediatorMiddleHeight - (stPictureBox.Image.Height >> 1);
                 stPictureBox.SendToBack();
+                string trivialName = lipidCreator.headgroups[stHgListbox.Items[hoveredIndex].ToString()].trivialName;
+                if (trivialName.Length > 0) toolTip.SetToolTip(stHgListbox, trivialName);
+                else toolTip.Hide(stHgListbox);
+            }
+            else
+            {
+                toolTip.Hide(stHgListbox);
             }
         }
         

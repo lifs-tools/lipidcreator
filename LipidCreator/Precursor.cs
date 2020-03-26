@@ -42,6 +42,7 @@ namespace LipidCreator
         public string pathToImage;
         public Dictionary<string, bool> adductRestrictions;
         public int buildingBlockType;
+        public string trivialName;
         public bool derivative;
         public ArrayList heavyLabeledPrecursors;
         public bool userDefined;
@@ -58,6 +59,7 @@ namespace LipidCreator
             elements = MS2Fragment.createEmptyElementDict();
             heavyLabeledPrecursors = new ArrayList();
             userDefined = false;
+            trivialName = "";
             userDefinedFattyAcids = null;
             attributes = new HashSet<string>();
         }

@@ -787,17 +787,17 @@ IPC,"-HG(I,180)","-HG(I,180)",images/MS2/Sphingolipids/CerPI/CerPI_neg_NL.png,-1
 IPC,LCB [xx:x;x](-H6NO),LCB(-H6NO),images/MS2/Sphingolipids/CerPI/CerPI_neg_LCB-N.png,-1,LCB,0,-4,-1,-1,0,0,0
 IPC,LCB [xx:x;x](-C2H10NO),LCB(-C2H10NO),images/MS2/Sphingolipids/CerPI/CerPI_neg_LCB-N-C2H4.png,-1,LCB,-2,-8,-1,-1,0,0,0
 Ch,-Cholesterol(35),-Cholesterol(35),images/MS2/Sterols/Ch/Ch_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-ChE,-FA [xx:x](+HO)-Cholesterol(35),-FA788(+ho)-Cholesterol(35),images/MS2/Sterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+ChE,-FA [xx:x](+HO)-Cholesterol(35),-FA788(+HO)-Cholesterol(35),images/MS2/Sterols/ChE/ChE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 Des,-Desmosterol(35),-Desmosterol(35),images/MS2/Sterols/Des/De_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-DesE,-FA [xx:x](+HO)-Desmosterol(35),-FA788(+ho)-Desmosterol(35),images/MS2/Sterols/DesE/DeE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+DesE,-FA [xx:x](+HO)-Desmosterol(35),-FA788(+HO)-Desmosterol(35),images/MS2/Sterols/DesE/DeE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 Sti,-Stigmasterol(35),-Stigmasterol(35),images/MS2/Sterols/Sti/St_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-StiE,-FA [xx:x](+HO)-Stigmasterol(35),-FA788(+ho)-Stigmasterol(35),images/MS2/Sterols/StiE/StE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+StiE,-FA [xx:x](+HO)-Stigmasterol(35),-FA788(+HO)-Stigmasterol(35),images/MS2/Sterols/StiE/StE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 Erg,-Ergosterol(35),-Ergosterol(35),images/MS2/Sterols/Erg/Er_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-ErgE,-FA [xx:x](+HO)-Ergosterol(35),-FA788(+ho)-Ergosterol(35),images/MS2/Sterols/ErgE/ErE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+ErgE,-FA [xx:x](+HO)-Ergosterol(35),-FA788(+HO)-Ergosterol(35),images/MS2/Sterols/ErgE/ErE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 Lan,-Lanosterol(35),-Lanosterol(35),images/MS2/Sterols/Lan/La_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-LanE,-FA [xx:x](+HO)-Lanosterol(35),-FA788(+ho)-Lanosterol(35),images/MS2/Sterols/LanE/LaE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+LanE,-FA [xx:x](+HO)-Lanosterol(35),-FA788(+HO)-Lanosterol(35),images/MS2/Sterols/LanE/LaE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 #ErgDi,-ergostadienol(35),-ergostadienol(35),images/MS2/Sterols/ErgDi/Ergostadienol_pos_HG.png,1,HG,0,-2,-1,0,0,0,0
-#ErgDiE,-FA [xx:x](+HO)-Ergostadienol(35),-FA790(+ho)-ergostadienol(35),images/MS2/Sterols/ErgDiE/ErgostadienolE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
+#ErgDiE,-FA [xx:x](+HO)-Ergostadienol(35),-FA790(+HO)-ergostadienol(35),images/MS2/Sterols/ErgDiE/ErgostadienolE_pos_HG.png,1,HG,0,-1,-1,0,0,0,0
 CL,FA [xx:x](+O),FA1(+O),images/MS2/Phospholipids/CL/CL_neg_FA1.png,-1,FA1,0,1,1,0,0,0,0
 CL,FA [yy:y](+O),FA2(+O),images/MS2/Phospholipids/CL/CL_neg_FA2.png,-1,FA2,0,1,1,0,0,0,0
 CL,FA [zz:z](+O),FA3(+O),images/MS2/Phospholipids/CL/CL_neg_FA3.png,-1,FA3,0,1,1,0,0,0,0

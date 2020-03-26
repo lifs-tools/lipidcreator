@@ -31,6 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 using log4net;
 using log4net.Config;
 
@@ -204,8 +205,11 @@ namespace LipidCreator
         
         
         public long nextFreeRuleIndex;
+        public Dictionary<char, long> originalTtoNT;
         public Dictionary<char, HashSet<long>> TtoNT;
         public Dictionary<long, HashSet<long>> NTtoNT;
+        public Dictionary<long, LinkedList<long>> substitution;
+        public ArrayList rightPair;
         public char quote;
         [NonSerialized]
         public TreeNode parseTree;
@@ -229,9 +233,12 @@ namespace LipidCreator
         public Parser(BaseParserEventHandler _parserEventHandler, string grammarFilename, char _quote = '"')
         {
             nextFreeRuleIndex = START_RULE;
+            originalTtoNT = new Dictionary<char, long>();
             TtoNT = new Dictionary<char, HashSet<long>>();
             NTtoNT = new Dictionary<long, HashSet<long>>();
             NTtoRule = new Dictionary<long, string>();
+            substitution = new Dictionary<long, LinkedList<long>>();
+            rightPair = new ArrayList();
             quote = _quote;
             parserEventHandler = _parserEventHandler;
             parseTree = null;
@@ -313,8 +320,21 @@ namespace LipidCreator
                         else
                         {
                             char c = NTFirst[1];
-                            if (!TtoNT.ContainsKey(c)) TtoNT[c] = new HashSet<long>();
-                            TtoNT[c].Add(newRuleIndex);
+                            long tRule = -1;
+                            if (!TtoNT.ContainsKey(c))
+                            {
+                                tRule = getNextFreeRuleIndex();
+                                TtoNT[c] = new HashSet<long>();
+                                TtoNT[c].Add(tRule);
+                            }
+                            else
+                            {
+                                tRule = TtoNT[c].ToList()[0];
+                            }
+                            
+                            
+                            if (!NTtoNT.ContainsKey(tRule)) NTtoNT.Add(tRule, new HashSet<long>());
+                            NTtoNT[tRule].Add(newRuleIndex);
                         }
                         
                         
@@ -372,7 +392,6 @@ namespace LipidCreator
             }
             
             
-            
             HashSet<char> keys = new HashSet<char>(TtoNT.Keys);
             foreach(char c in keys)
             {
@@ -397,6 +416,18 @@ namespace LipidCreator
                 {
                     foreach (long p in collectBackwards(rule)) NTtoNT[r].Add(p);
                 }
+            }
+            
+            // creating lookup table for right index pairs to a given left index
+            for (uint i = 0; i < nextFreeRuleIndex; ++i)
+            {
+                rightPair.Add(new Bitfield((int)nextFreeRuleIndex));
+            }
+            
+            foreach (long NTkey in NTtoNT.Keys)
+            {
+                if (NTkey <= MASK) continue;
+                ((Bitfield)rightPair[(int)(NTkey >> SHIFT)]).set((int)(NTkey & MASK));
             }
         }
         
@@ -665,9 +696,17 @@ namespace LipidCreator
             for (int i = 1; i < text.Length - 1; ++i)
             {
                 char c = text[i];
-                if (!TtoNT.ContainsKey(c)) TtoNT.Add(c, new HashSet<long>());
-                long nextIndex = getNextFreeRuleIndex();
-                TtoNT[c].Add(nextIndex);
+                long nextIndex = -1;
+                if (!TtoNT.ContainsKey(c))
+                {
+                    TtoNT.Add(c, new HashSet<long>());
+                    nextIndex = getNextFreeRuleIndex();
+                    TtoNT[c].Add(nextIndex);
+                }
+                else
+                {
+                    nextIndex = TtoNT[c].ToList()[0];
+                }
                 terminalRules.AddLast(nextIndex);
             }
             while (terminalRules.Count > 1)
@@ -904,15 +943,15 @@ namespace LipidCreator
             parseTree = null;
             int n = textToParse.Length;
             // dp stands for dynamic programming, nothing else
-            Dictionary<long, DPNode>[][] dpTable = new Dictionary<long, DPNode>[n][];
-            // Ks is a lookup, which fields in the dpTable are filled
+            Dictionary<long, DPNode>[][] DP = new Dictionary<long, DPNode>[n][];
+            // Ks is a lookup, which fields in the DP are filled
             Bitfield[] Ks = new Bitfield[n];            
             
             for (int i = 0; i < n; ++i)
             {
-                dpTable[i] = new Dictionary<long, DPNode>[n - i];
+                DP[i] = new Dictionary<long, DPNode>[n - i];
                 Ks[i] = new Bitfield(n - 1);
-                for (int j = 0; j < n - i; ++j) dpTable[i][j] = new Dictionary<long, DPNode>();
+                for (int j = 0; j < n - i; ++j) DP[i][j] = new Dictionary<long, DPNode>();
             }
             
             for (int i = 0; i < n; ++i)
@@ -925,7 +964,7 @@ namespace LipidCreator
                     long newKey = ruleIndex >> SHIFT;
                     long oldKey = ruleIndex & MASK;
                     DPNode dpNode = new DPNode((long)c, oldKey, null, null);
-                    dpTable[i][0][newKey] =  dpNode;
+                    DP[i][0][newKey] =  dpNode;
                     Ks[i].set(0);
                 }
             }
@@ -935,39 +974,40 @@ namespace LipidCreator
                 int im1 = i - 1;
                 for (int j = 0; j < n - i; ++j)
                 {
-                    Dictionary<long, DPNode>[] D = dpTable[j];
-                    Dictionary<long, DPNode> Di = D[i];
+                    Dictionary<long, DPNode>[] DPj = DP[j];
+                    Dictionary<long, DPNode> DPji = DPj[i];
                     int jp1 = j + 1;
                     
                     foreach(int k in Ks[j].getBitPositions())
                     {
                         if (k >= i) break;
                         if (Ks[jp1 + k].isNotSet(im1 - k)) continue;
-                        foreach (KeyValuePair<long, DPNode> indexPair1 in D[k])
+                        foreach (KeyValuePair<long, DPNode> indexPair1 in DPj[k])
                         {
-                            foreach (KeyValuePair<long, DPNode> indexPair2 in dpTable[jp1 + k][im1 - k])
+                            Bitfield b = (Bitfield)rightPair[(int)indexPair1.Key];
+                            foreach (KeyValuePair<long, DPNode> indexPair2 in DP[jp1 + k][im1 - k])
                             {
-                                long key = computeRuleKey(indexPair1.Key, indexPair2.Key);
-                                if (!NTtoNT.ContainsKey(key)) continue;
-                                
-                                DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
-                                Ks[j].set(i);
-                                foreach (long ruleIndex in NTtoNT[key])
+                                if (b.isSet((int)indexPair2.Key))
                                 {
-                                    Di[ruleIndex] = content;
+                                    long key = computeRuleKey(indexPair1.Key, indexPair2.Key);
+                                    
+                                    DPNode content = new DPNode(indexPair1.Key, indexPair2.Key, indexPair1.Value, indexPair2.Value);
+                                    
+                                    foreach (long ruleIndex in NTtoNT[key]) DPji[ruleIndex] = content;
                                 }
                             }
                         }
                     }
+                    if (DPji.Count > 0) Ks[j].set(i);
                 }
             }
             
             for (int i = n - 1; i > 0; --i){
-                if (dpTable[0][i].ContainsKey(START_RULE))
+                if (DP[0][i].ContainsKey(START_RULE))
                 {
                     wordInGrammar = true;
                     parseTree = new TreeNode(START_RULE, NTtoRule.ContainsKey(START_RULE));
-                    fillTree(parseTree, dpTable[0][i][START_RULE]);
+                    fillTree(parseTree, DP[0][i][START_RULE]);
                     break;
                 }
             }

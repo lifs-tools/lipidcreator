@@ -79,6 +79,7 @@ namespace LipidCreator
             ParserEventHandlerFragment pehf = new ParserEventHandlerFragment(lcf);
             Parser fp = new Parser(pehf, grammarFragmentFilename, '\'');
             
+    
             
             
             Console.WriteLine("testing valid lipid names:");

@@ -1956,7 +1956,7 @@ namespace LipidCreator
 
             
             plHgListbox.Location = new Point(25, 50);
-            plHgListbox.Size = new Size(70, 150);
+            plHgListbox.Size = new Size(70, 260);
             plHgListbox.BringToFront();
             plHgListbox.BorderStyle = BorderStyle.Fixed3D;
             plHgListbox.SelectedValueChanged += new System.EventHandler(plHGListboxSelectedValueChanged);

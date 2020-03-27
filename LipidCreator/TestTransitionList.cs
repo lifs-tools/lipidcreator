@@ -162,8 +162,6 @@ namespace LipidCreator
                         if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: '" + headgroup + "' headgroup could not be determined");
                     }
                     
-                    Console.WriteLine(headgroup);
-                    
                     // subtracting adduct from precursor
                     string adduct = unitTestRow[3];
                     adduct = adduct.Substring(2, adduct.Length - 2);

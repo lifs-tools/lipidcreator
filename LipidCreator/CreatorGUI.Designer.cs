@@ -1962,7 +1962,7 @@ namespace LipidCreator
             plHgListbox.SelectedValueChanged += new System.EventHandler(plHGListboxSelectedValueChanged);
             plHgListbox.MouseLeave += new System.EventHandler(plHGListboxMouseLeave);
             plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(plHGListboxMouseHover);
-            plHgListbox.KeyDown += plHgListboxKeyDown;
+            plHgListbox.KeyDown += ListboxSelectAll;
             
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";
@@ -2148,7 +2148,7 @@ namespace LipidCreator
             slHgListbox.SelectedValueChanged += new System.EventHandler(slHGListboxSelectedValueChanged);
             slHgListbox.MouseLeave += new System.EventHandler(slHGListboxMouseLeave);
             slHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(slHGListboxMouseHover);
-            slHgListbox.KeyDown += slHgListboxKeyDown;
+            slHgListbox.KeyDown += ListboxSelectAll;
             slHGLabel.Location = new Point(slHgListbox.Left, slHgListbox.Top - sep);
             slHGLabel.Text = "Head group";
             
@@ -2325,7 +2325,7 @@ namespace LipidCreator
             stHgListbox.BorderStyle = BorderStyle.Fixed3D;
             stHgListbox.SelectedValueChanged += new System.EventHandler(stHGListboxSelectedValueChanged);
             stHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(stHGListboxMouseHover);
-            stHgListbox.KeyDown += stHgListboxKeyDown;
+            stHgListbox.KeyDown += ListboxSelectAll;
             stPictureBox.Location = new Point(110, 40);
             if (!lipidCreatorInitError && stHgListbox.Items.Count > 0)
             {

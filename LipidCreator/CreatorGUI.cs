@@ -1600,21 +1600,17 @@ namespace LipidCreator
         
         
         
-        private void plHgListboxKeyDown(object sender, KeyEventArgs e)
+        private void ListboxSelectAll(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.A && e.Control)
             {
-                plHgListbox.SelectedItems.Clear();
-                foreach(string itemChecked in plHgListbox.Items)
+                ListBox l = (ListBox)sender;
+                l.SelectedItems.Clear();
+                List<string> listBoxItems = l.Items.Cast<string>().ToList();
+                foreach(string itemChecked in listBoxItems)
                 {
-                    plHgListbox.SelectedItems.Add(itemChecked);
+                    l.SelectedItems.Add(itemChecked);
                 }
-                /*
-                foreach (ListViewItem item in plHgListbox.Items)
-                {
-                    item.Selected = true;
-                }
-                */
             }
         }
         

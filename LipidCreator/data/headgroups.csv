@@ -9,8 +9,8 @@ Sterol,Erg,Ergosterol,28,44,1,0,0,0,0,images/backbones/Er.png,images/Precursors/
 Sterol,ErgE,Ergosterol Ester,28,43,1,0,0,0,0,images/backbones/ErE.png,images/Precursors/ErE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,Lan,Lanosterol,30,50,1,0,0,0,0,images/backbones/La.png,images/Precursors/La_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
 Sterol,LanE,Lanosterol Ester,30,49,1,0,0,0,0,images/backbones/LaE.png,images/Precursors/LaE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
-#Sterol,ErgDi,Ergostadienol,28,46,1,0,0,0,0,images/backbones/Ch.png,images/Precursors/Ergostadienol_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-#Sterol,ErgDiE,Ergostadienol Ester,28,45,1,0,0,0,0,images/backbones/ChE.png,images/Precursors/ErgostadienolE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,ErgDi,Ergostadienol,28,46,1,0,0,0,0,images/backbones/ErDi.png,images/Precursors/ErDi_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
+Sterol,ErgDiE,Ergostadienol Ester,28,45,1,0,0,0,0,images/backbones/ErDiE.png,images/Precursors/ErDiE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 GL,DAG,Diacylglycerol,3,6,3,0,0,0,0,,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,Digalactosyldiacylglycerol,15,26,13,0,0,0,0,,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
 GL,MAG,Monoacylglycerol,3,7,3,0,0,0,0,,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,

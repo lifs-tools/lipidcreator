@@ -104,6 +104,7 @@ namespace LipidCreator
             
             registeredEvents.Add("st_pre_event", StPreEvent);
             registeredEvents.Add("hg_ste_pre_event", HG_StEPreEvent);
+            registeredEvents.Add("hg_stes_pre_event", HG_StEPreEvent);
             
             registeredEvents.Add("dpl_post_event", DPLPostEvent);
             registeredEvents.Add("dpl_o_post_event", DPLPostEvent);

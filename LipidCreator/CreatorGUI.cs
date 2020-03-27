@@ -1611,6 +1611,8 @@ namespace LipidCreator
                 {
                     l.SelectedItems.Add(itemChecked);
                 }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
         

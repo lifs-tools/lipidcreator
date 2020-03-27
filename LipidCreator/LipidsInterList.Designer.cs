@@ -75,7 +75,7 @@ namespace LipidCreator
             // 
             // dataGridView1
             // 
-            this.dataGridViewPrecursors.Size = new System.Drawing.Size(505, 609);
+            this.dataGridViewPrecursors.Size = new System.Drawing.Size(505, 509);
             this.dataGridViewPrecursors.Location = new System.Drawing.Point(12, 12);
             this.dataGridViewPrecursors.DataSource = precursorDataTable;
             this.dataGridViewPrecursors.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -94,7 +94,7 @@ namespace LipidCreator
             // 
             // button1
             // 
-            this.cancelButton.Location = new System.Drawing.Point(308, 698);
+            this.cancelButton.Location = new System.Drawing.Point(308, 598);
             this.cancelButton.Name = "button1";
             this.cancelButton.Size = new System.Drawing.Size(88, 34);
             this.cancelButton.TabIndex = 2;
@@ -104,7 +104,7 @@ namespace LipidCreator
             // 
             // button2
             // 
-            this.continueReviewButton.Location = new System.Drawing.Point(409, 698);
+            this.continueReviewButton.Location = new System.Drawing.Point(409, 598);
             this.continueReviewButton.Name = "button2";
             this.continueReviewButton.Size = new System.Drawing.Size(108, 34);
             this.continueReviewButton.TabIndex = 1;
@@ -115,7 +115,7 @@ namespace LipidCreator
             // label
             //
             this.labelSlash.AutoSize = true;
-            this.labelSlash.Location = new System.Drawing.Point(67, 628);
+            this.labelSlash.Location = new System.Drawing.Point(67, 528);
             this.labelSlash.Name = "labelSlash";
             this.labelSlash.Text = "/";
             // 
@@ -124,7 +124,7 @@ namespace LipidCreator
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Location = new System.Drawing.Point(12, 648);
+            this.groupBox1.Location = new System.Drawing.Point(12, 548);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(288, 85);
             this.groupBox1.TabIndex = 3;
@@ -167,7 +167,7 @@ namespace LipidCreator
             // labelSelectAll
             // 
             this.labelSelectAll.AutoSize = true;
-            this.labelSelectAll.Location = new System.Drawing.Point(12, 628);
+            this.labelSelectAll.Location = new System.Drawing.Point(12, 528);
             this.labelSelectAll.Name = "labelSelectAll";
             this.labelSelectAll.TabIndex = 6;
             this.labelSelectAll.Text = "select all";
@@ -177,7 +177,7 @@ namespace LipidCreator
             // labelDeselectAll
             // 
             this.labelDeselectAll.AutoSize = true;
-            this.labelDeselectAll.Location = new System.Drawing.Point(74, 628);
+            this.labelDeselectAll.Location = new System.Drawing.Point(74, 528);
             this.labelDeselectAll.Name = "labelDeselectAll";
             this.labelDeselectAll.TabIndex = 6;
             this.labelDeselectAll.Text = "deselect all";
@@ -187,14 +187,14 @@ namespace LipidCreator
             // labelSelected
             // 
             this.labelSelected.AutoSize = true;
-            this.labelSelected.Location = new System.Drawing.Point(200, 628);
+            this.labelSelected.Location = new System.Drawing.Point(200, 528);
             this.labelSelected.Name = "labelSelected";
             this.labelSelected.TabIndex = 7;
             this.labelSelected.Text = "Selected precursors: -";
             
             this.Font = new Font(Font.Name, CreatorGUI.REGULAR_FONT_SIZE * CreatorGUI.FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(529, 744);
+            this.ClientSize = new System.Drawing.Size(529, 644);
             this.Controls.Add(this.continueReviewButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridViewPrecursors);

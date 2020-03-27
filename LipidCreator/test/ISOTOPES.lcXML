@@ -1037,7 +1037,7 @@
 </DataTable>
 </userDefinedFattyAcids>
 </Precursor>
-<Precursor name="Ch{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\Ch_pos_pre.png" buildingBlockType="6" derivative="False" userDefined="True">
+<Precursor name="ST 27:1;1{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\Ch_pos_pre.png" buildingBlockType="6" derivative="False" userDefined="True">
 <AdductRestriction key="+H" value="True" />
 <AdductRestriction key="+2H" value="False" />
 <AdductRestriction key="+NH4" value="True" />
@@ -1147,7 +1147,7 @@
 </DataTable>
 </userDefinedFattyAcids>
 </Precursor>
-<Precursor name="ChE{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\ChE_pos_pre.png" buildingBlockType="3" derivative="False" userDefined="True">
+<Precursor name="SE 27:1;1{d7}" category="4" pathToImage="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\Precursors\ChE_pos_pre.png" buildingBlockType="3" derivative="False" userDefined="True">
 <AdductRestriction key="+H" value="True" />
 <AdductRestriction key="+2H" value="False" />
 <AdductRestriction key="+NH4" value="True" />
@@ -2429,7 +2429,7 @@
 <Element type="S''">0</Element>
 </MS2Fragment>
 </userDefinedFragment>
-<userDefinedFragment headgroup="Ch{d7}">
+<userDefinedFragment headgroup="ST 27:1;1{d7}">
 <MS2Fragment fragmentName="-Cholesterol(35)" fragmentOutputName="-Cholesterol(35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Cholesterols\Ch\Ch_pos_HG.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
 <Element type="C">0</Element>
 <Element type="H">-2</Element>
@@ -2629,7 +2629,7 @@
 <Element type="S''">0</Element>
 </MS2Fragment>
 </userDefinedFragment>
-<userDefinedFragment headgroup="ChE{d7}">
+<userDefinedFragment headgroup="SE 27:1;1{d7}">
 <MS2Fragment fragmentName="-FA1(+HO)-Cholesterol(35)" fragmentOutputName="-FA [xx:x](+HO)-Cholesterol(35)" fragmentAdduct="+H" fragmentFile="C:\Users\nils.hoffmann\AppData\Local\Apps\2.0\0RGOPAV4.CXA\H4VD3XK8.901\skyl..tion_e4141a2a22107248_0013.0001_ce58d4536a56800a\Tools\LipidCreator1\images\MS2\Cholesterols\ChE\ChE_pos_HG.png" specific="0" userDefined="True"><fragmentBase>HG</fragmentBase>
 <Element type="C">0</Element>
 <Element type="H">-1</Element>
@@ -3317,26 +3317,26 @@
 <onlyPrecursors>1</onlyPrecursors>
 <onlyHeavyLabeled>1</onlyHeavyLabeled>
 <adduct type="+NH4" />
-<headGroup>Ch</headGroup>
-<positiveFragments lipidClass="Ch">
+<headGroup>ST 27:1;1</headGroup>
+<positiveFragments lipidClass="ST 27:1;1">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="ChE">
+<positiveFragments lipidClass="SE 27:1;1">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="Ch{d7}">
+<positiveFragments lipidClass="ST 27:1;1{d7}">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="ChE{d7}">
+<positiveFragments lipidClass="SE 27:1;1{d7}">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
-<negativeFragments lipidClass="Ch">
+<negativeFragments lipidClass="ST 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="ChE">
+<negativeFragments lipidClass="SE 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="Ch{d7}">
+<negativeFragments lipidClass="ST 27:1;1{d7}">
 </negativeFragments>
-<negativeFragments lipidClass="ChE{d7}">
+<negativeFragments lipidClass="SE 27:1;1{d7}">
 </negativeFragments>
 </lipid>
 <lipid type="PL" isCL="False" isLyso="True">
@@ -3448,26 +3448,26 @@
 <onlyPrecursors>1</onlyPrecursors>
 <onlyHeavyLabeled>1</onlyHeavyLabeled>
 <adduct type="+NH4" />
-<headGroup>ChE</headGroup>
-<positiveFragments lipidClass="Ch">
+<headGroup>SE 27:1;1</headGroup>
+<positiveFragments lipidClass="ST 27:1;1">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="ChE">
+<positiveFragments lipidClass="SE 27:1;1">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="Ch{d7}">
+<positiveFragments lipidClass="ST 27:1;1{d7}">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="ChE{d7}">
+<positiveFragments lipidClass="SE 27:1;1{d7}">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
-<negativeFragments lipidClass="Ch">
+<negativeFragments lipidClass="ST 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="ChE">
+<negativeFragments lipidClass="SE 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="Ch{d7}">
+<negativeFragments lipidClass="ST 27:1;1{d7}">
 </negativeFragments>
-<negativeFragments lipidClass="ChE{d7}">
+<negativeFragments lipidClass="SE 27:1;1{d7}">
 </negativeFragments>
 </lipid>
 <lipid type="GL">

@@ -165,7 +165,7 @@ namespace LipidCreator
                 {
                     foreach (string headgroup in headGroupNames)
                     {
-                        string key = " ";
+                        string key = "/";
                         key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
                         if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
                         key += fa.suffix;

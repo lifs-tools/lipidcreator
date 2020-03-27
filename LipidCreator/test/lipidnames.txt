@@ -24,7 +24,7 @@ Palmitic acid,Palmitic acid
 # lipids on precursor level with one heavy labeled building block
 HexCer(+[13]C4) 18:1;2/16:0,HexCer(+[13]C4) 18:1;2/16:0
 MAG(+[18]O) 16:0,MAG(+[18]O) 16:0
-Ch(+[13]C),Ch(+[13]C)
+Ch(+[13]C),ST 27:1;1(+[13]C)
 12-HETE(+[2]H2),12-HETE(+[2]H2)
 MAG 16:0(+[18]O),MAG 16:0(+[18]O)
 CL 18:1-18:1-18:1(+[13]C18)-18:1,CL 18:1-18:1-18:1(+[13]C18)-18:1

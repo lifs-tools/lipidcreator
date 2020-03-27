@@ -141,18 +141,28 @@ namespace LipidCreator
                     if (headgroup.IndexOf("PC O") >= 0) headgroup = headgroup.Replace("PC O", "PC O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
                     else if (headgroup.IndexOf("PE O") >= 0) headgroup = headgroup.Replace("PE O", "PE O-" + (headgroup.IndexOf("a") > 0 ? "a" : "p"));
                     
-                    string[] speciesToken = headgroup.Split(new char[]{' '});
-                    headgroup = speciesToken[0];
-                    if (speciesToken.Length > 2)
+                    if (!headgroup.StartsWith("SE") && !headgroup.StartsWith("ST"))
                     {
-                        headgroup = speciesToken[0] + " " + speciesToken[1];
-                        if (!lcf.headgroups.ContainsKey(headgroup))
+                        string[] speciesToken = headgroup.Split(new char[]{' '});
+                        headgroup = speciesToken[0];
+                        if (speciesToken.Length > 2)
                         {
-                            headgroup = speciesToken[0];
-                            if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: headgroup could not be determined");
+                            headgroup = speciesToken[0] + " " + speciesToken[1];
+                            if (!lcf.headgroups.ContainsKey(headgroup))
+                            {
+                                headgroup = speciesToken[0];
+                                if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: '" + headgroup + "' headgroup could not be determined");
+                            }
                         }
                     }
+                    else
+                    {
+                        string[] speciesToken = headgroup.Split(new char[]{'/'});
+                        headgroup = speciesToken[0];
+                        if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: '" + headgroup + "' headgroup could not be determined");
+                    }
                     
+                    Console.WriteLine(headgroup);
                     
                     // subtracting adduct from precursor
                     string adduct = unitTestRow[3];

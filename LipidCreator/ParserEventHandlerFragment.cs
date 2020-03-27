@@ -1014,8 +1014,8 @@ namespace LipidCreator
                 string headgroup = node.getText();
                 switch (headgroup)
                 {
-                    case "CE": headgroup = "SE 27:1;1"; break;
-                    case "ChE": headgroup = "SE 27:1;1"; break;
+                    case "CE": headgroup = "SE 27:1"; break;
+                    case "ChE": headgroup = "SE 27:1"; break;
                     default: break;
                 }
                 lipid.headGroupNames.Add(headgroup);

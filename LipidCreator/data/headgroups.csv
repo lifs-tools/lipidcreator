@@ -1,16 +1,16 @@
 Category,Precursor,Trivialname,C,H,O,N,P,S,d,Backbone File,Precursor File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
 Sterol,ST 27:1;1,Cholesterol,27,46,1,0,0,0,0,images/backbones/Ch.png,images/Precursors/Ch_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 27:1;1,Cholesterol Ester,27,45,1,0,0,0,0,images/backbones/ChE.png,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 27:1,Cholesterol Ester,27,45,1,0,0,0,0,images/backbones/ChE.png,images/Precursors/ChE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,ST 27:2;1,Desmosterol,27,44,1,0,0,0,0,images/backbones/De.png,images/Precursors/De_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 27:2;1,Desmosterol Ester,27,43,1,0,0,0,0,images/backbones/DeE.png,images/Precursors/DeE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 27:2,Desmosterol Ester,27,43,1,0,0,0,0,images/backbones/DeE.png,images/Precursors/DeE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,ST 29:2;1,Stigmasterol,29,48,1,0,0,0,0,images/backbones/St.png,images/Precursors/St_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 29:2;1,Stigmasterol Ester,29,47,1,0,0,0,0,images/backbones/StE.png,images/Precursors/StE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 29:2,Stigmasterol Ester,29,47,1,0,0,0,0,images/backbones/StE.png,images/Precursors/StE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,ST 28:3;1,Ergosterol,28,44,1,0,0,0,0,images/backbones/Er.png,images/Precursors/Er_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 28:3;1,Ergosterol Ester,28,43,1,0,0,0,0,images/backbones/ErE.png,images/Precursors/ErE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 28:3,Ergosterol Ester,28,43,1,0,0,0,0,images/backbones/ErE.png,images/Precursors/ErE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,ST 30:2;1,Lanosterol,30,50,1,0,0,0,0,images/backbones/La.png,images/Precursors/La_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 30:2;1,Lanosterol Ester,30,49,1,0,0,0,0,images/backbones/LaE.png,images/Precursors/LaE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 30:2,Lanosterol Ester,30,49,1,0,0,0,0,images/backbones/LaE.png,images/Precursors/LaE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 Sterol,ST 28:2;1,Ergostadienol,28,46,1,0,0,0,0,images/backbones/ErDi.png,images/Precursors/ErDi_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,6,
-Sterol,SE 28:2;1,Ergostadienol Ester,28,45,1,0,0,0,0,images/backbones/ErDiE.png,images/Precursors/ErDiE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
+Sterol,SE 28:2,Ergostadienol Ester,28,45,1,0,0,0,0,images/backbones/ErDiE.png,images/Precursors/ErDiE_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,ester
 GL,DAG,Diacylglycerol,3,6,3,0,0,0,0,,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,Digalactosyldiacylglycerol,15,26,13,0,0,0,0,,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
 GL,MAG,Monoacylglycerol,3,7,3,0,0,0,0,,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,

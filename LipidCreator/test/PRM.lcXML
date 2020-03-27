@@ -1107,12 +1107,12 @@
 <positiveFragments lipidClass="ST 27:1;1">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="SE 27:1;1">
+<positiveFragments lipidClass="SE 27:1">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
 <negativeFragments lipidClass="ST 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="SE 27:1;1">
+<negativeFragments lipidClass="SE 27:1">
 </negativeFragments>
 </lipid>
 <lipid type="Sterol" containsEster="True">
@@ -1126,16 +1126,16 @@
 <onlyPrecursors>1</onlyPrecursors>
 <onlyHeavyLabeled>2</onlyHeavyLabeled>
 <adduct type="+NH4" />
-<headGroup>SE 27:1;1</headGroup>
+<headGroup>SE 27:1</headGroup>
 <positiveFragments lipidClass="ST 27:1;1">
 <fragment>-Cholesterol(35)</fragment>
 </positiveFragments>
-<positiveFragments lipidClass="SE 27:1;1">
+<positiveFragments lipidClass="SE 27:1">
 <fragment>-FA1(+HO)-Cholesterol(35)</fragment>
 </positiveFragments>
 <negativeFragments lipidClass="ST 27:1;1">
 </negativeFragments>
-<negativeFragments lipidClass="SE 27:1;1">
+<negativeFragments lipidClass="SE 27:1">
 </negativeFragments>
 </lipid>
 <lipid type="Mediator">

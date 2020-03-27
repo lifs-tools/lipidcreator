@@ -982,6 +982,14 @@ namespace LipidCreator
                     stIsEster.Checked = currentSTLipid.containsEster;
                     stRegular.Checked = !currentSTLipid.containsEster;
                     
+                    settingListbox = true;
+                    stHgListbox.SelectedItems.Clear();
+                    foreach (string headgroup in currentLipid.headGroupNames)
+                    {
+                        stHgListbox.SelectedItems.Add(headgroup);
+                    }
+                    settingListbox = false;
+                    
                     stFATextbox.Text = currentSTLipid.fag.lengthInfo;
                     stDBTextbox.Text = currentSTLipid.fag.dbInfo;
                     stHydroxylTextbox.Text = currentSTLipid.fag.hydroxylInfo;

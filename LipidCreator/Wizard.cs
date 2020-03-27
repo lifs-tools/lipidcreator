@@ -269,7 +269,7 @@ namespace LipidCreator
                     
                     else if (headgroupCategory == (int)LipidCategory.Sterollipid)
                     {
-                        if (headgroup == "ChE")
+                        if (creatorGUI.lipidCreator.headgroups[headgroup].attributes.Contains("ester"))
                         {
                             ((Sterol)lipid).containsEster = true;
                         }
@@ -570,7 +570,10 @@ namespace LipidCreator
                     hgCombobox.Items.Clear();
                     int hgListSelect = 0;
                     int ii = 0;
-                    foreach (string hg in creatorGUI.lipidCreator.categoryToClass[headgroupCategory])
+                    
+                    ArrayList sortedHGs = new ArrayList(creatorGUI.lipidCreator.categoryToClass[headgroupCategory]);
+                    sortedHGs.Sort();
+                    foreach (string hg in sortedHGs)
                     {
                         if (!creatorGUI.lipidCreator.headgroups[hg].attributes.Contains("heavy"))
                         {
@@ -587,6 +590,8 @@ namespace LipidCreator
                     
                 case (int)WizardSteps.SelectFA:
                     labelTitle.Text = "Select parameters for ";
+                    
+                    
                     
                     switch((string)faList[currentFA])
                     {
@@ -615,7 +620,7 @@ namespace LipidCreator
                             break;
                     }
                     
-                
+                    
                 
                     labelInformation.Text = "It's the inner attributes that matter. For '" + (string)faList[currentFA] + "', please select:" + Environment.NewLine +
                     "carbon length, number of double bonds and number of hydroxyl groups.";

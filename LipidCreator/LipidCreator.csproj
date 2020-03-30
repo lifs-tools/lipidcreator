@@ -15,7 +15,7 @@
     <AssemblyName>LipidCreator</AssemblyName>
     <AppTitle>$(AssemblyName)</AppTitle>
     <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
-    <AppCompany>Leibniz-Institut für Analytische Wissenschaften – ISAS – e.V.</AppCompany>
+    <AppCompany>Leibniz-Institut fuer Analytische Wissenschaften - ISAS - e.V.</AppCompany>
     <AppAuthor>Dominik Kopczynski, Nils Hoffmann, Bing Peng</AppAuthor>
     <AppProvider>https://lifs.isas.de/lipidcreator</AppProvider>
     <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
@@ -377,14 +377,13 @@
     <PropertyGroup>
       <InfoPropertiesFile>$(_TargetDir)tool-inf\info.properties</InfoPropertiesFile>
     </PropertyGroup>
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Name = $(AppTitle)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Version = $(AppVersion)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Author = $(AppAuthor)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Description = $(AppDescription)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(AppProvider)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(AppCompany)" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="Name = $(AppTitle)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Version = $(AppVersion)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Author = $(AppAuthor)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Description = $(AppDescription)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(AppProvider)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(AppCompany)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" Encoding="ASCII" />
   </Target>
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>

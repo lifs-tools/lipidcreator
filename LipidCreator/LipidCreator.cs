@@ -1861,6 +1861,8 @@ namespace LipidCreator
         {
             try
             {
+                // piwik webserver only allows TLS1.2
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 HttpWebRequest request = WebRequest.CreateHttp("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
                 request.Timeout = 2000;
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()){}

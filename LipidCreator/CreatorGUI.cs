@@ -3621,7 +3621,7 @@ namespace LipidCreator
 
         protected void menuDocsClick(object sender, System.EventArgs e)
         {
-            string docsDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), "data", "docs");
+            string docsDir = Path.Combine(System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) , "data", "docs");
             openDirectory(docsDir);
         }
         

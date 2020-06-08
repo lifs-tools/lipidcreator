@@ -91,28 +91,26 @@ namespace LipidCreator
         {
             try
             {
+                var openCmd = "explorer.exe";
                 int p = (int)Environment.OSVersion.Platform;
                 if ((p == 4) || (p == 6) || (p == 128))
                 {
-                    log.Debug("Running on Linux");
-                    string openCmd = "/usr/bin/xdg-open";
-                    var startInfo = new ProcessStartInfo()
-                    {
-                        FileName = openCmd,
-                        Arguments = "\"" +resource+ "\"",
-                        UseShellExecute = false
-                    };
-                    Process process = Process.Start(startInfo);
-                    process.WaitForExit();
-                    log.Debug("Finished starting process '" + openCmd + " " + resource + "' with code " + process.ExitCode);
+                    log.Debug("Running on Linux with resource '" + resource + "'");
+                    openCmd = "/usr/bin/xdg-open";
                 }
                 else
                 {
-                    log.Debug("Running on Windows");
-                    Process process = Process.Start(resource);
-                    process.WaitForExit();
-                    log.Debug("Finished starting process '" + resource + "'");
+                    log.Debug("Running on Windows with resource '" + resource + "'");
                 }
+                var startInfo = new ProcessStartInfo()
+                {
+                    FileName = openCmd,
+                    Arguments = "\"" + resource + "\"",
+                    UseShellExecute = false
+                };
+                Process process = Process.Start(startInfo);
+                process.WaitForExit();
+                log.Debug("Finished starting process '" + resource + "'");
             }
             catch (Exception exception)
             {

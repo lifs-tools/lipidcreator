@@ -2571,12 +2571,11 @@ namespace LipidCreator
             homeText3.Width = 560;
             homeText3.Height = 80;
             homeText3.Location = new Point(60, 390);
-            homeText3.Text = "Citation: Peng et al., Awesome journal, 2019";
+            homeText3.Text = "Citation: Peng, Bing, et al. Nature Communications 11(1):1-14, 2020.";
             homeText3.BackColor = Color.Transparent;
-            homeText3.Font = new Font(homeTab.Font.FontFamily, (int)(12.0 * FONT_SIZE_FACTOR), FontStyle.Bold);
+            homeText3.Font = new Font(homeTab.Font.FontFamily, (int)(10.0 * FONT_SIZE_FACTOR), FontStyle.Bold);
             homeText3.ForeColor = Color.White;
             homeText3.Click += homeText3LinkClicked;
-            homeText3.Visible = false;
             
             
             startFirstTutorialButton = new Button();

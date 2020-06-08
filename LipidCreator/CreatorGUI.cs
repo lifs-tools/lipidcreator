@@ -1147,7 +1147,7 @@ namespace LipidCreator
         
         private void homeText3LinkClicked(Object sender, EventArgs e)
         {
-            string url = "http://www.whateverjournal.com/doi/or/whatever";
+            string url = "https://www.nature.com/articles/s41467-020-15960-z";
             var si = new ProcessStartInfo(url);
             Process.Start(si);
         }

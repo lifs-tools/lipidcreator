@@ -290,7 +290,7 @@ namespace LipidCreator
 
         public void toolDirectoryMenu(Object sender, EventArgs e)
         {
-            string dataDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase));
+            string dataDir = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             openDirectory(dataDir);
         }
         
@@ -300,33 +300,8 @@ namespace LipidCreator
         
         private void openDirectory(string dataDir)
         {
-            log.Debug("LipidCreator dir to open is " + dataDir);
-
-            try
-            {
-                log.Debug("Opening directory " + System.IO.Path.GetDirectoryName(dataDir));
-                int p = (int)Environment.OSVersion.Platform;
-                if ((p == 4) || (p == 6) || (p == 128))
-                {
-                    log.Debug("Running on Linux");
-                    string openCmd = "xdg-open";
-                    Process process = System.Diagnostics.Process.Start(openCmd, dataDir);
-                    process?.WaitForExit();
-                    log.Debug("Finished starting process '" + openCmd + " " + dataDir + "' with code " + process.ExitCode);
-                }
-                else
-                {
-                    log.Debug("Running on Windows");
-                    Process process = System.Diagnostics.Process.Start(dataDir);
-                    process?.WaitForExit();
-                    log.Debug("Finished starting process '" + dataDir);
-                }
-            }
-            catch (Exception exception)
-            {
-                log.Error("Error while opening dataDir folder " + dataDir + ":", exception);
-                log.Error(exception.StackTrace);
-            }
+            log.Debug("LipidCreator directory to open is '" + dataDir + "'");
+            new CrossPlatform().OpenFileOrDir(dataDir);
         }
         
         
@@ -1148,8 +1123,7 @@ namespace LipidCreator
         private void homeText3LinkClicked(Object sender, EventArgs e)
         {
             string url = "https://www.nature.com/articles/s41467-020-15960-z";
-            var si = new ProcessStartInfo(url);
-            Process.Start(si);
+            new CrossPlatform().OpenUri(url);
         }
         
         

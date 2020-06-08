@@ -92,10 +92,9 @@ namespace LipidCreator
                 url = linkLabel.Text.Substring(e.Link.Start, e.Link.Length);
 
             if (!url.Contains("://"))
-                url = "http://" + url;
+                url = "https://" + url;
 
-            var si = new ProcessStartInfo(url);
-            Process.Start(si);
+            new CrossPlatform().OpenUri(url);
             linkLabel.LinkVisited = true;
         }
 
@@ -141,34 +140,9 @@ namespace LipidCreator
 
         protected void OpenAction(object sender, System.EventArgs e)
         {
-            string logDir = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), "data");
-            log.Debug("docsDir is " + logDir);
-
-            try
-            {
-                log.Debug("Opening directory " + System.IO.Path.GetDirectoryName(logDir));
-                int p = (int)Environment.OSVersion.Platform;
-                if ((p == 4) || (p == 6) || (p == 128))
-                {
-                    log.Debug("Running on Linux");
-                    string openCmd = "xdg-open";
-                    Process process = System.Diagnostics.Process.Start(openCmd, logDir);
-                    process.WaitForExit();
-                    log.Debug("Finished starting process '" + openCmd + " " + logDir + "' with code " + process.ExitCode);
-                }
-                else
-                {
-                    log.Debug("Running on Windows");
-                    Process process = System.Diagnostics.Process.Start(logDir);
-                    process.WaitForExit();
-                    log.Debug("Finished starting process '" + logDir);
-                }
-            }
-            catch (Exception exception)
-            {
-                log.Error("Error while opening logs folder " + logDir + ":", exception);
-                log.Error(exception.StackTrace);
-            }
+            string logDir = Path.Combine(System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath), "data");
+            log.Debug("Directory to open is " + logDir);
+            new CrossPlatform().OpenFileOrDir(logDir);
         }
     }
 }

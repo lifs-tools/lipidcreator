@@ -154,6 +154,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrossPlatform.cs" />
     <Compile Include="AddHeavyPrecursor.cs">
       <SubType>Form</SubType>
     </Compile>

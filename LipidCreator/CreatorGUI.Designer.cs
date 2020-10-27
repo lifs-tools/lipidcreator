@@ -269,6 +269,8 @@ namespace LipidCreator
     
     
     
+    
+    
     public class AdductCheckedEventArgs : EventArgs
     {
         public string adduct;
@@ -2445,8 +2447,6 @@ namespace LipidCreator
             lipidsGridviewPanel.AutoScroll = true;
             lipidsGridviewPanel.Controls.Add(lipidsGridview);
 
-            //lipidsGroupbox.Controls.Add(lipidsGridviewPanel);
-
             lipidsReviewButtonPanel = new Panel();
             lipidsReviewButtonPanel.AutoSize = true;
             lipidsReviewButtonPanel.Dock = DockStyle.Bottom;
@@ -2525,6 +2525,7 @@ namespace LipidCreator
             openReviewFormButton.BackColor = SystemColors.Control;
             openReviewFormButton.Dock = DockStyle.Bottom;
             openReviewFormButton.Click += openReviewForm;
+            openReviewFormButton.Enabled = false;
 
             this.Controls.Add(tabControl);
             this.Controls.Add(lipidsGroupbox);

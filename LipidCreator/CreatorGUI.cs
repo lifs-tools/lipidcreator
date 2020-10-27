@@ -1931,6 +1931,7 @@ namespace LipidCreator
         {
             
             List<String> slHgList = new List<String>();
+            settingListbox = true;
             slHgListbox.Items.Clear();
             
             
@@ -1965,6 +1966,20 @@ namespace LipidCreator
             
             slHgList.Sort();
             slHgListbox.Items.AddRange(slHgList.ToArray());
+            foreach (string headgroup in ((Sphingolipid)currentLipid).headGroupNames)
+            {
+                var i = 0;
+                foreach (var item in slHgListbox.Items)
+                {
+                    if (item.ToString().Equals(headgroup)) 
+                    {
+                        slHgListbox.SetSelected(i, true);
+                        break;
+                    }
+                    ++i;
+                }
+            }
+            settingListbox = false;
         }
         
         private void slHgListboxKeyDown(object sender, KeyEventArgs e)
@@ -1987,6 +2002,7 @@ namespace LipidCreator
         public void chContainsEsterCheckedChanged(Object sender, EventArgs e)
         {
             ((Sterol)currentLipid).containsEster = stIsEster.Checked;
+            settingListbox = true;
             stHgListbox.Items.Clear();
             
             if (((Sterol)currentLipid).containsEster)
@@ -1997,6 +2013,24 @@ namespace LipidCreator
             {
                 stHgListbox.Items.AddRange(stHgList.ToArray());
             }
+            
+            foreach (string headgroup in ((Sterol)currentLipid).headGroupNames)
+            {
+                var i = 0;
+                foreach (var item in stHgListbox.Items)
+                {
+                    if (item.ToString().Equals(headgroup)) 
+                    {
+                        stHgListbox.SetSelected(i, true);
+                        break;
+                    }
+                    ++i;
+                }
+            }
+            settingListbox = false;
+            
+            
+            
             stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToBackboneImage);
             stFACombobox.Visible = ((Sterol)currentLipid).containsEster;
             stFATextbox.Visible = ((Sterol)currentLipid).containsEster;
@@ -2480,10 +2514,19 @@ namespace LipidCreator
             
             else if (currentLipid is Sphingolipid)
             {
-                if (currentLipid.headGroupNames.Count == 0)
+                bool hasOneHG = false;
+                foreach (string headgroup in currentLipid.headGroupNames)
+                {
+                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("lyso") ^ ((Sphingolipid)currentLipid).isLyso) )
+                    {
+                        hasOneHG = true;
+                        break;
+                    }
+                }
+                if (!hasOneHG)
                 {
                     MessageBox.Show("No head group selected!", "Not registrable");
-                    return LipidCategory.NoLipid;                   
+                    return  LipidCategory.NoLipid;                    
                 }
                 
                 if (slLCBTextbox.BackColor == alertColor)
@@ -2512,6 +2555,20 @@ namespace LipidCreator
             
             else if (currentLipid is Sterol)
             {
+                bool hasOneHG = false;
+                foreach (string headgroup in currentLipid.headGroupNames)
+                {
+                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("ester") ^ ((Sterol)currentLipid).containsEster) )
+                    {
+                        hasOneHG = true;
+                        break;
+                    }
+                }
+                if (!hasOneHG)
+                {
+                    MessageBox.Show("No head group selected!", "Not registrable");
+                    return  LipidCategory.NoLipid;                    
+                }
                 if (stIsEster.Checked && stFATextbox.BackColor == alertColor)
                 {
                     MessageBox.Show("Fatty acyl length content not valid!", "Not registrable");
@@ -2705,6 +2762,7 @@ namespace LipidCreator
                     log.Debug("A lipid with this set of parameters is already registered.");
                     MessageBox.Show("A lipid with this set of parameters is already registered.", "Lipid registered");
                 }
+                openReviewFormButton.Enabled = lipidCreator.registeredLipids.Count > 0;
             });
         }
         
@@ -2888,11 +2946,9 @@ namespace LipidCreator
         
         
         
-        
-        
-        
         public void refreshRegisteredLipidsTable()
         {
+            openReviewFormButton.Enabled = lipidCreator.registeredLipids.Count > 0;
             lipidsGridview.InvokeIfRequired(() =>
             {
                 log.Debug("Refreshing lipids table");
@@ -2913,6 +2969,7 @@ namespace LipidCreator
                     lipidsGridview.Rows[i].Cells["Edit"].Value = editImage;
                     lipidsGridview.Rows[i].Cells["Delete"].Value = deleteImage;
                 }
+                
             });
         }
         
@@ -3036,6 +3093,7 @@ namespace LipidCreator
                 }
                 lipidCreator.registeredLipidDictionary.Remove((ulong)lipidCreator.registeredLipids[rowIndex]);
                 lipidCreator.registeredLipids.RemoveAt(rowIndex);
+                openReviewFormButton.Enabled = lipidCreator.registeredLipids.Count > 0;
             });
 
         }

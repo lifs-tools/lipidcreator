@@ -55,6 +55,12 @@ namespace LipidCreator
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
     public delegate void SkylineConnectionClosedEventHandler(object sender, EventArgs e);
+    
+    
+    
+    
+    
+    
 
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};

@@ -13,7 +13,8 @@ RESX_FILES = AboutDialog.resx,$(BUILD_DIR)/LipidCreator.AboutDialog.resources Ad
 
 RES_FILES = -resource:$(BUILD_DIR)/LipidCreator.AboutDialog.resources -resource:$(BUILD_DIR)/LipidCreator.AddHeavyPrecursor.resources -resource:$(BUILD_DIR)/LipidCreator.CEInspector.resources -resource:$(BUILD_DIR)/LipidCreator.FilterDialog.resources -resource:$(BUILD_DIR)/LipidCreator.LCMessageBox.resources -resource:$(BUILD_DIR)/LipidCreator.LipidsReview.resources -resource:$(BUILD_DIR)/LipidCreator.MS2Form.resources -resource:$(BUILD_DIR)/LipidCreator.NewFragment.resources -resource:$(BUILD_DIR)/LipidCreator.NewMediator.resources -resource:$(BUILD_DIR)/LipidCreator.TranslatorDialog.resources -resource:$(BUILD_DIR)/LipidCreator.LipidsInterList.resources -resource:$(BUILD_DIR)/LipidCreator.Wizard.resources
 
-
+WITH_DEBUG = 
+#WITH_DEBUG = -d:DEBUG
 
 
 
@@ -24,15 +25,15 @@ main: setup
 
 tests: setup
 	resgen2 -compile $(RESX_FILES)
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll $(WITH_DEBUG) -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll $(WITH_DEBUG) -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestImport.cs -out:$(BUILD_DIR)/TestImport.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll $(WITH_DEBUG) -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestImport.cs -out:$(BUILD_DIR)/TestImport.exe
 	
-	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
+	mcs -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll $(WITH_DEBUG) -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
 	
-	mcs $(RES_FILES) -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -d:DEBUG -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
+	mcs $(RES_FILES) -pkg:dotnet -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll $(WITH_DEBUG) -r:SkylineTool.dll -r:Ionic.Zip.dll -r:ExcelLibrary.dll -r:$(SQLite_DLL) -lib:/usr/lib/mono/4.5 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
 
 complete:
 	$(MAKE) setup

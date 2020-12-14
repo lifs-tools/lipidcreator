@@ -126,6 +126,23 @@ namespace LipidCreator
         }
         
         
+        public override string ToString()
+        {
+            string faLCB = (isLCB) ? "long chain base" : "fatty acyl";
+            string allFaTypes = "";
+            foreach (string typeFa in faTypes.Keys)
+            {
+                if (faTypes[typeFa])
+                {
+                    if (allFaTypes.Length > 0)
+                    {
+                        allFaTypes += ", ";
+                    }
+                    allFaTypes += typeFa;
+                }
+            }
+            return String.Format("The {0} group of length {1}, with double bonds {2}, hydroxlations {3}, and types {4}", faLCB, lengthInfo, dbInfo, hydroxylInfo, allFaTypes);
+        }
         
         
         public ulong getHashCode()

@@ -40,6 +40,13 @@ namespace LipidCreator
         public ElementDictionary atomsCount;
         public bool isLCB;
         
+        
+        public override string ToString()
+        {
+            string faLCB = isLCB ? "Long chain base" : "Fatty acyl";
+            return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and suffix {4}.", faLCB, length, db, hydroxyl, suffix);
+        }
+        
         public FattyAcid(int l, int db, int hydro)
         {
         

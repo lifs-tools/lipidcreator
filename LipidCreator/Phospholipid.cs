@@ -33,7 +33,7 @@ using System.Text;
 using log4net;
 
 namespace LipidCreator
-{
+{    
     [Serializable]
     public class Phospholipid : Lipid
     {
@@ -360,16 +360,17 @@ namespace LipidCreator
                 if (headGroupNames.Count == 0) return;
                 if (fag1.faTypes["FAx"]) return;
                 
-                bool isPlamalogen1 = false;
-                bool isFAa1 = false;
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
+                    bool isPlamalogen1 = false;
+                    bool isFAa1 = false;
                     switch (fa1.suffix)
                     {
                         case "a": isFAa1 = true; break;
                         case "p": isPlamalogen1 = true; break;
                         default: break;
                     }
+                    
                     
                     foreach(string headgroupIter in headGroupNames)
                     {   
@@ -380,6 +381,7 @@ namespace LipidCreator
                         
                         string PLsep = " ";
                         string modifiedHeadgroup = headgroup;
+                        
                         if ((isFAa || isPlamalogen) && (headgroup.Equals("LPC") || headgroup.Equals("LPE"))) continue;
                         if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
                         {
@@ -402,9 +404,12 @@ namespace LipidCreator
                         
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
+                            
                         
                             if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
                             if (usedKeys.Contains(completeKey + adductKey)) continue;
+                            
+                            
                             
                             usedKeys.Add(completeKey + adductKey);
                             

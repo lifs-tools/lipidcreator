@@ -246,6 +246,11 @@ namespace LipidCreator
             if (handler != null) handler(this, e);
         }
         
+        public static void print(string s)
+        {
+            Console.WriteLine(s);
+        }
+        
         public void readInputFiles()
         {
             int lineCounter = 1;

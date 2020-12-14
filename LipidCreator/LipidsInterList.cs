@@ -108,6 +108,7 @@ namespace LipidCreator
                 count += (bool)dataRow[0] ? 1 : 0;
             }
             labelSelected.Text = "Selected precursors: " + count.ToString();
+            continueReviewButton.Enabled = count > 0;
         }
         
         

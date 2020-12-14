@@ -1,5 +1,5 @@
 BUILD_NUMBER ?= 0
 main:
-	xbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=$(BUILD_NUMBER)
+	msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=$(BUILD_NUMBER)
 clean:
-	xbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 -t:Clean
+	msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 -t:Clean

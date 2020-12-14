@@ -1078,11 +1078,12 @@ namespace LipidCreator
             ChainType objectType = (ChainType)objectTypeI;
             int minRange = 0, maxRange = 0;
             bool incorrectParsing = false;
+            
             if (objectType <= ChainType.carbonLengthEven)
             {
                 minRange = LipidCreator.MIN_CARBON_LENGTH;
                 maxRange = LipidCreator.MAX_CARBON_LENGTH;
-                fag.carbonCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                fag.carbonCounts = LipidCreator.parseRange(fag.lengthInfo, minRange,  maxRange, objectType);
                 if (fag.carbonCounts == null)
                 {
                     incorrectParsing = true;
@@ -1093,7 +1094,7 @@ namespace LipidCreator
             {
                 minRange = LipidCreator.MIN_DB_LENGTH;
                 maxRange = LipidCreator.MAX_DB_LENGTH;
-                fag.doubleBondCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                fag.doubleBondCounts = LipidCreator.parseRange(fag.dbInfo, minRange,  maxRange, objectType);
                 if (fag.doubleBondCounts == null)
                 {
                     incorrectParsing = true;
@@ -1104,7 +1105,7 @@ namespace LipidCreator
             {
                 minRange = LipidCreator.MIN_HYDROXY_LENGTH;
                 maxRange = LipidCreator.MAX_HYDROXY_LENGTH;
-                fag.hydroxylCounts = LipidCreator.parseRange(tb.Text, minRange,  maxRange, objectType);
+                fag.hydroxylCounts = LipidCreator.parseRange(fag.hydroxylInfo, minRange,  maxRange, objectType);
                 if (fag.hydroxylCounts == null)
                 {
                     incorrectParsing = true;
@@ -1164,7 +1165,9 @@ namespace LipidCreator
         public void updateOddEven(Object sender, FattyAcidEventArgs e)
         {
             e.fag.chainType = ((ComboBox)sender).SelectedIndex;
+            Console.WriteLine(e.fag);
             updateRanges(e.fag, e.textbox, e.fag.chainType);
+            Console.WriteLine(e.fag);
         }
         
         

@@ -130,6 +130,7 @@ namespace LipidCreator
         {
             string faLCB = (isLCB) ? "long chain base" : "fatty acyl";
             string allFaTypes = "";
+            string restrictions = chainType == 0 ? "no restriction" : (chainType == 1 ? "odd chain numbers" : "even chain numbers"); 
             foreach (string typeFa in faTypes.Keys)
             {
                 if (faTypes[typeFa])
@@ -141,7 +142,7 @@ namespace LipidCreator
                     allFaTypes += typeFa;
                 }
             }
-            return String.Format("The {0} group of length {1}, with double bonds {2}, hydroxlations {3}, and types {4}", faLCB, lengthInfo, dbInfo, hydroxylInfo, allFaTypes);
+            return String.Format("The {0} group of length {1} ({2}), with double bonds {3}, hydroxlations {4}, bond types {5}, and {6}", faLCB, String.Join(",", carbonCounts), lengthInfo, dbInfo, hydroxylInfo, allFaTypes, restrictions);
         }
         
         

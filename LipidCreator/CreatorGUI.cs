@@ -2851,6 +2851,7 @@ namespace LipidCreator
             {
                 Sphingolipid currentSphingolipid = (Sphingolipid)currentRegisteredLipid;
                 row["Category"] = "Sphingolipid";
+                headGroupNames.AddRange(currentSphingolipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
                 row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
                 if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();

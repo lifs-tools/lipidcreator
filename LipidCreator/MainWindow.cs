@@ -57,7 +57,7 @@ namespace LipidCreator
             }
             catch
             {
-                log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidreator.log' and get in contact with the developers.");
+                log.Error("An error occurred during the initialization of LipidCreator. For more details, please read the log message 'data/lipidcreator.log' and get in contact with the developers.");
                 return;
             }
             StringBuilder b;
@@ -261,7 +261,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "agentmode", "translate"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "agentmode", "translate", "version"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -313,7 +313,12 @@ namespace LipidCreator
                             checkForAnalytics(runMode, false);
                             printHelp();
                             break;
-                            
+                        
+                        case "version":
+                            runMode = RunMode.commandline;
+                            checkForAnalytics(runMode, false);
+                            printHelp("version");
+                            break;
                             
                         case "random":
                             runMode = RunMode.commandline;

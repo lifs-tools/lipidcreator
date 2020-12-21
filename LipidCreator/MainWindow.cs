@@ -139,7 +139,17 @@ namespace LipidCreator
                     b = new StringBuilder("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
                     Console.Write(b.ToString());
                     break;
-                    
+
+                case "version":
+                    b = new StringBuilder(
+                        Application.ProductName + " " + Application.ProductVersion + 
+                        " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + 
+                        AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + 
+                        System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + 
+                        "\n\n" + "MIT License"
+                    );
+                    Console.Write(b.ToString());
+                    break;
                     
                 default:
                     b = new StringBuilder("usage: LipidCreator.exe (option)").
@@ -151,6 +161,7 @@ namespace LipidCreator
                     AppendLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list").
                     AppendLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)").
                     AppendLine("  agentmode:\t\t\tsecret agent mode").
+                    AppendLine("  version:\t\t\tprint version information").
                     AppendLine("  help:\t\t\t\tprint this help");
                     Console.Write(b.ToString());
                     break;

@@ -129,7 +129,7 @@ namespace LipidCreator
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.LinkLabel linkLabel;
         private System.Windows.Forms.RichTextBox textLibraryName;
-        private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
+        private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcynski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
             "MIT License\n\n" +
 
             "Copyright(c) 2018\n" +

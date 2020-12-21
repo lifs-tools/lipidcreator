@@ -141,13 +141,18 @@ namespace LipidCreator
                     break;
 
                 case "version":
-                    b = new StringBuilder(
-                        Application.ProductName + " " + Application.ProductVersion + 
+                    b = new StringBuilder();
+                    b.AppendLine(Application.ProductName + " " + Application.ProductVersion + 
                         " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + 
-                        AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcyinski\nNils Hoffmann\n\n" + 
-                        System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + 
-                        "\n\n" + "MIT License"
-                    );
+                        AssemblyInfo.GetBuildTime() + ")").
+                    AppendLine().
+                    AppendLine("Contributers:").
+                    AppendLine("Bing Peng").
+                    AppendLine("Dominik Kopzcynski").
+                    AppendLine("Nils Hoffmann").
+                    AppendLine().
+                    AppendLine(System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright).
+                    AppendLine("MIT License");
                     Console.Write(b.ToString());
                     break;
                     

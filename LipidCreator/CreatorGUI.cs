@@ -3218,6 +3218,15 @@ namespace LipidCreator
                 log.Info("Closing LipidCreator!");
                 lipidCreator.Dispose();
             }
+            DialogResult dr = MessageBox.Show ("You are going to leave LipidCreator. All information and settings will be discarded. Do you want to save the LipidCreator session?", "Saving LipidCreator Session", MessageBoxButtons.YesNoCancel);
+            if (dr == DialogResult.Yes)
+            {
+                exportDialog();
+            }
+            else if (dr == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
         
         
@@ -3452,6 +3461,15 @@ namespace LipidCreator
         
         
         
+        public void Creator_Closing(object sender, CancelEventArgs e)
+        {
+            
+        }
+        
+        
+        
+        
+        
         
         public void goToFragment(LipidException lipidException)
         {
@@ -3605,6 +3623,13 @@ namespace LipidCreator
         
         
         protected void menuExportClick(object sender, System.EventArgs e)
+        {
+            exportDialog();
+        }
+        
+        
+        
+        public void exportDialog()
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.InitialDirectory = "c:\\";

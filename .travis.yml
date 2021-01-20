@@ -1,0 +1,11 @@
+env:
+  global:
+      - BASE_BUILD_NUMBER=749
+      - BUILD_NUMBER=$(($BASE_BUILD_NUMBER + $TRAVIS_BUILD_NUMBER))  
+language: csharp
+solution: LipidCreator.sln
+mono:
+ - 6.12.0
+script:
+ - msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}
+ - cd LipidCreator && make tests && make runtest

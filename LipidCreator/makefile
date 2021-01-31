@@ -1,6 +1,6 @@
 CC = x86_64-w64-mingw32-g++
 SQLite_DLL = ../packages/System.Data.SQLite.Core.1.0.110.0/lib/net40/System.Data.SQLite.dll
-Log4Net_DLL = ../packages/log4net.2.0.8/lib/net40-client/log4net.dll
+Log4Net_DLL = ../packages/log4net.2.0.12/lib/net40-client/log4net.dll
 
 CORE_FILES = LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs Glycerolipid.cs Phospholipid.cs Sphingolipid.cs Sterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs IonFormulaParserEventHandler.cs MoleculeFormulaParserEventHandler.cs ParserEventHandler.cs Parser.cs LipidCreatorExtensionMethods.cs Element.cs ListingParserEventHandler.cs Adduct.cs IsotopeParserEventHandler.cs ParserEventHandlerFragment.cs CrossPlatform.cs
 
@@ -48,7 +48,7 @@ setup:  $(SQLite_DLL)
 	if [ ! -d "$(BUILD_DIR)" ];then \
 		mkdir -p bin; \
 		mkdir -p $(BUILD_DIR); \
-		cp -r data images SkylineTool.dll ExcelLibrary.dll Ionic.Zip.dll $(SQLite_DLL) ../packages/log4net.2.0.8/lib/net40-client/* tool-inf $(BUILD_DIR); \
+		cp -r data images SkylineTool.dll ExcelLibrary.dll Ionic.Zip.dll $(SQLite_DLL) ../packages/log4net.2.0.12/lib/net40-client/* tool-inf $(BUILD_DIR); \
 		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
 	fi
 	mkdir -p $(BUILD_DIR)/data/predefined

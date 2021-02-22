@@ -21,6 +21,8 @@ WITH_DEBUG =
 main: setup
 	resgen2 -compile $(RESX_FILES)
 
+	#mcs $(RES_FILES) -t:library -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5  $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.dll
+	
 	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
 
 tests: setup

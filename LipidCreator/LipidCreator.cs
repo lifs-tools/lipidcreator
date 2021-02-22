@@ -608,6 +608,12 @@ namespace LipidCreator
         
         public LipidCreator(string pipe, bool firstInit = false)
         {
+            /*
+            if (nologging)
+            {
+                ((log4net.Repository.Hierarchy.Logger)log.Logger).Level = log4net.Core.Level.Error;
+            }*/
+            
             buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
             buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
             buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
@@ -1208,6 +1214,84 @@ namespace LipidCreator
             }
         }
         
+        
+        
+        
+        public int[] insertLipidList(string[] lipidsToImport, int[] filterParameters = null)
+        {
+            int total = 0;
+            int valid = 0;
+            int lipidNameIndex = 0;
+            ArrayList importedLipids = translate(new ArrayList(lipidsToImport), true);
+            
+            
+            
+            Dictionary<string, Lipid> parsedLipidsDict = new Dictionary<string, Lipid>();
+            ArrayList lipidListForInsertion = new ArrayList();
+            
+            foreach (object[] lipidRow in importedLipids)
+            {
+                Lipid currentLipid = (Lipid)lipidRow[0];
+                string lipidName = (string)lipidRow[2];
+                if (currentLipid == null || (currentLipid is UnsupportedLipid)) continue;
+                ++valid;
+                
+                if (!parsedLipidsDict.ContainsKey(lipidName))
+                {
+                    parsedLipidsDict.Add(lipidName, currentLipid);
+                    lipidListForInsertion.Add(currentLipid);
+                }
+                else
+                {
+                    Lipid lipidForMerging = parsedLipidsDict[lipidName];
+                    foreach (string lipidClass in lipidForMerging.positiveFragments.Keys)
+                    {
+                        lipidForMerging.positiveFragments[lipidClass].UnionWith(currentLipid.positiveFragments[lipidClass]);
+                    }
+                    foreach (string lipidClass in lipidForMerging.negativeFragments.Keys)
+                    {
+                        lipidForMerging.negativeFragments[lipidClass].UnionWith(currentLipid.negativeFragments[lipidClass]);
+                    }
+                }
+            }
+            
+            
+            foreach (Lipid lipid in lipidListForInsertion)
+            {
+                if (lipid == null || (lipid is UnsupportedLipid)) continue;
+                
+                if (filterParameters != null)
+                {
+                    lipid.onlyPrecursors = filterParameters[0];
+                    lipid.onlyHeavyLabeled = filterParameters[1];
+                }
+                
+                ulong lipidHash = 0;
+                if (lipid is Glycerolipid) lipidHash = ((Glycerolipid)lipid).getHashCode();
+                else if (lipid is Phospholipid) lipidHash = ((Phospholipid)lipid).getHashCode();
+                else if (lipid is Sphingolipid) lipidHash = ((Sphingolipid)lipid).getHashCode();
+                else if (lipid is Sterol) lipidHash = ((Sterol)lipid).getHashCode();
+                else if (lipid is Mediator) lipidHash = ((Mediator)lipid).getHashCode();
+                else if (lipid is UnsupportedLipid) lipidHash = ((UnsupportedLipid)lipid).getHashCode();
+
+                if (!registeredLipidDictionary.ContainsKey(lipidHash))
+                {
+                    registeredLipidDictionary.Add(lipidHash, lipid);
+                    registeredLipids.Add(lipidHash);
+                }
+                else
+                {
+                    --valid;
+                    StringBuilder lipidXml = new StringBuilder(50);
+                    lipid.serialize(lipidXml);
+                    StringBuilder lipidDictXml = new StringBuilder(50);
+                    registeredLipidDictionary[lipidHash].serialize(lipidDictXml);
+                    log.Warn("Lipid " + lipidsToImport[lipidNameIndex] + " was already defined! Please check your input for duplicates!");
+                }
+                ++lipidNameIndex;
+            }
+            return new int[]{valid, total}; 
+        }
         
         
         

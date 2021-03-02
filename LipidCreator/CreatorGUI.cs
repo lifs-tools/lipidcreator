@@ -1165,9 +1165,7 @@ namespace LipidCreator
         public void updateOddEven(Object sender, FattyAcidEventArgs e)
         {
             e.fag.chainType = ((ComboBox)sender).SelectedIndex;
-            Console.WriteLine(e.fag);
             updateRanges(e.fag, e.textbox, e.fag.chainType);
-            Console.WriteLine(e.fag);
         }
         
         

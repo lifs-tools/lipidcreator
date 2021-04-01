@@ -733,7 +733,7 @@ namespace LipidCreator
         {
             if (lipid != null && !(lipid is UnsupportedLipid))
             {
-                lipid.headGroupNames.Add("Ch");
+                lipid.headGroupNames.Add("ST 27:1;1");
                 List<string> keys = new List<string>(((Sterol)lipid).fag.faTypes.Keys);
                 foreach(string faTypeKey in keys) ((Sterol)lipid).fag.faTypes[faTypeKey] = false;
                 ((Sterol)lipid).fag.faTypes["FAx"] = true;
@@ -747,7 +747,7 @@ namespace LipidCreator
         {
             if (lipid != null && !(lipid is UnsupportedLipid))
             {
-                lipid.headGroupNames.Add("ChE");
+                lipid.headGroupNames.Add("SE 27:1");
                 ((Sterol)lipid).containsEster = true;
             }
         }

@@ -5,7 +5,7 @@ LipidCreator is a plugin for [Skyline](https://skyline.ms/project/home/software/
 It can be used to create user-defined target lists and fragment libraries for PRM and MRM experiments in Skyline.
 It also supports standalone and command-line operation.
 
-It has been tested with Thermo QExactive HF and Waters QTOF instruments.
+It has been tested with Thermo QExactive HF and Agilent QTOF instruments.
 
 ## Latest Release ##
 The LipidCreator releases are available from the [LIFS Portal](https://lifs.isas.de/lipidcreator) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).

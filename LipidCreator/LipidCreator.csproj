@@ -150,7 +150,7 @@
       <HintPath>..\packages\log4net.2.0.12\lib\net40-client\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite">
-      <HintPath>packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.113.3\lib\net451\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net451\System.Data.SQLite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

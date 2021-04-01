@@ -1,3 +1,10 @@
+Cholesterol,ST 27:1;1
+15:1 Cholesteryl ester,SE 27:1/15:1
+17:1 Cholesteryl ester,SE 27:1/17:1
+16:2 Cholesteryl ester,SE 27:1/16:2
+22:1 Cholesteryl ester,SE 27:1/22:1
+17:0 Cholesteryl ester,SE 27:1/17:0
+15:0 Cholesteryl ester,SE 27:1/15:0
 Serratamic acid,
 PC(O-14:0/0:0),LPC O-14:0a
 Sphinganine,LCB 18:0;2
@@ -31319,7 +31326,7 @@ GlcNalpha1-6Ins-1-P-Cer(t18:0/26:0),
 Psychosine,
 psychosine sulfate,
 Cholestane skeleton,
-Cholesterol,Ch
+Cholesterol,ST 27:1;1
 25-hydroxy-cholesterol(d3),
 4beta-hydroxy-cholesterol(d7),
 "5,6alpha-epoxy-cholesterol(d7)",
@@ -31545,46 +31552,46 @@ Ganoderic acid B,
 Ganosporeric acid A,
 Masticadienonic acid,
 "(24E),26-hydroxydesmosterol",
-12:0 Cholesteryl ester,ChE 12:0
-19:0 Cholesteryl ester,ChE 19:0
-18:1 Cholesteryl ester,ChE 18:1
-14:0 Cholesteryl ester,ChE 14:0
-16:0 Cholesteryl ester,ChE 16:0
-16:1 Cholesteryl ester,ChE 16:1
-18:0 Cholesteryl ester,ChE 18:0
-18:2 Cholesteryl ester,ChE 18:2
-18:3 Cholesteryl ester,ChE 18:3
-20:0 Cholesteryl ester,ChE 20:0
-20:1 Cholesteryl ester,ChE 20:1
-20:2 Cholesteryl ester,ChE 20:2
-20:3 Cholesteryl ester,ChE 20:3
-20:4 Cholesteryl ester,ChE 20:4
-20:5 Cholesteryl ester,ChE 20:5
-22:0 Cholesteryl ester,ChE 22:0
-22:2 Cholesteryl ester,ChE 22:2
-22:4 Cholesteryl ester,ChE 22:4
-22:6 Cholesteryl ester,ChE 22:6
-24:1 Cholesteryl ester,ChE 24:1
-14:1 Cholesteryl ester,ChE 14:1
-15:1 Cholesteryl ester,ChE 15:1
-17:1 Cholesteryl ester,ChE 17:1
-16:2 Cholesteryl ester,ChE 16:2
-22:1 Cholesteryl ester,ChE 22:1
-17:0 Cholesteryl ester,ChE 17:0
-15:0 Cholesteryl ester,ChE 15:0
+12:0 Cholesteryl ester,SE 27:1/12:0
+19:0 Cholesteryl ester,SE 27:1/19:0
+18:1 Cholesteryl ester,SE 27:1/18:1
+14:0 Cholesteryl ester,SE 27:1/14:0
+16:0 Cholesteryl ester,SE 27:1/16:0
+16:1 Cholesteryl ester,SE 27:1/16:1
+18:0 Cholesteryl ester,SE 27:1/18:0
+18:2 Cholesteryl ester,SE 27:1/18:2
+18:3 Cholesteryl ester,SE 27:1/18:3
+20:0 Cholesteryl ester,SE 27:1/20:0
+20:1 Cholesteryl ester,SE 27:1/20:1
+20:2 Cholesteryl ester,SE 27:1/20:2
+20:3 Cholesteryl ester,SE 27:1/20:3
+20:4 Cholesteryl ester,SE 27:1/20:4
+20:5 Cholesteryl ester,SE 27:1/20:5
+22:0 Cholesteryl ester,SE 27:1/22:0
+22:2 Cholesteryl ester,SE 27:1/22:2
+22:4 Cholesteryl ester,SE 27:1/22:4
+22:6 Cholesteryl ester,SE 27:1/22:6
+24:1 Cholesteryl ester,SE 27:1/24:1
+14:1 Cholesteryl ester,SE 27:1/14:1
+15:1 Cholesteryl ester,SE 27:1/15:1
+17:1 Cholesteryl ester,SE 27:1/17:1
+16:2 Cholesteryl ester,SE 27:1/16:2
+22:1 Cholesteryl ester,SE 27:1/22:1
+17:0 Cholesteryl ester,SE 27:1/17:0
+15:0 Cholesteryl ester,SE 27:1/15:0
 Cholesteryl nitrolinoleate,
 Cholesteryl 11-hydroperoxy-eicosatetraenoate,
-18:1 Cholesteryl ester (d5),ChE 18:1
-22:5 Cholesteryl ester,ChE 22:5
+18:1 Cholesteryl ester (d5),SE 27:1/18:1
+22:5 Cholesteryl ester,SE 27:1/22:5
 lanosteryl oleate,
 lanosteryl palmitoleate,
 zymosteryl oleate,
 zymosteryl palmitoleate,
 ecdysone palmitate,
-16:3 Cholesteryl ester,ChE 16:3
-16:2 Cholesteryl ester,ChE 16:2
-16:1 Cholesteryl ester,ChE 16:1
-22:3 Cholesteryl ester,ChE 22:3
+16:3 Cholesteryl ester,SE 27:1/16:3
+16:2 Cholesteryl ester,SE 27:1/16:2
+16:1 Cholesteryl ester,SE 27:1/16:1
+22:3 Cholesteryl ester,SE 27:1/22:3
 16:0 Campesteryl ester,
 18:0 Campesteryl ester,
 20:0 Campesteryl ester,

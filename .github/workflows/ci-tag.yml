@@ -18,10 +18,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create Build Number
-      env:
-           BUILD_NUM: ${{ GITHUB_RUN_NUMBER }}
       run: |
-        echo ::set-env name=BUILD_NUMBER::$(($BUILD_NUM+752))
+        echo ::set-env name=BUILD_NUMBER::$(($GITHUB_RUN_NUMBER+752))
     - name: Add and install mono PPA
       run: |
         apt install build-essential gnupg ca-certificates && \

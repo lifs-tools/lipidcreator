@@ -1,0 +1,47 @@
+name: LipidCreator CI and Tag
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - { name: "Ubuntu Latest GCC", artifact: "LipidCreator.zip", os: ubuntu-latest, build_type: "Release", cc: "gcc", cxx: "g++" }
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Build Number
+      env:
+           BUILD_NUM: ${{ $GITHUB_RUN_NUMBER }}
+      run: |
+        echo ::set-env name=BUILD_NUMBER::$(($BUILD_NUM+752))
+    - name: Add and install mono PPA
+      run: |
+        apt install build-essential gnupg ca-certificates && \
+        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+        echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list && \
+        apt update && \
+        apt install mono-complete ca-certificates-mono referenceassemblies-pcl
+    - name: Build
+      run: msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}'
+    - name: Test
+      run: cd LipidCreator && make tests && make runtest
+    - name: Tag
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `refs/tags/${BUILD_NUMBER}`,
+            sha: context.sha
+          })
+

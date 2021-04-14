@@ -42,4 +42,10 @@ jobs:
             ref: `refs/tags/${{ env.BUILD_NUMBER }}`,
             sha: context.sha
           })
+    - name: Upload Zip
+      uses: actions/upload-artifact@v2
+      if: success()
+      with:
+        name: LipidCreator.zip
+        path: LipidCreator/bin/x64/Release/LipidCreator.zip
 

@@ -16,7 +16,7 @@ Source releases are available from the [Github release page](https://github.com/
 
 ## Installation and Usage ##
 
-### Windows ###
+### Windows ### 
 
 #### With Skyline ####
 LipidCreator has been tested with [Skyline 20.2, 64 bit](https://skyline.ms/project/home/software/Skyline/begin.view). Please follow the installation instructions on the Skyline homepage if you do not have Skyline installed already.

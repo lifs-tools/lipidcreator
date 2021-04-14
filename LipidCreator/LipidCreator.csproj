@@ -343,7 +343,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx" />
+    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx;$(ProjectDir)data\goslin\*.csv;$(ProjectDir)data\goslin\*.tsv;$(ProjectDir)data\goslin\*.txt;$(ProjectDir)data\goslin\testfiles\*.*;$(ProjectDir)data\goslin\docs\*.*;$(ProjectDir)data\goslin\html\*.*" />
     <ReadmeFile Include="$(ProjectDir)..\README.txt" />
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />

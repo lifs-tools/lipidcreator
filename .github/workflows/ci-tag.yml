@@ -46,6 +46,6 @@ jobs:
       uses: actions/upload-artifact@v2
       if: success()
       with:
-        name: LipidCreator.zip
+        name: LipidCreator
         path: LipidCreator/bin/x64/Release/LipidCreator.zip
 

@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Create Build Number
       run: |
-        echo ::set-env name=BUILD_NUMBER::$(($GITHUB_RUN_NUMBER+752))
+        echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 752))" >> $GITHUB_ENV
     - name: Add and install mono PPA
       run: |
         apt install build-essential gnupg ca-certificates && \
@@ -28,7 +28,7 @@ jobs:
         apt update && \
         apt install mono-complete ca-certificates-mono referenceassemblies-pcl
     - name: Build
-      run: msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 /p:BuildNumber=${BUILD_NUMBER}'
+      run: msbuild LipidCreator.sln /p:Configuration=Release /p:Platform=x64 "/p:BuildNumber=${{ env.BUILD_NUMBER }}"
     - name: Test
       run: cd LipidCreator && make tests && make runtest
     - name: Tag

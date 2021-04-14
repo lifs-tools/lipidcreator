@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Create Build Number
       env:
-           BUILD_NUM: ${{ $GITHUB_RUN_NUMBER }}
+           BUILD_NUM: ${{ GITHUB_RUN_NUMBER }}
       run: |
         echo ::set-env name=BUILD_NUMBER::$(($BUILD_NUM+752))
     - name: Add and install mono PPA

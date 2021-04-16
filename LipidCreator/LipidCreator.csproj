@@ -17,10 +17,10 @@
     <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
     <AppCompany>Leibniz-Institut fuer Analytische Wissenschaften - ISAS - e.V.</AppCompany>
     <AppAuthor>Dominik Kopczynski, Nils Hoffmann, Bing Peng</AppAuthor>
-    <AppProvider>https://lifs.isas.de/lipidcreator</AppProvider>
+    <AppProvider>https://github.com/lifs-tools/lipidcreator</AppProvider>
     <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
     <AppProduct>$(AssemblyName)</AppProduct>
-    <AppCopyright>Copyright © 2018</AppCopyright>
+    <AppCopyright>Copyright © 2021</AppCopyright>
     <AppCulture>
     </AppCulture>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -28,7 +28,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ReleaseVersion>1.1.1</ReleaseVersion>
+    <ReleaseVersion>1.1.2</ReleaseVersion>
     <AppVersion>$(ReleaseVersion).$(BuildNumber)</AppVersion>
     <AppFileVersion>$(AppVersion)</AppFileVersion>
     <CodePage>65001</CodePage>
@@ -48,7 +48,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.1.1.%2a</ApplicationVersion>
+    <ApplicationVersion>1.1.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -343,7 +343,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx;$(ProjectDir)data\goslin\*.csv;$(ProjectDir)data\goslin\*.tsv;$(ProjectDir)data\goslin\*.txt;$(ProjectDir)data\goslin\testfiles\*.*;$(ProjectDir)data\goslin\docs\*.*;$(ProjectDir)data\goslin\html\*.*" />
+	  <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx;$(ProjectDir)data\goslin\*.csv;$(ProjectDir)data\goslin\*.tsv;$(ProjectDir)data\goslin\*.txt;$(ProjectDir)data\goslin\.*;$(ProjectDir)data\goslin\.github\**\*.*;$(ProjectDir)data\goslin\testfiles\**\*.*;$(ProjectDir)data\goslin\docs\**\*.*;$(ProjectDir)data\goslin\html\**\*.*;"  />
     <ReadmeFile Include="$(ProjectDir)..\README.txt" />
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />

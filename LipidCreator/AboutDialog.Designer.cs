@@ -129,10 +129,15 @@ namespace LipidCreator
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.LinkLabel linkLabel;
         private System.Windows.Forms.RichTextBox textLibraryName;
-        private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")\n\nContributers: \nBing Peng\nDominik Kopzcynski\nNils Hoffmann\n\n" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n\n" +
+        private string licenseText = Application.ProductName + " " + Application.ProductVersion + " (built from revision " + AssemblyInfo.GetGitHash() + " (" + AssemblyInfo.GetGitBranch() + ") on " + AssemblyInfo.GetBuildTime() + ")" + 
+            "\n\nMain Contributers: \nBing Peng\nDominik Kopzcynski\nNils Hoffmann\n\n" + 
+            "We thank the following external contributors:\n\n" +
+            "Dr. Andreas Hülsmeier, University of Zurich, University Hospital Zurich - experimental data for GM1 fragments" +
+            "\n\n" +
+            
             "MIT License\n\n" +
 
-            "Copyright(c) 2018\n" +
+            System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location).LegalCopyright + "\n" +
             "Dominik Kopczynski   -   dominik.kopczynski {at} isas.de\n" +
             "Bing Peng   -   bing.peng {at} ki.se\n" +
             "Nils Hoffmann  -  nils.hoffmann {at} cebitec.uni-bielefeld.de\n\n" +

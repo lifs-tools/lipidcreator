@@ -7,6 +7,10 @@ It also supports standalone and command-line operation.
 
 It has been tested with Thermo QExactive HF and Agilent QTOF instruments.
 
+## Citing LipidCreator
+Please reference LipidCreator by citing the following publication:
+**[Peng, B., Kopczynski, D., Pratt, B.S. et al. LipidCreator workbench to probe the lipidomic landscape. Nat Commun 11, 2057 (2020)](https://doi.org/10.1038/s41467-020-15960-z)**
+
 ## Latest Release ##
 The LipidCreator releases are available from the [LIFS Portal](https://lifs.isas.de/lipidcreator) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).
 
@@ -107,3 +111,8 @@ Other Linux distributions should also work, but were not tested. If you encounte
 
 ## Reporting issues ##
 If you encounter any issues with LipidCreator, please report them via https://lifs.isas.de/support, using the 'Support category' LipidCreator.
+
+## Contributors ##
+We thank the following external LipidCreator contributors:
+
+. Dr. Andreas Hülsmeier, University of Zurich, University Hospital Zurich - experimental data for GM1 fragments

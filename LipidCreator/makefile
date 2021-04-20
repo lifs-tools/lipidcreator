@@ -1,6 +1,6 @@
 CC = x86_64-w64-mingw32-g++
 SQLite_DLL = ../packages/System.Data.SQLite.Core.1.0.110.0/lib/net40/System.Data.SQLite.dll
-Log4Net_DLL = ../packages/log4net.2.0.8/lib/net40-client/log4net.dll
+Log4Net_DLL = ../packages/log4net.2.0.12/lib/net40-client/log4net.dll
 
 CORE_FILES = LipidCreator.cs FattyAcid.cs FattyAcidGroup.cs MS2Fragment.cs Lipid.cs Glycerolipid.cs Phospholipid.cs Sphingolipid.cs Sterol.cs Mediator.cs Precursor.cs CollisionEnergy.cs BaseParserEventHandler.cs LipidMapsParserEventHandler.cs IonFormulaParserEventHandler.cs MoleculeFormulaParserEventHandler.cs ParserEventHandler.cs Parser.cs LipidCreatorExtensionMethods.cs Element.cs ListingParserEventHandler.cs Adduct.cs IsotopeParserEventHandler.cs ParserEventHandlerFragment.cs CrossPlatform.cs
 
@@ -21,7 +21,13 @@ WITH_DEBUG =
 main: setup
 	resgen2 -compile $(RESX_FILES)
 
-	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
+	mcs $(RES_FILES) -t:library -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator-Core.dll
+
+	mcs $(RES_FILES) -t:library -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -r:$(BUILD_DIR)/LipidCreator-Core.dll -lib:/usr/lib/mono/4.5 $(GUI_FILES) -out:$(BUILD_DIR)/LipidCreator-GUI.dll
+	
+	mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 MainWindow.cs -r:$(BUILD_DIR)/LipidCreator-Core.dll -r:$(BUILD_DIR)/LipidCreator-GUI.dll -out:$(BUILD_DIR)/LipidCreator.exe
+	
+	#mcs $(RES_FILES) -pkg:dotnet -platform:x64 -sdk:4.5 -r:$(Log4Net_DLL) -r:System.Xml.Linq.dll -r:SkylineTool.dll -r:Ionic.Zip.dll -r:$(SQLite_DLL) -r:ExcelLibrary.dll -lib:/usr/lib/mono/4.5 MainWindow.cs $(GUI_FILES) $(CORE_FILES) -out:$(BUILD_DIR)/LipidCreator.exe
 
 tests: setup
 	resgen2 -compile $(RESX_FILES)
@@ -48,7 +54,7 @@ setup:  $(SQLite_DLL)
 	if [ ! -d "$(BUILD_DIR)" ];then \
 		mkdir -p bin; \
 		mkdir -p $(BUILD_DIR); \
-		cp -r data images SkylineTool.dll ExcelLibrary.dll Ionic.Zip.dll $(SQLite_DLL) ../packages/log4net.2.0.8/lib/net40-client/* tool-inf $(BUILD_DIR); \
+		cp -r data images SkylineTool.dll ExcelLibrary.dll Ionic.Zip.dll $(SQLite_DLL) ../packages/log4net.2.0.12/lib/net40-client/* tool-inf $(BUILD_DIR); \
 		echo -1 > $(BUILD_DIR)/data/analytics.txt; \
 	fi
 	mkdir -p $(BUILD_DIR)/data/predefined

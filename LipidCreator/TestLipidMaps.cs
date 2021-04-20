@@ -119,11 +119,13 @@ namespace LipidCreator
                     Console.WriteLine("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:");
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e.StackTrace);
+                    Environment.Exit(-1);
                 }
             }
             else
             {
                 Console.WriteLine("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+                Environment.Exit(-1);
             }
         }
     }

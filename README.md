@@ -1,11 +1,16 @@
 # LipidCreator #
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3529484.svg)](https://doi.org/10.5281/zenodo.3529484)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3529484.svg)](https://doi.org/10.5281/zenodo.3529484)[![Continuous Integration](https://github.com/lifs-tools/lipidcreator/actions/workflows/ci-tag.yml/badge.svg)](https://github.com/lifs-tools/lipidcreator/actions)
 
 LipidCreator is a plugin for [Skyline](https://skyline.ms/project/home/software/Skyline/begin.view) supporting targeted workflow development in lipidomics.
 It can be used to create user-defined target lists and fragment libraries for PRM and MRM experiments in Skyline.
 It also supports standalone and command-line operation.
 
-It has been tested with Thermo QExactive HF and Waters QTOF instruments.
+It has been tested with Thermo QExactive HF and Agilent QTOF instruments.
+
+## Citing LipidCreator
+Please reference LipidCreator by citing the following publication:
+
+**[Peng, B., Kopczynski, D., Pratt, B.S. et al. LipidCreator workbench to probe the lipidomic landscape. Nat Commun 11, 2057 (2020)](https://doi.org/10.1038/s41467-020-15960-z)**
 
 ## Latest Release ##
 The LipidCreator releases are available from the [LIFS Portal](https://lifs.isas.de/lipidcreator) and from the [Skyline Tool Store](https://skyline.ms/skyts/home/software/Skyline/tools/details.view?name=LipidCreator).
@@ -16,7 +21,7 @@ Source releases are available from the [Github release page](https://github.com/
 
 ## Installation and Usage ##
 
-### Windows ###
+### Windows ### 
 
 #### With Skyline ####
 LipidCreator has been tested with [Skyline 20.2, 64 bit](https://skyline.ms/project/home/software/Skyline/begin.view). Please follow the installation instructions on the Skyline homepage if you do not have Skyline installed already.
@@ -106,4 +111,9 @@ Please note: we have developed and tested LipidCreator using Mono under Ubuntu 1
 Other Linux distributions should also work, but were not tested. If you encounter any issues, please let us know!
 
 ## Reporting issues ##
-If you encounter any issues with LipidCreator, please report them via https://lifs.isas.de/support, using the 'Support category' LipidCreator.
+If you encounter any issues with LipidCreator, please report them via GitHub https://github.com/lifs-tools/lipidcreator/issues
+
+## Contributors ##
+We thank the following external LipidCreator contributors:
+
+- Dr. Andreas Hülsmeier, University of Zurich, University Hospital Zurich - experimental data for GM1 fragments

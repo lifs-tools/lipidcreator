@@ -2,8 +2,8 @@
 ============================== MIT License ===================================
 
 Copyright (c) 2018 Dominik Kopczynski   -   dominik.kopczynski {at} isas.de
-                   Bing Peng   -   bing.peng {at} isas.de
-                   Nils Hoffmann  -  nils.hoffmann {at} isas.de
+                   Bing Peng   -   bing.peng {at} ki.se
+                   Nils Hoffmann  -  nils.hoffmann {at} cebitec.uni-bielefeld.de
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
+============================== Citing ========================================
+
+Please reference LipidCreator by citing the following publication:
+
+Peng, B., Kopczynski, D., Pratt, B.S. et al. 
+LipidCreator workbench to probe the lipidomic landscape. Nat Commun 11, 2057 (2020)
+https://doi.org/10.1038/s41467-020-15960-z
 
 ============================== Installation ==================================
 
@@ -82,8 +89,9 @@ on 'Help' -> 'Documentation' within LipidCreator's menu.
 
 ============================ Help & Support ==================================
 
-If you experience any issues with LipidCreator, we kindly ask you to report them
-using our support form at https://lifs.isas.de/support with the support category
-'Lipid Creator'. Please include your Operating System, Skyline version (if 
-applicable), and the full LipidCreator version, which is available from the 
-'Help' -> 'About' menu dialog.
+If you experience any issues with LipidCreator, we kindly ask you to report 
+them at https://github.com/lifs-tools/lipidcreator. Please include your 
+Operating System, Skyline version (if applicable), and the full LipidCreator 
+version, which is available from the 'Help' -> 'About' menu dialog.
+
+============================ Contributors ==================================

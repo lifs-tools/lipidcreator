@@ -45,7 +45,6 @@ namespace LipidCreator
     
     
     
-    
     [Serializable]
     public class PrecursorData
     {
@@ -116,6 +115,17 @@ namespace LipidCreator
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
         public static int MEDIATOR_PREFIX_LENGTH = 4;
+        
+        
+        public static Dictionary<LipidCategory, string> LipidCategoryNames = new Dictionary<LipidCategory, string>(){
+            {LipidCategory.NoLipid, "No lipid"},
+            {LipidCategory.Glycerolipid, "Glycerolipid"},
+            {LipidCategory.Glycerophospholipid, "Glycerophospholipid"},
+            {LipidCategory.Sphingolipid, "Sphingolipid"},
+            {LipidCategory.Sterollipid, "Sterollipid"},
+            {LipidCategory.LipidMediator, "LipidMediator"},
+            {LipidCategory.Unsupported, "Unsupported"}
+        }; 
         
         
         public static Dictionary<AdductType, Adduct> ALL_ADDUCTS = new Dictionary<AdductType, Adduct>()

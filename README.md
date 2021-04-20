@@ -116,4 +116,4 @@ If you encounter any issues with LipidCreator, please report them via https://li
 ## Contributors ##
 We thank the following external LipidCreator contributors:
 
-. Dr. Andreas Hülsmeier, University of Zurich, University Hospital Zurich - experimental data for GM1 fragments
+- Dr. Andreas Hülsmeier, University of Zurich, University Hospital Zurich - experimental data for GM1 fragments

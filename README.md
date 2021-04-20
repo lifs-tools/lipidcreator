@@ -111,7 +111,7 @@ Please note: we have developed and tested LipidCreator using Mono under Ubuntu 1
 Other Linux distributions should also work, but were not tested. If you encounter any issues, please let us know!
 
 ## Reporting issues ##
-If you encounter any issues with LipidCreator, please report them via https://lifs.isas.de/support, using the 'Support category' LipidCreator.
+If you encounter any issues with LipidCreator, please report them via GitHub https://github.com/lifs-tools/lipidcreator/issues
 
 ## Contributors ##
 We thank the following external LipidCreator contributors:

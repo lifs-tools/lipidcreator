@@ -9,6 +9,7 @@ It has been tested with Thermo QExactive HF and Agilent QTOF instruments.
 
 ## Citing LipidCreator
 Please reference LipidCreator by citing the following publication:
+
 **[Peng, B., Kopczynski, D., Pratt, B.S. et al. LipidCreator workbench to probe the lipidomic landscape. Nat Commun 11, 2057 (2020)](https://doi.org/10.1038/s41467-020-15960-z)**
 
 ## Latest Release ##

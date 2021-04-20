@@ -2628,7 +2628,7 @@ namespace LipidCreator
                 startThirdTutorialButton.Click -= startThirdTutorial;
                 startFourthTutorialButton.Click -= startFourthTutorial;
                 
-                string incompatible = "Interactive tutorials are currently not supported on Linux-based operating systems. Please check the manual under Help -> Documentation. We apologize for inconvenience.";
+                string incompatible = "Interactive tutorials are currently not supported on Linux-based operating systems. Please check the manual under Help -> Documentation. We apologize for the inconvenience.";
                 
                 startFirstTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };
                 startSecondTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };

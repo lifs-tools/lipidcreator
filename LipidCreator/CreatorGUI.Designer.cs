@@ -2588,6 +2588,7 @@ namespace LipidCreator
             startFirstTutorialButton.BackColor = SystemColors.Control;
             startFirstTutorialButton.Click += startFirstTutorial;
             
+            
             startSecondTutorialButton = new Button();
             homeTab.Controls.Add(startSecondTutorialButton);
             startSecondTutorialButton.Text = "Start SRM tutorial";
@@ -2616,6 +2617,24 @@ namespace LipidCreator
             startFourthTutorialButton.Location = new Point(300, 350);
             startFourthTutorialButton.BackColor = SystemColors.Control;
             startFourthTutorialButton.Click += startFourthTutorial;
+            
+            
+            Console.WriteLine(LipidCreator.LC_OS == PlatformID.Unix);
+            if (LipidCreator.LC_OS == PlatformID.Unix)
+            {
+                
+                startFirstTutorialButton.Click -= startFirstTutorial;
+                startSecondTutorialButton.Click -= startSecondTutorial;
+                startThirdTutorialButton.Click -= startThirdTutorial;
+                startFourthTutorialButton.Click -= startFourthTutorial;
+                
+                string incompatible = "Interactive tutorials are currently not supported on Linux-based operating systems. Please check the manual under Help -> Documentation. We apologize for inconvenience.";
+                
+                startFirstTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };
+                startSecondTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };
+                startThirdTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };
+                startFourthTutorialButton.Click += delegate(object s, EventArgs e){ MessageBox.Show(incompatible, "Incompatible operating system"); };
+            }
             
             this.SizeChanged += new EventHandler(windowSizeChanged);
             this.FormClosing += new FormClosingEventHandler(windowOnClosing);

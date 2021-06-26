@@ -631,7 +631,7 @@ namespace LipidCreator
                 skylineToolClient = new SkylineToolClient(pipe, "LipidCreator");
                 skylineToolClient.DocumentChanged += OnDocumentChanged;
                 skylineToolClient.SelectionChanged += OnSelectionChanged;
-                log.Info("LipidCreator is connected to Skyline file: '" + skylineToolClient.GetDocumentPath()+"'");
+                log.Info("LipidCreator is connected to Skyline version '" + skylineToolClient.GetSkylineVersion().ToString() + "'. Project file: '" + skylineToolClient.GetDocumentPath()+"'");
                 Task.Factory.StartNew(() =>
                 {
                     var client = new NamedPipeClientStream(@".", pipe, PipeDirection.In);
@@ -1647,6 +1647,7 @@ namespace LipidCreator
             }
             try
             {
+                log.Debug("Sending small molecule transition list to Skyline: " + sb.ToString());
                 skylineToolClient.InsertSmallMoleculeTransitionList(sb.ToString());
                 try
                 {
@@ -1958,7 +1959,7 @@ namespace LipidCreator
             {
                 // piwik webserver only allows TLS1.2
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                HttpWebRequest request = WebRequest.CreateHttp("https://lifs.isas.de/piwik/piwik.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
+                HttpWebRequest request = WebRequest.CreateHttp("https://lifs-tools.org/matomo/matomo.php?idsite=2&rec=1&e_c=" + category + "&e_a=" + action);
                 request.Timeout = 2000;
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()){}
             } 

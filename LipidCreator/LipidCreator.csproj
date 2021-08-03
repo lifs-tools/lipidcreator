@@ -376,15 +376,15 @@
   </Target>
   <Target Name="WriteSkylineInfoProperties" AfterTargets="WriteGitHash">
     <PropertyGroup>
-      <InfoPropertiesFile>$(TargetDir)tool-inf\info.properties</InfoPropertiesFile>
+      <InfoPropertiesFile>info.properties</InfoPropertiesFile>
     </PropertyGroup>
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="Name = $(AppTitle)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Version = $(AppVersion)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Author = $(AppAuthor)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Description = $(AppDescription)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(AppProvider)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(AppCompany)" Encoding="ASCII" />
-    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Overwrite="true" Lines="Name = $(AppTitle)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Version = $(AppVersion)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Author = $(AppAuthor)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Description = $(AppDescription)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Provider = $(AppProvider)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Organization = $(AppCompany)" />
+    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Identifier = $(AppIdentifier)" />
   </Target>
   <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
     <PropertyGroup>

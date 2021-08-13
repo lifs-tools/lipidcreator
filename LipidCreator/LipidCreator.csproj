@@ -1,512 +1,81 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.0\build\NuGet.Build.Packaging.props" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.0\build\NuGet.Build.Packaging.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Guid>C82A580E-D9D9-40A6-8890-D93211920552</Guid>
-    <ProjectGuid>{C82A580E-D9D9-40A6-8890-D93211920552}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LipidCreator</RootNamespace>
-    <AssemblyName>LipidCreator</AssemblyName>
-    <AppTitle>$(AssemblyName)</AppTitle>
-    <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
-    <AppCompany>Leibniz-Institut fuer Analytische Wissenschaften - ISAS - e.V.</AppCompany>
-    <AppAuthor>Dominik Kopczynski, Nils Hoffmann, Bing Peng</AppAuthor>
-    <AppProvider>https://github.com/lifs-tools/lipidcreator</AppProvider>
-    <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
-    <AppProduct>$(AssemblyName)</AppProduct>
-    <AppCopyright>Copyright © 2021</AppCopyright>
-    <AppCulture>
-    </AppCulture>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <Today>$([System.DateTime]::Now.tostring("u"))</Today>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ReleaseVersion>1.2.1</ReleaseVersion>
-    <AppVersion>$(ReleaseVersion).$(BuildNumber)</AppVersion>
-    <AppFileVersion>$(AppVersion)</AppFileVersion>
-    <CodePage>65001</CodePage>
-    <PackageId>C82A580E-D9D9-40A6-8890-D93211920552</PackageId>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <SynchReleaseVersion>false</SynchReleaseVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.2.1.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>anycpu</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
+    <TargetFramework>net47</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-    <Optimize>true</Optimize>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>portable</DebugType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>
-    </DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <ManifestCertificateThumbprint>3468CDD17A6C14FC1B62CF1BE0F14AB62B880737</ManifestCertificateThumbprint>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <Authors>Dominik Kopczynski, Nils Hoffmann</Authors>
+    <Copyright>© $([System.DateTime]::Now.Year) Dominik Kopczynski, Nils Hoffmann</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/lifs-tools/lipidcreator/main/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/lifs-tools/lipidcreator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/lifs-tools/lipidcreator</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <!-- Root control Version Prefix -->
+    <VersionPrefix>2.0.1</VersionPrefix>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>lipidcreator.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
-  </PropertyGroup>
-  <!--  <PropertyGroup>
-    <ManifestKeyFile>LipidCreator_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>-->
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Ionic.Zip">
+    <Compile Remove="$(ProjectDir)test\*\*.*" />
+    <Compile Remove="$(ProjectDir)Test*.*" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.7" />
+    <PackageReference Include="System.Windows.Forms" Version="4.0" />
+    <PackageReference Include="Ionic.Zip">
       <HintPath>Ionic.Zip.dll</HintPath>
-    </Reference>
+    </PackageReference>
     <Reference Include="SkylineTool">
       <HintPath>SkylineTool.dll</HintPath>
     </Reference>
-    <Reference Include="ExcelLibrary">
+    <PackageReference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
+    </PackageReference>
+    <PackageReference Include="log4net">
       <HintPath>..\packages\log4net.2.0.12\lib\net40-client\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite">
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net451\System.Data.SQLite.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CrossPlatform.cs" />
-    <Compile Include="AddHeavyPrecursor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddHeavyPrecursor.Designer.cs">
-      <DependentUpon>AddHeavyPrecursor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Sterol.cs" />
-    <Compile Include="CreatorGUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CreatorGUI.Designer.cs">
-      <DependentUpon>CreatorGUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FattyAcid.cs" />
-    <Compile Include="ListingParserEventHandler.cs" />
-    <Compile Include="FattyAcidGroup.cs" />
-    <Compile Include="FilterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FilterDialog.Designer.cs">
-      <DependentUpon>FilterDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CEInspector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CEInspector.Designer.cs">
-      <DependentUpon>CEInspector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LCMessageBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LCMessageBox.Designer.cs">
-      <DependentUpon>LCMessageBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.cs" />
-    <Compile Include="MoleculeFormulaParserEventHandler.cs" />
-    <Compile Include="NewMediatorFragment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewMediatorFragment.Designer.cs">
-      <DependentUpon>NewMediatorFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Glycerolipid.cs" />
-    <Compile Include="CollisionEnergy.cs" />
-    <Compile Include="IonFormulaParserEventHandler.cs" />
-    <Compile Include="Lipid.cs" />
-    <Compile Include="Element.cs" />
-    <Compile Include="Adduct.cs" />
-    <Compile Include="LipidsReview.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LipidsReview.Designer.cs">
-      <DependentUpon>LipidsReview.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LipidsInterList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LipidsInterList.Designer.cs">
-      <DependentUpon>LipidsInterList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Mediator.cs" />
-    <Compile Include="MediatorMS2Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MediatorMS2Form.Designer.cs">
-      <DependentUpon>MediatorMS2Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MS2Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MS2Form.Designer.cs">
-      <DependentUpon>MS2Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MS2Fragment.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="ParserEventHandler.cs" />
-    <Compile Include="ParserEventHandlerFragment.cs" />
-    <Compile Include="IsotopeParserEventHandler.cs" />
-    <Compile Include="BaseParserEventHandler.cs" />
-    <Compile Include="LipidMapsParserEventHandler.cs" />
-    <Compile Include="Wizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Wizard.Designer.cs">
-      <DependentUpon>Wizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewFragment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewFragment.Designer.cs">
-      <DependentUpon>NewFragment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Phospholipid.cs" />
-    <Compile Include="LipidCreator.cs" />
-    <Compile Include="Precursor.cs" />
-    <Compile Include="Sphingolipid.cs" />
-    <Compile Include="SpectralName.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SpectralName.Designer.cs">
-      <DependentUpon>SpectralName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TranslatorDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TranslatorDialog.Designer.cs">
-      <DependentUpon>TranslatorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tutorial.cs" />
-    <EmbeddedResource Include="AboutDialog.resx">
-      <DependentUpon>AboutDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddHeavyPrecursor.resx">
-      <DependentUpon>AddHeavyPrecursor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterDialog.resx">
-      <DependentUpon>FilterDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LCMessageBox.resx">
-      <DependentUpon>LCMessageBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LipidsReview.resx">
-      <DependentUpon>LipidsReview.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LipidsInterList.resx">
-      <DependentUpon>LipidsInterList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MS2Form.resx">
-      <DependentUpon>MS2Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewFragment.resx">
-      <DependentUpon>NewFragment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Wizard.resx">
-      <DependentUpon>Wizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CEInspector.resx">
-      <DependentUpon>CEInspector.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewMediatorFragment.resx">
-      <DependentUpon>NewMediatorFragment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="SpectralName.resx">
-      <DependentUpon>SpectralName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TranslatorDialog.resx">
-      <DependentUpon>TranslatorDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="data\headgroups.csv" />
-    <None Include="data\ms2fragments.csv" />
-    <None Include="LipidCreator_TemporaryKey.pfx" />
-    <None Include="Properties\app.manifest" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="AboutDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutDialog.Designer.cs">
-      <DependentUpon>AboutDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyInfo.cs" />
-    <None Include="packages.config" />
-    <None Include="data\log4net.config" />
-    <Compile Include="LipidCreatorExtensionMethods.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-	  <DataFiles Include="$(ProjectDir)data\**\*.*" Exclude="$(ProjectDir)data\**\*.docx;$(ProjectDir)data\goslin\*.csv;$(ProjectDir)data\goslin\*.tsv;$(ProjectDir)data\goslin\*.txt;$(ProjectDir)data\goslin\.*;$(ProjectDir)data\goslin\.github\**\*.*;$(ProjectDir)data\goslin\testfiles\**\*.*;$(ProjectDir)data\goslin\docs\**\*.*;$(ProjectDir)data\goslin\html\**\*.*;"  />
+    </PackageReference>
     <ReadmeFile Include="$(ProjectDir)..\README.txt" />
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
-    <ToolInfFiles Include="$(ProjectDir)tool-inf\*" />
-    <LinuxNativeFiles Include="$(ProjectDir)*.so" />
+    <ToolInfFiles Include="$(ProjectDir)tool-inf\**\*.*" />
+    <DataFiles Include="$(ProjectDir)data\**\*.*" />
+    <LibraryFiles Include="$(ProjectDir)SkylineTool.dll;$(ProjectDir)ExcelLibrary.dll;$(ProjectDir)Ionic.Zip.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(ProjectDir)images\lipidcreator.ico" />
-    <Content Include="$(ProjectDir)lipidcreator.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets'))" />
+  
+  <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
+    <Message Text="Preparation $(OutDir)" Importance="High" />
+    <MakeDir Directories="$(OutDir)" />
+    <MakeDir Directories="$(OutDir)data" />
+    <MakeDir Directories="$(OutDir)images" />
+    <MakeDir Directories="$(OutDir)tool-inf" />
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(OutDir)data\%(RecursiveDir)" />
+    <Copy SourceFiles="@(ReadmeFile)" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(OutDir)images\%(RecursiveDir)" />
+    <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(OutDir)tool-inf\%(RecursiveDir)" />
   </Target>
-  <Target Name="WriteSkylineInfoProperties" AfterTargets="WriteGitHash">
-    <PropertyGroup>
-      <InfoPropertiesFile>info.properties</InfoPropertiesFile>
-    </PropertyGroup>
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Overwrite="true" Lines="Name = $(AppTitle)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Version = $(AppVersion)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Author = $(AppAuthor)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Description = $(AppDescription)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Provider = $(AppProvider)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Organization = $(AppCompany)" />
-    <WriteLinesToFile File="$(TargetDir)tool-inf\info.properties" Lines="Identifier = $(AppIdentifier)" />
-  </Target>
-  <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
-    <PropertyGroup>
-      <!-- temp file for the git version (lives in "obj" folder)-->
-      <VerFile>$(ProjectDir)$(IntermediateOutputPath)gitver</VerFile>
-      <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
-    </PropertyGroup>
-    <!-- write the hash to the temp file.-->
-    <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
-    <!-- read the version into the GitVersion itemGroup-->
-    <ReadLinesFromFile File="$(VerFile)">
-      <Output TaskParameter="Lines" ItemName="GitVersion" />
-    </ReadLinesFromFile>
-    <!-- read the branch into the GitBranch itemGroup-->
-    <ReadLinesFromFile File="$(BranchFile)">
-      <Output TaskParameter="Lines" ItemName="GitBranch" />
-    </ReadLinesFromFile>
-    <!-- Set the BuildHash property to contain the GitVersion, if it wasn't already set.-->
-    <PropertyGroup>
-      <BuildHash>@(GitVersion)</BuildHash>
-      <BuildBranch>@(GitBranch)</BuildBranch>
-    </PropertyGroup>
-  </Target>
-  <Target Name="WriteGitHash" BeforeTargets="CoreCompile">
-    <!-- names the obj/.../CustomAssemblyInfo.cs file -->
-    <PropertyGroup>
-      <CustomAssemblyInfoFile>$(IntermediateOutputPath)CustomAssemblyInfo.cs</CustomAssemblyInfoFile>
-    </PropertyGroup>
-    <!-- includes the CustomAssemblyInfo for compilation into your project -->
-    <ItemGroup>
-      <Compile Include="$(CustomAssemblyInfoFile)" />
-    </ItemGroup>
-    <!-- defines the AssemblyMetadata attribute that will be written -->
-    <ItemGroup>
-      <AssemblyAttributes Include="AssemblyMetadata">
-        <_Parameter1>GitHash</_Parameter1>
-        <_Parameter2>$(BuildHash)</_Parameter2>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyMetadata">
-        <_Parameter1>BuildTime</_Parameter1>
-        <_Parameter2>$(Today)</_Parameter2>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyMetadata">
-        <_Parameter1>GitBranch</_Parameter1>
-        <_Parameter2>$(BuildBranch)</_Parameter2>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyTitle">
-        <_Parameter1>$(AppTitle)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyDescription">
-        <_Parameter1>$(AppDescription)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyCompany">
-        <_Parameter1>$(AppCompany)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyProduct">
-        <_Parameter1>$(AppProduct)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyCopyright">
-        <_Parameter1>$(AppCopyright)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyCulture">
-        <_Parameter1>$(AppCulture)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyVersion">
-        <_Parameter1>$(AppVersion)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="AssemblyFileVersion">
-        <_Parameter1>$(AppVersion)</_Parameter1>
-      </AssemblyAttributes>
-      <AssemblyAttributes Include="System.Runtime.InteropServices.Guid">
-        <_Parameter1>$(Guid)</_Parameter1>
-      </AssemblyAttributes>
-    </ItemGroup>
-    <!-- writes the attribute to the customAssemblyInfo file -->
-    <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
-  </Target>
-  <Target Name="BeforeBuild">
-    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TargetDir)data\%(RecursiveDir)" />
-    <Copy SourceFiles="@(ReadmeFile)" DestinationFolder="$(TargetDir)" />
-    <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(TargetDir)" />
-    <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(TargetDir)images\%(RecursiveDir)" />
-    <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(TargetDir)tool-inf" />
-    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
-  </Target>
-  <Target Name="AfterBuild">
-    <Exec Command="echo -1 &gt; &quot;$(TargetDir)data\analytics.txt&quot;" />
-    <MakeDir Directories="$(TargetDir)data\predefined\" />
-    <MakeDir Directories="$(TargetDir)data\predefined\Human\" />
-    <MakeDir Directories="$(TargetDir)data\predefined\Mouse\" />
-    <MakeDir Directories="$(TargetDir)data\predefined\Yeast\" />
-    <!-- create resources on Windows
-    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\human-platelet.csv $(TargetDir)data\predefined\Human\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-platelet.csv $(TargetDir)data\predefined\Mouse\Platelet.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-brain.csv $(TargetDir)data\predefined\Mouse\Brain.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\mouse-heart.csv $(TargetDir)data\predefined\Mouse\Heart.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="$(TargetDir)LipidCreator.exe transitionlist $(TargetDir)data\predefined-lists\yeast-lipidome.csv $(TargetDir)data\predefined\Yeast\Lipidome.lcXML -l -p 0 -h 0" Condition=" '$(OS)' == 'Windows_NT' " /> -->
-    <!-- create resources on Linux / OSX
-    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\human-platelet.csv&quot; &quot;$(TargetDir)data\predefined\Human\Platelet.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-platelet.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Platelet.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-brain.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Brain.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\mouse-heart.csv&quot; &quot;$(TargetDir)data\predefined\Mouse\Heart.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="mono &quot;$(TargetDir)LipidCreator.exe&quot; transitionlist &quot;$(TargetDir)data\predefined-lists\yeast-lipidome.csv&quot; &quot;$(TargetDir)data\predefined\Yeast\Lipidome.lcXML&quot; -l -p 0 -h 0" Condition=" '$(OS)' != 'Windows_NT' " /> -->
-    <!-- remove generated log file and predefined template directory -->
-    <Delete Files="$(TargetDir)data\lipidcreator.log" />
-    <Delete Files="$(TargetDir)data\docs\*.docx" />
-    <RemoveDir Directories="$(TargetDir)data\predefined-lists" />
+  
+  <Target Name="CustomAfterBuild" AfterTargets="AfterBuild" >
+    <Message Text="Postprocessing" Importance="High" />
+    <Exec Command="echo -1 &gt; &quot;$(OutDir)data\analytics.txt&quot;" />
+    <RemoveDir Directories="$(OutDir)data\predefined-lists" />
   </Target>
   <Target Name="ZipDist" AfterTargets="CopySQLiteInteropFiles">
-    <Delete Files="$(TargetDir)System.Data.SQLite.dll.config" />
-    <Delete Files="$(TargetDir)System.Data.SQLite.xml" />
+    <Delete Files="$(OutDir)System.Data.SQLite.dll.config" />
+    <Delete Files="$(OutDir)System.Data.SQLite.xml" />
     <!-- create zip distribution on Windows -->
-    <Exec WorkingDirectory="$(TargetDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec WorkingDirectory="$(OutDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
     <!-- create zip distribution on Linux / OSX -->
-    <Exec WorkingDirectory="$(TargetDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
-  <Target Name="AfterClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(IntermediateOutputPath)" />
-    <RemoveDir Directories="$(TargetDir)" />
-  </Target>
-  <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.113.3\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.113.3\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
 </Project>

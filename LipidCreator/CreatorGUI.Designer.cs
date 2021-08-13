@@ -837,7 +837,7 @@ namespace LipidCreator
         [NonSerialized]
         DataGridView lipidsGridview;
         [NonSerialized]
-        public Button openReviewFormButton;
+        public System.Windows.Forms.Button openReviewFormButton;
         
         public ArrayList controlElements;
         

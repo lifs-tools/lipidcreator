@@ -287,7 +287,9 @@ namespace LipidCreator
                             if (fattyAcidLength <= fattyAcidHydroxyl) continue;
                             foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
                             {
-                                if (fattyAcidKeyValuePair.Value && !(fattyAcidKeyValuePair.Key.Equals("FAp") && fattyAcidDoubleBond == 0)) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
+                                // in old nomenclature, we denied plasmenyls with zero double bonds, since the number of double bonds were expliticely written. In the new nomenclature, it is again implicit
+                                //if (fattyAcidKeyValuePair.Value && !(fattyAcidKeyValuePair.Key.Equals("FAp") && fattyAcidDoubleBond == 0)) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
+                                if (fattyAcidKeyValuePair.Value) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
                             }
                         }
                     }

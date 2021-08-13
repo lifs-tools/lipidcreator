@@ -219,10 +219,15 @@ namespace LipidCreator
                             var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
                             string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                             
+                            
+                            // goslin
+                            csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, sortedAcids);
+                            
+                            
                             // species name
                             FattyAcid speciesFA = new FattyAcid(fa1);
                             speciesFA.merge(fa2);
-                            string speciesName = headgroup + " " + speciesFA.ToString();
+                            string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                             
                             
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
@@ -245,10 +250,10 @@ namespace LipidCreator
                                 
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Glycerolipid;
-                                precursorData.moleculeListName = headgroup;
+                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.precursorExportName = headgroup + key;
-                                precursorData.precursorName = headgroup + key;
+                                precursorData.precursorExportName = lipidSpecies.get_lipid_string();
+                                precursorData.precursorName = lipidSpecies.get_lipid_string();
                                 precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct;
@@ -362,13 +367,9 @@ namespace LipidCreator
                             // create species id i.e. key for avoiding double entries
                             var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
                             string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
-                            
-                            csgoslin.Headgroup cshg = new csgoslin.Headgroup(headgroup);
-                            csgoslin.FattyAcid csfa1 = convertFA(fa1, 1);
-                            csgoslin.FattyAcid csfa2 = convertFA(fa2, 2);
-                            csgoslin.FattyAcid csfa3 = convertFA(fa3, 3);
-                            
-                            csgoslin.LipidSpecies lipidSpecies = new csgoslin.LipidStructuralSubspecies(cshg, new List<csgoslin.FattyAcid>{csfa1, csfa2, csfa3});
+    
+                            // goslin
+                            csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, sortedAcids);
                             
                             // species name
                             FattyAcid speciesFA = new FattyAcid(fa1);
@@ -399,7 +400,7 @@ namespace LipidCreator
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Glycerolipid;
                                 precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
-                                precursorData.fullMoleculeListName = headgroup;//lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                                precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = lipidSpecies.get_lipid_string();
                                 precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorName = lipidSpecies.get_lipid_string();

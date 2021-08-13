@@ -165,6 +165,17 @@ namespace LipidCreator
         }
         
         
+        
+        public csgoslin.LipidStructuralSubspecies convertLipid(string hg, List<FattyAcid> fa_list)
+        {
+            // goslin
+            csgoslin.Headgroup cshg = new csgoslin.Headgroup(hg);                        
+            List<csgoslin.FattyAcid> csFAs = new List<csgoslin.FattyAcid>();
+            for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1));
+            return new csgoslin.LipidStructuralSubspecies(cshg, csFAs);
+        }
+        
+        
     
         public Lipid(LipidCreator _lipidCreator, LipidCategory lipidCategory)
         {

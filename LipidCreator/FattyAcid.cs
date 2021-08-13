@@ -72,7 +72,7 @@ namespace LipidCreator
                             atomsCount[Molecule.O] = 1 + hydroxyl; // O
                             break;
                         case "p":
-                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * db + 2; // H
+                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * (db + 1) + 2; // H
                             atomsCount[Molecule.O] = hydroxyl; // O
                             break;
                         case "a":

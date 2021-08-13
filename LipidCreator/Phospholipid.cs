@@ -225,13 +225,16 @@ namespace LipidCreator
                                 string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                                 
                                     
+                                
+                                // goslin
+                                csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, sortedAcids);
                                     
                                 // species name
                                 FattyAcid speciesFA = new FattyAcid(fa1);
                                 speciesFA.merge(fa2);
                                 speciesFA.merge(fa3);
                                 speciesFA.merge(fa4);
-                                string speciesName = headgroup + " " + speciesFA.ToString();
+                                string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                                 
                                 
                                 foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
@@ -259,10 +262,10 @@ namespace LipidCreator
                                     // filling information on MS1 level for cardiolipin
                                     PrecursorData precursorData = new PrecursorData();
                                     precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                                    precursorData.moleculeListName = headgroup;
+                                    precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);;
                                     precursorData.fullMoleculeListName = headgroup;
-                                    precursorData.precursorExportName = headgroup + key;
-                                    precursorData.precursorName = headgroup + key;
+                                    precursorData.precursorExportName = lipidSpecies.get_lipid_string();
+                                    precursorData.precursorName = lipidSpecies.get_lipid_string();
                                     precursorData.precursorSpeciesName = speciesName;
                                     precursorData.precursorIonFormula = chemForm;
                                     precursorData.precursorAdduct = adduct;
@@ -381,12 +384,14 @@ namespace LipidCreator
                         
                         string PLsep = " ";
                         string modifiedHeadgroup = headgroup;
+                        string goslinHeadgroup = headgroup;
                         
                         if ((isFAa || isPlamalogen) && (headgroup.Equals("LPC") || headgroup.Equals("LPE"))) continue;
                         if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
                         {
                             if (isFAa || !isPlamalogen) continue;
                             modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                            goslinHeadgroup = headgroup.Replace(" O-p", "");
                             PLsep = "";
                             fa1.suffix = "p";
                         }
@@ -394,13 +399,17 @@ namespace LipidCreator
                         {
                             if (!isFAa || isPlamalogen) continue;
                             modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
+                            goslinHeadgroup = headgroup.Replace(" O-a", "");
                             PLsep = "";
                             fa1.suffix = "a";
                         }
                         
+                        // goslin
+                        csgoslin.LipidSpecies lipidSpecies = convertLipid(goslinHeadgroup, new List<FattyAcid>{fa1});
                         
                         String key = PLsep + fa1.ToString();
                         string completeKey = modifiedHeadgroup + key;
+                        string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                         
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
@@ -426,11 +435,11 @@ namespace LipidCreator
                             // filling information on MS1 level for phospholipid
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                            precursorData.moleculeListName = headgroup;
+                            precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
                             precursorData.fullMoleculeListName = headgroup;
-                            precursorData.precursorExportName = completeKey;
-                            precursorData.precursorName = completeKey;
-                            precursorData.precursorSpeciesName = completeKey;
+                            precursorData.precursorExportName = lipidSpecies.get_lipid_string();
+                            precursorData.precursorName = lipidSpecies.get_lipid_string();
+                            precursorData.precursorSpeciesName = speciesName;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct;
                             precursorData.precursorAdductFormula = adductForm;
@@ -541,6 +550,7 @@ namespace LipidCreator
                             bool isSorted = true;
                             string PLsep = " ";
                             string modifiedHeadgroup = headgroup;
+                        string goslinHeadgroup = headgroup;
                             if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
                             
                             
@@ -548,6 +558,7 @@ namespace LipidCreator
                             {
                                 if (isFAa || !isPlamalogen) continue;
                                 modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
+                                goslinHeadgroup = headgroup.Replace(" O-p", "");
                                 PLsep = "";
                                 fa1.suffix = "p";
                             }
@@ -555,6 +566,7 @@ namespace LipidCreator
                             {
                                 if (!isFAa || isPlamalogen) continue;
                                 modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
+                                goslinHeadgroup = headgroup.Replace(" O-a", "");
                                 PLsep = "";
                                 fa1.suffix = "a";
                             }
@@ -566,11 +578,18 @@ namespace LipidCreator
                             var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
                             string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                         
+                            // goslin
+                            csgoslin.LipidSpecies lipidSpecies = convertLipid(goslinHeadgroup, sortedAcids);
+                            
+                            
                             // species name
                             FattyAcid speciesFA = new FattyAcid(fa1);
                             speciesFA.merge(fa2);
-                            string speciesName = modifiedHeadgroup + PLsep + speciesFA.ToString();
+                            string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                             string completeKey = modifiedHeadgroup + key;
+                            
+                            
+                            
 
                           
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
@@ -598,10 +617,10 @@ namespace LipidCreator
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                                precursorData.moleculeListName = headgroup;
+                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.precursorExportName = completeKey;
-                                precursorData.precursorName = completeKey;
+                                precursorData.precursorExportName = lipidSpecies.get_lipid_string();
+                                precursorData.precursorName = lipidSpecies.get_lipid_string();
                                 precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct;

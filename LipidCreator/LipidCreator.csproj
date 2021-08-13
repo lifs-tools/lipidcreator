@@ -38,6 +38,9 @@
     <PackageReference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
     </PackageReference>
+    <Reference Include="csgoslin">
+      <HintPath>csgoslin.dll</HintPath>
+    </Reference>
     <PackageReference Include="log4net">
       <HintPath>..\packages\log4net.2.0.12\lib\net40-client\log4net.dll</HintPath>
     </PackageReference>
@@ -49,7 +52,6 @@
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\**\*.*" />
     <DataFiles Include="$(ProjectDir)data\**\*.*" />
-    <LibraryFiles Include="$(ProjectDir)SkylineTool.dll;$(ProjectDir)ExcelLibrary.dll;$(ProjectDir)Ionic.Zip.dll" />
   </ItemGroup>
   
   <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
@@ -58,6 +60,7 @@
     <MakeDir Directories="$(OutDir)data" />
     <MakeDir Directories="$(OutDir)images" />
     <MakeDir Directories="$(OutDir)tool-inf" />
+    <Exec Command="echo -1 &gt; &quot;$(OutDir)data\analytics.txt&quot;" />
     <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(OutDir)data\%(RecursiveDir)" />
     <Copy SourceFiles="@(ReadmeFile)" DestinationFolder="$(OutDir)" />
     <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(OutDir)" />
@@ -67,15 +70,8 @@
   
   <Target Name="CustomAfterBuild" AfterTargets="AfterBuild" >
     <Message Text="Postprocessing" Importance="High" />
-    <Exec Command="echo -1 &gt; &quot;$(OutDir)data\analytics.txt&quot;" />
     <RemoveDir Directories="$(OutDir)data\predefined-lists" />
-  </Target>
-  <Target Name="ZipDist" AfterTargets="CopySQLiteInteropFiles">
-    <Delete Files="$(OutDir)System.Data.SQLite.dll.config" />
-    <Delete Files="$(OutDir)System.Data.SQLite.xml" />
-    <!-- create zip distribution on Windows -->
     <Exec WorkingDirectory="$(OutDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
-    <!-- create zip distribution on Linux / OSX -->
     <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

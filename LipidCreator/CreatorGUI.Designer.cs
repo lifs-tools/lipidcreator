@@ -2618,8 +2618,6 @@ namespace LipidCreator
             startFourthTutorialButton.BackColor = SystemColors.Control;
             startFourthTutorialButton.Click += startFourthTutorial;
             
-            
-            Console.WriteLine(LipidCreator.LC_OS == PlatformID.Unix);
             if (LipidCreator.LC_OS == PlatformID.Unix)
             {
                 

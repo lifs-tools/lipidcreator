@@ -34,6 +34,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using log4net;
+using csgoslin;
 
 // For the benefit of Skyline developer systems configured to not allow nonlocalized strings
 // ReSharper disable NonLocalizedString
@@ -144,6 +145,24 @@ namespace LipidCreator
         
         public static Dictionary<int, Adduct> chargeToAdduct = new Dictionary<int, Adduct>{{1, ALL_ADDUCTS[AdductType.Hp]}, {2, ALL_ADDUCTS[AdductType.HHp]}, {-1, ALL_ADDUCTS[AdductType.Hm]}, {-2, ALL_ADDUCTS[AdductType.HHm]}};
         
+        
+        
+        public csgoslin.FattyAcid convertFA(FattyAcid fa, int num)
+        {
+            Dictionary<string, List<csgoslin.FunctionalGroup> > functionalGroups = new Dictionary<string, List<csgoslin.FunctionalGroup> >();
+            csgoslin.DoubleBonds db = new csgoslin.DoubleBonds(fa.db);
+            if (fa.hydroxyl > 0)
+            {
+                csgoslin.FunctionalGroup fg = csgoslin.KnownFunctionalGroups.get_functional_group("OH");
+                fg.count = fa.hydroxyl;
+                functionalGroups.Add("OH", new List<csgoslin.FunctionalGroup>{fg});
+            }
+            csgoslin.LipidFaBondType faType = csgoslin.LipidFaBondType.ESTER;
+            if (fa.suffix.Equals("a")) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
+            else if (fa.suffix.Equals("p")) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
+            
+            return new csgoslin.FattyAcid("FA" + Convert.ToString(num), fa.length, db, functionalGroups, faType, fa.isLCB);
+        }
         
         
     

@@ -2406,13 +2406,13 @@ namespace LipidCreator
             
             
             medHgListbox.Location = new Point(34, 35);
-            medHgListbox.Size = new Size(140, 260);
+            medHgListbox.Size = new Size(240, 260);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
             medHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(medHGListboxMouseHover);
             medHgListbox.KeyDown += ListboxSelectAll;
-            medPictureBox.Location = new Point(210, 30);
+            medPictureBox.Location = new Point(310, 30);
             if (!lipidCreatorInitError && medHgListbox.Items.Count > 0)
             {
                 medPictureBox.Image = Image.FromFile(lipidCreator.headgroups[medHgListbox.Items[0].ToString()].pathToImage);

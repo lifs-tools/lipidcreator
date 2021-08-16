@@ -292,6 +292,10 @@ namespace LipidCreator
                             }
                             int charge = Convert.ToInt32(tokens[4]);
                             Adduct adduct = Lipid.chargeToAdduct[charge];
+                            if (allFragments[tokens[0]][charge >= 0].ContainsKey(tokens[2]))
+                            {
+                                throw new Exception(String.Format("Error: fragment '{0}{1}' already inserted in lipid '{2}'", tokens[2], (charge >= 0 ? "+" : "-"), tokens[0]));
+                            }
                             allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5], tokens[12] == "1"));
                         }
                     }
@@ -390,7 +394,6 @@ namespace LipidCreator
                             headgroup.buildingBlockType = Convert.ToInt32(tokens[20]);
                             if (tokens[21].Length > 0) headgroup.attributes = new HashSet<string>(tokens[21].Split(new char[]{';'}));
                             headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
-                            
                             if (headgroup.attributes.Contains("heavy"))
                             {
                                 string monoName = precursorNameSplit(headgroup.name)[0];
@@ -400,7 +403,7 @@ namespace LipidCreator
                                 }
                                 else
                                 {
-                                    log.Error("cannot find monoisotopic class in headgroups file.");
+                                    log.Error("cannot find monoisotopic class '" + monoName + "' in headgroups file.");
                                     throw new Exception();
                                 }
                             }

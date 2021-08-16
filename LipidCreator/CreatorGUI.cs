@@ -2117,6 +2117,14 @@ namespace LipidCreator
                 medPictureBox.Image = Image.FromFile(mediatorFile);
                 medPictureBox.Top = mediatorMiddleHeight - (medPictureBox.Image.Height >> 1);
                 medPictureBox.SendToBack();
+            
+                string trivialName = lipidCreator.headgroups[medHgListbox.Items[hoveredIndex].ToString()].trivialName;
+                if (trivialName.Length > 0) toolTip.SetToolTip(medHgListbox, trivialName);
+                else toolTip.Hide(medHgListbox);
+            }
+            else
+            {
+                toolTip.Hide(medHgListbox);
             }
         }
         

@@ -112,7 +112,7 @@ namespace LipidCreator
             this.SuspendLayout();
             
             medHgListbox.Location = new System.Drawing.Point(12, 22);
-            medHgListbox.Size = new System.Drawing.Size(150, 294);
+            medHgListbox.Size = new System.Drawing.Size(250, 294);
             medHgListbox.BringToFront();
             medHgListbox.BorderStyle = BorderStyle.Fixed3D;
             medHgListbox.SelectedValueChanged += new System.EventHandler(medHGListboxSelectedValueChanged);
@@ -123,9 +123,9 @@ namespace LipidCreator
             */
             
             // pictureBox1
-            pictureBoxFragments.Location = new System.Drawing.Point(520, 2);
+            pictureBoxFragments.Location = new System.Drawing.Point(620, 2);
             pictureBoxFragments.Name = "pictureBox1";
-            pictureBoxFragments.Size = new System.Drawing.Size(620, 358);
+            pictureBoxFragments.Size = new System.Drawing.Size(520, 358);
             pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             pictureBoxFragments.TabStop = false;
             this.Controls.Add(pictureBoxFragments);
@@ -133,7 +133,7 @@ namespace LipidCreator
             // checkedListBox1 - monoisotopic fragments
             checkedListBoxMonoIsotopicFragments.CheckOnClick = true;
             checkedListBoxMonoIsotopicFragments.FormattingEnabled = true;
-            checkedListBoxMonoIsotopicFragments.Location = new System.Drawing.Point(200, 47);
+            checkedListBoxMonoIsotopicFragments.Location = new System.Drawing.Point(300, 47);
             checkedListBoxMonoIsotopicFragments.Name = "checkedListBox1";
             checkedListBoxMonoIsotopicFragments.ScrollAlwaysVisible = true;
             checkedListBoxMonoIsotopicFragments.Size = new System.Drawing.Size(150, 269);
@@ -144,7 +144,7 @@ namespace LipidCreator
             this.Controls.Add(checkedListBoxMonoIsotopicFragments);
             
             
-            deuteratedMediatorHeadgroups.Location = new System.Drawing.Point(360, 22);
+            deuteratedMediatorHeadgroups.Location = new System.Drawing.Point(460, 22);
             deuteratedMediatorHeadgroups.Width = 150;
             deuteratedMediatorHeadgroups.DropDownStyle = ComboBoxStyle.DropDownList;
             deuteratedMediatorHeadgroups.SelectedIndexChanged += new EventHandler(deuteratedCheckBoxValueChanged);
@@ -155,7 +155,7 @@ namespace LipidCreator
             // checkedListBox2 - deuterated fragments
             checkedListBoxDeuteratedFragments.CheckOnClick = true;
             checkedListBoxDeuteratedFragments.FormattingEnabled = true;
-            checkedListBoxDeuteratedFragments.Location = new System.Drawing.Point(360, 47);
+            checkedListBoxDeuteratedFragments.Location = new System.Drawing.Point(460, 47);
             checkedListBoxDeuteratedFragments.Name = "checkedListBox2";
             checkedListBoxDeuteratedFragments.ScrollAlwaysVisible = true;
             checkedListBoxDeuteratedFragments.Size = new System.Drawing.Size(150, 269);
@@ -185,7 +185,7 @@ namespace LipidCreator
             
             // label2
             labelMonoIsotopicFragments.AutoSize = true;
-            labelMonoIsotopicFragments.Location = new System.Drawing.Point(200, 6);
+            labelMonoIsotopicFragments.Location = new System.Drawing.Point(300, 6);
             labelMonoIsotopicFragments.Name = "label2";
             labelMonoIsotopicFragments.Text = "Monoisotopic Fragments";
             Controls.Add(labelMonoIsotopicFragments);
@@ -193,7 +193,7 @@ namespace LipidCreator
             
             // label3
             labelDeuteratedFragments.AutoSize = true;
-            labelDeuteratedFragments.Location = new System.Drawing.Point(360, 6);
+            labelDeuteratedFragments.Location = new System.Drawing.Point(460, 6);
             labelDeuteratedFragments.Name = "label3";
             labelDeuteratedFragments.Text = "Isotopic Fragments";
             this.Controls.Add(labelDeuteratedFragments);
@@ -201,7 +201,7 @@ namespace LipidCreator
             
             // label6 - positive fragments
             labelMonoisotopeSelectAll.AutoSize = true;
-            labelMonoisotopeSelectAll.Location = new System.Drawing.Point(200, 316);
+            labelMonoisotopeSelectAll.Location = new System.Drawing.Point(300, 316);
             labelMonoisotopeSelectAll.Name = "label6";
             labelMonoisotopeSelectAll.TabIndex = 6;
             labelMonoisotopeSelectAll.Text = "select all";
@@ -212,7 +212,7 @@ namespace LipidCreator
             
             // label7 - positive fragments
             labelMonoisotopeDeselectAll.AutoSize = true;
-            labelMonoisotopeDeselectAll.Location = new System.Drawing.Point(262, 316);
+            labelMonoisotopeDeselectAll.Location = new System.Drawing.Point(362, 316);
             labelMonoisotopeDeselectAll.Name = "label7";
             labelMonoisotopeDeselectAll.TabIndex = 6;
             labelMonoisotopeDeselectAll.Text = "deselect all";
@@ -223,7 +223,7 @@ namespace LipidCreator
             
             // label8 - positive fragments
             labelDeuteratedSelectAll.AutoSize = true;
-            labelDeuteratedSelectAll.Location = new System.Drawing.Point(360, 316);
+            labelDeuteratedSelectAll.Location = new System.Drawing.Point(460, 316);
             labelDeuteratedSelectAll.Name = "label8";
             labelDeuteratedSelectAll.TabIndex = 6;
             labelDeuteratedSelectAll.Text = "select all";
@@ -234,7 +234,7 @@ namespace LipidCreator
             
             // label9 - positive fragments
             labelDeuteratedDeselectAll.AutoSize = true;
-            labelDeuteratedDeselectAll.Location = new System.Drawing.Point(422, 316);
+            labelDeuteratedDeselectAll.Location = new System.Drawing.Point(522, 316);
             labelDeuteratedDeselectAll.Name = "label9";
             labelDeuteratedDeselectAll.TabIndex = 6;
             labelDeuteratedDeselectAll.Text = "deselect all";
@@ -245,7 +245,7 @@ namespace LipidCreator
             
             // label10
             labelSlashMonoisotope.AutoSize = true;
-            labelSlashMonoisotope.Location = new System.Drawing.Point(255, 316);
+            labelSlashMonoisotope.Location = new System.Drawing.Point(355, 316);
             labelSlashMonoisotope.Name = "label10";
             labelSlashMonoisotope.Text = "/";
             this.Controls.Add(labelSlashMonoisotope);
@@ -253,7 +253,7 @@ namespace LipidCreator
             
             // label11
             labelSlashDeuterated.AutoSize = true;
-            labelSlashDeuterated.Location = new System.Drawing.Point(415, 316);
+            labelSlashDeuterated.Location = new System.Drawing.Point(515, 316);
             labelSlashDeuterated.Name = "label11";
             labelSlashDeuterated.Text = "/";
             this.Controls.Add(labelSlashDeuterated);

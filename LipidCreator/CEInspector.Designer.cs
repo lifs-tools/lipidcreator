@@ -339,7 +339,7 @@ namespace LipidCreator
             this.labelSlash = new Label();
             this.numericalUpDownCurrentCE = new NumericUpDown();
             this.instrumentCombobox = new ComboBox();
-            this.classCombobox = new ComboBox();
+            this.classCombobox = new MultiColumnComboBox();
             this.adductCombobox = new ComboBox();
             fragmentsGridView = new DataGridView();
             this.timerSmooth = new System.Timers.Timer(250);
@@ -386,11 +386,11 @@ namespace LipidCreator
             
             
             classCombobox.Location = new Point(410, 20);
-            classCombobox.Width = 200;
+            classCombobox.Width = 400;
             classCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             classCombobox.SelectedIndexChanged += new EventHandler(classComboboxChanged);
             
-            adductCombobox.Location = new Point(620, 20);
+            adductCombobox.Location = new Point(820, 20);
             adductCombobox.Width = 192;
             adductCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             adductCombobox.SelectedIndexChanged += new EventHandler(adductComboboxChanged);
@@ -405,12 +405,12 @@ namespace LipidCreator
             
             labelAdduct.Text = "Adducts:";
             labelAdduct.Width = 140;
-            labelAdduct.Location = new Point(620, 4);
+            labelAdduct.Location = new Point(820, 4);
             
             labelFragment.Text = "Fragments:";
             labelFragment.Width = 140;
             labelFragment.Height = 16;
-            labelFragment.Location = new Point(820, 4);
+            labelFragment.Location = new Point(820, 50);
             
             labelCurrentCE.Text = "Collision energy:";
             labelCurrentCE.Width = 100;
@@ -446,8 +446,8 @@ namespace LipidCreator
             
             
             
-            fragmentsGridView.Location = new Point(820, 20);
-            fragmentsGridView.Size = new Size(216, 410);
+            fragmentsGridView.Location = new Point(820, 66);
+            fragmentsGridView.Size = new Size(216, 364);
             fragmentsGridView.DataSource = fragmentsList;
             fragmentsGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             fragmentsGridView.AllowUserToResizeColumns = false;
@@ -534,7 +534,7 @@ namespace LipidCreator
         public System.Windows.Forms.Button button2;
         public System.Windows.Forms.ToolTip ToolTip1;
         public ComboBox instrumentCombobox;
-        public ComboBox classCombobox;
+        public MultiColumnComboBox classCombobox;
         public ComboBox adductCombobox;
         public Label labelInstrument;
         public Label labelClass;

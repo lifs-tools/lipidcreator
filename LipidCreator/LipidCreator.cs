@@ -44,6 +44,7 @@ using System.Security.Cryptography;
 using log4net;
 using log4net.Config;
 using System.Globalization;
+using csgoslin;
 
 
 using ExcelLibrary.SpreadSheet;
@@ -153,14 +154,7 @@ namespace LipidCreator
         public MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring;
         public PRMTypes PRMMode = PRMTypes.PRMAutomatically;
         
-        public LipidMapsParserEventHandler lipidMapsParserEventHandler;
-        public Parser lipidMapsParser;
-        
-        public ParserEventHandler parserEventHandler;
-        public Parser lipidNamesParser;
-        
-        public ParserEventHandlerFragment parserEventHandlerFragment;
-        public Parser lipidFragmentsParser;
+        public csgoslin.LipidParser lipidParser = new csgoslin.LipidParser();
         
         public static ListingParserEventHandler listingParserEventHandler;
         public static Parser listingParser;
@@ -705,39 +699,6 @@ namespace LipidCreator
                     log.Error("Inconsistency of fragment lipid classes: '" + lipidClass + "' doesn't occur in fragments table");
                     throw new Exception();
                 }
-            }
-            
-            try 
-            {
-                lipidMapsParserEventHandler = new LipidMapsParserEventHandler(this);
-                lipidMapsParser = new Parser(lipidMapsParserEventHandler, Path.Combine(prefixPath, "data", "goslin", "LipidMaps.g4"), PARSER_QUOTE);
-            }
-            catch (Exception e)
-            {
-                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "LipidMaps.g4") + "': " + e);
-                throw new Exception();
-            }
-                
-            try 
-            {
-                parserEventHandler = new ParserEventHandler(this);
-                lipidNamesParser = new Parser(parserEventHandler, Path.Combine(prefixPath, "data", "goslin", "Goslin.g4"), PARSER_QUOTE);
-            }
-            catch (Exception e)
-            {
-                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "Goslin.g4") + "': " + e);
-                throw new Exception();
-            }
-                
-            try 
-            {
-                parserEventHandlerFragment = new ParserEventHandlerFragment(this);
-                lipidFragmentsParser = new Parser(parserEventHandlerFragment, Path.Combine(prefixPath, "data", "goslin", "GoslinFragments.g4"), PARSER_QUOTE);
-            }
-            catch (Exception e)
-            {
-                log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "goslin", "Goslin.g4") + "': " + e);
-                throw new Exception();
             }
                 
             try 
@@ -1852,6 +1813,117 @@ namespace LipidCreator
         
         
         
+        // handling all events
+        public Lipid checkLipid(Lipid lipid, int charge = 0, string adduct = "")
+        {
+            // first of all, finish ether PC, PE, LPC, LPE
+            // flip fatty acids if necessary
+            if (lipid != null && lipid.headGroupNames.Count > 0 && (lipid is Phospholipid))
+            {
+                if (!((Phospholipid)lipid).isLyso && !((Phospholipid)lipid).isCL)
+                {
+                    bool firstFAHasPlamalogen = false;
+                    bool secondFAHasPlamalogen = false;
+                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
+                    {
+                        firstFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                    }
+                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
+                    {
+                        secondFAHasPlamalogen |= ((kvp.Key.Equals("FAa") && kvp.Value) || (kvp.Key.Equals("FAp") && kvp.Value));
+                    }
+                    
+                    // flip fatty acids
+                    if (!firstFAHasPlamalogen && secondFAHasPlamalogen)
+                    {
+                        FattyAcidGroup tmp = ((Phospholipid)lipid).fag1;
+                        ((Phospholipid)lipid).fag1 = ((Phospholipid)lipid).fag2;
+                        ((Phospholipid)lipid).fag2 = tmp;
+                    }
+                    
+                    else if (firstFAHasPlamalogen && secondFAHasPlamalogen)
+                    {
+                        lipid = new UnsupportedLipid(this);
+                    }
+                }
+            
+                // check for PE O, PC O, LPE O, LPC O
+                if (lipid != null)
+                {
+                    if ((new HashSet<string>(){"PC O", "PE O", "LPC O", "LPE O"}).Contains(lipid.headGroupNames[0]))
+                    {
+                        string lipidClass = lipid.headGroupNames[0];
+                        if (lipidClass.Equals("PC O") || lipidClass.Equals("PE O"))
+                        {
+                            if (((Phospholipid)lipid).fag1.faTypes["FAp"])
+                            {
+                                lipidClass = lipidClass + "-p";
+                            }
+                            else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
+                            {
+                                lipidClass = lipidClass + "-a";
+                            }
+                        }
+                        else if  (lipidClass.Equals("LPC O") || lipidClass.Equals("LPE O"))
+                        {
+                            if (((Phospholipid)lipid).fag1.faTypes["FAp"])
+                            {
+                                lipidClass = lipidClass + "-p";
+                            }
+                            else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
+                            {   
+                                lipidClass = lipidClass + "-a";
+                            }
+                        }
+                        lipid.headGroupNames[0] = lipidClass;
+                    }
+                    if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(lipid.headGroupNames[0]) && (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag1.faTypes["FAa"]))
+                    {
+                        lipid = null;
+                    }
+                }
+            }
+            
+        
+        
+            if (lipid != null && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
+            {
+            
+                foreach (string lipidAdduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[lipidAdduct] = false;
+            
+                
+                if (charge != 0)
+                {
+                    if (Lipid.ADDUCT_POSITIONS.ContainsKey(adduct) && Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adduct]].charge == charge && headgroups[lipid.headGroupNames[0]].adductRestrictions[adduct])
+                    {
+                        lipid.adducts[adduct] = true;
+                    }
+                    else
+                    {
+                        lipid = null;
+                    }
+                }
+                else
+                {
+                    lipid.adducts[headgroups[lipid.headGroupNames[0]].defaultAdduct] = true;
+                }
+            }
+            else 
+            {
+                lipid = null;
+            }
+            
+            
+            if (lipid != null)
+            {
+                lipid.onlyHeavyLabeled = 0;
+            }
+            
+            
+            return lipid;
+        }
+        
+        
         
         
         public ArrayList translate(ArrayList lipidNamesList, bool reportError = false)
@@ -1864,87 +1936,123 @@ namespace LipidCreator
                     Lipid lipid = null;
                     string heavyName = "";
                     string purePrecursor = lipidName;
+                    FattyAcidGroupEnumerator fagEnum = null;
                     
-                    
-                    lipidNamesParser.parse(lipidName);
-                    if (lipidNamesParser.wordInGrammar)
+                    try 
                     {
-                        lipidNamesParser.raiseEvents();
-                        if (parserEventHandler.lipid != null)
-                        {
-                            lipid = parserEventHandler.lipid;
-                            heavyName = parserEventHandler.heavyName;
-                        }
-                        else if (reportError)
-                        {
-                            log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                        }
-                    }
-                    else {
-                    
-                    
-                        lipidFragmentsParser.parse(lipidName);
-                        if (lipidFragmentsParser.wordInGrammar)
-                        {
-                            lipidFragmentsParser.raiseEvents();
-                            if (parserEventHandlerFragment.lipid != null)
-                            {
-                                lipid = parserEventHandlerFragment.lipid;
-                                purePrecursor = parserEventHandlerFragment.purePrecursor;
-                                heavyName = parserEventHandlerFragment.heavyName;
-                            }
-                            else if (reportError)
-                            {
-                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                            }
-                        }
-                        else {
+                        csgoslin.LipidAdduct lipidAdduct = lipidParser.parse(lipidName);
+                        purePrecursor = lipidAdduct.get_lipid_string();
                         
-                            
-                            lipidMapsParser.parse(lipidName);
-                            if (lipidMapsParser.wordInGrammar)
-                            {
-                                lipidMapsParser.raiseEvents();
-                                if (lipidMapsParserEventHandler.lipid != null)
-                                {
-                                    lipid = lipidMapsParserEventHandler.lipid;
-                                }
-                                else if (reportError)
-                                {
-                                    log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                                }
-                            }
-                            else if (reportError)
-                            {
-                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                            }
-                        }
-                    
-                    
-                    
-                    
-                    
-                        /*
-                        lipidMapsParser.parse(lipidName);
-                        if (lipidMapsParser.wordInGrammar)
+                        // translate csgoslin.LipidAdduct into LipidCreator.Lipid
+                        switch(lipidAdduct.lipid.headgroup.lipid_category)
                         {
-                            lipidMapsParser.raiseEvents();
-                            if (lipidMapsParserEventHandler.lipid != null)
-                            {
-                                lipid = lipidMapsParserEventHandler.lipid;
-                            }
-                            else if (reportError)
-                            {
-                                log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
-                            }
+                            case csgoslin.LipidCategory.GL:
+                                lipid = new Glycerolipid(this);
+                                lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
+                                ((Glycerolipid)lipid).containsSugar = lipidAdduct.contains_sugar();
+                                fagEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
+                                break;
+                                
+                            case csgoslin.LipidCategory.GP:
+                                lipid = new Phospholipid(this);
+                                lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
+                                ((Phospholipid)lipid).isLyso = lipidAdduct.is_lyso();
+                                ((Phospholipid)lipid).isCL = lipidAdduct.is_cardio_lipin();
+                                fagEnum = new FattyAcidGroupEnumerator((Phospholipid)lipid);
+                                foreach (csgoslin.FattyAcid fa in lipidAdduct.lipid.fa_list)
+                                {
+                                    if (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL || fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL)
+                                    {
+                                        ((Phospholipid)lipid).hasPlasmalogen = true;
+                                        break;
+                                    }
+                                }
+                                break;
+                                
+                            case csgoslin.LipidCategory.SP:
+                                lipid = new Sphingolipid(this);
+                                lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
+                                ((Sphingolipid)lipid).isLyso = lipidAdduct.is_lyso();
+                                fagEnum = new FattyAcidGroupEnumerator((Sphingolipid)lipid);
+                                break;
+                                
+                            case csgoslin.LipidCategory.ST:
+                                lipid = new Sterol(this);
+                                lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
+                                ((Sterol)lipid).containsEster = lipidAdduct.contains_ester();
+                                fagEnum = new FattyAcidGroupEnumerator((Sterol)lipid);
+                                break;
+                                
+                            case csgoslin.LipidCategory.FA:
+                                lipid = new Mediator(this);
+                                lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
+                                break;
+                            
+                            default:
+                                break;
                         }
-                        else if (reportError)
+                         
+                        if (lipid != null)
+                        {
+                            foreach (csgoslin.FattyAcid fa in lipidAdduct.lipid.fa_list)
+                            {
+                                FattyAcidGroup fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
+                                if (fag == null)
+                                {
+                                    lipid = null;
+                                    throw new Exception("Fatty acids number inconsistency");
+                                }
+                                fag.carbonCounts.Clear();
+                                fag.doubleBondCounts.Clear();
+                                fag.hydroxylCounts.Clear();
+                                fag.faTypes["FA"] = false;
+                                if (lipidAdduct.lipid.fa_list[0].num_carbon > 0)
+                                {
+                                    fag.carbonCounts.Add(fa.num_carbon);
+                                    fag.doubleBondCounts.Add(fa.double_bonds.get_num());
+                                    if (fa.functional_groups.ContainsKey("OH"))
+                                    {
+                                        if (fa.functional_groups["OH"].Count == 1) fag.hydroxylCounts.Add(fa.functional_groups["OH"][0].count);
+                                        else
+                                        {
+                                            int cnt = 0;
+                                            foreach (csgoslin.FunctionalGroup fg in fa.functional_groups["OH"]) cnt += fg.count;
+                                            fag.hydroxylCounts.Add(cnt);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        fag.hydroxylCounts.Add(0);
+                                    }
+                                    fag.isLCB = fa.lcb;
+                                    switch (fa.lipid_FA_bond_type)
+                                    {
+                                        case csgoslin.LipidFaBondType.ESTER: fag.faTypes["FA"] = true; break;
+                                        case csgoslin.LipidFaBondType.ETHER_PLASMANYL: fag.faTypes["FAa"] = true; break;
+                                        case csgoslin.LipidFaBondType.ETHER_PLASMENYL: fag.faTypes["FAp"] = true; break;
+                                        default: lipid = null; throw new Exception("Fatty acid bond type not supported.");
+                                    }
+                                }
+                                else
+                                {
+                                    fag.faTypes["FAx"] = true;
+                                }
+                            }
+                            int charge = lipidAdduct.adduct != null ? lipidAdduct.adduct.charge * lipidAdduct.adduct.charge_sign : 0;
+                            string adduct = lipidAdduct.adduct != null ? lipidAdduct.adduct.adduct_string : "";
+                            lipid = checkLipid(lipid, charge, adduct);
+                        }
+                        
+                        
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        if (reportError)
                         {
                             log.Error("Warning: lipid '" + lipidName + "' could not parsed.");
                         }
-                        */
                     }
-                    
                     
                     parsedLipids.Add(new object[]{lipid, heavyName, purePrecursor});
                 }

@@ -64,7 +64,7 @@ namespace LipidCreator
         
         public override ArrayList getFattyAcidGroupList()
         {
-            return new ArrayList{fag};
+            return new ArrayList{lcb, fag};
         }
         
         

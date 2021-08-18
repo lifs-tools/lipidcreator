@@ -1,10 +1,10 @@
 Category,Precursor,Trivialname,C,H,O,N,P,S,d,Backbone File,Precursor File,+H,+2H,+NH4,-H,-2H,+HCOO,+CH3COO,Default Adduct,Building Blocks,Attributes
-GL,DAG,Diacylglycerol,3,6,3,0,0,0,0,,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
+GL,DG,Diacylglycerol,3,6,3,0,0,0,0,,images/Precursors/DG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,2,
 GL,DGDG,Digalactosyldiacylglycerol,15,26,13,0,0,0,0,,images/Precursors/DGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
-GL,MAG,Monoacylglycerol,3,7,3,0,0,0,0,,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
+GL,MG,Monoacylglycerol,3,7,3,0,0,0,0,,images/Precursors/MG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,3,
 GL,MGDG,Monogalactosyldiacylglycerol,9,16,8,0,0,0,0,,images/Precursors/MGDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
 GL,SQDG,Sulfoquinovosyl diacylglycerol,9,16,10,0,0,1,0,,images/Precursors/SQDG_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,2,sugar
-GL,TAG,Triacylglycerol,3,5,3,0,0,0,0,,images/Precursors/TG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,1,
+GL,TG,Triacylglycerol,3,5,3,0,0,0,0,,images/Precursors/TG_pos_pre.png,Yes,No,Yes,No,No,No,No,+NH4,1,
 Mediator,FA 16:0,Palmitic acid,16,32,2,0,0,0,0,,images/Precursors/Palmitic Acid.png,No,No,No,Yes,No,No,No,-H,6,
 Mediator,FA 16:0{d2},Palmitic acid{d2},16,30,2,0,0,0,2,,images/Precursors/IS/Palmitic Acid_d2.png,No,No,No,Yes,No,No,No,-H,6,heavy
 Mediator,FA 16:3;8OH,tetranor-12-HETE,16,26,3,0,0,0,0,,images/Precursors/tetranor-12-HETE.png,No,No,No,Yes,No,No,No,-H,6,
@@ -113,7 +113,7 @@ PL,LPE O-p,Ether lysophosphatidylethanolamine,5,13,6,1,1,0,0,,images/Precursors/
 PL,LPG,Lysophosphatidylglycerol,6,14,8,0,1,0,0,,images/Precursors/LPG_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,3,lyso
 PL,LPI,Lysophosphatidylinositol,9,18,11,0,1,0,0,,images/Precursors/LPI_neg_pre.png,Yes,No,Yes,Yes,No,No,No,-H,3,lyso
 PL,LPS,Lysophosphatidylserine,6,13,8,1,1,0,0,,images/Precursors/LPS_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,3,lyso
-PL,MLCL,Monolysocardiolipin,9,19,13,0,2,0,0,,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,1,cardio
+PL,LCL,Monolysocardiolipin,9,19,13,0,2,0,0,,images/Precursors/MLCL_neg_pre.png,Yes,Yes,Yes,Yes,Yes,No,No,-2H,1,cardio
 PL,MMPE,Monomethylphosphatidylethanolamine,6,14,6,1,1,0,0,,images/Precursors/MMPE_neg_pre.png,Yes,No,No,Yes,No,No,No,-H,2,
 PL,PA,Phosphatidic acid,3,7,6,0,1,0,0,,images/Precursors/PA_neg_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,-H,2,
 PL,PC,Phosphatidylcholine,8,18,6,1,1,0,0,,images/Precursors/PC_neg_pre.png,Yes,No,Yes,No,No,Yes,Yes,+H,2,
@@ -141,8 +141,8 @@ SL,Hex2Cer,Dihexosylceramide,12,20,10,0,0,0,0,,images/Precursors/LacCer_pos_pre.
 SL,Hex3Cer,Trihexosylceramide,18,30,15,0,0,0,0,,images/Precursors/GB3Cer_pos_pre.png,Yes,No,No,No,No,No,No,+H,4,
 SL,HexCer,Hexosylceramide,6,10,5,0,0,0,0,,images/Precursors/HexCer_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,4,
 SL,IPC,Inositolphosphoceramide,6,11,8,0,1,0,0,,images/Precursors/CerPI_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,
-SL,LCB,Long-chain base,0,1,0,0,0,0,0,,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,+H,5,lyso
-SL,LCBP,Long-chain base phosphate,0,2,3,0,1,0,0,,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,+H,5,lyso
+SL,SPB,Long-chain base,0,1,0,0,0,0,0,,images/Precursors/SPH_pos_pre.png,Yes,No,No,No,No,No,No,+H,5,lyso
+SL,SPBP,Long-chain base phosphate,0,2,3,0,1,0,0,,images/Precursors/SPH-P_pos_pre.png,Yes,No,No,Yes,No,No,No,+H,5,lyso
 SL,LHexCer,Lysomonohexosylceramide,6,11,5,0,0,0,0,,images/Precursors/HexSph_pos_pre.png,Yes,No,Yes,Yes,No,Yes,Yes,+H,5,lyso
 SL,LSM,Lysosphingomyelin,5,13,3,1,1,0,0,,images/Precursors/SPC_pos_pre.png,Yes,No,No,No,No,Yes,Yes,+H,5,lyso
 SL,M(IP)2C,Mannosyldiinositolphosphoceramide,18,32,21,0,2,0,0,,images/Precursors/MIP2Cer_neg_pre.png,No,No,No,Yes,No,No,No,-H,4,

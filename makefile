@@ -1,6 +1,5 @@
-BUILD_NUMBER ?= 0
 main:
-	dotnet build -c Release -p:BuildNumber=$(BUILD_NUMBER) -p:PublishSingleFile=true
+	dotnet build -c Release
 clean:
 	dotnet build -t:Clean
 run:

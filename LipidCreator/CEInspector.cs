@@ -528,8 +528,8 @@ namespace LipidCreator
                 
                 
                 classTable = new DataTable();
-                classTable.Columns.Add(SYSTEMATIC_NAME, typeof(String));
                 classTable.Columns.Add(TRIVIAL_NAME, typeof(String));
+                classTable.Columns.Add(SYSTEMATIC_NAME, typeof(String));
                 
                 double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].minCE;
                 double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].maxCE;
@@ -542,7 +542,7 @@ namespace LipidCreator
                 foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
                 {
                     string trivialName = creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) ? creatorGUI.lipidCreator.headgroups[lipidClass].trivialName : "";
-                    classTable.Rows.Add(new String[] { lipidClass, trivialName });
+                    classTable.Rows.Add(new String[] { trivialName, lipidClass });
                     if (selectedClass != null && selectedClass.Equals(lipidClass)) selectedIndex = i;
                     ++i;
                 }
@@ -551,8 +551,8 @@ namespace LipidCreator
                 classTable = classTable.DefaultView.ToTable();
                 
                 classCombobox.DataSource = classTable;
-                classCombobox.DisplayMember = SYSTEMATIC_NAME;
-                classCombobox.ValueMember = SYSTEMATIC_NAME;
+                classCombobox.DisplayMember = TRIVIAL_NAME;
+                classCombobox.ValueMember = TRIVIAL_NAME;
             }
         }
         

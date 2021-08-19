@@ -8,9 +8,7 @@
     <DebugType>portable</DebugType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <DefaultLanguage>en-US</DefaultLanguage>
     <Authors>Dominik Kopczynski, Nils Hoffmann</Authors>
@@ -29,24 +27,26 @@
     <Compile Remove="$(ProjectDir)Test*.*" />
     <PackageReference Include="System.Resources.Extensions" Version="4.7" />
     <PackageReference Include="System.Windows.Forms" Version="4.0" />
-    <PackageReference Include="Ionic.Zip">
+    <PackageReference Include="Ionic.Zip" Version="[1.9.1.8, )">
       <HintPath>Ionic.Zip.dll</HintPath>
     </PackageReference>
     <Reference Include="SkylineTool">
       <HintPath>SkylineTool.dll</HintPath>
     </Reference>
-    <PackageReference Include="ExcelLibrary">
+    <PackageReference Include="ExcelLibrary" Version="[1.2011.7.31,)">
       <HintPath>ExcelLibrary.dll</HintPath>
     </PackageReference>
-    <Reference Include="csgoslin">
+    <Reference Include="csgoslin" Version="[2.0.1, )">
       <HintPath>csgoslin.dll</HintPath>
     </Reference>
-    <PackageReference Include="log4net">
+    <PackageReference Include="log4net" Version="[2.0.12, )">
       <HintPath>..\packages\log4net.2.0.12\lib\net40-client\log4net.dll</HintPath>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite">
+    <PackageReference Include="System.Data.SQLite" Version="[1.0.110.0, )">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net451\System.Data.SQLite.dll</HintPath>
     </PackageReference>
+    
+    
     <ReadmeFile Include="$(ProjectDir)..\README.txt" />
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />

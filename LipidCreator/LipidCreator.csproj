@@ -13,15 +13,29 @@
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <Authors>Dominik Kopczynski, Nils Hoffmann</Authors>
-    <Copyright>© $([System.DateTime]::Now.Year) Dominik Kopczynski, Nils Hoffmann</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/lifs-tools/lipidcreator/main/LICENSE</PackageLicenseUrl>
+    <Authors>Dominik Kopczynski, Nils Hoffmann, Bing Peng, Robert Ahrends</Authors>
+    <Company>Lipidomics Informatics for Life Science</Company>
+    <Copyright>© $([System.DateTime]::Now.Year) Dominik Kopczynski, Nils Hoffmann, Bing Peng</Copyright>
+    <PackageLicense>https://raw.githubusercontent.com/lifs-tools/lipidcreator/main/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/lifs-tools/lipidcreator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/lifs-tools/lipidcreator</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
+    <!-- build number, set by parameter on build server, default to 0 for local, dev builds -->
+    <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
+    <!-- build time -->
+    <BuildTime>$([System.DateTime]::Now.tostring("u"))</BuildTime>
     <!-- Root control Version Prefix -->
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>2.0.1.$(BuildNumber)</VersionPrefix>
+    <Guid>C82A580E-D9D9-40A6-8890-D93211920552</Guid>
+    <ProjectGuid>{C82A580E-D9D9-40A6-8890-D93211920552}</ProjectGuid>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <ApplicationIcon>lipidcreator.ico</ApplicationIcon>
+    <!-- required information for generation of Skyline tool-inf\info.properties file -->
+    <AppDescription>"LipidCreator provides support for targeted lipidomics assay development based on lipid building blocks and the small molecule support in Skyline. It provides lipid fragmentation prediction, generation of lipid class specific target lists, in-silico spectral library generation and supports the latest community-approved lipid nomenclature."</AppDescription>
+    <AppIdentifier>URN:LSID:lipidomics.isas.de</AppIdentifier>
+    <!-- intentionally empty for main assembly -->
+    <AppCulture></AppCulture>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,28 +46,28 @@
     <PackageReference Include="Ionic.Zip">
       <HintPath>Ionic.Zip.dll</HintPath>
     </PackageReference>
+    <!-- <PackageReference Include="DotNetZip" Version="1.15.0" /> -->
     <Reference Include="SkylineTool">
       <HintPath>SkylineTool.dll</HintPath>
     </Reference>
+    <!-- <PackageReference Include="ExcelLibrary" Version="1.2011.7.31" /> -->
     <PackageReference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
     </PackageReference>
     <Reference Include="csgoslin">
       <HintPath>csgoslin.dll</HintPath>
     </Reference>
-    <PackageReference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.12\lib\net40-client\log4net.dll</HintPath>
-    </PackageReference>
-    <PackageReference Include="System.Data.SQLite">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net451\System.Data.SQLite.dll</HintPath>
-    </PackageReference>
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.114.4" />
     <ReadmeFile Include="$(ProjectDir)..\README.txt" />
     <LicenseFile Include="$(ProjectDir)..\LICENSE" />
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\**\*.*" />
-    <DataFiles Include="$(ProjectDir)data\**\*.*" />
+    <DataFiles Include="$(ProjectDir)data\**\*.*" 
+      Exclude="$(ProjectDir)data\docs\*.docx;$(ProjectDir)data\*.log;$(ProjectDir)data\testfiles\*;$(ProjectDir)data\goslin\testfiles\*"
+    />
   </ItemGroup>
-  
+
   <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
     <Message Text="Preparation $(OutDir)" Importance="High" />
     <MakeDir Directories="$(OutDir)" />
@@ -66,6 +80,82 @@
     <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(OutDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(OutDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(OutDir)tool-inf\%(RecursiveDir)" />
+    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
+  </Target>
+
+  <Target Name="WriteSkylineInfoProperties" AfterTargets="CustomBeforeBuild">
+    <PropertyGroup>
+      <InfoPropertiesFile>$(OutDir)tool-inf\info.properties</InfoPropertiesFile>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Overwrite="true" Lines="Name = $(AssemblyName)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Version = $(Version)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Author = $(Authors)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Description = $(AppDescription)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Provider = $(RepositoryUrl)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Organization = $(Company)" Encoding="ASCII" />
+    <WriteLinesToFile File="$(InfoPropertiesFile)" Lines="Identifier = $(AppIdentifier)" Encoding="ASCII" />
+  </Target>
+
+  <Target Name="GetGitHash" BeforeTargets="WriteGitHash" Condition="'$(BuildHash)' == ''">
+    <PropertyGroup>
+      <!-- temp file for the git version (lives in "obj" folder)-->
+      <VerFile>$(ProjectDir)$(IntermediateOutputPath)gitver</VerFile>
+      <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
+    </PropertyGroup>
+    <!-- write the hash to the temp file.-->
+    <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
+    <!-- read the version into the GitVersion itemGroup-->
+    <ReadLinesFromFile File="$(VerFile)">
+      <Output TaskParameter="Lines" ItemName="GitVersion" />
+    </ReadLinesFromFile>
+    <!-- read the branch into the GitBranch itemGroup-->
+    <ReadLinesFromFile File="$(BranchFile)">
+      <Output TaskParameter="Lines" ItemName="GitBranch" />
+    </ReadLinesFromFile>
+    <!-- Set the BuildHash property to contain the GitVersion, if it wasn't already set.-->
+    <PropertyGroup>
+      <BuildHash>@(GitVersion)</BuildHash>
+      <BuildBranch>@(GitBranch)</BuildBranch>
+    </PropertyGroup>
+  </Target>
+  <Target Name="WriteGitHash" BeforeTargets="CoreCompile">
+    <!-- names the obj/.../CustomAssemblyInfo.cs file -->
+    <PropertyGroup>
+      <CustomAssemblyInfoFile>$(IntermediateOutputPath)CustomAssemblyInfo.cs</CustomAssemblyInfoFile>
+    </PropertyGroup>
+    <!-- includes the CustomAssemblyInfo for compilation into your project -->
+    <ItemGroup>
+      <Compile Include="$(CustomAssemblyInfoFile)" />
+    </ItemGroup>
+    <!-- defines the AssemblyMetadata attribute that will be written -->
+    <ItemGroup>
+      <AssemblyAttributes Include="AssemblyMetadata">
+        <_Parameter1>GitHash</_Parameter1>
+        <_Parameter2>$(BuildHash)</_Parameter2>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyMetadata">
+        <_Parameter1>BuildTime</_Parameter1>
+        <_Parameter2>$(BuildTime)</_Parameter2>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyMetadata">
+        <_Parameter1>GitBranch</_Parameter1>
+        <_Parameter2>$(BuildBranch)</_Parameter2>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyDescription">
+        <_Parameter1>$(AppDescription)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyCulture">
+        <_Parameter1>$(AppCulture)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="System.Runtime.InteropServices.Guid">
+        <_Parameter1>$(Guid)</_Parameter1>
+      </AssemblyAttributes>
+    </ItemGroup>
+    <!-- writes the attribute to the customAssemblyInfo file -->
+    <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
   </Target>
   
   <Target Name="CustomAfterBuild" AfterTargets="AfterBuild" >

@@ -161,7 +161,7 @@
   <Target Name="CustomAfterBuild" AfterTargets="AfterBuild" >
     <Message Text="Postprocessing" Importance="High" />
     <RemoveDir Directories="$(OutDir)data\predefined-lists" />
-    <Exec WorkingDirectory="$(OutDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config ExcelLibrary.dll SkylineTool.dll Ionic.Zip.dll log4net.dll System.Data.SQLite.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec WorkingDirectory="$(OutDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config *.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config *.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

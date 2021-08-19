@@ -349,17 +349,17 @@ namespace LipidCreator
                             switch(containsMonoLyso)
                             {
                                 case 0:
-                                    headgroup = "TAG";
+                                    headgroup = "TG";
                                     break;
                                 case 4:
                                 case 2:
                                 case 1:
-                                    headgroup = "DAG";
+                                    headgroup = "DG";
                                     break;
                                 case 6:
                                 case 5:
                                 case 3:
-                                    headgroup = "MAG";
+                                    headgroup = "MG";
                                     break;
                             }
                             

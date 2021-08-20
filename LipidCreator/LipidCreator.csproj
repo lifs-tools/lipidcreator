@@ -3,11 +3,12 @@
     
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net47</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>portable</DebugType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <!-- we generate a custom assembly info -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -64,6 +65,8 @@
     <DataFiles Include="$(ProjectDir)data\**\*.*" 
       Exclude="$(ProjectDir)data\docs\*.docx;$(ProjectDir)data\*.log;$(ProjectDir)data\testfiles\*;$(ProjectDir)data\goslin\testfiles\*"
     />
+    <!-- include linux native / interop files -->
+    <LinuxNativeFiles Include="$(ProjectDir)\*.so"/>
   </ItemGroup>
 
   <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
@@ -78,7 +81,7 @@
     <Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(OutDir)" />
     <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(OutDir)images\%(RecursiveDir)" />
     <Copy SourceFiles="@(ToolInfFiles)" DestinationFolder="$(OutDir)tool-inf\%(RecursiveDir)" />
-    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(TargetDir)" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFolder="$(OutDir)" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 
   <Target Name="WriteSkylineInfoProperties" AfterTargets="CustomBeforeBuild">
@@ -170,6 +173,6 @@
     <Message Text="Postprocessing" Importance="High" />
     <RemoveDir Directories="$(OutDir)data\predefined-lists" />
     <Exec WorkingDirectory="$(OutDir)" Command="$(ProjectDir)tools\zip.exe -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config *.dll tool-inf LICENSE README.txt" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config *.dll tool-inf LICENSE README.txt libSQLite.Interop.so" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec WorkingDirectory="$(OutDir)" Command="zip -r LipidCreator.zip LipidCreator.exe data images x64 LipidCreator.exe.config *.dll tool-inf LICENSE README.txt *.so" Condition=" '$(OS)' != 'Windows_NT' " />
   </Target>
 </Project>

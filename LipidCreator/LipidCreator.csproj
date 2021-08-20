@@ -24,7 +24,8 @@
     <!-- build time -->
     <BuildTime>$([System.DateTime]::Now.tostring("u"))</BuildTime>
     <!-- Root control Version Prefix -->
-    <VersionPrefix>2.0.1.$(BuildNumber)</VersionPrefix>
+    <ReleaseVersion>2.0.1</ReleaseVersion>
+    <VersionPrefix>$(ReleaseVersion).$(BuildNumber)</VersionPrefix>
     <Guid>C82A580E-D9D9-40A6-8890-D93211920552</Guid>
     <ProjectGuid>{C82A580E-D9D9-40A6-8890-D93211920552}</ProjectGuid>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -98,12 +99,15 @@
       <!-- temp file for the git version (lives in "obj" folder)-->
       <VerFile>$(ProjectDir)$(IntermediateOutputPath)gitver</VerFile>
       <BranchFile>$(ProjectDir)$(IntermediateOutputPath)gitbranch</BranchFile>
+      <BuildFile>$(ProjectDir)$(IntermediateOutputPath)gitbuild</BuildFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
     <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C $(ProjectDir)  &gt; $(BuildFile)" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --tags --abbrev=0 &gt; &quot;$(BuildFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -112,10 +116,14 @@
     <ReadLinesFromFile File="$(BranchFile)">
       <Output TaskParameter="Lines" ItemName="GitBranch" />
     </ReadLinesFromFile>
+    <ReadLinesFromFile File="$(BuildFile)">
+      <Output TaskParameter="Lines" ItemName="GitBuild" />
+    </ReadLinesFromFile>
     <!-- Set the BuildHash property to contain the GitVersion, if it wasn't already set.-->
     <PropertyGroup>
       <BuildHash>@(GitVersion)</BuildHash>
       <BuildBranch>@(GitBranch)</BuildBranch>
+      <BuildBuild>@(GitBuild)</BuildBuild>
     </PropertyGroup>
   </Target>
   <Target Name="WriteGitHash" BeforeTargets="CoreCompile">
@@ -145,7 +153,7 @@
         <_Parameter1>$(AppDescription)</_Parameter1>
       </AssemblyAttributes>
       <AssemblyAttributes Include="AssemblyVersion">
-        <_Parameter1>$(Version)</_Parameter1>
+        <_Parameter1>$(ReleaseVersion).$(BuildBuild)</_Parameter1>
       </AssemblyAttributes>
       <AssemblyAttributes Include="AssemblyCulture">
         <_Parameter1>$(AppCulture)</_Parameter1>

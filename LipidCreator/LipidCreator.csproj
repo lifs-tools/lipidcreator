@@ -107,7 +107,7 @@
     <!-- write the hash to the temp file.-->
     <Exec Command="git -C $(ProjectDir) describe --long --always &gt; $(VerFile)" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="git -C $(ProjectDir) rev-parse --abbrev-ref HEAD &gt; $(BranchFile)" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command="git -C $(ProjectDir)  &gt; $(BuildFile)" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command="git -C $(ProjectDir) &gt; $(BuildFile)" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --tags --abbrev=0 &gt; &quot;$(BuildFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />

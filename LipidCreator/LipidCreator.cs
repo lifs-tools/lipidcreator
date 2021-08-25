@@ -39,7 +39,6 @@ using System.Text;
 using SkylineTool;
 using System.Net;
 using System.Threading;
-using System.Security.Cryptography;
 
 using log4net;
 using log4net.Config;
@@ -1629,106 +1628,6 @@ namespace LipidCreator
             }
             
             return success;
-        }
-        
-        
-        
-        
-        
-        
-        
-        public static RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-    
-    
-    
-        
-        public static ArrayList createRandomLipidNames(int num = 1)
-        {
-            ArrayList lipidNames = new ArrayList();
-            IDictionary<long, ArrayList> rules = new Dictionary<long, ArrayList>();
-            IDictionary<long, string> terminals = new Dictionary<long, string>();
-            
-            string grammarFilename = Path.Combine("data", "goslin", "Goslin.g4");
-            char quote = '\'';
-            
-            if (File.Exists(grammarFilename))
-            {
-                
-                Dictionary<string, long> ruleToNT = new Dictionary<string, long>();
-                ArrayList grammarRules = Parser.extractTextBasedRules(grammarFilename, quote);
-                grammarRules.RemoveAt(0);
-                int nextFreeRule = 2;
-                
-                foreach (string ruleLine in grammarRules)
-                {
-                
-                    ArrayList tokens_level_1 = new ArrayList();
-                    foreach (string t in Parser.splitString(ruleLine, Parser.RULE_ASSIGNMENT, quote)) tokens_level_1.Add(Parser.strip(t, ' '));
-                    if (tokens_level_1.Count != 2) throw new Exception("Error: corrupted token in grammar rule: '" + ruleLine + "'");
-                    
-                    if (Parser.splitString((string)tokens_level_1[0], ' ', quote).Count > 1)
-                    {
-                        throw new Exception("Error: several rule names on left hand side in grammar rule: '" + ruleLine + "'");
-                    }
-
-                    string rule = (string)tokens_level_1[0];
-                    
-                    if (rule.Equals(Parser.EOF_RULE_NAME))
-                    {
-                        throw new Exception("Error: rule name is not allowed to be called EOF");
-                    }
-                    
-                    ArrayList products = new ArrayList();
-                    foreach (string p in Parser.splitString((string)tokens_level_1[1], Parser.RULE_SEPARATOR, quote)) products.Add(Parser.strip(p, ' '));
-                    
-                    if (!ruleToNT.ContainsKey(rule)) ruleToNT.Add(rule, nextFreeRule++);
-                    long newRuleIndex = ruleToNT[rule];
-                    
-                    if (!rules.ContainsKey(newRuleIndex)) rules.Add(newRuleIndex, new ArrayList());
-                    
-                    foreach (string product in products)
-                    {
-                        ArrayList productRules = new ArrayList();
-                        foreach (string NT in Parser.splitString(product, ' ', quote))
-                        {
-                            string stripedNT = Parser.strip(NT, ' ');
-                            if (Parser.isTerminal(stripedNT, quote)) stripedNT = Parser.deEscape(stripedNT, quote);
-                            if (stripedNT.Equals(Parser.EOF_RULE_NAME)) continue;
-                            
-                            if (Parser.isTerminal(stripedNT, quote))
-                            {
-                                long terminalRule = nextFreeRule++;
-                                productRules.Add(terminalRule);
-                                terminals.Add(terminalRule, stripedNT.Substring(1, stripedNT.Length - 2));
-                            }
-                            else
-                            {
-                                if (!ruleToNT.ContainsKey(stripedNT)) ruleToNT.Add(stripedNT, nextFreeRule++);
-                                long nonTerminalRule = ruleToNT[stripedNT];
-                                if (!rules.ContainsKey(nonTerminalRule)) rules.Add(nonTerminalRule, new ArrayList());
-                                productRules.Add(nonTerminalRule);
-                            }
-                            rules[newRuleIndex].Add(productRules);
-                        }
-                    }
-                }
-                
-            }
-            else
-            {
-                throw new Exception("Error: file '" + grammarFilename + "' does not exist or can not be opened.");
-            }
-            
-            
-            
-            Random rnd = new Random();
-            for (int i = 0; i < num; ++i)
-            {
-                StringBuilder sb = new StringBuilder();
-                assembleLipidname(rules, terminals, 2, sb, rnd);
-                lipidNames.Add(sb.ToString());
-            }
-            return lipidNames;
         }
         
         

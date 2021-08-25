@@ -125,16 +125,6 @@ namespace LipidCreator
                     Console.WriteLine(b.ToString());
                     break;
                     
-                    
-                    
-                case "random":
-                    b = new StringBuilder("Generating a random lipid name (not necessarily reasonable in terms of chemistry)").
-                    AppendLine().
-                    AppendLine("usage: LipidCreator.exe random [number]");
-                    Console.Write(b.ToString());
-                    break;
-                    
-                    
                 case "agentmode":
                     b = new StringBuilder("\nUnsaturated fatty acids contain at least one special bond - James Bond!\n\n");
                     Console.Write(b.ToString());
@@ -164,7 +154,6 @@ namespace LipidCreator
                     AppendLine("  transitionlist:\t\tcreating transition list from lipid list").
                     AppendLine("  translate:\t\t\ttranslating a list with old lipid names into current nomenclature").
                     AppendLine("  library:\t\t\tcreating a spectral library in *.blib format from a lipid list").
-                    AppendLine("  random:\t\t\tgenerating a random lipid name (not necessarily reasonable in terms of chemistry)").
                     AppendLine("  agentmode:\t\t\tsecret agent mode").
                     AppendLine("  version:\t\t\tprint version information").
                     AppendLine("  help:\t\t\t\tprint this help");
@@ -266,7 +255,7 @@ namespace LipidCreator
             if (args.Length > 0)
             {
         
-                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "random", "agentmode", "translate", "version"}).Contains(args[0]))
+                if ((new HashSet<string>{"external", "dev", "help", "transitionlist", "library", "agentmode", "translate", "version"}).Contains(args[0]))
                 {
                     switch (args[0])
                     {
@@ -323,15 +312,6 @@ namespace LipidCreator
                             runMode = RunMode.commandline;
                             checkForAnalytics(runMode, false);
                             printHelp("version");
-                            break;
-                            
-                        case "random":
-                            runMode = RunMode.commandline;
-                            checkForAnalytics(runMode, false);
-                            if (args.Length > 1 && args[1].Equals("help")) printHelp("random");
-                            int num = 1;
-                            if (args.Length > 1) num = int.TryParse(args[1], out num) ? num : 1;
-                            foreach (string lipidName in LipidCreator.createRandomLipidNames(num)) Console.WriteLine(lipidName);
                             break;
                           
                           

@@ -218,7 +218,7 @@ namespace LipidCreator
                                 sortedAcids.Add(fa3);
                                 sortedAcids.Add(fa4);
                                 sortedAcids.Sort();
-                                String headgroup = (containsMonoLyso == 0) ? "CL" : "MLCL";
+                                String headgroup = (containsMonoLyso == 0) ? "CL" : "LCL";
                                 
                                 // create species id i.e. key for avoiding double entries
                                 var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
@@ -386,6 +386,7 @@ namespace LipidCreator
                         string modifiedHeadgroup = headgroup;
                         string goslinHeadgroup = headgroup;
                         
+                        
                         if ((isFAa || isPlamalogen) && (headgroup.Equals("LPC") || headgroup.Equals("LPE"))) continue;
                         if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
                         {
@@ -435,7 +436,7 @@ namespace LipidCreator
                             // filling information on MS1 level for phospholipid
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                            precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                            precursorData.moleculeListName = headgroup;
                             precursorData.fullMoleculeListName = headgroup;
                             precursorData.precursorExportName = lipidSpecies.get_lipid_string();
                             precursorData.precursorName = lipidSpecies.get_lipid_string();
@@ -617,7 +618,7 @@ namespace LipidCreator
                                 // filling information on MS1 level for phospholipid
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                                precursorData.moleculeListName = headgroup;
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = lipidSpecies.get_lipid_string();
                                 precursorData.precursorName = lipidSpecies.get_lipid_string();

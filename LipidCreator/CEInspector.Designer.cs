@@ -399,7 +399,7 @@ namespace LipidCreator
             labelInstrument.Width = 140;
             labelInstrument.Location = new Point(10, 4);
             
-            labelClass.Text = "Lipid classes / species:";
+            labelClass.Text = "Lipid species:";
             labelClass.Width = 140;
             labelClass.Location = new Point(410, 4);
             

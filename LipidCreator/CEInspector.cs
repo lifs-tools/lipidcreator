@@ -538,13 +538,10 @@ namespace LipidCreator
                 cartesean.xAxisLabel = (string)creatorGUI.lipidCreator.msInstruments[selectedInstrument].xAxisLabel;
             
                 cartesean.updateXBoundaries(0, maxVal, minVal, maxVal);
-                int i = 0, selectedIndex = 0;
                 foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
                 {
                     string trivialName = creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) ? creatorGUI.lipidCreator.headgroups[lipidClass].trivialName : "";
                     classTable.Rows.Add(new String[] { trivialName, lipidClass });
-                    if (selectedClass != null && selectedClass.Equals(lipidClass)) selectedIndex = i;
-                    ++i;
                 }
                 
                 classTable.DefaultView.Sort = TRIVIAL_NAME;

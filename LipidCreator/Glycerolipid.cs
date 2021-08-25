@@ -220,6 +220,7 @@ namespace LipidCreator
                             string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                             
                             
+                            
                             // goslin
                             csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, sortedAcids);
                             

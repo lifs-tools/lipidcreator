@@ -33,12 +33,6 @@ tests: setup
 	resgen2 -compile $(RESX_FILES)
 	mcs -pkg:dotnet $(LIBS) $(WITH_DEBUG) -lib:/usr/lib/mono/4.7.2 $(CORE_FILES) TestTransitionList.cs -out:$(BUILD_DIR)/TestTransitionList.exe
 	
-	mcs -pkg:dotnet $(LIBS) $(WITH_DEBUG) -lib:/usr/lib/mono/4.7.2 $(CORE_FILES) TestParserEventHandler.cs TestParser.cs -out:$(BUILD_DIR)/TestParser.exe
-	
-	mcs -pkg:dotnet $(LIBS) $(WITH_DEBUG) -lib:/usr/lib/mono/4.7.2 $(CORE_FILES) TestImport.cs -out:$(BUILD_DIR)/TestImport.exe
-	
-	mcs -pkg:dotnet $(LIBS) $(WITH_DEBUG) -lib:/usr/lib/mono/4.7.2 $(CORE_FILES) TestLipidMaps.cs -out:$(BUILD_DIR)/TestLipidMaps.exe
-	
 	mcs $(RES_FILES) -pkg:dotnet $(LIBS) $(WITH_DEBUG) -lib:/usr/lib/mono/4.7.2 $(CORE_FILES) $(GUI_FILES) TestTutorials.cs -out:$(BUILD_DIR)/TestTutorials.exe
 
 complete:
@@ -68,6 +62,3 @@ run:
 	
 runtest:
 	mono $(BUILD_DIR)/TestTransitionList.exe
-	mono $(BUILD_DIR)/TestImport.exe
-	mono $(BUILD_DIR)/TestParser.exe
-	mono $(BUILD_DIR)/TestLipidMaps.exe

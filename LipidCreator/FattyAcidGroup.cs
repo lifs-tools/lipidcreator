@@ -79,7 +79,7 @@ namespace LipidCreator
         public HashSet<int> doubleBondCounts;
         public HashSet<int> hydroxylCounts;
     
-        public FattyAcidGroup(bool isLCB = false)
+        public FattyAcidGroup(bool isLCB = false, bool dummy = false)
         {
             this.isLCB = isLCB;
             chainType = 0;
@@ -87,10 +87,10 @@ namespace LipidCreator
             dbInfo = "0";
             hydroxylInfo = "0";
             faTypes = new Dictionary<String, bool>();
-            faTypes.Add("FA", true);
+            faTypes.Add("FA", !dummy);
             faTypes.Add("FAp", false);
             faTypes.Add("FAa", false);
-            faTypes.Add("FAx", false);  // no fatty acid dummy
+            faTypes.Add("FAx", dummy);  // no fatty acid dummy
             carbonCounts = new HashSet<int>();
             doubleBondCounts = new HashSet<int>();
             hydroxylCounts = new HashSet<int>();

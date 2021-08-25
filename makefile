@@ -6,4 +6,4 @@ clean:
 	rm -rf LipidCreator/obj
 
 run:
-	mono LipidCreator/bin/Release/net47/LipidCreator.exe &
+	mono LipidCreator/bin/Release/net472/LipidCreator.exe &

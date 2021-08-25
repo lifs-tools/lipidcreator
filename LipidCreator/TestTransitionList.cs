@@ -34,7 +34,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Globalization;
-
+using csgoslin;
 
 namespace LipidCreator
 {
@@ -52,7 +52,7 @@ namespace LipidCreator
         {
             if (i1 != i2)
             {
-                throw new Exception("Assert failed: " + message + i1 + " != " + i2);
+                throw new Exception("Assert failed: " + message + i1 + "(computed) != " + i2);
             }
         }
         
@@ -60,7 +60,7 @@ namespace LipidCreator
         {
             if (Math.Abs(d1 - d2) > 2e-4)
             {
-                throw new Exception("Assert failed: " + message + d1 + " != " + d2);
+                throw new Exception("Assert failed: " + message + d1 + "(computed) != " + d2);
             }
         }
         
@@ -68,7 +68,7 @@ namespace LipidCreator
         {
             if (!s1.Equals(s2))
             {
-                throw new Exception("Assert failed: " + message + s1 + " != " + s2);
+                throw new Exception("Assert failed: " + message + s1 + "(computed) != " + s2);
             }
         }
     
@@ -78,10 +78,7 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
-            string grammarFilename = "data/goslin/Goslin.g4";
-            char quote = '\'';
-            ParserEventHandler parserEventHandler = new ParserEventHandler(lcf);
-            Parser parser = new Parser(parserEventHandler, grammarFilename, quote);
+            csgoslin.GoslinParser parser = new csgoslin.GoslinParser();
             
             try {
                 int lineCounter = 1;
@@ -126,15 +123,25 @@ namespace LipidCreator
                     
                     // parse species identifier
                     Lipid lipid = null;
-                    parser.parse(unitTestRow[1]);
-                    if (parser.wordInGrammar)
+                    string headgroup = "";
+                    try 
                     {
-                        parser.raiseEvents();
-                        if (parserEventHandler.lipid != null) lipid = parserEventHandler.lipid;
+                        csgoslin.LipidAdduct lipidAdduct = parser.parse(unitTestRow[1]);
+                        if (lipidAdduct != null)
+                        {
+                            lipid = lcf.translateLipid(lipidAdduct);
+                            if (lipid == null) throw new Exception("data structure translation failed");
+                            headgroup = lipid.headGroupNames[0];
+                        }
+                        else throw new Exception("parser failed");
                     }
-                    if (lipid == null) throw new Exception("Error: '" + unitTestRow[1] + "' could not be parsed");
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error: '" + unitTestRow[1] + "' could not be parsed: " + e);
+                    }
                     
                     
+                    /*
                     // extract headgroup name
                     string headgroup = unitTestRow[1];
                     // exception for PC -_-
@@ -161,6 +168,8 @@ namespace LipidCreator
                         headgroup = speciesToken[0];
                         if (!lcf.headgroups.ContainsKey(headgroup)) throw new Exception("Error: '" + headgroup + "' headgroup could not be determined");
                     }
+                    */
+                    
                     
                     // subtracting adduct from precursor
                     string adduct = unitTestRow[3];
@@ -188,11 +197,19 @@ namespace LipidCreator
                     
                     
                     // create transition
-                    lcf.registeredLipids.Clear();
-                    lcf.registeredLipidDictionary.Clear();
-                    lcf.registeredLipidDictionary.Add(lipidHash, lipid);
-                    lcf.registeredLipids.Add(lipidHash);
-                    lcf.assembleLipids(false, new ArrayList(){false, 0});
+                    try 
+                    {
+                        lcf.registeredLipids.Clear();
+                        lcf.registeredLipidDictionary.Clear();
+                        lcf.registeredLipidDictionary.Add(lipidHash, lipid);
+                        lcf.registeredLipids.Add(lipidHash);
+                        lcf.assembleLipids(false, new ArrayList(){false, 0});
+                    }
+                    catch (LipidException e)
+                    {
+                        Console.WriteLine(e);
+                        Environment.Exit(-1);
+                    }
                     
                     // resolve the [adduct] wildcards if present
                     string fragmentName = unitTestRow[6];
@@ -206,7 +223,7 @@ namespace LipidCreator
                         {
                             // precursor
                             Assert((string)row[LipidCreator.MOLECULE_LIST_NAME], unitTestRow[0], "class: ");
-                            Assert((string)row[LipidCreator.PRECURSOR_NAME], unitTestRow[1], "precursor name: ");
+                            //Assert((string)row[LipidCreator.PRECURSOR_NAME], unitTestRow[1], "precursor name: ");
                             Assert((string)row[LipidCreator.PRECURSOR_NEUTRAL_FORMULA], unitTestRow[2], "precursor formula: ");
                             Assert((string)row[LipidCreator.PRECURSOR_ADDUCT], unitTestRow[3], "precursor adduct: ");
                             Assert(Convert.ToDouble(row[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture), Convert.ToDouble(unitTestRow[4], CultureInfo.InvariantCulture), "precursor mass: ");

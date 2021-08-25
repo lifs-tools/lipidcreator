@@ -83,13 +83,13 @@ namespace LipidCreator
         public string heavyIsotope = "";
         public Object creatorGUI = null;
         
-        public LipidException(PrecursorData _precursorData, MS2Fragment _fragment)
+        public LipidException(PrecursorData _precursorData, MS2Fragment _fragment, string message = "") : base(message)
         {
             fragment = _fragment;
             precursorData = _precursorData;
         }
         
-        public LipidException(Molecule _molecule, int _counts)
+        public LipidException(Molecule _molecule, int _counts, string message = "") : base(message)
         {
             molecule = _molecule;
             counts = _counts;
@@ -312,7 +312,6 @@ namespace LipidCreator
         public static void computeFragmentData(DataTable transitionList, PrecursorData precursorData, IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments, IDictionary<String, Precursor> headgroups, ArrayList parameters, CollisionEnergy collisionEnergyHandler = null, string instrument = "", MonitoringTypes monitoringType = MonitoringTypes.NoMonitoring, double CE = -1, double minCE = 0, double maxCE = 0)
         {
             
-            
             if (precursorData.addPrecursor){
                 DataRow lipidRowPrecursor = transitionList.NewRow();
                 lipidRowPrecursor[LipidCreator.MOLECULE_LIST_NAME] = precursorData.moleculeListName;
@@ -346,6 +345,7 @@ namespace LipidCreator
                     }
                 }
             }
+            
             
             HashSet<string> insertedFragments = new HashSet<string>();
             
@@ -382,7 +382,6 @@ namespace LipidCreator
                 string fragName = fragment.fragmentOutputName;
                 ElementDictionary atomsCountFragment = fragment.copyElementDict();
                 
-                
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
@@ -411,12 +410,11 @@ namespace LipidCreator
                     }
                 }
                 
-                
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
                 double massFragment = 0;
-                
+            
                 // Exceptions for mediators
                 if (precursorData.lipidCategory != LipidCategory.LipidMediator)
                 {
@@ -426,6 +424,7 @@ namespace LipidCreator
                     }
                     catch (LipidException lipidException)
                     {
+                        
                         lipidException.precursorData = precursorData;
                         lipidException.fragment = fragment;
                         lipidException.heavyIsotope = LipidCreator.precursorNameSplit(precursorData.fullMoleculeListName)[1];
@@ -665,7 +664,6 @@ namespace LipidCreator
             var peaks = new List<Peak>();
             foreach (KeyValuePair<string, MS2Fragment> fragmentPair in allFragments[precursorData.fullMoleculeListName][precursorData.precursorAdduct.charge >= 0])
             {
-            
                 MS2Fragment fragment = fragmentPair.Value;
                 
                 // introduce exception for LCB, only HG fragment occurs when LCB contains no double bond

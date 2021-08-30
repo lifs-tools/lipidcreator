@@ -2532,6 +2532,10 @@ namespace LipidCreator
             if (!lipidCreatorInitError)
             {
                 this.Text = "LipidCreator  " + LipidCreator.LC_RELEASE_NUMBER;
+                if (lipidCreator.openedAsExternal)
+                {
+                    this.Text += "  - Opened with Skyline";
+                }
             }
             else
             {

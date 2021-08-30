@@ -1609,8 +1609,9 @@ namespace LipidCreator
                 if (!nameToExportName.ContainsKey(precursorData.precursorName)) nameToExportName.Add(precursorData.precursorName, precursorData.precursorExportName);
             }            
             
+            string skylineSep = ",";
 
-            string header = string.Join(",", SKYLINE_API_HEADER);
+            string header = string.Join(skylineSep, SKYLINE_API_HEADER);
 
             StringBuilder sb = new StringBuilder(header, header.Length);
             sb.AppendLine();
@@ -1623,20 +1624,20 @@ namespace LipidCreator
                 {                    
                     string exportName = nameToExportName.ContainsKey((string)entry[LipidCreator.PRECURSOR_NAME]) ? nameToExportName[(string)entry[LipidCreator.PRECURSOR_NAME]] : (string)entry[LipidCreator.PRECURSOR_NAME];
                     // Default col order is listname, preName, PreFormula, preAdduct, preMz, preCharge, prodName, ProdFormula, prodAdduct, prodMz, prodCharge
-                    sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\","); // listname
-                    sb.Append("\"").Append(exportName).Append("\","); // preName
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\","); // PreFormula
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_MZ]).Append("\","); // preMz
+                    sb.Append("\"").Append(entry[LipidCreator.MOLECULE_LIST_NAME]).Append("\"" + skylineSep); // listname
+                    sb.Append("\"").Append(exportName).Append("\"" + skylineSep); // preName
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_NEUTRAL_FORMULA]).Append("\"" + skylineSep); // PreFormula
+                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_ADDUCT]).Append("\"" + skylineSep); // preAdduct
+                    sb.Append(entry[LipidCreator.PRECURSOR_MZ]).Append(skylineSep); // preMz
                     maxMass = Math.Max(maxMass, Convert.ToDouble((string)entry[LipidCreator.PRECURSOR_MZ], CultureInfo.InvariantCulture));
-                    sb.Append("\"").Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append("\","); // preCharge
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\","); // prodName
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\","); // ProdFormula, no prodAdduct
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\","); // preAdduct
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_MZ]).Append("\","); // prodMz
-                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_CHARGE]).Append("\","); // prodCharge
+                    sb.Append(entry[LipidCreator.PRECURSOR_CHARGE]).Append(skylineSep); // preCharge
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NAME]).Append("\"" + skylineSep); // prodName
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_NEUTRAL_FORMULA]).Append("\"" + skylineSep); // ProdFormula, no prodAdduct
+                    sb.Append("\"").Append(entry[LipidCreator.PRODUCT_ADDUCT]).Append("\"" + skylineSep); // preAdduct
+                    sb.Append(entry[LipidCreator.PRODUCT_MZ]).Append(skylineSep); // prodMz
+                    sb.Append(entry[LipidCreator.PRODUCT_CHARGE]).Append(skylineSep); // prodCharge
                     sb.Append("\"").Append(entry[LipidCreator.NOTE]).Append("\""); // note
-                    if (withCE) sb.Append(",\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
+                    if (withCE) sb.Append(skylineSep + "\"").Append(entry[LipidCreator.COLLISION_ENERGY]).Append("\""); // note
                     sb.AppendLine();
                 } 
                 catch(Exception e)
@@ -1647,6 +1648,7 @@ namespace LipidCreator
             }
             try
             {
+                log.Error(sb.ToString());
                 log.Debug("Sending small molecule transition list to Skyline: " + sb.ToString());
                 skylineToolClient.InsertSmallMoleculeTransitionList(sb.ToString());
                 try

@@ -335,13 +335,13 @@ namespace LipidCreator
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
-                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = CE.ToString(CultureInfo.InvariantCulture);
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = CE >= 0 ? CE.ToString(CultureInfo.InvariantCulture) : "";
                     }
                     else if (monitoringType == MonitoringTypes.SRM)
                     {
                         double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, "precursor");
-                        if (ceValue != -1) ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
-                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = ceValue.ToString(CultureInfo.InvariantCulture);
+                        ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
+                        lipidRowPrecursor[LipidCreator.COLLISION_ENERGY] = (ceValue >= 0) ? ceValue.ToString(CultureInfo.InvariantCulture) : "";
                     }
                 }
             }
@@ -486,13 +486,13 @@ namespace LipidCreator
                     string adduct = LipidCreator.computeAdductFormula(null, precursorData.precursorAdduct);
                     if (monitoringType == MonitoringTypes.PRM)
                     {
-                        lipidRow[LipidCreator.COLLISION_ENERGY] = CE.ToString(CultureInfo.InvariantCulture);
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = CE >= 0 ? CE.ToString(CultureInfo.InvariantCulture) : "";
                     }
                     else if (monitoringType == MonitoringTypes.SRM)
                     {
                         double ceValue = collisionEnergyHandler.getApex(instrument, lipidClass, adduct, fragName);
-                        if (ceValue != -1) ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
-                        lipidRow[LipidCreator.COLLISION_ENERGY] = ceValue.ToString(CultureInfo.InvariantCulture);
+                        ceValue = Math.Max(Math.Min(maxCE, ceValue), minCE);
+                        lipidRow[LipidCreator.COLLISION_ENERGY] = ceValue >= 0 ? ceValue.ToString(CultureInfo.InvariantCulture) : "";
                     }
                 }
             }

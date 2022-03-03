@@ -43,7 +43,7 @@ jobs:
             sha: context.sha
           })
     - name: Upload Zip
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: success()
       with:
         name: LipidCreator

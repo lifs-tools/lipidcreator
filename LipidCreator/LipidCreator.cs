@@ -36,8 +36,10 @@ using Ionic.Zlib;
 
 using System.Xml.Linq;
 using System.Text;
+using System.Text.Json;
 using SkylineTool;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 
 using log4net;
@@ -120,6 +122,7 @@ namespace LipidCreator
         
     
         [NonSerialized]
+        private static readonly HttpClient client = new HttpClient();
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public event SkylineConnectionClosedEventHandler ConnectionClosed;
@@ -652,7 +655,7 @@ namespace LipidCreator
                     }
                 });
                 
-            }
+            } 
             LC_RELEASE_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build.ToString();
             LC_BUILD_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString();
             LC_VERSION_NUMBER = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -662,6 +665,9 @@ namespace LipidCreator
             {
                 log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
                 log.Info("Using " + prefixPath + " as base directory for relative resource lookup. Resolved executing assembly location: " + new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            }
+            if (!openedAsExternal) {
+                LipidCreator.updateAvailableRequest().ConfigureAwait(false);
             }
             registeredLipids = new ArrayList();
             registeredLipidDictionary = new Dictionary<ulong, Lipid>();
@@ -2011,6 +2017,42 @@ namespace LipidCreator
             {
                 log.Warn("Failed to contact analytics endpoint!", ex);
             }
+        }
+
+
+        public static async Task<bool> updateAvailableRequest() {
+            try	
+            {
+                log.Info("Checking for LipidCreator updates!");
+                // check for updates
+                var buildNumber = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
+                var stringBody = await client.GetStringAsync("https://api.github.com/repos/lifs-tools/lipidcreator/releases/latest");
+                using(JsonDocument doc = JsonDocument.Parse(stringBody)) {
+                    JsonElement root = doc.RootElement;
+                    JsonElement tagName;
+                    bool tagNameAvailable = root.TryGetProperty("tag_name", out tagName);
+                    if(tagNameAvailable) {
+                        int tagNumber = 0;
+                        var tagNameString = tagName.GetString();
+                        bool success = int.TryParse(tagNameString, out tagNumber);
+                        if(success) {
+                            if(tagNumber > buildNumber) {
+                                log.Info("An update for LipidCreator is available! Please check https://github.com/lifs-tools/lipidcreator for details!");
+                                return true;
+                            }
+                        } else {
+                            log.Warn("Could not parse tag name "+ tagNameString+ " as int!");
+                        }
+                    } else {
+                        log.Warn("Could not extract tag_name from response!");
+                    }
+                }
+            }
+            catch(HttpRequestException e)
+            {
+                log.Warn("Failed to contact update endpoint!", e);
+            } 
+            return false;
         }
         
         

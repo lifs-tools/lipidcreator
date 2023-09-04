@@ -16,7 +16,7 @@ jobs:
         config:
         - { name: "Ubuntu latest GCC and latest Mono", artifact: "LipidCreator.zip", os: ubuntu-latest, build_type: "Release", cc: "gcc", cxx: "g++" }
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Create Build Number
       run: |
         echo "BUILD_NUMBER=$(($GITHUB_RUN_NUMBER + 752))" >> $GITHUB_ENV

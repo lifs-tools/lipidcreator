@@ -147,7 +147,7 @@ namespace LipidCreator
         
         
         
-        public csgoslin.FattyAcid convertFA(FattyAcid fa, int num)
+        public csgoslin.FattyAcid convertFA(FattyAcid fa, int num, bool sp_exception = false)
         {
             Dictionary<string, List<csgoslin.FunctionalGroup> > functionalGroups = new Dictionary<string, List<csgoslin.FunctionalGroup> >();
             csgoslin.DoubleBonds db = new csgoslin.DoubleBonds(fa.db);
@@ -160,19 +160,21 @@ namespace LipidCreator
             csgoslin.LipidFaBondType faType = csgoslin.LipidFaBondType.ESTER;
             if (fa.suffix.Equals("a")) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
             else if (fa.suffix.Equals("p")) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
+            else if (fa.isLCB && sp_exception) faType = csgoslin.LipidFaBondType.LCB_EXCEPTION;
+            else if (fa.isLCB && !sp_exception) faType = csgoslin.LipidFaBondType.LCB_REGULAR;
             
-            return new csgoslin.FattyAcid("FA" + Convert.ToString(num), fa.length, db, functionalGroups, faType, fa.isLCB);
+            return new csgoslin.FattyAcid("FA" + Convert.ToString(num), fa.length, db, functionalGroups, faType);
         }
         
         
         
-        public csgoslin.LipidStructuralSubspecies convertLipid(string hg, List<FattyAcid> fa_list)
+        public csgoslin.LipidStructureDefined convertLipid(string hg, List<FattyAcid> fa_list)
         {
             // goslin
             csgoslin.Headgroup cshg = new csgoslin.Headgroup(hg);                        
             List<csgoslin.FattyAcid> csFAs = new List<csgoslin.FattyAcid>();
-            for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1));
-            return new csgoslin.LipidStructuralSubspecies(cshg, csFAs);
+            for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1, cshg.sp_exception));
+            return new csgoslin.LipidStructureDefined(cshg, csFAs);
         }
         
         

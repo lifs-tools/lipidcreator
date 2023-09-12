@@ -1924,8 +1924,8 @@ namespace LipidCreator
                         {
                             fag.hydroxylCounts.Add(0);
                         }
-                        fag.isLCB = fa.lcb;
-                        if (fa.lcb && !lipidAdduct.is_sp_exception())
+                        fag.isLCB = (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_EXCEPTION || fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_REGULAR);
+                        if (fag.isLCB && !lipidAdduct.is_sp_exception())
                         {
                             int num_oh = (new List<int>(fag.hydroxylCounts))[0];
                             fag.hydroxylCounts.Clear();

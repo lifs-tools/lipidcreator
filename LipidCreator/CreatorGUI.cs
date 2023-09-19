@@ -1802,7 +1802,7 @@ namespace LipidCreator
                 {
                     foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
                     {
-                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("LCL")) plHgList.Add(headgroup);
                     }
                     plFA1Checkbox1.Checked = false;
                     plFA1Checkbox2.Checked = true;
@@ -1817,7 +1817,7 @@ namespace LipidCreator
                 {
                     foreach(string headgroup in lipidCreator.categoryToClass[(int)LipidCategory.Glycerophospholipid])
                     {
-                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("MLCL")) plHgList.Add(headgroup);
+                        if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("LCL")) plHgList.Add(headgroup);
                     }
                     plFA1Checkbox3.Visible = true;
                     plFA1Checkbox2.Visible = true;
@@ -2156,7 +2156,7 @@ namespace LipidCreator
                 }
                 else if (((Glycerolipid)currentLipid).fag2.faTypes["FAx"] && !((Glycerolipid)currentLipid).fag3.faTypes["FAx"])
                 {
-                    MessageBox.Show("Please select the middle fatty acyl for DAG!", "Not registrable");
+                    MessageBox.Show("Please select the middle fatty acyl for DG!", "Not registrable");
                     return  LipidCategory.NoLipid;
                 }
                 
@@ -2819,16 +2819,16 @@ namespace LipidCreator
                 {
                     row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
                     row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
-                    headGroupNames.Add("TAG");
+                    headGroupNames.Add("TG");
                 }
                 else if (!currentGlycerolipid.fag2.faTypes["FAx"])
                 {
                     row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
-                    headGroupNames.Add("DAG"); 
+                    headGroupNames.Add("DG"); 
                 }
                 else
                 {
-                    headGroupNames.Add("MAG");
+                    headGroupNames.Add("MG");
                 }
                 row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + "; OH: " + currentGlycerolipid.fag1.hydroxylInfo;
             }

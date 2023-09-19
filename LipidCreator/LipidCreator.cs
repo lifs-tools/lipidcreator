@@ -47,6 +47,8 @@ using log4net.Config;
 using System.Globalization;
 using csgoslin;
 
+using System.Diagnostics;
+
 
 using ExcelLibrary.SpreadSheet;
 using System.IO.Pipes;
@@ -876,6 +878,9 @@ namespace LipidCreator
         public void createFragmentList(string instrument, MonitoringTypes monitoringType, ArrayList parameters)
         {
             analytics(ANALYTICS_CATEGORY, "create-transition-list-" + runMode);
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            
             
             transitionList = addDataColumns(new DataTable ());
             transitionListUnique = addDataColumns (new DataTable ());
@@ -918,11 +923,13 @@ namespace LipidCreator
                     }
                     Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, parameters, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
-            }           
+            }            
             
             
-            
-            
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed);
+            watch = new Stopwatch();
+            watch.Start();
             
             if ((int)parameters[1] != 0)
             {
@@ -947,6 +954,10 @@ namespace LipidCreator
                 }
             }
             
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed);
+            watch = new Stopwatch();
+            watch.Start();
             
             // check for duplicates
             IDictionary<String, ArrayList> replicateKeys = new Dictionary<String, ArrayList> ();
@@ -958,6 +969,11 @@ namespace LipidCreator
                 if (!replicateKeys.ContainsKey (replicateKey)) replicateKeys.Add(replicateKey, new ArrayList());
                 replicateKeys[replicateKey].Add(row);
             }
+            
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed);
+            watch = new Stopwatch();
+            watch.Start();
                 
             foreach (string replicateKey in replicateKeys.Keys)
             {
@@ -966,12 +982,22 @@ namespace LipidCreator
                 
                 if (replicateKeys[replicateKey].Count > 1)
                 {
+                    string[] duplicate_strings = new string[replicateKeys[replicateKey].Count];
+                    for (int i = 0; i < replicateKeys[replicateKey].Count; ++i)
+                    {
+                        StringBuilder note = new StringBuilder();
+                        DataRow dr = (DataRow)replicateKeys[replicateKey][i];
+                            
+                        note.Append((string)dr[LipidCreator.PRECURSOR_NAME]).Append(" ").Append((string)dr[LipidCreator.PRECURSOR_ADDUCT]).Append(" ").Append((string)dr[LipidCreator.PRODUCT_NAME]);
+                        duplicate_strings[i] = note.ToString();
+                    }
+                    
                     for (int i = 0; i < replicateKeys[replicateKey].Count; ++i)
                     {
                         DataRow dr1 = (DataRow)replicateKeys[replicateKey][i];
-                        dr1[UNIQUE] = false;
+                        dr1[UNIQUE] = 0;
                         
-                        string note = "";
+                        StringBuilder note = new StringBuilder();
                         for (int j = 0; j < replicateKeys[replicateKey].Count; ++j)
                         {
                             if (i == j) continue;
@@ -979,26 +1005,26 @@ namespace LipidCreator
                             
                             if (note.Length > 0)
                             {
-                                note += " and with ";
+                                note.Append(" and with ");
                             }
                             
                             else
                             {
-                                note = "Interference with ";
+                                note.Append("Interference with ");
                             }
-                            note += (string)dr2[LipidCreator.PRECURSOR_NAME] + " " + (string)dr2[LipidCreator.PRECURSOR_ADDUCT] + " " + (string)dr2[LipidCreator.PRODUCT_NAME];
+                            note.Append(duplicate_strings[j]);
                         }
-                        dr1[LipidCreator.NOTE] = note;
+                        dr1[LipidCreator.NOTE] = note.ToString();
                     }
                 }
                 else
                 {
-                    row[UNIQUE] = true;
+                    row[UNIQUE] = 1;
                 }
-                transitionListUnique.ImportRow (row);
+                transitionListUnique.ImportRow(row);
             }
-            
-            
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed);
         }
         
         
@@ -1066,6 +1092,7 @@ namespace LipidCreator
                     precursorData.precursorAdductFormula = computeAdductFormula(emptyAtomsCount, precursorData.precursorAdduct);
                 }
             }
+            
             
             createFragmentList(selectedInstrumentForCE, monitoringType, parameters);
         }

@@ -353,13 +353,14 @@ namespace LipidCreator
             
             foreach (string fragmentName in precursorData.fragmentNames)
             {
+                
                 if (!allFragments.ContainsKey(precursorData.fullMoleculeListName) || !allFragments[precursorData.fullMoleculeListName][precursorData.precursorAdduct.charge >= 0].ContainsKey(fragmentName)) continue;
             
-                // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
+                // Exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
                 
                 
-                // Cxception for LCB, only HG fragment occurs when LCB contains no double bond
+                // Exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.fa1.hydroxyl == 0) continue;
                 
                 
@@ -383,6 +384,7 @@ namespace LipidCreator
                 
                 string fragName = fragment.fragmentOutputName;
                 ElementDictionary atomsCountFragment = fragment.copyElementDict();
+                
                 
                 foreach (string fbase in fragment.fragmentBase)
                 {
@@ -443,23 +445,23 @@ namespace LipidCreator
                 {
                     fragName = fragName.Replace("[adduct]", precursorData.precursorAdduct.name);
                 }
-                if (fragName.IndexOf("[xx:x]") > -1)
+                else if (fragName.IndexOf("[xx:x]") > -1)
                 {
                     fragName = fragName.Replace("[xx:x]", precursorData.fa1.ToString(false));
                 }
-                if (fragName.IndexOf("[yy:y]") > -1)
+                else if (fragName.IndexOf("[yy:y]") > -1)
                 {
                     fragName = fragName.Replace("[yy:y]", precursorData.fa2.ToString(false));
                 }
-                if (fragName.IndexOf("[zz:z]") > -1)
+                else if (fragName.IndexOf("[zz:z]") > -1)
                 {
                     fragName = fragName.Replace("[zz:z]", precursorData.fa3.ToString(false));
                 }
-                if (fragName.IndexOf("[uu:u]") > -1)
+                else if (fragName.IndexOf("[uu:u]") > -1)
                 {
                     fragName = fragName.Replace("[uu:u]", precursorData.fa4.ToString(false));
                 }
-                if (fragName.IndexOf("[xx:x;x]") > -1)
+                else if (fragName.IndexOf("[xx:x;x]") > -1)
                 {
                     fragName = fragName.Replace("[xx:x;x]", precursorData.lcb.ToString());
                 }

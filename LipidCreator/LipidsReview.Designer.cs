@@ -64,6 +64,9 @@ namespace LipidCreator
         
             int windowWidth = 1100;
             int windowHeight = 580;
+            
+            System.ComponentModel.ComponentResourceManager resources =
+                new System.ComponentModel.ComponentResourceManager(typeof(LipidsReview));
         
             this.dataGridViewTransitions = new System.Windows.Forms.DataGridView();
             this.buttonSendToSkyline = new System.Windows.Forms.Button();
@@ -144,6 +147,17 @@ namespace LipidCreator
             this.buttonBack.Text = "Back";
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.buttonBackClick);
+            
+            
+            this.bindingNavigator1 = new BindingNavigator(true);
+            this.bindingNavigator1.Dock = DockStyle.Bottom;
+            this.bindingNavigator1.MoveFirstItem.Click += this.bindingSource1_CurrentChanged;
+            this.bindingNavigator1.MovePreviousItem.Click += this.bindingSource1_CurrentChanged;
+            this.bindingNavigator1.MoveNextItem.Click += this.bindingSource1_CurrentChanged;
+            this.bindingNavigator1.MoveLastItem.Click += this.bindingSource1_CurrentChanged;
+            this.bindingNavigator1.AddNewItem = null;
+            this.bindingNavigator1.DeleteItem = null;
+
             // 
             // button4
             // 
@@ -228,6 +242,7 @@ namespace LipidCreator
             this.Controls.Add(this.buttonStoreTransitionList);
             this.Controls.Add(this.buttonSendToSkyline);
             this.Controls.Add(this.dataGridViewTransitions);
+            this.Controls.Add(this.bindingNavigator1);
             this.Name = "LipidsReview";
             this.Text = "Lipid Transitions Review";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransitions)).EndInit();
@@ -281,5 +296,6 @@ namespace LipidCreator
         public Label labelNumberOfTransitions;
         public GroupBox groupBoxOptions;
         public ArrayList controlElements;
+        public BindingNavigator bindingNavigator1;
     }
 }

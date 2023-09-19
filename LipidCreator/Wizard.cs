@@ -209,7 +209,7 @@ namespace LipidCreator
                             ((Glycerolipid)lipid).containsSugar = true;
                         }
                         
-                        if (headgroup == "DAG")
+                        if (headgroup == "DG")
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag3;
                             currFAG.faTypes["FA"] = false;
@@ -218,7 +218,7 @@ namespace LipidCreator
                             currFAG.faTypes["FAx"] = true;
                         }
                         
-                        else if (headgroup == "MAG")
+                        else if (headgroup == "MG")
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag2;
                             currFAG.faTypes["FA"] = false;
@@ -247,7 +247,7 @@ namespace LipidCreator
                             ((Phospholipid)lipid).isCL = true;
                         }
                         
-                        if (headgroup == "MLCL")
+                        if (headgroup == "LCL")
                         {
                             FattyAcidGroup currFAG = ((Phospholipid)lipid).fag4;
                             currFAG.faTypes["FA"] = false;

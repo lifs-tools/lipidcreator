@@ -27,6 +27,7 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -53,7 +54,10 @@ namespace LipidCreator
         public IonFormulaParserEventHandler ionFormulaParserEventHandler;
         public Parser ionFormulaParser;
         public bool inEditingCheck;
-        
+        public BindingSource binding1;
+        public int rowsPerPage = 10;
+        List<int> tables;
+        List<int> tablesUnique;
 
         public LipidsReview (CreatorGUI _creatorGUI, ArrayList _returnValues)
         {
@@ -65,7 +69,13 @@ namespace LipidCreator
             transitionListUnique = creatorGUI.lipidCreator.transitionListUnique;
             pressedBackButton = false;
             inEditingCheck = false;
+            binding1 = new BindingSource();
             
+            int maxRows = (int)((double)transitionList.Rows.Count / (double)rowsPerPage) + (((transitionList.Rows.Count % rowsPerPage) != 0) ? 1 : 0);
+            tables = new List<int>(new int[maxRows]);
+            
+            int maxRowsUnique = (int)((double)transitionListUnique.Rows.Count / (double)rowsPerPage) + (((transitionListUnique.Rows.Count % rowsPerPage) != 0) ? 1 : 0);
+            tablesUnique = new List<int>(new int[maxRowsUnique]);
             
             
             moleculeFormulaParserEventHandler = new MoleculeFormulaParserEventHandler();
@@ -76,16 +86,13 @@ namespace LipidCreator
             
             InitializeComponent();
             InitializeCustom();
-            dataGridViewTransitions.DataSource = currentView;
+            bindingNavigator1.BindingSource = binding1;
+            dataGridViewTransitions.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewTransitions.RowHeadersVisible = false;
+            dataGridViewTransitions.DataSource = null;
             
-            
+            binding1.DataSource = tables;
             buttonSendToSkyline.Enabled = creatorGUI.lipidCreator.openedAsExternal;
-            updateCountLabel();
-            
-            
-            
-            dataGridViewTransitions.Update ();
-            dataGridViewTransitions.Refresh ();
             
             bool enableCBCSL = false;
             
@@ -97,8 +104,22 @@ namespace LipidCreator
             
             
             checkBoxCreateSpectralLibrary.Enabled = creatorGUI.lipidCreator.openedAsExternal && enableCBCSL;
-            
+            bindingSource1_CurrentChanged(binding1, EventArgs.Empty);
         }
+        
+        
+        private void bindingSource1_CurrentChanged(object sender, EventArgs e)
+        {
+            if (currentView.Rows.Count == 0) return;
+            DataTable dt = currentView.Clone();
+            for (int i = binding1.Position * rowsPerPage; i < Math.Min((binding1.Position + 1) * rowsPerPage, currentView.Rows.Count); ++i){
+                dt.Rows.Add(currentView.Rows[i].ItemArray);
+            }
+            dataGridViewTransitions.DataSource = dt;
+            dataGridViewTransitions.ClearSelection();
+            gridviewDataColor();
+        }
+        
         
         
         private void formResize(object sender, System.EventArgs e)
@@ -125,32 +146,13 @@ namespace LipidCreator
             updateCountLabel();
         }
         
-        
-        private void SetupDataGridView()
-    {
-        this.Controls.Add(dataGridViewTransitions);
-
-        dataGridViewTransitions.ColumnCount = 5;
-
-        
-
-        dataGridViewTransitions.Columns[0].Name = "Release Date";
-        dataGridViewTransitions.Columns[1].Name = "Track";
-        dataGridViewTransitions.Columns[2].Name = "Title";
-        dataGridViewTransitions.Columns[3].Name = "Artist";
-        dataGridViewTransitions.Columns[4].Name = "Album";
-        dataGridViewTransitions.Columns[4].DefaultCellStyle.Font =
-            new Font(dataGridViewTransitions.DefaultCellStyle.Font, FontStyle.Italic);
-
-
-    }
 
         
         public void updateCountLabel()
         {   
             dataGridViewTransitions.Update ();
             dataGridViewTransitions.Refresh ();
-            labelNumberOfTransitions.Text = "Number of transitions: " + (dataGridViewTransitions.Rows.Count - (checkBoxEditMode.Checked ? 1 : 0));
+            labelNumberOfTransitions.Text = "Number of transitions: " + (currentView.Rows.Count - (checkBoxEditMode.Checked ? 1 : 0));
         }
         
         
@@ -177,12 +179,12 @@ namespace LipidCreator
         
         public void gridviewDataColor()
         {
+            if (dataGridViewTransitions.Rows.Count == 0) return;
             if (currentView == transitionList)
             {
-                for (int i = 0; i < currentView.Rows.Count; ++i)
+                for (int i = 0; i < dataGridViewTransitions.Rows.Count; ++i)
                 {
-                    if (currentView.Rows[i]["unique"] is System.DBNull) continue;
-                    if((string)(currentView.Rows[i]["unique"]) == "False")
+                    if (dataGridViewTransitions.Rows[i].Cells[0].Value.Equals("0"))
                     {
                         dataGridViewTransitions.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
                     }
@@ -776,14 +778,17 @@ namespace LipidCreator
             if (((CheckBox)sender).Checked)
             {            
                 currentView = this.transitionListUnique;
+                binding1.DataSource = tablesUnique;
             }
             else
             {
                 currentView = this.transitionList;
+                binding1.DataSource = tables;
             }
             
             updateCountLabel();
-            dataGridViewTransitions.DataSource = currentView;
+            bindingSource1_CurrentChanged(binding1, EventArgs.Empty);
+            //dataGridViewTransitions.DataSource = currentView;
             dataGridViewTransitions.Update();
             dataGridViewTransitions.Refresh();
         }

@@ -280,10 +280,14 @@ namespace LipidCreator
                         
                         case "external":
                             runMode = RunMode.external;
-                            if (File.Exists(Path.Combine(LipidCreator.EXTERNAL_PREFIX_PATH, "data", "lipidcreator.log")))
+                            
+                            
+                            string[] allLogFiles = Directory.GetFiles(Path.Combine(LipidCreator.EXTERNAL_PREFIX_PATH, "data"), "lipidcreator.log*", SearchOption.AllDirectories);
+                            foreach (string logFile in allLogFiles)
                             {
-                                System.IO.File.WriteAllText(Path.Combine(LipidCreator.EXTERNAL_PREFIX_PATH, "data", "lipidcreator.log"), string.Empty); // Clearing the log file
+                                if (File.Exists(logFile)) File.Delete(logFile);
                             }
+                            
                             checkForAnalytics(runMode, true);
                             CreatorGUI creatorGUI = new CreatorGUI(args[1]);
                             if (!creatorGUI.lipidCreatorInitError)
@@ -602,7 +606,14 @@ namespace LipidCreator
             {
                 runMode = RunMode.standalone;
                 checkForAnalytics(runMode, false);
-                if (File.Exists(Path.Combine("data", "lipidcreator.log"))) System.IO.File.WriteAllText(Path.Combine("data", "lipidcreator.log"), string.Empty); // Clearing the log file
+                
+                string[] allLogFiles = Directory.GetFiles(Path.Combine(new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName, "data"), "lipidcreator.log*", SearchOption.AllDirectories);
+                foreach (string logFile in allLogFiles)
+                {
+                    if (File.Exists(logFile)) File.Delete(logFile);
+                }
+                
+                //if (File.Exists(Path.Combine("data", "lipidcreator.log"))) System.IO.File.WriteAllText(Path.Combine("data", "lipidcreator.log"), string.Empty); // Clearing the log file
                 CreatorGUI creatorGUI = new CreatorGUI(null);
                 if (!creatorGUI.lipidCreatorInitError)
                 {

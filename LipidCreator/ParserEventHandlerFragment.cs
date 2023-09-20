@@ -256,14 +256,7 @@ namespace LipidCreator
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(key))
             {
                 Molecule m = MS2Fragment.ELEMENT_POSITIONS[key];
-                if (heavyElementCounts.ContainsKey(m))
-                {
-                    heavyElementCounts[m] = heavyCount;
-                }
-                else
-                {
-                    heavyElementCounts.Add(m, heavyCount);
-                }
+                heavyElementCounts[(int)m] = heavyCount;
             }
             else
             {
@@ -567,7 +560,7 @@ namespace LipidCreator
                         {
                             MS2Fragment.addCounts(totalHeavy, ed);
                         }
-                        MS2Fragment.addCounts(totalHeavy, heavyFragment, true);
+                        MS2Fragment.subtractCounts(totalHeavy, heavyFragment);
                         
                         if (!MS2Fragment.validElementDict(totalHeavy))
                         {

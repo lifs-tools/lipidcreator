@@ -34,34 +34,42 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public class ElementDictionary : Dictionary<Molecule, int> {
+    public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
+    //public static List<Molecule> ElementOrder = new List<Molecule>(){Molecule.C, MoleculeC13, Molecule.H, Molecule.H2, Molecule.N, Molecule.N15, Molecule.O, Molecule.O17, Molecule.O18, Molecule.P, Molecule.P32, Molecule.S, Molecule.S34, Molecule.S33};
+    
+    public class ElementDictionary : List<int> {
+        public const int ElementCount = 14;
         public ElementDictionary(ElementDictionary elementDictionary)
         {
-            foreach (KeyValuePair<Molecule, int> kvp in elementDictionary) 
+            for (int i = 0; i < ElementCount; ++i) 
             {
-                this[kvp.Key] = kvp.Value;
+                this.Add(elementDictionary[i]);
             }
+            while (this.Count < ElementCount) this.Add(0);
         }
         
         public ElementDictionary()
         {
-        
+            for (int i = 0; i < ElementCount; ++i) 
+            {
+                this.Add(0);
+            }
         }
         
         public bool hasHeavy()
         {
             foreach (KeyValuePair<Molecule, Element> kvp in MS2Fragment.ALL_ELEMENTS.Where(x => x.Value.isHeavy)) 
             {
-                if (this[kvp.Key] > 0) return true;
+                if (this[(int)kvp.Key] > 0) return true;
             }
             return false;
         }
         
         public void print()
         {
-            foreach (KeyValuePair<Molecule, int> kvp in this)
+            for (int m = 0; m < ElementCount; ++m) 
             {
-                Console.WriteLine(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + ": " + kvp.Value);
+                Console.WriteLine(MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + ": " + this[m]);
             }
             Console.WriteLine("----------------");
         }
@@ -71,16 +79,15 @@ namespace LipidCreator
             unchecked
             {
                 ulong hashCode = 0;
-                foreach (KeyValuePair<Molecule, int> kvp in this)
+                for (int m = 0; m < ElementCount; ++m) 
                 {
-                    hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut) * (ulong)(kvp.Value + 7);
+                    hashCode += LipidCreator.HashCode(MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut) * (ulong)(this[m] + 7);
                 }
                 return hashCode;
             }
         }
     }
 
-    public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
 
     [Serializable]
     public partial class Element

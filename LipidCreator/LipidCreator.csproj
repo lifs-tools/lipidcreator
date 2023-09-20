@@ -65,7 +65,7 @@
     <ImageFiles Include="$(ProjectDir)images\**\*.*" />
     <ToolInfFiles Include="$(ProjectDir)tool-inf\**\*.*" />
     <DataFiles Include="$(ProjectDir)data\**\*.*" 
-      Exclude="$(ProjectDir)data\docs\*.docx;$(ProjectDir)data\*.log;$(ProjectDir)data\testfiles\*;$(ProjectDir)data\goslin\testfiles\*"
+      Exclude="$(ProjectDir)data\docs\*.docx;$(ProjectDir)data\*.log*;$(ProjectDir)data\testfiles\*;$(ProjectDir)data\goslin\testfiles\*"
     />
     <!-- include linux native / interop files -->
     <LinuxNativeFiles Include="$(ProjectDir)\*.so"/>

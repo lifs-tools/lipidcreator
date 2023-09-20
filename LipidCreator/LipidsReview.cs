@@ -55,7 +55,7 @@ namespace LipidCreator
         public Parser ionFormulaParser;
         public bool inEditingCheck;
         public BindingSource binding1;
-        public int rowsPerPage = 10;
+        public int rowsPerPage = 1000;
         List<int> tables;
         List<int> tablesUnique;
 

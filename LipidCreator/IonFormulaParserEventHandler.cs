@@ -134,8 +134,8 @@ namespace LipidCreator
             {
                 Molecule pos = MS2Fragment.ELEMENT_POSITIONS[heavyElement];
                 Molecule lightPos = MS2Fragment.ALL_ELEMENTS[pos].lightOrigin;
-                elements[pos] += count;
-                elements[lightPos] -= count;
+                elements[(int)pos] += count;
+                elements[(int)lightPos] -= count;
             }
             else
             {

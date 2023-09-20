@@ -158,25 +158,25 @@ namespace LipidCreator
                 Dictionary<string, object[]> data = new Dictionary<string, object[]>();
                 
             
-                foreach (KeyValuePair<Molecule, int> row in input)
+                for (int m = 0; m < input.Count; ++m)
                 {
-                    if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
+                    if (!MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy)
                     {
                         // check for heavy isotopes
-                        int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
+                        int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives.Count() - 1;
                         int heavyElementCount = 0;
                         string heavyShortcut = "";
                         for (; heavyElementIndex >= 0; --heavyElementIndex)
                         {
-                            heavyElementCount = input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]];
-                            heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]].shortcutNumber;
-                            if (input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]] > 0)
+                            heavyElementCount = input[(int)MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]];
+                            heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]].shortcutNumber;
+                            if (input[(int)MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]] > 0)
                             {
                                 break;
                             }
                         }
                 
-                        data.Add(MS2Fragment.ALL_ELEMENTS[row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
+                        data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut, new object[]{input[m], heavyElementCount, heavyShortcut});
                     }
                 }
                 
@@ -240,25 +240,25 @@ namespace LipidCreator
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
             
-            foreach (KeyValuePair<Molecule, int> row in input)
+            for (int m = 0; m < input.Count; ++m)
             {
-                if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
+                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy)
                 {
                     // check for heavy isotopes
-                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
+                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives.Count() - 1;
                     int heavyElementCount = 0;
                     string heavyShortcut = "";
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
-                        heavyElementCount = input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]];
-                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]].shortcutNumber;
-                        if (input[MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex]] > 0)
+                        heavyElementCount = input[(int)MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]];
+                        heavyShortcut = MS2Fragment.ALL_ELEMENTS[MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]].shortcutNumber;
+                        if (input[(int)MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex]] > 0)
                         {
                             break;
                         }
                     }
             
-                    data.Add(MS2Fragment.ALL_ELEMENTS[row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut, new object[]{input[m], heavyElementCount, heavyShortcut});
                 }
             }
             return data;
@@ -275,8 +275,8 @@ namespace LipidCreator
                 Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
                 Molecule heavyIndex = MS2Fragment.ELEMENT_POSITIONS[(string)row.Value[2]];
                 
-                elements[elementIndex] = (int)row.Value[0];
-                elements[heavyIndex] = (int)row.Value[1];
+                elements[(int)elementIndex] = (int)row.Value[0];
+                elements[(int)heavyIndex] = (int)row.Value[1];
                 
             }
             return elements;

@@ -60,7 +60,7 @@ namespace LipidCreator
         public void elementGroupPostEvent(Parser.TreeNode node)
         {
             if (elements == null) return;
-            elements[molecule] += count;
+            elements[(int)molecule] += count;
         }
         
         
@@ -89,7 +89,7 @@ namespace LipidCreator
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element))
             {
                 molecule = MS2Fragment.ELEMENT_POSITIONS[element];
-                elements[molecule] += 1;
+                elements[(int)molecule] += 1;
             }
             else
             {

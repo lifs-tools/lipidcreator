@@ -79,17 +79,12 @@ namespace LipidCreator
         public static float FONT_SIZE_FACTOR;
         public static readonly float REGULAR_FONT_SIZE = 8.25f;
         public bool lipidCreatorInitError = false;
-        public bool openedAsExternal = false;
-        public string prefixPath = "";
         
         public CreatorGUI(string _inputParameters)
         {
         
             FONT_SIZE_FACTOR = 96.0f / CreateGraphics().DpiX;
-            inputParameters = _inputParameters;
-            openedAsExternal = (inputParameters != null);
-            prefixPath = (openedAsExternal ? LipidCreator.EXTERNAL_PREFIX_PATH : "");
-            
+            inputParameters = _inputParameters;            
             try
             {
                 this.lipidCreator = new LipidCreator(inputParameters, true);

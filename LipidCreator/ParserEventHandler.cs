@@ -223,14 +223,7 @@ namespace LipidCreator
             if (MS2Fragment.ELEMENT_POSITIONS.ContainsKey(key))
             {
                 Molecule m = MS2Fragment.ELEMENT_POSITIONS[key];
-                if (heavyElementCounts.ContainsKey(m))
-                {
-                    heavyElementCounts[m] = heavyCount;
-                }
-                else
-                {
-                    heavyElementCounts.Add(m, heavyCount);
-                }
+                heavyElementCounts[(int)m] = heavyCount;
             }
             else
             {

@@ -105,7 +105,8 @@ namespace LipidCreator
 
             try
             {
-                string logFile = Path.Combine(creatorGUI.prefixPath, "data", "lipidcreator.log");
+                string logFile = Path.Combine(creatorGUI.lipidCreator.prefixPath, "data", "lipidcreator.log");
+                Console.WriteLine(logFile);
                 if (File.Exists(logFile))
                 {
                     using (FileStream fileStream = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -125,7 +126,7 @@ namespace LipidCreator
             {
                 this.textLibraryName.Text = "Log file could not be opened." + e;
 
-                if (creatorGUI.openedAsExternal)
+                if (creatorGUI.lipidCreator.openedAsExternal)
                 {
                     this.textLibraryName.Text = "\n\nPlease be sure, that you installed LipidCreator in Skyline using the zip file with the name 'LipidCreator.zip'. Any renaming of the file before installation will cause a malfunction of LipidCreator. In case, please uninstall LipidCreator in Skyline, rename the zip file and re-install LipidCreator again.";
                 }

@@ -142,27 +142,27 @@ namespace LipidCreator
         public static Dictionary<string, object[]> createGridData(ElementDictionary input)
         {
             Dictionary<string, object[]> data = new Dictionary<string, object[]>();
-            
-            foreach (KeyValuePair<Molecule, int> row in input)
+
+            for(int m = 0; m < input.Count; ++m)
             {
-                if (!MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy)
+                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy)
                 {
                     // check for heavy isotopes
-                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives.Count() - 1;
+                    int heavyElementIndex = MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives.Count() - 1;
                     int heavyElementCount = 0;
                     string heavyShortcut = "";
                     for (; heavyElementIndex >= 0; --heavyElementIndex)
                     {
-                        Molecule heavyID = MS2Fragment.ALL_ELEMENTS[row.Key].derivatives[heavyElementIndex];
-                        heavyElementCount = input[heavyID];
+                        Molecule heavyID = MS2Fragment.ALL_ELEMENTS[(Molecule)m].derivatives[heavyElementIndex];
+                        heavyElementCount = input[(int)heavyID];
                         heavyShortcut = MS2Fragment.ALL_ELEMENTS[heavyID].shortcutNumber;
-                        if (input[heavyID] > 0)
+                        if (input[(int)heavyID] > 0)
                         {
                             break;
                         }
                     }
             
-                    data.Add(MS2Fragment.ALL_ELEMENTS[row.Key].shortcut, new object[]{row.Value, heavyElementCount, heavyShortcut});
+                    data.Add(MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut, new object[]{input[m], heavyElementCount, heavyShortcut});
                 }
             }
             return data;
@@ -453,7 +453,7 @@ namespace LipidCreator
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 
-                int orig = precursor.elements[MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[(string)dataGridView1.Rows[e.RowIndex].Cells[3].Value]].lightOrigin];
+                int orig = precursor.elements[(int)MS2Fragment.ALL_ELEMENTS[MS2Fragment.ELEMENT_POSITIONS[(string)dataGridView1.Rows[e.RowIndex].Cells[3].Value]].lightOrigin];
                 int n = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value);
                 if (n < 0) n = 0;
                 if (n > orig) n = orig;
@@ -489,7 +489,10 @@ namespace LipidCreator
             foreach (Dictionary<string, object[]> bbdt in buildingBlockElementDicts)
             {
                 ElementDictionary elements = LipidCreator.createElementData(bbdt);
-                foreach(KeyValuePair<Molecule, int> row in elements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
+                for(int m = 0; m < elements.Count; ++m)
+                {
+                    if (MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy && elements[m] > 0) numHeavyElements += elements[m];
+                }
                 tmp.Add(elements);
                 
             }
@@ -563,11 +566,18 @@ namespace LipidCreator
             {
                 int numHeavyElements = 0;
                 
-                foreach(KeyValuePair<Molecule, int> row in LipidCreator.createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0])) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
+                ElementDictionary bbed = LipidCreator.createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[0]);
+                for (int m = 0; m < bbed.Count; ++m)
+                {
+                    if (MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy && m > 0) numHeavyElements += bbed[m];
+                }
                 for (int i = 1; i < buildingBlockElementDicts.Count; ++i)
                 {
                     ElementDictionary newElements = LipidCreator.createElementData((Dictionary<string, object[]>)buildingBlockElementDicts[i]);
-                    foreach(KeyValuePair<Molecule, int> row in newElements) if (MS2Fragment.ALL_ELEMENTS[row.Key].isHeavy && row.Value > 0) numHeavyElements += row.Value;
+                    for(int m = 0; m < newElements.Count; ++m)
+                    {
+                        if (MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy && newElements[m] > 0) numHeavyElements += newElements[m];
+                    }
                 }
                 
                 

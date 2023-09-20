@@ -64,20 +64,20 @@ namespace LipidCreator
                 this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
                 if (length > 0 || db > 0)
                 {
-                    atomsCount[Molecule.C] = length; // C
+                    atomsCount[(int)Molecule.C] = length; // C
                     switch(this.suffix)
                     {
                         case "":
-                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * db; // H
-                            atomsCount[Molecule.O] = 1 + hydroxyl; // O
+                            atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * db; // H
+                            atomsCount[(int)Molecule.O] = 1 + hydroxyl; // O
                             break;
                         case "p":
-                            atomsCount[Molecule.H] = 2 * length - 1 - 2 * (db + 1) + 2; // H
-                            atomsCount[Molecule.O] = hydroxyl; // O
+                            atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * (db + 1) + 2; // H
+                            atomsCount[(int)Molecule.O] = hydroxyl; // O
                             break;
                         case "a":
-                            atomsCount[Molecule.H] = (length + 1) * 2 - 1 - 2 * db; // H
-                            atomsCount[Molecule.O] = hydroxyl; // O
+                            atomsCount[(int)Molecule.H] = (length + 1) * 2 - 1 - 2 * db; // H
+                            atomsCount[(int)Molecule.O] = hydroxyl; // O
                             break;
                     }
                 }
@@ -86,10 +86,10 @@ namespace LipidCreator
             {
                 // long chain base
                 this.suffix = "";
-                atomsCount[Molecule.C] = length; // C
-                atomsCount[Molecule.H] = (2 * (length - db) + 2); // H
-                atomsCount[Molecule.O] = hydroxyl; // O
-                atomsCount[Molecule.N] = 1; // N
+                atomsCount[(int)Molecule.C] = length; // C
+                atomsCount[(int)Molecule.H] = (2 * (length - db) + 2); // H
+                atomsCount[(int)Molecule.O] = hydroxyl; // O
+                atomsCount[(int)Molecule.N] = 1; // N
             }
         }
         
@@ -101,7 +101,7 @@ namespace LipidCreator
             hydroxyl = copy.hydroxyl;
             suffix = copy.suffix;
             atomsCount = MS2Fragment.createEmptyElementDict();
-            foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] = row.Value;
+            for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
         
         
@@ -116,7 +116,7 @@ namespace LipidCreator
             isLCB |= copy.isLCB;
             hydroxyl += copy.hydroxyl;
             suffix += copy.suffix;
-            foreach (KeyValuePair<Molecule, int> row in copy.atomsCount) atomsCount[row.Key] += row.Value;
+            for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
         
         
@@ -144,19 +144,21 @@ namespace LipidCreator
         // this function is different to the one from MS2Fragment class
         public void updateForHeavyLabeled(ElementDictionary heavyAtomsCount)
         {
-            foreach (KeyValuePair<Molecule, int> row in heavyAtomsCount.Where(kvp => MS2Fragment.ALL_ELEMENTS[kvp.Key].isHeavy))
+            for (int m = 0; m < heavyAtomsCount.Count; ++m)
             {
-                Molecule monoIsotopic = MS2Fragment.ALL_ELEMENTS[row.Key].lightOrigin;
+                if (!MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy) continue;
+                
+                Molecule monoIsotopic = MS2Fragment.ALL_ELEMENTS[(Molecule)m].lightOrigin;
                 //int updateValue = updateElements.;
-                if (atomsCount[monoIsotopic] >= row.Value)
+                if (atomsCount[(int)monoIsotopic] >= heavyAtomsCount[m])
                 {
-                    atomsCount[monoIsotopic] -= row.Value;
-                    atomsCount[row.Key] += row.Value;
+                    atomsCount[(int)monoIsotopic] -= heavyAtomsCount[m];
+                    atomsCount[m] += heavyAtomsCount[m];
                 }
                 else
                 {
-                    atomsCount[row.Key] = atomsCount[monoIsotopic];
-                    atomsCount[monoIsotopic] = 0;
+                    atomsCount[m] = atomsCount[(int)monoIsotopic];
+                    atomsCount[(int)monoIsotopic] = 0;
                 }
             }
         }

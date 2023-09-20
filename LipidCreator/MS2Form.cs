@@ -209,10 +209,11 @@ namespace LipidCreator
                 }
                 
                 
-                foreach (KeyValuePair<Molecule, int> row in fragment.fragmentElements)
+                for (int m = 0; m < fragment.fragmentElements.Count; ++m)
                 {
-                    if (row.Value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
-                    else if (row.Value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
+                    int value = fragment.fragmentElements[m];
+                    if (value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + Convert.ToString(Math.Abs(value));
+                    else if (value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + Convert.ToString(Math.Abs(value));
                 }
                 string combinedChemForm = "";
                 if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))
@@ -272,10 +273,11 @@ namespace LipidCreator
                     }
                 }
                 
-                foreach (KeyValuePair<Molecule, int> row in fragment.fragmentElements)
+                for (int m = 0; m < fragment.fragmentElements.Count; ++m)
                 {
-                    if (row.Value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
-                    else if (row.Value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + Convert.ToString(Math.Abs(row.Value));
+                    int value = fragment.fragmentElements[m];
+                    if (value > 0) chemFormP += MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + Convert.ToString(Math.Abs(value));
+                    else if (value < 0) chemFormN += MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + Convert.ToString(Math.Abs(value));
                 }
                 string combinedChemForm = "";
                 if (baseName.Length > 0 && (chemFormP.Length > 0 || chemFormN.Length > 0))

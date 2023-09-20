@@ -107,9 +107,7 @@ namespace LipidCreator
 
         public static ElementDictionary createEmptyElementDict()
         {
-            ElementDictionary elements = new ElementDictionary();
-            foreach (Molecule elementKey in ALL_ELEMENTS.Keys) elements.Add(elementKey, 0);
-            return elements;
+            return new ElementDictionary();
         }
 
 
@@ -121,16 +119,16 @@ namespace LipidCreator
             {
                 if (ELEMENT_POSITIONS.ContainsKey(elementKvp.Key))
                 {
-                    elements[ELEMENT_POSITIONS[elementKvp.Key]] = elementKvp.Value;
+                    elements[(int)ELEMENT_POSITIONS[elementKvp.Key]] = elementKvp.Value;
                 }
             }
             return elements;
         }
 
 
-        public static bool validElementDict(ElementDictionary dict)
+        public static bool validElementDict(ElementDictionary elements)
         {
-            foreach (int count in dict.Values)
+            foreach (int count in elements)
             {
                 if (count < 0) return false;
             }
@@ -142,12 +140,12 @@ namespace LipidCreator
         
         public static void updateForHeavyLabeled(ElementDictionary originElements, ElementDictionary updateElements)
         {
-            foreach (KeyValuePair<Molecule, int> row in updateElements.Where(kvp => MS2Fragment.ALL_ELEMENTS[kvp.Key].isHeavy))
+            for (int m = 0; m < updateElements.Count; ++m)
             {
-                
-                Molecule monoIsotopic = MS2Fragment.ALL_ELEMENTS[row.Key].lightOrigin;
-                originElements[monoIsotopic] -= row.Value;
-                originElements[row.Key] += row.Value;
+                if (MS2Fragment.ALL_ELEMENTS[(Molecule)m].isHeavy) continue;
+                Molecule monoIsotopic = MS2Fragment.ALL_ELEMENTS[(Molecule)m].lightOrigin;
+                originElements[(int)monoIsotopic] -= updateElements[m];
+                originElements[m] += updateElements[m];
             }
         }
         
@@ -182,7 +180,7 @@ namespace LipidCreator
             ElementDictionary elements = new ElementDictionary();
             foreach (DataRow dr in dt.Rows)
             {
-                elements.Add(ELEMENT_POSITIONS[(string)dr["Shortcut"]], Convert.ToInt32(dr["Count"]));
+                elements[(int)ELEMENT_POSITIONS[(string)dr["Shortcut"]]] = Convert.ToInt32(dr["Count"]);
             }
             return elements;
         }
@@ -191,7 +189,7 @@ namespace LipidCreator
         public static ElementDictionary createFilledElementDict(ElementDictionary copy)
         {
             ElementDictionary elements = new ElementDictionary();
-            foreach (KeyValuePair<Molecule, int> kvp in copy) elements.Add(kvp.Key, kvp.Value);
+            for (int m = 0; m < copy.Count; ++m) elements[m] = copy[m];
             return elements;
         }
         
@@ -199,7 +197,7 @@ namespace LipidCreator
         public ElementDictionary copyElementDict()
         {
             ElementDictionary elements = new ElementDictionary();
-            foreach (KeyValuePair<Molecule, int> kvp in fragmentElements) elements.Add(kvp.Key, kvp.Value);
+            for (int m = 0; m < fragmentElements.Count; ++m) elements[m] = fragmentElements[m];
             return elements;
         }
     
@@ -217,9 +215,9 @@ namespace LipidCreator
             {
                 sb.Append("<fragmentBase>" + fbase + "</fragmentBase>\n");
             }
-            foreach (KeyValuePair<Molecule, int> kvp in fragmentElements)
+            for (int m = 0; m < fragmentElements.Count; ++m)
             {
-                sb.Append("<Element type=\"" + ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
+                sb.Append("<Element type=\"" + ALL_ELEMENTS[(Molecule)m].shortcut + "\">" + Convert.ToString(fragmentElements[m]) + "</Element>\n");
             }
             sb.Append("</MS2Fragment>\n");
         }
@@ -248,7 +246,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        fragmentElements[ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        fragmentElements[(int)ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     default:
@@ -262,12 +260,24 @@ namespace LipidCreator
         
         
     
-        public static void addCounts(ElementDictionary counts1, ElementDictionary counts2, bool subtract = false)
+        public static void addCounts(ElementDictionary counts1, ElementDictionary counts2)
         {
-            int sign = subtract ? -1 : 1;
-            foreach (KeyValuePair<Molecule, int> kvp in counts2)
+            for (int m = 0; m < counts2.Count; ++m)
             {
-                counts1[kvp.Key] += sign * kvp.Value;
+                counts1[m] += counts2[m];
+            }
+        }
+        
+        
+        
+        
+        
+    
+        public static void subtractCounts(ElementDictionary counts1, ElementDictionary counts2)
+        {
+            for (int m = 0; m < counts2.Count; ++m)
+            {
+                counts1[m] -= counts2[m];
             }
         }
         
@@ -295,7 +305,6 @@ namespace LipidCreator
             fragmentFile = "-";
             fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = new ElementDictionary();
-            foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
@@ -310,7 +319,6 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
             fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
-            foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
@@ -324,7 +332,6 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
             fragmentAdduct = _adduct;
-            foreach (Molecule element in ALL_ELEMENTS.Keys) fragmentElements.Add(element, 0);
             fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
@@ -367,7 +374,7 @@ namespace LipidCreator
             fragmentFile = copy.fragmentFile;
             fragmentElements = new ElementDictionary();
             fragmentAdduct = copy.fragmentAdduct;
-            foreach (KeyValuePair<Molecule, int> kvp in copy.fragmentElements) fragmentElements.Add(kvp.Key, kvp.Value);
+            for (int m = 0; m < copy.fragmentElements.Count; ++m) fragmentElements[m] = copy.fragmentElements[m];
             fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);

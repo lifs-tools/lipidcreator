@@ -74,9 +74,9 @@ namespace LipidCreator
             {
                 sb.Append("<AdductRestriction key=\"" + adductRestriction.Key + "\" value=\"" + adductRestriction.Value + "\" />\n");
             }
-            foreach (KeyValuePair<Molecule, int> kvp in elements)
+            for (int m = 0; m < elements.Count; ++m)
             {
-                sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
+                sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "\">" + Convert.ToString(elements[m]) + "</Element>\n");
             }
             foreach (string attribute in attributes)
             {
@@ -89,9 +89,9 @@ namespace LipidCreator
                 foreach (ElementDictionary table in userDefinedFattyAcids)
                 {
                     sb.Append("<DataTable>\n");
-                    foreach (KeyValuePair<Molecule, int> kvp in table)
+                    for (int m = 0; m < table.Count; ++m)
                     {
-                        sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[kvp.Key].shortcut + "\">" + Convert.ToString(kvp.Value) + "</Element>\n");
+                        sb.Append("<Element type=\"" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "\">" + Convert.ToString(table[m]) + "</Element>\n");
                     }
                     sb.Append("</DataTable>\n");
                 }
@@ -121,7 +121,7 @@ namespace LipidCreator
                         break;
                         
                     case "Element":
-                        elements[MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
+                        elements[(int)MS2Fragment.ELEMENT_POSITIONS[child.Attribute("type").Value.ToString()]] = Convert.ToInt32(child.Value.ToString());
                         break;
                         
                     case "Attribute":
@@ -138,7 +138,7 @@ namespace LipidCreator
                             {
                                 if (row.Name.ToString().Equals("Element"))
                                 {
-                                    fattyElements[MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
+                                    fattyElements[(int)MS2Fragment.ELEMENT_POSITIONS[row.Attribute("type").Value.ToString()]] = Convert.ToInt32(row.Value.ToString());
                                 }
                             }
                             userDefinedFattyAcids.Add(fattyElements);

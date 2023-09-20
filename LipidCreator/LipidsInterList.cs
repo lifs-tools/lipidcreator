@@ -65,7 +65,7 @@ namespace LipidCreator
                 DataRow row = precursorDataTable.NewRow();
                 row["Keep"] = precursorData.precursorSelected;
                 row["Precursor name"] = precursorData.precursorName;
-                row["Adduct"] = precursorData.precursorAdduct.ToString();
+                row["Adduct"] = precursorData.precursorAdductFormula;
                 row["Category"] = precursorData.lipidCategory.ToString();
                 row["reference"] = precursorData;
                 precursorDataTable.Rows.Add(row);

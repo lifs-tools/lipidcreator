@@ -39,7 +39,6 @@ using System.Text;
 using System.Text.Json;
 using SkylineTool;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
 
 using log4net;
@@ -59,17 +58,27 @@ namespace LipidCreator
     public delegate void LipidUpdateEventHandler(object sender, EventArgs e);
 
     public delegate void SkylineConnectionClosedEventHandler(object sender, EventArgs e);
-    
-    
-    
-    
-    
-    
 
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};
     public enum RunMode {commandline, standalone, external};
     public enum ChainType {carbonLength, carbonLengthOdd, carbonLengthEven, dbLength, hydroxylLength};
+    public enum LabelPosition {UNIQUE_POS = 0,
+        SPECIFIC_POS = 1,
+        MOLECULE_LIST_NAME_POS = 2,
+        PRECURSOR_NAME_POS = 3,
+        PRECURSOR_NEUTRAL_FORMULA_POS = 4,
+        PRECURSOR_ADDUCT_POS = 5,
+        PRECURSOR_MZ_POS = 6,
+        PRECURSOR_CHARGE_POS = 7,
+        PRODUCT_NAME_POS = 8,
+        PRODUCT_NEUTRAL_FORMULA_POS = 9,
+        PRODUCT_ADDUCT_POS = 10,
+        PRODUCT_MZ_POS = 11,
+        PRODUCT_CHARGE_POS = 12,
+        NOTE_POS = 13,
+        COLLISION_ENERGY_POS = 14
+    }
 
     [Serializable]
     public class LipidCreator : IDisposable
@@ -124,7 +133,7 @@ namespace LipidCreator
         
     
         [NonSerialized]
-        private static readonly HttpClient client = new HttpClient();
+        //private static readonly HttpClient client = new HttpClient();
         private static readonly ILog log = LogManager.GetLogger(typeof(LipidCreator));
         public event LipidUpdateEventHandler Update;
         public event SkylineConnectionClosedEventHandler ConnectionClosed;
@@ -228,6 +237,7 @@ namespace LipidCreator
             PRODUCT_CHARGE,
             NOTE
         };
+            
         
         public static string[] DATA_COLUMN_KEYS;
         public static string[] SKYLINE_API_HEADER;
@@ -275,12 +285,12 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
                             ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
-                            atomsCount[Molecule.C] = Convert.ToInt32(tokens[6]);
-                            atomsCount[Molecule.H] = Convert.ToInt32(tokens[7]);
-                            atomsCount[Molecule.O] = Convert.ToInt32(tokens[8]);
-                            atomsCount[Molecule.N] = Convert.ToInt32(tokens[9]);
-                            atomsCount[Molecule.P] = Convert.ToInt32(tokens[10]);
-                            atomsCount[Molecule.S] = Convert.ToInt32(tokens[11]);
+                            atomsCount[(int)Molecule.C] = Convert.ToInt32(tokens[6]);
+                            atomsCount[(int)Molecule.H] = Convert.ToInt32(tokens[7]);
+                            atomsCount[(int)Molecule.O] = Convert.ToInt32(tokens[8]);
+                            atomsCount[(int)Molecule.N] = Convert.ToInt32(tokens[9]);
+                            atomsCount[(int)Molecule.P] = Convert.ToInt32(tokens[10]);
+                            atomsCount[(int)Molecule.S] = Convert.ToInt32(tokens[11]);
                             
                             string fragmentFile = Path.Combine(prefixPath, Path.Combine(tokens[3].Split(new char[]{'/'})));
                             if (tokens[3] != "%" && !File.Exists(fragmentFile))
@@ -357,13 +367,13 @@ namespace LipidCreator
                             
                             headgroup.name = tokens[1];
                             headgroup.trivialName = tokens[2];
-                            headgroup.elements[Molecule.C] = Convert.ToInt32(tokens[3]); // carbon
-                            headgroup.elements[Molecule.H] = Convert.ToInt32(tokens[4]); // hydrogen
-                            headgroup.elements[Molecule.H2] = Convert.ToInt32(tokens[9]); // hydrogen 2
-                            headgroup.elements[Molecule.O] = Convert.ToInt32(tokens[5]); // oxygen
-                            headgroup.elements[Molecule.N] = Convert.ToInt32(tokens[6]); // nytrogen
-                            headgroup.elements[Molecule.P] = Convert.ToInt32(tokens[7]); // phosphor
-                            headgroup.elements[Molecule.S] = Convert.ToInt32(tokens[8]); // sulfor
+                            headgroup.elements[(int)Molecule.C] = Convert.ToInt32(tokens[3]); // carbon
+                            headgroup.elements[(int)Molecule.H] = Convert.ToInt32(tokens[4]); // hydrogen
+                            headgroup.elements[(int)Molecule.H2] = Convert.ToInt32(tokens[9]); // hydrogen 2
+                            headgroup.elements[(int)Molecule.O] = Convert.ToInt32(tokens[5]); // oxygen
+                            headgroup.elements[(int)Molecule.N] = Convert.ToInt32(tokens[6]); // nytrogen
+                            headgroup.elements[(int)Molecule.P] = Convert.ToInt32(tokens[7]); // phosphor
+                            headgroup.elements[(int)Molecule.S] = Convert.ToInt32(tokens[8]); // sulfor
                             if (tokens[10].Length > 0)
                             {
                                 string backboneFile = Path.Combine(prefixPath, Path.Combine(tokens[10].Split(new char[]{'/'})));
@@ -668,9 +678,11 @@ namespace LipidCreator
                 log.Info("Running LipidCreator version " + LC_VERSION_NUMBER + " in " + (skylineToolClient == null ? "standalone":"skyline tool") + " mode on " + LC_OS.ToString());
                 log.Info("Using " + prefixPath + " as base directory for relative resource lookup. Resolved executing assembly location: " + new System.IO.FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location));
             }
+            /*
             if (!openedAsExternal) {
                 LipidCreator.updateAvailableRequest().ConfigureAwait(false);
             }
+            */
             registeredLipids = new ArrayList();
             registeredLipidDictionary = new Dictionary<ulong, Lipid>();
             categoryToClass = new Dictionary<int, ArrayList>();
@@ -878,9 +890,6 @@ namespace LipidCreator
         public void createFragmentList(string instrument, MonitoringTypes monitoringType, ArrayList parameters)
         {
             analytics(ANALYTICS_CATEGORY, "create-transition-list-" + runMode);
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            
             
             transitionList = addDataColumns(new DataTable ());
             transitionListUnique = addDataColumns (new DataTable ());
@@ -923,13 +932,7 @@ namespace LipidCreator
                     }
                     Lipid.computeFragmentData(transitionList, precursorData, allFragments, headgroups, parameters, collisionEnergyHandler, instrument, monitoringType, CE, minCE, maxCE);
                 }
-            }            
-            
-            
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed);
-            watch = new Stopwatch();
-            watch.Start();
+            }
             
             if ((int)parameters[1] != 0)
             {
@@ -954,11 +957,6 @@ namespace LipidCreator
                 }
             }
             
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed);
-            watch = new Stopwatch();
-            watch.Start();
-            
             // check for duplicates
             IDictionary<String, ArrayList> replicateKeys = new Dictionary<String, ArrayList> ();
             foreach (DataRow row in transitionList.Rows)
@@ -969,11 +967,6 @@ namespace LipidCreator
                 if (!replicateKeys.ContainsKey (replicateKey)) replicateKeys.Add(replicateKey, new ArrayList());
                 replicateKeys[replicateKey].Add(row);
             }
-            
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed);
-            watch = new Stopwatch();
-            watch.Start();
                 
             foreach (string replicateKey in replicateKeys.Keys)
             {
@@ -1023,15 +1016,12 @@ namespace LipidCreator
                 }
                 transitionListUnique.ImportRow(row);
             }
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed);
         }
         
         
         
         public void assembleLipids(bool asDeveloper, ArrayList parameters)
         {
-
             List<string> headerList = new List<string>();
             headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
             if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
@@ -1061,7 +1051,6 @@ namespace LipidCreator
         
         public void assemblePrecursors()
         {
-
             List<string> headerList = new List<string>();
             headerList.AddRange(STATIC_DATA_COLUMN_KEYS);
             if (selectedInstrumentForCE.Length > 0) headerList.Add(COLLISION_ENERGY);
@@ -1497,10 +1486,10 @@ namespace LipidCreator
             String chemForm = "";
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
-                int numElements = elements[molecule];
+                int numElements = elements[(int)molecule];
                 foreach (Molecule heavyMolecule in MS2Fragment.ALL_ELEMENTS[molecule].derivatives)
                 {
-                    numElements += elements[heavyMolecule];
+                    numElements += elements[(int)heavyMolecule];
                 }
             
                 if (numElements > 0)
@@ -1523,29 +1512,29 @@ namespace LipidCreator
             String adductForm = "[M";
             if (elements != null)
             {
-                if (adduct.name == "-H")
+                if (adduct.name.Equals("-H"))
                 {
-                    if (elements[Molecule.H] < 1)
+                    if (elements[(int)Molecule.H] < 1)
                     {
-                        elements[Molecule.H2] += elements[Molecule.H] - 1;
-                        elements[Molecule.H] = 1;
+                        elements[(int)Molecule.H2] += elements[(int)Molecule.H] - 1;
+                        elements[(int)Molecule.H] = 1;
                     }
                 }
-                else if (adduct.name == "-2H")
+                else if (adduct.name.Equals("-2H"))
                 {
-                    if (elements[Molecule.H] < 2)
+                    if (elements[(int)Molecule.H] < 2)
                     {
-                        elements[Molecule.H2] += elements[Molecule.H] - 2;
-                        elements[Molecule.H] = 2;
+                        elements[(int)Molecule.H2] += elements[(int)Molecule.H] - 2;
+                        elements[(int)Molecule.H] = 2;
                     }
                 }
             
             
                 foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
                 {
-                    if (elements[molecule] > 0)
+                    if (elements[(int)molecule] > 0)
                     {
-                        adductForm += Convert.ToString(elements[molecule]) + MS2Fragment.ALL_ELEMENTS[molecule].shortcutIUPAC;
+                        adductForm += Convert.ToString(elements[(int)molecule]) + MS2Fragment.ALL_ELEMENTS[molecule].shortcutIUPAC;
                     }
                 }
             }
@@ -1565,9 +1554,9 @@ namespace LipidCreator
             string label = "";
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
-                if (elements[molecule] > 0)
+                if (elements[(int)molecule] > 0)
                 {
-                    label += MS2Fragment.ALL_ELEMENTS[molecule].shortcutNomenclature + ((elements[molecule] > 1) ? Convert.ToString(elements[molecule]) : "");
+                    label += MS2Fragment.ALL_ELEMENTS[molecule].shortcutNomenclature + ((elements[(int)molecule] > 1) ? Convert.ToString(elements[(int)molecule]) : "");
                 }
             }
             if (label.Length > 0) label = "(+" + label + ")";
@@ -1580,10 +1569,10 @@ namespace LipidCreator
         public static double computeMass(ElementDictionary elements, double charge)
         {
             double mass = 0;
-            foreach (KeyValuePair<Molecule, int> row in elements)
+            for (int m = 0; m < elements.Count; ++m)
             {
-                if (row.Value < 0) throw new LipidException(row.Key, row.Value, "For element '" + MS2Fragment.ALL_ELEMENTS[row.Key].shortcut + "' the count dropped below zero to " + row.Value);
-                mass += row.Value * MS2Fragment.ALL_ELEMENTS[row.Key].mass;
+                if (elements[m] < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
+                mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
             }
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);
         }
@@ -2047,6 +2036,7 @@ namespace LipidCreator
         }
 
 
+        /*
         public static async Task<bool> updateAvailableRequest() {
             try	
             {
@@ -2081,7 +2071,7 @@ namespace LipidCreator
             } 
             return false;
         }
-        
+        */
         
         public static string[] precursorNameSplit(string precursorName)
         {
@@ -2189,8 +2179,8 @@ namespace LipidCreator
                 Molecule elementIndex = MS2Fragment.ELEMENT_POSITIONS[row.Key];
                 Molecule heavyIndex = MS2Fragment.ELEMENT_POSITIONS[(string)row.Value[2]];
                 
-                elements[elementIndex] = (int)row.Value[0];
-                elements[heavyIndex] = (int)row.Value[1];
+                elements[(int)elementIndex] = (int)row.Value[0];
+                elements[(int)heavyIndex] = (int)row.Value[1];
                 
             }
             return elements;

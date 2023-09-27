@@ -136,7 +136,8 @@ namespace LipidCreator
                     MS2Fragment.addCounts(atomsCount, adduct.elements);
                     double mass = LipidCreator.computeMass(atomsCount, charge);
                                     
-                    string newKey = precNames[0] + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
+                    
+                    string newKey = (lipidCreator.headgroups.ContainsKey(headgroup) ? lipidCreator.headgroups[headgroup].trivialName : precNames[0]) + LipidCreator.computeHeavyIsotopeLabel(atomsCount);
                                                         
                     PrecursorData precursorData = new PrecursorData();
                     precursorData.lipidCategory = LipidCategory.LipidMediator;

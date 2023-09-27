@@ -528,8 +528,8 @@ namespace LipidCreator
                 
                 
                 classTable = new DataTable();
-                classTable.Columns.Add(TRIVIAL_NAME, typeof(String));
                 classTable.Columns.Add(SYSTEMATIC_NAME, typeof(String));
+                classTable.Columns.Add(TRIVIAL_NAME, typeof(String));
                 
                 double minVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].minCE;
                 double maxVal = (double)creatorGUI.lipidCreator.msInstruments[selectedInstrument].maxCE;
@@ -541,7 +541,7 @@ namespace LipidCreator
                 foreach(string lipidClass in collisionEnergies[selectedInstrument].Keys)
                 {
                     string trivialName = creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) ? creatorGUI.lipidCreator.headgroups[lipidClass].trivialName : "";
-                    classTable.Rows.Add(new String[] { trivialName, lipidClass });
+                    classTable.Rows.Add(new String[] { lipidClass, trivialName });
                 }
                 
                 classTable.DefaultView.Sort = TRIVIAL_NAME;

@@ -262,7 +262,7 @@ namespace LipidCreator
         public void readInputFiles()
         {
             int lineCounter = 1;
-            string ms2FragmentsFile = Path.Combine(prefixPath, "data", "ms2fragments.csv");
+            string ms2FragmentsFile = Path.Combine(prefixPath, "data", "MS2Fragments", "ms2fragments.csv");
             if (File.Exists(ms2FragmentsFile))
             {
                 try
@@ -285,26 +285,21 @@ namespace LipidCreator
                                 allFragments[tokens[0]].Add(true, new Dictionary<string, MS2Fragment>());
                             }
                             ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
-                            atomsCount[(int)Molecule.C] = Convert.ToInt32(tokens[6]);
-                            atomsCount[(int)Molecule.H] = Convert.ToInt32(tokens[7]);
-                            atomsCount[(int)Molecule.O] = Convert.ToInt32(tokens[8]);
-                            atomsCount[(int)Molecule.N] = Convert.ToInt32(tokens[9]);
-                            atomsCount[(int)Molecule.P] = Convert.ToInt32(tokens[10]);
-                            atomsCount[(int)Molecule.S] = Convert.ToInt32(tokens[11]);
+                            atomsCount[(int)Molecule.C] = Convert.ToInt32(tokens[5]);
+                            atomsCount[(int)Molecule.H] = Convert.ToInt32(tokens[6]);
+                            atomsCount[(int)Molecule.O] = Convert.ToInt32(tokens[7]);
+                            atomsCount[(int)Molecule.N] = Convert.ToInt32(tokens[8]);
+                            atomsCount[(int)Molecule.P] = Convert.ToInt32(tokens[9]);
+                            atomsCount[(int)Molecule.S] = Convert.ToInt32(tokens[10]);
                             
-                            string fragmentFile = Path.Combine(prefixPath, Path.Combine(tokens[3].Split(new char[]{'/'})));
-                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
-                            {
-                                log.Error("At line " + lineCounter + ": file '" + fragmentFile + "' does not exist or can not be opened.");
-                                throw new Exception();
-                            }
-                            int charge = Convert.ToInt32(tokens[4]);
+                            
+                            int charge = Convert.ToInt32(tokens[3]);
                             Adduct adduct = Lipid.chargeToAdduct[charge];
                             if (allFragments[tokens[0]][charge >= 0].ContainsKey(tokens[2]))
                             {
                                 throw new Exception(String.Format("Error: fragment '{0}{1}' already inserted in lipid '{2}'", tokens[2], (charge >= 0 ? "+" : "-"), tokens[0]));
                             }
-                            allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, fragmentFile, atomsCount, tokens[5], tokens[12] == "1"));
+                            allFragments[tokens[0]][charge >= 0].Add(tokens[2], new MS2Fragment(tokens[2], tokens[1], adduct, "", atomsCount, tokens[4], tokens[11] == "1"));
                         }
                     }
                 }
@@ -319,6 +314,65 @@ namespace LipidCreator
                 log.Error("Error: file '" + ms2FragmentsFile + "' does not exist or can not be opened.");
                 throw new Exception();
             }
+            
+            
+            
+            
+            
+            lineCounter = 1;
+            string ms2FragmentImageFile = Path.Combine(prefixPath, "data", "ms2fragment-images.csv");
+            if (File.Exists(ms2FragmentImageFile))
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader(ms2FragmentImageFile))
+                    {
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            
+                            string[] tokens = parseLine(line);
+                            
+                            int charge = Convert.ToInt32(tokens[2]);
+                            
+                            
+                            if (!allFragments.ContainsKey(tokens[0]))
+                            {
+                                throw new Exception(String.Format("Error: lipid class '{0}' unknown", tokens[0]));
+                            }
+                            
+                            if (!allFragments[tokens[0]][charge >= 0].ContainsKey(tokens[1]))
+                            {
+                                throw new Exception(String.Format("Error: fragment '{0}{1}' not inserted in lipid class '{2}'", tokens[1], (charge >= 0 ? "+" : "-"), tokens[0]));
+                            }
+                            
+                            string fragmentFile = Path.Combine(prefixPath, Path.Combine(tokens[3].Split(new char[]{'/'})));
+                            if (tokens[3] != "%" && !File.Exists(fragmentFile))
+                            {
+                                log.Error("At line " + lineCounter + ": file '" + fragmentFile + "' does not exist or can not be opened.");
+                                throw new Exception();
+                            }
+                            
+                            allFragments[tokens[0]][charge >= 0][tokens[1]].fragmentFile = fragmentFile;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error("The file '" + ms2FragmentImageFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    throw new Exception();
+                }
+            }
+            else
+            {
+                log.Error("Error: file '" + ms2FragmentImageFile + "' does not exist or can not be opened.");
+                throw new Exception();
+            }
+            
+            
             
             
             

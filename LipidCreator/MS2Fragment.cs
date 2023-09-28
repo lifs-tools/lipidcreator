@@ -346,7 +346,7 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentAdduct = _adduct;
             fragmentElements = dataElements;
-            fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            fragmentBase = (baseForms.Length > 0) ? new ArrayList(baseForms.Split(new char[] {';'})) : new ArrayList();
             userDefined = false;
             specific = false;
         }
@@ -360,7 +360,7 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentAdduct = _adduct;
             fragmentElements = dataElements;
-            fragmentBase = new ArrayList(baseForms.Split(new char[] {';'}));
+            fragmentBase = (baseForms.Length > 0) ? new ArrayList(baseForms.Split(new char[] {';'})) : new ArrayList();
             userDefined = false;
             specific = _specific;
         }

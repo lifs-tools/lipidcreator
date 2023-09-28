@@ -498,6 +498,20 @@ namespace LipidCreator
                 {
                     HashSet<string> blocks = new HashSet<string>();
                     foreach (string fragmentBase in ms2fragment.fragmentBase) blocks.Add(fragmentBase);
+                    if (blocks.Count == 0) continue;
+                    blocks.ExceptWith(buildingBlockSets[headgroupType]);
+                    if (blocks.Count > 0)
+                    {
+                        log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
+                        throw new Exception();
+                    }
+                }
+                
+                foreach (MS2Fragment ms2fragment in allFragments[headgroupName][false].Values)
+                {
+                    HashSet<string> blocks = new HashSet<string>();
+                    foreach (string fragmentBase in ms2fragment.fragmentBase) blocks.Add(fragmentBase);
+                    if (blocks.Count == 0) continue;
                     blocks.ExceptWith(buildingBlockSets[headgroupType]);
                     if (blocks.Count > 0)
                     {
@@ -508,6 +522,22 @@ namespace LipidCreator
             }
             
             
+            foreach (KeyValuePair<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> headgroup_map in allFragments)
+            {
+                foreach (KeyValuePair<bool, IDictionary<string, MS2Fragment>> charge_map in headgroup_map.Value)
+                {
+                    foreach (KeyValuePair<string, MS2Fragment> ms2fragment_pair in charge_map.Value)
+                    {
+                        MS2Fragment ms2fragment = ms2fragment_pair.Value;
+                        if (ms2fragment.fragmentBase.Count == 0) continue;
+                            
+                        if (ms2fragment.fragmentFile.Equals(""))
+                        {
+                            log.Warn(String.Format("Warning: fragment '{0}{1}' not inserted in lipid class '{2}'", ms2fragment.fragmentName, (charge_map.Key ? "+" : "-"), headgroup_map.Key));
+                        }
+                    }
+                }
+            }
             
             
             string instrumentsFile = Path.Combine(prefixPath, "data", "ms-instruments.csv");

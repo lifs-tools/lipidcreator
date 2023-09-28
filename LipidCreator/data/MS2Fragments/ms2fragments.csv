@@ -697,11 +697,14 @@ TXB3,m/z 169.0869,m/z 169.0869,-1,,0,0,0,0,0,0,0
 TXB3,m/z 151.1126,m/z 151.1126,-1,,0,0,0,0,0,0,0
 TXB3,m/z 125.0971,m/z 125.0971,-1,,0,0,0,0,0,0,0
 TXB3,m/z 69.0342,m/z 69.0342,-1,,0,0,0,0,0,0,0
+
 BMP,"HG(GP,155)","HG(GP,155)",1,HG,-3,-6,-3,0,0,0,1
 BMP,"HG(GPG,211)","HG(GPG,211)",1,HG,0,-2,-2,0,0,0,1
 BMP,"-(NH3,17)","-(NH3,17)",1,HG;FA1;FA2,0,0,0,0,0,0,1
 BMP,"-(2H2O,36)","-(2H2O,36)",1,HG;FA1;FA2,0,-4,-2,0,0,0,1
 BMP,"-HG(GP,172)","-HG(GP,172)",1,HG;FA1;FA2,-3,-9,-6,0,-1,0,1
+BMP,FA [xx:x](+C3H6O1),FA1(+C3H6O),1,FA1;HG,-3,-6,-7,0,-1,0,1
+BMP,FA [yy:y](+C3H6O1),FA2(+C3H6O),1,FA2;HG,-3,-6,-7,0,-1,0,1
 BMP,FA [yy:y](+C3H4O) + HG(GP),FA2(+C3H4O) + HG(GP),1,FA2;HG,0,-2,-1,0,0,0,0
 BMP,FA [xx:x](+C3H4O) + HG(GP),FA1(+C3H4O) + HG(GP),1,FA1;HG,0,-2,-1,0,0,0,0
 BMP,FA [xx:x](+C3H5O4P),FA1(+C3H5O4P),1,FA1;HG,-3,-7,-4,0,0,0,0
@@ -1218,6 +1221,7 @@ SHexCer,"-HG(SHex,260)","-HG(SHex,260)",1,HG;LCB;FA,-6,-12,-9,0,0,-1,1
 SHexCer,"-HG(SHex,278)","-HG(SHex,278)",1,HG;LCB;FA,-6,-14,-10,0,0,-1,1
 SHexCer,"-HG(SHex,242)","-HG(SHex,242)",1,HG;LCB;FA,-6,-10,-8,0,0,-1,1
 SHexCer,"HG(S,97)","HG(S,97)",-1,HG,-6,-8,-4,0,0,0,1
+SHexCer,"HG(SHexCer,300)","HG(SHexCer,300)",-1,HG,2,5,1,1,0,0,1
 SHexCer,"HG(SHexCer,241)","HG(SHexCer,241)",-1,HG,0,0,0,0,0,0,1
 SHexCer,HG(SHexCer)+(C2H5NO),HG(SHexCer)+(C2H5NO),-1,HG,2,5,1,1,0,0,1
 SHexCer,"-HG(SHexCer,242)","-HG(SHexCer,242)",-1,HG;LCB;FA,-6,-10,-8,0,0,-1,1
@@ -1460,9 +1464,9 @@ PEt,FA [yy:y](+C3H6O2),FA2(+C3H6O2),1,FA2;HG,-2,-6,-4,0,-1,0,0
 PEt,FA [xx:x](+C3H6O2),FA1(+C3H6O2),1,FA1;HG,-2,-6,-4,0,-1,0,0
 PEt,FA [yy:y](+C3H4O) + HG(PEt),FA2(+C3H4O) + HG(PEt),1,FA2;HG,0,-1,-1,0,0,0,0
 PEt,FA [xx:x](+C3H4O) + HG(PEt),FA1(+C3H4O) + HG(PEt),1,FA1;HG,0,-1,-1,0,0,0,0
+PG,"-HG(PG,172)","-HG(PG,172)",1,HG;FA1;FA2,-3,-9,-6,0,-1,0,1
 PG,FA [xx:x](+O),FA1(+O),-1,FA1,0,1,1,0,0,0,0
 PG,-FA [xx:x](+HO),-FA1(+HO),-1,FA2;HG,0,-1,-1,0,0,0,0
-PG,"-HG(PG,172)","-HG(PG,172)",1,HG;FA1;FA2,-3,-9,-6,0,-1,0,1
 PG,-FA [xx:x](-H),-FA1(-H),-1,FA2;HG,0,1,0,0,0,0,0
 PG,FA [yy:y](+O),FA2(+O),-1,FA2,0,1,1,0,0,0,0
 PG,-FA [yy:y](+HO),-FA2(+HO),-1,FA1;HG,0,-1,-1,0,0,0,0
@@ -1626,6 +1630,7 @@ PS,-FA [xx:x](+H)-(C3H5NO2),-FA1(+HO)-(C3H5NO2),1,FA2;HG,-3,-7,-6,-1,-1,0,0
 PS,-FA [yy:y](+H)-(C3H5NO2),-FA2(+HO)-(C3H5NO2),1,FA1;HG,-3,-7,-6,-1,-1,0,0
 SM,"HG(PC,184)","HG(PC,184)",1,HG,0,2,1,0,0,0,1
 SM,LCB [xx:x;x](-H3O2),LCB(-H3O2),1,LCB,0,-3,-2,0,0,0,0
+SM,-(CH3[adduct]),-(CH3[adduct]),-1,HG;LCB;FA,-1,-2,0,0,0,0,0
 SM,"-(H2O,18)","-(H2O,18)",1,HG;LCB;FA,0,-2,-1,0,0,0,1
 SM,-FA [xx:x](+H),-FA(+H),1,HG;LCB,0,-1,-1,0,0,0,0
 SM,-(NC3H9) - (H2O),-(NC3H9) - (H2O),1,HG;LCB;FA,-3,-11,-1,-1,0,0,0
@@ -1634,7 +1639,8 @@ SM,"HG(PC,168)","HG(PC,168)",-1,HG,-1,0,1,0,0,0,1
 SM,P(79),P(79),-1,HG,-5,-11,0,-1,0,0,1
 SM,FA [xx:x](+O),FA1(+O),-1,FA,0,1,1,0,0,0,0
 SM,-(CH3),-(CH3),-1,HG;LCB;FA,-1,-2,0,0,0,0,0
-SM,-FA [xx:x](+H) - (CH3),-FA(+H) - (CH3),-1,HG;LCB,-1,-1,0,0,0,0,0
+SM,-FA [xx:x](+O),-FA1(+O),-1,HG;LCB,-1,-1,0,0,0,0,0,1,0,0
+LSM,-(CH3[adduct]),-(CH3[adduct]),-1,HG;LCB,-1,-1,0,0,0,0,0
 LSM,"HG(PC,184)","HG(PC,184)",1,HG,0,1,1,0,0,0,1
 LSM,LCB [xx:x;x](-H3O2),LCB(-H3O2),1,LCB,0,-3,-2,0,0,0,0
 LSM,"HG(PC,168)","HG(PC,168)",-1,HG,-1,-1,1,0,0,0,1

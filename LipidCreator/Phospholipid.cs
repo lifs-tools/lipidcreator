@@ -191,25 +191,25 @@ namespace LipidCreator
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     containsMonoLyso &= ~1;
-                    if (fa1.suffix == "x") containsMonoLyso |= 1;
+                    if (fa1.prefix == "x") containsMonoLyso |= 1;
                     
                     // calling all possible fatty acid 2 combinations
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
                         containsMonoLyso &= ~2;
-                        if (fa2.suffix == "x") containsMonoLyso |= 2;
+                        if (fa2.prefix == "x") containsMonoLyso |= 2;
                     
                         // calling all possible fatty acid 3 combinations
                         foreach (FattyAcid fa3 in fag3.getFattyAcids())
                         {
                             containsMonoLyso &= ~4;
-                            if (fa3.suffix == "x") containsMonoLyso |= 4;
+                            if (fa3.prefix == "x") containsMonoLyso |= 4;
                     
                             // calling all possible fatty acid 4 combinations
                             foreach (FattyAcid fa4 in fag4.getFattyAcids())
                             {
                                 containsMonoLyso &= ~8;
-                                if (fa4.suffix == "x") containsMonoLyso |= 8;
+                                if (fa4.prefix == "x") containsMonoLyso |= 8;
                                                 
                                 // sort fatty acids and check if lipid is monolyso cardiolipin
                                 List<FattyAcid> sortedAcids = new List<FattyAcid>();
@@ -221,7 +221,7 @@ namespace LipidCreator
                                 String headgroup = (containsMonoLyso == 0) ? "CL" : "LCL";
                                 
                                 // create species id i.e. key for avoiding double entries
-                                var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                var fattys = from fa in sortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                                 string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                                 
                                     
@@ -325,7 +325,7 @@ namespace LipidCreator
                                         heavySpeciesFA.merge(heavyFA4);
                                         
                                         
-                                        var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                        var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                                         string heavyFattyComp = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, heavyFattys);
                                                                             
                                         // filling information on MS1 level for heavy cardiolipin
@@ -367,10 +367,10 @@ namespace LipidCreator
                 {
                     bool isPlamalogen1 = false;
                     bool isFAa1 = false;
-                    switch (fa1.suffix)
+                    switch (fa1.prefix)
                     {
-                        case "a": isFAa1 = true; break;
-                        case "p": isPlamalogen1 = true; break;
+                        case "O": isFAa1 = true; break;
+                        case "P": isPlamalogen1 = true; break;
                         default: break;
                     }
                     
@@ -388,21 +388,21 @@ namespace LipidCreator
                         
                         
                         if ((isFAa || isPlamalogen) && (headgroup.Equals("LPC") || headgroup.Equals("LPE"))) continue;
-                        if (headgroup.Equals("LPC O-p") || headgroup.Equals("LPE O-p"))
+                        if (headgroup.Equals("LPC P") || headgroup.Equals("LPE P"))
                         {
                             if (isFAa || !isPlamalogen) continue;
-                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
-                            goslinHeadgroup = headgroup.Replace(" O-p", "");
+                            modifiedHeadgroup += "-";
+                            goslinHeadgroup = headgroup.Replace(" P", "");
                             PLsep = "";
-                            fa1.suffix = "p";
+                            fa1.prefix = "P";
                         }
-                        else if (headgroup.Equals("LPC O-a") || headgroup.Equals("LPE O-a"))
+                        else if (headgroup.Equals("LPC O") || headgroup.Equals("LPE O"))
                         {
                             if (!isFAa || isPlamalogen) continue;
-                            modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
-                            goslinHeadgroup = headgroup.Replace(" O-a", "");
+                            modifiedHeadgroup += "-";
+                            goslinHeadgroup = headgroup.Replace(" O", "");
                             PLsep = "";
-                            fa1.suffix = "a";
+                            fa1.prefix = "O";
                         }
                         
                         // goslin
@@ -463,11 +463,11 @@ namespace LipidCreator
                                 string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
                                 if (isPlamalogen)
                                 {
-                                    heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-p", "O-");
+                                    heavyModifiedHeadgroup += "-";
                                 }
                                 else if (isFAa)
                                 {
-                                    heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-a", "O-");
+                                    heavyModifiedHeadgroup += "-";
                                 }
                                 
                                 if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
@@ -524,10 +524,10 @@ namespace LipidCreator
                     bool isPlamalogen1 = false;
                     bool isFAa1 = false;
                         
-                    switch (fa1.suffix)
+                    switch (fa1.prefix)
                     {
-                        case "a": isFAa1 = true; break;
-                        case "p": isPlamalogen1 = true; break;
+                        case "O": isFAa1 = true; break;
+                        case "P": isPlamalogen1 = true; break;
                         default: break;
                     }
                     
@@ -551,32 +551,32 @@ namespace LipidCreator
                             bool isSorted = true;
                             string PLsep = " ";
                             string modifiedHeadgroup = headgroup;
-                        string goslinHeadgroup = headgroup;
+                            string goslinHeadgroup = headgroup;
                             if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
                             
                             
-                            if (headgroup.Equals("PC O-p") || headgroup.Equals("PE O-p"))
+                            if (headgroup.Equals("PC P") || headgroup.Equals("PE P"))
                             {
                                 if (isFAa || !isPlamalogen) continue;
-                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-p", "O-");
-                                goslinHeadgroup = headgroup.Replace(" O-p", "");
+                                modifiedHeadgroup += "-";
+                                goslinHeadgroup = headgroup.Replace(" P", "");
                                 PLsep = "";
-                                fa1.suffix = "p";
+                                fa1.prefix = "P";
                             }
-                            else if (headgroup.Equals("PC O-a") || headgroup.Equals("PE O-a"))
+                            else if (headgroup.Equals("PC O") || headgroup.Equals("PE O"))
                             {
                                 if (!isFAa || isPlamalogen) continue;
-                                modifiedHeadgroup = modifiedHeadgroup.Replace("O-a", "O-");
-                                goslinHeadgroup = headgroup.Replace(" O-a", "");
+                                modifiedHeadgroup += "-";
+                                goslinHeadgroup = headgroup.Replace(" O", "");
                                 PLsep = "";
-                                fa1.suffix = "a";
+                                fa1.prefix = "O";
                             }
                             if (isPlamalogen || isFAa) isSorted = false;
                             
                             
                             
                             
-                            var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                            var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                             string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                         
                             // goslin
@@ -655,11 +655,11 @@ namespace LipidCreator
                                     string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
                                     if (isPlamalogen)
                                     {
-                                        heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-p", "O-");
+                                        heavyModifiedHeadgroup += "-";
                                     }
                                     else if (isFAa)
                                     {
-                                        heavyModifiedHeadgroup = heavyModifiedHeadgroup.Replace("O-a", "O-");
+                                        heavyModifiedHeadgroup += "-";
                                     }
                                     
                                     if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
@@ -689,7 +689,7 @@ namespace LipidCreator
                                     string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                     
                                     
-                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                                     string heavyFattyComp = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
                                     
                                     

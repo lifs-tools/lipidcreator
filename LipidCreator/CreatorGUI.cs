@@ -634,24 +634,24 @@ namespace LipidCreator
                     glHydroxyl1Textbox.Text = currentGlycerolipid.fag1.hydroxylInfo;
                     glFA1Combobox.SelectedIndex = currentGlycerolipid.fag1.chainType;
                     glFA1Checkbox1.Checked = currentGlycerolipid.fag1.faTypes["FA"];
-                    glFA1Checkbox2.Checked = currentGlycerolipid.fag1.faTypes["FAp"];
-                    glFA1Checkbox3.Checked = currentGlycerolipid.fag1.faTypes["FAa"];
+                    glFA1Checkbox2.Checked = currentGlycerolipid.fag1.faTypes["FAP"];
+                    glFA1Checkbox3.Checked = currentGlycerolipid.fag1.faTypes["FAO"];
                     
                     glFA2Textbox.Text = currentGlycerolipid.fag2.lengthInfo;
                     glDB2Textbox.Text = currentGlycerolipid.fag2.dbInfo;
                     glHydroxyl2Textbox.Text = currentGlycerolipid.fag2.hydroxylInfo;
                     glFA2Combobox.SelectedIndex = currentGlycerolipid.fag2.chainType;
                     glFA2Checkbox1.Checked = currentGlycerolipid.fag2.faTypes["FA"];
-                    glFA2Checkbox2.Checked = currentGlycerolipid.fag2.faTypes["FAp"];
-                    glFA2Checkbox3.Checked = currentGlycerolipid.fag2.faTypes["FAa"];
+                    glFA2Checkbox2.Checked = currentGlycerolipid.fag2.faTypes["FAP"];
+                    glFA2Checkbox3.Checked = currentGlycerolipid.fag2.faTypes["FAO"];
                     
                     glFA3Textbox.Text = currentGlycerolipid.fag3.lengthInfo;
                     glDB3Textbox.Text = currentGlycerolipid.fag3.dbInfo;
                     glHydroxyl3Textbox.Text = currentGlycerolipid.fag3.hydroxylInfo;
                     glFA3Combobox.SelectedIndex = currentGlycerolipid.fag3.chainType;
                     glFA3Checkbox1.Checked = currentGlycerolipid.fag3.faTypes["FA"];
-                    glFA3Checkbox2.Checked = currentGlycerolipid.fag3.faTypes["FAp"];
-                    glFA3Checkbox3.Checked = currentGlycerolipid.fag3.faTypes["FAa"];
+                    glFA3Checkbox2.Checked = currentGlycerolipid.fag3.faTypes["FAP"];
+                    glFA3Checkbox3.Checked = currentGlycerolipid.fag3.faTypes["FAO"];
                     
                     glPosAdductCheckbox1.Checked = currentGlycerolipid.adducts["+H"];
                     glPosAdductCheckbox2.Checked = currentGlycerolipid.adducts["+2H"];
@@ -729,32 +729,32 @@ namespace LipidCreator
                         plHydroxyl1Textbox.Text = currentPhospholipid.fag1.hydroxylInfo;
                         plFA1Combobox.SelectedIndex = currentPhospholipid.fag1.chainType;
                         plFA1Checkbox1.Checked = currentPhospholipid.fag1.faTypes["FA"];
-                        plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes["FAp"];
-                        plFA1Checkbox3.Checked = currentPhospholipid.fag1.faTypes["FAa"];
+                        plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes["FAP"];
+                        plFA1Checkbox3.Checked = currentPhospholipid.fag1.faTypes["FAO"];
                         
                         plFA2Textbox.Text = currentPhospholipid.fag2.lengthInfo;
                         plDB2Textbox.Text = currentPhospholipid.fag2.dbInfo;
                         plHydroxyl2Textbox.Text = currentPhospholipid.fag2.hydroxylInfo;
                         plFA2Combobox.SelectedIndex = currentPhospholipid.fag2.chainType;
                         plFA2Checkbox1.Checked = currentPhospholipid.fag2.faTypes["FA"];
-                        plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes["FAp"];
-                        plFA2Checkbox3.Checked = currentPhospholipid.fag2.faTypes["FAa"];
+                        plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes["FAP"];
+                        plFA2Checkbox3.Checked = currentPhospholipid.fag2.faTypes["FAO"];
                         
                         clFA3Textbox.Text = currentPhospholipid.fag3.lengthInfo;
                         clDB3Textbox.Text = currentPhospholipid.fag3.dbInfo;
                         clHydroxyl3Textbox.Text = currentPhospholipid.fag3.hydroxylInfo;
                         clFA3Combobox.SelectedIndex = currentPhospholipid.fag3.chainType;
                         clFA3Checkbox1.Checked = currentPhospholipid.fag3.faTypes["FA"];
-                        clFA3Checkbox2.Checked = currentPhospholipid.fag3.faTypes["FAp"];
-                        clFA3Checkbox3.Checked = currentPhospholipid.fag3.faTypes["FAa"];
+                        clFA3Checkbox2.Checked = currentPhospholipid.fag3.faTypes["FAP"];
+                        clFA3Checkbox3.Checked = currentPhospholipid.fag3.faTypes["FAO"];
                         
                         clFA4Textbox.Text = currentPhospholipid.fag4.lengthInfo;
                         clDB4Textbox.Text = currentPhospholipid.fag4.dbInfo;
                         clHydroxyl4Textbox.Text = currentPhospholipid.fag4.hydroxylInfo;
                         clFA4Combobox.SelectedIndex = currentPhospholipid.fag4.chainType;
                         clFA4Checkbox1.Checked = currentPhospholipid.fag4.faTypes["FA"];
-                        clFA4Checkbox2.Checked = currentPhospholipid.fag4.faTypes["FAp"];
-                        clFA4Checkbox3.Checked = currentPhospholipid.fag4.faTypes["FAa"];
+                        clFA4Checkbox2.Checked = currentPhospholipid.fag4.faTypes["FAP"];
+                        clFA4Checkbox3.Checked = currentPhospholipid.fag4.faTypes["FAO"];
                         
                         
                         plPosAdductCheckbox1.Checked = currentPhospholipid.adducts["+H"];
@@ -846,16 +846,16 @@ namespace LipidCreator
                         plHydroxyl1Textbox.Text = currentPhospholipid.fag1.hydroxylInfo;
                         plFA1Combobox.SelectedIndex = currentPhospholipid.fag1.chainType;
                         plFA1Checkbox1.Checked = currentPhospholipid.fag1.faTypes["FA"];
-                        plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes["FAp"];
-                        plFA1Checkbox3.Checked = currentPhospholipid.fag1.faTypes["FAa"];
+                        plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes["FAP"];
+                        plFA1Checkbox3.Checked = currentPhospholipid.fag1.faTypes["FAO"];
                         
                         plFA2Textbox.Text = currentPhospholipid.fag2.lengthInfo;
                         plDB2Textbox.Text = currentPhospholipid.fag2.dbInfo;
                         plHydroxyl2Textbox.Text = currentPhospholipid.fag2.hydroxylInfo;
                         plFA2Combobox.SelectedIndex = currentPhospholipid.fag2.chainType;
                         plFA2Checkbox1.Checked = currentPhospholipid.fag2.faTypes["FA"];
-                        plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes["FAp"];
-                        plFA2Checkbox3.Checked = currentPhospholipid.fag2.faTypes["FAa"];
+                        plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes["FAP"];
+                        plFA2Checkbox3.Checked = currentPhospholipid.fag2.faTypes["FAO"];
                     
                         
                         
@@ -2400,7 +2400,7 @@ namespace LipidCreator
                     
                     
                     //
-                    if ((((Phospholipid)currentLipid).fag1.faTypes["FAa"] || ((Phospholipid)currentLipid).fag1.faTypes["FAp"]) && !((Phospholipid)currentLipid).isCL  && !((Phospholipid)currentLipid).hasPlasmalogen)
+                    if ((((Phospholipid)currentLipid).fag1.faTypes["FAO"] || ((Phospholipid)currentLipid).fag1.faTypes["FAP"]) && !((Phospholipid)currentLipid).isCL  && !((Phospholipid)currentLipid).hasPlasmalogen)
                     {
                         HashSet<string> supposedPLs = ((Phospholipid)currentLipid).isLyso ? new HashSet<string>(){"LPC", "LPE"} : new HashSet<string>(){"PC", "PE"};
                         
@@ -2424,8 +2424,8 @@ namespace LipidCreator
                                 List<string> HGs = new List<string>(); 
                                 foreach (string hg in specialPLs)
                                 {
-                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAp"]) HGs.Add(hg + " O-p");
-                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAa"]) HGs.Add(hg + " O-a");
+                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAP"]) HGs.Add(hg + " P");
+                                    if (((Phospholipid)currentLipid).fag1.faTypes["FAO"]) HGs.Add(hg + " O");
                                 }
                                 
                                 if (split && regularWarn)
@@ -2437,8 +2437,8 @@ namespace LipidCreator
                                         pureLipid = new Phospholipid((Phospholipid)currentLipid);
                                         pureLipid.headGroupNames.Clear();
                                         pureLipid.fag1.faTypes["FA"] = true;
-                                        pureLipid.fag1.faTypes["FAa"] = false;
-                                        pureLipid.fag1.faTypes["FAp"] = false;
+                                        pureLipid.fag1.faTypes["FAO"] = false;
+                                        pureLipid.fag1.faTypes["FAP"] = false;
                                         foreach (string hg in specialPLs) pureLipid.headGroupNames.Add(hg);
                                     }
                                     

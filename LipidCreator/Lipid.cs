@@ -158,8 +158,8 @@ namespace LipidCreator
                 functionalGroups.Add("OH", new List<csgoslin.FunctionalGroup>{fg});
             }
             csgoslin.LipidFaBondType faType = csgoslin.LipidFaBondType.ESTER;
-            if (fa.suffix.Equals("a")) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
-            else if (fa.suffix.Equals("p")) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
+            if (fa.prefix.Equals("O")) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
+            else if (fa.prefix.Equals("P")) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
             else if (fa.isLCB && sp_exception) faType = csgoslin.LipidFaBondType.LCB_EXCEPTION;
             else if (fa.isLCB && !sp_exception) faType = csgoslin.LipidFaBondType.LCB_REGULAR;
             

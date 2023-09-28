@@ -198,13 +198,13 @@ namespace LipidCreator
             foreach (FattyAcid fa1 in fag1.getFattyAcids())
             {
                 containsMonoLyso &= ~1;
-                if (fa1.suffix == "x") containsMonoLyso |= 1;
+                if (fa1.prefix == "x") containsMonoLyso |= 1;
                     
                 // calling all possible fatty acid 2 combinations
                 foreach (FattyAcid fa2 in fag2.getFattyAcids())
                 {
                     containsMonoLyso &= ~2;
-                    if (fa2.suffix == "x") containsMonoLyso |= 2;
+                    if (fa2.prefix == "x") containsMonoLyso |= 2;
                     if (containsSugar)
                     {
                         List<FattyAcid> sortedAcids = new List<FattyAcid>();
@@ -216,7 +216,7 @@ namespace LipidCreator
                         foreach (string headgroup in headGroupNames)
                         {
                             // create species id i.e. key for avoiding double entries
-                            var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                            var fattys = from fa in sortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                             string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                             
                             
@@ -299,7 +299,7 @@ namespace LipidCreator
                                     string heavyKey = LipidCreator.precursorNameSplit(heavyHeadgroup)[0] + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                     
                                     
-                                    var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                    var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                                     string heavyFattyComp = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, heavyFattys);
                                     
                                     
@@ -338,7 +338,7 @@ namespace LipidCreator
                         foreach (FattyAcid fa3 in fag3.getFattyAcids())
                         {
                             containsMonoLyso &= ~4;
-                            if (fa3.suffix == "x") containsMonoLyso |= 4;
+                            if (fa3.prefix == "x") containsMonoLyso |= 4;
                                                             
                             List<FattyAcid> sortedAcids = new List<FattyAcid>();
                             sortedAcids.Add(fa1);
@@ -366,7 +366,7 @@ namespace LipidCreator
                             
                                 
                             // create species id i.e. key for avoiding double entries
-                            var fattys = from fa in sortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                            var fattys = from fa in sortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                             string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
     
                             // goslin
@@ -458,7 +458,7 @@ namespace LipidCreator
                                                             
                                                             
                                                             
-                                    var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.suffix != "x" select fa.ToString();
+                                    var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
                                     string heavyFattyComp = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, heavyFattys);
                                     
                                     

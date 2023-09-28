@@ -213,8 +213,8 @@ namespace LipidCreator
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag3;
                             currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAa"] = false;
-                            currFAG.faTypes["FAp"] = false;
+                            currFAG.faTypes["FAO"] = false;
+                            currFAG.faTypes["FAP"] = false;
                             currFAG.faTypes["FAx"] = true;
                         }
                         
@@ -222,14 +222,14 @@ namespace LipidCreator
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag2;
                             currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAa"] = false;
-                            currFAG.faTypes["FAp"] = false;
+                            currFAG.faTypes["FAO"] = false;
+                            currFAG.faTypes["FAP"] = false;
                             currFAG.faTypes["FAx"] = true;
                             
                             currFAG = ((Glycerolipid)lipid).fag3;
                             currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAa"] = false;
-                            currFAG.faTypes["FAp"] = false;
+                            currFAG.faTypes["FAO"] = false;
+                            currFAG.faTypes["FAP"] = false;
                             currFAG.faTypes["FAx"] = true;
                         }
                     }
@@ -251,8 +251,8 @@ namespace LipidCreator
                         {
                             FattyAcidGroup currFAG = ((Phospholipid)lipid).fag4;
                             currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAa"] = false;
-                            currFAG.faTypes["FAp"] = false;
+                            currFAG.faTypes["FAO"] = false;
+                            currFAG.faTypes["FAP"] = false;
                             currFAG.faTypes["FAx"] = true;
                         }
                     }
@@ -649,8 +649,8 @@ namespace LipidCreator
                     hydroxylTextbox.Text = fag.hydroxylInfo;
                     
                     faCheckbox1.Checked = fag.faTypes["FA"];
-                    faCheckbox2.Checked = fag.faTypes["FAp"];
-                    faCheckbox3.Checked = fag.faTypes["FAa"];
+                    faCheckbox2.Checked = fag.faTypes["FAP"];
+                    faCheckbox3.Checked = fag.faTypes["FAO"];
                     
                     faCombobox.Items.Clear();
                     faCombobox.Items.Add("Fatty acyl chain");
@@ -665,9 +665,9 @@ namespace LipidCreator
                             faCheckbox2.Enabled = false;
                             faCheckbox3.Enabled = false;
                         
-                            faCheckbox1.Checked = !headgroup.EndsWith("O-p") && !headgroup.EndsWith("O-a");
-                            faCheckbox2.Checked = headgroup.EndsWith("O-p");
-                            faCheckbox3.Checked = headgroup.EndsWith("O-a");
+                            faCheckbox1.Checked = !headgroup.EndsWith("P") && !headgroup.EndsWith("O");
+                            faCheckbox2.Checked = headgroup.EndsWith("P");
+                            faCheckbox3.Checked = headgroup.EndsWith("O");
                         }
                         else if (currentFA > 0)
                         {

@@ -88,8 +88,8 @@ namespace LipidCreator
             hydroxylInfo = "0";
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", !dummy);
-            faTypes.Add("FAp", false);
-            faTypes.Add("FAa", false);
+            faTypes.Add("FAO", false);
+            faTypes.Add("FAP", false);
             faTypes.Add("FAx", dummy);  // no fatty acid dummy
             carbonCounts = new HashSet<int>();
             doubleBondCounts = new HashSet<int>();
@@ -105,8 +105,8 @@ namespace LipidCreator
             hydroxylInfo = copy.hydroxylInfo;
             faTypes = new Dictionary<String, bool>();
             faTypes.Add("FA", copy.faTypes["FA"]);
-            faTypes.Add("FAp", copy.faTypes["FAp"]);
-            faTypes.Add("FAa", copy.faTypes["FAa"]);
+            faTypes.Add("FAP", copy.faTypes["FAP"]);
+            faTypes.Add("FAO", copy.faTypes["FAO"]);
             faTypes.Add("FAx", copy.faTypes["FAx"]);  // no fatty acid dummy
             carbonCounts = new HashSet<int>();
             foreach (int l in copy.carbonCounts)
@@ -263,7 +263,7 @@ namespace LipidCreator
         
         public bool anyFAChecked()
         {
-            return faTypes["FA"] || faTypes["FAp"] || faTypes["FAa"];
+            return faTypes["FA"] || faTypes["FAP"] || faTypes["FAO"];
         }
         
         // generator function for providing all possible carbon length / double bond /

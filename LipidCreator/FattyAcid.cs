@@ -36,7 +36,7 @@ namespace LipidCreator
         public int length;
         public int db;
         public int hydroxyl;
-        public string suffix;
+        public string prefix;
         public ElementDictionary atomsCount;
         public bool isLCB;
         
@@ -44,7 +44,7 @@ namespace LipidCreator
         public override string ToString()
         {
             string faLCB = isLCB ? "Long chain base" : "Fatty acyl";
-            return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and suffix {4}.", faLCB, length, db, hydroxyl, suffix);
+            return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and prefix {4}.", faLCB, length, db, hydroxyl, prefix);
         }
         
         public FattyAcid(int l, int db, int hydro)
@@ -52,7 +52,7 @@ namespace LipidCreator
         
         }
         
-        public FattyAcid(int l, int db, int hydro, string suffix, bool _isLCB = false)
+        public FattyAcid(int l, int db, int hydro, string prefix, bool _isLCB = false)
         {
             length = l;
             this.db = db;
@@ -61,23 +61,30 @@ namespace LipidCreator
             atomsCount = MS2Fragment.createEmptyElementDict();
             if (!isLCB)
             {
-                this.suffix = (suffix.Length > 2) ? suffix.Substring(2, 1) : "";
+                this.prefix = "";
+                if (prefix.Length > 2 && prefix.StartsWith("FA") && (prefix[2] == 'P' || prefix[2] == 'O'))
+                {
+                    this.prefix = prefix.Substring(2, 1);
+                }
+                
                 if (length > 0 || db > 0)
                 {
                     atomsCount[(int)Molecule.C] = length; // C
-                    switch(this.suffix)
+                    switch(this.prefix)
                     {
                         case "":
                             atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * db; // H
                             atomsCount[(int)Molecule.O] = 1 + hydroxyl; // O
                             break;
-                        case "p":
+                        case "P":
                             atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * (db + 1) + 2; // H
                             atomsCount[(int)Molecule.O] = hydroxyl; // O
                             break;
-                        case "a":
+                        case "O":
                             atomsCount[(int)Molecule.H] = (length + 1) * 2 - 1 - 2 * db; // H
                             atomsCount[(int)Molecule.O] = hydroxyl; // O
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -85,7 +92,7 @@ namespace LipidCreator
             else 
             {
                 // long chain base
-                this.suffix = "";
+                this.prefix = "";
                 atomsCount[(int)Molecule.C] = length; // C
                 atomsCount[(int)Molecule.H] = (2 * (length - db) + 2); // H
                 atomsCount[(int)Molecule.O] = hydroxyl; // O
@@ -99,7 +106,7 @@ namespace LipidCreator
             db = copy.db;
             isLCB = copy.isLCB;
             hydroxyl = copy.hydroxyl;
-            suffix = copy.suffix;
+            prefix = copy.prefix;
             atomsCount = MS2Fragment.createEmptyElementDict();
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
@@ -109,20 +116,20 @@ namespace LipidCreator
         
         public void merge(FattyAcid copy)
         {
-            if (copy.suffix == "x") return;
+            if (copy.prefix == "x") return;
             
             length += copy.length;
             db += copy.db;
             isLCB |= copy.isLCB;
             hydroxyl += copy.hydroxyl;
-            suffix += copy.suffix;
+            prefix += copy.prefix;
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
         
         
         public string ToString(bool fullFormat = true)
         {
-            string key = Convert.ToString(length) + ":" + Convert.ToString(db);
+            string key = (prefix.Length > 0 ? prefix + "-" : "") + Convert.ToString(length) + ":" + Convert.ToString(db);
             if (isLCB)
             {
                 key += ";" + Convert.ToString(hydroxyl);
@@ -132,7 +139,6 @@ namespace LipidCreator
                 if (fullFormat)
                 {
                     if (hydroxyl > 0) key += ";" + Convert.ToString(hydroxyl);
-                    key += suffix;
                 }
             }
             key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
@@ -166,8 +172,8 @@ namespace LipidCreator
 
         public int CompareTo(FattyAcid other)
         {
-            if (other.suffix.Length > 0 && other.suffix[0] == 'x') return -1;
-            if (suffix.Length > 0 && suffix[0] == 'x') return 1;
+            if (other.prefix.Length > 0 && other.prefix[0] == 'x') return -1;
+            if (prefix.Length > 0 && prefix[0] == 'x') return 1;
             if (length != other.length)
             {
                 return length - other.length;
@@ -176,13 +182,13 @@ namespace LipidCreator
             {
                 return db - other.db;
             }
-            else if (suffix.Length != other.suffix.Length)
+            else if (prefix.Length != other.prefix.Length)
             {
-                return suffix.Length - other.suffix.Length;
+                return prefix.Length - other.prefix.Length;
             }
-            else if (suffix.Length > 0 && suffix[0] != other.suffix[0])
+            else if (prefix.Length > 0 && prefix[0] != other.prefix[0])
             {
-                return suffix[0] - other.suffix[0];
+                return prefix[0] - other.prefix[0];
             }
             return 0;
         }
@@ -199,7 +205,7 @@ namespace LipidCreator
         
         public override bool Equals(FattyAcid obj, FattyAcid obj2)
         { 
-            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.suffix == obj2.suffix) && (obj.hydroxyl == obj2.hydroxyl);
+            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.prefix == obj2.prefix) && (obj.hydroxyl == obj2.hydroxyl);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace LipidCreator
         public string dbInfo;
         public string hydroxylInfo;
         public bool isLCB;
-        public Dictionary<string, bool> faTypes;
+        public Dictionary<FattyAcidType, bool> faTypes;
         public HashSet<int> carbonCounts;
         public HashSet<int> doubleBondCounts;
         public HashSet<int> hydroxylCounts;
@@ -86,11 +86,11 @@ namespace LipidCreator
             lengthInfo = "12-15";
             dbInfo = "0";
             hydroxylInfo = "0";
-            faTypes = new Dictionary<String, bool>();
-            faTypes.Add("FA", !dummy);
-            faTypes.Add("FAO", false);
-            faTypes.Add("FAP", false);
-            faTypes.Add("FAx", dummy);  // no fatty acid dummy
+            faTypes = new Dictionary<FattyAcidType, bool>();
+            faTypes.Add(FattyAcidType.Ester, !dummy);
+            faTypes.Add(FattyAcidType.Plasmanyl, false);
+            faTypes.Add(FattyAcidType.Plasmenyl, false);
+            faTypes.Add(FattyAcidType.NoType, dummy);  // no fatty acid dummy
             carbonCounts = new HashSet<int>();
             doubleBondCounts = new HashSet<int>();
             hydroxylCounts = new HashSet<int>();
@@ -103,11 +103,11 @@ namespace LipidCreator
             dbInfo = copy.dbInfo;
             isLCB = copy.isLCB;
             hydroxylInfo = copy.hydroxylInfo;
-            faTypes = new Dictionary<String, bool>();
-            faTypes.Add("FA", copy.faTypes["FA"]);
-            faTypes.Add("FAP", copy.faTypes["FAP"]);
-            faTypes.Add("FAO", copy.faTypes["FAO"]);
-            faTypes.Add("FAx", copy.faTypes["FAx"]);  // no fatty acid dummy
+            faTypes = new Dictionary<FattyAcidType, bool>();
+            faTypes.Add(FattyAcidType.Ester, copy.faTypes[FattyAcidType.Ester]);
+            faTypes.Add(FattyAcidType.Plasmanyl, copy.faTypes[FattyAcidType.Plasmanyl]);
+            faTypes.Add(FattyAcidType.Plasmenyl, copy.faTypes[FattyAcidType.Plasmenyl]);
+            faTypes.Add(FattyAcidType.NoType, copy.faTypes[FattyAcidType.NoType]);  // no fatty acid dummy
             carbonCounts = new HashSet<int>();
             foreach (int l in copy.carbonCounts)
             {
@@ -131,15 +131,15 @@ namespace LipidCreator
             string faLCB = (isLCB) ? "long chain base" : "fatty acyl";
             string allFaTypes = "";
             string restrictions = chainType == 0 ? "no restriction" : (chainType == 1 ? "odd chain numbers" : "even chain numbers"); 
-            foreach (string typeFa in faTypes.Keys)
+            foreach (KeyValuePair<FattyAcidType, bool> kvp in faTypes)
             {
-                if (faTypes[typeFa])
+                if (kvp.Value)
                 {
                     if (allFaTypes.Length > 0)
                     {
                         allFaTypes += ", ";
                     }
-                    allFaTypes += typeFa;
+                    allFaTypes += kvp.Key;
                 }
             }
             return String.Format("The {0} group of length {1} ({2}), with double bonds {3}, hydroxlations {4}, bond types {5}, and {6}", faLCB, String.Join(",", carbonCounts), lengthInfo, dbInfo, hydroxylInfo, allFaTypes, restrictions);
@@ -171,9 +171,9 @@ namespace LipidCreator
                 
                 hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[isLCB ? 2 : 8], i & 63);
                 
-                foreach (string faType in faTypes.Keys.Where(x => faTypes[x]))
+                foreach (FattyAcidType faType in faTypes.Keys.Where(x => faTypes[x]))
                 {
-                    hashCode += LipidCreator.HashCode(faType);
+                    hashCode += Lipid.FAHashCode[faType];
                 }
                 
                 return hashCode;
@@ -199,7 +199,8 @@ namespace LipidCreator
                 switch (child.Name.ToString())
                 {
                     case "faType":
-                        if ((string)child.Attribute("type") != null) faTypes[child.Attribute("type").Value.ToString()] = child.Value == "1";
+                        int fatype = Convert.ToInt32(child.Attribute("type").Value.ToString());
+                        if ((string)child.Attribute("type") != null) faTypes[Lipid.FattyAcidTypeOrder[fatype]] = child.Value == "1";
                         break;
                     /*
                     case "length":
@@ -233,10 +234,10 @@ namespace LipidCreator
             sb.Append(" dbInfo=\"" + dbInfo + "\"");
             sb.Append(" hydroxylInfo=\"" + hydroxylInfo + "\">\n");
             
-            foreach (KeyValuePair<String, bool> item in faTypes)
+            foreach (KeyValuePair<FattyAcidType, bool> item in faTypes)
             {
                 sb.Append("<faType");
-                sb.Append(" type=\"" + item.Key + "\">");
+                sb.Append(" type=\"" + (int)item.Key + "\">");
                 sb.Append((item.Value ? 1 : 0));
                 sb.Append("</faType>\n");
             }
@@ -263,14 +264,14 @@ namespace LipidCreator
         
         public bool anyFAChecked()
         {
-            return faTypes["FA"] || faTypes["FAP"] || faTypes["FAO"];
+            return faTypes[FattyAcidType.Ester] || faTypes[FattyAcidType.Plasmanyl] || faTypes[FattyAcidType.Plasmenyl];
         }
         
         // generator function for providing all possible carbon length / double bond /
         // hydroxyl / (ether / ester) bonding combinations for a fatty acid
         public System.Collections.Generic.IEnumerable<FattyAcid> getFattyAcids()
         {
-            if (!faTypes["FAx"])
+            if (!faTypes[FattyAcidType.NoType])
             {
                 // iterate for all carbon lengths
                 foreach (int fattyAcidLength in carbonCounts)
@@ -285,7 +286,7 @@ namespace LipidCreator
                         {
                             // iterate for all bondings
                             if (fattyAcidLength <= fattyAcidHydroxyl) continue;
-                            foreach (KeyValuePair<string, bool> fattyAcidKeyValuePair in faTypes)
+                            foreach (KeyValuePair<FattyAcidType, bool> fattyAcidKeyValuePair in faTypes)
                             {
                                 // in old nomenclature, we denied plasmenyls with zero double bonds, since the number of double bonds were expliticely written. In the new nomenclature, it is again implicit
                                 //if (fattyAcidKeyValuePair.Value && !(fattyAcidKeyValuePair.Key.Equals("FAp") && fattyAcidDoubleBond == 0)) yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
@@ -297,7 +298,7 @@ namespace LipidCreator
             }
             else
             {
-                yield return new FattyAcid(0, 0, 0, "FAx");
+                yield return new FattyAcid(0, 0, 0, FattyAcidType.NoType);
             }
         }
     }

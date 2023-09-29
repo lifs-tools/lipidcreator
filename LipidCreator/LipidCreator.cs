@@ -1831,13 +1831,13 @@ namespace LipidCreator
                 {
                     bool firstFAHasPlamalogen = false;
                     bool secondFAHasPlamalogen = false;
-                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
+                    foreach (KeyValuePair<FattyAcidType, bool> kvp in ((Phospholipid)lipid).fag1.faTypes)
                     {
-                        firstFAHasPlamalogen |= ((kvp.Key.Equals("FAO") && kvp.Value) || (kvp.Key.Equals("FAP") && kvp.Value));
+                        firstFAHasPlamalogen |= ((kvp.Key == FattyAcidType.Plasmanyl && kvp.Value) || (kvp.Key == FattyAcidType.Plasmenyl && kvp.Value));
                     }
-                    foreach (KeyValuePair<string, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
+                    foreach (KeyValuePair<FattyAcidType, bool> kvp in ((Phospholipid)lipid).fag2.faTypes)
                     {
-                        secondFAHasPlamalogen |= ((kvp.Key.Equals("FAO") && kvp.Value) || (kvp.Key.Equals("FAP") && kvp.Value));
+                        secondFAHasPlamalogen |= ((kvp.Key == FattyAcidType.Plasmanyl && kvp.Value) || (kvp.Key == FattyAcidType.Plasmenyl && kvp.Value));
                     }
                     
                     // flip fatty acids
@@ -1853,48 +1853,52 @@ namespace LipidCreator
                         lipid = new UnsupportedLipid(this);
                     }
                 }
+            }
             
-                /*
-                // check for PE O, PC O, LPE O, LPC O
-                if (lipid != null)
+            if (lipid != null)
+            {
+                foreach (FattyAcidGroup fag in lipid.getFattyAcidGroupList())
                 {
-                    if ((new HashSet<string>(){"PC O", "PE O", "LPC O", "LPE O"}).Contains(lipid.headGroupNames[0]))
+                    foreach (int val in fag.carbonCounts)
                     {
-                        string lipidClass = lipid.headGroupNames[0];
-                        if (lipidClass.Equals("PC O") || lipidClass.Equals("PE O"))
+                        if (val < 2 || 30 < val)
                         {
-                            if (((Phospholipid)lipid).fag1.faTypes["FAP"])
-                            {
-                                lipidClass = lipidClass + " P";
-                            }
-                            else if (((Phospholipid)lipid).fag1.faTypes["FAO"])
-                            {
-                                lipidClass = lipidClass + " O";
-                            }
+                            lipid = new UnsupportedLipid(this);
+                            break;
                         }
-                        else if  (lipidClass.Equals("LPC O") || lipidClass.Equals("LPE O"))
-                        {
-                            if (((Phospholipid)lipid).fag1.faTypes["FAp"])
-                            {
-                                lipidClass = lipidClass + "-p";
-                            }
-                            else if (((Phospholipid)lipid).fag1.faTypes["FAa"])
-                            {   
-                                lipidClass = lipidClass + "-a";
-                            }
-                        }
-                        lipid.headGroupNames[0] = lipidClass;
                     }
-                    if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(lipid.headGroupNames[0]) && (((Phospholipid)lipid).fag1.faTypes["FAp"] || ((Phospholipid)lipid).fag1.faTypes["FAa"]))
+                    foreach (int val in fag.doubleBondCounts)
                     {
-                        lipid = null;
+                        if (val < 0 || 6 < val)
+                        {
+                            lipid = new UnsupportedLipid(this);
+                            break;
+                        }
+                    }
+                    if (fag.isLCB)
+                    {
+                        foreach (int val in fag.hydroxylCounts)
+                        {
+                            if (val < 2 || 3 < val)
+                            {
+                                lipid = new UnsupportedLipid(this);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (fag.hydroxylCounts.Count > 1 || (fag.hydroxylCounts.Count == 1 && (new List<int>(fag.hydroxylCounts))[0] != 0))
+                        {
+                            lipid = new UnsupportedLipid(this);
+                            break;
+                        }
                     }
                 }
-                */
             }
             
 
-            if (lipid != null && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
+            if (lipid != null && !(lipid is UnsupportedLipid)  && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
                 foreach (string lipidAdduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[lipidAdduct] = false;
@@ -1941,6 +1945,7 @@ namespace LipidCreator
             {
                 case csgoslin.LipidCategory.GL:
                     lipid = new Glycerolipid(this);
+                    Console.WriteLine(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
                     lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
                     ((Glycerolipid)lipid).fag1 = new FattyAcidGroup(false, true);
                     ((Glycerolipid)lipid).fag2 = new FattyAcidGroup(false, true);
@@ -1951,11 +1956,18 @@ namespace LipidCreator
                     
                 case csgoslin.LipidCategory.GP:
                     lipid = new Phospholipid(this);
-                    string hg = lipidAdduct.get_extended_class();
-                    if (hg.EndsWith("-p")) hg = hg.Replace("-p", " P");
-                    if (hg.EndsWith("-P")) hg = hg.Replace("-P", " P");
-                    else if (hg.EndsWith("-O")) hg = hg.Replace("-O", " O");
-                    lipid.headGroupNames.Add(hg);
+                    
+                    string hg = lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                    if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(hg))
+                    {
+                        if (lipidAdduct.lipid.fa_list.Count > 0)
+                        {
+                            if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL) hg += " O";
+                            else if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL) hg += " P";
+                        }
+                    }
+                    
+                    
                     
                     ((Phospholipid)lipid).isLyso = lipidAdduct.is_lyso();
                     ((Phospholipid)lipid).isCL = lipidAdduct.is_cardio_lipin();
@@ -1969,9 +1981,15 @@ namespace LipidCreator
                         if (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL || fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL)
                         {
                             ((Phospholipid)lipid).hasPlasmalogen = true;
-                            break;
+                            if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(hg))
+                            {
+                                if (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL) hg += " O";
+                                else if (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL) hg += " P";
+                                break;
+                            }
                         }
                     }
+                    lipid.headGroupNames.Add(hg);
                     break;
                     
                 case csgoslin.LipidCategory.SP:
@@ -2000,6 +2018,11 @@ namespace LipidCreator
                     break;
             }
             
+            if (lipid != null && lipidAdduct.lipid.info.level == csgoslin.LipidLevel.SPECIES)
+            {
+                lipid = null;
+                throw new Exception("Lipid on species level not supported.");
+            }
                 
             if (lipid != null)
             {
@@ -2019,43 +2042,78 @@ namespace LipidCreator
                     {
                         fag.carbonCounts.Add(fa.num_carbon);
                         fag.doubleBondCounts.Add(fa.double_bonds.get_num());
-                        if (fa.functional_groups.ContainsKey("OH"))
+                        
+                        fag.lengthInfo = Convert.ToString(fa.num_carbon);
+                        fag.dbInfo = Convert.ToString(fa.double_bonds.get_num());
+                        
+                        fag.isLCB = (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_EXCEPTION || fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_REGULAR);
+                        
+                        if (fa.functional_groups.ContainsKey("OH") && fa.functional_groups.ContainsKey("O"))
                         {
-                            if (fa.functional_groups["OH"].Count == 1) fag.hydroxylCounts.Add(fa.functional_groups["OH"][0].count);
+                            lipid = null;
+                            throw new Exception("Lipid with functional groups 'OH' and 'O' in one FA description not supported.");
+                        }
+                        
+                        int checked_functional_groups = fa.functional_groups.ContainsKey("[X]") ? 1 : 0;
+                        if (fa.functional_groups.ContainsKey("OH") || fa.functional_groups.ContainsKey("O"))
+                        {
+                            checked_functional_groups += 1;
+                            string fg = fa.functional_groups.ContainsKey("OH") ? "OH" : "O";
+                            int cnt = (fa.functional_groups.ContainsKey("OH") && !lipidAdduct.is_sp_exception()) ? 1 : 0;
+                            if (fa.functional_groups[fg].Count == 1)
+                            {
+                                cnt += fa.functional_groups[fg][0].count;
+                                fag.hydroxylCounts.Add(fa.functional_groups[fg][0].count);
+                            }
                             else
                             {
-                                int cnt = 0;
-                                foreach (csgoslin.FunctionalGroup fg in fa.functional_groups["OH"]) cnt += fg.count;
-                                fag.hydroxylCounts.Add(cnt);
+                                foreach (csgoslin.FunctionalGroup func_group in fa.functional_groups[fg]) cnt += func_group.count;
                             }
+                            fag.hydroxylCounts.Add(cnt);
+                            fag.hydroxylInfo = Convert.ToString(cnt);
+                            
                         }
                         else
                         {
                             fag.hydroxylCounts.Add(0);
                         }
-                        fag.isLCB = (fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_EXCEPTION || fa.lipid_FA_bond_type == csgoslin.LipidFaBondType.LCB_REGULAR);
-                        if (fag.isLCB && !lipidAdduct.is_sp_exception())
+                        if (fa.functional_groups.Count > checked_functional_groups)
                         {
-                            int num_oh = (new List<int>(fag.hydroxylCounts))[0];
-                            fag.hydroxylCounts.Clear();
-                            fag.hydroxylCounts.Add(num_oh + 1);
+                            foreach(var kv in fa.functional_groups) Console.WriteLine(kv.Key);
+                            Console.WriteLine(fa.functional_groups.Count + " " + checked_functional_groups);
+                            throw new Exception("Unknown functional groups not supported.");
                         }
                         
-                        switch (fa.lipid_FA_bond_type)
+                        if (!fag.isLCB)
                         {
-                            case csgoslin.LipidFaBondType.ESTER:
-                                fag.faTypes["FA"] = true;
-                                fag.faTypes["FAx"] = false;
-                                break;
-                            case csgoslin.LipidFaBondType.ETHER_PLASMANYL:
-                                fag.faTypes["FAO"] = true;
-                                fag.faTypes["FAx"] = false;
-                                break;
-                            case csgoslin.LipidFaBondType.ETHER_PLASMENYL:
-                                fag.faTypes["FAP"] = true;
-                                fag.faTypes["FAx"] = false;
-                                break;
-                            default: lipid = null; throw new Exception("Fatty acid bond type not supported.");
+                            switch (fa.lipid_FA_bond_type)
+                            {
+                                case csgoslin.LipidFaBondType.ESTER:
+                                    fag.faTypes[FattyAcidType.Ester] = true;
+                                    fag.faTypes[FattyAcidType.NoType] = false;
+                                    break;
+                                case csgoslin.LipidFaBondType.ETHER_PLASMANYL:
+                                    fag.faTypes[FattyAcidType.Plasmanyl] = true;
+                                    fag.faTypes[FattyAcidType.NoType] = false;
+                                    break;
+                                case csgoslin.LipidFaBondType.ETHER_PLASMENYL:
+                                    fag.faTypes[FattyAcidType.Plasmenyl] = true;
+                                    fag.faTypes[FattyAcidType.NoType] = false;
+                                    break;
+                                default: lipid = null; throw new Exception("Fatty acid bond type not supported.");
+                            }
+                        }
+                        else
+                        {
+                            switch (fa.lipid_FA_bond_type)
+                            {
+                                case csgoslin.LipidFaBondType.LCB_EXCEPTION:
+                                case csgoslin.LipidFaBondType.LCB_REGULAR:
+                                    fag.faTypes[FattyAcidType.Ester] = true;
+                                    fag.faTypes[FattyAcidType.NoType] = false;
+                                    break;
+                                default: lipid = null; throw new Exception("Long chain base bond type not supported.");
+                            }
                         }
                     }
                 }
@@ -2083,9 +2141,17 @@ namespace LipidCreator
                     
                     try 
                     {
-                        csgoslin.LipidAdduct lipidAdduct = lipidParser.parse(lipidName);
-                        purePrecursor = lipidAdduct.get_lipid_string();
-                        lipid = translateLipid(lipidAdduct);
+                        if (headgroups.ContainsKey(lipidName) && headgroups[lipidName].category == LipidCategory.LipidMediator)
+                        {
+                            lipid = new Mediator(this);
+                            lipid.headGroupNames.Add(lipidName);
+                        }
+                        else
+                        {
+                            csgoslin.LipidAdduct lipidAdduct = lipidParser.parse(lipidName);
+                            purePrecursor = lipidAdduct.get_lipid_string();
+                            lipid = translateLipid(lipidAdduct);
+                        }
                     }
                     catch (Exception e)
                     {

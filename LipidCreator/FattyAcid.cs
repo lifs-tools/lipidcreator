@@ -36,7 +36,7 @@ namespace LipidCreator
         public int length;
         public int db;
         public int hydroxyl;
-        public string prefix;
+        public FattyAcidType fattyAcidType;
         public ElementDictionary atomsCount;
         public bool isLCB;
         
@@ -44,7 +44,7 @@ namespace LipidCreator
         public override string ToString()
         {
             string faLCB = isLCB ? "Long chain base" : "Fatty acyl";
-            return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and prefix {4}.", faLCB, length, db, hydroxyl, prefix);
+            return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and fatty acid type {4}.", faLCB, length, db, hydroxyl, fattyAcidType);
         }
         
         public FattyAcid(int l, int db, int hydro)
@@ -52,7 +52,7 @@ namespace LipidCreator
         
         }
         
-        public FattyAcid(int l, int db, int hydro, string prefix, bool _isLCB = false)
+        public FattyAcid(int l, int db, int hydro, FattyAcidType fattyAcidType = FattyAcidType.Ester, bool _isLCB = false)
         {
             length = l;
             this.db = db;
@@ -61,29 +61,28 @@ namespace LipidCreator
             atomsCount = MS2Fragment.createEmptyElementDict();
             if (!isLCB)
             {
-                this.prefix = "";
-                if (prefix.Length > 2 && prefix.StartsWith("FA") && (prefix[2] == 'P' || prefix[2] == 'O'))
-                {
-                    this.prefix = prefix.Substring(2, 1);
-                }
+                this.fattyAcidType = fattyAcidType;
                 
                 if (length > 0 || db > 0)
                 {
                     atomsCount[(int)Molecule.C] = length; // C
-                    switch(this.prefix)
+                    switch(fattyAcidType)
                     {
-                        case "":
+                        case FattyAcidType.Ester:
                             atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * db; // H
                             atomsCount[(int)Molecule.O] = 1 + hydroxyl; // O
                             break;
-                        case "P":
+                            
+                        case FattyAcidType.Plasmenyl:
                             atomsCount[(int)Molecule.H] = 2 * length - 1 - 2 * (db + 1) + 2; // H
                             atomsCount[(int)Molecule.O] = hydroxyl; // O
                             break;
-                        case "O":
+                            
+                        case FattyAcidType.Plasmanyl:
                             atomsCount[(int)Molecule.H] = (length + 1) * 2 - 1 - 2 * db; // H
                             atomsCount[(int)Molecule.O] = hydroxyl; // O
                             break;
+                            
                         default:
                             break;
                     }
@@ -92,7 +91,6 @@ namespace LipidCreator
             else 
             {
                 // long chain base
-                this.prefix = "";
                 atomsCount[(int)Molecule.C] = length; // C
                 atomsCount[(int)Molecule.H] = (2 * (length - db) + 2); // H
                 atomsCount[(int)Molecule.O] = hydroxyl; // O
@@ -106,7 +104,7 @@ namespace LipidCreator
             db = copy.db;
             isLCB = copy.isLCB;
             hydroxyl = copy.hydroxyl;
-            prefix = copy.prefix;
+            fattyAcidType = copy.fattyAcidType;
             atomsCount = MS2Fragment.createEmptyElementDict();
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
@@ -116,20 +114,20 @@ namespace LipidCreator
         
         public void merge(FattyAcid copy)
         {
-            if (copy.prefix == "x") return;
+            if (fattyAcidType == FattyAcidType.NoType) return;
             
             length += copy.length;
             db += copy.db;
             isLCB |= copy.isLCB;
             hydroxyl += copy.hydroxyl;
-            prefix += copy.prefix;
+            fattyAcidType = copy.fattyAcidType;
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
         
         
         public string ToString(bool fullFormat = true)
         {
-            string key = (prefix.Length > 0 ? prefix + "-" : "") + Convert.ToString(length) + ":" + Convert.ToString(db);
+            string key = Lipid.FAPrefix[fattyAcidType] + Convert.ToString(length) + ":" + Convert.ToString(db);
             if (isLCB)
             {
                 key += ";" + Convert.ToString(hydroxyl);
@@ -172,8 +170,12 @@ namespace LipidCreator
 
         public int CompareTo(FattyAcid other)
         {
-            if (other.prefix.Length > 0 && other.prefix[0] == 'x') return -1;
-            if (prefix.Length > 0 && prefix[0] == 'x') return 1;
+            if (other.isLCB) return -1;
+            if (isLCB) return 1;
+            if ((int)fattyAcidType != (int)other.fattyAcidType)
+            {
+                return (int)fattyAcidType - (int)other.fattyAcidType;
+            }
             if (length != other.length)
             {
                 return length - other.length;
@@ -182,13 +184,9 @@ namespace LipidCreator
             {
                 return db - other.db;
             }
-            else if (prefix.Length != other.prefix.Length)
+            else if (hydroxyl != other.hydroxyl)
             {
-                return prefix.Length - other.prefix.Length;
-            }
-            else if (prefix.Length > 0 && prefix[0] != other.prefix[0])
-            {
-                return prefix[0] - other.prefix[0];
+                return hydroxyl - other.hydroxyl;
             }
             return 0;
         }
@@ -205,7 +203,7 @@ namespace LipidCreator
         
         public override bool Equals(FattyAcid obj, FattyAcid obj2)
         { 
-            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.prefix == obj2.prefix) && (obj.hydroxyl == obj2.hydroxyl);
+            return (obj.length == obj2.length) && (obj.db == obj2.db) && (obj.fattyAcidType == obj2.fattyAcidType) && (obj.hydroxyl == obj2.hydroxyl);
         }
     }
 }

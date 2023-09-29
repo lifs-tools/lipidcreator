@@ -179,10 +179,10 @@ namespace LipidCreator
             {
                 // check if more than one fatty acids are 0:0
                 int checkFattyAcids = 0;
-                checkFattyAcids += fag1.faTypes["FAx"] ? 1 : 0;
-                checkFattyAcids += fag2.faTypes["FAx"] ? 1 : 0;
-                checkFattyAcids += fag3.faTypes["FAx"] ? 1 : 0;
-                checkFattyAcids += fag4.faTypes["FAx"] ? 1 : 0;
+                checkFattyAcids += fag1.faTypes[FattyAcidType.NoType] ? 1 : 0;
+                checkFattyAcids += fag2.faTypes[FattyAcidType.NoType] ? 1 : 0;
+                checkFattyAcids += fag3.faTypes[FattyAcidType.NoType] ? 1 : 0;
+                checkFattyAcids += fag4.faTypes[FattyAcidType.NoType] ? 1 : 0;
                 if (checkFattyAcids > 1) return;
                 
                 
@@ -191,25 +191,25 @@ namespace LipidCreator
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     containsMonoLyso &= ~1;
-                    if (fa1.prefix == "x") containsMonoLyso |= 1;
+                    if (fa1.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 1;
                     
                     // calling all possible fatty acid 2 combinations
                     foreach (FattyAcid fa2 in fag2.getFattyAcids())
                     {
                         containsMonoLyso &= ~2;
-                        if (fa2.prefix == "x") containsMonoLyso |= 2;
+                        if (fa2.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 2;
                     
                         // calling all possible fatty acid 3 combinations
                         foreach (FattyAcid fa3 in fag3.getFattyAcids())
                         {
                             containsMonoLyso &= ~4;
-                            if (fa3.prefix == "x") containsMonoLyso |= 4;
+                            if (fa3.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 4;
                     
                             // calling all possible fatty acid 4 combinations
                             foreach (FattyAcid fa4 in fag4.getFattyAcids())
                             {
                                 containsMonoLyso &= ~8;
-                                if (fa4.prefix == "x") containsMonoLyso |= 8;
+                                if (fa4.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 8;
                                                 
                                 // sort fatty acids and check if lipid is monolyso cardiolipin
                                 List<FattyAcid> sortedAcids = new List<FattyAcid>();
@@ -221,7 +221,7 @@ namespace LipidCreator
                                 String headgroup = (containsMonoLyso == 0) ? "CL" : "LCL";
                                 
                                 // create species id i.e. key for avoiding double entries
-                                var fattys = from fa in sortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
+                                var fattys = from fa in sortedAcids where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
                                 string key = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, fattys);
                                 
                                     
@@ -325,7 +325,7 @@ namespace LipidCreator
                                         heavySpeciesFA.merge(heavyFA4);
                                         
                                         
-                                        var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.prefix != "x" select fa.ToString();
+                                        var heavyFattys = from fa in heavySortedAcids where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
                                         string heavyFattyComp = " " + string.Join(ID_SEPARATOR_UNSPECIFIC, heavyFattys);
                                                                             
                                         // filling information on MS1 level for heavy cardiolipin
@@ -361,16 +361,16 @@ namespace LipidCreator
             {
             
                 if (headGroupNames.Count == 0) return;
-                if (fag1.faTypes["FAx"]) return;
+                if (fag1.faTypes[FattyAcidType.NoType]) return;
                 
                 foreach (FattyAcid fa1 in fag1.getFattyAcids())
                 {
                     bool isPlamalogen1 = false;
                     bool isFAa1 = false;
-                    switch (fa1.prefix)
+                    switch (fa1.fattyAcidType)
                     {
-                        case "O": isFAa1 = true; break;
-                        case "P": isPlamalogen1 = true; break;
+                        case FattyAcidType.Plasmanyl: isFAa1 = true; break;
+                        case FattyAcidType.Plasmenyl: isPlamalogen1 = true; break;
                         default: break;
                     }
                     
@@ -394,7 +394,7 @@ namespace LipidCreator
                             modifiedHeadgroup += "-";
                             goslinHeadgroup = headgroup.Replace(" P", "");
                             PLsep = "";
-                            fa1.prefix = "P";
+                            fa1.fattyAcidType = FattyAcidType.Plasmenyl;
                         }
                         else if (headgroup.Equals("LPC O") || headgroup.Equals("LPE O"))
                         {
@@ -402,7 +402,7 @@ namespace LipidCreator
                             modifiedHeadgroup += "-";
                             goslinHeadgroup = headgroup.Replace(" O", "");
                             PLsep = "";
-                            fa1.prefix = "O";
+                            fa1.fattyAcidType = FattyAcidType.Plasmanyl;
                         }
                         
                         // goslin
@@ -524,10 +524,10 @@ namespace LipidCreator
                     bool isPlamalogen1 = false;
                     bool isFAa1 = false;
                         
-                    switch (fa1.prefix)
+                    switch (fa1.fattyAcidType)
                     {
-                        case "O": isFAa1 = true; break;
-                        case "P": isPlamalogen1 = true; break;
+                        case FattyAcidType.Plasmanyl: isFAa1 = true; break;
+                        case FattyAcidType.Plasmenyl: isPlamalogen1 = true; break;
                         default: break;
                     }
                     
@@ -561,7 +561,7 @@ namespace LipidCreator
                                 modifiedHeadgroup += "-";
                                 goslinHeadgroup = headgroup.Replace(" P", "");
                                 PLsep = "";
-                                fa1.prefix = "P";
+                                fa1.fattyAcidType = FattyAcidType.Plasmenyl;
                             }
                             else if (headgroup.Equals("PC O") || headgroup.Equals("PE O"))
                             {
@@ -569,14 +569,14 @@ namespace LipidCreator
                                 modifiedHeadgroup += "-";
                                 goslinHeadgroup = headgroup.Replace(" O", "");
                                 PLsep = "";
-                                fa1.prefix = "O";
+                                fa1.fattyAcidType = FattyAcidType.Plasmanyl;
                             }
                             if (isPlamalogen || isFAa) isSorted = false;
                             
                             
                             
                             
-                            var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.prefix != "x" select fa.ToString();
+                            var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
                             string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                         
                             // goslin
@@ -689,7 +689,7 @@ namespace LipidCreator
                                     string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
                                     
                                     
-                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.prefix != "x" select fa.ToString();
+                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
                                     string heavyFattyComp = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
                                     
                                     

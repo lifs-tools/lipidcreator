@@ -43,7 +43,7 @@ namespace LipidCreator
 {
     public enum LipidCategory {NoLipid = 0, Glycerolipid = 1, Glycerophospholipid = 2, Sphingolipid = 3, Sterollipid = 4, LipidMediator = 5, Unsupported = 99};
     
-    
+    public enum FattyAcidType {Plasmanyl = 0, Plasmenyl = 1, Ester = 2, NoType = 3};
     
     
     [Serializable]
@@ -117,6 +117,14 @@ namespace LipidCreator
         public LipidCreator lipidCreator;
         public static int MEDIATOR_PREFIX_LENGTH = 4;
         
+        public static List<FattyAcidType> FattyAcidTypeOrder = new List<FattyAcidType>(){FattyAcidType.Ester, FattyAcidType.Plasmanyl, FattyAcidType.Plasmenyl, FattyAcidType.NoType};
+        
+        public static Dictionary<FattyAcidType, string> FAPrefix = new Dictionary<FattyAcidType, string>(){{FattyAcidType.Ester, ""}, {FattyAcidType.Plasmanyl, "O-"}, {FattyAcidType.Plasmenyl, "P-"}, {FattyAcidType.NoType, ""}};
+        
+        public static Dictionary<FattyAcidType, string> FARepresentationString = new Dictionary<FattyAcidType, string>(){{FattyAcidType.Ester, "FA"}, {FattyAcidType.Plasmanyl, "FA O"}, {FattyAcidType.Plasmenyl, "FA P"}, {FattyAcidType.NoType, "FAx"}};
+        
+        public static Dictionary<FattyAcidType, ulong> FAHashCode = new Dictionary<FattyAcidType, ulong>(){{FattyAcidType.Ester, 35146310681585UL}, {FattyAcidType.Plasmanyl, 230776207451746402UL}, {FattyAcidType.Plasmenyl, 723018610604835218UL}, {FattyAcidType.NoType, 165630315668861088UL}};
+        
         
         public static Dictionary<LipidCategory, string> LipidCategoryNames = new Dictionary<LipidCategory, string>(){
             {LipidCategory.NoLipid, "No lipid"},
@@ -158,8 +166,8 @@ namespace LipidCreator
                 functionalGroups.Add("OH", new List<csgoslin.FunctionalGroup>{fg});
             }
             csgoslin.LipidFaBondType faType = csgoslin.LipidFaBondType.ESTER;
-            if (fa.prefix.Equals("O")) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
-            else if (fa.prefix.Equals("P")) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
+            if (fa.fattyAcidType == FattyAcidType.Plasmanyl) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
+            else if (fa.fattyAcidType == FattyAcidType.Plasmenyl) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
             else if (fa.isLCB && sp_exception) faType = csgoslin.LipidFaBondType.LCB_EXCEPTION;
             else if (fa.isLCB && !sp_exception) faType = csgoslin.LipidFaBondType.LCB_REGULAR;
             
@@ -168,13 +176,13 @@ namespace LipidCreator
         
         
         
-        public csgoslin.LipidStructureDefined convertLipid(string hg, List<FattyAcid> fa_list)
+        public csgoslin.LipidMolecularSpecies convertLipid(string hg, List<FattyAcid> fa_list)
         {
             // goslin
             csgoslin.Headgroup cshg = new csgoslin.Headgroup(hg);                        
             List<csgoslin.FattyAcid> csFAs = new List<csgoslin.FattyAcid>();
             for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1, cshg.sp_exception));
-            return new csgoslin.LipidStructureDefined(cshg, csFAs);
+            return new csgoslin.LipidMolecularSpecies(cshg, csFAs);
         }
         
         

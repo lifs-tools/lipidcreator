@@ -212,25 +212,25 @@ namespace LipidCreator
                         if (headgroup == "DG")
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag3;
-                            currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAO"] = false;
-                            currFAG.faTypes["FAP"] = false;
-                            currFAG.faTypes["FAx"] = true;
+                            currFAG.faTypes[FattyAcidType.Ester] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmanyl] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmenyl] = false;
+                            currFAG.faTypes[FattyAcidType.NoType] = true;
                         }
                         
                         else if (headgroup == "MG")
                         {
                             FattyAcidGroup currFAG = ((Glycerolipid)lipid).fag2;
-                            currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAO"] = false;
-                            currFAG.faTypes["FAP"] = false;
-                            currFAG.faTypes["FAx"] = true;
+                            currFAG.faTypes[FattyAcidType.Ester] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmanyl] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmenyl] = false;
+                            currFAG.faTypes[FattyAcidType.NoType] = true;
                             
                             currFAG = ((Glycerolipid)lipid).fag3;
-                            currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAO"] = false;
-                            currFAG.faTypes["FAP"] = false;
-                            currFAG.faTypes["FAx"] = true;
+                            currFAG.faTypes[FattyAcidType.Ester] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmanyl] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmenyl] = false;
+                            currFAG.faTypes[FattyAcidType.NoType] = true;
                         }
                     }
                     
@@ -250,10 +250,10 @@ namespace LipidCreator
                         if (headgroup == "LCL")
                         {
                             FattyAcidGroup currFAG = ((Phospholipid)lipid).fag4;
-                            currFAG.faTypes["FA"] = false;
-                            currFAG.faTypes["FAO"] = false;
-                            currFAG.faTypes["FAP"] = false;
-                            currFAG.faTypes["FAx"] = true;
+                            currFAG.faTypes[FattyAcidType.Ester] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmanyl] = false;
+                            currFAG.faTypes[FattyAcidType.Plasmenyl] = false;
+                            currFAG.faTypes[FattyAcidType.NoType] = true;
                         }
                     }
                     
@@ -300,10 +300,10 @@ namespace LipidCreator
                             currFAG.chainType = repFAG.chainType;
                             
                             
-                            creatorGUI.updateCarbon(faTextbox, new FattyAcidEventArgs(currFAG, "" ));
+                            creatorGUI.updateCarbon(faTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
                             creatorGUI.updateOddEven(faCombobox, new FattyAcidEventArgs(currFAG, faTextbox ));
-                            creatorGUI.updateDB(dbTextbox, new FattyAcidEventArgs(currFAG, "" ));
-                            creatorGUI.updateHydroxyl(hydroxylTextbox, new FattyAcidEventArgs(currFAG, "" ));
+                            creatorGUI.updateDB(dbTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
+                            creatorGUI.updateHydroxyl(hydroxylTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
                             
                         }
                     }
@@ -648,9 +648,9 @@ namespace LipidCreator
                     dbTextbox.Text = fag.dbInfo;
                     hydroxylTextbox.Text = fag.hydroxylInfo;
                     
-                    faCheckbox1.Checked = fag.faTypes["FA"];
-                    faCheckbox2.Checked = fag.faTypes["FAP"];
-                    faCheckbox3.Checked = fag.faTypes["FAO"];
+                    faCheckbox1.Checked = fag.faTypes[FattyAcidType.Ester];
+                    faCheckbox2.Checked = fag.faTypes[FattyAcidType.Plasmenyl];
+                    faCheckbox3.Checked = fag.faTypes[FattyAcidType.Plasmanyl];
                     
                     faCombobox.Items.Clear();
                     faCombobox.Items.Add("Fatty acyl chain");

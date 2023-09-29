@@ -276,7 +276,7 @@ namespace LipidCreator
             faTextbox.Location = new Point(100, 164);
             faTextbox.Width = faLength;
             faTextbox.Text = "12-15";
-            faTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateCarbon(s, new FattyAcidEventArgs(fag, "" )); };
+            faTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateCarbon(s, new FattyAcidEventArgs(fag, FattyAcidType.Ester )); };
             toolTip.SetToolTip(faTextbox, formattingFA);
             faCombobox.Location = new Point(faTextbox.Left, faTextbox.Top - sepText);
             faCombobox.Width = faLength;
@@ -286,7 +286,7 @@ namespace LipidCreator
             dbTextbox.Location = new Point(faTextbox.Left + faTextbox.Width + sep, faTextbox.Top);
             dbTextbox.Width = dbLength;
             dbTextbox.Text = "0";
-            dbTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateDB(s, new FattyAcidEventArgs(fag, "" )); };
+            dbTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateDB(s, new FattyAcidEventArgs(fag, FattyAcidType.Ester )); };
             toolTip.SetToolTip(dbTextbox, formattingDB);
             dbLabel.Location = new Point(dbTextbox.Left, dbTextbox.Top - sep);
             dbLabel.Width = dbLength;
@@ -294,25 +294,25 @@ namespace LipidCreator
             hydroxylTextbox.Width = dbLength;
             hydroxylTextbox.Location = new Point(dbTextbox.Left + dbTextbox.Width + sep, dbTextbox.Top);
             hydroxylTextbox.Text = "0";
-            hydroxylTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateHydroxyl(s, new FattyAcidEventArgs(fag, "" )); };
+            hydroxylTextbox.TextChanged += delegate(object s, EventArgs e){ creatorGUI.updateHydroxyl(s, new FattyAcidEventArgs(fag, FattyAcidType.Ester )); };
             toolTip.SetToolTip(hydroxylTextbox, formattingHydroxyl);
             hydroxylLabel.Width = dbLength;
             hydroxylLabel.Location = new Point(hydroxylTextbox.Left, hydroxylTextbox.Top - sep);
             hydroxylLabel.Text = hydroxylText;
 
             faCheckbox3.Location = new Point(faTextbox.Left + 100, faTextbox.Top + faTextbox.Height);
-            faCheckbox3.Text = "FAa";
+            faCheckbox3.Text = "FA O";
             faCheckbox3.Width = 45;
-            faCheckbox3.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, "FAa" )); };
+            faCheckbox3.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, FattyAcidType.Plasmanyl )); };
             faCheckbox2.Location = new Point(faTextbox.Left + 50, faTextbox.Top + faTextbox.Height);
-            faCheckbox2.Text = "FAp";
+            faCheckbox2.Text = "FA P";
             faCheckbox2.Width = 45;
             toolTip.SetToolTip(faCheckbox2, FApInformation);
-            faCheckbox2.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, "FAp" )); };
+            faCheckbox2.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, FattyAcidType.Plasmenyl )); };
             faCheckbox1.Location = new Point(faTextbox.Left, faTextbox.Top + faTextbox.Height);
             faCheckbox1.Text = "FA";
             faCheckbox1.Width = 45;
-            faCheckbox1.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, "FA" )); };
+            faCheckbox1.CheckedChanged += delegate(object s, EventArgs e){ creatorGUI.FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs(fag, FattyAcidType.Ester )); };
             faCheckbox1.Checked = true;
             
             faHydroxyCombobox.Location = new Point(dbTextbox.Left + dbTextbox.Width + sep, dbTextbox.Top);

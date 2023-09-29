@@ -1118,6 +1118,7 @@ namespace LipidCreator
             SKYLINE_API_HEADER = apiList.ToArray();
             
             createPrecursorList();
+            
             if (asDeveloper)
             {
                 ElementDictionary emptyAtomsCount = MS2Fragment.createEmptyElementDict();
@@ -1879,7 +1880,7 @@ namespace LipidCreator
                     {
                         foreach (int val in fag.hydroxylCounts)
                         {
-                            if (val < 2 || 3 < val)
+                            if (val < 1 || 3 < val)
                             {
                                 lipid = new UnsupportedLipid(this);
                                 break;
@@ -2063,7 +2064,6 @@ namespace LipidCreator
                             if (fa.functional_groups[fg].Count == 1)
                             {
                                 cnt += fa.functional_groups[fg][0].count;
-                                fag.hydroxylCounts.Add(fa.functional_groups[fg][0].count);
                             }
                             else
                             {
@@ -2071,7 +2071,6 @@ namespace LipidCreator
                             }
                             fag.hydroxylCounts.Add(cnt);
                             fag.hydroxylInfo = Convert.ToString(cnt);
-                            
                         }
                         else
                         {
@@ -2079,8 +2078,7 @@ namespace LipidCreator
                         }
                         if (fa.functional_groups.Count > checked_functional_groups)
                         {
-                            foreach(var kv in fa.functional_groups) Console.WriteLine(kv.Key);
-                            Console.WriteLine(fa.functional_groups.Count + " " + checked_functional_groups);
+                            lipid = null;
                             throw new Exception("Unknown functional groups not supported.");
                         }
                         
@@ -2119,8 +2117,10 @@ namespace LipidCreator
                 }
                 int charge = lipidAdduct.adduct != null ? lipidAdduct.adduct.charge * lipidAdduct.adduct.charge_sign : 0;
                 string adduct = lipidAdduct.adduct != null ? lipidAdduct.adduct.adduct_string : "";
+            
                 lipid = checkLipid(lipid, charge, adduct);
             }
+            
             
             return lipid;
         }

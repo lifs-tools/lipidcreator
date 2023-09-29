@@ -78,7 +78,7 @@ namespace LipidCreator
             LipidCreator lcf = new LipidCreator(null);
             ArrayList unitTestData = new ArrayList();
             
-            csgoslin.GoslinParser parser = new csgoslin.GoslinParser();
+            csgoslin.LipidParser parser = new csgoslin.LipidParser();
             
             try {
                 int lineCounter = 1;

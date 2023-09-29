@@ -139,22 +139,26 @@ namespace LipidCreator
         {
             foreach (FattyAcid lcbType in lcb.getFattyAcids())
             {
+                
                 foreach (string headgroup in headGroupNames)
                 {
+                    
+                    csgoslin.Headgroup cs_headgroup = new csgoslin.Headgroup(headgroup);        
+                    FattyAcid lcbType_goslin = new FattyAcid(lcbType);
+                    if (!cs_headgroup.sp_exception) lcbType_goslin.hydroxyl = Math.Min(1, lcbType_goslin.hydroxyl - 1);
+                    
+                    
                  
                     if (!isLyso) // sphingolipids with fatty acid
                     {
                         foreach (FattyAcid fa in fag.getFattyAcids())
                         {
-                    
                             string key = " " + lcbType.ToString() + ID_SEPARATOR_SPECIFIC + fa.ToString();
                                 
                             // goslin
-                            csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, new List<FattyAcid>{lcbType, fa});
+                            csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin, fa});
                             
                             // species name
-                            FattyAcid speciesFA = new FattyAcid(lcbType);
-                            speciesFA.merge(fa);
                             string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                             
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
@@ -178,7 +182,7 @@ namespace LipidCreator
                             
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Sphingolipid;
-                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);;
+                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
                                 precursorData.fullMoleculeListName = headgroup;
                                 precursorData.precursorExportName = lipidSpecies.get_lipid_string();
                                 precursorData.precursorName = lipidSpecies.get_lipid_string();

@@ -59,10 +59,9 @@ namespace LipidCreator
             hydroxyl = hydro;
             isLCB = _isLCB;
             atomsCount = MS2Fragment.createEmptyElementDict();
+            this.fattyAcidType = fattyAcidType;
             if (!isLCB)
             {
-                this.fattyAcidType = fattyAcidType;
-                
                 if (length > 0 || db > 0)
                 {
                     atomsCount[(int)Molecule.C] = length; // C
@@ -130,13 +129,13 @@ namespace LipidCreator
             string key = Lipid.FAPrefix[fattyAcidType] + Convert.ToString(length) + ":" + Convert.ToString(db);
             if (isLCB)
             {
-                key += ";" + Convert.ToString(hydroxyl);
+                key += ";O" + Convert.ToString(hydroxyl);
             }
             else
             {
                 if (fullFormat)
                 {
-                    if (hydroxyl > 0) key += ";" + Convert.ToString(hydroxyl);
+                    if (hydroxyl > 0) key += ";O" + Convert.ToString(hydroxyl);
                 }
             }
             key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);

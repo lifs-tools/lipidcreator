@@ -487,6 +487,7 @@ namespace LipidCreator
             }
             
             
+            
             // check fragment building block list against precursor type
             foreach (KeyValuePair<string, Precursor> kvpHeadgroups in headgroups)
             {
@@ -1899,7 +1900,8 @@ namespace LipidCreator
             }
             
 
-            if (lipid != null && !(lipid is UnsupportedLipid)  && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
+            Console.WriteLine((lipid != null) + " " + !(lipid is UnsupportedLipid) + " " + lipid.headGroupNames[0]);
+            if (lipid != null && !(lipid is UnsupportedLipid) && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
                 foreach (string lipidAdduct in Lipid.ADDUCT_POSITIONS.Keys) lipid.adducts[lipidAdduct] = false;
@@ -2019,6 +2021,13 @@ namespace LipidCreator
                     break;
             }
             
+            
+            Dictionary<string, string> trans_table = new Dictionary<string, string>(){{"Hex3HexNAcCer", "GB4"}, {"Hex2NeuAc2Cer", "GD3"}, {"Hex3HexNAcNeuAcCer", "GM1"}, {"Hex2NeuAcCer", "GM3"}};
+            
+            if (trans_table.ContainsKey(lipid.headGroupNames[0])) lipid.headGroupNames[0] = trans_table[lipid.headGroupNames[0]];
+            
+            
+            
             if (lipid != null && lipidAdduct.lipid.info.level == csgoslin.LipidLevel.SPECIES)
             {
                 lipid = null;
@@ -2060,7 +2069,8 @@ namespace LipidCreator
                         {
                             checked_functional_groups += 1;
                             string fg = fa.functional_groups.ContainsKey("OH") ? "OH" : "O";
-                            int cnt = (fa.functional_groups.ContainsKey("OH") && !lipidAdduct.is_sp_exception()) ? 1 : 0;
+                            int cnt = (fa.functional_groups.ContainsKey("[X]") && !lipidAdduct.lipid.headgroup.sp_exception) ? 1 : 0;
+                            Console.WriteLine("cnt: " + cnt + " " + fa.functional_groups.ContainsKey("[X]") + " " + lipidAdduct.lipid.headgroup.sp_exception);
                             if (fa.functional_groups[fg].Count == 1)
                             {
                                 cnt += fa.functional_groups[fg][0].count;

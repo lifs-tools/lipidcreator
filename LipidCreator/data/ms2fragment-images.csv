@@ -617,13 +617,13 @@ LPE P,"-HG(PE,141)",1,images/MS2/Phospholipids/pLPE/pLPE_pos_NL(PE).png
 LPE P,"-(H3PO4,98)",1,images/MS2/Phospholipids/pLPE/pLPE_pos_NL(P).png
 PC P,HG(PC)-(CH3[adduct]),-1,images/MS2/Phospholipids/pPC/pPC_neg_HG.png
 PC P,-(CH3[adduct]),-1,images/MS2/Phospholipids/pPC/pPC_neg_NL.png
-PC P,FA O-FA1,-1,images/MS2/Phospholipids/pPC/pPC_neg_pFA1.png
+PC P,FA P-FA1,-1,images/MS2/Phospholipids/pPC/pPC_neg_pFA1.png
 PC P,FA2(+O),-1,images/MS2/Phospholipids/pPC/pPC_neg_FA2.png
 PC P,-FA2(+HO),-1,images/MS2/Phospholipids/pPC/pPC_neg_FA2'.png
 PC P,-FA2(-H),-1,images/MS2/Phospholipids/pPC/pPC_neg_FA2'+O.png
 PC P,FA2 -(CO),-1,images/MS2/Phospholipids/pPC/pPC_neg_FA2-CO.png
 PC P,"HG(PC,184)",1,images/MS2/Phospholipids/pPC/pPC_pos_HG.png
-PE P,FA O-FA1,-1,images/MS2/Phospholipids/pPE/pPE_neg_pFA1.png
+PE P,FA P-FA1,-1,images/MS2/Phospholipids/pPE/pPE_neg_pFA1.png
 PE P,FA2(+O),-1,images/MS2/Phospholipids/pPE/pPE_neg_FA2.png
 PE P,-FA2(+HO),-1,images/MS2/Phospholipids/pPE/pPE_neg_FA2'.png
 PE P,-FA2(-H),-1,images/MS2/Phospholipids/pPE/pPE_neg_FA2'+O.png

@@ -815,7 +815,6 @@ namespace LipidCreator
                 log.Error("Unable to read grammar file '" + Path.Combine(prefixPath, "data", "listing.grammar") + "': " + e);
                 throw new Exception();
             }
-            
         }
         
         
@@ -1900,7 +1899,6 @@ namespace LipidCreator
             }
             
 
-            Console.WriteLine((lipid != null) + " " + !(lipid is UnsupportedLipid) + " " + lipid.headGroupNames[0]);
             if (lipid != null && !(lipid is UnsupportedLipid) && lipid.headGroupNames.Count > 0 && headgroups.ContainsKey(lipid.headGroupNames[0]))
             {
             
@@ -2020,13 +2018,9 @@ namespace LipidCreator
                 default:
                     break;
             }
-            
-            
-            Dictionary<string, string> trans_table = new Dictionary<string, string>(){{"Hex3HexNAcCer", "GB4"}, {"Hex2NeuAc2Cer", "GD3"}, {"Hex3HexNAcNeuAcCer", "GM1"}, {"Hex2NeuAcCer", "GM3"}};
-            
-            if (trans_table.ContainsKey(lipid.headGroupNames[0])) lipid.headGroupNames[0] = trans_table[lipid.headGroupNames[0]];
-            
-            
+                        
+            if (headgroups.ContainsKey(lipidAdduct.lipid.headgroup.unaltered_headgroup) && !headgroups.ContainsKey(lipid.headGroupNames[0])) lipid.headGroupNames[0] = lipidAdduct.lipid.headgroup.unaltered_headgroup;
+                        
             
             if (lipid != null && lipidAdduct.lipid.info.level == csgoslin.LipidLevel.SPECIES)
             {

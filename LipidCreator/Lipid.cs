@@ -436,8 +436,6 @@ namespace LipidCreator
                 if (insertedFragments.Contains(fragName)) continue;
                 insertedFragments.Add(fragName);
                 
-                Console.WriteLine(fragName);
-                
                 rowString[(int)LabelPosition.SPECIFIC_POS] = fragment.specific ? "1" : "0";
                 rowString[(int)LabelPosition.PRECURSOR_NAME_POS] = (((int)parameters[1] == 1 && fragment.specific) || (int)parameters[1] == 2) ? precursorData.precursorSpeciesName : precursorData.precursorName;
                 

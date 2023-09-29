@@ -95,7 +95,6 @@ namespace LipidCreator
                 atomsCount[(int)Molecule.O] = hydroxyl; // O
                 atomsCount[(int)Molecule.N] = 1; // N
             }
-            Console.WriteLine(ToString(false));
         }
         
         public FattyAcid(FattyAcid copy)

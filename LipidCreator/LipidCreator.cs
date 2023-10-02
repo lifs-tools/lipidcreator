@@ -262,7 +262,7 @@ namespace LipidCreator
         public void readInputFiles()
         {
             int lineCounter = 1;
-            string ms2FragmentsFile = Path.Combine(prefixPath, "data", "MS2Fragments", "ms2fragments.csv");
+            string ms2FragmentsFile = Path.Combine(prefixPath, "data", "LipidDataTables", "ms2fragments.csv");
             if (File.Exists(ms2FragmentsFile))
             {
                 try
@@ -376,7 +376,7 @@ namespace LipidCreator
             
             
             
-            string headgroupsFile = Path.Combine(prefixPath, "data", "headgroups.csv");
+            string headgroupsFile = Path.Combine(prefixPath, "data", "LipidDataTables", "lipidclasses.csv");
             if (File.Exists(headgroupsFile))
             {
                 lineCounter = 1;
@@ -392,8 +392,7 @@ namespace LipidCreator
                             if (line[0] == '#') continue;
                             
                             string[] tokens = parseLine(line);
-                            if (tokens.Length < 22) throw new Exception("invalid line in file, number of columns in line < 22");
-                            
+                            if (tokens.Length < 20) throw new Exception("Error in headgroup image table: number of columns is less than 20 in line " + lineCounter);
                             Precursor headgroup = new Precursor();
                             //headgroup.catogory
                             switch(tokens[0])
@@ -428,33 +427,17 @@ namespace LipidCreator
                             headgroup.elements[(int)Molecule.N] = Convert.ToInt32(tokens[6]); // nytrogen
                             headgroup.elements[(int)Molecule.P] = Convert.ToInt32(tokens[7]); // phosphor
                             headgroup.elements[(int)Molecule.S] = Convert.ToInt32(tokens[8]); // sulfor
-                            if (tokens[10].Length > 0)
-                            {
-                                string backboneFile = Path.Combine(prefixPath, Path.Combine(tokens[10].Split(new char[]{'/'})));
-                                if (!File.Exists(backboneFile))
-                                {
-                                    log.Error("At line " + lineCounter + ": backbone file " + backboneFile + " does not exist or can not be opened.");
-                                    throw new Exception();
-                                }
-                                headgroup.pathToBackboneImage = backboneFile;
-                            }
-                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[11].Split(new char[]{'/'})));
-                            if (!File.Exists(precursorFile))
-                            {
-                                log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
-                                throw new Exception();
-                            }
-                            headgroup.pathToImage = precursorFile;
-                            headgroup.adductRestrictions.Add("+H", tokens[12].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+2H", tokens[13].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+NH4", tokens[14].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-H", tokens[15].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("-2H", tokens[16].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+HCOO", tokens[17].Equals("Yes"));
-                            headgroup.adductRestrictions.Add("+CH3COO", tokens[18].Equals("Yes"));
-                            headgroup.defaultAdduct = tokens[19];
-                            headgroup.buildingBlockType = Convert.ToInt32(tokens[20]);
-                            if (tokens[21].Length > 0) headgroup.attributes = new HashSet<string>(tokens[21].Split(new char[]{';'}));
+                            
+                            headgroup.adductRestrictions.Add("+H", tokens[10].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+2H", tokens[11].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+NH4", tokens[12].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-H", tokens[13].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("-2H", tokens[14].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+HCOO", tokens[15].Equals("Yes"));
+                            headgroup.adductRestrictions.Add("+CH3COO", tokens[16].Equals("Yes"));
+                            headgroup.defaultAdduct = tokens[17];
+                            headgroup.buildingBlockType = Convert.ToInt32(tokens[18]);
+                            if (tokens[19].Length > 0) headgroup.attributes = new HashSet<string>(tokens[19].Split(new char[]{';'}));
                             headgroup.derivative = headgroup.attributes.Contains("lyso") || headgroup.attributes.Contains("ether");
                             if (headgroup.attributes.Contains("heavy"))
                             {
@@ -483,6 +466,64 @@ namespace LipidCreator
             else
             {
                 log.Error("Error: file " + headgroupsFile + " does not exist or can not be opened.");
+                throw new Exception();
+            }
+            
+            
+            
+            
+            
+            string headgroupImagesFile = Path.Combine(prefixPath, "data", "headgroup-images.csv");
+            if (File.Exists(headgroupImagesFile))
+            {
+                lineCounter = 1;
+                try
+                {
+                    using (StreamReader sr = new StreamReader(headgroupImagesFile))
+                    {
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            
+                            string[] tokens = parseLine(line);
+                            if (tokens.Length < 3) throw new Exception("Error in headgroup image table: number of columns is less than 3 in line " + lineCounter);
+                            
+                            if (!headgroups.ContainsKey(tokens[0])) throw new Exception("Error in headgroup image table: lipid class '" + tokens[0] + "' unknown line " + lineCounter);
+                            
+                            var headgroup = headgroups[tokens[0]];
+                            
+                            if (tokens[1].Length > 0)
+                            {
+                                string backboneFile = Path.Combine(prefixPath, Path.Combine(tokens[1].Split(new char[]{'/'})));
+                                if (!File.Exists(backboneFile))
+                                {
+                                    log.Error("At line " + lineCounter + ": backbone file " + backboneFile + " does not exist or can not be opened.");
+                                    throw new Exception();
+                                }
+                                headgroup.pathToBackboneImage = backboneFile;
+                            }
+                            string precursorFile = Path.Combine(prefixPath, Path.Combine(tokens[2].Split(new char[]{'/'})));
+                            if (!File.Exists(precursorFile))
+                            {
+                                log.Error("At line " + lineCounter + ": precursor file " + precursorFile + " does not exist or can not be opened.");
+                                throw new Exception();
+                            }
+                            headgroup.pathToImage = precursorFile;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error("The file '" + headgroupImagesFile + "' in line '" + lineCounter + "' could not be read:", e);
+                    throw new Exception();
+                }
+            }
+            else
+            {
+                log.Error("Error: file " + headgroupImagesFile + " does not exist or can not be opened.");
                 throw new Exception();
             }
             

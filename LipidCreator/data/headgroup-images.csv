@@ -1,0 +1,171 @@
+Precursor,Backbone File,Precursor File
+DG,,images/Precursors/DG_pos_pre.png
+DGDG,,images/Precursors/DGDG_neg_pre.png
+MG,,images/Precursors/MG_pos_pre.png
+MGDG,,images/Precursors/MGDG_neg_pre.png
+SQDG,,images/Precursors/SQDG_neg_pre.png
+TG,,images/Precursors/TG_pos_pre.png
+Palmitic acid,,images/Precursors/Palmitic Acid.png
+Palmitic acid{d2},,images/Precursors/IS/Palmitic Acid_d2.png
+tetranor-12-HETE,,images/Precursors/tetranor-12-HETE.png
+12-HHTrE,,images/Precursors/12-HHTrE.png
+12(13)-EpOME,,images/Precursors/12(13)-EpOME.png
+12(13)-EpOME{d4},,images/Precursors/IS/12(13)-EpOME_d4.png
+9(10)-EpOME,,images/Precursors/9(10)-EpOME.png
+Linoleic acid,,images/Precursors/Linoleic Acid.png
+13-HODE,,images/Precursors/13-HODE.png
+13-HODE{d4},,images/Precursors/IS/13-HODE_d4.png
+9-HODE,,images/Precursors/9-HODE.png
+9(10)-EpOME{d4},,images/Precursors/IS/9(10)-EpOME_d4.png
+Linoleic acid{d11},,images/Precursors/IS/LA_d11.png
+Linoleic acid{d4},,images/Precursors/IS/Linoleic Acid_d4.png
+ALA,,images/Precursors/alpha-LA.png
+13-HOTrE,,images/Precursors/13-HOTrE.png
+9-HOTrE,,images/Precursors/9-HOTrE.png
+ALA{d14},,images/Precursors/IS/alpha-LA_d14.png
+TXB1,,images/Precursors/TXB1.png
+TXB2,,images/Precursors/TXB2.png
+TXB3,,images/Precursors/TXB3.png
+TXB2{d4},,images/Precursors/IS/TXB2_d4.png
+PGF2alpha,,images/Precursors/PGF2alpha.png
+PGF2alpha{d4},,images/Precursors/IS/PGF2alpha_d4.png
+PGD2,,images/Precursors/PGD2.png
+PGD2{d4},,images/Precursors/IS/PGD2_d4.png
+PGE2,,images/Precursors/PGE2.png
+PGE2{d4},,images/Precursors/IS/PGE2_d4.png
+PGE2{d9},,images/Precursors/IS/PGE2_d9.png
+PGB2,,images/Precursors/PGB2.png
+PGB2{d4},,images/Precursors/IS/PGB2_d4.png
+15d-PGJ2,,images/Precursors/15d-PGJ2.png
+15d-PGJ2{d4},,images/Precursors/IS/15d-PGJ2_d4.png
+14(15)-EET,,images/Precursors/14(15)-EET.png
+14(15)-EET{d11},,images/Precursors/IS/14(15)-EET_d11.png
+"14,15-DHET",,"images/Precursors/14,15-DHET.png"
+"14,15-DHET{d11}",,"images/Precursors/IS/14,15-DHET_d11.png"
+5(6)-EET,,images/Precursors/5(6)-EET.png
+5(6)-EET{d11},,images/Precursors/IS/5(6)-EET_d11.png
+8(9)-EET,,images/Precursors/8(9)-EET.png
+8(9)-EET{d11},,images/Precursors/IS/8(9)-EET_d11.png
+"8,9-DHET",,"images/Precursors/8,9-DHET.png"
+"8,9-DHET{d11}",,"images/Precursors/IS/8,9-DHET_d11.png"
+11(12)-EET,,images/Precursors/11(12)-EET.png
+11(12)-EET{d11},,images/Precursors/IS/11(12)-EET_d11.png
+"11,12-DHET",,"images/Precursors/11,12-DHET.png"
+"11,12-DHET{d11}",,"images/Precursors/IS/11,12-DHET_d11.png"
+AA,,images/Precursors/AA.png
+11-HETE,,images/Precursors/11-HETE.png
+12-HETE,,images/Precursors/12-HETE.png
+12-HETE{d8},,images/Precursors/IS/12-HETE_d8.png
+12-OxoETE,,images/Precursors/12-OxoETE.png
+14(15)-EpETE,,images/Precursors/14(15)-EpETE.png
+15-HETE,,images/Precursors/15-HETE.png
+15-HETE{d8},,images/Precursors/IS/15-HETE_d8.png
+16-HETE,,images/Precursors/16-HETE.png
+5-HETE,,images/Precursors/5-HETE.png
+"5,12-DiHETE",,"images/Precursors/5,12-DiHETE.png"
+LTB4,,images/Precursors/LTB4.png
+LTB4{d4},,images/Precursors/IS/LTB4_d4.png
+"5,6-DiHETE",,"images/Precursors/5,6-DiHETE.png"
+"5,6,15-LXA4",,"images/Precursors/5,6,15-LXA4.png"
+5-HETE{d8},,images/Precursors/IS/5-HETE_d8.png
+5-HpETE,,images/Precursors/5-HpETE.png
+5-OxoETE,,images/Precursors/5-OxoETE.png
+5-OxoETE{d7},,images/Precursors/IS/5-OxoETE_d7.png
+8-HETE,,images/Precursors/8-HETE.png
+9-HETE,,images/Precursors/9-HETE.png
+AA{d8},,images/Precursors/IS/AA_d8.png
+EPA,,images/Precursors/EPA.png
+12-HEPE,,images/Precursors/12-HEPE.png
+15-HEPE,,images/Precursors/15-HEPE.png
+18-HEPE,,images/Precursors/18-HEPE.png
+5-HEPE,,images/Precursors/5-HEPE.png
+9-HEPE,,images/Precursors/9-HEPE.png
+EPA{d5},,images/Precursors/IS/EPA_d5.png
+DHA,,images/Precursors/DHA.png
+10-HDoHE,,images/Precursors/10-HDoHE.png
+11-HDoHE,,images/Precursors/11-HDoHE.png
+16-HDoHE,,images/Precursors/16-HDoHE.png
+Resolvin D3,,images/Precursors/Resolvin D3.png
+Maresin 1,,images/Precursors/Maresin1.png
+Resolvin D2,,images/Precursors/Resolvin D2.png
+Resolvin D2{d5},,images/Precursors/IS/Resolvin D2_d5.png
+Resolvin D5,,images/Precursors/Resolvin D5.png
+Resolvin D1,,images/Precursors/Resolvin D1.png
+Resolvin D1{d5},,images/Precursors/IS/Resolvin D1_d5.png
+8-HDoHE,,images/Precursors/8-HDoHE.png
+DHA{d5},,images/Precursors/IS/DHA_d5.png
+LTC4,,images/Precursors/LTC4.png
+LTC4{d5},,images/Precursors/IS/LTC4_d5.png
+LTD4,,images/Precursors/LTD4.png
+LTD4{d5},,images/Precursors/IS/LTD4_d5.png
+PGI2,,images/Precursors/PGI2.png
+BMP,,images/Precursors/BMP_pos_pre.png
+CDPDAG,,images/Precursors/CDP-DAG_neg_pre.png
+CL,,images/Precursors/CL_neg_pre.png
+DMPE,,images/Precursors/DMPE_pos_pre.png
+LPA,,images/Precursors/LPA_neg_pre.png
+LPC,,images/Precursors/LPC_pos_pre.png
+LPC O,,images/Precursors/eLPC_pos_pre.png
+LPC P,,images/Precursors/pLPC_pos_pre.png
+LPE,,images/Precursors/LPE_neg_pre.png
+LPE O,,images/Precursors/eLPE_neg_pre.png
+LPE P,,images/Precursors/pLPE_neg_pre.png
+LPG,,images/Precursors/LPG_neg_pre.png
+LPI,,images/Precursors/LPI_neg_pre.png
+LPS,,images/Precursors/LPS_neg_pre.png
+LCL,,images/Precursors/MLCL_neg_pre.png
+MMPE,,images/Precursors/MMPE_neg_pre.png
+PA,,images/Precursors/PA_neg_pre.png
+PC,,images/Precursors/PC_neg_pre.png
+PC O,,images/Precursors/ePC_neg_pre.png
+PC P,,images/Precursors/pPC_neg_pre.png
+PE,,images/Precursors/PE_neg_pre.png
+PE O,,images/Precursors/ePE_neg_pre.png
+PE P,,images/Precursors/pPE_neg_pre.png
+PEt,,images/Precursors/PEt_neg_pre.png
+PG,,images/Precursors/PG_neg_pre.png
+PI,,images/Precursors/PI_neg_pre.png
+PIP,,images/Precursors/PIP_neg_pre.png
+PIP2,,images/Precursors/PIP2_neg_pre.png
+PIP3,,images/Precursors/PIP3_neg_pre.png
+PS,,images/Precursors/PS_neg_pre.png
+Cer,,images/Precursors/Cer_pos_pre.png
+CerP,,images/Precursors/CerP_pos_pre.png
+EPC,,images/Precursors/CerPE_pos_pre.png
+GB4,,images/Precursors/GB4Cer_pos_pre.png
+GM1,,images/Precursors/GM3Cer_neg_pre.png
+GM2,,images/Precursors/GM3Cer_neg_pre.png
+GM3,,images/Precursors/GM3Cer_neg_pre.png
+GM4,,images/Precursors/GM4Cer_neg_pre.png
+GD1,,images/Precursors/GM3Cer_neg_pre.png
+GD2,,images/Precursors/GM3Cer_neg_pre.png
+GD3,,images/Precursors/GD3Cer_neg_pre.png
+GT1,,images/Precursors/GM3Cer_neg_pre.png
+GT2,,images/Precursors/GM3Cer_neg_pre.png
+GT3,,images/Precursors/GM3Cer_neg_pre.png
+GQ1,,images/Precursors/GM3Cer_neg_pre.png
+GP1,,images/Precursors/GM3Cer_neg_pre.png
+Hex2Cer,,images/Precursors/LacCer_pos_pre.png
+Hex3Cer,,images/Precursors/GB3Cer_pos_pre.png
+HexCer,,images/Precursors/HexCer_pos_pre.png
+IPC,,images/Precursors/CerPI_neg_pre.png
+SPB,,images/Precursors/SPH_pos_pre.png
+SPBP,,images/Precursors/SPH-P_pos_pre.png
+LHexCer,,images/Precursors/HexSph_pos_pre.png
+LSM,,images/Precursors/SPC_pos_pre.png
+M(IP)2C,,images/Precursors/MIP2Cer_neg_pre.png
+MIPC,,images/Precursors/MIPCer_neg_pre.png
+SHexCer,,images/Precursors/HexCerS_pos_pre.png
+SM,,images/Precursors/SM_pos_pre.png
+SE 27:1,images/backbones/ChE.png,images/Precursors/ChE_pos_pre.png
+SE 27:2,images/backbones/DeE.png,images/Precursors/DeE_pos_pre.png
+SE 28:2,images/backbones/ErDiE.png,images/Precursors/ErDiE_pos_pre.png
+SE 28:3,images/backbones/ErE.png,images/Precursors/ErE_pos_pre.png
+SE 29:2,images/backbones/StE.png,images/Precursors/StE_pos_pre.png
+SE 30:2,images/backbones/LaE.png,images/Precursors/LaE_pos_pre.png
+ST 27:1;O,images/backbones/Ch.png,images/Precursors/Ch_pos_pre.png
+ST 27:2;O,images/backbones/De.png,images/Precursors/De_pos_pre.png
+ST 28:2;O,images/backbones/ErDi.png,images/Precursors/ErDi_pos_pre.png
+ST 28:3;O,images/backbones/Er.png,images/Precursors/Er_pos_pre.png
+ST 29:2;O,images/backbones/St.png,images/Precursors/St_pos_pre.png
+ST 30:2;O,images/backbones/La.png,images/Precursors/La_pos_pre.png

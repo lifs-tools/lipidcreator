@@ -541,8 +541,11 @@ namespace LipidCreator
                     HashSet<string> blocks = new HashSet<string>();
                     foreach (string fragmentBase in ms2fragment.fragmentBase) blocks.Add(fragmentBase);
                     if (blocks.Count == 0) continue;
+                    
+                    bool ms_is_molecule = blocks.Contains("M");
+                    
                     blocks.ExceptWith(buildingBlockSets[headgroupType]);
-                    if (blocks.Count > 0)
+                    if (!ms_is_molecule && blocks.Count > 0)
                     {
                         log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
                         throw new Exception();
@@ -554,8 +557,11 @@ namespace LipidCreator
                     HashSet<string> blocks = new HashSet<string>();
                     foreach (string fragmentBase in ms2fragment.fragmentBase) blocks.Add(fragmentBase);
                     if (blocks.Count == 0) continue;
+                    
+                    bool ms_is_molecule = blocks.Contains("M");
+                    
                     blocks.ExceptWith(buildingBlockSets[headgroupType]);
-                    if (blocks.Count > 0)
+                    if (!ms_is_molecule && blocks.Count > 0)
                     {
                         log.Error("Error: building blocks of fragement '" + headgroupName + " / " + ms2fragment.fragmentName + "' do not match with 'Building Blocks' type in headgroups file.");
                         throw new Exception();
@@ -1987,7 +1993,6 @@ namespace LipidCreator
             {
                 case csgoslin.LipidCategory.GL:
                     lipid = new Glycerolipid(this);
-                    Console.WriteLine(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
                     lipid.headGroupNames.Add(lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS));
                     ((Glycerolipid)lipid).fag1 = new FattyAcidGroup(false, true);
                     ((Glycerolipid)lipid).fag2 = new FattyAcidGroup(false, true);

@@ -129,6 +129,7 @@ namespace LipidCreator
                     
                     ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                     MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
+                    ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
                     string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
                     Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
                     string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
@@ -150,6 +151,7 @@ namespace LipidCreator
                     precursorData.precursorAdduct = adduct;
                     precursorData.precursorAdductFormula = adductForm;
                     precursorData.precursorM_Z = mass;
+                    precursorData.moleculeElements = moleculeDictionary;
                     precursorData.fa1 = null;
                     precursorData.fa2 = null;
                     precursorData.fa3 = null;

@@ -804,6 +804,43 @@ namespace LipidCreator
         Label plHydroxyl2Label;
         [NonSerialized]
         Label stFAHydroxyLabel;
+        
+        
+        [NonSerialized]
+        public GroupBox lipidNameSearchBox;
+        [NonSerialized]
+        public GroupBox lipidMassSearchBox;
+        [NonSerialized]
+        public TextBox suggestedLipidName;
+        [NonSerialized]
+        public TextBox translatedLipidName;
+        [NonSerialized]
+        public TextBox searchMass;
+        [NonSerialized]
+        public TextBox searchToll;
+        [NonSerialized]
+        public Label suggestedLipidNameLabel;
+        [NonSerialized]
+        public Label translatedLipidNameLabel;
+        [NonSerialized]
+        public Label searchMassLabel;
+        [NonSerialized]
+        public Label searchTollLabel;
+        [NonSerialized]
+        public Label lipidMassLabel;
+        [NonSerialized]
+        public Label lipidSumFormulaLabel;
+        [NonSerialized]
+        public Label fragmentsTableLabel;
+        [NonSerialized]
+        public Label searchAdductLabel;
+        [NonSerialized]
+        public ComboBox searchAdduct;
+        [NonSerialized]
+        DataGridView searchfragmentsGridview;
+        
+        
+        
 
         [NonSerialized]
         Label homeText;
@@ -2637,6 +2674,148 @@ namespace LipidCreator
             quicksearchTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             quicksearchTab.BackColor = Color.White;
             quicksearchTab.Font = Font;
+            
+            
+            
+            
+            
+            lipidNameSearchBox = new GroupBox();
+            lipidMassSearchBox = new GroupBox();
+            quicksearchTab.Controls.Add(lipidNameSearchBox);
+            quicksearchTab.Controls.Add(lipidMassSearchBox);
+            
+            lipidNameSearchBox.Text = "Lipid name search";
+            lipidNameSearchBox.Location = new Point(10, 10);
+            lipidNameSearchBox.Size = new Size(500, 400);
+            
+            lipidMassSearchBox.Text = "Lipid mass search";
+            lipidMassSearchBox.Location = new Point(520, 10);
+            lipidMassSearchBox.Size = new Size(500, 400);
+            
+            
+            
+            suggestedLipidName = new TextBox();
+            translatedLipidName = new TextBox();
+            searchMass = new TextBox();
+            searchToll = new TextBox();
+            
+            suggestedLipidNameLabel = new Label();
+            translatedLipidNameLabel = new Label();
+            searchMassLabel = new Label();
+            searchTollLabel = new Label();
+            lipidMassLabel = new Label();
+            lipidSumFormulaLabel = new Label();
+            searchAdductLabel = new Label();
+            fragmentsTableLabel = new Label();
+            
+            searchAdduct = new ComboBox();
+            searchAdduct.Items.Add("Neutral molecule");
+            searchAdduct.Items.Add("+H+");
+            searchAdduct.Items.Add("+2H+");
+            searchAdduct.Items.Add("+NH4+");
+            searchAdduct.Items.Add("-H-");
+            searchAdduct.Items.Add("-2H-");
+            searchAdduct.Items.Add("+HCOO-");
+            searchAdduct.Items.Add("+CH3COO-");
+            
+            searchfragmentsGridview = new DataGridView();
+                
+            
+            
+            lipidNameSearchBox.Controls.Add(suggestedLipidName);
+            lipidNameSearchBox.Controls.Add(suggestedLipidNameLabel);
+            suggestedLipidName.Location = new Point(10, 35);
+            suggestedLipidName.Width = faLength;
+            suggestedLipidName.TextChanged += lipidNameSearch;
+            //suggestedLipidName.TextChanged += delegate(object s, EventArgs e){};
+            suggestedLipidNameLabel.Location = new Point(suggestedLipidName.Left, suggestedLipidName.Top - sep);
+            suggestedLipidNameLabel.Width = faLength;
+            suggestedLipidNameLabel.Text = "Lipid Name";
+            
+            lipidNameSearchBox.Controls.Add(translatedLipidName);
+            lipidNameSearchBox.Controls.Add(translatedLipidNameLabel);
+            translatedLipidName.Location = new Point(suggestedLipidName.Left  + suggestedLipidName.Width + 10, suggestedLipidName.Top);
+            translatedLipidName.Width = faLength;
+            translatedLipidName.Enabled = false;
+            translatedLipidNameLabel.Location = new Point(translatedLipidName.Left, translatedLipidName.Top - sep);
+            translatedLipidNameLabel.Width = faLength;
+            translatedLipidNameLabel.Text = "Translated Lipid Name";
+            
+            lipidNameSearchBox.Controls.Add(lipidMassLabel);
+            lipidNameSearchBox.Controls.Add(lipidSumFormulaLabel);
+            
+            lipidMassLabel.Location = new Point(suggestedLipidName.Left, suggestedLipidName.Top + suggestedLipidName.Height + 10);
+            lipidMassLabel.Width = 2 * faLength;
+            lipidMassLabel.Text = "m/z: ";
+            
+            lipidSumFormulaLabel.Location = new Point(lipidMassLabel.Left, lipidMassLabel.Top + sep);
+            lipidSumFormulaLabel.Width = (int)(2.5 * faLength);
+            lipidSumFormulaLabel.Text = "sum formula: ";
+            lipidSumFormulaLabel.BringToFront();
+            
+            lipidNameSearchBox.Controls.Add(searchAdduct);
+            lipidNameSearchBox.Controls.Add(searchAdductLabel);
+            searchAdduct.Location = new Point(translatedLipidName.Left + faLength + 10, suggestedLipidName.Top);
+            searchAdduct.Width = faLength;
+            searchAdduct.DropDownStyle = ComboBoxStyle.DropDownList;
+            searchAdduct.SelectedIndexChanged += lipidNameSearch;
+            searchAdduct.SelectedIndex = 0;
+            searchAdductLabel.Location = new Point(searchAdduct.Left, searchAdduct.Top - sep);
+            searchAdductLabel.Width = faLength;
+            searchAdductLabel.Text = "Selected Adduct";
+            
+            lipidNameSearchBox.Controls.Add(searchfragmentsGridview);
+            //searchfragmentsGridview.Dock = DockStyle.Fill;
+            //searchfragmentsGridview.DataSource = registeredLipidsDatatable;
+            searchfragmentsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            searchfragmentsGridview.AllowUserToResizeColumns = false;
+            searchfragmentsGridview.AllowUserToAddRows = false;
+            searchfragmentsGridview.AllowUserToResizeRows = false;
+            searchfragmentsGridview.ReadOnly = true;
+            searchfragmentsGridview.MultiSelect = false;
+            //searchfragmentsGridview.RowTemplate.Height = 34;
+            searchfragmentsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            searchfragmentsGridview.RowHeadersVisible = false;
+            searchfragmentsGridview.ScrollBars = ScrollBars.Vertical;
+            searchfragmentsGridview.Location = new Point(lipidSumFormulaLabel.Left, lipidSumFormulaLabel.Top + (int)(2.5 * sep));
+            searchfragmentsGridview.Width = faLength;
+            searchfragmentsGridview.Size = new Size(480, 270);
+            
+            lipidNameSearchBox.Controls.Add(fragmentsTableLabel);
+            fragmentsTableLabel.Location = new Point(searchfragmentsGridview.Left, searchfragmentsGridview.Top - sep);
+            fragmentsTableLabel.Width = faLength;
+            fragmentsTableLabel.Text = "Table of lipid fragments";
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             

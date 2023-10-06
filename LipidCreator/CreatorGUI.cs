@@ -40,6 +40,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using ExtensionMethods;
+using csgoslin;
+using System.Globalization;
 
 namespace LipidCreator
 {
@@ -189,7 +191,7 @@ namespace LipidCreator
                 medNegAdductCheckbox2.Enabled = false;
                 medNegAdductCheckbox3.Enabled = false;
                 medNegAdductCheckbox4.Enabled = false;
-                changeTab(0);
+                changeTab(6);
                 
                 // add instruments into menu for collision energy optimization
                 for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
@@ -253,6 +255,78 @@ namespace LipidCreator
         {
             resetLipidCreator();
         }
+        
+        
+        
+        
+        
+        public void lipidNameSearch(Object sender, EventArgs e)
+        {
+            try
+            {
+                LipidAdduct lipidAdduct = lipidCreator.lipidParser.parse(suggestedLipidName.Text);
+                lipidAdduct.adduct = null;
+                string lipidName = lipidAdduct.get_lipid_string();
+                translatedLipidName.Text = lipidName;
+                
+                if (searchAdduct.SelectedIndex != 0)
+                {
+                    switch((string)searchAdduct.Items[searchAdduct.SelectedIndex])
+                    {
+                        case "+H+": lipidName += Lipid.ALL_ADDUCTS[AdductType.Hp].ToString(); break;
+                        case "+2H+": lipidName += Lipid.ALL_ADDUCTS[AdductType.HHp].ToString(); break;
+                        case "+NH4+": lipidName += Lipid.ALL_ADDUCTS[AdductType.NHHHHp].ToString(); break;
+                        case "-H-": lipidName += Lipid.ALL_ADDUCTS[AdductType.Hm].ToString(); break;
+                        case "-2H-": lipidName += Lipid.ALL_ADDUCTS[AdductType.HHm].ToString(); break;
+                        case "+HCOO-": lipidName += Lipid.ALL_ADDUCTS[AdductType.HCOOm].ToString(); break;
+                        case "+CH3COO-": lipidName += Lipid.ALL_ADDUCTS[AdductType.CHHHCOOm].ToString(); break;
+                        default: break;
+                    }
+                    lipidAdduct = lipidCreator.lipidParser.parse(lipidName);
+                }
+                
+                lipidMassLabel.Text = "m/z: " + string.Format("{0:N4}", lipidAdduct.get_mass());
+                lipidSumFormulaLabel.Text = "sum formula: " + lipidAdduct.get_sum_formula();
+                
+                if (searchAdduct.SelectedIndex != 0)
+                {
+                    Lipid lipid = lipidCreator.translateLipid(lipidAdduct);
+                    if (lipid != null && !(lipid is UnsupportedLipid))
+                    {
+                        HashSet<String> usedKeys = new HashSet<String>();
+                        ArrayList precursorDataList = new ArrayList();
+                        lipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
+                        
+                        
+                        DataTable transitionList = new DataTable();
+                        foreach (string columnKey in LipidCreator.STATIC_DATA_COLUMN_KEYS) transitionList.Columns.Add(columnKey);
+                        
+                        foreach (PrecursorData precursor in precursorDataList)
+                        {
+                            Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, 0});
+                        }
+                        searchfragmentsGridview.DataSource = transitionList;
+                        
+                    }
+                    else
+                    {
+                        searchfragmentsGridview.DataSource = null;
+                    }
+                }
+                else
+                {
+                    searchfragmentsGridview.DataSource = null;
+                }
+            }
+            catch(Exception)
+            {
+                translatedLipidName.Text = "";
+                lipidMassLabel.Text = "m/z: ";
+                lipidSumFormulaLabel.Text = "sum formula: ";
+                searchfragmentsGridview.DataSource = null;
+            }
+        }
+        
         
         
         

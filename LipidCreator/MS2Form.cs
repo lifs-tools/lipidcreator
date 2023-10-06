@@ -80,7 +80,7 @@ namespace LipidCreator
         public List<RectangleF> clippingAreas = new List<RectangleF>();
         public float offsetX = 0;
         public float offsetY = 0;
-        public float factor = 1.5f;
+        public float factor = 2.5f;
         public float dbSpace = 1.5f;
             
         public List<Color> colorList = new List<Color>();
@@ -244,8 +244,6 @@ namespace LipidCreator
                     string[] tokensBB = graphic.Attribute("BoundingBox").Value.Split(new char[]{' '});
                     float bx = (float)Convert.ToDouble(tokensBB[0]) - 1;
                     float by = (float)Convert.ToDouble(tokensBB[1]) - 1 - (symbol.Equals("+") ? 2 : 0);
-                    float bw = Math.Abs((float)Convert.ToDouble(tokensBB[2]) - bx) + 5;
-                    float bh = Math.Abs((float)Convert.ToDouble(tokensBB[3]) - by) + 3 + (symbol.Equals("+") ? 4 : 0);
                     RectangleF drawRect = new RectangleF(bx, by, 0, 0);
                     nodes.Add(new StructureNode(new PointF(bx, by), drawRect, symbol, idToNode[nodeId].solidBrush, idToNode[nodeId].font));                    
                 }
@@ -628,7 +626,6 @@ namespace LipidCreator
             toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
-            bool updateing = true;
 
             if (hIndex != -1)
             {

@@ -62,6 +62,7 @@ namespace LipidCreator
         public double precursorM_Z;
         public bool addPrecursor;
         public bool precursorSelected = true;
+        public ElementDictionary moleculeElements = new ElementDictionary();
         public FattyAcid fa1;
         public FattyAcid fa2;
         public FattyAcid fa3;
@@ -463,6 +464,9 @@ namespace LipidCreator
                             break;
                         case "HG":
                             MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
+                            break;
+                        case "M":
+                            MS2Fragment.addCounts(atomsCountFragment, precursorData.moleculeElements);
                             break;
                         default:
                             break;

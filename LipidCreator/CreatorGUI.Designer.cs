@@ -2780,6 +2780,7 @@ namespace LipidCreator
             searchfragmentsGridview.Location = new Point(lipidSumFormulaLabel.Left, lipidSumFormulaLabel.Top + (int)(2.5 * sep));
             searchfragmentsGridview.Width = faLength;
             searchfragmentsGridview.Size = new Size(480, 270);
+            searchfragmentsGridview.DataBindingComplete += searchFragmentsComplete;
             
             lipidNameSearchBox.Controls.Add(fragmentsTableLabel);
             fragmentsTableLabel.Location = new Point(searchfragmentsGridview.Left, searchfragmentsGridview.Top - sep);

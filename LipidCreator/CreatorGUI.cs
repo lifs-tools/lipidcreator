@@ -262,6 +262,10 @@ namespace LipidCreator
         
         public void lipidNameSearch(Object sender, EventArgs e)
         {
+            DataTable transitionList = new DataTable();
+            foreach (string columnKey in LipidCreator.STATIC_DATA_COLUMN_KEYS) transitionList.Columns.Add(columnKey);
+            searchfragmentsGridview.DataSource = transitionList;
+            
             try
             {
                 LipidAdduct lipidAdduct = lipidCreator.lipidParser.parse(suggestedLipidName.Text);
@@ -290,32 +294,24 @@ namespace LipidCreator
                 
                 if (searchAdduct.SelectedIndex != 0)
                 {
-                    Lipid lipid = lipidCreator.translateLipid(lipidAdduct);
-                    if (lipid != null && !(lipid is UnsupportedLipid))
+                    try
                     {
-                        HashSet<String> usedKeys = new HashSet<String>();
-                        ArrayList precursorDataList = new ArrayList();
-                        lipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
-                        
-                        
-                        DataTable transitionList = new DataTable();
-                        foreach (string columnKey in LipidCreator.STATIC_DATA_COLUMN_KEYS) transitionList.Columns.Add(columnKey);
-                        
-                        foreach (PrecursorData precursor in precursorDataList)
+                        Lipid lipid = lipidCreator.translateLipid(lipidAdduct);
+                        if (lipid != null && !(lipid is UnsupportedLipid))
                         {
-                            Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, 0});
+                            HashSet<String> usedKeys = new HashSet<String>();
+                            ArrayList precursorDataList = new ArrayList();
+                            lipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
+                            
+                            
+                            foreach (PrecursorData precursor in precursorDataList)
+                            {
+                                Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, 0});
+                            }
+                            
                         }
-                        searchfragmentsGridview.DataSource = transitionList;
-                        
                     }
-                    else
-                    {
-                        searchfragmentsGridview.DataSource = null;
-                    }
-                }
-                else
-                {
-                    searchfragmentsGridview.DataSource = null;
+                    catch(Exception) {}
                 }
             }
             catch(Exception)
@@ -323,8 +319,19 @@ namespace LipidCreator
                 translatedLipidName.Text = "";
                 lipidMassLabel.Text = "m/z: ";
                 lipidSumFormulaLabel.Text = "sum formula: ";
-                searchfragmentsGridview.DataSource = null;
             }
+        }
+        
+        
+        private void searchFragmentsComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            for (int c = 0; c < 8; c++) searchfragmentsGridview.Columns[c].Visible = false;
+            searchfragmentsGridview.Columns[8].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.3);
+            searchfragmentsGridview.Columns[9].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.3);
+            searchfragmentsGridview.Columns[10].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.20);
+            searchfragmentsGridview.Columns[11].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.20);
+            searchfragmentsGridview.Columns[12].Visible = false;
+            searchfragmentsGridview.Columns[13].Visible = false;
         }
         
         

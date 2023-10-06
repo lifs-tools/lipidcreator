@@ -143,7 +143,7 @@ namespace LipidCreator
         public static PlatformID LC_OS;
         public ArrayList registeredLipids;
         public Dictionary<ulong, Lipid> registeredLipidDictionary;
-        public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive charge -> fragment name -> fragment
+        public IDictionary<string, IDictionary<bool, IDictionary<string, MS2Fragment>>> allFragments; // lipid class -> positive/negative charge -> fragment name -> fragment
         public IDictionary<int, ArrayList> categoryToClass;
         public IDictionary<string, Precursor> headgroups;
         public DataTable transitionList;
@@ -775,7 +775,7 @@ namespace LipidCreator
                     log.Info("Opening connection to Skyline through pipe " + pipe);
                     client.Connect();
                     log.Info("Connected to Skyline through pipe " + pipe);
-                    while (client.NumberOfServerInstances>0)
+                    while (client.NumberOfServerInstances > 0)
                     {
                         log.Debug("Checking Skyline pipe connection!");
                         var nServers = client.NumberOfServerInstances;

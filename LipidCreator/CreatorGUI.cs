@@ -38,6 +38,7 @@ using System.Xml.Linq;
 using log4net;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using ExtensionMethods;
 
 namespace LipidCreator
@@ -143,7 +144,7 @@ namespace LipidCreator
                         }
                     }
                 }
-                tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, sterollipidsTab, mediatorlipidsTab});
+                tabList = new ArrayList(new TabPage[] {homeTab, glycerolipidsTab, phospholipidsTab, sphingolipidsTab, sterollipidsTab, mediatorlipidsTab, quicksearchTab});
                 if (!lipidCreatorInitError) tutorial = new Tutorial(this);
                 
                 Rectangle r = Screen.FromControl(this).Bounds;
@@ -246,12 +247,35 @@ namespace LipidCreator
         
         
         
-        
-        
+    
         
         public void resetLipidCreatorMenu(Object sender, EventArgs e)
         {
             resetLipidCreator();
+        }
+        
+        
+        
+        
+        
+        public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
+        {
+            foreach (var fragment in element.Elements().Where(el => el.Name.LocalName.Equals("fragment")))
+            {
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("n")))
+                {
+                    nodes.Add(node);
+                    parseXML(node, nodes, edges);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("b")))
+                {
+                    edges.Add(node);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("graphic")))
+                {
+                    nodes.Add(node);
+                }
+            }
         }
         
         
@@ -392,7 +416,8 @@ namespace LipidCreator
                                                       new Phospholipid(lipidCreator),
                                                       new Sphingolipid(lipidCreator),
                                                       new Sterol(lipidCreator),
-                                                      new Mediator(lipidCreator)});
+                                                      new Mediator(lipidCreator),
+                                                      null});
         }
         
         

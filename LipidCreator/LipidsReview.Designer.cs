@@ -65,8 +65,7 @@ namespace LipidCreator
             int windowWidth = 1100;
             int windowHeight = 580;
             
-            System.ComponentModel.ComponentResourceManager resources =
-                new System.ComponentModel.ComponentResourceManager(typeof(LipidsReview));
+            //System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LipidsReview));
         
             this.dataGridViewTransitions = new System.Windows.Forms.DataGridView();
             this.buttonSendToSkyline = new System.Windows.Forms.Button();

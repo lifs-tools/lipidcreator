@@ -86,6 +86,7 @@ namespace LipidCreator
             this.pictureBoxFragments.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBoxFragments.TabIndex = 1;
             this.pictureBoxFragments.TabStop = false;
+            this.pictureBoxFragments.Paint += new PaintEventHandler(test_Paint);
             //
             // checkBox1 - isotope list
             //

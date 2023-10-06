@@ -420,6 +420,8 @@ namespace LipidCreator
         [NonSerialized]
         public TabPage mediatorlipidsTab;
         [NonSerialized]
+        public TabPage quicksearchTab;
+        [NonSerialized]
         public GroupBox lipidsGroupbox;
         [NonSerialized]
         public int DefaultCheckboxBGR;
@@ -1037,6 +1039,7 @@ namespace LipidCreator
             sphingolipidsTab = new TabPage();
             sterollipidsTab = new TabPage();
             mediatorlipidsTab = new TabPage();
+            quicksearchTab = new TabPage();
             lipidsGroupbox = new GroupBox();
             addLipidButton = new Button();
             addHeavyIsotopeButton = new Button();
@@ -1379,13 +1382,14 @@ namespace LipidCreator
             tabControl.Controls.Add(sphingolipidsTab);
             tabControl.Controls.Add(sterollipidsTab);
             tabControl.Controls.Add(mediatorlipidsTab);
+            tabControl.Controls.Add(quicksearchTab);
             tabControl.ShowToolTips = true;
             tabControl.Dock = DockStyle.Fill;
             tabControl.Height = 300;
             Font tabFont = new Font(tabControl.Font.FontFamily, (REGULAR_FONT_SIZE + 5) * FONT_SIZE_FACTOR);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
-            tabControl.ItemSize = new Size(170, 50);
+            tabControl.ItemSize = new Size(148, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
             
@@ -2221,7 +2225,7 @@ namespace LipidCreator
             stStep1.Controls.Add(stPictureBox);
             stStep1.Controls.Add(stHgListbox);
             
-            sterollipidsTab.Text = "Sterol lipids";
+            sterollipidsTab.Text = "Sterol Lipids";
             //sterollipidsTab.ToolTipText = "Sterol lipids";
             sterollipidsTab.Location = new Point(0, 0);
             sterollipidsTab.Size = this.Size;
@@ -2621,6 +2625,21 @@ namespace LipidCreator
             startFourthTutorialButton.Location = new Point(300, 350);
             startFourthTutorialButton.BackColor = SystemColors.Control;
             startFourthTutorialButton.Click += startFourthTutorial;
+            
+            
+            
+            
+            quicksearchTab.Text = "      Quick\nLipid Search";
+            //sterollipidsTab.ToolTipText = "Sterol lipids";
+            quicksearchTab.Location = new Point(0, 0);
+            quicksearchTab.Size = this.Size;
+            quicksearchTab.AutoSize = true;
+            quicksearchTab.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            quicksearchTab.BackColor = Color.White;
+            quicksearchTab.Font = Font;
+            
+            
+            
             
             if (LipidCreator.LC_OS == PlatformID.Unix)
             {

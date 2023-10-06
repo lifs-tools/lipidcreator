@@ -30,6 +30,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Globalization;
 
 
 namespace LipidCreator
@@ -53,10 +54,12 @@ namespace LipidCreator
             precursorDataTable.Columns[1].DataType = typeof(string);
             precursorDataTable.Columns.Add(new DataColumn("Adduct"));
             precursorDataTable.Columns[2].DataType = typeof(string);
-            precursorDataTable.Columns.Add(new DataColumn("Category"));
+            precursorDataTable.Columns.Add(new DataColumn("Precursor Ion m/z"));
             precursorDataTable.Columns[3].DataType = typeof(string);
+            precursorDataTable.Columns.Add(new DataColumn("Category"));
+            precursorDataTable.Columns[4].DataType = typeof(string);
             precursorDataTable.Columns.Add(new DataColumn("reference"));
-            precursorDataTable.Columns[4].DataType = typeof(PrecursorData);
+            precursorDataTable.Columns[5].DataType = typeof(PrecursorData);
             
             InitializeComponent ();
             
@@ -66,6 +69,7 @@ namespace LipidCreator
                 row["Keep"] = precursorData.precursorSelected;
                 row["Precursor name"] = precursorData.precursorName;
                 row["Adduct"] = precursorData.precursorAdductFormula;
+                row["Precursor Ion m/z"] = string.Format(CultureInfo.InvariantCulture, "{0:N4}", precursorData.precursorM_Z).Replace(",", "");
                 row["Category"] = precursorData.lipidCategory.ToString();
                 row["reference"] = precursorData;
                 precursorDataTable.Rows.Add(row);
@@ -82,17 +86,21 @@ namespace LipidCreator
         
         private void precursorGridViewDataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            dataGridViewPrecursors.Columns[0].ReadOnly = true;
             dataGridViewPrecursors.Columns[0].Width = 50;
             dataGridViewPrecursors.Columns[0].SortMode = DataGridViewColumnSortMode.Automatic;
-            dataGridViewPrecursors.Columns[1].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.4);
+            dataGridViewPrecursors.Columns[1].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.3);
             dataGridViewPrecursors.Columns[1].ReadOnly = true;
             dataGridViewPrecursors.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dataGridViewPrecursors.Columns[2].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.2);
+            dataGridViewPrecursors.Columns[2].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.20);
             dataGridViewPrecursors.Columns[2].ReadOnly = true;
             dataGridViewPrecursors.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dataGridViewPrecursors.Columns[3].Width = (int)Math.Floor(dataGridViewPrecursors.Size.Width * 0.15);
             dataGridViewPrecursors.Columns[3].ReadOnly = true;
-            dataGridViewPrecursors.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewPrecursors.Columns[4].Visible = false;
+            dataGridViewPrecursors.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dataGridViewPrecursors.Columns[4].ReadOnly = true;
+            dataGridViewPrecursors.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPrecursors.Columns[5].Visible = false;
             
         }
         

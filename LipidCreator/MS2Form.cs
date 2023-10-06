@@ -28,9 +28,363 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Linq;
+using System.Drawing.Drawing2D;
 
 namespace LipidCreator
 {
+    public class StructureNode
+    {
+        public PointF position;
+        public RectangleF boundingBox = new RectangleF();
+        public string text = "";
+        public SolidBrush solidBrush = null;
+        public Font font = null;
+        
+        public StructureNode(PointF p)
+        {
+            position = p;
+        }    
+        
+        public StructureNode(PointF p, RectangleF b, string t, SolidBrush s, Font f)
+        {
+            position = p;
+            boundingBox = b;
+            text = t;
+            solidBrush = s;
+            font = f;
+        }
+    }
+    
+    public class StructureEdge
+    {
+        public PointF start;
+        public PointF end;
+        public Pen pen;
+        
+        public StructureEdge(Pen p, PointF s, PointF e)
+        {
+            start = s;
+            end = e;
+            pen = p;
+        }
+    }
+    
+    public class LipidStructure
+    {
+        
+        public List<StructureNode> nodes = new List<StructureNode>();
+        public List<StructureEdge> edges = new List<StructureEdge>();
+        public Dictionary<string, StructureNode> idToNode = new Dictionary<string, StructureNode>();
+        public List<RectangleF> clippingAreas = new List<RectangleF>();
+        public float offsetX = 0;
+        public float offsetY = 0;
+        public float factor = 1.5f;
+        public float dbSpace = 1.5f;
+            
+        public List<Color> colorList = new List<Color>();
+        public Dictionary<string, string> fonts = new Dictionary<string, string>();
+        
+        
+        
+        public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
+        {
+            foreach (var fragment in element.Elements().Where(el => el.Name.LocalName.Equals("fragment")))
+            {
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("n")))
+                {
+                    nodes.Add(node);
+                    parseXML(node, nodes, edges);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("b")))
+                {
+                    edges.Add(node);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("graphic")))
+                {
+                    nodes.Add(node);
+                }
+            }
+        }
+        
+        
+        
+        public LipidStructure(string file_name, PaintEventArgs e, CustomPictureBox pictureBoxFragments)
+        {
+            XDocument doc = XDocument.Load(file_name);
+            
+            List<Color> colorList = new List<Color>();
+            Dictionary<string, string> fonts = new Dictionary<string, string>();
+            
+            foreach (var colors in doc.Element("CDXML").Elements().Where(el => el.Name.LocalName.Equals("colortable")))
+            {
+                foreach(var color in colors.Elements().Where(el => el.Name.LocalName.Equals("color")))
+                {
+                    if (((string)color.Attribute("r") == null) || ((string)color.Attribute("g") == null) || ((string)color.Attribute("b") == null)) continue;
+                        
+                    int r = (int)(Convert.ToDouble(color.Attribute("r").Value.ToString()) * 255.0);
+                    int g = (int)(Convert.ToDouble(color.Attribute("g").Value.ToString()) * 255.0);
+                    int b = (int)(Convert.ToDouble(color.Attribute("b").Value.ToString()) * 255.0);
+                    colorList.Add(Color.FromArgb(r, g, b));
+                }
+            }
+            
+                
+            foreach (var fontlist in doc.Element("CDXML").Elements().Where(el => el.Name.LocalName.Equals("fonttable")))
+            {
+                foreach(var font in fontlist.Elements().Where(el => el.Name.LocalName.Equals("font")))
+                {
+                    if (((string)font.Attribute("id") == null) || ((string)font.Attribute("name") == null)) continue;
+                    
+                    string fontId = font.Attribute("id").Value.ToString();
+                    try
+                    {
+                        string fontName = font.Attribute("name").Value.ToString();                        
+                        fonts.Add(fontId, fontName);
+                    }
+                    catch(Exception)
+                    {
+                        fonts.Add(fontId, "Arial");
+                    }
+                }
+            }
+            
+            List<XElement> xnodes = new List<XElement>();
+            List<XElement> xedges = new List<XElement>();
+            foreach (var pages in doc.Element("CDXML").Elements().Where(el => el.Name.LocalName.Equals("page")))
+            {
+                parseXML(pages, xnodes, xedges);
+            }
+            
+            
+            // draw atoms and any other label
+            foreach (var node in xnodes.Where(el => (el.Name.LocalName.Equals("n")) && ((string)el.Attribute("p") != null) && ((string)el.Attribute("id") != null)))
+            {
+                string[] tokens = node.Attribute("p").Value.Split(new char[]{' '});
+                if (tokens.Length != 2) continue;
+                
+                try
+                {
+                    float x = (float)Convert.ToDouble(tokens[0]);
+                    float y = (float)Convert.ToDouble(tokens[1]);
+                    string nodeId = (string)node.Attribute("id").Value;
+                    
+                    if (node.Elements().Count() == 0 || node.Elements().First().Elements().Count() == 0)
+                    {
+                        StructureNode sn = new StructureNode(new PointF(x, y));
+                        nodes.Add(sn);
+                        idToNode.Add(nodeId, sn);
+                        continue;
+                    }
+                    
+                    var t = node.Elements().First();
+                    var s = t.Elements().First();
+                    string text = s.Value.ToString();
+                        
+                    float fontSize = 10.0f;
+
+                    // define the color
+                    int colorCode = ((string)node.Attribute("color") != null) ? Convert.ToInt32(node.Attribute("color").Value.ToString()) - 2 : -1;
+                    
+                    SolidBrush mySolidBrush = new SolidBrush((0 <= colorCode && colorCode < colorList.Count) ? colorList[colorCode] : Color.Black);
+                    
+                    string fontCode = ((string)s.Attribute("font") != null) ? s.Attribute("font").Value.ToString() : "";
+                    Font drawFont = (!fontCode.Equals("") && fonts.ContainsKey(fontCode)) ? new Font(fonts[fontCode], fontSize) : new Font("Arial", fontSize);
+                    
+                    RectangleF drawRect = new RectangleF(x, y, 0, 0);
+                
+                    if ((new HashSet<string>(){"R1", "R2", "R3", "R4"}).Contains(text))
+                    {
+                        StructureNode sn = new StructureNode(new PointF(x, y), drawRect, "R", mySolidBrush, drawFont);
+                        x -= (float)Math.Abs(x * 0.02);
+                        nodes.Add(sn);
+                        idToNode.Add(nodeId, sn);
+                        
+                        Size size = TextRenderer.MeasureText(e.Graphics, "R", drawFont);
+                        x += size.Width * 0.75f;
+                        y += size.Height * 0.25f;
+                        fontSize *= 0.5f;
+                        string subIndex = text.Substring(1, 1);
+                        
+                        RectangleF subscript = new RectangleF(x, y, 0, 0);
+                        Font subFont = (!fontCode.Equals("") && fonts.ContainsKey(fontCode)) ? new Font(fonts[fontCode], fontSize) : new Font("Arial", fontSize);
+                        nodes.Add(new StructureNode(new PointF(x, y), subscript, subIndex, mySolidBrush, subFont));
+                        
+                    }
+                    else 
+                    {
+                        StructureNode sn = new StructureNode(new PointF(x, y), drawRect, text, mySolidBrush, drawFont);
+                        nodes.Add(sn);
+                        idToNode.Add(nodeId, sn);
+                    }
+                }
+                catch(Exception ex){
+                    Console.WriteLine(ex);
+                }
+            }
+            
+            
+            
+            foreach (var graphic in xnodes.Where(el => (el.Name.LocalName.Equals("graphic")) && ((string)el.Attribute("SymbolType") != null) && ((string)el.Attribute("BoundingBox") != null)))
+            {
+                // get the symbol
+                try
+                {
+                    string symbolType = graphic.Attribute("SymbolType").Value.ToString();
+                    if (!symbolType.Equals("Plus") && !symbolType.Equals("Minus")) continue;
+                    string symbol = symbolType.Equals("Plus") ? "+" : "-";
+                    
+                    if ((string)graphic.Elements().First().Attribute("object") == null) continue;
+                    string nodeId = graphic.Elements().First().Attribute("object").Value.ToString();
+                    
+                    if (!idToNode.ContainsKey(nodeId)) continue;
+                    
+                    
+                    string[] tokensBB = graphic.Attribute("BoundingBox").Value.Split(new char[]{' '});
+                    float bx = (float)Convert.ToDouble(tokensBB[0]) - 1;
+                    float by = (float)Convert.ToDouble(tokensBB[1]) - 1 - (symbol.Equals("+") ? 2 : 0);
+                    float bw = Math.Abs((float)Convert.ToDouble(tokensBB[2]) - bx) + 5;
+                    float bh = Math.Abs((float)Convert.ToDouble(tokensBB[3]) - by) + 3 + (symbol.Equals("+") ? 4 : 0);
+                    RectangleF drawRect = new RectangleF(bx, by, 0, 0);
+                    nodes.Add(new StructureNode(new PointF(bx, by), drawRect, symbol, idToNode[nodeId].solidBrush, idToNode[nodeId].font));                    
+                }
+                catch (Exception){}
+            }
+            
+            
+            
+            // draw single and double bonds
+            foreach (var edge in xedges.Where(el => ((string)el.Attribute("id") != null) && ((string)el.Attribute("B") != null) && ((string)el.Attribute("E") != null)))
+            {
+                string idB = edge.Attribute("B").Value;
+                string idE = edge.Attribute("E").Value;
+                if (!idToNode.ContainsKey(idB) || !idToNode.ContainsKey(idE)) continue;
+                
+                StructureNode nodeB = idToNode[idB];
+                StructureNode nodeE = idToNode[idE];
+                
+                try
+                {
+                    float xB = nodeB.position.X;
+                    float yB = nodeB.position.Y;
+                    float xE = nodeE.position.X;
+                    float yE = nodeE.position.Y;
+                            
+                    
+                    // get the edge color
+                    int colorCode = ((string)edge.Attribute("color") != null) ? Convert.ToInt32(edge.Attribute("color").Value.ToString()) - 2 : -1;
+                    Pen colorPen = new Pen((0 <= colorCode && colorCode < colorList.Count) ? colorList[colorCode] : Color.Black, 1.0f * factor);
+                    
+                    bool isDoubleBond = ((string)edge.Attribute("Order") != null) && edge.Attribute("Order").Value.ToString().Equals("2");
+                    
+                    bool bondTypeNormal = ((string)edge.Attribute("BS") != null) && edge.Attribute("BS").Value.ToString().Equals("N");
+                    
+                    // Draw line to screen.
+                    if (isDoubleBond)
+                    {
+                        float deltaX = yE - yB;
+                        float deltaY = xB - xE;
+                        float norming = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                        deltaX /= norming;
+                        deltaY /= norming;
+                        
+                        if (bondTypeNormal)
+                        {
+                        
+                            float x1B = xB - deltaX * dbSpace;
+                            float y1B = yB - deltaY * dbSpace;
+                            float x1E = xE - deltaX * dbSpace;
+                            float y1E = yE - deltaY * dbSpace;
+                            edges.Add(new StructureEdge(colorPen, new PointF(x1B, y1B), new PointF(x1E, y1E)));
+                            
+                            
+                            float x2B = xB + deltaX * dbSpace;
+                            float y2B = yB + deltaY * dbSpace;
+                            float x2E = xE + deltaX * dbSpace;
+                            float y2E = yE + deltaY * dbSpace;
+                            edges.Add(new StructureEdge(colorPen, new PointF(x2B, y2B), new PointF(x2E, y2E)));
+                        }
+                        else
+                        {
+                        
+                            float x1B = xB - deltaX * (2 * dbSpace);
+                            float y1B = yB - deltaY * (2 * dbSpace);
+                            float x1E = xE - deltaX * (2 * dbSpace);
+                            float y1E = yE - deltaY * (2 * dbSpace);
+                            edges.Add(new StructureEdge(colorPen, new PointF(x1B, y1B), new PointF(x1E, y1E)));
+                            edges.Add(new StructureEdge(colorPen, new PointF(xB, yB), new PointF(xE, yE)));
+                        }
+                    }
+                    else
+                    {
+                        edges.Add(new StructureEdge(colorPen, new PointF(xB, yB), new PointF(xE, yE)));
+                    }
+                }
+                catch(Exception){}
+            }
+            
+            
+            
+            float minX = 100000.0f;
+            float maxX = -100000.0f;
+            float minY = 100000.0f;
+            float maxY = -100000.0f;
+            
+            
+            // draw atoms and any other label
+            foreach (var node in nodes)
+            {
+                float x = node.position.X;
+                float y = node.position.Y;
+                minX = Math.Min(minX, x);
+                maxX = Math.Max(maxX, x);
+                minY = Math.Min(minY, y);
+                maxY = Math.Max(maxY, y);
+            }
+            
+            float midX = minX + (maxX - minX) / 2.0f;
+            float midY = minY + (maxY - minY) / 2.0f;
+            offsetX = (float)pictureBoxFragments.Size.Width / 2.0f - midX * factor;
+            offsetY = (float)pictureBoxFragments.Size.Height / 2.0f - midY * factor;
+            
+            foreach (var node in nodes)
+            {
+                float x = node.position.X * factor + offsetX;
+                float y = node.position.Y * factor + offsetY;
+                node.position = new PointF(x, y);
+                
+                if (node.font == null) continue;
+                
+                node.font = new Font(node.font.FontFamily, node.font.Size * factor);
+                
+                x = node.boundingBox.X * factor + offsetX;
+                y = node.boundingBox.Y * factor + offsetY;
+                
+                Size size = TextRenderer.MeasureText(e.Graphics, node.text, node.font);
+                float w = size.Width * 0.9f;
+                float h = size.Height * 0.9f;
+                node.boundingBox = new RectangleF(x - w * 0.5f, y - h * 0.5f, w, h);
+                clippingAreas.Add(node.boundingBox);
+            }
+            
+            
+            
+            foreach (var edge in edges)
+            {
+                float xs = edge.start.X;
+                float ys = edge.start.Y;
+                edge.start = new PointF(xs * factor + offsetX, ys * factor + offsetY);
+                
+                float xe = edge.end.X;
+                float ye = edge.end.Y;
+                edge.end = new PointF(xe * factor + offsetX, ye * factor + offsetY);
+            }
+        }
+    }
+    
+    
+    
     [Serializable]
     public partial class MS2Form : Form
     {
@@ -46,6 +400,13 @@ namespace LipidCreator
         public int editDeleteIndex;
         public int hoveredIndex;
         public LipidException lipidException;
+        public Dictionary<string, LipidStructure> lipidStructures = new Dictionary<string, LipidStructure>();
+        
+        public string currentHeadgroup = "";
+        public string currentFragment = "";
+        public string currentPolarity = "";
+        
+        public Dictionary<string, string> f = new Dictionary<string, string>(){{"-(CH3[adduct])", "PC genNeg1"}, {"FA1(+O)", "PC genNeg2"}, {"FA2(+O)", "PC genNeg3"}, {"HG(PC,168)", "PC genNeg168"}, {"-FA1(+HO)-(CH3[adduct])", "PC genNeg-FA11"}, {"-FA2(+HO)-(CH3[adduct])", "PC genNeg-FA22"}, {"-FA1(-H)-(CH3[adduct])", "PC genNeg-FA1"}, {"-FA2(-H)-(CH3[adduct])", "PC genNeg-FA2"}};
         
         public MS2Form(CreatorGUI creatorGUI, LipidException _lipidException = null)
         {
@@ -112,8 +473,19 @@ namespace LipidCreator
 
         void checkedListBoxMouseLeave(object sender, EventArgs e)
         {
-            pictureBoxFragments.Image = fragmentComplete;
+            if (currentHeadgroup.Equals("PC"))
+            {
+                pictureBoxFragments.Image = null;
+            }
+            else
+            {
+                pictureBoxFragments.Image = fragmentComplete;
+            }
             hoveredIndex = -1;
+            currentFragment = "";
+            currentPolarity = "";
+            pictureBoxFragments.Update();
+            pictureBoxFragments.Refresh();
         }
         
         
@@ -186,6 +558,8 @@ namespace LipidCreator
                 this.checkedListBoxPositiveFragments.ContextMenu = this.contextMenuFragment;
                 string lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxPositiveFragments.Items[hIndex];
+                currentFragment = fragmentName;
+                currentPolarity = "+";
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][true][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
@@ -230,8 +604,18 @@ namespace LipidCreator
             {
                 toolTip1.Hide(this.checkedListBoxPositiveFragments);
                 this.checkedListBoxPositiveFragments.ContextMenu = null;
-                pictureBoxFragments.Image = fragmentComplete;
+                
+                if (currentHeadgroup.Equals("PC"))
+                {
+                    pictureBoxFragments.Image = null;
+                }
+                else
+                {
+                    pictureBoxFragments.Image = fragmentComplete;
+                }
                 hoveredIndex = -1;
+                currentFragment = "";
+                currentPolarity = "";
             }
         }
         
@@ -244,17 +628,29 @@ namespace LipidCreator
             toolTip1.SetToolTip(this.checkedListBoxPositiveFragments, "");
             Point point = checkedListBoxNegativeFragments.PointToClient(Cursor.Position);
             int hIndex = checkedListBoxNegativeFragments.IndexFromPoint(point);
-            
+            bool updateing = true;
 
             if (hIndex != -1)
             {
                 this.checkedListBoxNegativeFragments.ContextMenu = this.contextMenuFragment;
                 String lipidClass = getHeadgroup();
                 string fragmentName = (string)checkedListBoxNegativeFragments.Items[hIndex];
+                currentFragment = fragmentName;
+                currentPolarity = "-";
                 MS2Fragment fragment = creatorGUI.lipidCreator.allFragments[lipidClass][false][fragmentName];
                 menuFragmentItem1.Enabled = fragment.userDefined;
                 menuFragmentItem2.Enabled = fragment.userDefined;
-                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0 && hoveredIndex != hIndex) pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                if (fragment.fragmentFile != null && fragment.fragmentFile.Length > 0 && hoveredIndex != hIndex)
+                {
+                    if (f.ContainsKey(currentFragment))
+                    {
+                        pictureBoxFragments.Image = null;
+                    }
+                    else
+                    {
+                        pictureBoxFragments.Image = Image.FromFile(fragment.fragmentFile);
+                    }
+                }
                 hoveredIndex = hIndex;
                 
                 // create tool tip           
@@ -294,9 +690,20 @@ namespace LipidCreator
             {
                 toolTip1.Hide(this.checkedListBoxNegativeFragments);
                 this.checkedListBoxNegativeFragments.ContextMenu = null;
-                pictureBoxFragments.Image = fragmentComplete;
+                if (currentHeadgroup.Equals("PC"))
+                {
+                    pictureBoxFragments.Image = null;
+                }
+                else
+                {
+                    pictureBoxFragments.Image = fragmentComplete;
+                }
                 hoveredIndex = -1;
+                currentFragment = "";
+                currentPolarity = "";
             }
+            pictureBoxFragments.Update();
+            pictureBoxFragments.Refresh();
         }
         
         
@@ -380,7 +787,14 @@ namespace LipidCreator
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) && creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage.Length > 0)
             {
                 fragmentComplete = Image.FromFile(creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage);
-                pictureBoxFragments.Image = fragmentComplete;
+                if (currentHeadgroup.Equals("PC"))
+                {
+                    pictureBoxFragments.Image = null;
+                }
+                else
+                {
+                    pictureBoxFragments.Image = fragmentComplete;
+                }
             }
             else
             {
@@ -489,6 +903,9 @@ namespace LipidCreator
             
             loading = false;
             isotopeList.SelectedIndex = 0;
+            currentHeadgroup = getHeadgroup();
+            currentFragment = "";
+            currentPolarity = "";
         }
 
 
@@ -580,6 +997,91 @@ namespace LipidCreator
                 newFragment.Show();
             }
             tabChange(tabControlFragments.SelectedIndex);
+        }
+        
+        
+        
+        
+        public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
+        {
+            foreach (var fragment in element.Elements().Where(el => el.Name.LocalName.Equals("fragment")))
+            {
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("n")))
+                {
+                    nodes.Add(node);
+                    parseXML(node, nodes, edges);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("b")))
+                {
+                    edges.Add(node);
+                }
+                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("graphic")))
+                {
+                    nodes.Add(node);
+                }
+            }
+        }
+        
+        
+        
+        
+        public void test_Paint(object sender, PaintEventArgs e)
+        {
+            
+            
+            
+            if (!currentHeadgroup.Equals("PC") || (!f.ContainsKey(currentFragment) && !currentFragment.Equals(""))) return;
+            
+            
+            string structureId = currentHeadgroup + (!currentFragment.Equals("") ? "/" + currentFragment + currentPolarity : "");
+            LipidStructure lipidStructure = null;
+            if (!lipidStructures.ContainsKey(structureId))
+            {
+                
+                string root = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/";
+                
+                string file_name = "PC genNeg";
+                if (!currentFragment.Equals(""))
+                {
+                    file_name = f[currentFragment];
+                }
+                file_name = root + file_name + ".cdxml";
+                lipidStructure = new LipidStructure(file_name, e, pictureBoxFragments);
+                lipidStructures.Add(structureId, lipidStructure);
+            }
+            else
+            {
+                lipidStructure = lipidStructures[structureId];
+            }
+            
+            
+            StringFormat drawFormat = new StringFormat();
+            drawFormat.Alignment = StringAlignment.Center;
+            drawFormat.LineAlignment = StringAlignment.Center;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            
+            
+            foreach (var node in lipidStructure.nodes)
+            {
+                if (node.text.Equals("")) continue;
+                e.Graphics.DrawString(node.text, node.font, node.solidBrush, node.boundingBox, drawFormat);
+            }
+            
+            // set up all clipping
+            Graphics clippingGraphics = this.CreateGraphics();
+            foreach (var clippingArea in lipidStructure.clippingAreas)
+            {
+                clippingGraphics.SetClip(clippingArea);
+                e.Graphics.SetClip(clippingGraphics, CombineMode.Exclude);
+            }
+            
+            foreach (var edge in lipidStructure.edges)
+            {
+                e.Graphics.DrawLine(edge.pen, edge.start, edge.end);
+            }
+            
+            clippingGraphics.Dispose();
+            
         }
     }
 }

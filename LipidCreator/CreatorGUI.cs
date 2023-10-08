@@ -550,13 +550,61 @@ namespace LipidCreator
         {
             DataTable lipidList = new DataTable();
             lipidList.Columns.Add("Mass [m/z]");
-            if (searchToleranceType.SelectedIndex == 0) lipidList.Columns.Add("Mass tolerance [m/z]");
-            else lipidList.Columns.Add("Mass tolerance [ppm]");
+            bool tolerance_mz = searchToleranceType.SelectedIndex == 0;
+            string tolerance_string = tolerance_mz ? "Mass tolerance [m/z]" : "Mass tolerance [ppm]";
+            lipidList.Columns.Add(tolerance_string);
             lipidList.Columns.Add("Lipid name");
             lipidList.Columns.Add("Adduct");
             searchlipidsGridview.DataSource = lipidList;
             
             if (searchAdduct.Text.Length == 0 || searchTolerance.Text.Length == 0) return;
+            
+            double value = 0;
+            double tol = 0;
+            try {
+                value = Convert.ToDouble(searchMass.Text);
+                tol = Convert.ToDouble(searchTolerance.Text);
+            }
+            catch(Exception)
+            {
+                return;
+            }
+            
+            if (!tolerance_mz) tol *= value * 1e-6;
+            
+            
+            double min_value = value - tol;
+            double max_value = value + tol;
+            
+            int L = 0;
+            int R = searchLipids.Count - 1;
+
+            while (L < R){
+                int mid = (L + R) >> 1;
+                if (searchLipids[mid].mass < min_value) L = mid + 1;
+                else R = mid;
+            }
+            int pos = R + ((R == (searchLipids.Count - 1) && searchLipids[R].mass < min_value) ? 1 : 0);
+            
+            while (pos < searchLipids.Count)
+            {
+                if (searchLipids[pos].mass < min_value)
+                {
+                    pos++;
+                    continue;
+                }
+                else if (max_value < searchLipids[pos].mass) break;
+                
+                
+                DataRow lipidRow = lipidList.NewRow();
+                lipidRow["Mass [m/z]"] = string.Format("{0:N4}", searchLipids[pos].mass);
+                double tolerance_val = Math.Abs(value - searchLipids[pos].mass) * (tolerance_mz ? 1.0 : 1e6 / value);
+                lipidRow[tolerance_string] = string.Format("{0:N4}", tolerance_val);
+                lipidRow["Lipid name"] = searchLipids[pos].name;
+                lipidRow["Adduct"] = searchLipids[pos].adduct;
+                lipidList.Rows.Add(lipidRow);
+                pos++;
+            }
         }
         
         

@@ -2831,6 +2831,7 @@ namespace LipidCreator
             searchTolerance.Location = new Point(searchToleranceType.Left  + searchToleranceType.Width + 10, searchToleranceType.Top);
             searchTolerance.Width = (int)(faLength * 0.7);
             searchTolerance.Text = "0.02";
+            searchTolerance.TextChanged += lipidMassSearch;
             searchToleranceLabel.Location = new Point(searchTolerance.Left, searchTolerance.Top - sep);
             searchToleranceLabel.Width = (int)(faLength * 0.7);
             searchToleranceLabel.Text = "Tolerance";

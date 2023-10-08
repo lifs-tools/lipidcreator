@@ -809,23 +809,13 @@ namespace LipidCreator
         [NonSerialized]
         public GroupBox lipidNameSearchBox;
         [NonSerialized]
-        public GroupBox lipidMassSearchBox;
-        [NonSerialized]
         public TextBox suggestedLipidName;
         [NonSerialized]
         public TextBox translatedLipidName;
         [NonSerialized]
-        public TextBox searchMass;
-        [NonSerialized]
-        public TextBox searchToll;
-        [NonSerialized]
         public Label suggestedLipidNameLabel;
         [NonSerialized]
         public Label translatedLipidNameLabel;
-        [NonSerialized]
-        public Label searchMassLabel;
-        [NonSerialized]
-        public Label searchTollLabel;
         [NonSerialized]
         public Label lipidMassLabel;
         [NonSerialized]
@@ -838,6 +828,25 @@ namespace LipidCreator
         public ComboBox searchAdduct;
         [NonSerialized]
         DataGridView searchfragmentsGridview;
+        
+        [NonSerialized]
+        public GroupBox lipidMassSearchBox;
+        [NonSerialized]
+        DataGridView searchlipidsGridview;
+        [NonSerialized]
+        public TextBox searchMass;
+        [NonSerialized]
+        public ComboBox searchToleranceType;
+        [NonSerialized]
+        public TextBox searchTolerance;
+        [NonSerialized]
+        public Label searchMassLabel;
+        [NonSerialized]
+        public Label searchToleranceLabel;
+        [NonSerialized]
+        public Label searchToleranceTypeLabel;
+        [NonSerialized]
+        public Label searchlipidsGridviewLabel;
         
         
         
@@ -2696,13 +2705,12 @@ namespace LipidCreator
             
             suggestedLipidName = new TextBox();
             translatedLipidName = new TextBox();
-            searchMass = new TextBox();
-            searchToll = new TextBox();
+            searchTolerance = new TextBox();
             
             suggestedLipidNameLabel = new Label();
             translatedLipidNameLabel = new Label();
             searchMassLabel = new Label();
-            searchTollLabel = new Label();
+            searchToleranceLabel = new Label();
             lipidMassLabel = new Label();
             lipidSumFormulaLabel = new Label();
             searchAdductLabel = new Label();
@@ -2727,7 +2735,6 @@ namespace LipidCreator
             suggestedLipidName.Location = new Point(10, 35);
             suggestedLipidName.Width = faLength;
             suggestedLipidName.TextChanged += lipidNameSearch;
-            //suggestedLipidName.TextChanged += delegate(object s, EventArgs e){};
             suggestedLipidNameLabel.Location = new Point(suggestedLipidName.Left, suggestedLipidName.Top - sep);
             suggestedLipidNameLabel.Width = faLength;
             suggestedLipidNameLabel.Text = "Lipid Name";
@@ -2765,15 +2772,12 @@ namespace LipidCreator
             searchAdductLabel.Text = "Selected Adduct";
             
             lipidNameSearchBox.Controls.Add(searchfragmentsGridview);
-            //searchfragmentsGridview.Dock = DockStyle.Fill;
-            //searchfragmentsGridview.DataSource = registeredLipidsDatatable;
             searchfragmentsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             searchfragmentsGridview.AllowUserToResizeColumns = false;
             searchfragmentsGridview.AllowUserToAddRows = false;
             searchfragmentsGridview.AllowUserToResizeRows = false;
             searchfragmentsGridview.ReadOnly = true;
             searchfragmentsGridview.MultiSelect = false;
-            //searchfragmentsGridview.RowTemplate.Height = 34;
             searchfragmentsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             searchfragmentsGridview.RowHeadersVisible = false;
             searchfragmentsGridview.ScrollBars = ScrollBars.Vertical;
@@ -2790,11 +2794,67 @@ namespace LipidCreator
             
             
             
+            searchMass = new TextBox();
+            searchToleranceType = new ComboBox();
+            searchToleranceType.Items.Add("m/z");
+            searchToleranceType.Items.Add("ppm");
+            searchTolerance = new TextBox();
+            searchMassLabel = new Label();
+            searchToleranceLabel = new Label();
+            searchToleranceTypeLabel = new Label();
+            searchlipidsGridviewLabel = new Label();
+            searchlipidsGridview = new DataGridView();
             
             
+            lipidMassSearchBox.Controls.Add(searchMass);
+            lipidMassSearchBox.Controls.Add(searchMassLabel);
+            searchMass.Location = new Point(10, 35);
+            searchMass.Width = (int)(faLength * 0.7);
+            searchMass.TextChanged += lipidMassSearch;
+            searchMassLabel.Location = new Point(searchMass.Left, searchMass.Top - sep);
+            searchMassLabel.Width = (int)(faLength * 0.7);
+            searchMassLabel.Text = "Lipid Mass";
+            
+            lipidMassSearchBox.Controls.Add(searchToleranceType);
+            lipidMassSearchBox.Controls.Add(searchToleranceTypeLabel);
+            searchToleranceType.Location = new Point(searchMass.Left  + searchMass.Width + 10, searchMass.Top);
+            searchToleranceType.Width = (int)(faLength * 0.7);
+            searchToleranceType.DropDownStyle = ComboBoxStyle.DropDownList;
+            searchToleranceType.SelectedIndexChanged += toleranceTypeChanged;
+            searchToleranceType.SelectedIndex = 0;
+            searchToleranceTypeLabel.Location = new Point(searchToleranceType.Left, searchToleranceType.Top - sep);
+            searchToleranceTypeLabel.Width = (int)(faLength * 0.7);
+            searchToleranceTypeLabel.Text = "Type of tolerance";
+            
+            lipidMassSearchBox.Controls.Add(searchTolerance);
+            lipidMassSearchBox.Controls.Add(searchToleranceLabel);
+            searchTolerance.Location = new Point(searchToleranceType.Left  + searchToleranceType.Width + 10, searchToleranceType.Top);
+            searchTolerance.Width = (int)(faLength * 0.7);
+            searchTolerance.Text = "0.02";
+            searchToleranceLabel.Location = new Point(searchTolerance.Left, searchTolerance.Top - sep);
+            searchToleranceLabel.Width = (int)(faLength * 0.7);
+            searchToleranceLabel.Text = "Tolerance";
+            
+            lipidMassSearchBox.Controls.Add(searchlipidsGridview);
+            searchlipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            searchlipidsGridview.AllowUserToResizeColumns = false;
+            searchlipidsGridview.AllowUserToAddRows = false;
+            searchlipidsGridview.AllowUserToResizeRows = false;
+            searchlipidsGridview.ReadOnly = true;
+            searchlipidsGridview.MultiSelect = false;
+            searchlipidsGridview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            searchlipidsGridview.RowHeadersVisible = false;
+            searchlipidsGridview.ScrollBars = ScrollBars.Vertical;
+            searchlipidsGridview.Location = new Point(searchMass.Left, searchfragmentsGridview.Top);
+            searchlipidsGridview.Width = faLength;
+            searchlipidsGridview.Size = new Size(480, 270);
+            //searchfragmentsGridview.DataBindingComplete += searchFragmentsComplete;
             
             
-            
+            lipidMassSearchBox.Controls.Add(searchlipidsGridviewLabel);
+            searchlipidsGridviewLabel.Location = new Point(searchlipidsGridview.Left, searchlipidsGridview.Top - sep);
+            searchlipidsGridviewLabel.Width = faLength;
+            searchlipidsGridviewLabel.Text = "Table of lipids";
             
             
             

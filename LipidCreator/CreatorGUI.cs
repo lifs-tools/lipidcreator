@@ -45,7 +45,34 @@ using System.Globalization;
 
 namespace LipidCreator
 {
+    using ElementTable = System.Collections.Generic.Dictionary<csgoslin.Element, int>;
 
+    public class FattyAcidAssembly
+    {
+        public string name;
+        public double mass;
+        
+        public FattyAcidAssembly(string n, double m)
+        {
+            name = n;
+            mass = m;
+        }
+    }
+
+    public class LipidAssembly
+    {
+        public string name;
+        public double mass;
+        public string adduct;
+        
+        public LipidAssembly(string n, double m, string a = "")
+        {
+            name = n;
+            mass = m;
+            adduct = a;
+        }
+    }
+    
     [Serializable]
     public partial class CreatorGUI : Form
     {
@@ -82,6 +109,7 @@ namespace LipidCreator
         public static float FONT_SIZE_FACTOR;
         public static readonly float REGULAR_FONT_SIZE = 8.25f;
         public bool lipidCreatorInitError = false;
+        public List<LipidAssembly> searchLipids = new List<LipidAssembly>();
         
         public CreatorGUI(string _inputParameters)
         {
@@ -245,6 +273,253 @@ namespace LipidCreator
                 openReviewFormButton.Enabled = false;
                 lipidsGridview.Enabled = false;
             }
+            
+            
+            
+            Dictionary<int, FattyAcidAssembly> fatty_acids = new Dictionary<int, FattyAcidAssembly>();
+            Dictionary<int, FattyAcidAssembly> fatty_acids_o = new Dictionary<int, FattyAcidAssembly>();
+            Dictionary<int, FattyAcidAssembly> long_chain_bases = new Dictionary<int, FattyAcidAssembly>();
+            
+            for (int fa = 1; fa <= 4; ++fa)
+            {
+                for (int c = 2 * fa; c <= 30 * fa; c++)
+                {
+                    for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
+                    {
+                        int key = (c << 20) + ((db + 1) << 5);
+                        if (fatty_acids.ContainsKey(key)) continue;
+                        csgoslin.FattyAcid fatty = new csgoslin.FattyAcid("FA", c, new csgoslin.DoubleBonds(db));
+                        
+                        fatty_acids.Add(key, new FattyAcidAssembly(fatty.to_string(csgoslin.LipidLevel.SPECIES), csgoslin.StringFunctions.get_mass(fatty.get_elements())));
+                    }
+                }
+            }
+            
+            for (int fa = 1; fa <= 2; ++fa)
+            {
+                for (int c = 2 * fa; c <= 30 * fa; c++)
+                {
+                    for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
+                    {
+                        int key = (c << 20) + ((db + 1) << 5);
+                        if (fatty_acids_o.ContainsKey(key)) continue;
+                        csgoslin.FattyAcid fatty_o = new csgoslin.FattyAcid("FA", c, new csgoslin.DoubleBonds(db), null, csgoslin.LipidFaBondType.ETHER_PLASMANYL);
+                        
+                        fatty_acids_o.Add(key, new FattyAcidAssembly(fatty_o.to_string(csgoslin.LipidLevel.SPECIES), csgoslin.StringFunctions.get_mass(fatty_o.get_elements())));
+                    }
+                }
+            }
+            
+            for (int fa = 1; fa <= 2; ++fa)
+            {
+                for (int c = 2 * fa; c <= 30 * fa; c++)
+                {
+                    for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
+                    {
+                        for (int oh = 2; oh <= 3; ++oh)
+                        {
+                            int key = (c << 20) + ((db + 1) << 5) + (oh + 1);
+                            if (long_chain_bases.ContainsKey(key)) continue;
+                            
+                            Dictionary<string, List<FunctionalGroup> > oh_fg = new Dictionary<string, List<FunctionalGroup> >(){{"O", new List<FunctionalGroup>(){csgoslin.KnownFunctionalGroups.get_functional_group("O")}}};
+                            oh_fg["O"][0].count = oh;
+                            
+                            csgoslin.FattyAcid lcb = new csgoslin.FattyAcid("FA", c, new csgoslin.DoubleBonds(db), oh_fg, csgoslin.LipidFaBondType.LCB_REGULAR);
+                            
+                            long_chain_bases.Add(key, new FattyAcidAssembly(lcb.to_string(csgoslin.LipidLevel.SPECIES), csgoslin.StringFunctions.get_mass(lcb.get_elements())));
+                        }
+                    }
+                }
+            }
+            
+            double base_mass = fatty_acids[(2 << 20) + ((0 + 1) << 5)].mass;
+            double empty_mass = MS2Fragment.ALL_ELEMENTS[Molecule.H].mass;
+            foreach (KeyValuePair<string, Precursor> kvp in lipidCreator.headgroups)
+            {
+                Precursor precursor = kvp.Value;
+                bool plasmalogen = false;
+                string headgroup = precursor.name;
+                if (headgroup.EndsWith(" P")) continue;
+                if (headgroup.EndsWith(" O"))
+                {
+                    plasmalogen = true;
+                    headgroup = headgroup.Substring(0, headgroup.Length - 2);
+                }
+                
+                csgoslin.Headgroup hg = new csgoslin.Headgroup(headgroup);
+                switch(precursor.buildingBlockType)
+                {
+                    
+                    case 0:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        for (int c = 8; c <= 120; c++)
+                        {
+                            for (int db = 0; db <= Math.Min(((c - 6 - 1) >> 1), 24); ++db)
+                            {
+                                int key = ((c - 2) << 20) + ((db + 1) << 5);
+                                if (!fatty_acids.ContainsKey(key)) continue;
+                                double mass = mass_hg + 3 * base_mass + fatty_acids[((c - 6) << 20) + ((db + 1) << 5)].mass;
+                                searchLipids.Add(new LipidAssembly(kvp.Key + " " + fatty_acids[(c << 20) + ((db + 1) << 5)].name, mass));
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 1:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        for (int c = 6; c <= 90; c++)
+                        {
+                            for (int db = 0; db <= Math.Min(((c - 4 - 1) >> 1), 18); ++db)
+                            {
+                                int key = ((c - 2) << 20) + ((db + 1) << 5);
+                                if (!fatty_acids.ContainsKey(key)) continue;
+                                double mass = mass_hg + 2 * base_mass + fatty_acids[((c - 4) << 20) + ((db + 1) << 5)].mass;
+                                searchLipids.Add(new LipidAssembly(headgroup + " " + fatty_acids[(c << 20) + ((db + 1) << 5)].name, mass));
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 2:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        if (plasmalogen)
+                        {
+                            for (int c = 4; c <= 60; c++)
+                            {
+                                for (int db = 0; db <= Math.Min(((c - 2 - 1) >> 1), 12); ++db)
+                                {
+                                    int key = ((c - 2) << 20) + ((db + 1) << 5);
+                                    if (!fatty_acids_o.ContainsKey(key)) continue;
+                                    double mass = mass_hg + base_mass + fatty_acids_o[((c - 2) << 20) + ((db + 1) << 5)].mass;
+                                    searchLipids.Add(new LipidAssembly(headgroup + " " + fatty_acids_o[(c << 20) + ((db + 1) << 5)].name, mass));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int c = 4; c <= 60; c++)
+                            {
+                                for (int db = 0; db <= Math.Min(((c - 2 - 1) >> 1), 12); ++db)
+                                {
+                                    int key = ((c - 2) << 20) + ((db + 1) << 5);
+                                    if (!fatty_acids.ContainsKey(key)) continue;
+                                    double mass = mass_hg + base_mass + fatty_acids[((c - 2) << 20) + ((db + 1) << 5)].mass;
+                                    searchLipids.Add(new LipidAssembly(kvp.Key + " " + fatty_acids[(c << 20) + ((db + 1) << 5)].name, mass));
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 3:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        
+                        if (plasmalogen)
+                        {
+                            for (int c = 2; c <= 30; c++)
+                            {
+                                for (int db = 0; db <= Math.Min((c >> 1), 6); ++db)
+                                {
+                                    int key = (c << 20) + ((db + 1) << 5);
+                                    if (!fatty_acids_o.ContainsKey(key)) continue;
+                                    double mass = mass_hg + empty_mass + fatty_acids_o[(c << 20) + ((db + 1) << 5)].mass;
+                                    searchLipids.Add(new LipidAssembly(headgroup + " " + fatty_acids_o[(c << 20) + ((db + 1) << 5)].name, mass));
+                                }
+                            }
+                        }
+                        else 
+                        {
+                            for (int c = 2; c <= 30; c++)
+                            {
+                                for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6); ++db)
+                                {
+                                    int key = (c << 20) + ((db + 1) << 5);
+                                    if (!fatty_acids.ContainsKey(key)) continue;
+                                    double mass = mass_hg + empty_mass + fatty_acids[(c << 20) + ((db + 1) << 5)].mass;
+                                    searchLipids.Add(new LipidAssembly(kvp.Key + " " + fatty_acids[(c << 20) + ((db + 1) << 5)].name, mass));
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 4:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        for (int c = 4; c <= 60; c++)
+                        {
+                            for (int db = 0; db <= Math.Min(((c - 2 - 1) >> 1), 12); ++db)
+                            {
+                                for (int oh = 2; oh <= 3; ++oh)
+                                {
+                                    int key = (c << 20) + ((db + 1) << 5) + (oh + 1);
+                                    if (!long_chain_bases.ContainsKey(key)) continue;
+                                    double mass = mass_hg + base_mass + long_chain_bases[((c - 2) << 20) + ((db + 1) << 5) + (oh + 1)].mass;
+                                    searchLipids.Add(new LipidAssembly(kvp.Key + " " + long_chain_bases[(c << 20) + ((db + 1) << 5) + (oh + 1)].name, mass));
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 5:
+                    {
+                        ElementTable elements = hg.get_elements();
+                        double mass_hg = csgoslin.StringFunctions.get_mass(elements);
+                        
+                        for (int c = 2; c <= 30; c++)
+                        {
+                            for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6); ++db)
+                            {
+                                for (int oh = 2; oh <= 3; ++oh)
+                                {
+                                    int key = (c << 20) + ((db + 1) << 5) + (oh + 1);
+                                    if (!long_chain_bases.ContainsKey(key)) continue;
+                                    double mass = mass_hg + long_chain_bases[(c << 20) + ((db + 1) << 5) + (oh + 1)].mass;
+                                    searchLipids.Add(new LipidAssembly(kvp.Key + " " + long_chain_bases[(c << 20) + ((db + 1) << 5) + (oh + 1)].name, mass));
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    
+                    case 6:
+                    {
+                        ElementDictionary elements = precursor.elements;
+                        double mass = 0;
+                        for (int m = 0; m < elements.Count; ++m)
+                        {
+                            if (elements[m] < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
+                            mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
+                        }
+                        searchLipids.Add(new LipidAssembly(kvp.Key, mass));
+                        break;
+                    }
+                        
+                    default:
+                        break;
+                }
+            }
+            
+            searchLipids.Sort(delegate(LipidAssembly x, LipidAssembly y){
+                return x.mass < y.mass ? -1 : 1;
+            });
+            
+            Console.WriteLine(searchLipids[0].mass + " " + searchLipids[0].name);
         }
         
         
@@ -255,6 +530,36 @@ namespace LipidCreator
         {
             resetLipidCreator();
         }
+        
+        
+        
+        public void toleranceTypeChanged(Object sender, EventArgs e)
+        {
+            if (searchToleranceType.SelectedIndex == 0) searchTolerance.Text = "0.02";
+            else searchTolerance.Text = "5";
+            
+            lipidMassSearch(sender, e);
+        }
+        
+        
+        
+        
+        
+        
+        public void lipidMassSearch(Object sender, EventArgs e)
+        {
+            DataTable lipidList = new DataTable();
+            lipidList.Columns.Add("Mass [m/z]");
+            if (searchToleranceType.SelectedIndex == 0) lipidList.Columns.Add("Mass tolerance [m/z]");
+            else lipidList.Columns.Add("Mass tolerance [ppm]");
+            lipidList.Columns.Add("Lipid name");
+            lipidList.Columns.Add("Adduct");
+            searchlipidsGridview.DataSource = lipidList;
+            
+            if (searchAdduct.Text.Length == 0 || searchTolerance.Text.Length == 0) return;
+        }
+        
+        
         
         
         

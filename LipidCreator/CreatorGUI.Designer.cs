@@ -2849,7 +2849,7 @@ namespace LipidCreator
             searchlipidsGridview.Location = new Point(searchMass.Left, searchfragmentsGridview.Top);
             searchlipidsGridview.Width = faLength;
             searchlipidsGridview.Size = new Size(480, 270);
-            //searchfragmentsGridview.DataBindingComplete += searchFragmentsComplete;
+            searchlipidsGridview.DataBindingComplete += searchLipidsComplete;
             
             
             lipidMassSearchBox.Controls.Add(searchlipidsGridviewLabel);

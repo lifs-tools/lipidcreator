@@ -113,6 +113,7 @@ namespace LipidCreator
         public bool lipidCreatorInitError = false;
         public List<LipidAssembly> searchLipids = new List<LipidAssembly>();
         private Lipid searchLipid = null;
+        DataTable lipidList = new DataTable();
         
         public CreatorGUI(string _inputParameters)
         {
@@ -130,6 +131,11 @@ namespace LipidCreator
                 lipidCreatorInitError = true;
                 MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message (Menu -> Help -> Log messages) and get in contact with the developers.", "LipidCreator: error occurred");
             }
+            lipidList.Columns.Add("Mass [m/z]");
+            lipidList.Columns.Add("Mass tolerance [m/z]");
+            lipidList.Columns.Add("Lipid name");
+            lipidList.Columns.Add("Adduct");
+            lipidList.Columns.Add("Category");
             
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -505,17 +511,12 @@ namespace LipidCreator
         
         public void lipidMassSearch(Object sender, EventArgs e)
         {
-            DataTable lipidList = new DataTable();
-            lipidList.Columns.Add("Mass [m/z]");
+            if (searchlipidsGridview.DataSource == null) return;
             bool tolerance_mz = searchToleranceType.SelectedIndex == 0;
             string tolerance_string = tolerance_mz ? "Mass tolerance [m/z]" : "Mass tolerance [ppm]";
-            lipidList.Columns.Add(tolerance_string);
-            lipidList.Columns.Add("Lipid name");
-            lipidList.Columns.Add("Adduct");
-            lipidList.Columns.Add("Category");
-            searchlipidsGridview.DataSource = lipidList;
-            
-            
+            lipidList.Columns[1].ColumnName = tolerance_string;
+            searchlipidsGridview.Columns[1].Name = tolerance_string;
+            lipidList.Rows.Clear();
             
             if (searchAdduct.Text.Length == 0 || searchTolerance.Text.Length == 0) return;
             
@@ -676,8 +677,8 @@ namespace LipidCreator
         private void searchLipidsComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             searchlipidsGridview.Columns[0].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
-            searchlipidsGridview.Columns[1].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
-            searchlipidsGridview.Columns[2].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.27);
+            searchlipidsGridview.Columns[1].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.17);
+            searchlipidsGridview.Columns[2].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.25);
             searchlipidsGridview.Columns[3].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
             searchlipidsGridview.Columns[4].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.28);
         }

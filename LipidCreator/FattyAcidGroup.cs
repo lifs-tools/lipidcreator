@@ -190,9 +190,9 @@ namespace LipidCreator
             hydroxylInfo = ((string)node.Attribute("hydroxylInfo") != null) ? node.Attribute("hydroxylInfo").Value : "0";
             isLCB = ((string)node.Attribute("isLCB") != null) ? node.Attribute("isLCB").Value == "True" : false;
             
-            carbonCounts = LipidCreator.parseRange(lengthInfo, LipidCreator.MIN_CARBON_LENGTH,  LipidCreator.MAX_CARBON_LENGTH, (ChainType)chainType);
-            doubleBondCounts = LipidCreator.parseRange(dbInfo, LipidCreator.MIN_DB_LENGTH,  LipidCreator.MAX_DB_LENGTH, ChainType.dbLength);
-            hydroxylCounts = LipidCreator.parseRange(hydroxylInfo, LipidCreator.MIN_HYDROXY_LENGTH,  LipidCreator.MAX_HYDROXY_LENGTH, ChainType.hydroxylLength);
+            carbonCounts = LipidCreator.parseRange(lengthInfo, LipidCreator.MIN_CARBON_LENGTH, LipidCreator.MAX_CARBON_LENGTH, (ChainType)chainType);
+            doubleBondCounts = LipidCreator.parseRange(dbInfo, LipidCreator.MIN_DB_LENGTH, LipidCreator.MAX_DB_LENGTH, ChainType.dbLength);
+            hydroxylCounts = LipidCreator.parseRange(hydroxylInfo, LipidCreator.MIN_HYDROXY_LENGTH, LipidCreator.MAX_HYDROXY_LENGTH, ChainType.hydroxylLength);
             
             foreach(XElement child in node.Elements())
             {

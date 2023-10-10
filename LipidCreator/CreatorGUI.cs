@@ -526,7 +526,8 @@ namespace LipidCreator
             
             double value = 0;
             double tol = 0;
-            try {
+            try
+            {
                 value = Convert.ToDouble(searchMass.Text);
                 tol = Convert.ToDouble(searchTolerance.Text);
             }
@@ -546,7 +547,8 @@ namespace LipidCreator
 
             // since the list 'searchLipids' is sorted, we apply binary search here to
             // find the left-most position of the entry higher than our search value
-            while (L < R){
+            while (L < R)
+            {
                 int mid = (L + R) >> 1;
                 if (searchLipids[mid].mass < min_value) L = mid + 1;
                 else R = mid;
@@ -632,24 +634,23 @@ namespace LipidCreator
                             lipid.headGroupNames.Add(suggestedLipidName.Text);
                             lipid.adducts["-H"] = true;
                         }
-                        else lipid = lipidCreator.translateLipid(lipidAdduct);
+                        else lipid = lipidCreator.translateLipid(lipidAdduct, true);
                         if (lipid != null && !(lipid is UnsupportedLipid))
                         {
                             HashSet<String> usedKeys = new HashSet<String>();
                             ArrayList precursorDataList = new ArrayList();
-                            lipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);
-                            
+                            lipid.computePrecursorData(lipidCreator.headgroups, usedKeys, precursorDataList);                            
                             
                             foreach (PrecursorData precursor in precursorDataList)
                             {
-                                Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, 0});
+                                Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, lipid.speciesLevel ? 1 : 0});
                             }
-                            transferLipid.Enabled = true;
+                            transferLipid.Enabled = !lipid.speciesLevel;
                             searchLipid = lipid;
                             
                         }
                     }
-                    catch(Exception) {  }
+                    catch(Exception ex) { Console.WriteLine(ex); }
                 }
             }
             catch(Exception)
@@ -665,10 +666,10 @@ namespace LipidCreator
         private void searchFragmentsComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             for (int c = 0; c < 8; c++) searchfragmentsGridview.Columns[c].Visible = false;
-            searchfragmentsGridview.Columns[8].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.3);
-            searchfragmentsGridview.Columns[9].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.3);
-            searchfragmentsGridview.Columns[10].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.20);
-            searchfragmentsGridview.Columns[11].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.20);
+            searchfragmentsGridview.Columns[8].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.38);
+            searchfragmentsGridview.Columns[9].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.26);
+            searchfragmentsGridview.Columns[10].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.18);
+            searchfragmentsGridview.Columns[11].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.18);
             searchfragmentsGridview.Columns[12].Visible = false;
             searchfragmentsGridview.Columns[13].Visible = false;
         }

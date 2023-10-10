@@ -1905,11 +1905,18 @@ namespace LipidCreator
             
             if (lipid != null)
             {
+                int faNum = 1;
+                if (lipid.speciesLevel)
+                {
+                    string headgroup = lipid.headGroupNames[0];
+                    faNum = Precursor.fattyAcidCount[headgroups[headgroup].buildingBlockType];
+                }
+                
                 foreach (FattyAcidGroup fag in lipid.getFattyAcidGroupList())
                 {
                     foreach (int val in fag.carbonCounts)
                     {
-                        if (val < 2 || 30 < val)
+                        if (val < 2 * faNum || 30 * faNum < val)
                         {
                             lipid = new UnsupportedLipid(this);
                             break;
@@ -1917,7 +1924,7 @@ namespace LipidCreator
                     }
                     foreach (int val in fag.doubleBondCounts)
                     {
-                        if (val < 0 || 6 < val)
+                        if (val < 0 || 6 * faNum < val)
                         {
                             lipid = new UnsupportedLipid(this);
                             break;
@@ -1984,7 +1991,7 @@ namespace LipidCreator
         
         
         
-        public Lipid translateLipid(csgoslin.LipidAdduct lipidAdduct)
+        public Lipid translateLipid(csgoslin.LipidAdduct lipidAdduct, bool allowSpecies = false)
         {
             Lipid lipid = null;
             FattyAcidGroupEnumerator fagEnum = null;
@@ -2073,13 +2080,22 @@ namespace LipidCreator
             
             if (lipid != null && lipidAdduct.lipid.info.level == csgoslin.LipidLevel.SPECIES)
             {
-                lipid = null;
-                throw new Exception("Lipid on species level not supported.");
+                if (allowSpecies)
+                {
+                    lipid.speciesLevel = true;
+                }
+                else
+                {
+                    lipid = null;
+                    throw new Exception("Lipid on species level not supported.");
+                }
             }
                 
             if (lipid != null && !(lipid is Mediator))
             {
-                foreach (csgoslin.FattyAcid fa in lipidAdduct.lipid.fa_list)
+                List<csgoslin.FattyAcid> faList = lipid.speciesLevel ? new List<csgoslin.FattyAcid>(){lipidAdduct.lipid.info} : lipidAdduct.lipid.fa_list;
+                
+                foreach (csgoslin.FattyAcid fa in faList)
                 {
                     FattyAcidGroup fag = (fagEnum != null && fagEnum.MoveNext()) ? fagEnum.Current : null;
                     if (fag == null)
@@ -2170,9 +2186,110 @@ namespace LipidCreator
                 int charge = lipidAdduct.adduct != null ? lipidAdduct.adduct.charge * lipidAdduct.adduct.charge_sign : 0;
                 string adduct = lipidAdduct.adduct != null ? lipidAdduct.adduct.adduct_string : "";
             
+                
                 lipid = checkLipid(lipid, charge, adduct);
             }
             
+            if (lipid != null && !(lipid is UnsupportedLipid) && lipid.speciesLevel)
+            {
+                if ((lipid is Glycerolipid) || (lipid is Sphingolipid) || (lipid is Phospholipid))
+                {
+                    FattyAcidGroup fag1 = null;
+                    FattyAcidGroup fag2 = null;
+                    FattyAcidGroup fag3 = null;
+                    FattyAcidGroup fag4 = null;
+                    if (lipid is Glycerolipid)
+                    {
+                        fag1 = ((Glycerolipid)lipid).fag1;
+                        fag2 = ((Glycerolipid)lipid).fag2;
+                        fag3 = ((Glycerolipid)lipid).fag3;
+                    }
+                    if (lipid is Phospholipid)
+                    {
+                        fag1 = ((Phospholipid)lipid).fag1;
+                        fag2 = ((Phospholipid)lipid).fag2;
+                        fag3 = ((Phospholipid)lipid).fag3;
+                        fag4 = ((Phospholipid)lipid).fag4;
+                    }
+                    if (lipid is Sphingolipid)
+                    {
+                        fag1 = ((Sphingolipid)lipid).lcb;
+                        fag2 = ((Sphingolipid)lipid).fag;
+                    }
+                    
+                    int carbonCounts = fag1.carbonCounts.ToList()[0];
+                    string headgroup = lipid.headGroupNames[0];
+                    switch(headgroups[headgroup].buildingBlockType)
+                    {
+                        case 0:
+                            if (carbonCounts < 8) lipid = null;
+                            else
+                            {
+                                fag1.carbonCounts.Clear();
+                                fag1.carbonCounts.Add(carbonCounts - 6);
+                                fag2.carbonCounts.Add(2); fag2.doubleBondCounts.Add(0); fag2.hydroxylCounts.Add(0);
+                                fag2.faTypes[FattyAcidType.Ester] = true;
+                                fag2.faTypes[FattyAcidType.NoType] = false;
+                                fag3.carbonCounts.Add(2); fag3.doubleBondCounts.Add(0); fag3.hydroxylCounts.Add(0);
+                                fag3.faTypes[FattyAcidType.Ester] = true;
+                                fag3.faTypes[FattyAcidType.NoType] = false;
+                                fag4.carbonCounts.Add(2); fag4.doubleBondCounts.Add(0); fag4.hydroxylCounts.Add(0);
+                                fag4.faTypes[FattyAcidType.Ester] = true;
+                                fag4.faTypes[FattyAcidType.NoType] = false;
+                            }
+                            break;
+                            
+                            
+                        case 1:
+                            if (carbonCounts < 6) lipid = null;
+                            else
+                            {
+                                fag1.carbonCounts.Clear();
+                                fag1.carbonCounts.Add(carbonCounts - 4);
+                                fag2.carbonCounts.Add(2); fag2.doubleBondCounts.Add(0); fag2.hydroxylCounts.Add(0);
+                                fag2.faTypes[FattyAcidType.Ester] = true;
+                                fag2.faTypes[FattyAcidType.NoType] = false;
+                                fag3.carbonCounts.Add(2); fag3.doubleBondCounts.Add(0); fag3.hydroxylCounts.Add(0);
+                                fag3.faTypes[FattyAcidType.Ester] = true;
+                                fag3.faTypes[FattyAcidType.NoType] = false;
+                            }
+                            break;
+                            
+                            
+                        case 2:
+                        case 4:
+                            if (carbonCounts < 4) lipid = null;
+                            else
+                            {
+                                fag1.carbonCounts.Clear();
+                                fag1.carbonCounts.Add(carbonCounts - 2);
+                                fag2.carbonCounts.Add(2); fag2.doubleBondCounts.Add(0); fag2.hydroxylCounts.Add(0);
+                                fag2.faTypes[FattyAcidType.Ester] = true;
+                                fag2.faTypes[FattyAcidType.NoType] = false;
+                            }
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
+                    
+                    
+                    
+                    
+                    /*
+            buildingBlockSets[0] = new HashSet<string>{"FA1", "FA2", "FA3", "FA4", "HG"};
+            buildingBlockSets[1] = new HashSet<string>{"FA1", "FA2", "FA3", "HG"};
+            buildingBlockSets[2] = new HashSet<string>{"FA1", "FA2", "HG"};
+            buildingBlockSets[3] = new HashSet<string>{"FA", "HG"};
+            buildingBlockSets[4] = new HashSet<string>{"LCB", "FA", "HG"};
+            buildingBlockSets[5] = new HashSet<string>{"LCB", "HG"};
+            buildingBlockSets[6] = new HashSet<string>{"HG"};
+                    */
+                    
+                }
+                
+            }
             
             return lipid;
         }

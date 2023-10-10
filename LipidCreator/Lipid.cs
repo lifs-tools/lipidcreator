@@ -116,6 +116,7 @@ namespace LipidCreator
         public static string ID_SEPARATOR_UNSPECIFIC = "-";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
+        public bool speciesLevel = false;
         public static int MEDIATOR_PREFIX_LENGTH = 4;
         
         public static List<FattyAcidType> FattyAcidTypeOrder = new List<FattyAcidType>(){FattyAcidType.Ester, FattyAcidType.Plasmanyl, FattyAcidType.Plasmenyl, FattyAcidType.NoType};
@@ -397,6 +398,8 @@ namespace LipidCreator
                 
                 
                 MS2Fragment fragment = precursorFragments[fragmentName];
+                
+                if ((int)parameters[1] == 1 && !fragment.specific) continue;
                 
                 // Exception for lipids with NL(NH3) fragment
                 if (fragment.fragmentName.Equals("-(NH3,17)") && !precursorData.precursorAdductFormula.Equals("[M+NH4]1+")) continue;

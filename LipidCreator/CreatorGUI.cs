@@ -228,7 +228,7 @@ namespace LipidCreator
                 medNegAdductCheckbox2.Enabled = false;
                 medNegAdductCheckbox3.Enabled = false;
                 medNegAdductCheckbox4.Enabled = false;
-                changeTab(6);
+                changeTab(0);
                 
                 // add instruments into menu for collision energy optimization
                 for (int i = 1; i < lipidCreator.availableInstruments.Count; ++i)
@@ -1481,9 +1481,10 @@ namespace LipidCreator
                     break;
             }
             
-            menuResetCategory.Enabled = currentIndex != LipidCategory.NoLipid;
-            menuMS2Fragments.Enabled = currentIndex != LipidCategory.NoLipid;
-            menuIsotopes.Enabled = currentIndex != LipidCategory.NoLipid;
+            HashSet<LipidCategory> acceptedLipids = new HashSet<LipidCategory>(){LipidCategory.Glycerolipid, LipidCategory.Glycerophospholipid, LipidCategory.Sphingolipid, LipidCategory.Sterollipid, LipidCategory.LipidMediator};
+            menuResetCategory.Enabled = acceptedLipids.Contains(currentIndex);
+            menuMS2Fragments.Enabled = acceptedLipids.Contains(currentIndex);
+            menuIsotopes.Enabled = acceptedLipids.Contains(currentIndex);
             
             if (currentLipid != null)
             {

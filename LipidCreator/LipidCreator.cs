@@ -2006,6 +2006,8 @@ namespace LipidCreator
                     ((Glycerolipid)lipid).fag3 = new FattyAcidGroup(false, true);
                     ((Glycerolipid)lipid).containsSugar = lipidAdduct.contains_sugar();
                     fagEnum = new FattyAcidGroupEnumerator((Glycerolipid)lipid);
+                    string hgGL = lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                    if ((new HashSet<string>(){"DGDG", "MGDG", "SQDG"}).Contains(hgGL)) ((Glycerolipid)lipid).containsSugar = true;
                     break;
                     
                 case csgoslin.LipidCategory.GP:
@@ -2014,6 +2016,7 @@ namespace LipidCreator
                     string hg = lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS);
                     if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(hg))
                     {
+                        ((Phospholipid)lipid).hasPlasmalogen = true;
                         if (lipidAdduct.lipid.fa_list.Count > 0)
                         {
                             if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL) hg += " O";

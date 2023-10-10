@@ -2016,11 +2016,18 @@ namespace LipidCreator
                     string hg = lipidAdduct.get_lipid_string(csgoslin.LipidLevel.CLASS);
                     if ((new HashSet<string>(){"PC", "PE", "LPC", "LPE"}).Contains(hg))
                     {
-                        ((Phospholipid)lipid).hasPlasmalogen = true;
                         if (lipidAdduct.lipid.fa_list.Count > 0)
                         {
-                            if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL) hg += " O";
-                            else if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL) hg += " P";
+                            if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMANYL)
+                            {
+                                hg += " O";
+                                ((Phospholipid)lipid).hasPlasmalogen = true;
+                            }
+                            else if (lipidAdduct.lipid.fa_list[0].lipid_FA_bond_type == csgoslin.LipidFaBondType.ETHER_PLASMENYL)
+                            {
+                                hg += " P";
+                                ((Phospholipid)lipid).hasPlasmalogen = true;
+                            }
                         }
                     }
                     

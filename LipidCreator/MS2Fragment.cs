@@ -43,12 +43,13 @@ namespace LipidCreator
         public string fragmentFile;
         public ElementDictionary fragmentElements;
         public Adduct fragmentAdduct;
-        public ArrayList fragmentBase;
+        public HashSet<string> fragmentBase = new HashSet<string>();
         public bool specific;
         public bool userDefined;
         public const double MAX_INTENSITY = 100.0;
         public const double DEFAULT_INTENSITY = 10.0;
         public string CommentForSpectralLibrary { get { return fragmentName; } }
+        public static HashSet<string> UNSPECIFIC_BLOCKS = new HashSet<string>(){"HG", "M"};
 
         public static Dictionary<Molecule, Element> ALL_ELEMENTS = new Dictionary<Molecule, Element>(){
             {Molecule.C, new Element("C", "C", "C", "C", 0, 12.0, false, new Molecule[]{Molecule.C13}, Molecule.C)},
@@ -305,7 +306,6 @@ namespace LipidCreator
             fragmentFile = "-";
             fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
             fragmentElements = new ElementDictionary();
-            fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
         }
@@ -319,7 +319,6 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
             fragmentAdduct = Lipid.ALL_ADDUCTS[AdductType.Hp];
-            fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
         }
@@ -332,7 +331,6 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentElements = new ElementDictionary();
             fragmentAdduct = _adduct;
-            fragmentBase = new ArrayList();
             userDefined = false;
             specific = false;
         }
@@ -346,9 +344,15 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentAdduct = _adduct;
             fragmentElements = dataElements;
-            fragmentBase = (baseForms.Length > 0) ? new ArrayList(baseForms.Split(new char[] {';'})) : new ArrayList();
+            if (baseForms.Length > 0)
+            {
+                foreach (string bb in baseForms.Split(new char[] {';'})) fragmentBase.Add(bb);
+            }
             userDefined = false;
-            specific = false;
+            
+            HashSet<string> f = new HashSet<string>(fragmentBase);
+            f.ExceptWith(UNSPECIFIC_BLOCKS);
+            specific = f.Count == 0;
         }
         
         
@@ -360,9 +364,16 @@ namespace LipidCreator
             fragmentFile = fileName;
             fragmentAdduct = _adduct;
             fragmentElements = dataElements;
-            fragmentBase = (baseForms.Length > 0) ? new ArrayList(baseForms.Split(new char[] {';'})) : new ArrayList();
+            if (baseForms.Length > 0)
+            {
+                foreach (string bb in baseForms.Split(new char[] {';'})) fragmentBase.Add(bb);
+            }
             userDefined = false;
-            specific = _specific;
+            
+            HashSet<string> f = new HashSet<string>(fragmentBase);
+            f.ExceptWith(UNSPECIFIC_BLOCKS);
+            specific = f.Count == 0;
+            //specific = _specific;
         }
 
         
@@ -375,7 +386,6 @@ namespace LipidCreator
             fragmentElements = new ElementDictionary();
             fragmentAdduct = copy.fragmentAdduct;
             for (int m = 0; m < copy.fragmentElements.Count; ++m) fragmentElements[m] = copy.fragmentElements[m];
-            fragmentBase = new ArrayList();
             userDefined = copy.userDefined;
             foreach (string fbase in copy.fragmentBase) fragmentBase.Add(fbase);
             specific = copy.specific;

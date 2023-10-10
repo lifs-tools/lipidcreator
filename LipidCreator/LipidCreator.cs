@@ -2064,9 +2064,12 @@ namespace LipidCreator
                 default:
                     break;
             }
-                        
-            if (headgroups.ContainsKey(lipidAdduct.lipid.headgroup.unaltered_headgroup) && !headgroups.ContainsKey(lipid.headGroupNames[0])) lipid.headGroupNames[0] = lipidAdduct.lipid.headgroup.unaltered_headgroup;
-                        
+                    
+            if (headgroups.ContainsKey(lipidAdduct.lipid.headgroup.unaltered_headgroup) && !headgroups.ContainsKey(lipid.headGroupNames[0]))
+            {
+                lipid.headGroupNames[0] = lipidAdduct.lipid.headgroup.unaltered_headgroup;
+            }
+            
             
             if (lipid != null && lipidAdduct.lipid.info.level == csgoslin.LipidLevel.SPECIES)
             {
@@ -2074,7 +2077,7 @@ namespace LipidCreator
                 throw new Exception("Lipid on species level not supported.");
             }
                 
-            if (lipid != null)
+            if (lipid != null && !(lipid is Mediator))
             {
                 foreach (csgoslin.FattyAcid fa in lipidAdduct.lipid.fa_list)
                 {
@@ -2110,7 +2113,6 @@ namespace LipidCreator
                             checked_functional_groups += 1;
                             string fg = fa.functional_groups.ContainsKey("OH") ? "OH" : "O";
                             int cnt = (fa.functional_groups.ContainsKey("[X]") && !lipidAdduct.lipid.headgroup.sp_exception) ? 1 : 0;
-                            Console.WriteLine("cnt: " + cnt + " " + fa.functional_groups.ContainsKey("[X]") + " " + lipidAdduct.lipid.headgroup.sp_exception);
                             if (fa.functional_groups[fg].Count == 1)
                             {
                                 cnt += fa.functional_groups[fg][0].count;
@@ -2203,9 +2205,8 @@ namespace LipidCreator
                             lipid = translateLipid(lipidAdduct);
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        Console.WriteLine(e);
                         if (reportError)
                         {
                             log.Error("Warning: lipid '" + lipidName + "' could not parsed.");

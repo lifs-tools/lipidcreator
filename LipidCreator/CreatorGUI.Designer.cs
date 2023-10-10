@@ -446,6 +446,7 @@ namespace LipidCreator
         public Button startSecondTutorialButton;
         [NonSerialized]
         public Button startThirdTutorialButton;
+        [NonSerialized]
         public Button startFourthTutorialButton;
         
 
@@ -828,6 +829,8 @@ namespace LipidCreator
         public ComboBox searchAdduct;
         [NonSerialized]
         DataGridView searchfragmentsGridview;
+        [NonSerialized]
+        public Button transferLipid;
         
         [NonSerialized]
         public GroupBox lipidMassSearchBox;
@@ -838,7 +841,11 @@ namespace LipidCreator
         [NonSerialized]
         public ComboBox searchToleranceType;
         [NonSerialized]
+        public ComboBox searchPolarity;
+        [NonSerialized]
         public TextBox searchTolerance;
+        [NonSerialized]
+        public Label searchPolarityLabel;
         [NonSerialized]
         public Label searchMassLabel;
         [NonSerialized]
@@ -847,6 +854,8 @@ namespace LipidCreator
         public Label searchToleranceTypeLabel;
         [NonSerialized]
         public Label searchlipidsGridviewLabel;
+        [NonSerialized]
+        public CheckBox precursorAdductCombinations;
         
         
         
@@ -2485,12 +2494,11 @@ namespace LipidCreator
             lipidsGridview.ScrollBars = ScrollBars.Vertical;
             if (!lipidCreatorInitError)
             {
-                lipidsGridview.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(lipidsGridviewDataBindingComplete);
+                lipidsGridview.DataBindingComplete += lipidsGridviewDataBindingComplete;
                 lipidsGridview.DoubleClick += new EventHandler(lipidsGridviewDoubleClick);
                 lipidsGridview.KeyDown += new KeyEventHandler(lipidsGridviewKeydown);
                 lipidsGridview.EditMode = DataGridViewEditMode.EditOnEnter;
             }
-            
             lipidsGridviewPanel = new Panel();
             lipidsGridviewPanel.Dock = DockStyle.Fill;
             lipidsGridviewPanel.AutoSize = true;
@@ -2715,6 +2723,7 @@ namespace LipidCreator
             lipidSumFormulaLabel = new Label();
             searchAdductLabel = new Label();
             fragmentsTableLabel = new Label();
+            transferLipid = new Button();
             
             searchAdduct = new ComboBox();
             searchAdduct.Items.Add("Neutral molecule");
@@ -2727,7 +2736,7 @@ namespace LipidCreator
             searchAdduct.Items.Add("+CH3COO-");
             
             searchfragmentsGridview = new DataGridView();
-                
+            precursorAdductCombinations = new CheckBox();
             
             
             lipidNameSearchBox.Controls.Add(suggestedLipidName);
@@ -2737,7 +2746,7 @@ namespace LipidCreator
             suggestedLipidName.TextChanged += lipidNameSearch;
             suggestedLipidNameLabel.Location = new Point(suggestedLipidName.Left, suggestedLipidName.Top - sep);
             suggestedLipidNameLabel.Width = faLength;
-            suggestedLipidNameLabel.Text = "Lipid Name";
+            suggestedLipidNameLabel.Text = "Lipid name";
             
             lipidNameSearchBox.Controls.Add(translatedLipidName);
             lipidNameSearchBox.Controls.Add(translatedLipidNameLabel);
@@ -2746,18 +2755,18 @@ namespace LipidCreator
             translatedLipidName.Enabled = false;
             translatedLipidNameLabel.Location = new Point(translatedLipidName.Left, translatedLipidName.Top - sep);
             translatedLipidNameLabel.Width = faLength;
-            translatedLipidNameLabel.Text = "Translated Lipid Name";
+            translatedLipidNameLabel.Text = "Translated lipid name";
             
             lipidNameSearchBox.Controls.Add(lipidMassLabel);
             lipidNameSearchBox.Controls.Add(lipidSumFormulaLabel);
             
             lipidMassLabel.Location = new Point(suggestedLipidName.Left, suggestedLipidName.Top + suggestedLipidName.Height + 10);
-            lipidMassLabel.Width = 2 * faLength;
+            lipidMassLabel.Width = faLength;
             lipidMassLabel.Text = "m/z: ";
             
             lipidSumFormulaLabel.Location = new Point(lipidMassLabel.Left, lipidMassLabel.Top + sep);
-            lipidSumFormulaLabel.Width = (int)(2.5 * faLength);
-            lipidSumFormulaLabel.Text = "sum formula: ";
+            lipidSumFormulaLabel.Width = faLength;
+            lipidSumFormulaLabel.Text = "Sum formula: ";
             lipidSumFormulaLabel.BringToFront();
             
             lipidNameSearchBox.Controls.Add(searchAdduct);
@@ -2769,7 +2778,7 @@ namespace LipidCreator
             searchAdduct.SelectedIndex = 0;
             searchAdductLabel.Location = new Point(searchAdduct.Left, searchAdduct.Top - sep);
             searchAdductLabel.Width = faLength;
-            searchAdductLabel.Text = "Selected Adduct";
+            searchAdductLabel.Text = "Selected adduct";
             
             lipidNameSearchBox.Controls.Add(searchfragmentsGridview);
             searchfragmentsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -2789,8 +2798,17 @@ namespace LipidCreator
             lipidNameSearchBox.Controls.Add(fragmentsTableLabel);
             fragmentsTableLabel.Location = new Point(searchfragmentsGridview.Left, searchfragmentsGridview.Top - sep);
             fragmentsTableLabel.Width = faLength;
-            fragmentsTableLabel.Text = "Table of lipid fragments";
+            fragmentsTableLabel.Text = "Fragment table";
             
+            lipidNameSearchBox.Controls.Add(transferLipid);
+            transferLipid.Text = "Transfer lipid";
+            transferLipid.Width = 200;
+            transferLipid.Height = 26;
+            //transferLipid.Location = new Point(searchfragmentsGridview.Left - transferLipid.Width, transferLipid.Top - transferLipid.Height - 10);
+            transferLipid.Location = new Point(searchfragmentsGridview.Left + searchfragmentsGridview.Width - transferLipid.Width, searchfragmentsGridview.Top - transferLipid.Height - 10);
+            transferLipid.BackColor = SystemColors.Control;
+            transferLipid.Click += transferLipidAction;
+            transferLipid.Enabled = false;
             
             
             
@@ -2800,9 +2818,14 @@ namespace LipidCreator
             searchToleranceType.Items.Add("ppm");
             searchTolerance = new TextBox();
             searchMassLabel = new Label();
+            searchPolarityLabel = new Label();
             searchToleranceLabel = new Label();
             searchToleranceTypeLabel = new Label();
             searchlipidsGridviewLabel = new Label();
+            searchPolarity = new ComboBox();
+            searchPolarity.Items.Add("both");
+            searchPolarity.Items.Add("negative");
+            searchPolarity.Items.Add("positive");
             searchlipidsGridview = new DataGridView();
             
             
@@ -2813,7 +2836,7 @@ namespace LipidCreator
             searchMass.TextChanged += lipidMassSearch;
             searchMassLabel.Location = new Point(searchMass.Left, searchMass.Top - sep);
             searchMassLabel.Width = (int)(faLength * 0.7);
-            searchMassLabel.Text = "Lipid Mass";
+            searchMassLabel.Text = "Lipid mass";
             
             lipidMassSearchBox.Controls.Add(searchToleranceType);
             lipidMassSearchBox.Controls.Add(searchToleranceTypeLabel);
@@ -2824,7 +2847,7 @@ namespace LipidCreator
             searchToleranceType.SelectedIndex = 0;
             searchToleranceTypeLabel.Location = new Point(searchToleranceType.Left, searchToleranceType.Top - sep);
             searchToleranceTypeLabel.Width = (int)(faLength * 0.7);
-            searchToleranceTypeLabel.Text = "Type of tolerance";
+            searchToleranceTypeLabel.Text = "Tolerance type";
             
             lipidMassSearchBox.Controls.Add(searchTolerance);
             lipidMassSearchBox.Controls.Add(searchToleranceLabel);
@@ -2835,6 +2858,13 @@ namespace LipidCreator
             searchToleranceLabel.Location = new Point(searchTolerance.Left, searchTolerance.Top - sep);
             searchToleranceLabel.Width = (int)(faLength * 0.7);
             searchToleranceLabel.Text = "Tolerance";
+            
+            lipidMassSearchBox.Controls.Add(precursorAdductCombinations);
+            precursorAdductCombinations.Location = new Point(searchMass.Left, searchMass.Top + searchMass.Height);
+            precursorAdductCombinations.Text = "All lipid class / adduct combinations";
+            precursorAdductCombinations.Checked = true;
+            precursorAdductCombinations.Width = 2 * faLength;
+            precursorAdductCombinations.CheckedChanged += lipidMassSearch;
             
             lipidMassSearchBox.Controls.Add(searchlipidsGridview);
             searchlipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -2851,34 +2881,22 @@ namespace LipidCreator
             searchlipidsGridview.Size = new Size(480, 270);
             searchlipidsGridview.DataBindingComplete += searchLipidsComplete;
             
+            lipidMassSearchBox.Controls.Add(searchPolarity);
+            lipidMassSearchBox.Controls.Add(searchPolarityLabel);
+            searchPolarity.Location = new Point(searchTolerance.Left  + searchTolerance.Width + 10, searchTolerance.Top);
+            searchPolarity.Width = (int)(faLength * 0.7);
+            searchPolarity.DropDownStyle = ComboBoxStyle.DropDownList;
+            searchPolarity.SelectedIndex = 0;
+            searchPolarity.SelectedIndexChanged += lipidMassSearch;
+            searchPolarityLabel.Location = new Point(searchPolarity.Left, searchPolarity.Top - sep);
+            searchPolarityLabel.Width = (int)(faLength * 0.7);
+            searchPolarityLabel.Text = "Polarity";
+            
             
             lipidMassSearchBox.Controls.Add(searchlipidsGridviewLabel);
             searchlipidsGridviewLabel.Location = new Point(searchlipidsGridview.Left, searchlipidsGridview.Top - sep);
             searchlipidsGridviewLabel.Width = faLength;
-            searchlipidsGridviewLabel.Text = "Table of lipids";
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            searchlipidsGridviewLabel.Text = "Lipid table";
             
             
             

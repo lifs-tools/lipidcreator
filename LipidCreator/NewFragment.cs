@@ -140,7 +140,7 @@ namespace LipidCreator
                 addButton.Text = "OK";
                 fragmentOutputName = ms2Fragment.fragmentOutputName;
                 
-                HashSet<string> fragmentBB = new HashSet<string>(  (String[]) ms2Fragment.fragmentBase.ToArray( typeof( string ) ));
+                HashSet<string> fragmentBB = new HashSet<string>(ms2Fragment.fragmentBase);
                 for (int i = 1; i < buildingBlocksArray.Count; ++i)
                 {
                     HashSet<string> currentBB = new HashSet<string>(((string)buildingBlocksArray[i]).Split(new char[]{';'}));

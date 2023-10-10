@@ -63,13 +63,15 @@ namespace LipidCreator
     {
         public string name;
         public double mass;
-        public string adduct;
+        public AdductType adduct;
+        public Precursor precursor;
         
-        public LipidAssembly(string n, double m, string a = "")
+        public LipidAssembly(string n, double m, Precursor p, AdductType a = AdductType.NoAdduct)
         {
             name = n;
             mass = m;
             adduct = a;
+            precursor = p;
         }
     }
     
@@ -110,6 +112,7 @@ namespace LipidCreator
         public static readonly float REGULAR_FONT_SIZE = 8.25f;
         public bool lipidCreatorInitError = false;
         public List<LipidAssembly> searchLipids = new List<LipidAssembly>();
+        private Lipid searchLipid = null;
         
         public CreatorGUI(string _inputParameters)
         {
@@ -332,8 +335,6 @@ namespace LipidCreator
                 }
             }
             
-            double base_mass = fatty_acids[(2 << 20) + ((0 + 1) << 5)].mass;
-            double empty_mass = MS2Fragment.ALL_ELEMENTS[Molecule.H].mass;
             foreach (KeyValuePair<string, Precursor> kvp in lipidCreator.headgroups)
             {
                 Precursor precursor = kvp.Value;
@@ -351,39 +352,39 @@ namespace LipidCreator
                     
                     case 0:
                     {
-                        addLipidAssemblies(4, headgroup, fatty_acids);
+                        addLipidAssemblies(4, headgroup, precursor, fatty_acids);
                         break;
                     }
                     
                     case 1:
                     {
-                        addLipidAssemblies(3, headgroup, fatty_acids);
+                        addLipidAssemblies(3, headgroup, precursor, fatty_acids);
                         break;
                     }
                     
                     case 2:
                     {
-                        if (plasmalogen) addLipidAssemblies(2, headgroup, fatty_acids_o);
-                        else addLipidAssemblies(2, headgroup, fatty_acids);
+                        if (plasmalogen) addLipidAssemblies(2, headgroup, precursor, fatty_acids_o);
+                        else addLipidAssemblies(2, headgroup, precursor, fatty_acids);
                         break;
                     }
                     
                     case 3:
                     {
-                        if (plasmalogen) addLipidAssemblies(1, headgroup, fatty_acids_o);
-                        else addLipidAssemblies(1, headgroup, fatty_acids);
+                        if (plasmalogen) addLipidAssemblies(1, headgroup, precursor, fatty_acids_o);
+                        else addLipidAssemblies(1, headgroup, precursor, fatty_acids);
                         break;
                     }
                     
                     case 4:
                     {
-                        addLipidAssemblies(2, headgroup, long_chain_bases, true);
+                        addLipidAssemblies(2, headgroup, precursor, long_chain_bases, true);
                         break;
                     }
                     
                     case 5:
                     {
-                        addLipidAssemblies(1, headgroup, long_chain_bases, true);
+                        addLipidAssemblies(1, headgroup, precursor, long_chain_bases, true);
                         break;
                     }
                     
@@ -396,7 +397,7 @@ namespace LipidCreator
                             if (elements[m] < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
                             mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
                         }
-                        searchLipids.Add(new LipidAssembly(kvp.Key, mass));
+                        searchLipids.Add(new LipidAssembly(kvp.Key, mass, precursor));
                         break;
                     }
                         
@@ -427,11 +428,11 @@ namespace LipidCreator
                     double mass = searchLipids[i].mass + kvp.Value;
                     mass = (mass - charge * LipidCreator.ELECTRON_REST_MASS) / Math.Abs(charge);
                     
-                    searchLipids.Add(new LipidAssembly(searchLipids[i].name, mass, adduct.visualization));
+                    searchLipids.Add(new LipidAssembly(searchLipids[i].name, mass, searchLipids[i].precursor, kvp.Key));
                 }
             }
             
-            searchLipids = searchLipids.Where(x => x.adduct.Length > 0).ToList();
+            searchLipids = searchLipids.Where(x => x.adduct != AdductType.NoAdduct).ToList();
             
             searchLipids.Sort(delegate(LipidAssembly x, LipidAssembly y){
                 return x.mass < y.mass ? -1 : 1;
@@ -441,7 +442,7 @@ namespace LipidCreator
         
         
         
-        private void addLipidAssemblies(int fa, string headgroup, Dictionary<int, FattyAcidAssembly> chain_dict, bool isLCB = false)
+        private void addLipidAssemblies(int fa, string headgroup, Precursor precursor, Dictionary<int, FattyAcidAssembly> chain_dict, bool isLCB = false)
         {
             csgoslin.Headgroup hg = new csgoslin.Headgroup(headgroup);
             ElementTable elements = hg.get_elements();
@@ -464,7 +465,7 @@ namespace LipidCreator
                             int key = (c << 20) + ((db + 1) << 5) + (oh + 1);
                             if (!chain_dict.ContainsKey(key)) continue;
                             double mass = mass_hg + chain_dict[key].mass;
-                            searchLipids.Add(new LipidAssembly(headgroup + " " + chain_dict[key].name, mass));
+                            searchLipids.Add(new LipidAssembly(headgroup + " " + chain_dict[key].name, mass, precursor));
                         }
                     }
                     else
@@ -472,7 +473,7 @@ namespace LipidCreator
                         int key = (c << 20) + ((db + 1) << 5);
                         if (!chain_dict.ContainsKey(key)) continue;
                         double mass = mass_hg + chain_dict[key].mass;
-                        searchLipids.Add(new LipidAssembly(headgroup + " " + chain_dict[key].name, mass));
+                        searchLipids.Add(new LipidAssembly(headgroup + " " + chain_dict[key].name, mass, precursor));
                     }
                 }
             }
@@ -511,9 +512,16 @@ namespace LipidCreator
             lipidList.Columns.Add(tolerance_string);
             lipidList.Columns.Add("Lipid name");
             lipidList.Columns.Add("Adduct");
+            lipidList.Columns.Add("Category");
             searchlipidsGridview.DataSource = lipidList;
             
+            
+            
             if (searchAdduct.Text.Length == 0 || searchTolerance.Text.Length == 0) return;
+            
+            bool polarityNegative = searchPolarity.SelectedIndex == 1;
+            bool polarityPositive = searchPolarity.SelectedIndex == 2;
+            bool LCspecificCombinations = !precursorAdductCombinations.Checked;
             
             double value = 0;
             double tol = 0;
@@ -535,16 +543,24 @@ namespace LipidCreator
             int L = 0;
             int R = searchLipids.Count - 1;
 
+            // since the list 'searchLipids' is sorted, we apply binary search here to
+            // find the left-most position of the entry higher than our search value
             while (L < R){
                 int mid = (L + R) >> 1;
                 if (searchLipids[mid].mass < min_value) L = mid + 1;
                 else R = mid;
             }
-            int pos = R + ((R == (searchLipids.Count - 1) && searchLipids[R].mass < min_value) ? 1 : 0);
+            int pos = Math.Max(0, R + ((R == (searchLipids.Count - 1) && searchLipids[R].mass < min_value) ? 1 : 0));
             
             while (pos < searchLipids.Count)
             {
-                if (searchLipids[pos].mass < min_value)
+                if (searchLipids[pos].adduct == AdductType.NoAdduct)
+                {
+                    pos++;
+                    continue;
+                }
+                Adduct adduct = Lipid.ALL_ADDUCTS[searchLipids[pos].adduct];
+                if (searchLipids[pos].mass < min_value || (adduct.charge > 0 && polarityNegative) || (adduct.charge < 0 && polarityPositive) || (LCspecificCombinations && !searchLipids[pos].precursor.adductRestrictions[adduct.name]))
                 {
                     pos++;
                     continue;
@@ -557,7 +573,8 @@ namespace LipidCreator
                 double tolerance_val = Math.Abs(value - searchLipids[pos].mass) * (tolerance_mz ? 1.0 : 1e6 / value);
                 lipidRow[tolerance_string] = string.Format("{0:N4}", tolerance_val);
                 lipidRow["Lipid name"] = searchLipids[pos].name;
-                lipidRow["Adduct"] = searchLipids[pos].adduct;
+                lipidRow["Adduct"] = Lipid.ALL_ADDUCTS[searchLipids[pos].adduct].visualization;
+                lipidRow["Category"] = searchLipids[pos].precursor.category;
                 lipidList.Rows.Add(lipidRow);
                 pos++;
             }
@@ -574,6 +591,8 @@ namespace LipidCreator
             DataTable transitionList = new DataTable();
             foreach (string columnKey in LipidCreator.STATIC_DATA_COLUMN_KEYS) transitionList.Columns.Add(columnKey);
             searchfragmentsGridview.DataSource = transitionList;
+            transferLipid.Enabled = false;
+            searchLipid = null;
             
             try
             {
@@ -586,16 +605,16 @@ namespace LipidCreator
                 {
                     switch((string)searchAdduct.Items[searchAdduct.SelectedIndex])
                     {
-                        case "+H+": lipidName += Lipid.ALL_ADDUCTS[AdductType.Hp].ToString(); break;
-                        case "+2H+": lipidName += Lipid.ALL_ADDUCTS[AdductType.HHp].ToString(); break;
-                        case "+NH4+": lipidName += Lipid.ALL_ADDUCTS[AdductType.NHHHHp].ToString(); break;
-                        case "-H-": lipidName += Lipid.ALL_ADDUCTS[AdductType.Hm].ToString(); break;
-                        case "-2H-": lipidName += Lipid.ALL_ADDUCTS[AdductType.HHm].ToString(); break;
-                        case "+HCOO-": lipidName += Lipid.ALL_ADDUCTS[AdductType.HCOOm].ToString(); break;
-                        case "+CH3COO-": lipidName += Lipid.ALL_ADDUCTS[AdductType.CHHHCOOm].ToString(); break;
+                        case "+H+": lipidAdduct.adduct = new csgoslin.Adduct("", "+H", 1, 1); break;
+                        case "+2H+": lipidAdduct.adduct = new csgoslin.Adduct("", "+2H", 2, 1); break;
+                        case "+HH4+": lipidAdduct.adduct = new csgoslin.Adduct("", "+NH4", 1, 1); break;
+                        
+                        case "-H-": lipidAdduct.adduct = new csgoslin.Adduct("", "-H", 1, -1); break;
+                        case "-2H-": lipidAdduct.adduct = new csgoslin.Adduct("", "-2H", 2, -1); break;
+                        case "+HCOO-": lipidAdduct.adduct = new csgoslin.Adduct("", "+HCOO", 1, -1); break;
+                        case "+CH3COO-": lipidAdduct.adduct = new csgoslin.Adduct("", "+CH3COO", 1, -1); break;
                         default: break;
                     }
-                    lipidAdduct = lipidCreator.lipidParser.parse(lipidName);
                 }
                 
                 lipidMassLabel.Text = "m/z: " + string.Format("{0:N4}", lipidAdduct.get_mass());
@@ -605,7 +624,14 @@ namespace LipidCreator
                 {
                     try
                     {
-                        Lipid lipid = lipidCreator.translateLipid(lipidAdduct);
+                        Lipid lipid = null;
+                        if (lipidCreator.headgroups.ContainsKey(suggestedLipidName.Text) && lipidCreator.headgroups[suggestedLipidName.Text].category == LipidCategory.LipidMediator && (string)searchAdduct.Items[searchAdduct.SelectedIndex] == "-H-")
+                        {
+                            lipid = new Mediator(lipidCreator);
+                            lipid.headGroupNames.Add(suggestedLipidName.Text);
+                            lipid.adducts["-H"] = true;
+                        }
+                        else lipid = lipidCreator.translateLipid(lipidAdduct);
                         if (lipid != null && !(lipid is UnsupportedLipid))
                         {
                             HashSet<String> usedKeys = new HashSet<String>();
@@ -617,10 +643,12 @@ namespace LipidCreator
                             {
                                 Lipid.computeFragmentData(transitionList, precursor, lipidCreator.allFragments, lipidCreator.headgroups, new ArrayList(){false, 0});
                             }
+                            transferLipid.Enabled = true;
+                            searchLipid = lipid;
                             
                         }
                     }
-                    catch(Exception) {}
+                    catch(Exception) {  }
                 }
             }
             catch(Exception)
@@ -630,6 +658,7 @@ namespace LipidCreator
                 lipidSumFormulaLabel.Text = "sum formula: ";
             }
         }
+        
         
         
         private void searchFragmentsComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -646,10 +675,11 @@ namespace LipidCreator
         
         private void searchLipidsComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            searchlipidsGridview.Columns[0].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.2);
-            searchlipidsGridview.Columns[1].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.2);
-            searchlipidsGridview.Columns[2].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.4);
-            searchlipidsGridview.Columns[3].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.2);
+            searchlipidsGridview.Columns[0].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
+            searchlipidsGridview.Columns[1].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
+            searchlipidsGridview.Columns[2].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.27);
+            searchlipidsGridview.Columns[3].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.15);
+            searchlipidsGridview.Columns[4].Width = (int)Math.Floor(searchfragmentsGridview.Size.Width * 0.28);
         }
         
         
@@ -829,8 +859,9 @@ namespace LipidCreator
         {
             lipidsGridview.InvokeIfRequired(() =>
             {
-                 if (initialCall)
-                 {
+                if (initialCall)
+                {
+                    initialCall = false;
                     log.Debug("Initializing lipid table!");
                     int numCols = registeredLipidsDatatable.Columns.Count;
                     DataGridViewImageColumn editColumn = new DataGridViewImageColumn();
@@ -843,6 +874,10 @@ namespace LipidCreator
                     deleteColumn.HeaderText = "Delete";
                     deleteColumn.ValuesAreIcons = false;
                     lipidsGridview.Columns.Add(deleteColumn);
+                    for (int i = 0; i < lipidsGridview.Columns.Count; ++i)
+                    {
+                        lipidsGridview.Columns[i].DisplayIndex = lipidsGridview.Columns[i].Index;
+                    }
                     foreach (DataGridViewColumn col in lipidsGridview.Columns)
                     {
                         col.Frozen = false;
@@ -852,11 +887,10 @@ namespace LipidCreator
                     lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     editColumn.Width = 40;
                     deleteColumn.Width = 40;
-                    initialCall = false;
                     lipidsGridview.Enabled = true;
                     lipidsGridview.Invalidate();
                     lipidsGridview.PerformLayout();
-                 }
+                }
             });
         }
         
@@ -887,6 +921,25 @@ namespace LipidCreator
             changeTab(((TabControl)sender).SelectedIndex);
         }
         
+        
+        
+        
+        public void transferLipidAction(Object sender, EventArgs e)
+        {
+            if (searchLipid == null) return;
+            
+            int index = 0;
+            if (searchLipid is Glycerolipid) index = 1;
+            else if (searchLipid is Phospholipid) index = 2;
+            else if (searchLipid is Sphingolipid) index = 3;
+            else if (searchLipid is Sterol) index = 4;
+            else if (searchLipid is Mediator) index = 5;
+            else return;
+            
+            lipidTabList[index] = searchLipid;
+            lipidModifications[index] = 0;
+            changeTab(index);
+        }
         
         
         

@@ -32,7 +32,7 @@ using System.Data;
 
 namespace LipidCreator
 {
-    public enum AdductType {Hp, HHp, NHHHHp, Hm, HHm, HCOOm, CHHHCOOm};
+    public enum AdductType {Hp, HHp, NHHHHp, Hm, HHm, HCOOm, CHHHCOOm, NoAdduct};
 
     [Serializable]
     public partial class Adduct

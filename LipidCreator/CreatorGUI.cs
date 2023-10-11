@@ -113,7 +113,6 @@ namespace LipidCreator
         public bool lipidCreatorInitError = false;
         public List<LipidAssembly> searchLipids = new List<LipidAssembly>();
         private Lipid searchLipid = null;
-        DataTable lipidList = new DataTable();
         
         public CreatorGUI(string _inputParameters)
         {
@@ -131,11 +130,6 @@ namespace LipidCreator
                 lipidCreatorInitError = true;
                 MessageBox.Show ("An error occurred during the initialization of LipidCreator. For more details, please read the log message (Menu -> Help -> Log messages) and get in contact with the developers.", "LipidCreator: error occurred");
             }
-            lipidList.Columns.Add("Mass [m/z]");
-            lipidList.Columns.Add("Mass tolerance [m/z]");
-            lipidList.Columns.Add("Lipid name");
-            lipidList.Columns.Add("Adduct");
-            lipidList.Columns.Add("Category");
             
             
             registeredLipidsDatatable = new DataTable("Daten");
@@ -510,12 +504,18 @@ namespace LipidCreator
         
         
         public void lipidMassSearch(Object sender, EventArgs e)
-        {
-            if (searchlipidsGridview.DataSource == null) return;
+        {            
+            DataTable lipidList = new DataTable();            
             bool tolerance_mz = searchToleranceType.SelectedIndex == 0;
             string tolerance_string = tolerance_mz ? "Mass tolerance [m/z]" : "Mass tolerance [ppm]";
-            lipidList.Columns[1].ColumnName = tolerance_string;
-            searchlipidsGridview.Columns[1].Name = tolerance_string;
+            lipidList.Columns.Add("Mass [m/z]");
+            lipidList.Columns.Add(tolerance_string);
+            lipidList.Columns.Add("Lipid name");
+            lipidList.Columns.Add("Adduct");
+            lipidList.Columns.Add("Category");
+            searchlipidsGridview.DataSource = lipidList;
+            //lipidList.Columns[1].ColumnName = tolerance_string;
+            //searchlipidsGridview.Columns[1].Name = tolerance_string;
             lipidList.Rows.Clear();
             
             if (searchAdduct.Text.Length == 0 || searchTolerance.Text.Length == 0) return;
@@ -687,34 +687,6 @@ namespace LipidCreator
         
         
         
-        
-        
-        public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
-        {
-            foreach (var fragment in element.Elements().Where(el => el.Name.LocalName.Equals("fragment")))
-            {
-                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("n")))
-                {
-                    nodes.Add(node);
-                    parseXML(node, nodes, edges);
-                }
-                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("b")))
-                {
-                    edges.Add(node);
-                }
-                foreach (var node in fragment.Elements().Where(el => el.Name.LocalName.Equals("graphic")))
-                {
-                    nodes.Add(node);
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
         public void statisticsMenu(Object sender, EventArgs e)
         {
             menuStatistics.Checked = !menuStatistics.Checked;
@@ -731,8 +703,6 @@ namespace LipidCreator
                 log.Warn("Could not write to '"+ analyticsFile + "': " + ex);
             }
         }
-        
-        
         
         
         
@@ -876,17 +846,14 @@ namespace LipidCreator
                     deleteColumn.HeaderText = "Delete";
                     deleteColumn.ValuesAreIcons = false;
                     lipidsGridview.Columns.Add(deleteColumn);
-                    for (int i = 0; i < lipidsGridview.Columns.Count; ++i)
-                    {
-                        lipidsGridview.Columns[i].DisplayIndex = lipidsGridview.Columns[i].Index;
-                    }
                     foreach (DataGridViewColumn col in lipidsGridview.Columns)
                     {
                         col.Frozen = false;
-                        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
                     }
-                    lipidsGridview.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    for (int i = 1; i <= 4; ++i) lipidsGridview.Columns[i].Width = (int)(lipidsGridview.Width * 0.15);
+                    lipidsGridview.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     editColumn.Width = 40;
                     deleteColumn.Width = 40;
                     lipidsGridview.Enabled = true;

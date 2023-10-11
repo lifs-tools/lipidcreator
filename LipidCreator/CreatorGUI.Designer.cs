@@ -2859,7 +2859,6 @@ namespace LipidCreator
             precursorAdductCombinations.CheckedChanged += lipidMassSearch;
             
             lipidMassSearchBox.Controls.Add(searchlipidsGridview);
-            searchlipidsGridview.DataSource = lipidList;
             searchlipidsGridview.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             searchlipidsGridview.AllowUserToResizeColumns = false;
             searchlipidsGridview.AllowUserToAddRows = false;

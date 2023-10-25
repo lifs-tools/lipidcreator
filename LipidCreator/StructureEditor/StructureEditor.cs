@@ -22,13 +22,13 @@ namespace LipidCreatorStructureEditor
         public StructureNode drawStart = null;
         public Action action = Action.Idle;
         public StructureNode moveNode = null;
-        public int selectedIndexPositive = -1;
-        public int selectedIndexNegative = -1;
+        public int[] selectedIndexes = new int[]{-1, -1};
         public Point startSelect;
         public PointF previousMousePosition;
         public List<StructureNode> moveNodes = new List<StructureNode>();
         public static double ELECTRON_REST_MASS = 0.00054857990946;
-        
+        public const string FRAGMENT_LABEL = "fragment";
+        public bool semaphore = false;
         
         
         public LipidCreatorStructureEditor()
@@ -41,13 +41,13 @@ namespace LipidCreatorStructureEditor
             lipidStructure = new LipidStructure(file, this);
             
             positiveFragmentsListBox.Items.Add("HG 164");
-            lipidStructure.addPositiveFragment("HG 164");
+            lipidStructure.addFragment("HG 164", true);
             
             positiveFragmentsListBox.Items.Add("HG 181");
-            lipidStructure.addPositiveFragment("HG 181");
+            lipidStructure.addFragment("HG 181", true);
             
             negativeFragmentsListBox.Items.Add("HG -OH");
-            lipidStructure.addNegativeFragment("HG -OH");
+            lipidStructure.addFragment("HG -OH", false);
             
             computeFragmentMass(null, null);
         }
@@ -517,7 +517,7 @@ namespace LipidCreatorStructureEditor
             
             string currentFragmentName = (string)positiveFragmentsListBox.Items[selectedIndex];
             string newFragmentName = InputBox.Show("Please write a new fragment name:", "New fragment name", currentFragmentName);
-            if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName)) return;
+            if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName) || lipidStructure.positiveFragments.ContainsKey(newFragmentName)) return;
             
             lipidStructure.positiveFragments.Add(newFragmentName, lipidStructure.positiveFragments[currentFragmentName]);
             lipidStructure.positiveFragments.Remove(currentFragmentName);
@@ -525,26 +525,7 @@ namespace LipidCreatorStructureEditor
         }
         
         
-        private void positiveFragmentClicked(Object sender, EventArgs e)
-        {
-            moveNodes.Clear();
-            int selectedIndex = positiveFragmentsListBox.SelectedIndex;
-            if (selectedIndex == selectedIndexPositive)
-            {
-                positiveFragmentsListBox.SelectedIndex = -1;
-                selectedIndexPositive = -1;
-                lipidStructure.changeFragment();
-            }
-            else
-            {
-                selectedIndexPositive = selectedIndex;
-                lipidStructure.changeFragment((string)positiveFragmentsListBox.Items[selectedIndex], true);
-            }
-            negativeFragmentsListBox.SelectedIndex = -1;
-            selectedIndexNegative = -1;
-            lipidStructure.computeBonds();
-            updateStructure();
-        }
+        
         
         
         private void negativeFragmentDoubleClicked(Object sender, EventArgs e)
@@ -554,7 +535,7 @@ namespace LipidCreatorStructureEditor
             
             string currentFragmentName = (string)negativeFragmentsListBox.Items[selectedIndex];
             string newFragmentName = InputBox.Show("Please write a new fragment name:", "New fragment name", currentFragmentName);
-            if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName)) return;
+            if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName) || lipidStructure.negativeFragments.ContainsKey(newFragmentName)) return;
             
             lipidStructure.negativeFragments.Add(newFragmentName, lipidStructure.negativeFragments[currentFragmentName]);
             lipidStructure.negativeFragments.Remove(currentFragmentName);
@@ -562,26 +543,41 @@ namespace LipidCreatorStructureEditor
         }
         
         
-        private void negativeFragmentClicked(Object sender, EventArgs e)
+        
+        
+        
+        
+        private void fragmentClicked(Object sender, EventArgs e)
         {
+            if (semaphore) return;
+            semaphore = true;
+            
+            ListBox fragmentListBox = (ListBox)sender;
+            
+            int indexIndex = (fragmentListBox == positiveFragmentsListBox) ? 1 : 0;
+            
+            if (indexIndex == 1) negativeFragmentsListBox.SelectedIndex = -1;
+            else positiveFragmentsListBox.SelectedIndex = -1;
+            
             moveNodes.Clear();
-            int selectedIndex = negativeFragmentsListBox.SelectedIndex;
-            if (selectedIndex == selectedIndexNegative)
+            int selectedIndex = fragmentListBox.SelectedIndex;
+            
+            if (selectedIndex == selectedIndexes[indexIndex])
             {
-                negativeFragmentsListBox.SelectedIndex = -1;
-                selectedIndexNegative = -1;
+                fragmentListBox.SelectedIndex = -1;
+                selectedIndexes[indexIndex] = -1;
                 lipidStructure.changeFragment();
             }
             else
             {
-                selectedIndexNegative = selectedIndex;
-                lipidStructure.changeFragment((string)negativeFragmentsListBox.Items[selectedIndex], false);
-                
+                selectedIndexes[indexIndex] = selectedIndex;
+                lipidStructure.changeFragment((string)fragmentListBox.Items[selectedIndex], indexIndex == 1);
             }
-            positiveFragmentsListBox.SelectedIndex = -1;
-            selectedIndexPositive = -1;
+            selectedIndexes[1 - indexIndex] = -1;
             lipidStructure.computeBonds();
             updateStructure();
+            
+            semaphore = false;
         }
         
         
@@ -592,6 +588,98 @@ namespace LipidCreatorStructureEditor
             Invalidate();
             computeFragmentMass(null, null);
         }
+        
+        
+        
+        private void addPositiveFragment(Object sender, EventArgs e)
+        {
+            if (!lipidStructure.positiveFragments.ContainsKey(FRAGMENT_LABEL))
+            {
+                positiveFragmentsListBox.Items.Add(FRAGMENT_LABEL);
+                lipidStructure.addFragment(FRAGMENT_LABEL, true);
+            }
+            else
+            {
+                int i = 2;
+                while (true)
+                {
+                    string fragmentName = FRAGMENT_LABEL + "." + (i++);
+                    if (lipidStructure.positiveFragments.ContainsKey(fragmentName)) continue;
+                    positiveFragmentsListBox.Items.Add(fragmentName);
+                    lipidStructure.addFragment(fragmentName, true);
+                    break;
+                }
+            }
+        }
+        
+        
+        
+        
+        public void fragmentKeyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete) removeFragment(sender, null);
+        }
+        
+        
+        
+        
+        private void addNegativeFragment(Object sender, EventArgs e)
+        {
+            if (!lipidStructure.negativeFragments.ContainsKey(FRAGMENT_LABEL))
+            {
+                negativeFragmentsListBox.Items.Add(FRAGMENT_LABEL);
+                lipidStructure.addFragment(FRAGMENT_LABEL, false);
+            }
+            else
+            {
+                int i = 2;
+                while (true)
+                {
+                    string fragmentName = FRAGMENT_LABEL + "." + (i++);
+                    if (lipidStructure.negativeFragments.ContainsKey(fragmentName)) continue;
+                    negativeFragmentsListBox.Items.Add(fragmentName);
+                    lipidStructure.addFragment(fragmentName, false);
+                    break;
+                }
+            }
+        }
+        
+        
+        
+        
+        
+        
+        public void removePositiveFragment(Object sender, EventArgs e)
+        {
+            removeFragment(positiveFragmentsListBox, e);
+        }
+        
+        
+        public void removeNegativeFragment(Object sender, EventArgs e)
+        {
+            removeFragment(negativeFragmentsListBox, e);
+        }
+        
+        
+        private void removeFragment(Object sender, EventArgs e)
+        {
+            ListBox fragmentListBox = (ListBox)sender;
+            
+            semaphore = true;
+            int selectedIndex = fragmentListBox.SelectedIndex;
+            if (selectedIndex == -1) return;
+            lipidStructure.removeFragment((string)fragmentListBox.Items[selectedIndex], false);
+            fragmentListBox.Items.RemoveAt(selectedIndex);
+            
+            selectedIndex = Math.Min(selectedIndex, fragmentListBox.Items.Count - 1);
+            fragmentListBox.SelectedIndex = selectedIndex;
+            selectedIndexes[0] = -1;
+            selectedIndexes[1] = -1;
+            semaphore = false;
+            fragmentClicked(sender, null);
+        }
+        
+        
         
         
         

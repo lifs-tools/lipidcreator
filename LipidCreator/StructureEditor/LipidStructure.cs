@@ -193,7 +193,7 @@ namespace LipidCreatorStructureEditor
         public Dictionary<int, int> nodeConnectionsHiddenCount = new Dictionary<int, int>();
         public HashSet<string> specialAtoms = new HashSet<string>(){"N", "O", "P", "S"};
         public Dictionary<string, int> freeElectrons = new Dictionary<string, int>(){{"C", 4}, {"N", 3}, {"O", 2}, {"P", 3}, {"S", 2}};
-            
+        public int projectionIds = 1;
         
         
         
@@ -427,34 +427,59 @@ namespace LipidCreatorStructureEditor
         
         
         
-        public void addPositiveFragment(string fragmentName)
+        public void addFragment(string fragmentName, bool isPositive)
         {
-            int newProjectionId = positiveFragments.Count + negativeFragments.Count + 1;
-            positiveFragments.Add(fragmentName, newProjectionId);
+            int newProjectionId = projectionIds++;
+            if (isPositive) positiveFragments.Add(fragmentName, newProjectionId);
+            else negativeFragments.Add(fragmentName, newProjectionId);
+            
             foreach (var node in nodes)
             {
-                node.nodeProjections.Add(newProjectionId, new NodeProjection());
-                foreach (var decorator in node.decorators) decorator.nodeProjections.Add(newProjectionId, new NodeProjection());
+                node.nodeProjections.Add(newProjectionId, new NodeProjection(node.nodeProjections[currentProjection]));
+                foreach (var decorator in node.decorators) decorator.nodeProjections.Add(newProjectionId, new NodeProjection(decorator.nodeProjections[currentProjection]));
             }
-            foreach (var bond in bonds) bond.bondProjections.Add(newProjectionId, bond.isDoubleBond);
+            foreach (var bond in bonds) bond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
+            foreach (var bond in additionalBonds)
+            {
+                if (bond.bondProjections.ContainsKey(currentProjection)) bond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
+            }
             countNodeConnections();
         }
         
         
         
         
-        
-        public void addNegativeFragment(string fragmentName)
+        public void removeFragment(string fragmentName, bool isPositive)
         {
-            int newProjectionId = positiveFragments.Count + negativeFragments.Count + 1;
-            negativeFragments.Add(fragmentName, newProjectionId);
+            int projectionId = -1;
+            if (isPositive)
+            {
+                if (!positiveFragments.ContainsKey(fragmentName)) return;
+                projectionId = positiveFragments[fragmentName];
+                positiveFragments.Remove(fragmentName);
+            }
+            else
+            {
+                if (!negativeFragments.ContainsKey(fragmentName)) return;
+                projectionId = negativeFragments[fragmentName];
+                negativeFragments.Remove(fragmentName);
+            }
+            
             foreach (var node in nodes)
             {
-                node.nodeProjections.Add(newProjectionId, new NodeProjection());
-                foreach (var decorator in node.decorators) decorator.nodeProjections.Add(newProjectionId, new NodeProjection());
+                node.nodeProjections.Remove(projectionId);
+                foreach (var decorator in node.decorators) decorator.nodeProjections.Remove(projectionId);
             }
-            foreach (var bond in bonds) bond.bondProjections.Add(newProjectionId, bond.isDoubleBond);
-            countNodeConnections();
+            foreach (var bond in bonds) bond.bondProjections.Remove(projectionId);
+            foreach (var bond in additionalBonds)
+            {
+                if (bond.bondProjections.ContainsKey(projectionId)) bond.bondProjections.Remove(projectionId);
+            }
+            if (currentProjection == projectionId)
+            {
+                currentProjection = 0;
+                countNodeConnections();
+            }
         }
         
         
@@ -543,8 +568,6 @@ namespace LipidCreatorStructureEditor
         }
         
         
-        
-        
         public Graphics setClipping(Graphics g, Form form)
         {
             // set up all clipping
@@ -623,7 +646,7 @@ namespace LipidCreatorStructureEditor
         public void changeFragment(string fragmentName = "", bool charge = false)
         {
             currentProjection = (fragmentName.Length == 0) ? 0 : ((charge ? positiveFragments : negativeFragments)[fragmentName]);
-            countNodeConnections();
+            computeBonds();
         }
         
         

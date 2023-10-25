@@ -99,6 +99,11 @@ namespace LipidCreatorStructureEditor
         
         public ComboBox adductComboBox = new ComboBox();
         
+        public Button addPositiveFragmentButton = new Button();
+        public Button removePositiveFragmentButton = new Button();
+        public Button addNegativeFragmentButton = new Button();
+        public Button removeNegativeFragmentButton = new Button();
+        
         private void InitializeComponent()
         {
             this.Text = "LipidCreator Structure Editor";
@@ -153,15 +158,43 @@ namespace LipidCreatorStructureEditor
             positiveFragmentsListBox.Width = 130;
             positiveFragmentsListBox.Height = 300;
             positiveFragmentsListBox.Location = new Point(10, 210);
-            positiveFragmentsListBox.Click += positiveFragmentClicked;
+            positiveFragmentsListBox.KeyUp += fragmentKeyPressed;
+            positiveFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             positiveFragmentsListBox.DoubleClick += positiveFragmentDoubleClicked;
             
             this.Controls.Add(negativeFragmentsListBox);
             negativeFragmentsListBox.Width = 130;
             negativeFragmentsListBox.Height = 300;
             negativeFragmentsListBox.Location = new Point(150, 210);
-            negativeFragmentsListBox.Click += negativeFragmentClicked;
+            negativeFragmentsListBox.KeyUp += fragmentKeyPressed;
+            negativeFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             negativeFragmentsListBox.DoubleClick += negativeFragmentDoubleClicked;
+            
+            
+            this.Controls.Add(addPositiveFragmentButton);
+            addPositiveFragmentButton.Location = new Point(90, 505);
+            addPositiveFragmentButton.Size = new Size(25, 25);
+            addPositiveFragmentButton.Text = "+";
+            addPositiveFragmentButton.Click += addPositiveFragment;
+            
+            this.Controls.Add(removePositiveFragmentButton);
+            removePositiveFragmentButton.Location = new Point(115, 505);
+            removePositiveFragmentButton.Size = new Size(25, 25);
+            removePositiveFragmentButton.Text = "-";
+            removePositiveFragmentButton.Click += removePositiveFragment;
+            
+            this.Controls.Add(addNegativeFragmentButton);
+            addNegativeFragmentButton.Location = new Point(230, 505);
+            addNegativeFragmentButton.Size = new Size(25, 25);
+            addNegativeFragmentButton.Text = "+";
+            addNegativeFragmentButton.Click += addNegativeFragment;
+            
+            this.Controls.Add(removeNegativeFragmentButton);
+            removeNegativeFragmentButton.Location = new Point(255, 505);
+            removeNegativeFragmentButton.Size = new Size(25, 25);
+            removeNegativeFragmentButton.Text = "-";
+            removeNegativeFragmentButton.Click += removeNegativeFragment;
+            
             
             
             

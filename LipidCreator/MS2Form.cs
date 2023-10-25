@@ -1023,9 +1023,7 @@ namespace LipidCreator
         
         
         public void test_Paint(object sender, PaintEventArgs e)
-        {
-            
-            
+        {   
             
             if (!currentHeadgroup.Equals("PC") || (!f.ContainsKey(currentFragment) && !currentFragment.Equals(""))) return;
             

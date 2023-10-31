@@ -451,6 +451,15 @@ namespace LipidCreatorStructureEditor
         
         
         
+        
+        private void actionChangeGlobalChargeClicked(Object sender, EventArgs e)
+        {
+            lipidStructure.changeGlobalCharge();
+            updateStructure();
+        }
+        
+        
+        
             
         private void actionDrawBondClicked(Object sender, EventArgs e)
         {
@@ -686,12 +695,6 @@ namespace LipidCreatorStructureEditor
         
         private void computeFragmentMass(Object sender, EventArgs e)
         {
-            int C = 0;
-            int H = 0;
-            int N = 0;
-            int O = 0;
-            int P = 0;
-            int S = 0;
             
             double mass = 0;
             Dictionary<string, int[]> residues = new Dictionary<string, int[]>();
@@ -712,7 +715,14 @@ namespace LipidCreatorStructureEditor
             }
             catch(Exception){}
             
-            int adductCharge = 0;
+            int adductCharge = lipidStructure.currentFragment == null ? 0 : lipidStructure.currentFragment.charge;
+            int C = 0;
+            int H = lipidStructure.currentFragment == null ? 0 : lipidStructure.currentFragment.charge;
+            int N = 0;
+            int O = 0;
+            int P = 0;
+            int S = 0;
+            
             bool useAdduct = false;
             foreach (var node in lipidStructure.nodes)
             {

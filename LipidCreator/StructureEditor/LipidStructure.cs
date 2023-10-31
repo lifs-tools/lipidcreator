@@ -163,6 +163,27 @@ namespace LipidCreatorStructureEditor
     
     
     
+    public class LipidStructureFragment {
+        public int id;
+        public string fragmentName;
+        public int charge;
+        public const int minCharge = -1;
+        public const int maxCharge = 1;
+        
+        public LipidStructureFragment(int i, string f, int c = 0)
+        {
+            id = i;
+            fragmentName = f;
+            charge = c;
+        }
+        
+        public void toggleCharge()
+        {
+            charge = (charge >= maxCharge) ? minCharge : charge + 1;
+        }
+    }
+    
+    
     
     public class LipidStructure
     {
@@ -187,8 +208,9 @@ namespace LipidCreatorStructureEditor
         public Font decoratorFont;
         public Graphics graphics;
         public int currentProjection;
-        public Dictionary<string, int> positiveFragments = new Dictionary<string, int>();
-        public Dictionary<string, int> negativeFragments = new Dictionary<string, int>();
+        public LipidStructureFragment currentFragment = null;
+        public Dictionary<string, LipidStructureFragment> positiveFragments = new Dictionary<string, LipidStructureFragment>();
+        public Dictionary<string, LipidStructureFragment> negativeFragments = new Dictionary<string, LipidStructureFragment>();
         public Dictionary<int, int> nodeConnectionsCount = new Dictionary<int, int>();
         public Dictionary<int, int> nodeConnectionsHiddenCount = new Dictionary<int, int>();
         public HashSet<string> specialAtoms = new HashSet<string>(){"N", "O", "P", "S"};
@@ -430,8 +452,8 @@ namespace LipidCreatorStructureEditor
         public void addFragment(string fragmentName, bool isPositive)
         {
             int newProjectionId = projectionIds++;
-            if (isPositive) positiveFragments.Add(fragmentName, newProjectionId);
-            else negativeFragments.Add(fragmentName, newProjectionId);
+            if (isPositive) positiveFragments.Add(fragmentName, new LipidStructureFragment(newProjectionId, fragmentName));
+            else negativeFragments.Add(fragmentName, new LipidStructureFragment(newProjectionId, fragmentName));
             
             foreach (var node in nodes)
             {
@@ -455,13 +477,13 @@ namespace LipidCreatorStructureEditor
             if (isPositive)
             {
                 if (!positiveFragments.ContainsKey(fragmentName)) return;
-                projectionId = positiveFragments[fragmentName];
+                projectionId = positiveFragments[fragmentName].id;
                 positiveFragments.Remove(fragmentName);
             }
             else
             {
                 if (!negativeFragments.ContainsKey(fragmentName)) return;
-                projectionId = negativeFragments[fragmentName];
+                projectionId = negativeFragments[fragmentName].id;
                 negativeFragments.Remove(fragmentName);
             }
             
@@ -585,6 +607,7 @@ namespace LipidCreatorStructureEditor
                 foreach (var decorator in node.decorators)
                 {
                     NodeProjection decoratorProjection = decorator.nodeProjections[currentProjection];
+                    if (!developmentView && decoratorProjection.nodeState == NodeState.Hidden) continue;
                     
                     RectangleF rd = new RectangleF(decorator.boundingBox.X + decoratorProjection.shift.X, decorator.boundingBox.Y + decoratorProjection.shift.Y, decorator.boundingBox.Width, decorator.boundingBox.Height);
                     clippingGraphics.SetClip(rd);
@@ -645,8 +668,18 @@ namespace LipidCreatorStructureEditor
         
         public void changeFragment(string fragmentName = "", bool charge = false)
         {
-            currentProjection = (fragmentName.Length == 0) ? 0 : ((charge ? positiveFragments : negativeFragments)[fragmentName]);
+            currentFragment = (fragmentName.Length == 0) ? null : ((charge ? positiveFragments : negativeFragments)[fragmentName]);
+            currentProjection = (fragmentName.Length == 0) ? 0 : ((charge ? positiveFragments : negativeFragments)[fragmentName].id);
             computeBonds();
+        }
+        
+        
+        
+        
+        public void changeGlobalCharge()
+        {
+            if (currentFragment == null) return;
+            currentFragment.toggleCharge();
         }
         
         
@@ -749,6 +782,13 @@ namespace LipidCreatorStructureEditor
             }
             
             
+            
+            int minX = (1 << 30);
+            int maxX = -(1 << 30);
+            int minY = (1 << 30);
+            int maxY = -(1 << 30);
+            
+            
             foreach (var node in nodes)
             {
                 NodeProjection nodeProjection = node.nodeProjections[currentProjection];
@@ -760,17 +800,16 @@ namespace LipidCreatorStructureEditor
                 else if (nodeProjection.nodeState == NodeState.Disabled) brush = solidBrushDisabled;
                 
                 RectangleF r = new RectangleF(nodePoint.X, nodePoint.Y, node.boundingBox.Width, node.boundingBox.Height);
-                if (node.isCarbon)
+                if (!node.isCarbon || developmentView) g.DrawString(node.text, nodeFont, brush, r, drawFormat);
+                if (nodeProjection.nodeState == NodeState.Enabled)
                 {
-                    if (developmentView)
-                    {
-                        g.DrawString("C", nodeFont, brush, r, drawFormat);
-                    }
-                    continue;
+                    minX = Math.Min(minX, (int)nodePoint.X);
+                    maxX = Math.Max(maxX, (int)(nodePoint.X + node.boundingBox.Width));
+                    minY = Math.Min(minY, (int)nodePoint.Y);
+                    maxY = Math.Max(maxY, (int)(nodePoint.Y + node.boundingBox.Height));
                 }
                 
-                
-                g.DrawString(node.text, nodeFont, brush, r, drawFormat);
+                if (node.isCarbon) continue;
                 
                 foreach (var decorator in node.decorators)
                 {
@@ -836,6 +875,22 @@ namespace LipidCreatorStructureEditor
                     g.DrawString(Convert.ToString(unusedElectrons), decoratorFont, brush, rd, drawFormat);
                 }
             }
+            
+            if (currentFragment == null || currentFragment.charge == 0) return;
+            
+            g.DrawLine(penEnabled, new Point(minX, minY), new Point(minX, maxY));
+            g.DrawLine(penEnabled, new Point(maxX, minY), new Point(maxX, maxY));
+            
+            int h = (int)((maxY - minY) * 0.06);
+            g.DrawLine(penEnabled, new Point(minX, minY), new Point(minX + h, minY));
+            g.DrawLine(penEnabled, new Point(maxX, minY), new Point(maxX - h, minY));
+            
+            g.DrawLine(penEnabled, new Point(minX, maxY), new Point(minX + h, maxY));
+            g.DrawLine(penEnabled, new Point(maxX, maxY), new Point(maxX - h, maxY));
+            
+            string chargeSign = currentFragment.charge > 0 ? "+" : "-";
+            Size size = TextRenderer.MeasureText(graphics, chargeSign, nodeFont);
+            g.DrawString(chargeSign, nodeFont, solidBrushEnabled, new RectangleF(maxX, minY - (size.Height >> 1), size.Width, size.Height), drawFormat);
         }
     }
 }

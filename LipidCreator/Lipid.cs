@@ -98,10 +98,6 @@ namespace LipidCreator
     }
     
     
-    
-    
-    
-    
     [Serializable]
     public abstract class Lipid
     {
@@ -126,6 +122,10 @@ namespace LipidCreator
         public static Dictionary<FattyAcidType, string> FARepresentationString = new Dictionary<FattyAcidType, string>(){{FattyAcidType.Ester, "FA"}, {FattyAcidType.Plasmanyl, "FA O"}, {FattyAcidType.Plasmenyl, "FA P"}, {FattyAcidType.NoType, "FAx"}};
         
         public static Dictionary<FattyAcidType, ulong> FAHashCode = new Dictionary<FattyAcidType, ulong>(){{FattyAcidType.Ester, 35146310681585UL}, {FattyAcidType.Plasmanyl, 230776207451746402UL}, {FattyAcidType.Plasmenyl, 723018610604835218UL}, {FattyAcidType.NoType, 165630315668861088UL}};
+                
+        public static Dictionary<string, string> FunctionalGroupCodes = new Dictionary<string, string>(){{"Hydroxy", "OH"}, {"Epoxy", "Ep"}, {"Oxo/Keto", "oxo"}, {"Amino", "NH2"}};
+
+        
         
         
         public static Dictionary<LipidCategory, string> LipidCategoryNames = new Dictionary<LipidCategory, string>(){
@@ -150,7 +150,34 @@ namespace LipidCreator
             {AdductType.CHHHCOOm, new Adduct("+CH3COO", "+CH3COO⁻", -1, MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", 3}, {"C", 2}, {"O", 2}}))}
         };
         
+        
+        
+        public static Dictionary<FunctionalGroupType, FunctionalGroup> ALL_FUNCTIONAL_GROUPS = new Dictionary<FunctionalGroupType, FunctionalGroup>()
+        {
+            {FunctionalGroupType.Alkoxy, new FunctionalGroup(FunctionalGroupType.Alkoxy, "Alkoxy", "oxy", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}}))},
+            {FunctionalGroupType.Amino, new FunctionalGroup(FunctionalGroupType.Amino, "Amino", "NH2", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"N", 1}, {"H", 1}}))},
+            {FunctionalGroupType.Carboxyl, new FunctionalGroup(FunctionalGroupType.Carboxyl, "Carboxyl", "COOH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"O", 2}}))},
+            {FunctionalGroupType.Cyano, new FunctionalGroup(FunctionalGroupType.Cyano, "Cyano", "CN", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"N", 1}, {"H", -1}}))},
+            {FunctionalGroupType.Epoxy, new FunctionalGroup(FunctionalGroupType.Epoxy, "Epoxy", "Ep", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}, {"H", -2}}))},
+            {FunctionalGroupType.Ethyl, new FunctionalGroup(FunctionalGroupType.Ethyl, "Ethyl", "Et", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 2}, {"H", 4}}))},
+            {FunctionalGroupType.Hydroperoxy, new FunctionalGroup(FunctionalGroupType.Hydroperoxy, "Hydroperoxy", "OOH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 2}}))},
+            {FunctionalGroupType.Hydroxy, new FunctionalGroup(FunctionalGroupType.Hydroxy, "Hydroxy", "OH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}}))},
+            {FunctionalGroupType.Methoxy, new FunctionalGroup(FunctionalGroupType.Methoxy, "Methoxy", "OMe", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"H", 2}, {"O", 1}}))},
+            {FunctionalGroupType.Methyl, new FunctionalGroup(FunctionalGroupType.Methyl, "Methyl", "Me", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"H", 2}}))},
+            {FunctionalGroupType.Nitro, new FunctionalGroup(FunctionalGroupType.Nitro, "Nitro", "NO2", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"N", 1}, {"O", 2}, {"H", -1}}))},
+            {FunctionalGroupType.Oxo, new FunctionalGroup(FunctionalGroupType.Oxo, "Oxo/Keto", "oxo", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"H", -2}, {"O", 1}}))},
+            {FunctionalGroupType.Peroxy, new FunctionalGroup(FunctionalGroupType.Peroxy, "Peroxy", "OO", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 2}}))},
+            {FunctionalGroupType.Phosphate, new FunctionalGroup(FunctionalGroupType.Phosphate, "Phosphate", "Ph", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"P", 1}, {"O", 4}, {"H", 1}}))},
+            {FunctionalGroupType.Sulfanyl, new FunctionalGroup(FunctionalGroupType.Sulfanyl, "Sulfanyl", "SH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"S", 1}}))},
+            {FunctionalGroupType.Sulfate, new FunctionalGroup(FunctionalGroupType.Sulfate, "Sulfate", "Su", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"S", 1}, {"O", 4}}))}
+        };
+        
+        
+        public static Dictionary<string, FunctionalGroupType> FUNCTIONAL_GROUP_POSITIONS = ALL_FUNCTIONAL_GROUPS.Values.ToDictionary(k => k.name, k => k.type);
+        
         public static Dictionary<string, AdductType> ADDUCT_POSITIONS = ALL_ADDUCTS.Keys.ToDictionary(k=>ALL_ADDUCTS[k].name, k=>k);
+        
+        public static readonly List<string> FUNCTIONAL_GROUP_NAMES = ALL_FUNCTIONAL_GROUPS.Values.Select(f => f.name).ToList();
         
         
         public static Dictionary<int, Adduct> chargeToAdduct = new Dictionary<int, Adduct>{{1, ALL_ADDUCTS[AdductType.Hp]}, {2, ALL_ADDUCTS[AdductType.HHp]}, {-1, ALL_ADDUCTS[AdductType.Hm]}, {-2, ALL_ADDUCTS[AdductType.HHm]}};
@@ -161,12 +188,24 @@ namespace LipidCreator
         {
             Dictionary<string, List<csgoslin.FunctionalGroup> > functionalGroups = new Dictionary<string, List<csgoslin.FunctionalGroup> >();
             csgoslin.DoubleBonds db = new csgoslin.DoubleBonds(fa.db);
+            
             if (fa.hydroxyl > 0)
             {
                 csgoslin.FunctionalGroup fg = csgoslin.KnownFunctionalGroups.get_functional_group("OH");
                 fg.count = fa.hydroxyl;
                 functionalGroups.Add("OH", new List<csgoslin.FunctionalGroup>{fg});
             }
+            
+            foreach (KeyValuePair<FunctionalGroupType, int> kvp in fa.functionalGroups)
+            {
+                if (!ALL_FUNCTIONAL_GROUPS.ContainsKey(kvp.Key) || kvp.Value == 0) continue;
+                string goslinFG = ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation;
+                csgoslin.FunctionalGroup fg = csgoslin.KnownFunctionalGroups.get_functional_group(goslinFG);
+                fg.count = kvp.Value;
+                functionalGroups.Add(goslinFG, new List<csgoslin.FunctionalGroup>{fg});
+            }
+            
+            
             csgoslin.LipidFaBondType faType = csgoslin.LipidFaBondType.ESTER;
             if (fa.fattyAcidType == FattyAcidType.Plasmanyl) faType = csgoslin.LipidFaBondType.ETHER_PLASMANYL;
             else if (fa.fattyAcidType == FattyAcidType.Plasmenyl) faType = csgoslin.LipidFaBondType.ETHER_PLASMENYL;
@@ -178,22 +217,23 @@ namespace LipidCreator
         
         
         
-        public csgoslin.LipidMolecularSpecies convertLipid(string hg, List<FattyAcid> fa_list)
+        public csgoslin.LipidSpecies convertLipid(string hg, List<FattyAcid> fa_list)
         {
-            // goslin
-            csgoslin.Headgroup cshg = new csgoslin.Headgroup(hg);                        
-            List<csgoslin.FattyAcid> csFAs = new List<csgoslin.FattyAcid>();
-            for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1, cshg.sp_exception));
-            return new csgoslin.LipidMolecularSpecies(cshg, csFAs);
+            return convertLipid(new csgoslin.Headgroup(hg), fa_list);
         }
         
         
         
-        public csgoslin.LipidMolecularSpecies convertLipid(csgoslin.Headgroup cshg, List<FattyAcid> fa_list)
-        {
-            // goslin                
+        public csgoslin.LipidSpecies convertLipid(csgoslin.Headgroup cshg, List<FattyAcid> fa_list)
+        {                   
             List<csgoslin.FattyAcid> csFAs = new List<csgoslin.FattyAcid>();
-            for (int i = 0; i < fa_list.Count; ++i) csFAs.Add(convertFA(fa_list[i], i + 1, cshg.sp_exception));
+            bool doStructureDefined = false;
+            for (int i = 0; i < fa_list.Count; ++i){
+                csgoslin.FattyAcid fa = convertFA(fa_list[i], i + 1, cshg.sp_exception);
+                csFAs.Add(fa);
+                if (fa.functional_groups.Count > 0) doStructureDefined = true;
+            }
+            if (doStructureDefined) return new csgoslin.LipidStructureDefined(cshg, csFAs);
             return new csgoslin.LipidMolecularSpecies(cshg, csFAs);
         }
         

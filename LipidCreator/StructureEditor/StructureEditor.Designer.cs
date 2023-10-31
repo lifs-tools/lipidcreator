@@ -73,6 +73,7 @@ namespace LipidCreatorStructureEditor
         
         public Button actionChangeAtomState = new Button();
         public Button actionChangeBondState = new Button();
+        public Button actionChangeGlobalCharge = new Button();
         public Button actionDrawBond = new Button();
         public Button actionFinalView = new Button();
         public Button actionMoveAtom = new Button();
@@ -129,22 +130,29 @@ namespace LipidCreatorStructureEditor
             actionChangeBondState.Location = new Point(10, 45);
             actionChangeBondState.Click += actionChangeBondStateClicked;
             
+            
+            this.Controls.Add(actionChangeGlobalCharge);
+            actionChangeGlobalCharge.Size = new Size(120, 25);
+            actionChangeGlobalCharge.Text = "Change global charge";
+            actionChangeGlobalCharge.Location = new Point(10, 80);
+            actionChangeGlobalCharge.Click += actionChangeGlobalChargeClicked;
+            
             this.Controls.Add(actionDrawBond);
             actionDrawBond.Size = new Size(120, 25);
             actionDrawBond.Text = "Draw bond";
-            actionDrawBond.Location = new Point(10, 80);
+            actionDrawBond.Location = new Point(10, 115);
             actionDrawBond.Click += actionDrawBondClicked;
             
             this.Controls.Add(actionMoveAtom);
             actionMoveAtom.Size = new Size(120, 25);
             actionMoveAtom.Text = "Move atom";
-            actionMoveAtom.Location = new Point(10, 115);
+            actionMoveAtom.Location = new Point(10, 150);
             actionMoveAtom.Click += actionMoveAtomClicked;
             
             this.Controls.Add(actionFinalView);
             actionFinalView.Size = new Size(120, 25);
             actionFinalView.Text = "Final View";
-            actionFinalView.Location = new Point(10, 160);
+            actionFinalView.Location = new Point(10, 195);
             actionFinalView.Click += actionFinalViewClicked;
             
             
@@ -157,7 +165,7 @@ namespace LipidCreatorStructureEditor
             this.Controls.Add(positiveFragmentsListBox);
             positiveFragmentsListBox.Width = 130;
             positiveFragmentsListBox.Height = 300;
-            positiveFragmentsListBox.Location = new Point(10, 210);
+            positiveFragmentsListBox.Location = new Point(10, 245);
             positiveFragmentsListBox.KeyUp += fragmentKeyPressed;
             positiveFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             positiveFragmentsListBox.DoubleClick += positiveFragmentDoubleClicked;
@@ -165,32 +173,32 @@ namespace LipidCreatorStructureEditor
             this.Controls.Add(negativeFragmentsListBox);
             negativeFragmentsListBox.Width = 130;
             negativeFragmentsListBox.Height = 300;
-            negativeFragmentsListBox.Location = new Point(150, 210);
+            negativeFragmentsListBox.Location = new Point(150, 245);
             negativeFragmentsListBox.KeyUp += fragmentKeyPressed;
             negativeFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             negativeFragmentsListBox.DoubleClick += negativeFragmentDoubleClicked;
             
             
             this.Controls.Add(addPositiveFragmentButton);
-            addPositiveFragmentButton.Location = new Point(90, 505);
+            addPositiveFragmentButton.Location = new Point(90, 540);
             addPositiveFragmentButton.Size = new Size(25, 25);
             addPositiveFragmentButton.Text = "+";
             addPositiveFragmentButton.Click += addPositiveFragment;
             
             this.Controls.Add(removePositiveFragmentButton);
-            removePositiveFragmentButton.Location = new Point(115, 505);
+            removePositiveFragmentButton.Location = new Point(115, 540);
             removePositiveFragmentButton.Size = new Size(25, 25);
             removePositiveFragmentButton.Text = "-";
             removePositiveFragmentButton.Click += removePositiveFragment;
             
             this.Controls.Add(addNegativeFragmentButton);
-            addNegativeFragmentButton.Location = new Point(230, 505);
+            addNegativeFragmentButton.Location = new Point(230, 540);
             addNegativeFragmentButton.Size = new Size(25, 25);
             addNegativeFragmentButton.Text = "+";
             addNegativeFragmentButton.Click += addNegativeFragment;
             
             this.Controls.Add(removeNegativeFragmentButton);
-            removeNegativeFragmentButton.Location = new Point(255, 505);
+            removeNegativeFragmentButton.Location = new Point(255, 540);
             removeNegativeFragmentButton.Size = new Size(25, 25);
             removeNegativeFragmentButton.Text = "-";
             removeNegativeFragmentButton.Click += removeNegativeFragment;

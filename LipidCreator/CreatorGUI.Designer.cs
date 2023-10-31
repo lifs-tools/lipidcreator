@@ -27,6 +27,7 @@ SOFTWARE.
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -116,6 +117,17 @@ namespace LipidCreator
             g.DrawImage(arrows[direction], 0, 0, arrows[direction].Size.Width, arrows[direction].Size.Height);
             g.Dispose();
             base.OnPaint(e);
+        }
+    }
+    
+    
+    
+    public class FMenuItem : MenuItem
+    {
+        public DataGridView view;
+        public FMenuItem(string s, EventHandler e, DataGridView v) : base(s, e)
+        {
+            view = v;
         }
     }
     
@@ -336,8 +348,8 @@ namespace LipidCreator
         public Image addImage;
         public bool initialCall = true;
         
-        List<String> stHgList = new List<String>();
-        List<String> stEsterHgList = new List<String>();
+        List<string> stHgList = new List<string>();
+        List<string> stEsterHgList = new List<string>();
 
         [NonSerialized]
         public System.Timers.Timer timerEasterEgg;
@@ -896,6 +908,17 @@ namespace LipidCreator
         [NonSerialized]
         public System.Windows.Forms.Button openReviewFormButton;
         
+        
+        
+        [NonSerialized]
+        DataGridView glFA1FuncGroups;
+        
+        
+        
+        
+        
+        
+        
         public ArrayList controlElements;
         
         
@@ -1363,6 +1386,8 @@ namespace LipidCreator
             stPositiveAdduct = new GroupBox();
             stNegativeAdduct = new GroupBox();
             medNegativeAdduct = new GroupBox();
+            
+            glFA1FuncGroups = new DataGridView();
             
             glStep1 = new GroupBox();
             plStep1 = new GroupBox();
@@ -1846,6 +1871,7 @@ namespace LipidCreator
             glContainsSugar.CheckedChanged += new EventHandler(glContainsSugarCheckedChanged);
             glContainsSugar.BringToFront();
             
+            
             glRepresentativeFA.Location = new Point(glHydroxyl1Textbox.Left + glHydroxyl1Textbox.Width + sep, glHydroxyl1Textbox.Top);
             glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
@@ -1853,6 +1879,52 @@ namespace LipidCreator
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
             glRepresentativeFA.SendToBack();
 
+            
+            
+            
+            
+            
+            
+            
+
+            DataGridViewComboBoxColumn funcGroupCol = new DataGridViewComboBoxColumn();
+            funcGroupCol.DataSource = Lipid.FUNCTIONAL_GROUP_NAMES;
+            funcGroupCol.HeaderText = "Func. group";
+            funcGroupCol.DataPropertyName = "Func. group";
+            
+            DataGridViewTextBoxColumn rangeCol = new DataGridViewTextBoxColumn();
+            rangeCol.HeaderText = "Range";
+            rangeCol.DataPropertyName = "Range";
+            
+            
+            glStep1.Controls.Add(glFA1FuncGroups);
+            glFA1FuncGroups.Location = new Point(glFA1Combobox.Left + glFA1Combobox.Width + 2 * sep + glDB1Textbox.Width, glFA1Combobox.Top);
+            glFA1FuncGroups.Size = new Size(340, 360);
+            glFA1FuncGroups.BringToFront();
+            glFA1FuncGroups.Columns.AddRange(funcGroupCol, rangeCol);
+            glFA1FuncGroups.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            glFA1FuncGroups.AllowUserToResizeColumns = false;
+            glFA1FuncGroups.AllowUserToAddRows = false;
+            glFA1FuncGroups.AllowUserToResizeRows = false;
+            glFA1FuncGroups.MultiSelect = false;
+            glFA1FuncGroups.RowTemplate.Height = 20;
+            glFA1FuncGroups.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            glFA1FuncGroups.RowHeadersVisible = false;
+            glFA1FuncGroups.ScrollBars = ScrollBars.Vertical;
+            glFA1FuncGroups.DefaultCellStyle.Font = new Font("Arial", 8);
+            glFA1FuncGroups.RowHeadersWidthSizeMode = 
+            DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            glFA1FuncGroups.EnableHeadersVisualStyles = false;
+            glFA1FuncGroups.ColumnHeadersHeight = 20;
+            glFA1FuncGroups.DataBindingComplete += functionalGroupComplete;
+            glFA1FuncGroups.CellValueChanged += functionalGroupCellValueChanged;
+            
+            ContextMenu cm = new ContextMenu();
+            cm.MenuItems.Add(new FMenuItem("Add functional group", new EventHandler(addFunctionalGroup), glFA1FuncGroups));
+            cm.MenuItems.Add(new FMenuItem("Remove functional group", new EventHandler(removeFunctionalGroup), glFA1FuncGroups));
+            glFA1FuncGroups.ContextMenu = cm;
+            
+            
             
 
             // tab for phospholipids

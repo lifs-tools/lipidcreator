@@ -39,7 +39,7 @@ namespace LipidCreator
         public FattyAcidType fattyAcidType;
         public ElementDictionary atomsCount;
         public bool isLCB;
-        
+        public Dictionary<FunctionalGroupType, int> functionalGroups = new Dictionary<FunctionalGroupType, int>();
         
         public override string ToString()
         {
@@ -47,12 +47,7 @@ namespace LipidCreator
             return String.Format("{0} with length {1}, double bond(s) {2}, hydroxylations {3}, and fatty acid type {4}.", faLCB, length, db, hydroxyl, fattyAcidType);
         }
         
-        public FattyAcid(int l, int db, int hydro)
-        {
-        
-        }
-        
-        public FattyAcid(int l, int db, int hydro, FattyAcidType fattyAcidType = FattyAcidType.Ester, bool _isLCB = false)
+        public FattyAcid(int l, int db, int hydro, FattyAcidType fattyAcidType = FattyAcidType.Ester, bool _isLCB = false, Dictionary<FunctionalGroupType, int> funcGroups = null)
         {
             length = l;
             this.db = db;
@@ -60,6 +55,10 @@ namespace LipidCreator
             isLCB = _isLCB;
             atomsCount = MS2Fragment.createEmptyElementDict();
             this.fattyAcidType = fattyAcidType;
+            if (funcGroups != null)
+            {
+                foreach (KeyValuePair<FunctionalGroupType, int> kvp in funcGroups) functionalGroups.Add(kvp.Key, kvp.Value);
+            }
             if (!isLCB)
             {
                 if (length > 0 || db > 0)
@@ -94,6 +93,11 @@ namespace LipidCreator
                 atomsCount[(int)Molecule.H] = (2 * (length - db) + 2); // H
                 atomsCount[(int)Molecule.O] = hydroxyl; // O
                 atomsCount[(int)Molecule.N] = 1; // N
+            }
+            foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups)
+            {
+                if (kvp.Value <= 0) continue;
+                MS2Fragment.addCounts(atomsCount, Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].elements);
             }
         }
         
@@ -138,6 +142,7 @@ namespace LipidCreator
                     if (hydroxyl > 0) key += ";O" + Convert.ToString(hydroxyl);
                 }
             }
+            foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups) key += ";(" + Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation + ")" + Convert.ToString(kvp.Value);
             key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
             return key;
         }

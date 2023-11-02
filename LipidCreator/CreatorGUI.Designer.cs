@@ -736,21 +736,6 @@ namespace LipidCreator
         public TextBox slDB2Textbox;
         [NonSerialized]
         public TextBox stDBTextbox;
-
-        [NonSerialized]
-        public TextBox clHydroxyl3Textbox;
-        [NonSerialized]
-        public TextBox clHydroxyl4Textbox;
-        [NonSerialized]
-        public TextBox glHydroxyl1Textbox;
-        [NonSerialized]
-        public TextBox glHydroxyl2Textbox;
-        [NonSerialized]
-        public TextBox glHydroxyl3Textbox;
-        [NonSerialized]
-        public TextBox plHydroxyl1Textbox;
-        [NonSerialized]
-        public TextBox plHydroxyl2Textbox;
         [NonSerialized]
         public TextBox stHydroxylTextbox;
 
@@ -801,20 +786,6 @@ namespace LipidCreator
         Label slLCBHydroxyLabel;
         [NonSerialized]
         Label slFAHydroxyLabel;
-        [NonSerialized]
-        Label clHydroxyl3Label;
-        [NonSerialized]
-        Label clHydroxyl4Label;
-        [NonSerialized]
-        Label glHydroxyl1Label;
-        [NonSerialized]
-        Label glHydroxyl2Label;
-        [NonSerialized]
-        Label glHydroxyl3Label;
-        [NonSerialized]
-        Label plHydroxyl1Label;
-        [NonSerialized]
-        Label plHydroxyl2Label;
         [NonSerialized]
         Label stFAHydroxyLabel;
         
@@ -911,7 +882,19 @@ namespace LipidCreator
         
         
         [NonSerialized]
-        DataGridView glFA1FuncGroups;
+        public DataGridView glFA1FuncGroups;
+        [NonSerialized]
+        public DataGridView glFA2FuncGroups;
+        [NonSerialized]
+        public DataGridView glFA3FuncGroups;
+        [NonSerialized]
+        public DataGridView plFA1FuncGroups;
+        [NonSerialized]
+        public DataGridView plFA2FuncGroups;
+        [NonSerialized]
+        public DataGridView plFA3FuncGroups;
+        [NonSerialized]
+        public DataGridView plFA4FuncGroups;
         
         
         
@@ -932,6 +915,72 @@ namespace LipidCreator
         public bool windowExtended = false;
         public int mediatorMiddleHeight = 164;
         public long easterEggMilliseconds;
+        
+        public delegate void MouseMovedEvent();
+
+        public class GlobalMouseHandler : IMessageFilter
+        {
+            private const int WM_MOUSEMOVE = 0x0200;
+
+            public event MouseMovedEvent TheMouseMoved;
+
+            #region IMessageFilter Members
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.Msg == WM_MOUSEMOVE)
+                {
+                    if (TheMouseMoved != null) TheMouseMoved();
+                }
+                return false;
+            }
+
+            #endregion
+        }
+        
+        public List<DataGridView>[] functionalGroupGridViews = new List<DataGridView>[7]{new List<DataGridView>(), new List<DataGridView>(), new List<DataGridView>(), new List<DataGridView>(), new List<DataGridView>(), new List<DataGridView>(), new List<DataGridView>()};
+        public DataGridView expandedView = null;
+        
+        
+        private void setupFGDataGridView(DataGridView view, int left, int top, int tabIndex)
+        {
+            DataGridViewComboBoxColumn funcGroupCol = new DataGridViewComboBoxColumn();
+            funcGroupCol.DataSource = Lipid.FUNCTIONAL_GROUP_NAMES;
+            funcGroupCol.HeaderText = "Func. group";
+            funcGroupCol.DataPropertyName = "Func. group";
+            funcGroupCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+            
+            DataGridViewTextBoxColumn rangeCol = new DataGridViewTextBoxColumn();
+            rangeCol.HeaderText = "Range";
+            rangeCol.DataPropertyName = "Range";
+            rangeCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+            
+            view.Location = new Point(left, top);
+            view.Size = new Size(180, 40);
+            view.BringToFront();
+            view.Columns.AddRange(funcGroupCol, rangeCol);
+            view.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            view.AllowUserToResizeColumns = false;
+            view.AllowUserToAddRows = false;
+            view.AllowUserToResizeRows = false;
+            view.MultiSelect = false;
+            view.RowTemplate.Height = 20;
+            view.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            view.RowHeadersVisible = false;
+            view.ScrollBars = ScrollBars.Vertical;
+            view.DefaultCellStyle.Font = new Font("Arial", 8);
+            view.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            view.EnableHeadersVisualStyles = false;
+            view.ColumnHeadersHeight = 20;
+            view.DataBindingComplete += functionalGroupComplete;
+            view.CellValueChanged += functionalGroupCellValueChanged;
+            functionalGroupGridViews[tabIndex].Add(view);
+            
+            ContextMenu cm = new ContextMenu();
+            cm.MenuItems.Add(new FMenuItem("Add functional group", new EventHandler(addFunctionalGroup), view));
+            cm.MenuItems.Add(new FMenuItem("Remove functional group", new EventHandler(removeFunctionalGroup), view));
+            view.ContextMenu = cm;
+        }
         
 
         public Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -961,6 +1010,10 @@ namespace LipidCreator
             this.Font = new Font(Font.Name, REGULAR_FONT_SIZE * FONT_SIZE_FACTOR, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Text = "LipidCreator";
+            
+            GlobalMouseHandler gmh = new GlobalMouseHandler();
+            gmh.TheMouseMoved += new MouseMovedEvent(gmh_TheMouseMoved);
+            Application.AddMessageFilter(gmh);
             
             this.timerEasterEgg = new System.Timers.Timer(15);
             this.timerEasterEgg.Elapsed += this.timerEasterEggTick;
@@ -1139,7 +1192,7 @@ namespace LipidCreator
             
             String dbText = "No. DB";
             String hydroxylText = "No. Hydroxy";
-            int dbLength = 70;
+            int dbLength = 60;
             int sep = 15;
             int sepText = 20;
             int faLength = 150;
@@ -1255,10 +1308,6 @@ namespace LipidCreator
             clFA4Combobox.Items.Add("Fatty acyl chain - even");
             clDB3Textbox = new TextBox();
             clDB4Textbox = new TextBox();
-            clHydroxyl3Textbox = new TextBox();
-            clHydroxyl4Textbox = new TextBox();
-            clHydroxyl3Label = new Label();
-            clHydroxyl4Label = new Label();
             clDB3Label = new Label();
             clDB4Label = new Label();
             glFA1Textbox = new TextBox();
@@ -1279,16 +1328,10 @@ namespace LipidCreator
             glDB1Textbox = new TextBox();
             glDB2Textbox = new TextBox();
             glDB3Textbox = new TextBox();
-            glHydroxyl1Textbox = new TextBox();
-            glHydroxyl2Textbox = new TextBox();
-            glHydroxyl3Textbox = new TextBox();
             glDB1Label = new Label();
             glDB2Label = new Label();
             glDB3Label = new Label();
             glHGLabel = new Label();
-            glHydroxyl1Label = new Label();
-            glHydroxyl2Label = new Label();
-            glHydroxyl3Label = new Label();
             plFA1Textbox = new TextBox();
             plFA2Textbox = new TextBox();
             plFA1Combobox = new ComboBox();
@@ -1301,12 +1344,8 @@ namespace LipidCreator
             plFA2Combobox.Items.Add("Fatty acyl chain - even");
             plDB1Textbox = new TextBox();
             plDB2Textbox = new TextBox();
-            plHydroxyl1Textbox = new TextBox();
-            plHydroxyl2Textbox = new TextBox();
             plDB1Label = new Label();
             plDB2Label = new Label();
-            plHydroxyl1Label = new Label();
-            plHydroxyl2Label = new Label();
             plHGLabel = new Label();
             slLCBTextbox = new TextBox();
             slFATextbox = new TextBox();
@@ -1388,6 +1427,12 @@ namespace LipidCreator
             medNegativeAdduct = new GroupBox();
             
             glFA1FuncGroups = new DataGridView();
+            glFA2FuncGroups = new DataGridView();
+            glFA3FuncGroups = new DataGridView();
+            plFA1FuncGroups = new DataGridView();
+            plFA2FuncGroups = new DataGridView();
+            plFA3FuncGroups = new DataGridView();
+            plFA4FuncGroups = new DataGridView();
             
             glStep1 = new GroupBox();
             plStep1 = new GroupBox();
@@ -1451,7 +1496,7 @@ namespace LipidCreator
 
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
-            string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 2-4, 10, 12";
+            string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 0-2, 4";
             string FApInformation = "Plasmenyl fatty acids need at least one double bond";
             string repFAText = "All fatty acyl parameters will be copied from the first FA to all remaining FAs";
 
@@ -1492,14 +1537,10 @@ namespace LipidCreator
             plStep1.Controls.Add(clFA4Textbox);
             plStep1.Controls.Add(clDB3Textbox);
             plStep1.Controls.Add(clDB4Textbox);
-            plStep1.Controls.Add(clHydroxyl3Textbox);
-            plStep1.Controls.Add(clHydroxyl4Textbox);
             plStep1.Controls.Add(clFA3Combobox);
             plStep1.Controls.Add(clFA4Combobox);
             plStep1.Controls.Add(clDB3Label);
             plStep1.Controls.Add(clDB4Label);
-            plStep1.Controls.Add(clHydroxyl3Label);
-            plStep1.Controls.Add(clHydroxyl4Label);
             phospholipidsTab.Font = Font;
             
             
@@ -1507,14 +1548,12 @@ namespace LipidCreator
             clFA4Textbox.Visible = false;
             clDB3Textbox.Visible = false;
             clDB4Textbox.Visible = false;
-            clHydroxyl3Textbox.Visible = false;
-            clHydroxyl4Textbox.Visible = false;
             clFA3Combobox.Visible = false;
             clFA4Combobox.Visible = false;
             clDB3Label.Visible = false;
             clDB4Label.Visible = false;
-            clHydroxyl3Label.Visible = false;
-            clHydroxyl4Label.Visible = false;
+            plFA3FuncGroups.Visible = false;
+            plFA4FuncGroups.Visible = false;
             
 
 
@@ -1535,13 +1574,8 @@ namespace LipidCreator
             clDB3Label.Location = new Point(clDB3Textbox.Left, clDB3Textbox.Top - sep);
             clDB3Label.Width = dbLength;
             clDB3Label.Text = dbText;
-            clHydroxyl3Textbox.Width = dbLength;
-            clHydroxyl3Textbox.Location = new Point(clDB3Textbox.Left + clDB3Textbox.Width + sep, clDB3Textbox.Top);
-            clHydroxyl3Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(clHydroxyl3Textbox, formattingHydroxyl);
-            clHydroxyl3Label.Width = dbLength;
-            clHydroxyl3Label.Location = new Point(clHydroxyl3Textbox.Left, clHydroxyl3Textbox.Top - sep);
-            clHydroxyl3Label.Text = hydroxylText;
+            setupFGDataGridView(plFA3FuncGroups, clDB3Textbox.Left + sep + dbLength, clFA3Combobox.Top, 2);
+            toolTip.SetToolTip(plFA3FuncGroups, formattingHydroxyl);
 
 
             clFA3Checkbox3.Location = new Point(clFA3Textbox.Left + 90, clFA3Textbox.Top + clFA3Textbox.Height);
@@ -1580,13 +1614,8 @@ namespace LipidCreator
             clDB4Label.Location = new Point(clDB4Textbox.Left, clDB4Textbox.Top - sep);
             clDB4Label.Width = dbLength;
             clDB4Label.Text = dbText;
-            clHydroxyl4Textbox.Width = dbLength;
-            clHydroxyl4Textbox.Location = new Point(clDB4Textbox.Left + clDB4Textbox.Width + sep, clDB4Textbox.Top);
-            clHydroxyl4Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(clHydroxyl4Textbox, formattingHydroxyl);
-            clHydroxyl4Label.Width = dbLength;
-            clHydroxyl4Label.Location = new Point(clHydroxyl4Textbox.Left, clHydroxyl4Textbox.Top - sep);
-            clHydroxyl4Label.Text = hydroxylText;
+            setupFGDataGridView(plFA4FuncGroups, clDB4Textbox.Left + sep + dbLength, clFA4Combobox.Top, 2);
+            toolTip.SetToolTip(plFA4FuncGroups, formattingHydroxyl);
 
             clFA4Checkbox3.Location = new Point(clFA4Textbox.Left + 90, clFA4Textbox.Top + clFA4Textbox.Height);
             clFA4Checkbox3.Text = "FA O";
@@ -1625,9 +1654,6 @@ namespace LipidCreator
             glStep1.Controls.Add(glDB1Textbox);
             glStep1.Controls.Add(glDB2Textbox);
             glStep1.Controls.Add(glDB3Textbox);
-            glStep1.Controls.Add(glHydroxyl1Textbox);
-            glStep1.Controls.Add(glHydroxyl2Textbox);
-            glStep1.Controls.Add(glHydroxyl3Textbox);
             glStep1.Controls.Add(glFA1Combobox);
             glStep1.Controls.Add(glFA2Combobox);
             glStep1.Controls.Add(glFA3Combobox);
@@ -1637,12 +1663,12 @@ namespace LipidCreator
             glStep1.Controls.Add(glDB1Label);
             glStep1.Controls.Add(glDB2Label);
             glStep1.Controls.Add(glDB3Label);
-            glStep1.Controls.Add(glHydroxyl1Label);
-            glStep1.Controls.Add(glHydroxyl2Label);
-            glStep1.Controls.Add(glHydroxyl3Label);
             glStep1.Controls.Add(glRepresentativeFA);
             glStep1.Controls.Add(glPositiveAdduct);
             glStep1.Controls.Add(glNegativeAdduct);
+            glStep1.Controls.Add(glFA1FuncGroups);
+            glStep1.Controls.Add(glFA2FuncGroups);
+            glStep1.Controls.Add(glFA3FuncGroups);
             glycerolipidsTab.Parent = tabControl;
             glycerolipidsTab.Text = "Glycerolipids";
             //glycerolipidsTab.ToolTipText = "Glycerolipids";
@@ -1658,7 +1684,6 @@ namespace LipidCreator
             glStep1.Width = Width - 50;
             glStep1.Height = step1Height;
             glStep1.Text = "Step 1: Precursor selection";
-            
             
             
 
@@ -1682,13 +1707,10 @@ namespace LipidCreator
             glDB1Label.Location = new Point(glDB1Textbox.Left, glDB1Textbox.Top - sep);
             glDB1Label.Width = dbLength;
             glDB1Label.Text = dbText;
-            glHydroxyl1Textbox.Width = dbLength;
-            glHydroxyl1Textbox.Location = new Point(glDB1Textbox.Left + glDB1Textbox.Width + sep, glDB1Textbox.Top);
-            glHydroxyl1Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester )); updateGLRepresentative(); };
-            toolTip.SetToolTip(glHydroxyl1Textbox, formattingHydroxyl);
-            glHydroxyl1Label.Width = dbLength;
-            glHydroxyl1Label.Location = new Point(glHydroxyl1Textbox.Left, glHydroxyl1Textbox.Top - sep);
-            glHydroxyl1Label.Text = hydroxylText;
+            setupFGDataGridView(glFA1FuncGroups, glDB1Textbox.Left + sep + dbLength, glFA1Combobox.Top, 1);
+            toolTip.SetToolTip(glFA1FuncGroups, formattingHydroxyl);
+            
+            
 
             glFA1Checkbox3.Location = new Point(glFA1Textbox.Left + 90, glFA1Textbox.Top + glFA1Textbox.Height);
             glFA1Checkbox3.Text = "FA O";
@@ -1705,6 +1727,10 @@ namespace LipidCreator
             glFA1Checkbox1.Text = "FA";
             glFA1Checkbox1.Checked = true;
             glFA1Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester )); updateGLRepresentative(); };
+            
+            
+            
+            
 
             glFA2Combobox.BringToFront();
             glFA2Textbox.BringToFront();
@@ -1726,13 +1752,9 @@ namespace LipidCreator
             glDB2Label.Location = new Point(glDB2Textbox.Left, glDB2Textbox.Top - sep);
             glDB2Label.Width = dbLength;
             glDB2Label.Text = dbText;
-            glHydroxyl2Textbox.Width = dbLength;
-            glHydroxyl2Textbox.Location = new Point(glDB2Textbox.Left + glDB2Textbox.Width + sep, glDB2Textbox.Top);
-            glHydroxyl2Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(glHydroxyl2Textbox, formattingHydroxyl);
-            glHydroxyl2Label.Width = dbLength;
-            glHydroxyl2Label.Location = new Point(glHydroxyl2Textbox.Left, glHydroxyl2Textbox.Top - sep);
-            glHydroxyl2Label.Text = hydroxylText;
+            setupFGDataGridView(glFA2FuncGroups, glDB2Textbox.Left + sep + dbLength, glFA2Combobox.Top, 1);
+            toolTip.SetToolTip(glFA2FuncGroups, formattingHydroxyl);
+            
 
             glFA2Checkbox3.Location = new Point(glFA2Textbox.Left + 90, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox3.Text = "FA O";
@@ -1771,13 +1793,8 @@ namespace LipidCreator
             glDB3Label.Location = new Point(glDB3Textbox.Left, glDB3Textbox.Top - sep);
             glDB3Label.Width = dbLength;
             glDB3Label.Text = dbText;
-            glHydroxyl3Textbox.Width = dbLength;
-            glHydroxyl3Textbox.Location = new Point(glDB3Textbox.Left + glDB3Textbox.Width + sep, glDB3Textbox.Top);
-            glHydroxyl3Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(glHydroxyl3Textbox, formattingHydroxyl);
-            glHydroxyl3Label.Width = dbLength;
-            glHydroxyl3Label.Location = new Point(glHydroxyl3Textbox.Left, glHydroxyl3Textbox.Top - sep);
-            glHydroxyl3Label.Text = hydroxylText;
+            setupFGDataGridView(glFA3FuncGroups, glDB3Textbox.Left + sep + dbLength, glFA3Combobox.Top, 1);
+            toolTip.SetToolTip(glFA3FuncGroups, formattingHydroxyl);
 
             glFA3Checkbox3.Location = new Point(glFA3Textbox.Left + 90, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox3.Text = "FA O";
@@ -1872,7 +1889,7 @@ namespace LipidCreator
             glContainsSugar.BringToFront();
             
             
-            glRepresentativeFA.Location = new Point(glHydroxyl1Textbox.Left + glHydroxyl1Textbox.Width + sep, glHydroxyl1Textbox.Top);
+            glRepresentativeFA.Location = new Point(glFA1FuncGroups.Left + glFA1FuncGroups.Width + sep, glFA1Textbox.Top);
             glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
             toolTip.SetToolTip(glRepresentativeFA, repFAText);
@@ -1887,42 +1904,9 @@ namespace LipidCreator
             
             
 
-            DataGridViewComboBoxColumn funcGroupCol = new DataGridViewComboBoxColumn();
-            funcGroupCol.DataSource = Lipid.FUNCTIONAL_GROUP_NAMES;
-            funcGroupCol.HeaderText = "Func. group";
-            funcGroupCol.DataPropertyName = "Func. group";
-            
-            DataGridViewTextBoxColumn rangeCol = new DataGridViewTextBoxColumn();
-            rangeCol.HeaderText = "Range";
-            rangeCol.DataPropertyName = "Range";
             
             
-            glStep1.Controls.Add(glFA1FuncGroups);
-            glFA1FuncGroups.Location = new Point(glFA1Combobox.Left + glFA1Combobox.Width + 2 * sep + glDB1Textbox.Width, glFA1Combobox.Top);
-            glFA1FuncGroups.Size = new Size(340, 360);
-            glFA1FuncGroups.BringToFront();
-            glFA1FuncGroups.Columns.AddRange(funcGroupCol, rangeCol);
-            glFA1FuncGroups.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            glFA1FuncGroups.AllowUserToResizeColumns = false;
-            glFA1FuncGroups.AllowUserToAddRows = false;
-            glFA1FuncGroups.AllowUserToResizeRows = false;
-            glFA1FuncGroups.MultiSelect = false;
-            glFA1FuncGroups.RowTemplate.Height = 20;
-            glFA1FuncGroups.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            glFA1FuncGroups.RowHeadersVisible = false;
-            glFA1FuncGroups.ScrollBars = ScrollBars.Vertical;
-            glFA1FuncGroups.DefaultCellStyle.Font = new Font("Arial", 8);
-            glFA1FuncGroups.RowHeadersWidthSizeMode = 
-            DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            glFA1FuncGroups.EnableHeadersVisualStyles = false;
-            glFA1FuncGroups.ColumnHeadersHeight = 20;
-            glFA1FuncGroups.DataBindingComplete += functionalGroupComplete;
-            glFA1FuncGroups.CellValueChanged += functionalGroupCellValueChanged;
             
-            ContextMenu cm = new ContextMenu();
-            cm.MenuItems.Add(new FMenuItem("Add functional group", new EventHandler(addFunctionalGroup), glFA1FuncGroups));
-            cm.MenuItems.Add(new FMenuItem("Remove functional group", new EventHandler(removeFunctionalGroup), glFA1FuncGroups));
-            glFA1FuncGroups.ContextMenu = cm;
             
             
             
@@ -1942,20 +1926,20 @@ namespace LipidCreator
             plStep1.Controls.Add(plFA2Textbox);
             plStep1.Controls.Add(plDB1Textbox);
             plStep1.Controls.Add(plDB2Textbox);
-            plStep1.Controls.Add(plHydroxyl1Textbox);
-            plStep1.Controls.Add(plHydroxyl2Textbox);
             plStep1.Controls.Add(plFA1Combobox);
             plStep1.Controls.Add(plFA2Combobox);
             plStep1.Controls.Add(plDB1Label);
             plStep1.Controls.Add(plDB2Label);
-            plStep1.Controls.Add(plHydroxyl1Label);
-            plStep1.Controls.Add(plHydroxyl2Label);
             plStep1.Controls.Add(plHgListbox);
             plStep1.Controls.Add(plHGLabel);
             plStep1.Controls.Add(plRepresentativeFA);
             plStep1.Controls.Add(plPositiveAdduct);
             plStep1.Controls.Add(plNegativeAdduct);
             plStep1.Controls.Add(easterText);
+            plStep1.Controls.Add(plFA1FuncGroups);
+            plStep1.Controls.Add(plFA2FuncGroups);
+            plStep1.Controls.Add(plFA3FuncGroups);
+            plStep1.Controls.Add(plFA4FuncGroups);
             phospholipidsTab.Parent = tabControl;
             phospholipidsTab.Text = "    Glycero-\nphospholipids";
             //phospholipidsTab.ToolTipText = "Glycerophospholipids";
@@ -1991,13 +1975,8 @@ namespace LipidCreator
             plDB1Label.Location = new Point(plDB1Textbox.Left, plDB1Textbox.Top - sep);
             plDB1Label.Width = dbLength;
             plDB1Label.Text = dbText;
-            plHydroxyl1Textbox.Width = dbLength;
-            plHydroxyl1Textbox.Location = new Point(plDB1Textbox.Left + plDB1Textbox.Width + sep, plDB1Textbox.Top);
-            plHydroxyl1Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Ester )); updatePLRepresentative(); };
-            toolTip.SetToolTip(plHydroxyl1Textbox, formattingHydroxyl);
-            plHydroxyl1Label.Width = dbLength;
-            plHydroxyl1Label.Location = new Point(plHydroxyl1Textbox.Left, plHydroxyl1Textbox.Top - sep);
-            plHydroxyl1Label.Text = hydroxylText;
+            setupFGDataGridView(plFA1FuncGroups, plDB1Textbox.Left + sep + dbLength, plFA1Combobox.Top, 2);
+            toolTip.SetToolTip(plFA1FuncGroups, formattingHydroxyl);
 
             plFA1Checkbox3.Location = new Point(plFA1Textbox.Left + 90, plFA1Textbox.Top + plFA1Textbox.Height);
             plFA1Checkbox3.Text = "FA O";
@@ -2035,13 +2014,8 @@ namespace LipidCreator
             plDB2Label.Location = new Point(plDB2Textbox.Left, plDB2Textbox.Top - sep);
             plDB2Label.Width = dbLength;
             plDB2Label.Text = dbText;
-            plHydroxyl2Textbox.Width = dbLength;
-            plHydroxyl2Textbox.Location = new Point(plDB2Textbox.Left + plDB2Textbox.Width + sep, plDB2Textbox.Top);
-            plHydroxyl2Textbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(plHydroxyl2Textbox, formattingHydroxyl);
-            plHydroxyl2Label.Width = dbLength;
-            plHydroxyl2Label.Location = new Point(plHydroxyl2Textbox.Left, plHydroxyl2Textbox.Top - sep);
-            plHydroxyl2Label.Text = hydroxylText;
+            setupFGDataGridView(plFA2FuncGroups, plDB2Textbox.Left + sep + dbLength, plFA2Combobox.Top, 2);
+            toolTip.SetToolTip(plFA2FuncGroups, formattingHydroxyl);
 
             plFA2Checkbox3.Location = new Point(plFA2Textbox.Left + 90, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox3.Text = "FA O";
@@ -2153,7 +2127,7 @@ namespace LipidCreator
             plPictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
             plPictureBox.SendToBack();
             
-            plRepresentativeFA.Location = new Point(plHydroxyl1Textbox.Left + plHydroxyl1Textbox.Width + sep, plHydroxyl1Textbox.Top);
+            plRepresentativeFA.Location = new Point(plFA1FuncGroups.Left + plFA1FuncGroups.Width + sep, plFA1FuncGroups.Top);
             plRepresentativeFA.Width = 150;
             plRepresentativeFA.Text = "First FA representative";
             toolTip.SetToolTip(plRepresentativeFA, repFAText);
@@ -2983,7 +2957,7 @@ namespace LipidCreator
             this.SizeChanged += new EventHandler(windowSizeChanged);
             this.FormClosing += new FormClosingEventHandler(windowOnClosing);
             
-            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plHydroxyl1Textbox, plHydroxyl2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuWizard, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics, glFA1Checkbox3, glFA1Checkbox2, glFA1Checkbox1, glFA2Checkbox3, glFA2Checkbox2, glFA2Checkbox1, glFA3Checkbox3, glFA3Checkbox2, glFA3Checkbox1, glPictureBox, glArrow, glFA1Textbox, glFA2Textbox, glFA3Textbox, glDB1Textbox, glDB2Textbox, glDB3Textbox, glHydroxyl1Textbox, glHydroxyl2Textbox, glHydroxyl3Textbox, glFA1Combobox, glFA2Combobox, glFA3Combobox, glHgListbox, glHGLabel, glContainsSugar, glRepresentativeFA, glPositiveAdduct, glNegativeAdduct, plHasPlasmalogen};
+            controlElements = new ArrayList(){menuFile, menuOptions, menuHelp, addLipidButton, modifyLipidButton, MS2fragmentsLipidButton, addHeavyIsotopeButton, filtersButton, plFA1Checkbox3, plFA1Checkbox2, plFA1Checkbox1, plFA2Checkbox1, plPosAdductCheckbox2, plPosAdductCheckbox3, plIsCL, plRegular, plIsLyso, plFA1Textbox, plFA2Textbox, plDB1Textbox, plDB2Textbox, plFA1Combobox, plFA2Combobox, plHgListbox, plHGLabel, plRepresentativeFA, plPositiveAdduct, plNegativeAdduct, openReviewFormButton, startFirstTutorialButton, startSecondTutorialButton, startThirdTutorialButton, startFourthTutorialButton, lipidsGridview, menuTranslate, menuWizard, menuCollisionEnergy, menuCollisionEnergyOpt, menuMS2Fragments, menuIsotopes, menuClearLipidList, menuResetCategory, menuResetLipidCreator, menuStatistics, glFA1Checkbox3, glFA1Checkbox2, glFA1Checkbox1, glFA2Checkbox3, glFA2Checkbox2, glFA2Checkbox1, glFA3Checkbox3, glFA3Checkbox2, glFA3Checkbox1, glPictureBox, glArrow, glFA1Textbox, glFA2Textbox, glFA3Textbox, glDB1Textbox, glDB2Textbox, glDB3Textbox, glFA1FuncGroups, glFA2FuncGroups, glFA3FuncGroups, glFA1Combobox, glFA2Combobox, glFA3Combobox, glHgListbox, glHGLabel, glContainsSugar, glRepresentativeFA, glPositiveAdduct, glNegativeAdduct, plHasPlasmalogen, plFA1FuncGroups, plFA2FuncGroups, plFA3FuncGroups, plFA4FuncGroups};
             
             
             if (!lipidCreatorInitError)

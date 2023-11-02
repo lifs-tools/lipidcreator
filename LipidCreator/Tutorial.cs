@@ -1167,10 +1167,10 @@ namespace LipidCreator
                     
                 case (int)PRMSteps.MoreParameters:
                     setTutorialControls(creatorGUI.plStep1, creatorGUI.phospholipidsTab);
-                    TextBox plHyd1 = creatorGUI.plHydroxyl1Textbox;
+                    DataGridView plHyd1 = creatorGUI.plFA1FuncGroups;
                     tutorialArrow.update(new Point(plHyd1.Location.X + (plHyd1.Size.Width >> 1), plHyd1.Location.Y + plHyd1.Size.Height), "lt");
                     
-                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "The number of hydroxyl groups can be adjusted for each FA specification. Here, we stick with zero.");
+                    tutorialWindow.update(new Size(540, 200), new Point(60, 200), "Click on 'Continue'", "LipidCreator offers 14 additional functional groups to be bound to a fatty acyl chain. Here, you can add the different groups along with a range.");
                     
                     nextEnabled = true;
                     break;

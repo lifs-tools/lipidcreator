@@ -142,7 +142,10 @@ namespace LipidCreator
                     if (hydroxyl > 0) key += ";O" + Convert.ToString(hydroxyl);
                 }
             }
-            foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups) key += ";(" + Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation + ")" + Convert.ToString(kvp.Value);
+            foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups)
+            {
+                if (kvp.Value > 0) key += ";(" + Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation + ")" + Convert.ToString(kvp.Value);
+            }
             key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
             return key;
         }

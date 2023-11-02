@@ -232,6 +232,22 @@ namespace LipidCreator
         
         
         
+        public string functionalGroupsInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (DataRow dataRow in functionalGroups.Rows)
+            {
+                if (sb.Length > 0) sb.Append(", ");
+                string key = (string)dataRow[0];
+                FunctionalGroupType fgt = Lipid.FUNCTIONAL_GROUP_POSITIONS[key];
+                sb.Append(Lipid.ALL_FUNCTIONAL_GROUPS[fgt].abbreviation).Append(": ").Append((string)dataRow[1]);
+            }
+            string s = sb.ToString();
+            return (s.Length == 0) ? "" : "; " + s;
+        }
+        
+        
+        
         public void import(XElement node, string importVersion)
         {
             chainType = ((string)node.Attribute("chainType") != null) ? Convert.ToInt32(node.Attribute("chainType").Value) : 0;
@@ -339,42 +355,47 @@ namespace LipidCreator
                     {
                         // iterate for all hydroxyls
                         if (maxDoubleBond < fattyAcidDoubleBond) continue;
-                        foreach (int fattyAcidHydroxyl in hydroxylCounts)
+                        foreach (KeyValuePair<FattyAcidType, bool> fattyAcidKeyValuePair in faTypes)
                         {
-                            // iterate for all bondings
-                            if (fattyAcidLength <= fattyAcidHydroxyl) continue;
-                            foreach (KeyValuePair<FattyAcidType, bool> fattyAcidKeyValuePair in faTypes)
+                            if (!fattyAcidKeyValuePair.Value) continue;
+                            
+                            if (isLCB)
                             {
-                                if (!fattyAcidKeyValuePair.Value) continue;
-                                
-                                if (functionalGroupCounts == null || functionalGroupCounts.Count == 0)
+                                foreach (int fattyAcidHydroxyl in hydroxylCounts)
                                 {
+                                    if (fattyAcidLength <= fattyAcidHydroxyl) continue;
                                     yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB);
                                 }
-                                else 
+                                continue;
+                            }
+                            
+                            if (functionalGroupCounts == null || functionalGroupCounts.Count == 0)
+                            {
+                                yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, 0, fattyAcidKeyValuePair.Key, isLCB);
+                            }
+                            else 
+                            {
+                                Dictionary<FunctionalGroupType, int> funcGroups = new Dictionary<FunctionalGroupType, int>();
+                                Dictionary<FunctionalGroupType, List<int>> funcGroupsPossibilities = new Dictionary<FunctionalGroupType, List<int>>();
+                                Dictionary<FunctionalGroupType, int[]> divisors = new Dictionary<FunctionalGroupType, int[]>();
+                                
+                                int combinations = 1;
+                                foreach(KeyValuePair<FunctionalGroupType, HashSet<int>> kvp in functionalGroupCounts)
                                 {
-                                    Dictionary<FunctionalGroupType, int> funcGroups = new Dictionary<FunctionalGroupType, int>();
-                                    Dictionary<FunctionalGroupType, List<int>> funcGroupsPossibilities = new Dictionary<FunctionalGroupType, List<int>>();
-                                    Dictionary<FunctionalGroupType, int[]> divisors = new Dictionary<FunctionalGroupType, int[]>();
-                                    
-                                    int combinations = 1;
-                                    foreach(KeyValuePair<FunctionalGroupType, HashSet<int>> kvp in functionalGroupCounts)
+                                    funcGroupsPossibilities.Add(kvp.Key, new List<int>(kvp.Value));
+                                    int tmp = combinations;
+                                    combinations *= kvp.Value.Count;
+                                    funcGroups.Add(kvp.Key, 0);
+                                    divisors.Add(kvp.Key, new int[]{combinations, tmp});
+                                }
+                                for (int i = 0; i < combinations; ++i)
+                                {
+                                    foreach (KeyValuePair<FunctionalGroupType, HashSet<int>> kvp in functionalGroupCounts)
                                     {
-                                        funcGroupsPossibilities.Add(kvp.Key, new List<int>(kvp.Value));
-                                        int tmp = combinations;
-                                        combinations *= kvp.Value.Count;
-                                        funcGroups.Add(kvp.Key, 0);
-                                        divisors.Add(kvp.Key, new int[]{combinations, tmp});
+                                        int pos = (i % divisors[kvp.Key][0]) / divisors[kvp.Key][1];
+                                        funcGroups[kvp.Key] = funcGroupsPossibilities[kvp.Key][pos];
                                     }
-                                    for (int i = 0; i < combinations; ++i)
-                                    {
-                                        foreach (KeyValuePair<FunctionalGroupType, HashSet<int>> kvp in functionalGroupCounts)
-                                        {
-                                            int pos = (i % divisors[kvp.Key][0]) / divisors[kvp.Key][1];
-                                            funcGroups[kvp.Key] = funcGroupsPossibilities[kvp.Key][pos];
-                                        }
-                                        yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, fattyAcidHydroxyl, fattyAcidKeyValuePair.Key, isLCB, funcGroups);
-                                    }
+                                    yield return new FattyAcid(fattyAcidLength, fattyAcidDoubleBond, 0, fattyAcidKeyValuePair.Key, isLCB, funcGroups);
                                 }
                             }
                         }

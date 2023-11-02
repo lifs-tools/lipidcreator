@@ -81,7 +81,6 @@ namespace LipidCreator
         private static readonly ILog log = LogManager.GetLogger(typeof(CreatorGUI));
         public bool changingTabForced;
         public ArrayList lipidTabList;
-        public int currentTabIndex = 1;
         public LipidCreator lipidCreator;
         [NonSerialized]
         public AboutDialog aboutDialog;
@@ -692,8 +691,8 @@ namespace LipidCreator
         {
             if (!(sender is DataGridView)) return;
             DataGridView view = (DataGridView)sender;
-            view.Columns[0].Width = (int)Math.Floor(view.Size.Width * 0.45);
-            view.Columns[1].Width = (int)Math.Floor(view.Size.Width * 0.55);
+            view.Columns[0].Width = (int)Math.Floor(view.Size.Width * 0.6);
+            view.Columns[1].Width = (int)Math.Floor(view.Size.Width * 0.4);
         }
         
         
@@ -706,6 +705,43 @@ namespace LipidCreator
             dr[1] = "0-1";
             dt.Rows.Add(dr);
         }
+        
+        
+        
+        
+        public void gmh_TheMouseMoved()
+        {
+            Point cur_pos = Cursor.Position;
+            List<DataGridView> hoveredViews = new List<DataGridView>();
+            bool expandedInList = false;
+            foreach (DataGridView view in functionalGroupGridViews[(int)currentIndex])
+            {
+                Point view_pos = view.PointToScreen(Point.Empty);
+                if (view_pos.X <= cur_pos.X && cur_pos.X <= view_pos.X + view.Width && view_pos.Y <= cur_pos.Y && cur_pos.Y <= view_pos.Y + view.Height)
+                {
+                    hoveredViews.Add(view);
+                    if (expandedView == view) expandedInList = true;
+                }
+            }
+            if (expandedInList)
+            {
+                return;
+            }
+            
+            if (expandedView != null)
+            {
+                expandedView.Height = 40;
+                expandedView = null;
+            }
+            if (hoveredViews.Count > 0)
+            {
+                expandedView = hoveredViews[0];
+                expandedView.Height = 100;
+                expandedView.BringToFront();
+                expandedView.Update();
+            }
+        }
+        
         
         
         
@@ -1117,7 +1153,6 @@ namespace LipidCreator
                     
                     glFA1Textbox.Text = currentGlycerolipid.fag1.lengthInfo;
                     glDB1Textbox.Text = currentGlycerolipid.fag1.dbInfo;
-                    glHydroxyl1Textbox.Text = currentGlycerolipid.fag1.hydroxylInfo;
                     glFA1Combobox.SelectedIndex = currentGlycerolipid.fag1.chainType;
                     glFA1Checkbox1.Checked = currentGlycerolipid.fag1.faTypes[FattyAcidType.Ester];
                     glFA1Checkbox2.Checked = currentGlycerolipid.fag1.faTypes[FattyAcidType.Plasmenyl];
@@ -1126,19 +1161,19 @@ namespace LipidCreator
                     
                     glFA2Textbox.Text = currentGlycerolipid.fag2.lengthInfo;
                     glDB2Textbox.Text = currentGlycerolipid.fag2.dbInfo;
-                    glHydroxyl2Textbox.Text = currentGlycerolipid.fag2.hydroxylInfo;
                     glFA2Combobox.SelectedIndex = currentGlycerolipid.fag2.chainType;
                     glFA2Checkbox1.Checked = currentGlycerolipid.fag2.faTypes[FattyAcidType.Ester];
                     glFA2Checkbox2.Checked = currentGlycerolipid.fag2.faTypes[FattyAcidType.Plasmenyl];
                     glFA2Checkbox3.Checked = currentGlycerolipid.fag2.faTypes[FattyAcidType.Plasmanyl];
+                    glFA2FuncGroups.DataSource = currentGlycerolipid.fag2.functionalGroups;
                     
                     glFA3Textbox.Text = currentGlycerolipid.fag3.lengthInfo;
                     glDB3Textbox.Text = currentGlycerolipid.fag3.dbInfo;
-                    glHydroxyl3Textbox.Text = currentGlycerolipid.fag3.hydroxylInfo;
                     glFA3Combobox.SelectedIndex = currentGlycerolipid.fag3.chainType;
                     glFA3Checkbox1.Checked = currentGlycerolipid.fag3.faTypes[FattyAcidType.Ester];
                     glFA3Checkbox2.Checked = currentGlycerolipid.fag3.faTypes[FattyAcidType.Plasmenyl];
                     glFA3Checkbox3.Checked = currentGlycerolipid.fag3.faTypes[FattyAcidType.Plasmanyl];
+                    glFA3FuncGroups.DataSource = currentGlycerolipid.fag3.functionalGroups;
                     
                     glPosAdductCheckbox1.Checked = currentGlycerolipid.adducts["+H"];
                     glPosAdductCheckbox2.Checked = currentGlycerolipid.adducts["+2H"];
@@ -1154,14 +1189,13 @@ namespace LipidCreator
                     
                     updateRanges(currentGlycerolipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
                     updateRanges(currentGlycerolipid.fag1, glDB1Textbox, 3);
-                    updateRanges(currentGlycerolipid.fag1, glHydroxyl1Textbox, 4);
                     updateFunctionalGroupGridView(currentGlycerolipid.fag1, glFA1FuncGroups);
                     updateRanges(currentGlycerolipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
                     updateRanges(currentGlycerolipid.fag2, glDB2Textbox, 3);
-                    updateRanges(currentGlycerolipid.fag2, glHydroxyl2Textbox, 4);
+                    updateFunctionalGroupGridView(currentGlycerolipid.fag2, glFA2FuncGroups);
                     updateRanges(currentGlycerolipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
                     updateRanges(currentGlycerolipid.fag3, glDB3Textbox, 3);
-                    updateRanges(currentGlycerolipid.fag3, glHydroxyl3Textbox, 4);
+                    updateFunctionalGroupGridView(currentGlycerolipid.fag3, glFA3FuncGroups);
                     
                     glRepresentativeFA.Checked = currentGlycerolipid.representativeFA;
                     glPictureBox.SendToBack();
@@ -1178,9 +1212,8 @@ namespace LipidCreator
                     plFA2Combobox.Visible = true;
                     plFA2Textbox.Visible = true;
                     plDB2Textbox.Visible = true;
-                    plHydroxyl2Textbox.Visible = true;
+                    plFA2FuncGroups.Visible = true;
                     plDB2Label.Visible = true;
-                    plHydroxyl2Label.Visible = true;
                     
                     
                     
@@ -1199,10 +1232,8 @@ namespace LipidCreator
                         clFA4Textbox.Visible = true;
                         clDB3Textbox.Visible = true;
                         clDB4Textbox.Visible = true;
-                        clHydroxyl3Textbox.Visible = true;
-                        clHydroxyl4Textbox.Visible = true;
-                        clHydroxyl3Label.Visible = true;
-                        clHydroxyl4Label.Visible = true;
+                        plFA3FuncGroups.Visible = true;
+                        plFA4FuncGroups.Visible = true;
                         clFA3Combobox.Visible = true;
                         clFA4Combobox.Visible = true;
                         clDB3Label.Visible = true;
@@ -1214,7 +1245,7 @@ namespace LipidCreator
                         
                         plFA1Textbox.Text = currentPhospholipid.fag1.lengthInfo;
                         plDB1Textbox.Text = currentPhospholipid.fag1.dbInfo;
-                        plHydroxyl1Textbox.Text = currentPhospholipid.fag1.hydroxylInfo;
+                        plFA1FuncGroups.DataSource = currentPhospholipid.fag1.functionalGroups;
                         plFA1Combobox.SelectedIndex = currentPhospholipid.fag1.chainType;
                         plFA1Checkbox1.Checked = currentPhospholipid.fag1.faTypes[FattyAcidType.Ester];
                         plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmenyl];
@@ -1222,7 +1253,7 @@ namespace LipidCreator
                         
                         plFA2Textbox.Text = currentPhospholipid.fag2.lengthInfo;
                         plDB2Textbox.Text = currentPhospholipid.fag2.dbInfo;
-                        plHydroxyl2Textbox.Text = currentPhospholipid.fag2.hydroxylInfo;
+                        plFA2FuncGroups.DataSource = currentPhospholipid.fag2.functionalGroups;
                         plFA2Combobox.SelectedIndex = currentPhospholipid.fag2.chainType;
                         plFA2Checkbox1.Checked = currentPhospholipid.fag2.faTypes[FattyAcidType.Ester];
                         plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes[FattyAcidType.Plasmenyl];
@@ -1230,7 +1261,7 @@ namespace LipidCreator
                         
                         clFA3Textbox.Text = currentPhospholipid.fag3.lengthInfo;
                         clDB3Textbox.Text = currentPhospholipid.fag3.dbInfo;
-                        clHydroxyl3Textbox.Text = currentPhospholipid.fag3.hydroxylInfo;
+                        plFA3FuncGroups.DataSource = currentPhospholipid.fag3.functionalGroups;
                         clFA3Combobox.SelectedIndex = currentPhospholipid.fag3.chainType;
                         clFA3Checkbox1.Checked = currentPhospholipid.fag3.faTypes[FattyAcidType.Ester];
                         clFA3Checkbox2.Checked = currentPhospholipid.fag3.faTypes[FattyAcidType.Plasmenyl];
@@ -1238,7 +1269,7 @@ namespace LipidCreator
                         
                         clFA4Textbox.Text = currentPhospholipid.fag4.lengthInfo;
                         clDB4Textbox.Text = currentPhospholipid.fag4.dbInfo;
-                        clHydroxyl4Textbox.Text = currentPhospholipid.fag4.hydroxylInfo;
+                        plFA4FuncGroups.DataSource = currentPhospholipid.fag4.functionalGroups;
                         clFA4Combobox.SelectedIndex = currentPhospholipid.fag4.chainType;
                         clFA4Checkbox1.Checked = currentPhospholipid.fag4.faTypes[FattyAcidType.Ester];
                         clFA4Checkbox2.Checked = currentPhospholipid.fag4.faTypes[FattyAcidType.Plasmenyl];
@@ -1259,16 +1290,16 @@ namespace LipidCreator
                         
                         updateRanges(currentPhospholipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag1, plDB1Textbox, 3);
-                        updateRanges(currentPhospholipid.fag1, plHydroxyl1Textbox, 4);
+                        updateFunctionalGroupGridView(currentPhospholipid.fag1, plFA1FuncGroups);
                         updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
-                        updateRanges(currentPhospholipid.fag2, plHydroxyl2Textbox, 4);
+                        updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
                         updateRanges(currentPhospholipid.fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag3, clDB3Textbox, 3);
-                        updateRanges(currentPhospholipid.fag3, clHydroxyl3Textbox, 4);
+                        updateFunctionalGroupGridView(currentPhospholipid.fag3, plFA3FuncGroups);
                         updateRanges(currentPhospholipid.fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag4, clDB4Textbox, 3);
-                        updateRanges(currentPhospholipid.fag4, clHydroxyl4Textbox, 4);
+                        updateFunctionalGroupGridView(currentPhospholipid.fag4, plFA4FuncGroups);
                         
                         plRepresentativeFA.Checked = currentPhospholipid.representativeFA;
                         plPictureBox.Image = cardioBackboneImage;
@@ -1288,10 +1319,8 @@ namespace LipidCreator
                         clFA4Textbox.Visible = false;
                         clDB3Textbox.Visible = false;
                         clDB4Textbox.Visible = false;
-                        clHydroxyl3Textbox.Visible = false;
-                        clHydroxyl4Textbox.Visible = false;
-                        clHydroxyl3Label.Visible = false;
-                        clHydroxyl4Label.Visible = false;
+                        plFA3FuncGroups.Visible = false;
+                        plFA4FuncGroups.Visible = false;
                         clFA3Combobox.Visible = false;
                         clFA4Combobox.Visible = false;
                         clDB3Label.Visible = false;
@@ -1331,7 +1360,7 @@ namespace LipidCreator
                         
                         plFA1Textbox.Text = currentPhospholipid.fag1.lengthInfo;
                         plDB1Textbox.Text = currentPhospholipid.fag1.dbInfo;
-                        plHydroxyl1Textbox.Text = currentPhospholipid.fag1.hydroxylInfo;
+                        plFA1FuncGroups.DataSource = currentPhospholipid.fag1.functionalGroups;
                         plFA1Combobox.SelectedIndex = currentPhospholipid.fag1.chainType;
                         plFA1Checkbox1.Checked = currentPhospholipid.fag1.faTypes[FattyAcidType.Ester];
                         plFA1Checkbox2.Checked = currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmenyl];
@@ -1339,7 +1368,7 @@ namespace LipidCreator
                         
                         plFA2Textbox.Text = currentPhospholipid.fag2.lengthInfo;
                         plDB2Textbox.Text = currentPhospholipid.fag2.dbInfo;
-                        plHydroxyl2Textbox.Text = currentPhospholipid.fag2.hydroxylInfo;
+                        plFA2FuncGroups.DataSource = currentPhospholipid.fag2.functionalGroups;
                         plFA2Combobox.SelectedIndex = currentPhospholipid.fag2.chainType;
                         plFA2Checkbox1.Checked = currentPhospholipid.fag2.faTypes[FattyAcidType.Ester];
                         plFA2Checkbox2.Checked = currentPhospholipid.fag2.faTypes[FattyAcidType.Plasmenyl];
@@ -1359,12 +1388,12 @@ namespace LipidCreator
                         
                         updateRanges(currentPhospholipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
                         updateRanges(currentPhospholipid.fag1, plDB1Textbox, 3);
-                        updateRanges(currentPhospholipid.fag1, plHydroxyl1Textbox, 4);
+                        updateFunctionalGroupGridView(currentPhospholipid.fag1, plFA1FuncGroups);
                         if (!currentPhospholipid.isLyso)
                         {
                             updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
                             updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
-                            updateRanges(currentPhospholipid.fag2, plHydroxyl2Textbox, 4);
+                            updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
                         }
                         plRepresentativeFA.Checked = currentPhospholipid.representativeFA;
                         plHasPlasmalogen.Checked = currentPhospholipid.hasPlasmalogen;
@@ -1640,6 +1669,11 @@ namespace LipidCreator
         
         
         
+        
+        
+        
+        
+        
         public void updateCarbon(Object sender, FattyAcidEventArgs e)
         {
             e.fag.lengthInfo = ((TextBox)sender).Text;
@@ -1710,8 +1744,27 @@ namespace LipidCreator
                 glFA3Textbox.Text = glFA1Textbox.Text;
                 glDB2Textbox.Text = glDB1Textbox.Text;
                 glDB3Textbox.Text = glDB1Textbox.Text;
-                glHydroxyl2Textbox.Text = glHydroxyl1Textbox.Text;
-                glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
+                
+                DataTable gl1Table = (DataTable)glFA1FuncGroups.DataSource;
+                DataTable gl2Table = (DataTable)glFA2FuncGroups.DataSource;
+                DataTable gl3Table = (DataTable)glFA3FuncGroups.DataSource;
+                
+                gl2Table.Clear();
+                gl3Table.Clear();
+                
+                foreach (DataRow dr in gl1Table.Rows)
+                {
+                    DataRow gl2dr = gl2Table.NewRow();
+                    gl2dr[0] = dr[0];
+                    gl2dr[1] = dr[1];
+                    gl2Table.Rows.Add(gl2dr);
+                    
+                    DataRow gl3dr = gl3Table.NewRow();
+                    gl3dr[0] = dr[0];
+                    gl3dr[1] = dr[1];
+                    gl3Table.Rows.Add(gl3dr);
+                }
+                
                 glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
                 glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
                 glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
@@ -1737,9 +1790,6 @@ namespace LipidCreator
                 plDB2Textbox.Text = plDB1Textbox.Text;
                 clDB3Textbox.Text = plDB1Textbox.Text;
                 clDB4Textbox.Text = plDB1Textbox.Text;
-                plHydroxyl2Textbox.Text = plHydroxyl1Textbox.Text;
-                clHydroxyl3Textbox.Text = plHydroxyl1Textbox.Text;
-                clHydroxyl4Textbox.Text = plHydroxyl1Textbox.Text;
                 plFA2Checkbox1.Checked = plFA1Checkbox1.Checked;
                 plFA2Checkbox2.Checked = plFA1Checkbox2.Checked;
                 plFA2Checkbox3.Checked = plFA1Checkbox3.Checked;
@@ -1749,6 +1799,35 @@ namespace LipidCreator
                 clFA4Checkbox1.Checked = plFA1Checkbox1.Checked;
                 clFA4Checkbox2.Checked = plFA1Checkbox2.Checked;
                 clFA4Checkbox3.Checked = plFA1Checkbox3.Checked;
+                
+                
+                
+                DataTable pl1Table = (DataTable)plFA1FuncGroups.DataSource;
+                DataTable pl2Table = (DataTable)plFA2FuncGroups.DataSource;
+                DataTable pl3Table = (DataTable)plFA3FuncGroups.DataSource;
+                DataTable pl4Table = (DataTable)plFA4FuncGroups.DataSource;
+                
+                pl2Table.Clear();
+                pl3Table.Clear();
+                pl4Table.Clear();
+                
+                foreach (DataRow dr in pl1Table.Rows)
+                {
+                    DataRow pl2dr = pl2Table.NewRow();
+                    pl2dr[0] = dr[0];
+                    pl2dr[1] = dr[1];
+                    pl2Table.Rows.Add(pl2dr);
+                    
+                    DataRow pl3dr = pl3Table.NewRow();
+                    pl3dr[0] = dr[0];
+                    pl3dr[1] = dr[1];
+                    pl3Table.Rows.Add(pl3dr);
+                    
+                    DataRow pl4dr = pl4Table.NewRow();
+                    pl4dr[0] = dr[0];
+                    pl4dr[1] = dr[1];
+                    pl4Table.Rows.Add(pl4dr);
+                }
             }
         }
         
@@ -1756,26 +1835,27 @@ namespace LipidCreator
         
         public void clRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
-            ((Phospholipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
-            if (((Phospholipid)currentLipid).representativeFA)
+            Phospholipid currentPhospholipid = (Phospholipid)currentLipid;
+            currentPhospholipid.representativeFA = ((CheckBox)sender).Checked;
+            if (currentPhospholipid.representativeFA)
             {
                 plFA2Textbox.Enabled = false;
                 plDB2Textbox.Enabled = false;
-                plHydroxyl2Textbox.Enabled = false;
+                plFA2FuncGroups.Enabled = false;
                 plFA2Combobox.Enabled = false;
                 plFA2Checkbox1.Enabled = false;
                 plFA2Checkbox2.Enabled = false;
                 plFA2Checkbox3.Enabled = false;
                 clFA3Textbox.Enabled = false;
                 clDB3Textbox.Enabled = false;
-                clHydroxyl3Textbox.Enabled = false;
+                plFA3FuncGroups.Enabled = false;
                 clFA3Combobox.Enabled = false;
                 clFA3Checkbox1.Enabled = false;
                 clFA3Checkbox2.Enabled = false;
                 clFA3Checkbox3.Enabled = false;
                 clFA4Textbox.Enabled = false;
                 clDB4Textbox.Enabled = false;
-                clHydroxyl4Textbox.Enabled = false;
+                plFA4FuncGroups.Enabled = false;
                 clFA4Combobox.Enabled = false;
                 clFA4Checkbox1.Enabled = false;
                 clFA4Checkbox2.Enabled = false;
@@ -1787,9 +1867,34 @@ namespace LipidCreator
                 plDB2Textbox.Text = plDB1Textbox.Text;
                 clDB3Textbox.Text = plDB1Textbox.Text;
                 clDB4Textbox.Text = plDB1Textbox.Text;
-                plHydroxyl2Textbox.Text = plHydroxyl1Textbox.Text;
-                clHydroxyl3Textbox.Text = plHydroxyl1Textbox.Text;
-                clHydroxyl4Textbox.Text = plHydroxyl1Textbox.Text;
+                
+                DataTable pl1Table = (DataTable)plFA1FuncGroups.DataSource;
+                DataTable pl2Table = (DataTable)plFA2FuncGroups.DataSource;
+                DataTable pl3Table = (DataTable)plFA3FuncGroups.DataSource;
+                DataTable pl4Table = (DataTable)plFA4FuncGroups.DataSource;
+                
+                pl2Table.Clear();
+                pl3Table.Clear();
+                pl4Table.Clear();
+                
+                foreach (DataRow dr in pl1Table.Rows)
+                {
+                    DataRow pl2dr = pl2Table.NewRow();
+                    pl2dr[0] = dr[0];
+                    pl2dr[1] = dr[1];
+                    pl2Table.Rows.Add(pl2dr);
+                    
+                    DataRow pl3dr = pl3Table.NewRow();
+                    pl3dr[0] = dr[0];
+                    pl3dr[1] = dr[1];
+                    pl3Table.Rows.Add(pl3dr);
+                    
+                    DataRow pl4dr = pl4Table.NewRow();
+                    pl4dr[0] = dr[0];
+                    pl4dr[1] = dr[1];
+                    pl4Table.Rows.Add(pl4dr);
+                }
+                
                 plFA2Combobox.Text = plFA1Combobox.Text;
                 clFA3Combobox.Text = plFA1Combobox.Text;
                 clFA4Combobox.Text = plFA1Combobox.Text;
@@ -1807,35 +1912,36 @@ namespace LipidCreator
             {
                 plFA2Textbox.Enabled = true;
                 plDB2Textbox.Enabled = true;
-                plHydroxyl2Textbox.Enabled = true;
+                plFA2FuncGroups.Enabled = true;
                 plFA2Combobox.Enabled = true;
                 plFA2Checkbox1.Enabled = true;
                 plFA2Checkbox2.Enabled = true;
                 plFA2Checkbox3.Enabled = true;
                 clFA3Textbox.Enabled = true;
                 clDB3Textbox.Enabled = true;
-                clHydroxyl3Textbox.Enabled = true;
+                plFA3FuncGroups.Enabled = true;
                 clFA3Combobox.Enabled = true;
                 clFA3Checkbox1.Enabled = true;
                 clFA3Checkbox2.Enabled = true;
                 clFA3Checkbox3.Enabled = true;
                 clFA4Textbox.Enabled = true;
                 clDB4Textbox.Enabled = true;
-                clHydroxyl4Textbox.Enabled = true;
+                plFA4FuncGroups.Enabled = true;
                 clFA4Combobox.Enabled = true;
                 clFA4Checkbox1.Enabled = true;
                 clFA4Checkbox2.Enabled = true;
                 clFA4Checkbox3.Enabled = true;
             }
-            updateRanges(((Phospholipid)currentLipid).fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-            updateRanges(((Phospholipid)currentLipid).fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
-            updateRanges(((Phospholipid)currentLipid).fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
-            updateRanges(((Phospholipid)currentLipid).fag2, plDB2Textbox, 3);
-            updateRanges(((Phospholipid)currentLipid).fag3, clDB3Textbox, 3);
-            updateRanges(((Phospholipid)currentLipid).fag4, clDB4Textbox, 3);
-            updateRanges(((Phospholipid)currentLipid).fag2, plHydroxyl2Textbox, 4);
-            updateRanges(((Phospholipid)currentLipid).fag3, clHydroxyl3Textbox, 4);
-            updateRanges(((Phospholipid)currentLipid).fag4, clHydroxyl4Textbox, 4);
+            updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
+            updateRanges(currentPhospholipid.fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
+            updateRanges(currentPhospholipid.fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
+            updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
+            updateRanges(currentPhospholipid.fag3, clDB3Textbox, 3);
+            updateRanges(currentPhospholipid.fag4, clDB4Textbox, 3);
+            
+            updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
+            updateFunctionalGroupGridView(currentPhospholipid.fag3, plFA3FuncGroups);
+            updateFunctionalGroupGridView(currentPhospholipid.fag4, plFA4FuncGroups);
         }
         
         
@@ -1895,13 +2001,12 @@ namespace LipidCreator
             {
                 glFA3Textbox.Visible = false;
                 glDB3Textbox.Visible = false;
-                glHydroxyl3Textbox.Visible = false;
+                glFA3FuncGroups.Visible = false;
                 glFA3Combobox.Visible = false;
                 glFA3Checkbox1.Visible = false;
                 glFA3Checkbox2.Visible = false;
                 glFA3Checkbox3.Visible = false;
                 glDB3Label.Visible = false;
-                glHydroxyl3Label.Visible = false;
                 
                 
                 glHgListbox.Visible = true;
@@ -1917,13 +2022,12 @@ namespace LipidCreator
             {
                 glFA3Textbox.Visible = true;
                 glDB3Textbox.Visible = true;
-                glHydroxyl3Textbox.Visible = true;
+                glFA3FuncGroups.Visible = true;
                 glFA3Combobox.Visible = true;
                 glFA3Checkbox1.Visible = true;
                 glFA3Checkbox2.Visible = true;
                 glFA3Checkbox3.Visible = true;
                 glDB3Label.Visible = true;
-                glHydroxyl3Label.Visible = true;
                 
                 glHgListbox.Visible = false;
                 glHGLabel.Visible = false;
@@ -1947,19 +2051,21 @@ namespace LipidCreator
         
         public void glRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
-            ((Glycerolipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
-            if (((Glycerolipid)currentLipid).representativeFA)
+            Glycerolipid currentGlycerolipid = ((Glycerolipid)currentLipid);
+            
+            currentGlycerolipid.representativeFA = ((CheckBox)sender).Checked;
+            if (currentGlycerolipid.representativeFA)
             {
                 glFA2Textbox.Enabled = false;
                 glDB2Textbox.Enabled = false;
-                glHydroxyl2Textbox.Enabled = false;
+                glFA2FuncGroups.Enabled = false;
                 glFA2Combobox.Enabled = false;
                 glFA2Checkbox1.Enabled = false;
                 glFA2Checkbox2.Enabled = false;
                 glFA2Checkbox3.Enabled = false;
                 glFA3Textbox.Enabled = false;
                 glDB3Textbox.Enabled = false;
-                glHydroxyl3Textbox.Enabled = false;
+                glFA3FuncGroups.Enabled = false;
                 glFA3Combobox.Enabled = false;
                 glFA3Checkbox1.Enabled = false;
                 glFA3Checkbox2.Enabled = false;
@@ -1969,16 +2075,38 @@ namespace LipidCreator
                 glFA3Textbox.Text = glFA1Textbox.Text;
                 glDB2Textbox.Text = glDB1Textbox.Text;
                 glDB3Textbox.Text = glDB1Textbox.Text;
-                glHydroxyl2Textbox.Text = glHydroxyl1Textbox.Text;
-                glHydroxyl3Textbox.Text = glHydroxyl1Textbox.Text;
+                
+                
+                DataTable gl1Table = (DataTable)glFA1FuncGroups.DataSource;
+                DataTable gl2Table = (DataTable)glFA2FuncGroups.DataSource;
+                DataTable gl3Table = (DataTable)glFA3FuncGroups.DataSource;
+                
+                gl2Table.Clear();
+                gl3Table.Clear();
+                
+                foreach (DataRow dr in gl1Table.Rows)
+                {
+                    DataRow gl2dr = gl2Table.NewRow();
+                    gl2dr[0] = dr[0];
+                    gl2dr[1] = dr[1];
+                    gl2Table.Rows.Add(gl2dr);
+                    
+                    DataRow gl3dr = gl3Table.NewRow();
+                    gl3dr[0] = dr[0];
+                    gl3dr[1] = dr[1];
+                    gl3Table.Rows.Add(gl3dr);
+                }
+                
+                
+                
                 glFA2Combobox.Text = glFA1Combobox.Text;
                 glFA3Combobox.Text = glFA1Combobox.Text;
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
-                if (((Glycerolipid)currentLipid).fag2.anyFAChecked()) glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
-                if (((Glycerolipid)currentLipid).fag3.anyFAChecked()) glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (currentGlycerolipid.fag2.anyFAChecked()) glFA2Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (currentGlycerolipid.fag3.anyFAChecked()) glFA3Checkbox1.Checked = glFA1Checkbox1.Checked;
+                if (currentGlycerolipid.fag2.anyFAChecked()) glFA2Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (currentGlycerolipid.fag3.anyFAChecked()) glFA3Checkbox2.Checked = glFA1Checkbox2.Checked;
+                if (currentGlycerolipid.fag2.anyFAChecked()) glFA2Checkbox3.Checked = glFA1Checkbox3.Checked;
+                if (currentGlycerolipid.fag3.anyFAChecked()) glFA3Checkbox3.Checked = glFA1Checkbox3.Checked;
                 
                 
             }
@@ -1986,25 +2114,25 @@ namespace LipidCreator
             {
                 glFA2Textbox.Enabled = true;
                 glDB2Textbox.Enabled = true;
-                glHydroxyl2Textbox.Enabled = true;
+                glFA2FuncGroups.Enabled = true;
                 glFA2Combobox.Enabled = true;
                 glFA2Checkbox1.Enabled = true;
                 glFA2Checkbox2.Enabled = true;
                 glFA2Checkbox3.Enabled = true;
                 glFA3Textbox.Enabled = true;
                 glDB3Textbox.Enabled = true;
-                glHydroxyl3Textbox.Enabled = true;
+                glFA3FuncGroups.Enabled = true;
                 glFA3Combobox.Enabled = true;
                 glFA3Checkbox1.Enabled = true;
                 glFA3Checkbox2.Enabled = true;
                 glFA3Checkbox3.Enabled = true;
             }
-            updateRanges(((Glycerolipid)currentLipid).fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
-            updateRanges(((Glycerolipid)currentLipid).fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-            updateRanges(((Glycerolipid)currentLipid).fag2, glDB2Textbox, 3);
-            updateRanges(((Glycerolipid)currentLipid).fag3, glDB3Textbox, 3);
-            updateRanges(((Glycerolipid)currentLipid).fag2, glHydroxyl2Textbox, 4);
-            updateRanges(((Glycerolipid)currentLipid).fag3, glHydroxyl3Textbox, 4);
+            updateRanges(currentGlycerolipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
+            updateRanges(currentGlycerolipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
+            updateRanges(currentGlycerolipid.fag2, glDB2Textbox, 3);
+            updateRanges(currentGlycerolipid.fag3, glDB3Textbox, 3);
+            updateFunctionalGroupGridView(currentGlycerolipid.fag2, glFA2FuncGroups);
+            updateFunctionalGroupGridView(currentGlycerolipid.fag3, glFA3FuncGroups);
         }
         
         
@@ -2102,20 +2230,47 @@ namespace LipidCreator
         
         public void plRepresentativeFACheckedChanged(Object sender, EventArgs e)
         {
-            ((Phospholipid)currentLipid).representativeFA = ((CheckBox)sender).Checked;
-            if (((Phospholipid)currentLipid).representativeFA)
+            Phospholipid currentPhospholipid = (Phospholipid)currentLipid;
+            currentPhospholipid.representativeFA = ((CheckBox)sender).Checked;
+            if (currentPhospholipid.representativeFA)
             {
                 plFA2Textbox.Enabled = false;
                 plDB2Textbox.Enabled = false;
-                plHydroxyl2Textbox.Enabled = false;
+                plFA4FuncGroups.Enabled = false;
                 plFA2Combobox.Enabled = false;
                 plFA2Checkbox1.Enabled = false;
                 
                 plFA2Textbox.Text = plFA1Textbox.Text;
                 plDB2Textbox.Text = plDB1Textbox.Text;
-                plHydroxyl2Textbox.Text = plHydroxyl1Textbox.Text;
                 plFA2Combobox.Text = plFA1Combobox.Text;
                 plFA2Checkbox1.Checked = plFA1Checkbox1.Checked;
+                
+                DataTable pl1Table = (DataTable)plFA1FuncGroups.DataSource;
+                DataTable pl2Table = (DataTable)plFA2FuncGroups.DataSource;
+                DataTable pl3Table = (DataTable)plFA3FuncGroups.DataSource;
+                DataTable pl4Table = (DataTable)plFA4FuncGroups.DataSource;
+                
+                pl2Table.Clear();
+                pl3Table.Clear();
+                pl4Table.Clear();
+                
+                foreach (DataRow dr in pl1Table.Rows)
+                {
+                    DataRow pl2dr = pl2Table.NewRow();
+                    pl2dr[0] = dr[0];
+                    pl2dr[1] = dr[1];
+                    pl2Table.Rows.Add(pl2dr);
+                    
+                    DataRow pl3dr = pl3Table.NewRow();
+                    pl3dr[0] = dr[0];
+                    pl3dr[1] = dr[1];
+                    pl3Table.Rows.Add(pl3dr);
+                    
+                    DataRow pl4dr = pl4Table.NewRow();
+                    pl4dr[0] = dr[0];
+                    pl4dr[1] = dr[1];
+                    pl4Table.Rows.Add(pl4dr);
+                }
                 
                 if (plIsCL.Checked)
                 {
@@ -2126,7 +2281,7 @@ namespace LipidCreator
                     
                     clFA3Textbox.Enabled = false;
                     clDB3Textbox.Enabled = false;
-                    clHydroxyl3Textbox.Enabled = false;
+                    plFA4FuncGroups.Enabled = false;
                     clFA3Combobox.Enabled = false;
                     clFA3Checkbox1.Enabled = false;
                     clFA3Checkbox2.Enabled = false;
@@ -2134,7 +2289,6 @@ namespace LipidCreator
                     
                     clFA3Textbox.Text = plFA1Textbox.Text;
                     clDB3Textbox.Text = plDB1Textbox.Text;
-                    clHydroxyl3Textbox.Text = plHydroxyl1Textbox.Text;
                     clFA3Combobox.Text = plFA1Combobox.Text;
                     clFA3Checkbox1.Checked = plFA1Checkbox1.Checked;
                     clFA3Checkbox2.Checked = plFA1Checkbox2.Checked;
@@ -2142,7 +2296,7 @@ namespace LipidCreator
                     
                     clFA4Textbox.Enabled = false;
                     clDB4Textbox.Enabled = false;
-                    clHydroxyl4Textbox.Enabled = false;
+                    plFA4FuncGroups.Enabled = false;
                     clFA4Combobox.Enabled = false;
                     clFA4Checkbox1.Enabled = false;
                     clFA4Checkbox2.Enabled = false;
@@ -2150,7 +2304,6 @@ namespace LipidCreator
                     
                     clFA4Textbox.Text = plFA1Textbox.Text;
                     clDB4Textbox.Text = plDB1Textbox.Text;
-                    clHydroxyl4Textbox.Text = plHydroxyl1Textbox.Text;
                     clFA4Combobox.Text = plFA1Combobox.Text;
                     clFA4Checkbox1.Checked = plFA1Checkbox1.Checked;
                     clFA4Checkbox2.Checked = plFA1Checkbox2.Checked;
@@ -2161,7 +2314,7 @@ namespace LipidCreator
             {
                 plFA2Textbox.Enabled = true;
                 plDB2Textbox.Enabled = true;
-                plHydroxyl2Textbox.Enabled = true;
+                plFA2FuncGroups.Enabled = true;
                 plFA2Combobox.Enabled = true;
                 plFA2Checkbox1.Enabled = true;
                 
@@ -2172,7 +2325,7 @@ namespace LipidCreator
                     
                     clFA3Textbox.Enabled = true;
                     clDB3Textbox.Enabled = true;
-                    clHydroxyl3Textbox.Enabled = true;
+                    plFA3FuncGroups.Enabled = true;
                     clFA3Combobox.Enabled = true;
                     clFA3Checkbox1.Enabled = true;
                     clFA3Checkbox2.Enabled = true;
@@ -2180,7 +2333,7 @@ namespace LipidCreator
                     
                     clFA4Textbox.Enabled = true;
                     clDB4Textbox.Enabled = true;
-                    clHydroxyl4Textbox.Enabled = true;
+                    plFA4FuncGroups.Enabled = true;
                     clFA4Combobox.Enabled = true;
                     clFA4Checkbox1.Enabled = true;
                     clFA4Checkbox2.Enabled = true;
@@ -2188,20 +2341,20 @@ namespace LipidCreator
                     
                 }
             }
-            updateRanges(((Phospholipid)currentLipid).fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-            updateRanges(((Phospholipid)currentLipid).fag2, plDB2Textbox, 3);
-            updateRanges(((Phospholipid)currentLipid).fag2, plHydroxyl2Textbox, 4);
+            updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
+            updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
+            updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
             
             
             if (plIsCL.Checked)
             {
-                updateRanges(((Phospholipid)currentLipid).fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
-                updateRanges(((Phospholipid)currentLipid).fag3, clDB3Textbox, 3);
-                updateRanges(((Phospholipid)currentLipid).fag3, clHydroxyl3Textbox, 4);
+                updateRanges(currentPhospholipid.fag3, clFA3Textbox, clFA3Combobox.SelectedIndex);
+                updateRanges(currentPhospholipid.fag3, clDB3Textbox, 3);
+                updateFunctionalGroupGridView(currentPhospholipid.fag3, plFA3FuncGroups);
                 
-                updateRanges(((Phospholipid)currentLipid).fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
-                updateRanges(((Phospholipid)currentLipid).fag4, clDB4Textbox, 3);
-                updateRanges(((Phospholipid)currentLipid).fag4, clHydroxyl4Textbox, 4);
+                updateRanges(currentPhospholipid.fag4, clFA4Textbox, clFA4Combobox.SelectedIndex);
+                updateRanges(currentPhospholipid.fag4, clDB4Textbox, 3);
+                updateFunctionalGroupGridView(currentPhospholipid.fag4, plFA4FuncGroups);
             }
         }
         
@@ -2297,9 +2450,8 @@ namespace LipidCreator
                 plFA2Combobox.Visible = false;
                 plFA2Textbox.Visible = false;
                 plDB2Textbox.Visible = false;
-                plHydroxyl2Textbox.Visible = false;
+                plFA2FuncGroups.Visible = false;
                 plDB2Label.Visible = false;
-                plHydroxyl2Label.Visible = false;
                 plFA2Checkbox1.Visible = false;
                 plRepresentativeFA.Visible = false;
             }
@@ -2656,14 +2808,16 @@ namespace LipidCreator
             
             if (currentLipid is Glycerolipid)
             {
-                ((Glycerolipid)currentLipid).fag1.createFunctionalGroupCount();
-                ((Glycerolipid)currentLipid).fag2.createFunctionalGroupCount();
-                if (((Glycerolipid)currentLipid).fag1.faTypes[FattyAcidType.NoType])
+                Glycerolipid currentGlycerolipid = (Glycerolipid)currentLipid;
+                currentGlycerolipid.fag1.createFunctionalGroupCount();
+                currentGlycerolipid.fag2.createFunctionalGroupCount();
+                currentGlycerolipid.fag3.createFunctionalGroupCount();
+                if (currentGlycerolipid.fag1.faTypes[FattyAcidType.NoType])
                 {
                     MessageBox.Show("Please always select the top fatty acyl!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                else if (((Glycerolipid)currentLipid).fag2.faTypes[FattyAcidType.NoType] && !((Glycerolipid)currentLipid).fag3.faTypes[FattyAcidType.NoType])
+                else if (currentGlycerolipid.fag2.faTypes[FattyAcidType.NoType] && !currentGlycerolipid.fag3.faTypes[FattyAcidType.NoType])
                 {
                     MessageBox.Show("Please select the middle fatty acyl for DG!", "Not registrable");
                     return LipidCategory.NoLipid;
@@ -2689,35 +2843,25 @@ namespace LipidCreator
                     MessageBox.Show("Second double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (glHydroxyl1Textbox.BackColor == alertColor)
-                {
-                    MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
-                    return LipidCategory.NoLipid;
-                }
-                if (glHydroxyl2Textbox.BackColor == alertColor)
-                {
-                    MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
-                    return LipidCategory.NoLipid;
-                }
-                if (((Glycerolipid)currentLipid).fag1.functionalGroupCounts == null)
+                if (currentGlycerolipid.fag1.functionalGroupCounts == null)
                 {
                     MessageBox.Show("A functional group content in first fatty acid is not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (((Glycerolipid)currentLipid).fag2.functionalGroupCounts == null)
+                if (currentGlycerolipid.fag2.functionalGroupCounts == null)
                 {
                     MessageBox.Show("A functional group content in second fatty acid is not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
                 
-                if (((Glycerolipid)currentLipid).containsSugar)
+                if (currentGlycerolipid.containsSugar)
                 {
                     if (currentLipid.headGroupNames.Count == 0)
                     {
                         MessageBox.Show("No head group selected!", "Not registrable");
                         return LipidCategory.NoLipid;                    
                     }
-                    if (((Glycerolipid)currentLipid).fag1.faTypes[FattyAcidType.NoType] || ((Glycerolipid)currentLipid).fag2.faTypes[FattyAcidType.NoType])
+                    if (currentGlycerolipid.fag1.faTypes[FattyAcidType.NoType] || currentGlycerolipid.fag2.faTypes[FattyAcidType.NoType])
                     {
                         MessageBox.Show("Both fatty acyls must be selected!", "Not registrable");
                         return LipidCategory.NoLipid;
@@ -2725,8 +2869,7 @@ namespace LipidCreator
                 }
                 else
                 {
-                    ((Glycerolipid)currentLipid).fag3.createFunctionalGroupCount();
-                    if (((Glycerolipid)currentLipid).fag1.faTypes[FattyAcidType.NoType] && ((Glycerolipid)currentLipid).fag2.faTypes[FattyAcidType.NoType] && ((Glycerolipid)currentLipid).fag3.faTypes[FattyAcidType.NoType])
+                    if (currentGlycerolipid.fag1.faTypes[FattyAcidType.NoType] && currentGlycerolipid.fag2.faTypes[FattyAcidType.NoType] && currentGlycerolipid.fag3.faTypes[FattyAcidType.NoType])
                     {
                         MessageBox.Show("No fatty acyl selected!", "Not registrable");
                         return LipidCategory.NoLipid;
@@ -2741,12 +2884,7 @@ namespace LipidCreator
                         MessageBox.Show("Third double bond content not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
                     }
-                    if (glHydroxyl3Textbox.BackColor == alertColor)
-                    {
-                        MessageBox.Show("Third hydroxyl content not valid!", "Not registrable");
-                        return LipidCategory.NoLipid;
-                    }
-                    if (((Glycerolipid)currentLipid).fag3.functionalGroupCounts == null)
+                    if (currentGlycerolipid.fag3.functionalGroupCounts == null)
                     {
                         MessageBox.Show("A functional group content in third fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
@@ -2758,9 +2896,10 @@ namespace LipidCreator
             
             else if (currentLipid is Phospholipid)
             {
-                if (((Phospholipid)currentLipid).isCL)
+                Phospholipid currentPhospholipid = (Phospholipid)currentLipid;
+                if (currentPhospholipid.isCL)
                 {
-                    if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.NoType] || ((Phospholipid)currentLipid).fag2.faTypes[FattyAcidType.NoType] || ((Phospholipid)currentLipid).fag3.faTypes[FattyAcidType.NoType])
+                    if (currentPhospholipid.fag1.faTypes[FattyAcidType.NoType] || currentPhospholipid.fag2.faTypes[FattyAcidType.NoType] || currentPhospholipid.fag3.faTypes[FattyAcidType.NoType])
                     {
                         MessageBox.Show("At least the top three fatty acyls must be selected!", "Not registrable");
                         return LipidCategory.NoLipid;
@@ -2805,25 +2944,25 @@ namespace LipidCreator
                     {
                         MessageBox.Show("Fourth double bond content not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
-                    }
-                    if (plHydroxyl1Textbox.BackColor == alertColor)
+                    }  
+                    if (currentPhospholipid.fag1.functionalGroupCounts == null)
                     {
-                        MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
+                        MessageBox.Show("A functional group content in first fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
-                    }
-                    if (plHydroxyl2Textbox.BackColor == alertColor)
+                    }   
+                    if (currentPhospholipid.fag2.functionalGroupCounts == null)
                     {
-                        MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
+                        MessageBox.Show("A functional group content in second fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
-                    }
-                    if (clHydroxyl3Textbox.BackColor == alertColor)
+                    }  
+                    if (currentPhospholipid.fag3.functionalGroupCounts == null)
                     {
-                        MessageBox.Show("Third hydroxyl content not valid!", "Not registrable");
+                        MessageBox.Show("A functional group content in third fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
-                    }
-                    if (clHydroxyl4Textbox.BackColor == alertColor)
+                    }  
+                    if (currentPhospholipid.fag4.functionalGroupCounts == null)
                     {
-                        MessageBox.Show("Fourth hydroxyl content not valid!", "Not registrable");
+                        MessageBox.Show("A functional group content in fourth fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
                     }
                 }
@@ -2836,10 +2975,10 @@ namespace LipidCreator
                     }
                     
                     
-                    if (((Phospholipid)currentLipid).isLyso)
+                    if (currentPhospholipid.isLyso)
                     {
                         bool hasOneHG = false;
-                        bool hasPlasmalogen = ((Phospholipid)currentLipid).hasPlasmalogen;
+                        bool hasPlasmalogen = currentPhospholipid.hasPlasmalogen;
                         foreach (string headgroup in currentLipid.headGroupNames)
                         {
                             bool plasmalogenEquivalent = !(lipidCreator.headgroups[headgroup].attributes.Contains("ether") ^ hasPlasmalogen);
@@ -2855,10 +2994,10 @@ namespace LipidCreator
                             return LipidCategory.NoLipid;                    
                         }
                     }
-                    else if (!((Phospholipid)currentLipid).isCL)
+                    else if (!currentPhospholipid.isCL)
                     {
                         bool hasOneHG = false;
-                        bool hasPlasmalogen = ((Phospholipid)currentLipid).hasPlasmalogen;
+                        bool hasPlasmalogen = currentPhospholipid.hasPlasmalogen;
                         foreach (string headgroup in currentLipid.headGroupNames)
                         {
                             bool plasmalogenEquivalent = !(lipidCreator.headgroups[headgroup].attributes.Contains("ether") ^ hasPlasmalogen);
@@ -2878,7 +3017,7 @@ namespace LipidCreator
                     
                     
                     
-                    if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.NoType])
+                    if (currentPhospholipid.fag1.faTypes[FattyAcidType.NoType])
                     {
                         MessageBox.Show("Please select at least the top fatty acyl!", "Not registrable");
                         return LipidCategory.NoLipid;
@@ -2895,14 +3034,14 @@ namespace LipidCreator
                         MessageBox.Show("First double bond content not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
                     }
-                    if (plHydroxyl1Textbox.BackColor == alertColor)
+                    if (currentPhospholipid.fag1.functionalGroupCounts == null)
                     {
-                        MessageBox.Show("First hydroxyl content not valid!", "Not registrable");
+                        MessageBox.Show("A functional group content in first fatty acid is not valid!", "Not registrable");
                         return LipidCategory.NoLipid;
                     }
                     
                     
-                    if (!((Phospholipid)currentLipid).isLyso)
+                    if (!currentPhospholipid.isLyso)
                     {
                         if (plFA2Textbox.BackColor == alertColor)
                         {
@@ -2915,13 +3054,12 @@ namespace LipidCreator
                             MessageBox.Show("Second double bond content not valid!", "Not registrable");
                             return LipidCategory.NoLipid;
                         }
-                    
-                        if (plHydroxyl2Textbox.BackColor == alertColor)
+                        
+                        if (currentPhospholipid.fag2.functionalGroupCounts == null)
                         {
-                            MessageBox.Show("Second hydroxyl content not valid!", "Not registrable");
+                            MessageBox.Show("A functional group content in second fatty acid is not valid!", "Not registrable");
                             return LipidCategory.NoLipid;
                         }
-                    
                     }
                     
                     
@@ -2931,9 +3069,9 @@ namespace LipidCreator
                     
                     
                     //
-                    if ((((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Plasmanyl] || ((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Plasmenyl]) && !((Phospholipid)currentLipid).isCL  && !((Phospholipid)currentLipid).hasPlasmalogen)
+                    if ((currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmanyl] || currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmenyl]) && !currentPhospholipid.isCL  && !currentPhospholipid.hasPlasmalogen)
                     {
-                        HashSet<string> supposedPLs = ((Phospholipid)currentLipid).isLyso ? new HashSet<string>(){"LPC", "LPE"} : new HashSet<string>(){"PC", "PE"};
+                        HashSet<string> supposedPLs = currentPhospholipid.isLyso ? new HashSet<string>(){"LPC", "LPE"} : new HashSet<string>(){"PC", "PE"};
                         
                         HashSet<string> selectedPLs = new HashSet<string>(currentLipid.headGroupNames);
                         
@@ -2942,7 +3080,7 @@ namespace LipidCreator
                             
                         bool regularWarn = regularPLs.Any();
                         bool specialWarn = specialPLs.Any();
-                        bool split = (regularWarn && specialWarn) || (specialWarn && ((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Ester]);
+                        bool split = (regularWarn && specialWarn) || (specialWarn && currentPhospholipid.fag1.faTypes[FattyAcidType.Ester]);
                         
                         if (regularWarn || specialWarn)
                         {
@@ -2955,17 +3093,17 @@ namespace LipidCreator
                                 List<string> HGs = new List<string>(); 
                                 foreach (string hg in specialPLs)
                                 {
-                                    if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Plasmenyl]) HGs.Add(hg + " P");
-                                    if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Plasmanyl]) HGs.Add(hg + " O");
+                                    if (currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmenyl]) HGs.Add(hg + " P");
+                                    if (currentPhospholipid.fag1.faTypes[FattyAcidType.Plasmanyl]) HGs.Add(hg + " O");
                                 }
                                 
                                 if (split && regularWarn)
                                 {
-                                    Phospholipid newLipid = new Phospholipid((Phospholipid)currentLipid);
+                                    Phospholipid newLipid = new Phospholipid(currentPhospholipid);
                                     Phospholipid pureLipid = null;
-                                    if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Ester])
+                                    if (currentPhospholipid.fag1.faTypes[FattyAcidType.Ester])
                                     {
-                                        pureLipid = new Phospholipid((Phospholipid)currentLipid);
+                                        pureLipid = new Phospholipid(currentPhospholipid);
                                         pureLipid.headGroupNames.Clear();
                                         pureLipid.fag1.faTypes[FattyAcidType.Ester] = true;
                                         pureLipid.fag1.faTypes[FattyAcidType.Plasmanyl] = false;
@@ -2985,7 +3123,7 @@ namespace LipidCreator
                                         lipidCreator.registeredLipids.Add(lipidHash);
                                         registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(newLipid));
                                         
-                                        if (((Phospholipid)currentLipid).fag1.faTypes[FattyAcidType.Ester])
+                                        if (currentPhospholipid.fag1.faTypes[FattyAcidType.Ester])
                                         {
                                             lipidHash = pureLipid.getHashCode();
                                             lipidCreator.registeredLipidDictionary.Add(lipidHash, pureLipid);
@@ -3004,7 +3142,7 @@ namespace LipidCreator
                                 }
                                 else if (split && !regularWarn)
                                 {
-                                    Phospholipid newLipid = new Phospholipid((Phospholipid)currentLipid);
+                                    Phospholipid newLipid = new Phospholipid(currentPhospholipid);
                                     plFA1Checkbox1.Checked = true;
                                     plFA1Checkbox2.Checked = false;
                                     plFA1Checkbox3.Checked = false;
@@ -3326,6 +3464,7 @@ namespace LipidCreator
         
         
         
+        
         public DataRow createLipidsGridviewRow(Lipid currentRegisteredLipid)
         {
             DataRow row = registeredLipidsDatatable.NewRow();
@@ -3339,24 +3478,24 @@ namespace LipidCreator
                 {
                     row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
                     headGroupNames.AddRange(currentGlycerolipid.headGroupNames);
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
                 }
                 else if (!currentGlycerolipid.fag3.faTypes[FattyAcidType.NoType])
                 {
-                    row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + "; OH: " + currentGlycerolipid.fag3.hydroxylInfo;
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                    row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + currentGlycerolipid.fag3.functionalGroupsInfo();
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
                     headGroupNames.Add("TG");
                 }
                 else if (!currentGlycerolipid.fag2.faTypes[FattyAcidType.NoType])
                 {
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + "; OH: " + currentGlycerolipid.fag2.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
                     headGroupNames.Add("DG"); 
                 }
                 else
                 {
                     headGroupNames.Add("MG");
                 }
-                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + "; OH: " + currentGlycerolipid.fag1.hydroxylInfo;
+                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + currentGlycerolipid.fag1.functionalGroupsInfo();
             }
             else if (currentRegisteredLipid is Phospholipid)
             {
@@ -3364,10 +3503,10 @@ namespace LipidCreator
                 if (currentPhospholipid.isCL)
                 {
                     row["Category"] = "Cardiolipin";
-                    row["Building Block 1"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + "; OH: " + currentPhospholipid.fag1.hydroxylInfo;
-                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
-                    row["Building Block 3"] = FARepresentation(currentPhospholipid.fag3) + currentPhospholipid.fag3.lengthInfo + "; DB: " + currentPhospholipid.fag3.dbInfo + "; OH: " + currentPhospholipid.fag3.hydroxylInfo;
-                    if (!currentPhospholipid.fag4.faTypes[FattyAcidType.NoType]) row["Building Block 4"] = FARepresentation(currentPhospholipid.fag4) + currentPhospholipid.fag4.lengthInfo + "; DB: " + currentPhospholipid.fag4.dbInfo + "; OH: " + currentPhospholipid.fag4.hydroxylInfo;
+                    row["Building Block 1"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + currentPhospholipid.fag1.functionalGroupsInfo();
+                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + currentPhospholipid.fag2.functionalGroupsInfo();
+                    row["Building Block 3"] = FARepresentation(currentPhospholipid.fag3) + currentPhospholipid.fag3.lengthInfo + "; DB: " + currentPhospholipid.fag3.dbInfo + currentPhospholipid.fag3.functionalGroupsInfo();
+                    if (!currentPhospholipid.fag4.faTypes[FattyAcidType.NoType]) row["Building Block 4"] = FARepresentation(currentPhospholipid.fag4) + currentPhospholipid.fag4.lengthInfo + "; DB: " + currentPhospholipid.fag4.dbInfo + currentPhospholipid.fag4.functionalGroupsInfo();
                     headGroupNames.Add("CL");
                 }
                 else
@@ -3375,8 +3514,8 @@ namespace LipidCreator
                     row["Category"] = "Glycerophospholipid";
                     headGroupNames.AddRange(currentPhospholipid.headGroupNames);
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPhospholipid.headGroupNames);
-                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + "; OH: " + currentPhospholipid.fag1.hydroxylInfo;
-                    if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + "; OH: " + currentPhospholipid.fag2.hydroxylInfo;
+                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + currentPhospholipid.fag1.functionalGroupsInfo();
+                    if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + currentPhospholipid.fag2.functionalGroupsInfo();
                 }
             }
             else if (currentRegisteredLipid is Sphingolipid)

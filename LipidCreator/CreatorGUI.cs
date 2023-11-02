@@ -736,7 +736,7 @@ namespace LipidCreator
             if (hoveredViews.Count > 0)
             {
                 expandedView = hoveredViews[0];
-                expandedView.Height = 100;
+                expandedView.Height = 80;
                 expandedView.BringToFront();
                 expandedView.Update();
             }
@@ -1431,8 +1431,7 @@ namespace LipidCreator
                     slLCBTextbox.Text = currentSphingolipid.lcb.lengthInfo;
                     slDB2Textbox.Text = currentSphingolipid.lcb.dbInfo;
                     slLCBCombobox.SelectedIndex = currentSphingolipid.lcb.chainType;
-                    slLCBHydroxyCombobox.SelectedIndex = currentSphingolipid.lcb.hydroxylCounts.First() - 2;
-                    if (!currentSphingolipid.isLyso) slFAHydroxyCombobox.SelectedIndex = currentSphingolipid.fag.hydroxylCounts.First();
+                    slFAFuncGroups.DataSource = currentSphingolipid.fag.functionalGroups;
                     
                     slFATextbox.Text = currentSphingolipid.fag.lengthInfo;
                     slDB1Textbox.Text = currentSphingolipid.fag.dbInfo;
@@ -1451,6 +1450,7 @@ namespace LipidCreator
                     updateRanges(currentSphingolipid.lcb, slDB2Textbox, 3);
                     updateRanges(currentSphingolipid.fag, slFATextbox, slFACombobox.SelectedIndex);
                     updateRanges(currentSphingolipid.fag, slDB1Textbox, 3);
+                    updateFunctionalGroupGridView(currentSphingolipid.fag, slFAFuncGroups);
                     slPictureBox.SendToBack();
                     break;
                     
@@ -1479,11 +1479,11 @@ namespace LipidCreator
                     
                     stFATextbox.Text = currentSTLipid.fag.lengthInfo;
                     stDBTextbox.Text = currentSTLipid.fag.dbInfo;
-                    stHydroxylTextbox.Text = currentSTLipid.fag.hydroxylInfo;
+                    stFAFuncGroups.DataSource = currentSTLipid.fag.functionalGroups;
                     stFACombobox.SelectedIndex = currentSTLipid.fag.chainType;
                     updateRanges(currentSTLipid.fag, stFATextbox, stFACombobox.SelectedIndex);
                     updateRanges(currentSTLipid.fag, stDBTextbox, 3);
-                    updateRanges(currentSTLipid.fag, stHydroxylTextbox, 4);
+                    updateFunctionalGroupGridView(currentSTLipid.fag, stFAFuncGroups);
                     break;
                     
                     
@@ -2605,9 +2605,8 @@ namespace LipidCreator
                 slFACombobox.Visible = false;
                 slFATextbox.Visible = false;
                 slDB1Textbox.Visible = false;
-                slFAHydroxyCombobox.Visible = false;
+                slFAFuncGroups.Visible = false;
                 slDB1Label.Visible = false;
-                slFAHydroxyLabel.Visible = false;
             }
             else
             {
@@ -2619,9 +2618,8 @@ namespace LipidCreator
                 slFACombobox.Visible = true;
                 slFATextbox.Visible = true;
                 slDB1Textbox.Visible = true;
-                slFAHydroxyCombobox.Visible = true;
+                slFAFuncGroups.Visible = true;
                 slDB1Label.Visible = true;
-                slFAHydroxyLabel.Visible = true;
             }
             
             slHgList.Sort();
@@ -2696,8 +2694,7 @@ namespace LipidCreator
             stFATextbox.Visible = ((Sterol)currentLipid).containsEster;
             stDBTextbox.Visible = ((Sterol)currentLipid).containsEster;
             stDBLabel.Visible = ((Sterol)currentLipid).containsEster;
-            stHydroxylTextbox.Visible = ((Sterol)currentLipid).containsEster;
-            stFAHydroxyLabel.Visible = ((Sterol)currentLipid).containsEster;
+            stFAFuncGroups.Visible = ((Sterol)currentLipid).containsEster;
         }
         
         
@@ -3188,9 +3185,10 @@ namespace LipidCreator
             else if (currentLipid is Sphingolipid)
             {
                 bool hasOneHG = false;
+                Sphingolipid currentSphingolipid = (Sphingolipid)currentLipid;
                 foreach (string headgroup in currentLipid.headGroupNames)
                 {
-                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("lyso") ^ ((Sphingolipid)currentLipid).isLyso) )
+                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("lyso") ^ currentSphingolipid.isLyso) )
                     {
                         hasOneHG = true;
                         break;
@@ -3222,16 +3220,22 @@ namespace LipidCreator
                     MessageBox.Show("LCB double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
+                if (currentSphingolipid.fag.functionalGroupCounts == null)
+                {
+                    MessageBox.Show("A functional group content in fatty acid is not valid!", "Not registrable");
+                    return LipidCategory.NoLipid;
+                }
                 return LipidCategory.Sphingolipid;
             }
             
             
             else if (currentLipid is Sterol)
             {
+                Sterol currentSTLipid = (Sterol)currentLipid;
                 bool hasOneHG = false;
                 foreach (string headgroup in currentLipid.headGroupNames)
                 {
-                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("ester") ^ ((Sterol)currentLipid).containsEster) )
+                    if ( !(lipidCreator.headgroups[headgroup].attributes.Contains("ester") ^ currentSTLipid.containsEster) )
                     {
                         hasOneHG = true;
                         break;
@@ -3252,9 +3256,9 @@ namespace LipidCreator
                     MessageBox.Show("FA double bond content not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
-                if (stIsEster.Checked && stHydroxylTextbox.BackColor == alertColor)
+                if (stIsEster.Checked && currentSTLipid.fag.functionalGroupCounts == null)
                 {
-                    MessageBox.Show("Hydroxyl content not valid!", "Not registrable");
+                    MessageBox.Show("A functional group content in fatty acid is not valid!", "Not registrable");
                     return LipidCategory.NoLipid;
                 }
                 return LipidCategory.Sterollipid;
@@ -3525,7 +3529,7 @@ namespace LipidCreator
                 headGroupNames.AddRange(currentSphingolipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
                 row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
-                if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + "; OH: " + currentSphingolipid.fag.hydroxylCounts.First();
+                if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + currentSphingolipid.fag.functionalGroupsInfo();
             }
             
             else if (currentRegisteredLipid is Sterol)
@@ -3535,7 +3539,7 @@ namespace LipidCreator
                 headGroupNames.AddRange(currentSTLipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSTLipid.headGroupNames);
 
-                if (currentSTLipid.containsEster) row["Building Block 2"] = FARepresentation(currentSTLipid.fag) + currentSTLipid.fag.lengthInfo + "; DB: " + currentSTLipid.fag.dbInfo + "; OH: " + currentSTLipid.fag.hydroxylInfo;
+                if (currentSTLipid.containsEster) row["Building Block 2"] = FARepresentation(currentSTLipid.fag) + currentSTLipid.fag.lengthInfo + "; DB: " + currentSTLipid.fag.dbInfo + currentSTLipid.fag.functionalGroupsInfo();
             }
             
             else if (currentRegisteredLipid is Mediator)

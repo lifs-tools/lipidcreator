@@ -736,8 +736,6 @@ namespace LipidCreator
         public TextBox slDB2Textbox;
         [NonSerialized]
         public TextBox stDBTextbox;
-        [NonSerialized]
-        public TextBox stHydroxylTextbox;
 
         [NonSerialized]
         public GroupBox plTypeGroup;
@@ -784,10 +782,6 @@ namespace LipidCreator
         Label stDBLabel;
         [NonSerialized]
         Label slLCBHydroxyLabel;
-        [NonSerialized]
-        Label slFAHydroxyLabel;
-        [NonSerialized]
-        Label stFAHydroxyLabel;
         
         
         [NonSerialized]
@@ -864,8 +858,6 @@ namespace LipidCreator
 
         [NonSerialized]
         public ComboBox slLCBHydroxyCombobox;
-        [NonSerialized]
-        public ComboBox slFAHydroxyCombobox;
 
         [NonSerialized]
         ToolTip toolTip;
@@ -895,6 +887,10 @@ namespace LipidCreator
         public DataGridView plFA3FuncGroups;
         [NonSerialized]
         public DataGridView plFA4FuncGroups;
+        [NonSerialized]
+        public DataGridView slFAFuncGroups;
+        [NonSerialized]
+        public DataGridView stFAFuncGroups;
         
         
         
@@ -1363,7 +1359,6 @@ namespace LipidCreator
             slDB2Label = new Label();
             slHGLabel = new Label();
             slLCBHydroxyLabel = new Label();
-            slFAHydroxyLabel = new Label();
             easterText = new Label();
             stFACombobox = new ComboBox();
             stFACombobox.Items.Add("Fatty acyl chain");
@@ -1372,8 +1367,6 @@ namespace LipidCreator
             stFATextbox = new TextBox();
             stDBLabel = new Label();
             stDBTextbox = new TextBox();
-            stHydroxylTextbox = new TextBox();
-            stFAHydroxyLabel = new Label();
             homeText = new Label();
             homeText3 = new Label();
 
@@ -1433,6 +1426,8 @@ namespace LipidCreator
             plFA2FuncGroups = new DataGridView();
             plFA3FuncGroups = new DataGridView();
             plFA4FuncGroups = new DataGridView();
+            slFAFuncGroups = new DataGridView();
+            stFAFuncGroups = new DataGridView();
             
             glStep1 = new GroupBox();
             plStep1 = new GroupBox();
@@ -1480,20 +1475,7 @@ namespace LipidCreator
             slLCBHydroxyCombobox.Items.Add("2");
             slLCBHydroxyCombobox.Items.Add("3");
             
-            slFAHydroxyCombobox = new ComboBox();
-            slFAHydroxyCombobox.Items.Add("0");
-            slFAHydroxyCombobox.Items.Add("1");
-            slFAHydroxyCombobox.Items.Add("2");
-            slFAHydroxyCombobox.Items.Add("3");
-
-
-
             toolTip = new ToolTip();
-            
-            
-            
-            
-
             string formattingFA = "Comma seperated single entries or intervals. Example formatting: 2, 3, 5-6, 13-20";
             string formattingDB = "Comma seperated single entries or intervals. Example formatting: 2, 3-4, 6";
             string formattingHydroxyl = "Comma seperated single entries or intervals. Example formatting: 0-2, 4";
@@ -2151,8 +2133,7 @@ namespace LipidCreator
             slStep1.Controls.Add(slHGLabel);
             slStep1.Controls.Add(slHgListbox);
             slStep1.Controls.Add(slLCBHydroxyCombobox);
-            slStep1.Controls.Add(slFAHydroxyCombobox);
-            slStep1.Controls.Add(slFAHydroxyLabel);
+            slStep1.Controls.Add(slFAFuncGroups);
             slStep1.Controls.Add(slLCBHydroxyLabel);
             slStep1.Controls.Add(slPositiveAdduct);
             slStep1.Controls.Add(slNegativeAdduct);
@@ -2208,19 +2189,14 @@ namespace LipidCreator
             slDB1Label.Location = new Point(slDB1Textbox.Left, slDB1Textbox.Top - sep);
             slDB1Label.Width = dbLength;
             slDB1Label.Text = dbText;
-            slFAHydroxyCombobox.Location = new Point(slDB1Textbox.Left + slDB1Textbox.Width + sep, slDB1Textbox.Top);
-            slFAHydroxyCombobox.SelectedItem = "2";
-            slFAHydroxyCombobox.Width = dbLength;
-            slFAHydroxyCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slFAHydroxyCombobox.SelectedIndexChanged += new EventHandler(slFAHydroxyComboboxValueChanged);
-            slFAHydroxyLabel.Location = new Point(slFAHydroxyCombobox.Left, slFAHydroxyCombobox.Top - sep);
-            slFAHydroxyLabel.Text = hydroxylText;
+            setupFGDataGridView(slFAFuncGroups, slDB1Textbox.Left + sep + dbLength, slFACombobox.Top, 3);
+            toolTip.SetToolTip(slFAFuncGroups, formattingHydroxyl);
 
 
             slLCBCombobox.BringToFront();
             slLCBTextbox.BringToFront();
             slLCBHydroxyCombobox.BringToFront();
-            slFAHydroxyCombobox.BringToFront();
+            slFAFuncGroups.BringToFront();
             slLCBTextbox.Location = new Point(294, 158);
             slLCBTextbox.Width = faLength;
             slLCBTextbox.Text = "14, 16-18, 22";
@@ -2321,8 +2297,7 @@ namespace LipidCreator
             stStep1.Controls.Add(stDBTextbox);
             stStep1.Controls.Add(stTypeGroup);
             stStep1.Controls.Add(stDBLabel);
-            stStep1.Controls.Add(stHydroxylTextbox);
-            stStep1.Controls.Add(stFAHydroxyLabel);
+            stStep1.Controls.Add(stFAFuncGroups);
             stStep1.Controls.Add(stPictureBox);
             stStep1.Controls.Add(stHgListbox);
             
@@ -2390,7 +2365,7 @@ namespace LipidCreator
             
             stFACombobox.BringToFront();
             stFATextbox.BringToFront();
-            stFATextbox.Location = new Point(574, 270);
+            stFATextbox.Location = new Point(574, 240);
             stFATextbox.Width = faLength;
             stFATextbox.Text = "2, 5, 17-19";
             stFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, FattyAcidType.Ester )); };
@@ -2408,19 +2383,14 @@ namespace LipidCreator
             stDBLabel.Location = new Point(stDBTextbox.Left, stDBTextbox.Top - sep);
             stDBLabel.Width = dbLength;
             stDBLabel.Text = dbText;
-            stHydroxylTextbox.Width = dbLength;
-            stHydroxylTextbox.Location = new Point(stDBTextbox.Left + stDBTextbox.Width + sep, stDBTextbox.Top);
-            stHydroxylTextbox.TextChanged += delegate(object s, EventArgs e){ updateHydroxyl(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, FattyAcidType.Ester )); };
-            toolTip.SetToolTip(stHydroxylTextbox, formattingHydroxyl);
-            stFAHydroxyLabel.Location = new Point(stHydroxylTextbox.Left, stHydroxylTextbox.Top - sep);
-            stFAHydroxyLabel.Text = hydroxylText;
+            setupFGDataGridView(stFAFuncGroups, stDBTextbox.Left + sep + dbLength, stFACombobox.Top, 4);
+            toolTip.SetToolTip(stFAFuncGroups, formattingHydroxyl);
             
             stFACombobox.Visible = false;
             stFATextbox.Visible = false;
             stDBTextbox.Visible = false;
             stDBLabel.Visible = false;
-            stHydroxylTextbox.Visible = false;
-            stFAHydroxyLabel.Visible = false;
+            stFAFuncGroups.Visible = false;
             
             
             
@@ -2433,7 +2403,7 @@ namespace LipidCreator
             stHgListbox.SelectedValueChanged += new System.EventHandler(stHGListboxSelectedValueChanged);
             stHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(stHGListboxMouseHover);
             stHgListbox.KeyDown += ListboxSelectAll;
-            stPictureBox.Location = new Point(110, 40);
+            stPictureBox.Location = new Point(110, 12);
             if (!lipidCreatorInitError && stHgListbox.Items.Count > 0)
             {
                 stPictureBox.Image = Image.FromFile(lipidCreator.headgroups[stHgListbox.Items[0].ToString()].pathToBackboneImage);

@@ -165,9 +165,7 @@ namespace LipidCreator
                 {
                     foreach (string headgroup in headGroupNames)
                     {
-                        string key = "/" + Lipid.FAPrefix[fa.fattyAcidType];
-                        key += Convert.ToString(fa.length) + ":" + Convert.ToString(fa.db);
-                        if (fa.hydroxyl > 0) key += ";" + Convert.ToString(fa.hydroxyl);
+                        string key = "/" + Lipid.FAPrefix[fa.fattyAcidType] + fa.ToString();
                         
                         // goslin
                         csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, new List<FattyAcid>{fa});

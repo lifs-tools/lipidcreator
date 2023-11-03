@@ -282,9 +282,11 @@ namespace LipidCreator
             Dictionary<int, FattyAcidAssembly> fatty_acids_o = new Dictionary<int, FattyAcidAssembly>();
             Dictionary<int, FattyAcidAssembly> long_chain_bases = new Dictionary<int, FattyAcidAssembly>();
             
+            int max_num_fa = 30;
+            
             for (int fa = 1; fa <= 4; ++fa)
             {
-                for (int c = 2 * fa; c <= 30 * fa; c++)
+                for (int c = 2 * fa; c <= max_num_fa * fa; c++)
                 {
                     for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
                     {
@@ -299,7 +301,7 @@ namespace LipidCreator
             
             for (int fa = 1; fa <= 2; ++fa)
             {
-                for (int c = 2 * fa; c <= 30 * fa; c++)
+                for (int c = 2 * fa; c <= max_num_fa * fa; c++)
                 {
                     for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
                     {
@@ -314,7 +316,7 @@ namespace LipidCreator
             
             for (int fa = 1; fa <= 2; ++fa)
             {
-                for (int c = 2 * fa; c <= 30 * fa; c++)
+                for (int c = 2 * fa; c <= max_num_fa * fa; c++)
                 {
                     for (int db = 0; db <= Math.Min(((c - 1) >> 1), 6 * fa); ++db)
                     {
@@ -697,22 +699,70 @@ namespace LipidCreator
         
         
         
+        public void functionalGroupPrepareContextMenu(object sender, MouseEventArgs e)
+        {
+            if (e.Button != System.Windows.Forms.MouseButtons.Right) return;
+            FunctionalGroupDataGridView view = sender as FunctionalGroupDataGridView;
+            ContextMenu cm = view.ContextMenu;
+            cm.MenuItems[1].Enabled = view.SelectedRows.Count > 0;
+            
+            switch (LipidCreator.LC_OS)
+            {
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.WinCE:
+                    view.ContextMenu.Show(view, new Point(e.X, e.Y) );
+                    break;
+                    
+                default: break;
+            }            
+        }
+        
+        
+        
         public void addFunctionalGroup(Object sender, EventArgs e)
         {
-            FunctionalGroupDataGridView view = ((FMenuItem)sender).view;
+            
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem == null) return;
+            
+            ContextMenu menu = menuItem.GetContextMenu();
+            FunctionalGroupDataGridView view = (FunctionalGroupDataGridView)menu.SourceControl;
+            
             DataTable dt = (DataTable)(view.DataSource);
             DataRow dr = dt.NewRow();
             dr[0] = Lipid.FUNCTIONAL_GROUP_NAMES[0];
             dr[1] = "0-1";
             dt.Rows.Add(dr);
             view.trigger();
-            
         }
         
         
         
         
-        public void gmh_TheMouseMoved()
+        public void removeFunctionalGroup(Object sender, EventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem == null) return;
+            
+            ContextMenu menu = menuItem.GetContextMenu();
+            FunctionalGroupDataGridView view = (FunctionalGroupDataGridView)menu.SourceControl;
+            
+            var dt = view.DataSource as DataTable;
+            List<int> selRows = new List<int>();
+            foreach (DataGridViewRow row in view.SelectedRows) selRows.Add(row.Index);
+            //view.DataSource = null;
+            
+            for (int i = selRows.Count - 1; i >= 0; --i) dt.Rows.RemoveAt(selRows[i]);
+            //view.DataSource = dt;
+            view.trigger();
+        }
+        
+        
+        
+        
+        public void detectFunctionalGroupsHover()
         {
             Point cur_pos = Cursor.Position;
             List<FunctionalGroupDataGridView> hoveredViews = new List<FunctionalGroupDataGridView>();
@@ -743,24 +793,6 @@ namespace LipidCreator
                 expandedView.BringToFront();
                 expandedView.Update();
             }
-        }
-        
-        
-        
-        
-        public void removeFunctionalGroup(Object sender, EventArgs e)
-        {
-            
-            FunctionalGroupDataGridView view = ((FMenuItem)sender).view;
-            var dt = view.DataSource as DataTable;
-
-            List<int> selRows = new List<int>();
-            foreach (DataGridViewRow row in view.SelectedRows) selRows.Add(row.Index);
-            view.DataSource = null;
-            
-            for (int i = selRows.Count - 1; i >= 0; --i) dt.Rows.RemoveAt(selRows[i]);
-            view.DataSource = dt;
-            view.trigger();
         }
         
         
@@ -1641,15 +1673,14 @@ namespace LipidCreator
         
         
         
-        
-        
-        
-        
         private void homeText3LinkClicked(Object sender, EventArgs e)
         {
             string url = "https://www.nature.com/articles/s41467-020-15960-z";
             new CrossPlatform().OpenUri(url);
         }
+        
+        
+        
         
         
         
@@ -1683,39 +1714,39 @@ namespace LipidCreator
         
         
         
-        public void updateCarbon(Object sender, FattyAcidEventArgs e)
+        public void updateCarbon(Object sender, FattyAcidGroup fag)
         {
-            e.fag.lengthInfo = ((TextBox)sender).Text;
-            updateRanges(e.fag, (TextBox)sender, e.fag.chainType, e.fag.isLCB);
+            fag.lengthInfo = ((TextBox)sender).Text;
+            updateRanges(fag, (TextBox)sender, fag.chainType, fag.isLCB);
         }
         
         
         
         
         
-        public void updateDB(Object sender, FattyAcidEventArgs e)
+        public void updateDB(Object sender, FattyAcidGroup fag)
         {
-            e.fag.dbInfo = ((TextBox)sender).Text;
-            updateRanges(e.fag, (TextBox)sender, 3);
+            fag.dbInfo = ((TextBox)sender).Text;
+            updateRanges(fag, (TextBox)sender, 3);
         }
         
         
         
         
         
-        public void updateHydroxyl(Object sender, FattyAcidEventArgs e)
+        public void updateHydroxyl(Object sender, FattyAcidGroup fag)
         {
-            e.fag.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(e.fag, (TextBox)sender, 4);
+            fag.hydroxylInfo = ((TextBox)sender).Text;
+            updateRanges(fag, (TextBox)sender, 4);
         }
         
         
         
         
-        public void updateOddEven(Object sender, FattyAcidEventArgs e)
+        public void updateOddEven(Object sender, FattyAcidGroup fag, TextBox textbox)
         {
-            e.fag.chainType = ((ComboBox)sender).SelectedIndex;
-            updateRanges(e.fag, e.textbox, e.fag.chainType);
+            fag.chainType = ((ComboBox)sender).SelectedIndex;
+            updateRanges(fag, textbox, fag.chainType);
         }
         
         
@@ -1724,11 +1755,11 @@ namespace LipidCreator
         
         
         
-        public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidEventArgs e)
+        public void FattyAcidCheckboxCheckChanged(Object sender, FattyAcidGroup fag, FattyAcidType fType)
         {
-            if (sender == null || e.fag == null) return;
-            e.fag.faTypes[e.fType] = ((CheckBox)sender).Checked;
-            e.fag.faTypes[FattyAcidType.NoType] = !e.fag.anyFAChecked();
+            if (sender == null || fag == null) return;
+            fag.faTypes[fType] = ((CheckBox)sender).Checked;
+            fag.faTypes[FattyAcidType.NoType] = !fag.anyFAChecked();
         }
         
         

@@ -300,10 +300,10 @@ namespace LipidCreator
                             currFAG.chainType = repFAG.chainType;
                             
                             
-                            creatorGUI.updateCarbon(faTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
-                            creatorGUI.updateOddEven(faCombobox, new FattyAcidEventArgs(currFAG, faTextbox ));
-                            creatorGUI.updateDB(dbTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
-                            creatorGUI.updateHydroxyl(hydroxylTextbox, new FattyAcidEventArgs(currFAG, FattyAcidType.Ester ));
+                            creatorGUI.updateCarbon(faTextbox, currFAG);
+                            creatorGUI.updateOddEven(faCombobox, currFAG, faTextbox);
+                            creatorGUI.updateDB(dbTextbox, currFAG);
+                            creatorGUI.updateHydroxyl(hydroxylTextbox, currFAG);
                             
                         }
                     }

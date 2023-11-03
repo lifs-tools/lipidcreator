@@ -121,17 +121,6 @@ namespace LipidCreator
     }
     
     
-    
-    public class FMenuItem : MenuItem
-    {
-        public FunctionalGroupDataGridView view;
-        public FMenuItem(string s, EventHandler e, FunctionalGroupDataGridView v) : base(s, e)
-        {
-            view = v;
-        }
-    }
-    
-    
     public class TutorialWindow : Control
     {
         public Tutorial tutorial;
@@ -292,41 +281,6 @@ namespace LipidCreator
         {
             adduct = _adduct;
             lipid = _lipid;
-        }
-    }
-    
-    
-    
-    public class FattyAcidEventArgs : EventArgs
-    {
-        public FattyAcidGroup fag;
-        public FattyAcidType fType;
-        public TextBox textbox;
-        
-        public FattyAcidEventArgs(FattyAcidGroup _fag, FattyAcidType _fType) : base()
-        {
-            fag = _fag;
-            fType = _fType;
-            textbox = null;
-        }
-        
-        public FattyAcidEventArgs(FattyAcidGroup _fag, TextBox _textbox) : base()
-        {
-            fag = _fag;
-            fType = FattyAcidType.Ester;
-            textbox = _textbox;
-        }
-    }
-    
-    
-    
-    public class ImageEventArgs : EventArgs
-    {
-        public Image image;
-        
-        public ImageEventArgs(Image _image) : base()
-        {
-            image = _image;
         }
     }
     
@@ -966,7 +920,7 @@ namespace LipidCreator
             rangeCol.SortMode = DataGridViewColumnSortMode.NotSortable;
             
             view.Location = new Point(left, top);
-            view.Size = new Size(180, 40);
+            view.Size = new Size(190, 40);
             view.BringToFront();
             view.Columns.AddRange(funcGroupCol, rangeCol);
             view.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -980,16 +934,34 @@ namespace LipidCreator
             view.ScrollBars = ScrollBars.Vertical;
             view.DefaultCellStyle.Font = new Font("Arial", 8);
             view.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            view.RowHeadersDefaultCellStyle.SelectionBackColor = Color.Empty;
             view.EnableHeadersVisualStyles = false;
             view.ColumnHeadersHeight = 20;
             view.DataBindingComplete += functionalGroupComplete;
             view.CellValueChanged += functionalGroupCellValueChanged;
+            view.CurrentCellDirtyStateChanged += delegate(object sender, EventArgs e) {
+                DataGridView dgv = sender as DataGridView;
+                if (dgv.CurrentCell is DataGridViewComboBoxCell)
+                {
+                    dgv.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    dgv.EndEdit();
+                }
+            };
+            view.DoubleClick += delegate(object sender, EventArgs e){
+                Console.WriteLine("huhu");
+            };
+
             functionalGroupGridViews[tabIndex].Add(view);
             view.BackgroundColor = Color.FromArgb(245, 245, 245);
+            view.MouseClick += functionalGroupPrepareContextMenu;
+            
+            view.DefaultCellStyle.SelectionBackColor = Color.FromArgb(215, 236, 250);
+            view.DefaultCellStyle.SelectionForeColor = Color.FromArgb(0, 0, 0);
+            view.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(245, 245, 245);
             
             ContextMenu cm = new ContextMenu();
-            cm.MenuItems.Add(new FMenuItem("Add functional group", new EventHandler(addFunctionalGroup), view));
-            cm.MenuItems.Add(new FMenuItem("Remove functional group", new EventHandler(removeFunctionalGroup), view));
+            cm.MenuItems.Add(new MenuItem("Add functional group", new EventHandler(addFunctionalGroup)));
+            cm.MenuItems.Add(new MenuItem("Remove functional group", new EventHandler(removeFunctionalGroup)));
             view.ContextMenu = cm;
         }
         
@@ -1023,7 +995,7 @@ namespace LipidCreator
             this.Text = "LipidCreator";
             
             GlobalMouseHandler gmh = new GlobalMouseHandler();
-            gmh.TheMouseMoved += new MouseMovedEvent(gmh_TheMouseMoved);
+            gmh.TheMouseMoved += new MouseMovedEvent(detectFunctionalGroupsHover);
             Application.AddMessageFilter(gmh);
             
             this.timerEasterEgg = new System.Timers.Timer(15);
@@ -1511,7 +1483,7 @@ namespace LipidCreator
             Font tabFont = new Font(tabControl.Font.FontFamily, (REGULAR_FONT_SIZE + 5) * FONT_SIZE_FACTOR);
             tabControl.Font = tabFont;
             tabControl.Selecting += new TabControlCancelEventHandler(tabIndexChanged);
-            tabControl.ItemSize = new Size(148, 50);
+            tabControl.ItemSize = new Size(147, 50);
             tabControl.SizeMode = TabSizeMode.Fixed;
             tabControl.AutoSize = false;
             
@@ -1558,15 +1530,15 @@ namespace LipidCreator
             plFA3Textbox.BringToFront();
             plFA3Textbox.Location = new Point(440, 256);
             plFA3Textbox.Width = faLength;
-            plFA3Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            plFA3Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Phospholipid)currentLipid).fag3); };
             toolTip.SetToolTip(plFA3Textbox, formattingFA);
             plFA3Combobox.Location = new Point(plFA3Textbox.Left, plFA3Textbox.Top - sepText);
             plFA3Combobox.Width = faLength;
             plFA3Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            plFA3Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, plFA3Textbox )); };
+            plFA3Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Phospholipid)currentLipid).fag3, plFA3Textbox); };
             plDB3Textbox.Location = new Point(plFA3Textbox.Left + plFA3Textbox.Width + sep, plFA3Textbox.Top);
             plDB3Textbox.Width = dbLength;
-            plDB3Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            plDB3Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Phospholipid)currentLipid).fag3); };
             toolTip.SetToolTip(plDB3Textbox, formattingDB);
             plDB3Label.Location = new Point(plDB3Textbox.Left, plDB3Textbox.Top - sep);
             plDB3Label.Width = dbLength;
@@ -1577,19 +1549,19 @@ namespace LipidCreator
 
             plFA3Checkbox3.Location = new Point(plFA3Textbox.Left + 90, plFA3Textbox.Top + plFA3Textbox.Height);
             plFA3Checkbox3.Text = "FA O";
-            plFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Plasmanyl )); };
+            plFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag3, FattyAcidType.Plasmanyl); };
             plFA3Checkbox3.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = cardioBackboneImage; };
             plFA3Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = cardioBackboneImageFA3e; };
             plFA3Checkbox2.Location = new Point(plFA3Textbox.Left + 40, plFA3Textbox.Top + plFA3Textbox.Height);
             plFA3Checkbox2.Text = "FA P";
             toolTip.SetToolTip(plFA3Checkbox2, FApInformation);
-            plFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Plasmenyl )); };
+            plFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag3, FattyAcidType.Plasmenyl); };
             plFA3Checkbox2.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = cardioBackboneImage; };
             plFA3Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = cardioBackboneImageFA3p; };
             plFA3Checkbox1.Location = new Point(plFA3Textbox.Left, plFA3Textbox.Top + plFA3Textbox.Height);
             plFA3Checkbox1.Text = "FA";
             plFA3Checkbox1.Checked = true;
-            plFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            plFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag3, FattyAcidType.Ester); };
 
 
 
@@ -1598,15 +1570,15 @@ namespace LipidCreator
             plFA4Textbox.BringToFront();
             plFA4Textbox.Location = new Point(352, 336);
             plFA4Textbox.Width = faLength;
-            plFA4Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Ester )); };
+            plFA4Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Phospholipid)currentLipid).fag4); };
             toolTip.SetToolTip(plFA4Textbox, formattingFA);
             plFA4Combobox.Location = new Point(plFA4Textbox.Left, plFA4Textbox.Top - sepText);
             plFA4Combobox.Width = faLength;
             plFA4Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            plFA4Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, plFA4Textbox )); };
+            plFA4Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Phospholipid)currentLipid).fag4, plFA4Textbox); };
             plDB4Textbox.Location = new Point(plFA4Textbox.Left + plFA4Textbox.Width + sep, plFA4Textbox.Top);
             plDB4Textbox.Width = dbLength;
-            plDB4Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Ester )); };
+            plDB4Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Phospholipid)currentLipid).fag4); };
             toolTip.SetToolTip(plDB4Textbox, formattingDB);
             plDB4Label.Location = new Point(plDB4Textbox.Left, plDB4Textbox.Top - sep);
             plDB4Label.Width = dbLength;
@@ -1616,19 +1588,19 @@ namespace LipidCreator
 
             plFA4Checkbox3.Location = new Point(plFA4Textbox.Left + 90, plFA4Textbox.Top + plFA4Textbox.Height);
             plFA4Checkbox3.Text = "FA O";
-            plFA4Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Plasmanyl )); };
+            plFA4Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag4, FattyAcidType.Plasmanyl); };
             plFA4Checkbox3.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = cardioBackboneImage; };
             plFA4Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = cardioBackboneImageFA4e; };
             plFA4Checkbox2.Location = new Point(plFA4Textbox.Left + 40, plFA4Textbox.Top + plFA4Textbox.Height);
             plFA4Checkbox2.Text = "FA P";
             toolTip.SetToolTip(plFA4Checkbox2, FApInformation);
-            plFA4Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Plasmenyl )); };
+            plFA4Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag4, FattyAcidType.Plasmenyl); };
             plFA4Checkbox2.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = cardioBackboneImage; };
             plFA4Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = cardioBackboneImageFA4p; };
             plFA4Checkbox1.Location = new Point(plFA4Textbox.Left, plFA4Textbox.Top + plFA4Textbox.Height);
             plFA4Checkbox1.Text = "FA";
             plFA4Checkbox1.Checked = true;
-            plFA4Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag4, FattyAcidType.Ester )); };
+            plFA4Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag4, FattyAcidType.Ester); };
 
 
 
@@ -1689,17 +1661,17 @@ namespace LipidCreator
             glFA1Textbox.Location = new Point(236, 70);
             glFA1Textbox.Width = faLength;
             glFA1Textbox.Text = "0, 2, 4, 6-7";
-            glFA1Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester )); updateGLRepresentative(); };
+            glFA1Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Glycerolipid)currentLipid).fag1); updateGLRepresentative(); };
             toolTip.SetToolTip(glFA1Textbox, formattingFA);
             glFA1Combobox.Location = new Point(glFA1Textbox.Left, glFA1Textbox.Top - sepText);
             glFA1Combobox.Width = faLength;
             glFA1Combobox.SelectedItem = "Fatty acyl chain";
             glFA1Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            glFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, glFA2Textbox )); updateGLRepresentative(); };
+            glFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Glycerolipid)currentLipid).fag1, glFA2Textbox); updateGLRepresentative(); };
             glDB1Textbox.Location = new Point(glFA1Textbox.Left + glFA1Textbox.Width + sep, glFA1Textbox.Top);
             glDB1Textbox.Width = dbLength;
             glDB1Textbox.Text = "0-2";
-            glDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester )); updateGLRepresentative(); };
+            glDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Glycerolipid)currentLipid).fag1); updateGLRepresentative(); };
             toolTip.SetToolTip(glDB1Textbox, formattingDB);
             glDB1Label.Location = new Point(glDB1Textbox.Left, glDB1Textbox.Top - sep);
             glDB1Label.Width = dbLength;
@@ -1713,19 +1685,19 @@ namespace LipidCreator
 
             glFA1Checkbox3.Location = new Point(glFA1Textbox.Left + 90, glFA1Textbox.Top + glFA1Textbox.Height);
             glFA1Checkbox3.Text = "FA O";
-            glFA1Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Plasmanyl )); updateGLRepresentative(); };
+            glFA1Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag1, FattyAcidType.Plasmanyl); updateGLRepresentative(); };
             glFA1Checkbox3.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA1Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFAe; };
             glFA1Checkbox2.Location = new Point(glFA1Textbox.Left + 40, glFA1Textbox.Top + glFA1Textbox.Height);
             glFA1Checkbox2.Text = "FA P";
             toolTip.SetToolTip(glFA1Checkbox2, FApInformation);
-            glFA1Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Plasmenyl )); updateGLRepresentative(); };
+            glFA1Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag1, FattyAcidType.Plasmenyl); updateGLRepresentative(); };
             glFA1Checkbox2.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA1Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFA1p; };
             glFA1Checkbox1.Location = new Point(glFA1Textbox.Left, glFA1Textbox.Top + glFA1Textbox.Height);
             glFA1Checkbox1.Text = "FA";
             glFA1Checkbox1.Checked = true;
-            glFA1Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester )); updateGLRepresentative(); };
+            glFA1Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag1, FattyAcidType.Ester); updateGLRepresentative(); };
             
             
             
@@ -1736,17 +1708,17 @@ namespace LipidCreator
             glFA2Textbox.Location = new Point(330, 142);
             glFA2Textbox.Width = faLength;
             glFA2Textbox.Text = "0, 5, 17-19";
-            glFA2Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            glFA2Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Glycerolipid)currentLipid).fag2); };
             toolTip.SetToolTip(glFA2Textbox, formattingFA);
             glFA2Combobox.Location = new Point(glFA2Textbox.Left, glFA2Textbox.Top - sepText);
             glFA2Combobox.Width = faLength;
             glFA2Combobox.SelectedItem = "Fatty acyl chain";
             glFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            glFA2Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, glFA2Textbox )); };
+            glFA2Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Glycerolipid)currentLipid).fag2, glFA2Textbox); };
             glDB2Textbox.Location = new Point(glFA2Textbox.Left + glFA2Textbox.Width + sep, glFA2Textbox.Top);
             glDB2Textbox.Width = dbLength;
             glDB2Textbox.Text = "5-6";
-            glDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            glDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Glycerolipid)currentLipid).fag2); };
             toolTip.SetToolTip(glDB2Textbox, formattingDB);
             glDB2Label.Location = new Point(glDB2Textbox.Left, glDB2Textbox.Top - sep);
             glDB2Label.Width = dbLength;
@@ -1757,37 +1729,37 @@ namespace LipidCreator
 
             glFA2Checkbox3.Location = new Point(glFA2Textbox.Left + 90, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox3.Text = "FA O";
-            glFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Plasmanyl )); };
+            glFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag2, FattyAcidType.Plasmanyl); };
             glFA2Checkbox3.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA2Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFA2e; };
             glFA2Checkbox2.Location = new Point(glFA2Textbox.Left + 40, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox2.Text = "FA P";
             toolTip.SetToolTip(glFA2Checkbox2, FApInformation);
-            glFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Plasmenyl )); };
+            glFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag2, FattyAcidType.Plasmenyl); };
             glFA2Checkbox2.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA2Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFA2p; };
             glFA2Checkbox1.Location = new Point(glFA2Textbox.Left, glFA2Textbox.Top + glFA2Textbox.Height);
             glFA2Checkbox1.Text = "FA";
             glFA2Checkbox1.Checked = true;
             //glFA2Checkbox1.CheckedChanged += new EventHandler(glFA2Checkbox1CheckedChanged);
-            glFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            glFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag2, FattyAcidType.Ester); };
 
             glFA3Combobox.BringToFront();
             glFA3Textbox.BringToFront();
             glFA3Textbox.Location = new Point(198, 242);
             glFA3Textbox.Width = faLength;
             glFA3Textbox.Text = "20-22";
-            glFA3Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            glFA3Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Glycerolipid)currentLipid).fag3); };
             toolTip.SetToolTip(glFA3Textbox, formattingFA);
             glFA3Combobox.Location = new Point(glFA3Textbox.Left, glFA3Textbox.Top - sepText);
             glFA3Combobox.Width = faLength;
             glFA3Combobox.SelectedItem = "Fatty acyl chain";
             glFA3Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            glFA3Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, glFA3Textbox )); };
+            glFA3Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Glycerolipid)currentLipid).fag3, glFA3Textbox); };
             glDB3Textbox.Location = new Point(glFA3Textbox.Left + glFA3Textbox.Width + sep, glFA3Textbox.Top);
             glDB3Textbox.Width = dbLength;
             glDB3Textbox.Text = "0";
-            glDB3Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            glDB3Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Glycerolipid)currentLipid).fag3); };
             toolTip.SetToolTip(glDB3Textbox, formattingDB);
             glDB3Label.Location = new Point(glDB3Textbox.Left, glDB3Textbox.Top - sep);
             glDB3Label.Width = dbLength;
@@ -1797,19 +1769,19 @@ namespace LipidCreator
 
             glFA3Checkbox3.Location = new Point(glFA3Textbox.Left + 90, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox3.Text = "FA O";
-            glFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Plasmanyl )); };
+            glFA3Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag3, FattyAcidType.Plasmanyl); };
             glFA3Checkbox3.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA3Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFA3e; };
             glFA3Checkbox2.Location = new Point(glFA3Textbox.Left + 40, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox2.Text = "FA P";
             toolTip.SetToolTip(glFA3Checkbox2, FApInformation);
-            glFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Plasmenyl )); };
+            glFA3Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag3, FattyAcidType.Plasmenyl); };
             glFA3Checkbox2.MouseLeave += delegate(object s, EventArgs e){ glPictureBox.Image = glyceroBackboneImage; };
             glFA3Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ glPictureBox.Image = glyceroBackboneImageFA3p; };
             glFA3Checkbox1.Location = new Point(glFA3Textbox.Left, glFA3Textbox.Top + glFA3Textbox.Height);
             glFA3Checkbox1.Text = "FA";
             glFA3Checkbox1.Checked = true;
-            glFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Glycerolipid)currentLipid).fag3, FattyAcidType.Ester )); };
+            glFA3Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Glycerolipid)currentLipid).fag3, FattyAcidType.Ester); };
 
             
             glHgListbox.Location = new Point(172, 228);
@@ -1888,12 +1860,12 @@ namespace LipidCreator
             glContainsSugar.BringToFront();
             
             
-            glRepresentativeFA.Location = new Point(glFA1FuncGroups.Left + glFA1FuncGroups.Width + sep, glFA1Textbox.Top);
+            glRepresentativeFA.Location = new Point(glDB1Textbox.Left, glFA1Checkbox3.Top);
             glRepresentativeFA.Width = 150;
             glRepresentativeFA.Text = "First FA representative";
             toolTip.SetToolTip(glRepresentativeFA, repFAText);
             glRepresentativeFA.CheckedChanged += new EventHandler(glRepresentativeFACheckedChanged);
-            glRepresentativeFA.SendToBack();
+            glRepresentativeFA.BringToFront();
 
             
             
@@ -1959,17 +1931,17 @@ namespace LipidCreator
             plFA1Textbox.Location = new Point(400, 74);
             plFA1Textbox.Width = faLength;
             plFA1Textbox.Text = "0, 2, 4, 6-7";
-            plFA1Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Ester )); updatePLRepresentative(); };
+            plFA1Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Phospholipid)currentLipid).fag1); updatePLRepresentative(); };
             toolTip.SetToolTip(plFA1Textbox, formattingFA);
             plFA1Combobox.Location = new Point(plFA1Textbox.Left, plFA1Textbox.Top - sepText);
             plFA1Combobox.Width = faLength;
             plFA1Combobox.SelectedItem = "Fatty acyl chain";
             plFA1Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            plFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, plFA2Textbox )); updatePLRepresentative(); };
+            plFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Phospholipid)currentLipid).fag1, plFA2Textbox); updatePLRepresentative(); };
             plDB1Textbox.Location = new Point(plFA1Textbox.Left + plFA1Textbox.Width + sep, plFA1Textbox.Top);
             plDB1Textbox.Width = dbLength;
             plDB1Textbox.Text = "0-2";
-            plDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Ester )); updatePLRepresentative(); };
+            plDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Phospholipid)currentLipid).fag1); updatePLRepresentative(); };
             toolTip.SetToolTip(plDB1Textbox, formattingDB);
             plDB1Label.Location = new Point(plDB1Textbox.Left, plDB1Textbox.Top - sep);
             plDB1Label.Width = dbLength;
@@ -1982,36 +1954,36 @@ namespace LipidCreator
 
             plFA1Checkbox3.Location = new Point(plFA1Textbox.Left + 90, plFA1Textbox.Top + plFA1Textbox.Height);
             plFA1Checkbox3.Text = "FA O";
-            plFA1Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Plasmanyl )); updatePLRepresentative(); };
+            plFA1Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag1, FattyAcidType.Plasmanyl); updatePLRepresentative(); };
             plFA1Checkbox3.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? phosphoLysoBackboneImage : phosphoBackboneImage); };
             plFA1Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1e : (plIsLyso.Checked ? phosphoLysoBackboneImageFA1e : phosphoBackboneImageFA1e); };
             plFA1Checkbox2.Location = new Point(plFA1Textbox.Left + 40, plFA1Textbox.Top + plFA1Textbox.Height);
             plFA1Checkbox2.Text = "FA P";
             toolTip.SetToolTip(plFA1Checkbox2, FApInformation);
-            plFA1Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Plasmenyl )); updatePLRepresentative(); };
+            plFA1Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag1, FattyAcidType.Plasmenyl); updatePLRepresentative(); };
             plFA1Checkbox2.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : (plIsLyso.Checked ? phosphoLysoBackboneImage : phosphoBackboneImage); };
             plFA1Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA1p : (plIsLyso.Checked ? phosphoLysoBackboneImageFA1p : phosphoBackboneImageFA1p); };
             plFA1Checkbox1.Location = new Point(plFA1Textbox.Left, plFA1Textbox.Top + plFA1Textbox.Height);
             plFA1Checkbox1.Text = "FA";
             plFA1Checkbox1.Checked = true;
-            plFA1Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag1, FattyAcidType.Ester )); updatePLRepresentative(); };
+            plFA1Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag1, FattyAcidType.Ester); updatePLRepresentative(); };
 
             plFA2Combobox.BringToFront();
             plFA2Textbox.BringToFront();
             plFA2Textbox.Location = new Point(312, 154);
             plFA2Textbox.Width = faLength;
             plFA2Textbox.Text = "2, 5, 17-19";
-            plFA2Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            plFA2Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Phospholipid)currentLipid).fag2); };
             toolTip.SetToolTip(plFA2Textbox, formattingFA);
             plFA2Combobox.Location = new Point(plFA2Textbox.Left, plFA2Textbox.Top - sepText);
             plFA2Combobox.Width = faLength;
             plFA2Combobox.SelectedItem = "Fatty acyl chain";
             plFA2Combobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            plFA2Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, plFA2Textbox )); };
+            plFA2Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Phospholipid)currentLipid).fag2, plFA2Textbox); };
             plDB2Textbox.Location = new Point(plFA2Textbox.Left + plFA2Textbox.Width + sep, plFA2Textbox.Top);
             plDB2Textbox.Width = dbLength;
             plDB2Textbox.Text = "5-6";
-            plDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            plDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Phospholipid)currentLipid).fag2); };
             toolTip.SetToolTip(plDB2Textbox, formattingDB);
             plDB2Label.Location = new Point(plDB2Textbox.Left, plDB2Textbox.Top - sep);
             plDB2Label.Width = dbLength;
@@ -2021,19 +1993,19 @@ namespace LipidCreator
 
             plFA2Checkbox3.Location = new Point(plFA2Textbox.Left + 90, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox3.Text = "FA O";
-            plFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Plasmanyl )); };
+            plFA2Checkbox3.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag2, FattyAcidType.Plasmanyl); };
             plFA2Checkbox3.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : phosphoBackboneImage; };
             plFA2Checkbox3.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA2e : phosphoBackboneImageFA2e; };
             plFA2Checkbox2.Location = new Point(plFA2Textbox.Left + 40, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox2.Text = "FA P";
             toolTip.SetToolTip(plFA1Checkbox2, FApInformation);
-            plFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Plasmenyl )); };
+            plFA2Checkbox2.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag2, FattyAcidType.Plasmenyl); };
             plFA2Checkbox2.MouseLeave += delegate(object s, EventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImage : phosphoBackboneImage; };
             plFA2Checkbox2.MouseMove += delegate(object s, MouseEventArgs e){ plPictureBox.Image = plIsCL.Checked ? cardioBackboneImageFA2p : phosphoBackboneImageFA2p; };
             plFA2Checkbox1.Location = new Point(plFA2Textbox.Left, plFA2Textbox.Top + plFA2Textbox.Height);
             plFA2Checkbox1.Text = "FA";
             plFA2Checkbox1.Checked = true;
-            plFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, new FattyAcidEventArgs( ((Phospholipid)currentLipid).fag2, FattyAcidType.Ester )); };
+            plFA2Checkbox1.CheckedChanged += delegate(object s, EventArgs e){ FattyAcidCheckboxCheckChanged(s, ((Phospholipid)currentLipid).fag2, FattyAcidType.Ester); };
             
             
             plTypeGroup.Location = new Point(400, 8);
@@ -2130,12 +2102,12 @@ namespace LipidCreator
             plPictureBox.SendToBack();
             
             
-            plRepresentativeFA.Location = new Point(plFA1Checkbox3.Left + plFA1Checkbox3.Width + sep, plFA1Checkbox3.Top);
+            plRepresentativeFA.Location = new Point(plDB1Textbox.Left, plFA1Checkbox3.Top);
             plRepresentativeFA.Width = 150;
             plRepresentativeFA.Text = "First FA representative";
             toolTip.SetToolTip(plRepresentativeFA, repFAText);
             plRepresentativeFA.CheckedChanged += new EventHandler(plRepresentativeFACheckedChanged);
-            plRepresentativeFA.SendToBack();
+            plRepresentativeFA.BringToFront();
 
 
 
@@ -2195,17 +2167,17 @@ namespace LipidCreator
             slFATextbox.Location = new Point(258, 235);
             slFATextbox.Width = faLength;
             slFATextbox.Text = "2, 5, 17-19";
-            slFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).fag, FattyAcidType.Ester )); };
+            slFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Sphingolipid)currentLipid).fag); };
             toolTip.SetToolTip(slFATextbox, formattingFA);
             slFACombobox.Location = new Point(slFATextbox.Left, slFATextbox.Top - sepText);
             slFACombobox.Width = faLength;
             slFACombobox.SelectedItem = "Fatty acyl chain";
             slFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).fag, slFATextbox )); };
+            slFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Sphingolipid)currentLipid).fag, slFATextbox); };
             slDB1Textbox.Location = new Point(slFATextbox.Left + slFATextbox.Width + sep, slFATextbox.Top);
             slDB1Textbox.Width = dbLength;
             slDB1Textbox.Text = "5-6";
-            slDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).fag, FattyAcidType.Ester )); };
+            slDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Sphingolipid)currentLipid).fag); };
             toolTip.SetToolTip(slDB1Textbox, formattingDB);
             slDB1Label.Location = new Point(slDB1Textbox.Left, slDB1Textbox.Top - sep);
             slDB1Label.Width = dbLength;
@@ -2221,17 +2193,17 @@ namespace LipidCreator
             slLCBTextbox.Location = new Point(294, 158);
             slLCBTextbox.Width = faLength;
             slLCBTextbox.Text = "14, 16-18, 22";
-            slLCBTextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).lcb, FattyAcidType.Ester )); };
+            slLCBTextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Sphingolipid)currentLipid).lcb); };
             toolTip.SetToolTip(slLCBTextbox, formattingFA);
             slLCBCombobox.Location = new Point(slLCBTextbox.Left, slLCBTextbox.Top - sepText);
             slLCBCombobox.Width = faLength;
             slLCBCombobox.SelectedItem = "Long chain base";
             slLCBCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            slLCBCombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).lcb, slLCBTextbox )); };
+            slLCBCombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Sphingolipid)currentLipid).lcb, slLCBTextbox); };
             slDB2Textbox.Location = new Point(slLCBTextbox.Left + slLCBTextbox.Width + sep, slLCBTextbox.Top);
             slDB2Textbox.Width = dbLength;
             slDB2Textbox.Text = "0-2";
-            slDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Sphingolipid)currentLipid).lcb, FattyAcidType.Ester )); };
+            slDB2Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Sphingolipid)currentLipid).lcb); };
             toolTip.SetToolTip(slDB2Textbox, formattingDB);
             slDB2Label.Location = new Point(slDB2Textbox.Left, slDB2Textbox.Top - sep);
             slDB2Label.Width = dbLength;
@@ -2389,17 +2361,17 @@ namespace LipidCreator
             stFATextbox.Location = new Point(574, 240);
             stFATextbox.Width = faLength;
             stFATextbox.Text = "2, 5, 17-19";
-            stFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, FattyAcidType.Ester )); };
+            stFATextbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Sterol)currentLipid).fag); };
             toolTip.SetToolTip(stFATextbox, formattingFA);
             stFACombobox.Location = new Point(stFATextbox.Left, stFATextbox.Top - sepText);
             stFACombobox.Width = faLength;
             stFACombobox.SelectedItem = "Fatty acyl chain";
             stFACombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-            stFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, stFATextbox )); };
+            stFACombobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Sterol)currentLipid).fag, stFATextbox); };
             stDBTextbox.Location = new Point(stFATextbox.Left + stFATextbox.Width + sep, stFATextbox.Top);
             stDBTextbox.Width = dbLength;
             stDBTextbox.Text = "5-6";
-            stDBTextbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, new FattyAcidEventArgs( ((Sterol)currentLipid).fag, FattyAcidType.Ester )); };
+            stDBTextbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Sterol)currentLipid).fag); };
             toolTip.SetToolTip(stDBTextbox, formattingDB);
             stDBLabel.Location = new Point(stDBTextbox.Left, stDBTextbox.Top - sep);
             stDBLabel.Width = dbLength;

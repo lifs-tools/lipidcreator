@@ -702,7 +702,7 @@ namespace LipidCreator
         public void functionalGroupPrepareContextMenu(object sender, MouseEventArgs e)
         {
             if (e.Button != System.Windows.Forms.MouseButtons.Right) return;
-            FunctionalGroupDataGridView view = sender as FunctionalGroupDataGridView;
+            DataGridView view = sender as DataGridView;
             ContextMenu cm = view.ContextMenu;
             cm.MenuItems[1].Enabled = view.SelectedRows.Count > 0;
             
@@ -728,14 +728,14 @@ namespace LipidCreator
             if (menuItem == null) return;
             
             ContextMenu menu = menuItem.GetContextMenu();
-            FunctionalGroupDataGridView view = (FunctionalGroupDataGridView)menu.SourceControl;
+            DataGridView view = (DataGridView)menu.SourceControl;
             
             DataTable dt = (DataTable)(view.DataSource);
             DataRow dr = dt.NewRow();
             dr[0] = Lipid.FUNCTIONAL_GROUP_NAMES[0];
             dr[1] = "0-1";
             dt.Rows.Add(dr);
-            view.trigger();
+            if (gridViewActions.ContainsKey(view)) gridViewActions[view]();
         }
         
         
@@ -747,16 +747,14 @@ namespace LipidCreator
             if (menuItem == null) return;
             
             ContextMenu menu = menuItem.GetContextMenu();
-            FunctionalGroupDataGridView view = (FunctionalGroupDataGridView)menu.SourceControl;
+            DataGridView view = (DataGridView)menu.SourceControl;
             
             var dt = view.DataSource as DataTable;
             List<int> selRows = new List<int>();
             foreach (DataGridViewRow row in view.SelectedRows) selRows.Add(row.Index);
-            //view.DataSource = null;
             
             for (int i = selRows.Count - 1; i >= 0; --i) dt.Rows.RemoveAt(selRows[i]);
-            //view.DataSource = dt;
-            view.trigger();
+            if (gridViewActions.ContainsKey(view)) gridViewActions[view]();
         }
         
         
@@ -765,9 +763,9 @@ namespace LipidCreator
         public void detectFunctionalGroupsHover()
         {
             Point cur_pos = Cursor.Position;
-            List<FunctionalGroupDataGridView> hoveredViews = new List<FunctionalGroupDataGridView>();
+            List<DataGridView> hoveredViews = new List<DataGridView>();
             bool expandedInList = false;
-            foreach (FunctionalGroupDataGridView view in functionalGroupGridViews[(int)currentIndex])
+            foreach (DataGridView view in functionalGroupGridViews[(int)currentIndex])
             {
                 Point view_pos = view.PointToScreen(Point.Empty);
                 if (view_pos.X <= cur_pos.X && cur_pos.X <= view_pos.X + view.Width && view_pos.Y <= cur_pos.Y && cur_pos.Y <= view_pos.Y + view.Height)
@@ -1766,9 +1764,9 @@ namespace LipidCreator
         
         
         
-        public void AdductCheckBoxChecked(Object sender, AdductCheckedEventArgs e)
+        public void AdductCheckBoxChecked(Object sender, string adduct, Lipid lipid)
         {
-            e.lipid.adducts[e.adduct] = ((CheckBox)sender).Checked;
+            lipid.adducts[adduct] = ((CheckBox)sender).Checked;
         }
         
         

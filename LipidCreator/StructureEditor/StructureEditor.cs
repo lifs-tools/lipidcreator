@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 namespace LipidCreatorStructureEditor
 {
     public enum MouseState {MouseDefault, MouseDown, MouseDownMove};
-    public enum Action {Idle, ChangeAtom, ChangeAtomSelect, ChangeBond, DrawBond, MoveAtom, MoveAtomSelect};
+    public enum Action {Idle, ChangeAtom, ChangeAtomSelect, ChangeBond, DrawAtom, DrawBond, RemoveAtom, RemoveBond, MoveAtom, MoveAtomSelect};
         
     public partial class LipidCreatorStructureEditor : Form
     {
@@ -69,16 +69,16 @@ namespace LipidCreatorStructureEditor
             
             var mouse = PointToClient(Cursor.Position);
             
-            if (((action == Action.ChangeAtom || action == Action.MoveAtom) && mouseState != MouseState.MouseDownMove) || action == Action.DrawBond)
+            if (((action == Action.ChangeAtom || action == Action.MoveAtom) && mouseState != MouseState.MouseDownMove) || action == Action.DrawBond || action == Action.DrawAtom || action == Action.RemoveAtom)
             {
-                if (currentNode != null)
+                if (currentNode != null && currentNode.nodeProjections.ContainsKey(lipidStructure.currentProjection))
                 {
                     NodeProjection nodeProjection = currentNode.nodeProjections[lipidStructure.currentProjection];
                     Pen pen = new Pen(Color.DeepSkyBlue, 2);
                     g.DrawEllipse(pen, currentNode.position.X + nodeProjection.shift.X - cursorCircleRadius, currentNode.position.Y + nodeProjection.shift.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
                 }
             }
-            else if (action == Action.ChangeBond)
+            else if (action == Action.ChangeBond || action == Action.RemoveBond)
             {
                 if (currentBond != null)
                 {
@@ -93,6 +93,7 @@ namespace LipidCreatorStructureEditor
             {
                 foreach (var node in moveNodes)
                 {
+                    if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                     Pen pen = new Pen(Color.DeepSkyBlue, 2);
                     g.DrawEllipse(pen, node.position.X + nodeProjection.shift.X - cursorCircleRadius, node.position.Y + nodeProjection.shift.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
@@ -100,7 +101,7 @@ namespace LipidCreatorStructureEditor
             }
             
             lipidStructure.drawEdges(g, this);
-            if (mouseState == MouseState.MouseDownMove && action == Action.DrawBond && drawStart != null)
+            if (mouseState == MouseState.MouseDownMove && action == Action.DrawBond && drawStart != null && drawStart.nodeProjections.ContainsKey(lipidStructure.currentProjection))
             {
                 NodeProjection nodeProjection = drawStart.nodeProjections[lipidStructure.currentProjection];
                 Graphics clippingGraphics = lipidStructure.setClipping(g, this);
@@ -126,6 +127,7 @@ namespace LipidCreatorStructureEditor
                 // mark all atoms within the selection box
                 foreach (var node in lipidStructure.nodes)
                 {
+                    if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                     double xm = node.position.X + nodeProjection.shift.X;
                     double ym = node.position.Y + nodeProjection.shift.Y;
@@ -161,6 +163,19 @@ namespace LipidCreatorStructureEditor
                         lipidStructure.computeBonds();
                         updateStructure();
                     }
+                    else if (action == Action.RemoveBond && currentBond != null)
+                    {
+                        lipidStructure.removeBond(currentBond);
+                        currentBond = null;
+                        lipidStructure.computeBonds();
+                        updateStructure();
+                    }
+                    else if (action == Action.RemoveAtom && currentNode != null)
+                    {
+                        currentNode = lipidStructure.removeNode(currentNode);
+                        lipidStructure.computeBonds();
+                        updateStructure();
+                    }
                     else if (action == Action.MoveAtomSelect)
                     {
                         action = Action.MoveAtom;
@@ -168,6 +183,12 @@ namespace LipidCreatorStructureEditor
                     else if (action == Action.ChangeAtomSelect)
                     {
                         action = Action.ChangeAtom;
+                    }
+                    else if (action == Action.DrawAtom && currentNode == null)
+                    {
+                        var mouse = PointToClient(Cursor.Position);
+                        lipidStructure.addNode(mouse.X, mouse.Y);
+                        updateStructure();
                     }
                     break;
                     
@@ -180,6 +201,13 @@ namespace LipidCreatorStructureEditor
                     else if (action == Action.ChangeBond && currentBond != null)
                     {
                         currentBond.toggleState(); 
+                        lipidStructure.computeBonds();
+                        updateStructure();
+                    }
+                    else if (action == Action.RemoveBond && currentBond != null)
+                    {
+                        lipidStructure.removeBond(currentBond);
+                        currentBond = null;
                         lipidStructure.computeBonds();
                         updateStructure();
                     }
@@ -208,6 +236,7 @@ namespace LipidCreatorStructureEditor
                         // mark all atoms within the selection box
                         foreach (var node in lipidStructure.nodes)
                         {
+                            if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                             NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                             double xm = node.position.X + nodeProjection.shift.X;
                             double ym = node.position.Y + nodeProjection.shift.Y;
@@ -227,6 +256,7 @@ namespace LipidCreatorStructureEditor
                         // mark all atoms within the selection box
                         foreach (var node in lipidStructure.nodes)
                         {
+                            if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                             NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                             double xm = node.position.X + nodeProjection.shift.X;
                             double ym = node.position.Y + nodeProjection.shift.Y;
@@ -304,11 +334,12 @@ namespace LipidCreatorStructureEditor
             PointF mouse = PointToClient(Cursor.Position);
             
             
-            if (action == Action.ChangeAtom || action == Action.MoveAtom || action == Action.DrawBond)
+            if (action == Action.ChangeAtom || action == Action.MoveAtom || action == Action.DrawBond || action == Action.RemoveAtom)
             {
                 double minDist = 1e10;
                 foreach (var node in lipidStructure.nodes)
                 {
+                    if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                     double dist = Math.Pow(node.position.X + nodeProjection.shift.X - mouse.X, 2) + Math.Pow(node.position.Y + nodeProjection.shift.Y - mouse.Y, 2);
                     if (dist <= Math.Pow(10 + cursorCircleRadius, 2) && dist < minDist)
@@ -338,7 +369,7 @@ namespace LipidCreatorStructureEditor
                 }
             }
             
-            else if (action == Action.ChangeBond)
+            else if (action == Action.ChangeBond || action == Action.RemoveBond)
             {
                 double minDistC = 1e10;
                 foreach (var bond in lipidStructure.bonds)
@@ -408,25 +439,39 @@ namespace LipidCreatorStructureEditor
                 }
             }
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        private void buttonClicked(Button actionButton, Action newAction)
+        {
+            moveNodes.Clear();
+            foreach (var button in actionButtons) button.BackColor = Color.FromArgb(255, 255, 255);
+            if (action == newAction)
+            {
+                actionButton.BackColor = Color.FromArgb(255, 255, 255);
+                action = Action.Idle;
+            }
+            else
+            {
+                actionButton.BackColor = Color.FromArgb(210, 210, 210);
+                action = newAction;
+            }
+            updateStructure();
+        }
     
     
     
             
         private void actionChangeAtomStateClicked(Object sender, EventArgs e)
         {
-            moveNodes.Clear();
-            foreach (var button in actionButtons) button.BackColor = Color.FromArgb(255, 255, 255);
-            if (action == Action.ChangeAtom)
-            {
-                actionChangeAtomState.BackColor = Color.FromArgb(255, 255, 255);
-                action = Action.Idle;
-            }
-            else 
-            {
-                actionChangeAtomState.BackColor = Color.FromArgb(210, 210, 210);
-                action = Action.ChangeAtom;
-            }
-            updateStructure();
+            buttonClicked(actionChangeAtomState, Action.ChangeAtom);
         }
         
         
@@ -434,19 +479,7 @@ namespace LipidCreatorStructureEditor
             
         private void actionChangeBondStateClicked(Object sender, EventArgs e)
         {
-            moveNodes.Clear();
-            foreach (var button in actionButtons) button.BackColor = Color.FromArgb(255, 255, 255);
-            if (action == Action.ChangeBond)
-            {
-                actionChangeBondState.BackColor = Color.FromArgb(255, 255, 255);
-                action = Action.Idle;
-            }
-            else
-            {
-                actionChangeBondState.BackColor = Color.FromArgb(210, 210, 210);
-                action = Action.ChangeBond;
-            }
-            updateStructure();
+            buttonClicked(actionChangeBondState, Action.ChangeBond);
         }
         
         
@@ -461,21 +494,33 @@ namespace LipidCreatorStructureEditor
         
         
             
+        private void actionDrawAtomClicked(Object sender, EventArgs e)
+        {
+            buttonClicked(actionDrawAtom, Action.DrawAtom);
+        }
+        
+        
+        
+            
+        private void actionRemoveAtomClicked(Object sender, EventArgs e)
+        {
+            buttonClicked(actionRemoveAtom, Action.RemoveAtom);
+        }
+        
+        
+        
+            
+        private void actionRemoveBondClicked(Object sender, EventArgs e)
+        {
+            buttonClicked(actionRemoveBond, Action.RemoveBond);
+        }
+        
+        
+        
+            
         private void actionDrawBondClicked(Object sender, EventArgs e)
         {
-            foreach (var button in actionButtons) button.BackColor = Color.FromArgb(255, 255, 255);
-            moveNodes.Clear();
-            if (action == Action.DrawBond)
-            {
-                actionDrawBond.BackColor = Color.FromArgb(255, 255, 255);
-                action = Action.Idle;
-            }
-            else
-            {
-                actionDrawBond.BackColor = Color.FromArgb(210, 210, 210);
-                action = Action.DrawBond;
-            }
-            updateStructure();
+            buttonClicked(actionDrawBond, Action.DrawBond);
         }
         
         
@@ -483,19 +528,7 @@ namespace LipidCreatorStructureEditor
             
         private void actionMoveAtomClicked(Object sender, EventArgs e)
         {
-            foreach (var button in actionButtons) button.BackColor = Color.FromArgb(255, 255, 255);
-            moveNodes.Clear();
-            if (action == Action.MoveAtom)
-            {
-                actionMoveAtom.BackColor = Color.FromArgb(255, 255, 255);
-                action = Action.Idle;
-            }
-            else
-            {
-                actionMoveAtom.BackColor = Color.FromArgb(210, 210, 210);
-                action = Action.MoveAtom;
-            }
-            updateStructure();
+            buttonClicked(actionMoveAtom, Action.MoveAtom);
         }
         
         
@@ -726,6 +759,7 @@ namespace LipidCreatorStructureEditor
             bool useAdduct = false;
             foreach (var node in lipidStructure.nodes)
             {
+                if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                 NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                 if (nodeProjection.nodeState != NodeState.Enabled) continue;
                 

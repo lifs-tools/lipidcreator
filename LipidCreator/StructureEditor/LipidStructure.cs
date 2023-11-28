@@ -16,9 +16,10 @@ namespace LipidCreatorStructureEditor
         public NodeState nodeState = NodeState.Enabled;
         public PointF previousShift;
         
-        public NodeProjection()
+        public NodeProjection(NodeState state = NodeState.Enabled)
         {
             previousShift = new PointF(shift.X, shift.Y);
+            nodeState = state;
         }
         
         public NodeProjection(NodeProjection copy)
@@ -129,6 +130,12 @@ namespace LipidCreatorStructureEditor
             start = s;
             end = e;
         }
+        
+        public StructureEdge(StructureEdge copy)
+        {
+            start = new PointF(copy.start.X, copy.start.Y);
+            end = new PointF(copy.end.X, copy.end.Y);
+        }
     }
     
     
@@ -148,6 +155,23 @@ namespace LipidCreatorStructureEditor
             startId = start;
             endId = end;
             isDoubleBond = doubleBond;
+        }
+        
+        public Bond(Bond copy)
+        {
+            startId = copy.startId;
+            endId = copy.endId;
+            isDoubleBond = copy.isDoubleBond;
+            if (copy.edgeSingle != null) edgeSingle = new StructureEdge(copy.edgeSingle);
+            foreach (var edge in copy.edgesDouble)
+            {
+                edgesDouble.Add(new StructureEdge(edge));
+            }
+            foreach (var kvp in copy.bondProjections)
+            {
+                bondProjections.Add(kvp.Key, kvp.Value);
+            }
+            lipidStructure = copy.lipidStructure;
         }
         
         
@@ -188,6 +212,7 @@ namespace LipidCreatorStructureEditor
     public class LipidStructure
     {
         public List<StructureNode> nodes = new List<StructureNode>();
+        public HashSet<StructureNode> additionalNodes = new HashSet<StructureNode>();
         public List<Bond> bonds = new List<Bond>();
         public List<Bond> additionalBonds = new List<Bond>();
         public Dictionary<int, StructureNode> idToNode = new Dictionary<int, StructureNode>();
@@ -216,6 +241,7 @@ namespace LipidCreatorStructureEditor
         public HashSet<string> specialAtoms = new HashSet<string>(){"N", "O", "P", "S"};
         public Dictionary<string, int> freeElectrons = new Dictionary<string, int>(){{"C", 4}, {"N", 3}, {"O", 2}, {"P", 3}, {"S", 2}};
         public int projectionIds = 1;
+        public int currentNodeId = 0;
         
         
         
@@ -308,6 +334,8 @@ namespace LipidCreatorStructureEditor
                         nodes.Add(sn);
                         idToNode.Add(nodeId, sn);
                     }
+                    
+                    currentNodeId = Math.Max(currentNodeId, nodeId);
                 }
                 catch(Exception ex){
                     Console.WriteLine(ex);
@@ -440,7 +468,7 @@ namespace LipidCreatorStructureEditor
             foreach (var bond in bonds) bond.bondProjections.Add(0, bond.isDoubleBond);
             currentProjection = 0;
             
-            computeBonds();
+            computeBonds(bonds);
             changeFragment();
             countNodeConnections();
         }
@@ -460,11 +488,20 @@ namespace LipidCreatorStructureEditor
                 node.nodeProjections.Add(newProjectionId, new NodeProjection(node.nodeProjections[currentProjection]));
                 foreach (var decorator in node.decorators) decorator.nodeProjections.Add(newProjectionId, new NodeProjection(decorator.nodeProjections[currentProjection]));
             }
+            
             foreach (var bond in bonds) bond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
+            List<Bond> bondsToAdd = new List<Bond>();
             foreach (var bond in additionalBonds)
             {
-                if (bond.bondProjections.ContainsKey(currentProjection)) bond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
+                if (bond.bondProjections.ContainsKey(currentProjection))
+                {
+                    Bond newBond = new Bond(bond);
+                    newBond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
+                    bondsToAdd.Add(newBond);
+                }
             }
+            foreach (Bond bond in bondsToAdd) additionalBonds.Add(bond);
+            computeBonds(additionalBonds);
             countNodeConnections();
         }
         
@@ -528,6 +565,12 @@ namespace LipidCreatorStructureEditor
                 
                 StructureNode nodeB = idToNode[bond.startId];
                 StructureNode nodeE = idToNode[bond.endId];
+                
+                if (!nodeB.nodeProjections.ContainsKey(currentProjection) || !nodeE.nodeProjections.ContainsKey(currentProjection))
+                {
+                    deleteBonds.Add(bond);
+                    continue;
+                }
             
                 float xB = nodeB.position.X + nodeB.nodeProjections[currentProjection].shift.X;
                 float yB = nodeB.position.Y + nodeB.nodeProjections[currentProjection].shift.Y;
@@ -579,6 +622,48 @@ namespace LipidCreatorStructureEditor
         
         
         
+        public void addNode(int x, int y)
+        {
+            if (currentProjection == 0) return;
+            
+            nodeFont = new Font("Arial", fontSize * factor);
+            Size size = TextRenderer.MeasureText(graphics, "C", nodeFont);
+            float w = size.Width * 0.9f;
+            float h = size.Height * 0.9f;
+            RectangleF drawRect = new RectangleF(x - w * 0.5f, y - h * 0.5f, w, h);
+            StructureNode sn = new StructureNode(this, ++currentNodeId, new PointF(x, y), drawRect, "C");
+            
+        
+            int fragId = currentFragment.id;
+            sn.nodeProjections.Add(fragId, new NodeProjection(fragId == currentProjection ? NodeState.Enabled : NodeState.Hidden));
+            
+            nodes.Add(sn);
+            additionalNodes.Add(sn);
+            idToNode.Add(currentNodeId, sn);
+            
+            computeBonds();
+        }
+        
+        
+        public StructureNode removeNode(StructureNode node)
+        {
+            if (currentProjection == 0 || !additionalNodes.Contains(node) || !node.nodeProjections.ContainsKey(currentProjection)) return node;
+            
+            node.nodeProjections.Remove(currentProjection);
+            if (node.nodeProjections.Count == 0)
+            {
+                additionalNodes.Remove(node);
+                nodes.Remove(node);
+                idToNode.Remove(node.id);
+            }
+            
+            computeBonds();
+            
+            return null;
+        }
+        
+        
+        
         public void addBond(StructureNode start, StructureNode end)
         {
             if (currentProjection == 0) return;
@@ -590,12 +675,25 @@ namespace LipidCreatorStructureEditor
         }
         
         
+        
+        public void removeBond(Bond bond)
+        {
+            if (currentProjection == 0) return;
+            if (!additionalBonds.Contains(bond)) return;
+            additionalBonds.Remove(bond);
+            computeBonds(additionalBonds);
+            countNodeConnections();
+        }
+        
+        
         public Graphics setClipping(Graphics g, Form form)
         {
             // set up all clipping
             Graphics clippingGraphics = form.CreateGraphics();
             foreach (var node in nodes)
             {
+                if (!node.nodeProjections.ContainsKey(currentProjection)) continue;
+                
                 NodeProjection nodeProjection = node.nodeProjections[currentProjection];
                 if (!developmentView && (node.nodeProjections[currentProjection].nodeState == NodeState.Hidden || node.isCarbon)) continue;
                 
@@ -632,8 +730,11 @@ namespace LipidCreatorStructureEditor
             
             foreach (var bond in bonds)
             {
-                NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
-                NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
+                
+                StructureNode nodeB = idToNode[bond.startId];
+                StructureNode nodeE = idToNode[bond.endId];
+                NodeProjection proStart = nodeB.nodeProjections[currentProjection];
+                NodeProjection proEnd = nodeE.nodeProjections[currentProjection];
                 
                 if (proStart.nodeState == NodeState.Enabled && proEnd.nodeState == NodeState.Enabled)
                 {
@@ -649,8 +750,10 @@ namespace LipidCreatorStructureEditor
             {
                 if (!bond.bondProjections.ContainsKey(currentProjection)) continue;
                 
-                NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
-                NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
+                StructureNode nodeB = idToNode[bond.startId];
+                StructureNode nodeE = idToNode[bond.endId];
+                NodeProjection proStart = nodeB.nodeProjections[currentProjection];
+                NodeProjection proEnd = nodeE.nodeProjections[currentProjection];
                 
                 if (proStart.nodeState == NodeState.Enabled && proEnd.nodeState == NodeState.Enabled)
                 {
@@ -701,6 +804,9 @@ namespace LipidCreatorStructureEditor
             
             foreach (var bond in bonds)
             {
+                
+                if (!idToNode[bond.startId].nodeProjections.ContainsKey(currentProjection) || !idToNode[bond.endId].nodeProjections.ContainsKey(currentProjection)) continue;
+                
                 NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
                 NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
                 
@@ -788,9 +894,10 @@ namespace LipidCreatorStructureEditor
             int minY = (1 << 30);
             int maxY = -(1 << 30);
             
-            
             foreach (var node in nodes)
             {
+                if (!node.nodeProjections.ContainsKey(currentProjection)) continue;
+                
                 NodeProjection nodeProjection = node.nodeProjections[currentProjection];
                 PointF nodePoint = new PointF(node.boundingBox.X + nodeProjection.shift.X, node.boundingBox.Y + nodeProjection.shift.Y);
                 if (!developmentView && (nodeProjection.nodeState == NodeState.Hidden)) continue;

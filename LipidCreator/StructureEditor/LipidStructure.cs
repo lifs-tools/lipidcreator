@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
@@ -9,6 +10,14 @@ using System.Drawing.Drawing2D;
 namespace LipidCreatorStructureEditor
 {
     public enum NodeState {Enabled, Disabled, Hidden};
+    
+    
+    public class S {
+        public static string space(int n)
+        {
+            return new string(' ', 2 * n);
+        }
+    }
     
     public class NodeProjection 
     {
@@ -41,6 +50,12 @@ namespace LipidCreatorStructureEditor
         public void prepareMove()
         {
             previousShift = new PointF(shift.X, shift.Y);
+        }
+        
+        
+        public void serialize(StringBuilder sb, int id, int tabs = 0)
+        {
+            sb.Append(String.Format(S.space(tabs) + "<NodeProjection id={0} x={1} y={2} state=\"{3}\" />\n", id, shift.X, shift.Y, nodeState));
         }
     }
     
@@ -113,7 +128,46 @@ namespace LipidCreatorStructureEditor
                 NodeProjection decoratorProjection = decorator.nodeProjections[lipidStructure.currentProjection];
                 decoratorProjection.nodeState = nodeProjections[lipidStructure.currentProjection].nodeState;
             }
-            lipidStructure.countNodeConnections();
+            lipidStructure.computeBonds();
+        }
+        
+        public void toggleAtom()
+        {
+            if (lipidStructure.currentProjection == 0 || !lipidStructure.additionalNodes.Contains(this)) return;
+            
+            switch(text)
+            {
+                case "C": text = "H"; break;
+                case "H": text = "N"; break;
+                case "N": text = "O"; break;
+                case "O": text = "P"; break;
+                case "P": text = "S"; break;
+                case "S": text = "C"; break;
+                default: break;
+            }
+            isCarbon = text.Equals("C");
+            lipidStructure.computeBonds();
+        }
+        
+        
+        public void serialize(StringBuilder sb, int tabs = 0)
+        {
+            sb.Append(String.Format(S.space(tabs) + "<StructureNode id={0} x={1} y={2} ", id, position.X, position.Y));
+            sb.Append(String.Format("bx={0} by={1} bw={2} bh={3} ", boundingBox.X, boundingBox.Y, boundingBox.Width, boundingBox.Height));
+            sb.Append(String.Format("text=\"{0}\">\n", text));
+            if (decorators.Count > 0)
+            {
+                sb.Append(S.space(tabs + 1) + "<Decorators>\n");
+                foreach (var decorator in decorators) decorator.serialize(sb, tabs + 2);
+                sb.Append(S.space(tabs + 1) + "</Decorators>\n");
+            }
+            if (nodeProjections.Count > 0)
+            {
+                sb.Append(S.space(tabs + 1) + "<NodeProjections>\n");
+                foreach (var kvp in nodeProjections) kvp.Value.serialize(sb, kvp.Key, tabs + 2);
+                sb.Append(S.space(tabs + 1) + "</NodeProjections>\n");
+            }
+            sb.Append(S.space(tabs) + "</StructureNode>\n");
         }
     }
     
@@ -136,11 +190,17 @@ namespace LipidCreatorStructureEditor
             start = new PointF(copy.start.X, copy.start.Y);
             end = new PointF(copy.end.X, copy.end.Y);
         }
+        
+        public void serialize(StringBuilder sb, int tabs = 0)
+        {
+            sb.Append(S.space(tabs) + String.Format("<StructureEdge sx={0} sy={1} ex={2} ey={3} />\n", start.X, start.Y, end.X, end.Y));
+        }
     }
     
     
     public class Bond
     {
+        public int id;
         public int startId;
         public int endId;
         public bool isDoubleBond = false;
@@ -149,8 +209,9 @@ namespace LipidCreatorStructureEditor
         public Dictionary<int, bool> bondProjections = new Dictionary<int, bool>();
         public LipidStructure lipidStructure;
         
-        public Bond(LipidStructure _lipidStructure, int start, int end, bool doubleBond)
+        public Bond(LipidStructure _lipidStructure, int _id, int start, int end, bool doubleBond)
         {
+            id = _id;
             lipidStructure = _lipidStructure;
             startId = start;
             endId = end;
@@ -159,6 +220,7 @@ namespace LipidCreatorStructureEditor
         
         public Bond(Bond copy)
         {
+            id = copy.id;
             startId = copy.startId;
             endId = copy.endId;
             isDoubleBond = copy.isDoubleBond;
@@ -181,6 +243,11 @@ namespace LipidCreatorStructureEditor
             
             bondProjections[lipidStructure.currentProjection] = !bondProjections[lipidStructure.currentProjection];
             lipidStructure.countNodeConnections();
+        }
+        
+        public void serialize(StringBuilder sb, int tabs = 0)
+        {
+            
         }
     }
     
@@ -205,6 +272,11 @@ namespace LipidCreatorStructureEditor
         {
             charge = (charge >= maxCharge) ? minCharge : charge + 1;
         }
+        
+        public void serialize(StringBuilder sb, int tabs = 0)
+        {
+            
+        }
     }
     
     
@@ -214,10 +286,11 @@ namespace LipidCreatorStructureEditor
         public List<StructureNode> nodes = new List<StructureNode>();
         public HashSet<StructureNode> additionalNodes = new HashSet<StructureNode>();
         public List<Bond> bonds = new List<Bond>();
-        public List<Bond> additionalBonds = new List<Bond>();
+        public HashSet<Bond> additionalBonds = new HashSet<Bond>();
+        public Dictionary<string, LipidStructureFragment> positiveFragments = new Dictionary<string, LipidStructureFragment>();
+        public Dictionary<string, LipidStructureFragment> negativeFragments = new Dictionary<string, LipidStructureFragment>();
+        
         public Dictionary<int, StructureNode> idToNode = new Dictionary<int, StructureNode>();
-        public float offsetX = 0;
-        public float offsetY = 0;
         public float factor = 2.5f;
         public float dbSpace = 1.5f;
         public float fontSize = 10.0f;
@@ -234,15 +307,13 @@ namespace LipidCreatorStructureEditor
         public Graphics graphics;
         public int currentProjection;
         public LipidStructureFragment currentFragment = null;
-        public Dictionary<string, LipidStructureFragment> positiveFragments = new Dictionary<string, LipidStructureFragment>();
-        public Dictionary<string, LipidStructureFragment> negativeFragments = new Dictionary<string, LipidStructureFragment>();
         public Dictionary<int, int> nodeConnectionsCount = new Dictionary<int, int>();
         public Dictionary<int, int> nodeConnectionsHiddenCount = new Dictionary<int, int>();
         public HashSet<string> specialAtoms = new HashSet<string>(){"N", "O", "P", "S"};
         public Dictionary<string, int> freeElectrons = new Dictionary<string, int>(){{"C", 4}, {"N", 3}, {"O", 2}, {"P", 3}, {"S", 2}};
         public int projectionIds = 1;
         public int currentNodeId = 0;
-        
+        public int bondIDs = 0;
         
         
         public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
@@ -392,7 +463,7 @@ namespace LipidCreatorStructureEditor
                     // get the edge color
                     bool isDoubleBond = ((string)edge.Attribute("Order") != null) && edge.Attribute("Order").Value.ToString().Equals("2");
                     
-                    bond = new Bond(this, idB, idE, isDoubleBond);
+                    bond = new Bond(this, bondIDs++, idB, idE, isDoubleBond);
                     bonds.Add(bond);
                 }
                 catch(Exception){}
@@ -419,8 +490,8 @@ namespace LipidCreatorStructureEditor
             
             float midX = minX + (maxX - minX) / 2.0f;
             float midY = minY + (maxY - minY) / 2.0f;
-            offsetX = (float)form.Size.Width / 2.0f - midX * factor;
-            offsetY = (float)form.Size.Height / 2.0f - midY * factor;
+            float offsetX = (float)form.Size.Width / 2.0f - midX * factor;
+            float offsetY = (float)form.Size.Height / 2.0f - midY * factor;
             
             
             nodeFont = new Font("Arial", fontSize * factor);
@@ -468,11 +539,69 @@ namespace LipidCreatorStructureEditor
             foreach (var bond in bonds) bond.bondProjections.Add(0, bond.isDoubleBond);
             currentProjection = 0;
             
-            computeBonds(bonds);
+            computeBonds();
             changeFragment();
             countNodeConnections();
+            
+            serialize("foo");
         }
         
+        
+        
+        
+        public void serialize(string file_name)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<LipidStructure>\n");
+            
+            // add node information
+            sb.Append("  <Nodes>\n");
+            foreach (var node in nodes) node.serialize(sb, 2);
+            sb.Append("  </Nodes>\n");
+            
+            // add additional node information
+            if (additionalNodes.Count > 0)
+            {
+                sb.Append("  <AdditionalNodes>\n");
+                foreach (var node in additionalNodes) sb.Append(String.Format("    <NodeID id={0}>\n", node.id));
+                sb.Append("  </AdditionalNodes>\n");
+            }
+            
+            // add bond information
+            sb.Append("  <Bonds>\n");
+            foreach (var bond in bonds) bond.serialize(sb, 2);
+            sb.Append("  </Bonds>\n");
+            
+            // add additional bond information
+            if (additionalBonds.Count > 0)
+            {
+                sb.Append("  <AdditionalBonds>\n");
+                foreach (var bond in additionalBonds) sb.Append(String.Format("    <BondsID id={0}>\n", bond.id));
+                sb.Append("  </AdditionalBonds>\n");
+            }
+            
+            // add positive fragments
+            if (positiveFragments.Count > 0)
+            {
+                sb.Append("  <PositiveFragments>\n");
+                foreach (var kvp in positiveFragments) kvp.Value.serialize(sb, 2);
+                sb.Append("  </PositiveFragments>\n");
+            }
+            
+            // add positive fragments
+            if (negativeFragments.Count > 0)
+            {
+                sb.Append("  <NegativeFragments>\n");
+                foreach (var kvp in negativeFragments) kvp.Value.serialize(sb, 2);
+                sb.Append("  </NegativeFragments>\n");
+            }
+
+            
+            
+            sb.Append("</LipidStructure>\n");
+            
+            Console.WriteLine(sb.ToString());
+        }
         
         
         
@@ -480,8 +609,11 @@ namespace LipidCreatorStructureEditor
         public void addFragment(string fragmentName, bool isPositive)
         {
             int newProjectionId = projectionIds++;
-            if (isPositive) positiveFragments.Add(fragmentName, new LipidStructureFragment(newProjectionId, fragmentName));
-            else negativeFragments.Add(fragmentName, new LipidStructureFragment(newProjectionId, fragmentName));
+            
+            LipidStructureFragment newFragment = new LipidStructureFragment(newProjectionId, fragmentName, currentFragment != null ? currentFragment.charge : 0);
+            
+            if (isPositive) positiveFragments.Add(fragmentName, newFragment);
+            else negativeFragments.Add(fragmentName, newFragment);
             
             foreach (var node in nodes)
             {
@@ -490,19 +622,7 @@ namespace LipidCreatorStructureEditor
             }
             
             foreach (var bond in bonds) bond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
-            List<Bond> bondsToAdd = new List<Bond>();
-            foreach (var bond in additionalBonds)
-            {
-                if (bond.bondProjections.ContainsKey(currentProjection))
-                {
-                    Bond newBond = new Bond(bond);
-                    newBond.bondProjections.Add(newProjectionId, bond.bondProjections[currentProjection]);
-                    bondsToAdd.Add(newBond);
-                }
-            }
-            foreach (Bond bond in bondsToAdd) additionalBonds.Add(bond);
-            computeBonds(additionalBonds);
-            countNodeConnections();
+            computeBonds();
         }
         
         
@@ -530,10 +650,7 @@ namespace LipidCreatorStructureEditor
                 foreach (var decorator in node.decorators) decorator.nodeProjections.Remove(projectionId);
             }
             foreach (var bond in bonds) bond.bondProjections.Remove(projectionId);
-            foreach (var bond in additionalBonds)
-            {
-                if (bond.bondProjections.ContainsKey(projectionId)) bond.bondProjections.Remove(projectionId);
-            }
+            
             if (currentProjection == projectionId)
             {
                 currentProjection = 0;
@@ -544,18 +661,11 @@ namespace LipidCreatorStructureEditor
         
         
         
+        
         public void computeBonds()
         {
-            computeBonds(bonds);
-            computeBonds(additionalBonds);
-            countNodeConnections();
-        }
-        
-        
-        public void computeBonds(List<Bond> checkBonds)
-        {
             List<Bond> deleteBonds = new List<Bond>();
-            foreach (var bond in checkBonds)
+            foreach (var bond in bonds)
             {
                 if (!idToNode.ContainsKey(bond.startId) || !idToNode.ContainsKey(bond.endId))
                 {
@@ -568,7 +678,7 @@ namespace LipidCreatorStructureEditor
                 
                 if (!nodeB.nodeProjections.ContainsKey(currentProjection) || !nodeE.nodeProjections.ContainsKey(currentProjection))
                 {
-                    deleteBonds.Add(bond);
+                    //deleteBonds.Add(bond);
                     continue;
                 }
             
@@ -617,7 +727,13 @@ namespace LipidCreatorStructureEditor
                 bond.edgeSingle = new StructureEdge(new PointF(xB, yB), new PointF(xE, yE));
             }
             
-            foreach (var bond in deleteBonds) checkBonds.Remove(bond);
+            foreach (var bond in deleteBonds)
+            {
+                bonds.Remove(bond);
+                if (additionalBonds.Contains(bond)) additionalBonds.Remove(bond);
+            }
+            
+            countNodeConnections();
         }
         
         
@@ -667,22 +783,25 @@ namespace LipidCreatorStructureEditor
         public void addBond(StructureNode start, StructureNode end)
         {
             if (currentProjection == 0) return;
-            Bond bond = new Bond(this, start.id, end.id, false);
+            Bond bond = new Bond(this, bondIDs++, start.id, end.id, false);
             bond.bondProjections.Add(currentProjection, false);
+            bonds.Add(bond);
             additionalBonds.Add(bond);
-            computeBonds(additionalBonds);
-            countNodeConnections();
+            computeBonds();
         }
         
         
         
         public void removeBond(Bond bond)
         {
-            if (currentProjection == 0) return;
-            if (!additionalBonds.Contains(bond)) return;
-            additionalBonds.Remove(bond);
-            computeBonds(additionalBonds);
-            countNodeConnections();
+            if (currentProjection == 0|| !additionalBonds.Contains(bond) || !bond.bondProjections.ContainsKey(currentProjection)) return;
+            bond.bondProjections.Remove(currentProjection);
+            if (bond.bondProjections.Count == 0)
+            {
+                additionalBonds.Remove(bond);
+                bonds.Remove(bond);
+            }
+            computeBonds();
         }
         
         
@@ -729,24 +848,6 @@ namespace LipidCreatorStructureEditor
             foreach (var node in nodes) nodeConnectionsHiddenCount.Add(node.id, 0);
             
             foreach (var bond in bonds)
-            {
-                
-                StructureNode nodeB = idToNode[bond.startId];
-                StructureNode nodeE = idToNode[bond.endId];
-                NodeProjection proStart = nodeB.nodeProjections[currentProjection];
-                NodeProjection proEnd = nodeE.nodeProjections[currentProjection];
-                
-                if (proStart.nodeState == NodeState.Enabled && proEnd.nodeState == NodeState.Enabled)
-                {
-                    nodeConnectionsCount[bond.startId] += bond.bondProjections[currentProjection] ? 2 : 1;
-                    nodeConnectionsCount[bond.endId] += bond.bondProjections[currentProjection] ? 2 : 1;
-                }
-                if (proStart.nodeState != NodeState.Hidden && proEnd.nodeState != NodeState.Hidden){
-                    nodeConnectionsHiddenCount[bond.startId] += bond.bondProjections[currentProjection] ? 2 : 1;
-                    nodeConnectionsHiddenCount[bond.endId] += bond.bondProjections[currentProjection] ? 2 : 1;
-                }
-            }
-            foreach (var bond in additionalBonds)
             {
                 if (!bond.bondProjections.ContainsKey(currentProjection)) continue;
                 
@@ -804,6 +905,7 @@ namespace LipidCreatorStructureEditor
             
             foreach (var bond in bonds)
             {
+                if (!bond.bondProjections.ContainsKey(currentProjection)) continue;
                 
                 if (!idToNode[bond.startId].nodeProjections.ContainsKey(currentProjection) || !idToNode[bond.endId].nodeProjections.ContainsKey(currentProjection)) continue;
                 
@@ -815,29 +917,6 @@ namespace LipidCreatorStructureEditor
                 Pen pen = penEnabled; 
                 if (proStart.nodeState == NodeState.Hidden || proEnd.nodeState == NodeState.Hidden) pen = penHidden;
                 else if (proStart.nodeState == NodeState.Disabled || proEnd.nodeState == NodeState.Disabled) pen = penDisabled;
-                if (bond.bondProjections[currentProjection])
-                {
-                    foreach (var edge in bond.edgesDouble) g.DrawLine(pen, edge.start, edge.end);
-                }
-                else
-                {
-                    g.DrawLine(pen, bond.edgeSingle.start, bond.edgeSingle.end);
-                }
-            }
-           
-            foreach (var bond in additionalBonds)
-            {
-                if (!bond.bondProjections.ContainsKey(currentProjection)) continue;
-                
-                NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
-                NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
-                
-                if (!developmentView && (proStart.nodeState == NodeState.Hidden || proEnd.nodeState == NodeState.Hidden)) continue;
-                    
-                Pen pen = penEnabled; 
-                if (proStart.nodeState == NodeState.Hidden || proEnd.nodeState == NodeState.Hidden) pen = penHidden;
-                else if (proStart.nodeState == NodeState.Disabled || proEnd.nodeState == NodeState.Disabled) pen = penDisabled;
-                
                 if (bond.bondProjections[currentProjection])
                 {
                     foreach (var edge in bond.edgesDouble) g.DrawLine(pen, edge.start, edge.end);
@@ -861,32 +940,26 @@ namespace LipidCreatorStructureEditor
             drawFormat.Alignment = StringAlignment.Center;
             drawFormat.LineAlignment = StringAlignment.Center;
             
-            
             Dictionary<StructureNode, List<StructureNode>> adjacentNodes = new Dictionary<StructureNode, List<StructureNode>>();
             foreach (var node in nodes) adjacentNodes.Add(node, new List<StructureNode>());
                 
             foreach (var bond in bonds)
             {
-                NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
-                NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
+                if (!idToNode.ContainsKey(bond.startId) || !idToNode.ContainsKey(bond.endId)) continue;
+                
+                StructureNode nodeB = idToNode[bond.startId];
+                StructureNode nodeE = idToNode[bond.endId];
+                
+                if (!nodeB.nodeProjections.ContainsKey(currentProjection) || !nodeE.nodeProjections.ContainsKey(currentProjection) || !adjacentNodes.ContainsKey(nodeB) || ! adjacentNodes.ContainsKey(nodeE)) continue;
+                
+                NodeProjection proStart = nodeB.nodeProjections[currentProjection];
+                NodeProjection proEnd = nodeE.nodeProjections[currentProjection];
                 if (proStart.nodeState != NodeState.Hidden && proEnd.nodeState != NodeState.Hidden)
                 {
-                    adjacentNodes[idToNode[bond.startId]].Add(idToNode[bond.endId]);
-                    adjacentNodes[idToNode[bond.endId]].Add(idToNode[bond.startId]);
+                    adjacentNodes[nodeB].Add(nodeE);
+                    adjacentNodes[nodeE].Add(nodeB);
                 }
             }
-            foreach (var bond in additionalBonds)
-            {
-                if (!bond.bondProjections.ContainsKey(currentProjection)) continue;
-                NodeProjection proStart = idToNode[bond.startId].nodeProjections[currentProjection];
-                NodeProjection proEnd = idToNode[bond.endId].nodeProjections[currentProjection];
-                if (proStart.nodeState != NodeState.Hidden && proEnd.nodeState != NodeState.Hidden)
-                {
-                    adjacentNodes[idToNode[bond.startId]].Add(idToNode[bond.endId]);
-                    adjacentNodes[idToNode[bond.endId]].Add(idToNode[bond.startId]);
-                }
-            }
-            
             
             
             int minX = (1 << 30);

@@ -72,6 +72,7 @@ namespace LipidCreatorStructureEditor
         public ListBox negativeFragmentsListBox = new ListBox();
         
         public Button actionChangeAtomState = new Button();
+        public Button actionChangeAtom = new Button();
         public Button actionChangeBondState = new Button();
         public Button actionChangeGlobalCharge = new Button();
         public Button actionDrawAtom = new Button();
@@ -100,6 +101,7 @@ namespace LipidCreatorStructureEditor
         public TextBox bb4Hydro = new TextBox();
         
         public Label massLabel = new Label();
+        public Label sumFormulaLabel = new Label();
         
         public ComboBox adductComboBox = new ComboBox();
         
@@ -126,11 +128,17 @@ namespace LipidCreatorStructureEditor
             actionChangeAtomState.Location = new Point(10, 10);
             actionChangeAtomState.Click += actionChangeAtomStateClicked;
             
+            this.Controls.Add(actionChangeAtom);
+            actionChangeAtom.Size = new Size(120, 25);
+            actionChangeAtom.Text = "Change atom";
+            actionChangeAtom.Location = new Point(10, actionChangeAtomState.Top + 35);
+            actionChangeAtom.Click += actionChangeAtomClicked;
+            
             
             this.Controls.Add(actionChangeBondState);
             actionChangeBondState.Size = new Size(120, 25);
             actionChangeBondState.Text = "Change bond state";
-            actionChangeBondState.Location = new Point(10, actionChangeAtomState.Top + 35);
+            actionChangeBondState.Location = new Point(10, actionChangeAtom.Top + 35);
             actionChangeBondState.Click += actionChangeBondStateClicked;
             
             
@@ -178,6 +186,7 @@ namespace LipidCreatorStructureEditor
             
             
             actionButtons.Add(actionChangeAtomState);
+            actionButtons.Add(actionChangeAtom);
             actionButtons.Add(actionChangeBondState);
             actionButtons.Add(actionDrawAtom);
             actionButtons.Add(actionDrawBond);
@@ -251,6 +260,11 @@ namespace LipidCreatorStructureEditor
             this.Controls.Add(massLabel);
             massLabel.Location = new Point(200, 100);
             massLabel.Size = new Size(220, 25);
+            
+            this.Controls.Add(sumFormulaLabel);
+            sumFormulaLabel.Location = new Point(200, 120);
+            sumFormulaLabel.Size = new Size(220, 25);
+            sumFormulaLabel.BringToFront();
             
             
             

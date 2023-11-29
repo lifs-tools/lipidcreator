@@ -4,12 +4,13 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text;
 using System.Drawing.Drawing2D;
 
 namespace LipidCreatorStructureEditor
 {
     public enum MouseState {MouseDefault, MouseDown, MouseDownMove};
-    public enum Action {Idle, ChangeAtom, ChangeAtomSelect, ChangeBond, DrawAtom, DrawBond, RemoveAtom, RemoveBond, MoveAtom, MoveAtomSelect};
+    public enum Action {Idle, ChangeAtomState, ChangeAtomSelect, ChangeBond, ChangeAtom, DrawAtom, DrawBond, RemoveAtom, RemoveBond, MoveAtom, MoveAtomSelect};
         
     public partial class LipidCreatorStructureEditor : Form
     {
@@ -69,7 +70,7 @@ namespace LipidCreatorStructureEditor
             
             var mouse = PointToClient(Cursor.Position);
             
-            if (((action == Action.ChangeAtom || action == Action.MoveAtom) && mouseState != MouseState.MouseDownMove) || action == Action.DrawBond || action == Action.DrawAtom || action == Action.RemoveAtom)
+            if (((action == Action.ChangeAtomState || action == Action.MoveAtom) && mouseState != MouseState.MouseDownMove) || action == Action.DrawBond || action == Action.DrawAtom || action == Action.RemoveAtom || action == Action.ChangeAtom)
             {
                 if (currentNode != null && currentNode.nodeProjections.ContainsKey(lipidStructure.currentProjection))
                 {
@@ -152,9 +153,14 @@ namespace LipidCreatorStructureEditor
             switch (mouseState)
             {
                 case MouseState.MouseDown:
-                    if (action == Action.ChangeAtom && currentNode != null)
+                    if (action == Action.ChangeAtomState && currentNode != null)
                     {
                         currentNode.toggleState();
+                        updateStructure();
+                    }
+                    if (action == Action.ChangeAtom && currentNode != null)
+                    {
+                        currentNode.toggleAtom();
                         updateStructure();
                     }
                     else if (action == Action.ChangeBond && currentBond != null)
@@ -182,7 +188,7 @@ namespace LipidCreatorStructureEditor
                     }
                     else if (action == Action.ChangeAtomSelect)
                     {
-                        action = Action.ChangeAtom;
+                        action = Action.ChangeAtomState;
                     }
                     else if (action == Action.DrawAtom && currentNode == null)
                     {
@@ -193,7 +199,7 @@ namespace LipidCreatorStructureEditor
                     break;
                     
                 case MouseState.MouseDownMove:
-                    if (action == Action.ChangeAtom && currentNode != null)
+                    if (action == Action.ChangeAtomState && currentNode != null)
                     {
                         currentNode.toggleState();
                         updateStructure();
@@ -229,7 +235,7 @@ namespace LipidCreatorStructureEditor
                     }
                     else if (action == Action.ChangeAtomSelect)
                     {
-                        action = Action.ChangeAtom;
+                        action = Action.ChangeAtomState;
                         var mouse = PointToClient(Cursor.Position);
                         Point lower = new Point(Math.Min(startSelect.X, mouse.X), Math.Min(startSelect.Y, mouse.Y));
                         Point upper = new Point(Math.Max(startSelect.X, mouse.X), Math.Max(startSelect.Y, mouse.Y));
@@ -290,7 +296,7 @@ namespace LipidCreatorStructureEditor
                 mouseState = MouseState.MouseDown;
                 if (currentNode == null)
                 {
-                    if (action == Action.ChangeAtom)
+                    if (action == Action.ChangeAtomState)
                     {
                         startSelect = PointToClient(Cursor.Position);
                         action = Action.ChangeAtomSelect;
@@ -334,7 +340,7 @@ namespace LipidCreatorStructureEditor
             PointF mouse = PointToClient(Cursor.Position);
             
             
-            if (action == Action.ChangeAtom || action == Action.MoveAtom || action == Action.DrawBond || action == Action.RemoveAtom)
+            if (action == Action.ChangeAtom || action == Action.ChangeAtomState || action == Action.MoveAtom || action == Action.DrawBond || action == Action.RemoveAtom)
             {
                 double minDist = 1e10;
                 foreach (var node in lipidStructure.nodes)
@@ -374,18 +380,6 @@ namespace LipidCreatorStructureEditor
                 double minDistC = 1e10;
                 foreach (var bond in lipidStructure.bonds)
                 {
-                    double xb = (bond.edgeSingle.start.X + bond.edgeSingle.end.X) * 0.5;
-                    double yb = (bond.edgeSingle.start.Y + bond.edgeSingle.end.Y) * 0.5;
-                    double dist  = Math.Pow(xb - mouse.X, 2) + Math.Pow(yb - mouse.Y, 2);
-                    if (dist <= Math.Pow(10 + cursorCircleRadius, 2) && dist < minDistC)
-                    {
-                        minDistC = dist;
-                        currentBond = bond;
-                    }
-                }
-                foreach (var bond in lipidStructure.additionalBonds)
-                {
-                    if (!bond.bondProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     double xb = (bond.edgeSingle.start.X + bond.edgeSingle.end.X) * 0.5;
                     double yb = (bond.edgeSingle.start.Y + bond.edgeSingle.end.Y) * 0.5;
                     double dist  = Math.Pow(xb - mouse.X, 2) + Math.Pow(yb - mouse.Y, 2);
@@ -471,7 +465,15 @@ namespace LipidCreatorStructureEditor
             
         private void actionChangeAtomStateClicked(Object sender, EventArgs e)
         {
-            buttonClicked(actionChangeAtomState, Action.ChangeAtom);
+            buttonClicked(actionChangeAtomState, Action.ChangeAtomState);
+        }
+    
+    
+    
+            
+        private void actionChangeAtomClicked(Object sender, EventArgs e)
+        {
+            buttonClicked(actionChangeAtom, Action.ChangeAtom);
         }
         
         
@@ -844,6 +846,18 @@ namespace LipidCreatorStructureEditor
             }
             
             mass += C * 12.0 + H * 1.007825035 + N * 14.0030740 + O * 15.99491463 + P * 30.973762 + S * 31.9720707;
+            Dictionary<char, int> elements = new Dictionary<char, int>(){{'C', C}, {'H', H}, {'N', N}, {'O', O}, {'P', P}, {'S', S}};
+            StringBuilder formula = new StringBuilder();
+            formula.Append("formula: ");
+            foreach (char chr in "CHNOPS")
+            {
+                int num = elements[chr];
+                if (num <= 0) continue;
+                formula.Append(chr);
+                if (num > 1) formula.Append(num);
+            }
+            sumFormulaLabel.Text = formula.ToString();
+            
             if (adductCharge != 0) mass = (mass - adductCharge * ELECTRON_REST_MASS) / Math.Abs(adductCharge);
             massLabel.Text = string.Format("m/z: {0:N6} Da", mass);
         }

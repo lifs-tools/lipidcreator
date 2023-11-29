@@ -82,6 +82,7 @@ namespace LipidCreatorStructureEditor
         public Button actionRemoveBond = new Button();
         public Button actionFinalView = new Button();
         public Button actionMoveAtom = new Button();
+        public Button actionSaveStructure = new Button();
         
         public List<Button> actionButtons = new List<Button>();
         
@@ -328,6 +329,14 @@ namespace LipidCreatorStructureEditor
             bb4Hydro.Size = new Size(120, 25);
             bb4Hydro.Text = "0";
             bb4Hydro.TextChanged += computeFragmentMass;
+            
+            
+            
+            this.Controls.Add(actionSaveStructure);
+            actionSaveStructure.Size = new Size(120, 25);
+            actionSaveStructure.Text = "Save structure";
+            actionSaveStructure.Location = new Point(10, 750);
+            actionSaveStructure.Click += saveStructure;
             
             
             this.Controls.Add(adductComboBox);

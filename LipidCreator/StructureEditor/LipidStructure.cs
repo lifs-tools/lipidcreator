@@ -82,6 +82,11 @@ namespace LipidCreatorStructureEditor
             return new SPointF(p.X - r.X, p.Y - r.Y);
         }
         
+        public static SPointF operator /(SPointF p, float f)
+        {
+            return new SPointF(p.X / f, p.Y / f);
+        }
+        
         public PointF pF()
         {
             return new PointF(X, Y);
@@ -94,7 +99,8 @@ namespace LipidCreatorStructureEditor
     }
     
     
-    public class S {
+    public class S
+    {
         public static string space(int n)
         {
             return new string(' ', 2 * n);
@@ -362,6 +368,7 @@ namespace LipidCreatorStructureEditor
         
         public Bond(LipidStructure _lipidStructure, XElement element)
         {
+            lipidStructure = _lipidStructure;
             id = Convert.ToInt32(element.Attribute("id").Value);
             startId = Convert.ToInt32(element.Attribute("start").Value);
             endId = Convert.ToInt32(element.Attribute("end").Value);
@@ -386,7 +393,7 @@ namespace LipidCreatorStructureEditor
         
         public void toggleState()
         {
-            if (lipidStructure.currentProjection == 0) return;
+            if (lipidStructure.currentProjection == 0 || !bondProjections.ContainsKey(lipidStructure.currentProjection)) return;
             
             bondProjections[lipidStructure.currentProjection] = !bondProjections[lipidStructure.currentProjection];
             lipidStructure.countNodeConnections();
@@ -438,6 +445,13 @@ namespace LipidCreatorStructureEditor
             charge = c;
         }
         
+        public LipidStructureFragment(XElement element)
+        {
+            id = Convert.ToInt32(element.Attribute("id").Value);
+            fragmentName = element.Attribute("name").Value;
+            charge = Convert.ToInt32(element.Attribute("charge").Value);
+        }
+        
         public void toggleCharge()
         {
             charge = (charge >= maxCharge) ? minCharge : charge + 1;
@@ -483,8 +497,8 @@ namespace LipidCreatorStructureEditor
         public HashSet<string> specialAtoms = new HashSet<string>(){"N", "O", "P", "S"};
         public Dictionary<string, int> freeElectrons = new Dictionary<string, int>(){{"C", 4}, {"N", 3}, {"O", 2}, {"P", 3}, {"S", 2}};
         public int projectionIds = 1;
-        public int currentNodeId = 0;
-        public int bondIDs = 0;
+        public int nodeIds = 0;
+        public int bondIds = 0;
         
         
         
@@ -525,20 +539,28 @@ namespace LipidCreatorStructureEditor
             graphics = form.CreateGraphics();
          
             string documentType = doc.Elements().First().Name.LocalName;
-            if (documentType.Equals("CDXML")) loadCDXML(doc);
-            else if (documentType.Equals("LipidStructure")) loadLipidStructure(doc);
-            else throw new Exception("Unknown data format");
-            
-            nodeFont = new Font("Arial", fontSize * factor);
-            decoratorFont = new Font("Arial", (float)(fontSize * factor * 0.5));
-            penEnabled = new Pen(Color.Black, factor);
-            penDisabled = new Pen(Color.FromArgb(180, 180, 180), factor);
-            penHidden = new Pen(Color.FromArgb(220, 220, 220), factor);
+            if (documentType.Equals("CDXML"))
+            {
+                loadCDXML(doc);
+            }
+            else if (documentType.Equals("LipidStructure"))
+            {
+                ((LipidCreatorStructureEditor)form).structureFile = file_name;
+                loadLipidStructure(doc);
+            }
+            else
+            {
+                throw new Exception("Unknown data format");
+            }
             
             currentProjection = 0;
             computeBonds();
             changeFragment();
             countNodeConnections();
+            
+            penEnabled = new Pen(Color.Black, factor);
+            penDisabled = new Pen(Color.FromArgb(180, 180, 180), factor);
+            penHidden = new Pen(Color.FromArgb(220, 220, 220), factor);
         }
         
         
@@ -555,6 +577,7 @@ namespace LipidCreatorStructureEditor
                 StructureNode sn = new StructureNode(this, element);
                 idToNode.Add(sn.id, sn);
                 nodes.Add(sn);
+                nodeIds = Math.Max(nodeIds, sn.id + 1);
             }
             
             foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("AdditionalNodes")).Elements().Where(el => el.Name.LocalName.Equals("NodeID")))
@@ -577,6 +600,26 @@ namespace LipidCreatorStructureEditor
                 int id = Convert.ToInt32(element.Attribute("id").Value);
                 additionalBonds.Add(bond_dict[id]);
             }
+            
+            
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("PositiveFragments")).Elements().Where(el => el.Name.LocalName.Equals("LipidStructureFragment")))
+            {
+                LipidStructureFragment fragment = new LipidStructureFragment(element);
+                positiveFragments.Add(fragment.fragmentName, fragment);
+            }
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("NegativeFragments")).Elements().Where(el => el.Name.LocalName.Equals("LipidStructureFragment")))
+            {
+                LipidStructureFragment fragment = new LipidStructureFragment(element);
+                negativeFragments.Add(fragment.fragmentName, fragment);
+            }
+            
+            nodeFont = new Font("Arial", fontSize * factor);
+            decoratorFont = new Font("Arial", (float)(fontSize * factor * 0.5));
+            
+            bondIds = bonds.Count + 1;
+            projectionIds = negativeFragments.Count + positiveFragments.Count + 1;
         }
         
         
@@ -645,7 +688,7 @@ namespace LipidCreatorStructureEditor
                         idToNode.Add(nodeId, sn);
                     }
                     
-                    currentNodeId = Math.Max(currentNodeId, nodeId);
+                    nodeIds = Math.Max(nodeIds, nodeId + 1);
                 }
                 catch(Exception ex){
                     Console.WriteLine(ex);
@@ -697,7 +740,7 @@ namespace LipidCreatorStructureEditor
                     // get the edge color
                     bool isDoubleBond = ((string)edge.Attribute("Order") != null) && edge.Attribute("Order").Value.ToString().Equals("2");
                     
-                    bond = new Bond(this, bondIDs++, idB, idE, isDoubleBond);
+                    bond = new Bond(this, bondIds++, idB, idE, isDoubleBond);
                     bonds.Add(bond);
                 }
                 catch(Exception){}
@@ -727,6 +770,9 @@ namespace LipidCreatorStructureEditor
             float offsetX = /* (float)form.Size.Width / 2.0f */ - midX * factor;
             float offsetY = /* (float)form.Size.Height / 2.0f */ - midY * factor;
             
+            
+            nodeFont = new Font("Arial", fontSize * factor);
+            decoratorFont = new Font("Arial", (float)(fontSize * factor * 0.5));
             
             foreach (var node in nodes)
             {
@@ -976,7 +1022,7 @@ namespace LipidCreatorStructureEditor
             float w = size.Width * 0.9f;
             float h = size.Height * 0.9f;
             RectangleF drawRect = new RectangleF(pos.X - w * 0.5f, pos.Y - h * 0.5f, w, h);
-            StructureNode sn = new StructureNode(this, ++currentNodeId, pos, drawRect, "C");
+            StructureNode sn = new StructureNode(this, nodeIds, pos, drawRect, "C");
             
         
             int fragId = currentFragment.id;
@@ -984,7 +1030,7 @@ namespace LipidCreatorStructureEditor
             
             nodes.Add(sn);
             additionalNodes.Add(sn);
-            idToNode.Add(currentNodeId, sn);
+            idToNode.Add(nodeIds++, sn);
             
             computeBonds();
         }
@@ -1012,7 +1058,7 @@ namespace LipidCreatorStructureEditor
         public void addBond(StructureNode start, StructureNode end)
         {
             if (currentProjection == 0) return;
-            Bond bond = new Bond(this, bondIDs++, start.id, end.id, false);
+            Bond bond = new Bond(this, bondIds++, start.id, end.id, false);
             bond.bondProjections.Add(currentProjection, false);
             bonds.Add(bond);
             additionalBonds.Add(bond);

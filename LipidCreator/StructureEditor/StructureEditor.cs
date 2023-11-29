@@ -31,6 +31,7 @@ namespace LipidCreatorStructureEditor
         public static double ELECTRON_REST_MASS = 0.00054857990946;
         public const string FRAGMENT_LABEL = "fragment";
         public bool semaphore = false;
+        public string structureFile = "";
         
         
         public LipidCreatorStructureEditor()
@@ -39,11 +40,11 @@ namespace LipidCreatorStructureEditor
             InitializeComponent();
             this.DoubleBuffered = true;
             
-            /*
+            
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "txt files (*.cdxml)|*.cdxml|(*.stXL)|*.stXL";
+                openFileDialog.Filter = "chemdraw file (*.cdxml)|*.cdxml|structure file (*.stXL)|*.stXL";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
@@ -52,34 +53,45 @@ namespace LipidCreatorStructureEditor
                     //Get the path of specified file
                     string filePath = openFileDialog.FileName;
 
-                    
+                    try
+                    {
+                        lipidStructure = new LipidStructure(filePath, this);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("An error happened, please speak with Dominik and explain how you caused the error.", "Error happened");
+                        Environment.Exit(-1);
+                    }
                     Console.WriteLine(filePath);
                 }
+                else
+                {
+                    Environment.Exit(0);
+                }
             }
+            
+            foreach (var kvp in lipidStructure.positiveFragments)
+            {
+                positiveFragmentsListBox.Items.Add(kvp.Value.fragmentName);
+            }
+            
+            foreach (var kvp in lipidStructure.negativeFragments)
+            {
+                negativeFragmentsListBox.Items.Add(kvp.Value.fragmentName);
+            }
+            
+            /*
+            string file = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/PC genNeg.cdxml";
+            lipidStructure = new LipidStructure(file, this);
+            positiveFragmentsListBox.Items.Add("HG 164");
+            lipidStructure.addFragment("HG 164", true);
+            
+            positiveFragmentsListBox.Items.Add("HG 181");
+            lipidStructure.addFragment("HG 181", true);
+            
+            negativeFragmentsListBox.Items.Add("HG -OH");
+            lipidStructure.addFragment("HG -OH", false);
             */
-            
-            
-            if (true)
-            {
-                string file = "foo.stXL";
-                lipidStructure = new LipidStructure(file, this);
-            }
-            else
-            {
-                string file = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/PC genNeg.cdxml";
-                lipidStructure = new LipidStructure(file, this);
-                positiveFragmentsListBox.Items.Add("HG 164");
-                lipidStructure.addFragment("HG 164", true);
-                
-                positiveFragmentsListBox.Items.Add("HG 181");
-                lipidStructure.addFragment("HG 181", true);
-                
-                negativeFragmentsListBox.Items.Add("HG -OH");
-                lipidStructure.addFragment("HG -OH", false);
-                
-            
-                lipidStructure.serialize("foo.stXL");
-            }
             
             computeFragmentMass(null, null);
         }
@@ -116,9 +128,8 @@ namespace LipidCreatorStructureEditor
                 if (currentBond != null)
                 {
                     Pen pen = new Pen(Color.DeepSkyBlue, 2);
-                    int xb = (int)((currentBond.edgeSingle.start.X + currentBond.edgeSingle.end.X) * 0.5);
-                    int yb = (int)((currentBond.edgeSingle.start.Y + currentBond.edgeSingle.end.Y) * 0.5);
-                    g.DrawEllipse(pen, xb - cursorCircleRadius, yb - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
+                    SPointF p = (currentBond.edgeSingle.start + currentBond.edgeSingle.end) / 2.0f + lipidStructure.middlePoint;
+                    g.DrawEllipse(pen, p.X - cursorCircleRadius, p.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
                 }
             }
             
@@ -198,6 +209,7 @@ namespace LipidCreatorStructureEditor
                     }
                     else if (action == Action.ChangeBond && currentBond != null)
                     {
+                        Console.WriteLine(currentBond);
                         currentBond.toggleState(); 
                         lipidStructure.computeBonds();
                         updateStructure();
@@ -239,7 +251,7 @@ namespace LipidCreatorStructureEditor
                     }
                     else if (action == Action.ChangeBond && currentBond != null)
                     {
-                        currentBond.toggleState(); 
+                        currentBond.toggleState();
                         lipidStructure.computeBonds();
                         updateStructure();
                     }
@@ -413,9 +425,9 @@ namespace LipidCreatorStructureEditor
                 double minDistC = 1e10;
                 foreach (var bond in lipidStructure.bonds)
                 {
-                    double xb = (bond.edgeSingle.start.X + bond.edgeSingle.end.X) * 0.5;
-                    double yb = (bond.edgeSingle.start.Y + bond.edgeSingle.end.Y) * 0.5;
-                    double dist  = Math.Pow(xb - mouse.X, 2) + Math.Pow(yb - mouse.Y, 2);
+                    SPointF b = (bond.edgeSingle.start + bond.edgeSingle.end) / 2.0f + lipidStructure.middlePoint - mouse;
+                    
+                    double dist  = Math.Pow(b.X, 2) + Math.Pow(b.Y, 2);
                     if (dist <= Math.Pow(10 + cursorCircleRadius, 2) && dist < minDistC)
                     {
                         minDistC = dist;
@@ -596,7 +608,9 @@ namespace LipidCreatorStructureEditor
             string newFragmentName = InputBox.Show("Please write a new fragment name:", "New fragment name", currentFragmentName);
             if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName) || lipidStructure.positiveFragments.ContainsKey(newFragmentName)) return;
             
-            lipidStructure.positiveFragments.Add(newFragmentName, lipidStructure.positiveFragments[currentFragmentName]);
+            LipidStructureFragment fragment = lipidStructure.positiveFragments[currentFragmentName];
+            fragment.fragmentName = newFragmentName;
+            lipidStructure.positiveFragments.Add(newFragmentName, fragment);
             lipidStructure.positiveFragments.Remove(currentFragmentName);
             positiveFragmentsListBox.Items[selectedIndex] = newFragmentName;
         }
@@ -614,7 +628,9 @@ namespace LipidCreatorStructureEditor
             string newFragmentName = InputBox.Show("Please write a new fragment name:", "New fragment name", currentFragmentName);
             if (newFragmentName.Length == 0 || newFragmentName.Equals(currentFragmentName) || lipidStructure.negativeFragments.ContainsKey(newFragmentName)) return;
             
-            lipidStructure.negativeFragments.Add(newFragmentName, lipidStructure.negativeFragments[currentFragmentName]);
+            LipidStructureFragment fragment = lipidStructure.negativeFragments[currentFragmentName];
+            fragment.fragmentName = newFragmentName;
+            lipidStructure.negativeFragments.Add(newFragmentName, fragment);
             lipidStructure.negativeFragments.Remove(currentFragmentName);
             negativeFragmentsListBox.Items[selectedIndex] = newFragmentName;
         }
@@ -664,6 +680,31 @@ namespace LipidCreatorStructureEditor
         {
             Invalidate();
             computeFragmentMass(null, null);
+        }
+        
+        
+        
+        public void saveStructure(Object sender, EventArgs e)
+        {
+            if (structureFile.Length == 0)
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.InitialDirectory = "c:\\";
+                    saveFileDialog.Filter = "structure file (*.stXL)|*.stXL";
+                    saveFileDialog.FilterIndex = 0;
+                    saveFileDialog.RestoreDirectory = true;
+                    saveFileDialog.ShowDialog();
+                    
+                    structureFile = saveFileDialog.FileName;   
+                }
+            }
+            
+            if (structureFile.Length > 0)
+            {
+                lipidStructure.serialize(structureFile);
+                MessageBox.Show("The structure was saved.", "Structure saved");
+            }
         }
         
         

@@ -120,6 +120,16 @@ namespace LipidCreatorStructureEditor
             previousShift = new SPointF(shift.X, shift.Y);
         }
         
+        
+        public NodeProjection(XElement element)
+        {
+            shift = new SPointF(Convert.ToInt32(element.Attribute("x").Value), Convert.ToInt32(element.Attribute("y").Value));
+            string state = element.Attribute("state").Value;
+            if (state.Equals("Enabled")) nodeState = NodeState.Enabled;
+            else if (state.Equals("Disabled")) nodeState = NodeState.Disabled;
+            else nodeState = NodeState.Hidden;
+        }
+        
         public void toggleState(){
             switch(nodeState)
             {
@@ -137,7 +147,7 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int id, int tabs = 0)
         {
-            sb.Append(String.Format(S.space(tabs) + "<NodeProjection id={0} x={1} y={2} state=\"{3}\" />\n", id, shift.X, shift.Y, nodeState));
+            sb.Append(String.Format(S.space(tabs) + "<NodeProjection id=\"{0}\" x=\"{1}\" y=\"{2}\" state=\"{3}\" />\n", id, shift.X, shift.Y, nodeState));
         }
     }
     
@@ -168,6 +178,31 @@ namespace LipidCreatorStructureEditor
             boundingBox = b;
             text = t;
             isCarbon = text.Equals("C");
+        }
+        
+        
+        public StructureNode(LipidStructure _lipidStructure, XElement element)
+        {
+            lipidStructure = _lipidStructure;
+            id = Convert.ToInt32(element.Attribute("id").Value);
+            text = element.Attribute("text").Value;
+            isCarbon = text.Equals("C");
+            position = new SPointF(Convert.ToSingle(element.Attribute("x").Value), Convert.ToSingle(element.Attribute("y").Value));
+            boundingBox = new RectangleF(Convert.ToSingle(element.Attribute("bx").Value), Convert.ToSingle(element.Attribute("by").Value), Convert.ToSingle(element.Attribute("bw").Value), Convert.ToSingle(element.Attribute("bh").Value));
+            
+            
+            
+            foreach (var decorator in element.Elements().Where(el => el.Name.LocalName.Equals("Decorators")).Elements().Where(el => el.Name.LocalName.Equals("StructureNode")))
+            {
+                decorators.Add(new StructureNode(lipidStructure, decorator));
+            }
+            
+            foreach (var np in element.Elements().Where(el => el.Name.LocalName.Equals("NodeProjections")).Elements().Where(el => el.Name.LocalName.Equals("NodeProjection")))
+            {
+                int npId = Convert.ToInt32(np.Attribute("id").Value);
+                NodeProjection nodeProjection = new NodeProjection(np);
+                nodeProjections.Add(npId, nodeProjection);
+            }
         }
         
         
@@ -234,8 +269,8 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int tabs = 0)
         {
-            sb.Append(String.Format(S.space(tabs) + "<StructureNode id={0} x={1} y={2} ", id, position.X, position.Y));
-            sb.Append(String.Format("bx={0} by={1} bw={2} bh={3} ", boundingBox.X, boundingBox.Y, boundingBox.Width, boundingBox.Height));
+            sb.Append(String.Format(S.space(tabs) + "<StructureNode id=\"{0}\" x=\"{1}\" y=\"{2}\" ", id, position.X, position.Y));
+            sb.Append(String.Format("bx=\"{0}\" by=\"{1}\" bw=\"{2}\" bh=\"{3}\" ", boundingBox.X, boundingBox.Y, boundingBox.Width, boundingBox.Height));
             sb.Append(String.Format("text=\"{0}\">\n", text));
             if (decorators.Count > 0)
             {
@@ -273,9 +308,15 @@ namespace LipidCreatorStructureEditor
             end = new SPointF(copy.end.X, copy.end.Y);
         }
         
+        public StructureEdge(XElement element)
+        {
+            start = new SPointF(Convert.ToSingle(element.Attribute("sx").Value), Convert.ToSingle(element.Attribute("sy").Value));
+            end = new SPointF(Convert.ToSingle(element.Attribute("ex").Value), Convert.ToSingle(element.Attribute("ey").Value));
+        }
+        
         public void serialize(StringBuilder sb, int tabs = 0)
         {
-            sb.Append(S.space(tabs) + String.Format("<StructureEdge sx={0} sy={1} ex={2} ey={3} />\n", start.X, start.Y, end.X, end.Y));
+            sb.Append(S.space(tabs) + String.Format("<StructureEdge sx=\"{0}\" sy=\"{1}\" ex=\"{2}\" ey=\"{3}\" />\n", start.X, start.Y, end.X, end.Y));
         }
     }
     
@@ -286,7 +327,7 @@ namespace LipidCreatorStructureEditor
         public int startId;
         public int endId;
         public bool isDoubleBond = false;
-        public StructureEdge edgeSingle;
+        public StructureEdge edgeSingle = null;
         public List<StructureEdge> edgesDouble = new List<StructureEdge>();
         public Dictionary<int, bool> bondProjections = new Dictionary<int, bool>();
         public LipidStructure lipidStructure;
@@ -306,7 +347,7 @@ namespace LipidCreatorStructureEditor
             startId = copy.startId;
             endId = copy.endId;
             isDoubleBond = copy.isDoubleBond;
-            if (copy.edgeSingle != null) edgeSingle = new StructureEdge(copy.edgeSingle);
+            edgeSingle = new StructureEdge(copy.edgeSingle);
             foreach (var edge in copy.edgesDouble)
             {
                 edgesDouble.Add(new StructureEdge(edge));
@@ -316,6 +357,30 @@ namespace LipidCreatorStructureEditor
                 bondProjections.Add(kvp.Key, kvp.Value);
             }
             lipidStructure = copy.lipidStructure;
+        }
+        
+        
+        public Bond(LipidStructure _lipidStructure, XElement element)
+        {
+            id = Convert.ToInt32(element.Attribute("id").Value);
+            startId = Convert.ToInt32(element.Attribute("start").Value);
+            endId = Convert.ToInt32(element.Attribute("end").Value);
+            isDoubleBond = element.Attribute("db").Value.Equals("True");
+            
+            foreach (var singleEdge in element.Elements().Where(el => el.Name.LocalName.Equals("EdgeSingle")).Elements().Where(el => el.Name.LocalName.Equals("StructureEdge")))
+            {
+                edgeSingle = new StructureEdge(singleEdge);
+            }
+            
+            foreach (var doubleEdge in element.Elements().Where(el => el.Name.LocalName.Equals("EdgesDouble")).Elements().Where(el => el.Name.LocalName.Equals("StructureEdge")))
+            {
+                edgesDouble.Add(new StructureEdge(doubleEdge));
+            }
+            
+            foreach (var bp in element.Elements().Where(el => el.Name.LocalName.Equals("BondProjections")).Elements().Where(el => el.Name.LocalName.Equals("BP")))
+            {
+                bondProjections.Add(Convert.ToInt32(bp.Attribute("id").Value), bp.Attribute("enabled").Value.Equals("True"));
+            }
         }
         
         
@@ -329,7 +394,7 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int tabs = 0)
         {
-            sb.Append(S.space(tabs) + String.Format("<Bond id={0} start={1} end={2} db={3}>\n", id, startId, endId, isDoubleBond));
+            sb.Append(S.space(tabs) + String.Format("<Bond id=\"{0}\" start=\"{1}\" end=\"{2}\" db=\"{3}\">\n", id, startId, endId, isDoubleBond));
             if (edgeSingle != null)
             {
                 sb.Append(S.space(tabs + 1) + "<EdgeSingle>\n");
@@ -347,7 +412,7 @@ namespace LipidCreatorStructureEditor
             if (bondProjections.Count > 0)
             {
                 sb.Append(S.space(tabs + 1) + "<BondProjections>\n");
-                foreach (var kvp in bondProjections) sb.Append(S.space(tabs + 2) + String.Format("<BP id={0} enabled={1} />\n", kvp.Key, kvp.Value));
+                foreach (var kvp in bondProjections) sb.Append(S.space(tabs + 2) + String.Format("<BP id=\"{0}\" enabled=\"{1}\" />\n", kvp.Key, kvp.Value));
                 sb.Append(S.space(tabs + 1) + "</BondProjections>\n");
             }
             
@@ -380,7 +445,7 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int tabs = 0)
         {
-            sb.Append(String.Format(S.space(tabs) + "<LipidStructureFragment id={0} name=\"{1}\" charge={2} />\n", id, fragmentName, charge));
+            sb.Append(String.Format(S.space(tabs) + "<LipidStructureFragment id=\"{0}\" name=\"{1}\" charge=\"{2}\" />\n", id, fragmentName, charge));
         }
     }
     
@@ -394,8 +459,8 @@ namespace LipidCreatorStructureEditor
         public HashSet<Bond> additionalBonds = new HashSet<Bond>();
         public Dictionary<string, LipidStructureFragment> positiveFragments = new Dictionary<string, LipidStructureFragment>();
         public Dictionary<string, LipidStructureFragment> negativeFragments = new Dictionary<string, LipidStructureFragment>();
-        public SPointF middlePoint;
         
+        public SPointF middlePoint;
         public Dictionary<int, StructureNode> idToNode = new Dictionary<int, StructureNode>();
         public float factor = 2.5f;
         public float dbSpace = 1.5f;
@@ -422,6 +487,9 @@ namespace LipidCreatorStructureEditor
         public int bondIDs = 0;
         
         
+        
+        
+        
         public void parseXML(XElement element, List<XElement> nodes, List<XElement> edges)
         {
             foreach (var fragment in element.Elements().Where(el => el.Name.LocalName.Equals("fragment")))
@@ -444,6 +512,8 @@ namespace LipidCreatorStructureEditor
         
         
         
+        
+        
         public LipidStructure(string file_name, Form form)
         {
             nodeFont = new Font("Arial", fontSize);
@@ -453,7 +523,69 @@ namespace LipidCreatorStructureEditor
             
             XDocument doc = XDocument.Load(file_name);
             graphics = form.CreateGraphics();
+         
+            string documentType = doc.Elements().First().Name.LocalName;
+            if (documentType.Equals("CDXML")) loadCDXML(doc);
+            else if (documentType.Equals("LipidStructure")) loadLipidStructure(doc);
+            else throw new Exception("Unknown data format");
             
+            nodeFont = new Font("Arial", fontSize * factor);
+            decoratorFont = new Font("Arial", (float)(fontSize * factor * 0.5));
+            penEnabled = new Pen(Color.Black, factor);
+            penDisabled = new Pen(Color.FromArgb(180, 180, 180), factor);
+            penHidden = new Pen(Color.FromArgb(220, 220, 220), factor);
+            
+            currentProjection = 0;
+            computeBonds();
+            changeFragment();
+            countNodeConnections();
+        }
+        
+        
+        
+        
+        
+         
+        public void loadLipidStructure(XDocument doc)
+        {
+            Dictionary<int, Bond> bond_dict = new Dictionary<int, Bond>();
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("Nodes")).Elements().Where(el => el.Name.LocalName.Equals("StructureNode")))
+            {
+                StructureNode sn = new StructureNode(this, element);
+                idToNode.Add(sn.id, sn);
+                nodes.Add(sn);
+            }
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("AdditionalNodes")).Elements().Where(el => el.Name.LocalName.Equals("NodeID")))
+            {
+                int id = Convert.ToInt32(element.Attribute("id").Value);
+                additionalNodes.Add(idToNode[id]);
+            }
+            
+            
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("Bonds")).Elements().Where(el => el.Name.LocalName.Equals("Bond")))
+            {
+                Bond bond = new Bond(this, element);
+                bond_dict.Add(bond.id, bond);
+                bonds.Add(bond);
+            }
+            
+            foreach (var element in doc.Element("LipidStructure").Elements().Where(el => el.Name.LocalName.Equals("AdditionalBonds")).Elements().Where(el => el.Name.LocalName.Equals("BondID")))
+            {
+                int id = Convert.ToInt32(element.Attribute("id").Value);
+                additionalBonds.Add(bond_dict[id]);
+            }
+        }
+        
+        
+        
+        
+        
+         
+        public void loadCDXML(XDocument doc)
+        {
             List<XElement> xnodes = new List<XElement>();
             List<XElement> xedges = new List<XElement>();
             foreach (var pages in doc.Element("CDXML").Elements().Where(el => el.Name.LocalName.Equals("page")))
@@ -596,8 +728,6 @@ namespace LipidCreatorStructureEditor
             float offsetY = /* (float)form.Size.Height / 2.0f */ - midY * factor;
             
             
-            nodeFont = new Font("Arial", fontSize * factor);
-            decoratorFont = new Font("Arial", (float)(fontSize * factor * 0.5));
             foreach (var node in nodes)
             {
                 float x = node.position.X * factor + offsetX;
@@ -628,10 +758,6 @@ namespace LipidCreatorStructureEditor
                 }
             }
             
-            penEnabled = new Pen(Color.Black, factor);
-            penDisabled = new Pen(Color.FromArgb(180, 180, 180), factor);
-            penHidden = new Pen(Color.FromArgb(220, 220, 220), factor);
-            
             
             foreach (var node in nodes)
             {
@@ -639,11 +765,6 @@ namespace LipidCreatorStructureEditor
                 foreach (var decorator in node.decorators) decorator.nodeProjections.Add(0, new NodeProjection());
             }
             foreach (var bond in bonds) bond.bondProjections.Add(0, bond.isDoubleBond);
-            currentProjection = 0;
-            
-            computeBonds();
-            changeFragment();
-            countNodeConnections();
         }
         
         
@@ -658,6 +779,7 @@ namespace LipidCreatorStructureEditor
         public void serialize(string file_name)
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
             sb.Append("<LipidStructure>\n");
             
             // add node information
@@ -669,7 +791,7 @@ namespace LipidCreatorStructureEditor
             if (additionalNodes.Count > 0)
             {
                 sb.Append("  <AdditionalNodes>\n");
-                foreach (var node in additionalNodes) sb.Append(String.Format("    <NodeID id={0}>\n", node.id));
+                foreach (var node in additionalNodes) sb.Append(String.Format("    <NodeID id=\"{0}\">\n", node.id));
                 sb.Append("  </AdditionalNodes>\n");
             }
             
@@ -682,7 +804,7 @@ namespace LipidCreatorStructureEditor
             if (additionalBonds.Count > 0)
             {
                 sb.Append("  <AdditionalBonds>\n");
-                foreach (var bond in additionalBonds) sb.Append(String.Format("    <BondsID id={0}>\n", bond.id));
+                foreach (var bond in additionalBonds) sb.Append(String.Format("    <BondsID id=\"{0}\">\n", bond.id));
                 sb.Append("  </AdditionalBonds>\n");
             }
             
@@ -1074,6 +1196,7 @@ namespace LipidCreatorStructureEditor
             int minY = (1 << 30);
             int maxY = -(1 << 30);
             
+            
             foreach (var node in nodes)
             {
                 if (!node.nodeProjections.ContainsKey(currentProjection)) continue;
@@ -1087,7 +1210,10 @@ namespace LipidCreatorStructureEditor
                 else if (nodeProjection.nodeState == NodeState.Disabled) brush = solidBrushDisabled;
                 
                 RectangleF r = new RectangleF(nodeSPoint.X, nodeSPoint.Y, node.boundingBox.Width, node.boundingBox.Height);
-                if (!node.isCarbon || developmentView) g.DrawString(node.text, nodeFont, brush, r, drawFormat);
+                if (!node.isCarbon || developmentView)
+                {
+                    g.DrawString(node.text, nodeFont, brush, r, drawFormat);
+                }
                 if (nodeProjection.nodeState == NodeState.Enabled)
                 {
                     minX = Math.Min(minX, (int)nodeSPoint.X);

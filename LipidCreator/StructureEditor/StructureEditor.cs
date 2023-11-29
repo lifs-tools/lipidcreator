@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Drawing.Drawing2D;
 
@@ -38,23 +39,49 @@ namespace LipidCreatorStructureEditor
             InitializeComponent();
             this.DoubleBuffered = true;
             
-            string file = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/PC genNeg.cdxml";
-            lipidStructure = new LipidStructure(file, this);
+            /*
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "txt files (*.cdxml)|*.cdxml|(*.stXL)|*.stXL";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    string filePath = openFileDialog.FileName;
+
+                    
+                    Console.WriteLine(filePath);
+                }
+            }
+            */
             
-            positiveFragmentsListBox.Items.Add("HG 164");
-            lipidStructure.addFragment("HG 164", true);
             
-            positiveFragmentsListBox.Items.Add("HG 181");
-            lipidStructure.addFragment("HG 181", true);
+            if (true)
+            {
+                string file = "foo.stXL";
+                lipidStructure = new LipidStructure(file, this);
+            }
+            else
+            {
+                string file = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/PC genNeg.cdxml";
+                lipidStructure = new LipidStructure(file, this);
+                positiveFragmentsListBox.Items.Add("HG 164");
+                lipidStructure.addFragment("HG 164", true);
+                
+                positiveFragmentsListBox.Items.Add("HG 181");
+                lipidStructure.addFragment("HG 181", true);
+                
+                negativeFragmentsListBox.Items.Add("HG -OH");
+                lipidStructure.addFragment("HG -OH", false);
+                
             
-            negativeFragmentsListBox.Items.Add("HG -OH");
-            lipidStructure.addFragment("HG -OH", false);
+                lipidStructure.serialize("foo.stXL");
+            }
             
             computeFragmentMass(null, null);
-            
-            
-            
-            lipidStructure.serialize("foo.stXL");
         }
         
         

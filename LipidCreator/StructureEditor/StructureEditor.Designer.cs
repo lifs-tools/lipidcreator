@@ -67,6 +67,7 @@ namespace LipidCreatorStructureEditor
 
     partial class LipidCreatorStructureEditor
     {
+        
 
         public ListBox positiveFragmentsListBox = new ListBox();
         public ListBox negativeFragmentsListBox = new ListBox();
@@ -120,6 +121,8 @@ namespace LipidCreatorStructureEditor
             this.MouseMove += mouseMove;
             this.MouseUp += mouseUp;
             this.MouseDown += mouseDown;
+            
+            this.Resize += resizing;
             
             
             this.Controls.Add(actionChangeAtomState);

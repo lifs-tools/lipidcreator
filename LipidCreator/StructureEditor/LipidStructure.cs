@@ -6,10 +6,92 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace LipidCreatorStructureEditor
 {
     public enum NodeState {Enabled, Disabled, Hidden};
+    
+    
+    public class SPoint
+    {
+        public int X;
+        public int Y;
+        public SPoint(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+        
+        public static SPoint operator +(SPoint p1, SPoint p2)
+        {
+            return new SPoint(p1.X + p2.X, p1.Y + p2.Y);
+        }
+        
+        public Point pI()
+        {
+            return new Point(X, Y);
+        }
+    }
+    
+    
+    public class SPointF
+    {
+        public float X;
+        public float Y;
+        
+        public SPointF(float x, float y)
+        {
+            X = x;
+            Y = y;
+        }
+        
+        public SPointF(Point p)
+        {
+            X = p.X;
+            Y = p.Y;
+        }
+        
+        public static SPointF operator +(SPointF p1, SPointF p2)
+        {
+            return new SPointF(p1.X + p2.X, p1.Y + p2.Y);
+        }
+        
+        public static SPointF operator +(SPointF p1, SPoint p2)
+        {
+            return new SPointF(p1.X + p2.X, p1.Y + p2.Y);
+        }
+        
+        public static SPointF operator +(SPointF p, RectangleF r)
+        {
+            return new SPointF(p.X + r.X, p.Y + r.Y);
+        }
+        
+        public static SPointF operator -(SPointF p1, SPointF p2)
+        {
+            return new SPointF(p1.X - p2.X, p1.Y - p2.Y);
+        }
+        
+        public static SPointF operator -(SPointF p1, SPoint p2)
+        {
+            return new SPointF(p1.X - p2.X, p1.Y - p2.Y);
+        }
+        
+        public static SPointF operator -(SPointF p, RectangleF r)
+        {
+            return new SPointF(p.X - r.X, p.Y - r.Y);
+        }
+        
+        public PointF pF()
+        {
+            return new PointF(X, Y);
+        }
+        
+        public Point pI()
+        {
+            return new Point((int)X, (int)Y);
+        }
+    }
     
     
     public class S {
@@ -21,21 +103,21 @@ namespace LipidCreatorStructureEditor
     
     public class NodeProjection 
     {
-        public PointF shift = new PointF(0, 0);
+        public SPointF shift = new SPointF(0, 0);
         public NodeState nodeState = NodeState.Enabled;
-        public PointF previousShift;
+        public SPointF previousShift;
         
         public NodeProjection(NodeState state = NodeState.Enabled)
         {
-            previousShift = new PointF(shift.X, shift.Y);
+            previousShift = new SPointF(shift.X, shift.Y);
             nodeState = state;
         }
         
         public NodeProjection(NodeProjection copy)
         {
-            shift = new PointF(copy.shift.X, copy.shift.Y);
+            shift = new SPointF(copy.shift.X, copy.shift.Y);
             nodeState = copy.nodeState;
-            previousShift = new PointF(shift.X, shift.Y);
+            previousShift = new SPointF(shift.X, shift.Y);
         }
         
         public void toggleState(){
@@ -49,7 +131,7 @@ namespace LipidCreatorStructureEditor
         
         public void prepareMove()
         {
-            previousShift = new PointF(shift.X, shift.Y);
+            previousShift = new SPointF(shift.X, shift.Y);
         }
         
         
@@ -62,7 +144,7 @@ namespace LipidCreatorStructureEditor
     public class StructureNode
     {
         public int id;
-        public PointF position;
+        public SPointF position;
         public RectangleF boundingBox = new RectangleF();
         public string text = "";
         public List<StructureNode> decorators = new List<StructureNode>();
@@ -70,7 +152,7 @@ namespace LipidCreatorStructureEditor
         public Dictionary<int, NodeProjection> nodeProjections = new Dictionary<int, NodeProjection>();
         public LipidStructure lipidStructure;
         
-        public StructureNode(LipidStructure _lipidStructure, int _id, PointF p)
+        public StructureNode(LipidStructure _lipidStructure, int _id, SPointF p)
         {
             lipidStructure = _lipidStructure;
             id = _id;
@@ -78,7 +160,7 @@ namespace LipidCreatorStructureEditor
             isCarbon = true;
         }
         
-        public StructureNode(LipidStructure _lipidStructure, int _id, PointF p, RectangleF b, string t)
+        public StructureNode(LipidStructure _lipidStructure, int _id, SPointF p, RectangleF b, string t)
         {
             lipidStructure = _lipidStructure;
             id = _id;
@@ -101,7 +183,7 @@ namespace LipidCreatorStructureEditor
         }
         
         
-        public void move(PointF shift)
+        public void move(SPointF shift)
         {
             if (lipidStructure.currentProjection == 0) return;
             nodeProjections[lipidStructure.currentProjection].shift.X = nodeProjections[lipidStructure.currentProjection].previousShift.X + shift.X;
@@ -176,10 +258,10 @@ namespace LipidCreatorStructureEditor
     
     public class StructureEdge
     {
-        public PointF start;
-        public PointF end;
+        public SPointF start;
+        public SPointF end;
         
-        public StructureEdge(PointF s, PointF e)
+        public StructureEdge(SPointF s, SPointF e)
         {
             start = s;
             end = e;
@@ -187,8 +269,8 @@ namespace LipidCreatorStructureEditor
         
         public StructureEdge(StructureEdge copy)
         {
-            start = new PointF(copy.start.X, copy.start.Y);
-            end = new PointF(copy.end.X, copy.end.Y);
+            start = new SPointF(copy.start.X, copy.start.Y);
+            end = new SPointF(copy.end.X, copy.end.Y);
         }
         
         public void serialize(StringBuilder sb, int tabs = 0)
@@ -247,7 +329,30 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int tabs = 0)
         {
+            sb.Append(S.space(tabs) + String.Format("<Bond id={0} start={1} end={2} db={3}>\n", id, startId, endId, isDoubleBond));
+            if (edgeSingle != null)
+            {
+                sb.Append(S.space(tabs + 1) + "<EdgeSingle>\n");
+                edgeSingle.serialize(sb, tabs + 2);
+                sb.Append(S.space(tabs + 1) + "</EdgeSingle>\n");
+            }
+                
+            if (edgesDouble.Count > 0)
+            {
+                sb.Append(S.space(tabs + 1) + "<EdgesDouble>\n");
+                foreach (var edge in edgesDouble) edge.serialize(sb, tabs + 2);
+                sb.Append(S.space(tabs + 1) + "</EdgesDouble>\n");
+            }
             
+            if (bondProjections.Count > 0)
+            {
+                sb.Append(S.space(tabs + 1) + "<BondProjections>\n");
+                foreach (var kvp in bondProjections) sb.Append(S.space(tabs + 2) + String.Format("<BP id={0} enabled={1} />\n", kvp.Key, kvp.Value));
+                sb.Append(S.space(tabs + 1) + "</BondProjections>\n");
+            }
+            
+            
+            sb.Append(S.space(tabs) + "</Bond>\n");
         }
     }
     
@@ -275,7 +380,7 @@ namespace LipidCreatorStructureEditor
         
         public void serialize(StringBuilder sb, int tabs = 0)
         {
-            
+            sb.Append(String.Format(S.space(tabs) + "<LipidStructureFragment id={0} name=\"{1}\" charge={2} />\n", id, fragmentName, charge));
         }
     }
     
@@ -289,6 +394,7 @@ namespace LipidCreatorStructureEditor
         public HashSet<Bond> additionalBonds = new HashSet<Bond>();
         public Dictionary<string, LipidStructureFragment> positiveFragments = new Dictionary<string, LipidStructureFragment>();
         public Dictionary<string, LipidStructureFragment> negativeFragments = new Dictionary<string, LipidStructureFragment>();
+        public SPointF middlePoint;
         
         public Dictionary<int, StructureNode> idToNode = new Dictionary<int, StructureNode>();
         public float factor = 2.5f;
@@ -343,6 +449,7 @@ namespace LipidCreatorStructureEditor
             nodeFont = new Font("Arial", fontSize);
             decoratorFont = new Font("Arial", (float)(fontSize * 0.5));
             
+            middlePoint = new SPointF((float)(form.Width / 2.0), (float)(form.Height / 2.0));
             
             XDocument doc = XDocument.Load(file_name);
             graphics = form.CreateGraphics();
@@ -385,7 +492,7 @@ namespace LipidCreatorStructureEditor
                 
                     if ((new HashSet<string>(){"R1", "R2", "R3", "R4"}).Contains(text))
                     {
-                        StructureNode sn = new StructureNode(this, nodeId, new PointF(x, y), drawRect, "R");
+                        StructureNode sn = new StructureNode(this, nodeId, new SPointF(x, y), drawRect, "R");
                         x -= (float)Math.Abs(x * 0.02);
                         nodes.Add(sn);
                         idToNode.Add(nodeId, sn);
@@ -396,12 +503,12 @@ namespace LipidCreatorStructureEditor
                         string subIndex = text.Substring(1, 1);
                         
                         RectangleF subscript = new RectangleF(x, y, 0, 0);
-                        sn.decorators.Add(new StructureNode(this, -1, new PointF(x, y), subscript, subIndex));
+                        sn.decorators.Add(new StructureNode(this, -1, new SPointF(x, y), subscript, subIndex));
                         
                     }
                     else 
                     {
-                        StructureNode sn = new StructureNode(this, nodeId, new PointF(x, y), drawRect, text);
+                        StructureNode sn = new StructureNode(this, nodeId, new SPointF(x, y), drawRect, text);
                         nodes.Add(sn);
                         idToNode.Add(nodeId, sn);
                     }
@@ -435,7 +542,7 @@ namespace LipidCreatorStructureEditor
                     float bx = (float)Convert.ToDouble(tokensBB[0]) - 1;
                     float by = (float)Convert.ToDouble(tokensBB[1]) - 1 - (symbol.Equals("+") ? 2 : 0);
                     RectangleF drawRect = new RectangleF(bx, by, 0, 0);
-                    idToNode[parentId].decorators.Add(new StructureNode(this, nodeIdG, new PointF(bx, by), drawRect, symbol));
+                    idToNode[parentId].decorators.Add(new StructureNode(this, nodeIdG, new SPointF(bx, by), drawRect, symbol));
                 }
                 catch (Exception){}
             }
@@ -455,11 +562,6 @@ namespace LipidCreatorStructureEditor
                 Bond bond = null;
                 try
                 {
-                    float xB = nodeB.position.X;
-                    float yB = nodeB.position.Y;
-                    float xE = nodeE.position.X;
-                    float yE = nodeE.position.Y;
-                    
                     // get the edge color
                     bool isDoubleBond = ((string)edge.Attribute("Order") != null) && edge.Attribute("Order").Value.ToString().Equals("2");
                     
@@ -490,8 +592,8 @@ namespace LipidCreatorStructureEditor
             
             float midX = minX + (maxX - minX) / 2.0f;
             float midY = minY + (maxY - minY) / 2.0f;
-            float offsetX = (float)form.Size.Width / 2.0f - midX * factor;
-            float offsetY = (float)form.Size.Height / 2.0f - midY * factor;
+            float offsetX = /* (float)form.Size.Width / 2.0f */ - midX * factor;
+            float offsetY = /* (float)form.Size.Height / 2.0f */ - midY * factor;
             
             
             nodeFont = new Font("Arial", fontSize * factor);
@@ -500,7 +602,7 @@ namespace LipidCreatorStructureEditor
             {
                 float x = node.position.X * factor + offsetX;
                 float y = node.position.Y * factor + offsetY;
-                node.position = new PointF(x, y);
+                node.position = new SPointF(x, y);
                 
                 x = node.boundingBox.X * factor + offsetX;
                 y = node.boundingBox.Y * factor + offsetY;
@@ -514,7 +616,7 @@ namespace LipidCreatorStructureEditor
                 {
                     float xd = decorator.position.X * factor + offsetX;
                     float yd = decorator.position.Y * factor + offsetY;
-                    decorator.position = new PointF(xd, yd);
+                    decorator.position = new SPointF(xd, yd);
                     
                     xd = decorator.boundingBox.X * factor + offsetX;
                     yd = decorator.boundingBox.Y * factor + offsetY;
@@ -542,10 +644,14 @@ namespace LipidCreatorStructureEditor
             computeBonds();
             changeFragment();
             countNodeConnections();
-            
-            serialize("foo");
         }
         
+        
+        
+        public void setMiddlePoint(SPointF p)
+        {
+            middlePoint = p;
+        }
         
         
         
@@ -595,12 +701,13 @@ namespace LipidCreatorStructureEditor
                 foreach (var kvp in negativeFragments) kvp.Value.serialize(sb, 2);
                 sb.Append("  </NegativeFragments>\n");
             }
-
-            
             
             sb.Append("</LipidStructure>\n");
             
-            Console.WriteLine(sb.ToString());
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(".", file_name)))
+            {
+                outputFile.WriteLine(sb.ToString());
+            }
         }
         
         
@@ -704,14 +811,14 @@ namespace LipidCreatorStructureEditor
                     float y1B = yB - deltaY * dbSpace * factor;
                     float x1E = xE - deltaX * dbSpace * factor;
                     float y1E = yE - deltaY * dbSpace * factor;
-                    bond.edgesDouble.Add(new StructureEdge(new PointF(x1B, y1B), new PointF(x1E, y1E)));
+                    bond.edgesDouble.Add(new StructureEdge(new SPointF(x1B, y1B), new SPointF(x1E, y1E)));
                     
                     
                     float x2B = xB + deltaX * dbSpace * factor;
                     float y2B = yB + deltaY * dbSpace * factor;
                     float x2E = xE + deltaX * dbSpace * factor;
                     float y2E = yE + deltaY * dbSpace * factor;
-                    bond.edgesDouble.Add(new StructureEdge(new PointF(x2B, y2B), new PointF(x2E, y2E)));
+                    bond.edgesDouble.Add(new StructureEdge(new SPointF(x2B, y2B), new SPointF(x2E, y2E)));
                 }
                 else
                 {
@@ -720,11 +827,11 @@ namespace LipidCreatorStructureEditor
                     float y1B = yB - deltaY * (2 * dbSpace * factor);
                     float x1E = xE - deltaX * (2 * dbSpace * factor);
                     float y1E = yE - deltaY * (2 * dbSpace * factor);
-                    bond.edgesDouble.Add(new StructureEdge(new PointF(x1B, y1B), new PointF(x1E, y1E)));
-                    bond.edgesDouble.Add(new StructureEdge(new PointF(xB, yB), new PointF(xE, yE)));
+                    bond.edgesDouble.Add(new StructureEdge(new SPointF(x1B, y1B), new SPointF(x1E, y1E)));
+                    bond.edgesDouble.Add(new StructureEdge(new SPointF(xB, yB), new SPointF(xE, yE)));
                 }
                 
-                bond.edgeSingle = new StructureEdge(new PointF(xB, yB), new PointF(xE, yE));
+                bond.edgeSingle = new StructureEdge(new SPointF(xB, yB), new SPointF(xE, yE));
             }
             
             foreach (var bond in deleteBonds)
@@ -738,16 +845,16 @@ namespace LipidCreatorStructureEditor
         
         
         
-        public void addNode(int x, int y)
+        public void addNode(SPointF pos)
         {
             if (currentProjection == 0) return;
-            
+            pos = pos - middlePoint;
             nodeFont = new Font("Arial", fontSize * factor);
             Size size = TextRenderer.MeasureText(graphics, "C", nodeFont);
             float w = size.Width * 0.9f;
             float h = size.Height * 0.9f;
-            RectangleF drawRect = new RectangleF(x - w * 0.5f, y - h * 0.5f, w, h);
-            StructureNode sn = new StructureNode(this, ++currentNodeId, new PointF(x, y), drawRect, "C");
+            RectangleF drawRect = new RectangleF(pos.X - w * 0.5f, pos.Y - h * 0.5f, w, h);
+            StructureNode sn = new StructureNode(this, ++currentNodeId, pos, drawRect, "C");
             
         
             int fragId = currentFragment.id;
@@ -816,7 +923,7 @@ namespace LipidCreatorStructureEditor
                 NodeProjection nodeProjection = node.nodeProjections[currentProjection];
                 if (!developmentView && (node.nodeProjections[currentProjection].nodeState == NodeState.Hidden || node.isCarbon)) continue;
                 
-                RectangleF r = new RectangleF(node.boundingBox.X + nodeProjection.shift.X, node.boundingBox.Y + nodeProjection.shift.Y, node.boundingBox.Width, node.boundingBox.Height);
+                RectangleF r = new RectangleF(node.boundingBox.X + nodeProjection.shift.X + middlePoint.X, node.boundingBox.Y + nodeProjection.shift.Y + middlePoint.Y, node.boundingBox.Width, node.boundingBox.Height);
                 
                 clippingGraphics.SetClip(r);
                 g.SetClip(clippingGraphics, CombineMode.Exclude);
@@ -826,7 +933,7 @@ namespace LipidCreatorStructureEditor
                     NodeProjection decoratorProjection = decorator.nodeProjections[currentProjection];
                     if (!developmentView && decoratorProjection.nodeState == NodeState.Hidden) continue;
                     
-                    RectangleF rd = new RectangleF(decorator.boundingBox.X + decoratorProjection.shift.X, decorator.boundingBox.Y + decoratorProjection.shift.Y, decorator.boundingBox.Width, decorator.boundingBox.Height);
+                    RectangleF rd = new RectangleF(decorator.boundingBox.X + decoratorProjection.shift.X + middlePoint.X, decorator.boundingBox.Y + decoratorProjection.shift.Y + middlePoint.Y, decorator.boundingBox.Width, decorator.boundingBox.Height);
                     clippingGraphics.SetClip(rd);
                     g.SetClip(clippingGraphics, CombineMode.Exclude);
                 }
@@ -919,11 +1026,11 @@ namespace LipidCreatorStructureEditor
                 else if (proStart.nodeState == NodeState.Disabled || proEnd.nodeState == NodeState.Disabled) pen = penDisabled;
                 if (bond.bondProjections[currentProjection])
                 {
-                    foreach (var edge in bond.edgesDouble) g.DrawLine(pen, edge.start, edge.end);
+                    foreach (var edge in bond.edgesDouble) g.DrawLine(pen, (edge.start + middlePoint).pF(), (edge.end + middlePoint).pF());
                 }
                 else
                 {
-                    g.DrawLine(pen, bond.edgeSingle.start, bond.edgeSingle.end);
+                    g.DrawLine(pen, (bond.edgeSingle.start + middlePoint).pF(), (bond.edgeSingle.end + middlePoint).pF());
                 }
             }
             
@@ -972,21 +1079,21 @@ namespace LipidCreatorStructureEditor
                 if (!node.nodeProjections.ContainsKey(currentProjection)) continue;
                 
                 NodeProjection nodeProjection = node.nodeProjections[currentProjection];
-                PointF nodePoint = new PointF(node.boundingBox.X + nodeProjection.shift.X, node.boundingBox.Y + nodeProjection.shift.Y);
+                SPointF nodeSPoint = new SPointF(node.boundingBox.X + nodeProjection.shift.X, node.boundingBox.Y + nodeProjection.shift.Y) + middlePoint;
                 if (!developmentView && (nodeProjection.nodeState == NodeState.Hidden)) continue;
                 
                 SolidBrush brush = solidBrushEnabled;
                 if (nodeProjection.nodeState == NodeState.Hidden) brush = solidBrushHidden;
                 else if (nodeProjection.nodeState == NodeState.Disabled) brush = solidBrushDisabled;
                 
-                RectangleF r = new RectangleF(nodePoint.X, nodePoint.Y, node.boundingBox.Width, node.boundingBox.Height);
+                RectangleF r = new RectangleF(nodeSPoint.X, nodeSPoint.Y, node.boundingBox.Width, node.boundingBox.Height);
                 if (!node.isCarbon || developmentView) g.DrawString(node.text, nodeFont, brush, r, drawFormat);
                 if (nodeProjection.nodeState == NodeState.Enabled)
                 {
-                    minX = Math.Min(minX, (int)nodePoint.X);
-                    maxX = Math.Max(maxX, (int)(nodePoint.X + node.boundingBox.Width));
-                    minY = Math.Min(minY, (int)nodePoint.Y);
-                    maxY = Math.Max(maxY, (int)(nodePoint.Y + node.boundingBox.Height));
+                    minX = Math.Min(minX, (int)nodeSPoint.X);
+                    maxX = Math.Max(maxX, (int)(nodeSPoint.X + node.boundingBox.Width));
+                    minY = Math.Min(minY, (int)nodeSPoint.Y);
+                    maxY = Math.Max(maxY, (int)(nodeSPoint.Y + node.boundingBox.Height));
                 }
                 
                 if (node.isCarbon) continue;
@@ -1001,7 +1108,9 @@ namespace LipidCreatorStructureEditor
                     if (decoratorProjection.nodeState == NodeState.Hidden) decoBrush = solidBrushHidden;
                     else if (decoratorProjection.nodeState == NodeState.Disabled) decoBrush = solidBrushDisabled;
                     
-                    RectangleF rd = new RectangleF(decorator.boundingBox.X + decoratorProjection.shift.X, decorator.boundingBox.Y + decoratorProjection.shift.Y, decorator.boundingBox.Width, decorator.boundingBox.Height);
+                    SPointF decoratorPoint = decoratorProjection.shift + decorator.boundingBox + middlePoint;
+                    
+                    RectangleF rd = new RectangleF(decoratorPoint.X, decoratorPoint.Y, decorator.boundingBox.Width, decorator.boundingBox.Height);
                     g.DrawString(decorator.text, node.text.Equals("R") ? decoratorFont : nodeFont, decoBrush, rd, drawFormat);
                 }
                 
@@ -1031,11 +1140,11 @@ namespace LipidCreatorStructureEditor
                 foreach (var targetNode in adjacentNodes[node])
                 {
                     NodeProjection targetProjection = targetNode.nodeProjections[currentProjection];
-                    PointF targetPoint = new PointF(targetNode.boundingBox.X + targetProjection.shift.X, targetNode.boundingBox.Y + targetProjection.shift.Y);
+                    SPointF targetSPoint = new SPointF(targetNode.boundingBox.X + targetProjection.shift.X, targetNode.boundingBox.Y + targetProjection.shift.Y) + middlePoint;
                     
-                    double angle = Math.Atan((targetPoint.Y - nodePoint.Y) / (targetPoint.X - nodePoint.X)) / Math.PI * 180.0;
-                    if (nodePoint.X <= targetPoint.X && -45 <= angle && angle <= 45) rightfree = false;
-                    else if (nodePoint.X > targetPoint.X && -45 <= angle && angle <= 45) leftfree = false;
+                    double angle = Math.Atan((targetSPoint.Y - nodeSPoint.Y) / (targetSPoint.X - nodeSPoint.X)) / Math.PI * 180.0;
+                    if (nodeSPoint.X <= targetSPoint.X && -45 <= angle && angle <= 45) rightfree = false;
+                    else if (nodeSPoint.X > targetSPoint.X && -45 <= angle && angle <= 45) leftfree = false;
                     
                 }
                 

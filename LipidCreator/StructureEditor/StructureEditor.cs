@@ -51,6 +51,10 @@ namespace LipidCreatorStructureEditor
             lipidStructure.addFragment("HG -OH", false);
             
             computeFragmentMass(null, null);
+            
+            
+            
+            lipidStructure.serialize("foo.stXL");
         }
         
         
@@ -75,8 +79,9 @@ namespace LipidCreatorStructureEditor
                 if (currentNode != null && currentNode.nodeProjections.ContainsKey(lipidStructure.currentProjection))
                 {
                     NodeProjection nodeProjection = currentNode.nodeProjections[lipidStructure.currentProjection];
+                    SPointF point = currentNode.position + nodeProjection.shift + lipidStructure.middlePoint;
                     Pen pen = new Pen(Color.DeepSkyBlue, 2);
-                    g.DrawEllipse(pen, currentNode.position.X + nodeProjection.shift.X - cursorCircleRadius, currentNode.position.Y + nodeProjection.shift.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
+                    g.DrawEllipse(pen, point.X - cursorCircleRadius, point.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
                 }
             }
             else if (action == Action.ChangeBond || action == Action.RemoveBond)
@@ -97,7 +102,8 @@ namespace LipidCreatorStructureEditor
                     if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
                     Pen pen = new Pen(Color.DeepSkyBlue, 2);
-                    g.DrawEllipse(pen, node.position.X + nodeProjection.shift.X - cursorCircleRadius, node.position.Y + nodeProjection.shift.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
+                    SPointF n = node.position + nodeProjection.shift + lipidStructure.middlePoint;
+                    g.DrawEllipse(pen, n.X - cursorCircleRadius, n.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
                 }
             }
             
@@ -106,7 +112,8 @@ namespace LipidCreatorStructureEditor
             {
                 NodeProjection nodeProjection = drawStart.nodeProjections[lipidStructure.currentProjection];
                 Graphics clippingGraphics = lipidStructure.setClipping(g, this);
-                PointF start = new PointF(drawStart.position.X + nodeProjection.shift.X, drawStart.position.Y + nodeProjection.shift.Y);
+                SPointF d = drawStart.position + nodeProjection.shift + lipidStructure.middlePoint;
+                PointF start = new PointF(d.X, d.Y);
                 g.DrawLine(lipidStructure.penEnabled, start, mouse);
                 lipidStructure.releaseClipping(g, clippingGraphics);
             }
@@ -130,13 +137,12 @@ namespace LipidCreatorStructureEditor
                 {
                     if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
-                    double xm = node.position.X + nodeProjection.shift.X;
-                    double ym = node.position.Y + nodeProjection.shift.Y;
+                    SPointF n = node.position + nodeProjection.shift + lipidStructure.middlePoint;
                     
-                    if (lower.X <= xm && xm <= upper.X && lower.Y <= ym && ym <= upper.Y)
+                    if (lower.X <= n.X && n.X <= upper.X && lower.Y <= n.Y && n.Y <= upper.Y)
                     {
                         Pen pen = new Pen(Color.DeepSkyBlue, 2);
-                        g.DrawEllipse(pen, node.position.X + nodeProjection.shift.X - cursorCircleRadius, node.position.Y + nodeProjection.shift.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
+                        g.DrawEllipse(pen, n.X - cursorCircleRadius, n.Y - cursorCircleRadius, cursorCircleRadius * 2, cursorCircleRadius * 2);
                     }
                 }
                 
@@ -193,7 +199,7 @@ namespace LipidCreatorStructureEditor
                     else if (action == Action.DrawAtom && currentNode == null)
                     {
                         var mouse = PointToClient(Cursor.Position);
-                        lipidStructure.addNode(mouse.X, mouse.Y);
+                        lipidStructure.addNode(new SPointF(mouse));
                         updateStructure();
                     }
                     break;
@@ -244,10 +250,9 @@ namespace LipidCreatorStructureEditor
                         {
                             if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                             NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
-                            double xm = node.position.X + nodeProjection.shift.X;
-                            double ym = node.position.Y + nodeProjection.shift.Y;
+                            SPointF p = node.position + nodeProjection.shift + lipidStructure.middlePoint;
                             
-                            if (lower.X <= xm && xm <= upper.X && lower.Y <= ym && ym <= upper.Y)
+                            if (lower.X <= p.X && p.X <= upper.X && lower.Y <= p.Y && p.Y <= upper.Y)
                             {
                                 node.toggleState();
                             }
@@ -264,10 +269,9 @@ namespace LipidCreatorStructureEditor
                         {
                             if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                             NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
-                            double xm = node.position.X + nodeProjection.shift.X;
-                            double ym = node.position.Y + nodeProjection.shift.Y;
+                            SPointF p = node.position + nodeProjection.shift + lipidStructure.middlePoint;
                             
-                            if (lower.X <= xm && xm <= upper.X && lower.Y <= ym && ym <= upper.Y)
+                            if (lower.X <= p.X && p.X <= upper.X && lower.Y <= p.Y && p.Y <= upper.Y)
                             {
                                 moveNodes.Add(node);
                             }
@@ -337,7 +341,7 @@ namespace LipidCreatorStructureEditor
             Bond previousBond = currentBond;
             currentBond = null;
             
-            PointF mouse = PointToClient(Cursor.Position);
+            SPointF mouse = new SPointF(PointToClient(Cursor.Position));
             
             
             if (action == Action.ChangeAtom || action == Action.ChangeAtomState || action == Action.MoveAtom || action == Action.DrawBond || action == Action.RemoveAtom)
@@ -347,7 +351,8 @@ namespace LipidCreatorStructureEditor
                 {
                     if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
                     NodeProjection nodeProjection = node.nodeProjections[lipidStructure.currentProjection];
-                    double dist = Math.Pow(node.position.X + nodeProjection.shift.X - mouse.X, 2) + Math.Pow(node.position.Y + nodeProjection.shift.Y - mouse.Y, 2);
+                    SPointF n = node.position + nodeProjection.shift - mouse + lipidStructure.middlePoint;
+                    double dist = Math.Pow(n.X, 2) + Math.Pow(n.Y, 2);
                     if (dist <= Math.Pow(10 + cursorCircleRadius, 2) && dist < minDist)
                     {
                         minDist = dist;
@@ -359,7 +364,8 @@ namespace LipidCreatorStructureEditor
                         foreach (var decorator in node.decorators)
                         {
                             NodeProjection decoratorProjection = decorator.nodeProjections[lipidStructure.currentProjection];
-                            dist = Math.Pow(decorator.position.X + decoratorProjection.shift.X - mouse.X, 2) + Math.Pow(decorator.position.Y + decoratorProjection.shift.Y - mouse.Y, 2);
+                            SPointF d = decorator.position + decoratorProjection.shift - mouse + lipidStructure.middlePoint;
+                            dist = Math.Pow(d.X, 2) + Math.Pow(d.Y, 2);
                             if (dist <= Math.Pow(10 + cursorCircleRadius, 2) && dist < minDist)
                             {
                                 minDist = dist;
@@ -418,7 +424,7 @@ namespace LipidCreatorStructureEditor
             {
                 if (moveNode != null && action == Action.MoveAtom)
                 {
-                    PointF shift = new PointF(mouse.X - previousMousePosition.X, mouse.Y - previousMousePosition.Y);
+                    SPointF shift = new SPointF(mouse.X - previousMousePosition.X, mouse.Y - previousMousePosition.Y);
                     if (moveNodes.Count > 0 && moveNodes.Contains(moveNode))
                     {
                         foreach (var m in moveNodes) m.move(shift);
@@ -662,6 +668,15 @@ namespace LipidCreatorStructureEditor
         public void fragmentKeyPressed(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete) removeFragment(sender, null);
+        }
+        
+        
+        
+        
+        private void resizing(object sender, System.EventArgs e)
+        {
+            lipidStructure.setMiddlePoint(new SPointF(this.Width / 2.0f, this.Height / 2.0f));
+            updateStructure();
         }
         
         

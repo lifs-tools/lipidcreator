@@ -17,7 +17,7 @@ namespace LipidCreatorStructureEditor
     {
         
         public static int cursorCircleRadius = 15;
-        public LipidStructure lipidStructure;
+        public LipidStructure lipidStructure = null;
         public StructureNode currentNode = null;
         public Bond currentBond = null;
         public MouseState mouseState = MouseState.MouseDefault;
@@ -32,43 +32,162 @@ namespace LipidCreatorStructureEditor
         public const string FRAGMENT_LABEL = "fragment";
         public bool semaphore = false;
         public string structureFile = "";
+        public const char QUOTE = '"';
+        
+        
+        // TODO: add capability of handling with escape signs
+        public static string[] parseLine(string line, char separator = ',', char quote = QUOTE)
+        {
+            List<string> listTokens = new List<string>();
+            int start = 0;
+            int length = 0;
+            int state = 1;
+            for (int i = 0; i < line.Length; ++i)
+            {
+                switch (state)
+                {
+                    case 0:
+                        if (line[i] == quote)
+                        {
+                            throw new Exception("invalid line in file");
+                        }
+                        else if (line[i] == separator)
+                        {
+                            listTokens.Add(line.Substring(start, length));
+                            length = 0;
+                            state = 1;
+                        }
+                        else
+                        {
+                            ++length;
+                        }
+                        break;
+                        
+                    case 1:
+                        if (line[i] == quote)
+                        {
+                            length = 0;
+                            start = i + 1;
+                            state = 2;
+                        }
+                        else if (line[i] == separator)
+                        {
+                            listTokens.Add("");
+                            length = 0;
+                        }
+                        else
+                        {
+                            length = 1;
+                            start = i;
+                            state = 0;
+                        }
+                        break;
+                        
+                    case 2:
+                        if (line[i] != quote) ++length;
+                        else state = 3;
+                        break;
+                        
+                    case 3:
+                        if (line[i] == separator)
+                        {
+                            listTokens.Add(line.Substring(start, length));
+                            length = 0;
+                            state = 1;
+                        }    
+                        else throw new Exception("invalid line in file");
+                        break;
+                }
+            }
+            if (state != 2) listTokens.Add(line.Substring(start, length));
+            else throw new Exception("invalid line in file");
+            
+            return listTokens.ToArray();
+        }
+        
         
         
         public LipidCreatorStructureEditor()
-        {            
-            
+        {  
             InitializeComponent();
             this.DoubleBuffered = true;
             
             
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            string headgroupsFile = "lipidclasses.csv";
+            if (File.Exists(headgroupsFile))
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "chemdraw file (*.cdxml)|*.cdxml|structure file (*.stXL)|*.stXL";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                int lineCounter = 1;
+                List<ComboBoxItem> comboBoxItems = new List<ComboBoxItem>();
+                try
                 {
-                    //Get the path of specified file
-                    string filePath = openFileDialog.FileName;
-
-                    try
+                    using (StreamReader sr = new StreamReader(headgroupsFile))
                     {
-                        lipidStructure = new LipidStructure(filePath, this);
+                        String line = sr.ReadLine(); // omit titles
+                        while((line = sr.ReadLine()) != null)
+                        {
+                            lineCounter++;
+                            if (line.Length < 2) continue;
+                            if (line[0] == '#') continue;
+                            
+                            string[] tokens = parseLine(line);
+                            if (tokens.Length < 20) throw new Exception("Error in headgroup image table: number of columns is less than 20 in line " + lineCounter.ToString());
+                            
+                            if (tokens[1].Contains("{")) continue;
+                            comboBoxItems.Add(new ComboBoxItem(tokens[1], new string []{tokens[0], tokens[18]}));
+                        }
                     }
-                    catch
-                    {
-                        MessageBox.Show("An error happened, please speak with Dominik and explain how you caused the error.", "Error happened");
-                        Environment.Exit(-1);
-                    }
-                    Console.WriteLine(filePath);
                 }
-                else
+                catch (Exception ex)
+                {
+                    MessageBox.Show("The file '" + headgroupsFile + "' in line '" + lineCounter + "' could not be read:\n\n" + ex.ToString(), "Error happened");
+                    Environment.Exit(-1);
+                }
+                comboBoxItems.Sort(delegate(ComboBoxItem x, ComboBoxItem y)
+                {
+                    return String.Compare(x.Text, y.Text);
+                });
+                lipidClassComboBox.Items.AddRange(comboBoxItems.ToArray());
+                lipidClassComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Error: file " + headgroupsFile + " does not exist or can not be opened.", "Error happened");
+                Environment.Exit(-1);
+            }
+        }
+        
+        [STAThread]
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "chemdraw file (*.cdxml)|*.cdxml|structure file (*.stXL)|*.stXL";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.ShowHelp = true;
+            
+            while (true)
+            {
+                DialogResult dialogResult = openFileDialog.ShowDialog();
+                if (dialogResult != DialogResult.OK)
                 {
                     Environment.Exit(0);
                 }
+                //Get the path of specified file
+                string filePath = openFileDialog.FileName;
+
+                try
+                {
+                    lipidStructure = new LipidStructure(filePath, this);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error happened, please speak with Dominik and explain how you caused the error with this error message:\n\n" + ex.ToString(), "Error happened");
+                }
             }
+            
             
             foreach (var kvp in lipidStructure.positiveFragments)
             {
@@ -80,23 +199,12 @@ namespace LipidCreatorStructureEditor
                 negativeFragmentsListBox.Items.Add(kvp.Value.fragmentName);
             }
             
-            /*
-            string file = "/home/dominik/workspace/src/LipidCreator/LipidCreator/data/structures/PC genNeg.cdxml";
-            lipidStructure = new LipidStructure(file, this);
-            positiveFragmentsListBox.Items.Add("HG 164");
-            lipidStructure.addFragment("HG 164", true);
-            
-            positiveFragmentsListBox.Items.Add("HG 181");
-            lipidStructure.addFragment("HG 181", true);
-            
-            negativeFragmentsListBox.Items.Add("HG -OH");
-            lipidStructure.addFragment("HG -OH", false);
-            */
-            
             computeFragmentMass(null, null);
+            Activate();
         }
         
         
+        [STAThread]
         protected override void OnPaint(PaintEventArgs e)
         {
             DrawScene(e.Graphics);
@@ -105,8 +213,10 @@ namespace LipidCreatorStructureEditor
 
         
         
+        [STAThread]
         private void DrawScene(Graphics g)
         {
+            if (lipidStructure == null) return;
             
             // Handle mouse 
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -192,6 +302,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void mouseUp(Object sender, MouseEventArgs e)
         {
             switch (mouseState)
@@ -332,6 +443,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void mouseDown(Object sender, MouseEventArgs e)
         {
             if (mouseState == MouseState.MouseDefault)
@@ -372,6 +484,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void mouseMove(Object sender, MouseEventArgs e)
         {
             StructureNode previousNode = currentNode;
@@ -488,6 +601,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void buttonClicked(Button actionButton, Action newAction)
         {
             moveNodes.Clear();
@@ -508,6 +622,7 @@ namespace LipidCreatorStructureEditor
     
     
             
+        [STAThread]
         private void actionChangeAtomStateClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionChangeAtomState, Action.ChangeAtomState);
@@ -516,6 +631,7 @@ namespace LipidCreatorStructureEditor
     
     
             
+        [STAThread]
         private void actionChangeAtomClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionChangeAtom, Action.ChangeAtom);
@@ -524,6 +640,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionChangeBondStateClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionChangeBondState, Action.ChangeBond);
@@ -532,6 +649,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void actionChangeGlobalChargeClicked(Object sender, EventArgs e)
         {
             lipidStructure.changeGlobalCharge();
@@ -541,6 +659,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionDrawAtomClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionDrawAtom, Action.DrawAtom);
@@ -549,6 +668,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionRemoveAtomClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionRemoveAtom, Action.RemoveAtom);
@@ -557,6 +677,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionRemoveBondClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionRemoveBond, Action.RemoveBond);
@@ -565,6 +686,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionDrawBondClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionDrawBond, Action.DrawBond);
@@ -573,6 +695,7 @@ namespace LipidCreatorStructureEditor
         
         
             
+        [STAThread]
         private void actionMoveAtomClicked(Object sender, EventArgs e)
         {
             buttonClicked(actionMoveAtom, Action.MoveAtom);
@@ -581,7 +704,8 @@ namespace LipidCreatorStructureEditor
         
         
         
-            
+           
+        [STAThread] 
         private void actionFinalViewClicked(Object sender, EventArgs e)
         {
             if (lipidStructure.developmentView)
@@ -599,6 +723,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void positiveFragmentDoubleClicked(Object sender, EventArgs e)
         {
             int selectedIndex = positiveFragmentsListBox.SelectedIndex;
@@ -619,6 +744,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void negativeFragmentDoubleClicked(Object sender, EventArgs e)
         {
             int selectedIndex = negativeFragmentsListBox.SelectedIndex;
@@ -640,6 +766,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void fragmentClicked(Object sender, EventArgs e)
         {
             if (semaphore) return;
@@ -676,6 +803,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         public void updateStructure()
         {
             Invalidate();
@@ -684,6 +812,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         public void saveStructure(Object sender, EventArgs e)
         {
             if (structureFile.Length == 0)
@@ -709,6 +838,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void addPositiveFragment(Object sender, EventArgs e)
         {
             if (!lipidStructure.positiveFragments.ContainsKey(FRAGMENT_LABEL))
@@ -733,6 +863,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         public void fragmentKeyPressed(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete) removeFragment(sender, null);
@@ -741,6 +872,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void resizing(object sender, System.EventArgs e)
         {
             lipidStructure.setMiddlePoint(new SPointF(this.Width / 2.0f, this.Height / 2.0f));
@@ -750,6 +882,7 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         private void addNegativeFragment(Object sender, EventArgs e)
         {
             if (!lipidStructure.negativeFragments.ContainsKey(FRAGMENT_LABEL))
@@ -776,14 +909,24 @@ namespace LipidCreatorStructureEditor
         
         
         
+        [STAThread]
         public void removePositiveFragment(Object sender, EventArgs e)
         {
+            if (selectedIndexes[1] == -1) return;
+            DialogResult dialogResult = MessageBox.Show("Do you want to remove the fragment?", "Remove fragment", MessageBoxButtons.YesNo);
+            if(dialogResult == DialogResult.No) return;
+            
             removeFragment(positiveFragmentsListBox, e);
         }
         
         
+        [STAThread]
         public void removeNegativeFragment(Object sender, EventArgs e)
         {
+            if (selectedIndexes[0] == -1) return;
+            DialogResult dialogResult = MessageBox.Show("Do you want to remove the fragment?", "Remove fragment", MessageBoxButtons.YesNo);
+            if(dialogResult == DialogResult.No) return;
+            
             removeFragment(negativeFragmentsListBox, e);
         }
         
@@ -807,10 +950,66 @@ namespace LipidCreatorStructureEditor
         }
         
         
+        [STAThread]
+        private void lipidClassChange(Object sender, EventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            ComboBoxItem selectedItem = (ComboBoxItem)cmb.SelectedItem;
+            
+            bb1Carbon.Visible = false;
+            bb2Carbon.Visible = false;
+            bb3Carbon.Visible = false;
+            bb4Carbon.Visible = false;
+            
+            bb1DB.Visible = false;
+            bb2DB.Visible = false;
+            bb3DB.Visible = false;
+            bb4DB.Visible = false;
+            
+            bb1Hydro.Visible = false;
+            bb2Hydro.Visible = false;
+            bb3Hydro.Visible = false;
+            bb4Hydro.Visible = false;
+            
+            switch (((string[])selectedItem.Value)[1])
+            {
+                case "0":
+                    bb4Carbon.Visible = true;
+                    bb4DB.Visible = true;
+                    bb4Hydro.Visible = true;
+                    goto case "1";
+                    
+                case "1":
+                    bb3Carbon.Visible = true;
+                    bb3DB.Visible = true;
+                    bb3Hydro.Visible = true;
+                    goto case "2";
+                    
+                case "4":
+                case "2":
+                    bb2Carbon.Visible = true;
+                    bb2DB.Visible = true;
+                    bb2Hydro.Visible = true;
+                    goto case "3";
+                    
+                case "5":
+                case "3":
+                    bb1Carbon.Visible = true;
+                    bb1DB.Visible = true;
+                    bb1Hydro.Visible = true;
+                    break;                
+                
+                default:
+                    break;
+            }
+            
+            if (lipidStructure != null) computeFragmentMass(null, null);
+        }
         
         
         
         
+        [STAThread]
         private void computeFragmentMass(Object sender, EventArgs e)
         {
             
@@ -833,6 +1032,22 @@ namespace LipidCreatorStructureEditor
             }
             catch(Exception){}
             
+            try {
+                int numC = Convert.ToInt32(bb3Carbon.Text);
+                int numDB = Convert.ToInt32(bb3DB.Text);
+                int numOH = Convert.ToInt32(bb3Hydro.Text);
+                residues.Add("3", new int[]{numC, numDB, numOH});
+            }
+            catch(Exception){}
+            
+            try {
+                int numC = Convert.ToInt32(bb4Carbon.Text);
+                int numDB = Convert.ToInt32(bb4DB.Text);
+                int numOH = Convert.ToInt32(bb4Hydro.Text);
+                residues.Add("4", new int[]{numC, numDB, numOH});
+            }
+            catch(Exception){}
+            
             int adductCharge = lipidStructure.currentFragment == null ? 0 : lipidStructure.currentFragment.charge;
             int C = 0;
             int H = lipidStructure.currentFragment == null ? 0 : lipidStructure.currentFragment.charge;
@@ -842,6 +1057,7 @@ namespace LipidCreatorStructureEditor
             int S = 0;
             
             bool useAdduct = false;
+            ComboBoxItem selectedItem = (ComboBoxItem)lipidClassComboBox.SelectedItem;
             foreach (var node in lipidStructure.nodes)
             {
                 if (!node.nodeProjections.ContainsKey(lipidStructure.currentProjection)) continue;
@@ -880,8 +1096,9 @@ namespace LipidCreatorStructureEditor
                         string residue = node.decorators[0].text;
                         if (!residues.ContainsKey(residue)) break;
                         int[] nums = residues[residue];
-                        C += nums[0] - 1;
-                        H += 1 + 2 * (nums[0] - 1) - (2 * nums[1]) - nums[2];
+                        int carbonNumber = nums[0] - ((residue.Equals("1") && ((string[])selectedItem.Value)[0].Equals("SL")) ? 3 : 1);
+                        C += carbonNumber;
+                        H += 1 + 2 * carbonNumber - (2 * (carbonNumber + 1)) - nums[2];
                         O += nums[2];
                         break;
                 }
@@ -949,8 +1166,11 @@ namespace LipidCreatorStructureEditor
 
     public class StructureEditor
     {
+        [STAThread]
         public static void Main(string[] args)
         {
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
             Application.Run(new LipidCreatorStructureEditor());
         }
     }

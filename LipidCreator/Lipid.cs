@@ -156,12 +156,18 @@ namespace LipidCreator
         {
             {FunctionalGroupType.Alkoxy, new FunctionalGroup(FunctionalGroupType.Alkoxy, "Alkoxy", "oxy", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}}))},
             {FunctionalGroupType.Amino, new FunctionalGroup(FunctionalGroupType.Amino, "Amino", "NH2", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"N", 1}, {"H", 1}}))},
+            {FunctionalGroupType.Arsenic, new FunctionalGroup(FunctionalGroupType.Arsenic, "Arsenic", "As", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"As", 1}}))},
+            {FunctionalGroupType.Boron, new FunctionalGroup(FunctionalGroupType.Boron, "Boron", "B", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"B", 1}}))},
+            {FunctionalGroupType.Bromine, new FunctionalGroup(FunctionalGroupType.Bromine, "Bromine", "Br", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Br", 1}}))},
             {FunctionalGroupType.Carboxyl, new FunctionalGroup(FunctionalGroupType.Carboxyl, "Carboxyl", "COOH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"O", 2}}))},
+            {FunctionalGroupType.Chlorine, new FunctionalGroup(FunctionalGroupType.Chlorine, "Chlorine", "Cl", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"Cl", 1}}))},
             {FunctionalGroupType.Cyano, new FunctionalGroup(FunctionalGroupType.Cyano, "Cyano", "CN", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"N", 1}, {"H", -1}}))},
             {FunctionalGroupType.Epoxy, new FunctionalGroup(FunctionalGroupType.Epoxy, "Epoxy", "Ep", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}, {"H", -2}}))},
             {FunctionalGroupType.Ethyl, new FunctionalGroup(FunctionalGroupType.Ethyl, "Ethyl", "Et", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 2}, {"H", 4}}))},
+            {FunctionalGroupType.Fluorine, new FunctionalGroup(FunctionalGroupType.Fluorine, "Fluorine", "F", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"F", 1}}))},
             {FunctionalGroupType.Hydroperoxy, new FunctionalGroup(FunctionalGroupType.Hydroperoxy, "Hydroperoxy", "OOH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 2}}))},
             {FunctionalGroupType.Hydroxy, new FunctionalGroup(FunctionalGroupType.Hydroxy, "Hydroxy", "OH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"O", 1}}))},
+            {FunctionalGroupType.Iodine, new FunctionalGroup(FunctionalGroupType.Iodine, "Iodine", "I", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"I", 1}}))},
             {FunctionalGroupType.Methoxy, new FunctionalGroup(FunctionalGroupType.Methoxy, "Methoxy", "OMe", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"H", 2}, {"O", 1}}))},
             {FunctionalGroupType.Methyl, new FunctionalGroup(FunctionalGroupType.Methyl, "Methyl", "Me", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"C", 1}, {"H", 2}}))},
             {FunctionalGroupType.Nitro, new FunctionalGroup(FunctionalGroupType.Nitro, "Nitro", "NO2", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"N", 1}, {"O", 2}, {"H", -1}}))},
@@ -171,6 +177,7 @@ namespace LipidCreator
             {FunctionalGroupType.Sulfanyl, new FunctionalGroup(FunctionalGroupType.Sulfanyl, "Sulfanyl", "SH", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"S", 1}}))},
             {FunctionalGroupType.Sulfate, new FunctionalGroup(FunctionalGroupType.Sulfate, "Sulfate", "Su", MS2Fragment.initializeElementDict(new Dictionary<string, int>(){{"S", 1}, {"O", 4}}))}
         };
+
         
         
         public static Dictionary<string, FunctionalGroupType> FUNCTIONAL_GROUP_POSITIONS = ALL_FUNCTIONAL_GROUPS.Values.ToDictionary(k => k.name, k => k.type);

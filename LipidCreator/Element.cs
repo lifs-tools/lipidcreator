@@ -34,11 +34,11 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13};
+    public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13, B = 14, F = 15, Cl = 16, As = 17, Br = 18, I = 19};
     //public static List<Molecule> ElementOrder = new List<Molecule>(){Molecule.C, MoleculeC13, Molecule.H, Molecule.H2, Molecule.N, Molecule.N15, Molecule.O, Molecule.O17, Molecule.O18, Molecule.P, Molecule.P32, Molecule.S, Molecule.S34, Molecule.S33};
     
     public class ElementDictionary : List<int> {
-        public const int ElementCount = 14;
+        public const int ElementCount = 20;
         public ElementDictionary(ElementDictionary elementDictionary)
         {
             for (int i = 0; i < ElementCount; ++i) 

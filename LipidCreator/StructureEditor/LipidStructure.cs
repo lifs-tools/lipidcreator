@@ -476,7 +476,7 @@ namespace LipidCreatorStructureEditor
         
         public SPointF middlePoint;
         public Dictionary<int, StructureNode> idToNode = new Dictionary<int, StructureNode>();
-        public float factor = 2.5f;
+        public float factor = 2.0f;
         public float dbSpace = 1.5f;
         public float fontSize = 10.0f;
         public SolidBrush solidBrushEnabled = new SolidBrush(Color.Black);
@@ -659,9 +659,13 @@ namespace LipidCreatorStructureEditor
                     else 
                     {
                         var t = node.Elements().First();
-                        var s = t.Elements().First();
-                        text = s.Value.ToString();
+                        foreach (var s in t.Elements())
+                        {
+                            if (((string)s.Attribute("face") != null) && !((string)s.Attribute("face")).Equals("96")) continue;
+                            text = s.Value.ToString();
+                        }
                     }
+                    //if (text.Length > 1) text = text.Substring(0, 1);
                     
                     RectangleF drawRect = new RectangleF(x, y, 0, 0);
                 
@@ -784,9 +788,9 @@ namespace LipidCreatorStructureEditor
                 y = node.boundingBox.Y * factor + offsetY;
                 
                 Size size = TextRenderer.MeasureText(graphics, node.text, nodeFont);
-                float w = size.Width * 0.9f;
-                float h = size.Height * 0.9f;
-                node.boundingBox = new RectangleF(x - w * 0.5f, y - h * 0.5f, w, h);
+                float w = size.Width * 0.8f;
+                float h = size.Height * 0.8f;
+                node.boundingBox = new RectangleF(x - w * 0.4f, y - h * 0.4f, w, h);
                 
                 foreach (var decorator in node.decorators)
                 {
@@ -798,9 +802,9 @@ namespace LipidCreatorStructureEditor
                     yd = decorator.boundingBox.Y * factor + offsetY;
                     
                     Size sizeD = TextRenderer.MeasureText(graphics, decorator.text, node.text.Equals("R") ? decoratorFont : nodeFont);
-                    float wd = sizeD.Width * 0.9f;
-                    float hd = sizeD.Height * 0.9f;
-                    decorator.boundingBox = new RectangleF(xd - wd * 0.5f, yd - hd * 0.5f, wd, hd);
+                    float wd = sizeD.Width * 0.8f;
+                    float hd = sizeD.Height * 0.8f;
+                    decorator.boundingBox = new RectangleF(xd - wd * 0.4f, yd - hd * 0.4f, wd, hd);
                 }
             }
             
@@ -837,7 +841,7 @@ namespace LipidCreatorStructureEditor
             if (additionalNodes.Count > 0)
             {
                 sb.Append("  <AdditionalNodes>\n");
-                foreach (var node in additionalNodes) sb.Append(String.Format("    <NodeID id=\"{0}\">\n", node.id));
+                foreach (var node in additionalNodes) sb.Append(String.Format("    <NodeID id=\"{0}\" />\n", node.id));
                 sb.Append("  </AdditionalNodes>\n");
             }
             
@@ -850,7 +854,7 @@ namespace LipidCreatorStructureEditor
             if (additionalBonds.Count > 0)
             {
                 sb.Append("  <AdditionalBonds>\n");
-                foreach (var bond in additionalBonds) sb.Append(String.Format("    <BondsID id=\"{0}\">\n", bond.id));
+                foreach (var bond in additionalBonds) sb.Append(String.Format("    <BondsID id=\"{0}\" />\n", bond.id));
                 sb.Append("  </AdditionalBonds>\n");
             }
             
@@ -1215,6 +1219,13 @@ namespace LipidCreatorStructureEditor
             drawFormat.Alignment = StringAlignment.Center;
             drawFormat.LineAlignment = StringAlignment.Center;
             
+            
+            SolidBrush sbrush = solidBrushEnabled;
+            //g.DrawString("F", nodeFont, sbrush, new RectangleF(300, 300, 50, 50), drawFormat);
+            //g.DrawRectangle(penEnabled, 300, 300, 50, 50);
+            
+            
+            
             Dictionary<StructureNode, List<StructureNode>> adjacentNodes = new Dictionary<StructureNode, List<StructureNode>>();
             foreach (var node in nodes) adjacentNodes.Add(node, new List<StructureNode>());
                 
@@ -1259,6 +1270,7 @@ namespace LipidCreatorStructureEditor
                 if (!node.isCarbon || developmentView)
                 {
                     g.DrawString(node.text, nodeFont, brush, r, drawFormat);
+                    //g.DrawRectangle(penEnabled, nodeSPoint.X, nodeSPoint.Y, 2, 2);
                 }
                 if (nodeProjection.nodeState == NodeState.Enabled)
                 {

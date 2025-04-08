@@ -471,7 +471,7 @@ namespace LipidCreator
 
         void checkedListBoxMouseLeave(object sender, EventArgs e)
         {
-            if (currentHeadgroup.Equals("PC"))
+            if (currentHeadgroup.Equals("PCaeaea"))
             {
                 pictureBoxFragments.Image = null;
             }
@@ -603,7 +603,7 @@ namespace LipidCreator
                 toolTip1.Hide(this.checkedListBoxPositiveFragments);
                 this.checkedListBoxPositiveFragments.ContextMenu = null;
                 
-                if (currentHeadgroup.Equals("PC"))
+                if (currentHeadgroup.Equals("PCaeae"))
                 {
                     pictureBoxFragments.Image = null;
                 }
@@ -687,7 +687,7 @@ namespace LipidCreator
             {
                 toolTip1.Hide(this.checkedListBoxNegativeFragments);
                 this.checkedListBoxNegativeFragments.ContextMenu = null;
-                if (currentHeadgroup.Equals("PC"))
+                if (currentHeadgroup.Equals("PCaeae"))
                 {
                     pictureBoxFragments.Image = null;
                 }
@@ -784,7 +784,7 @@ namespace LipidCreator
             if (creatorGUI.lipidCreator.headgroups.ContainsKey(lipidClass) && creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage.Length > 0)
             {
                 fragmentComplete = Image.FromFile(creatorGUI.lipidCreator.headgroups[lipidClass].pathToImage);
-                if (currentHeadgroup.Equals("PC"))
+                if (currentHeadgroup.Equals("PCaeae"))
                 {
                     pictureBoxFragments.Image = null;
                 }
@@ -1025,7 +1025,7 @@ namespace LipidCreator
         public void test_Paint(object sender, PaintEventArgs e)
         {   
             
-            if (!currentHeadgroup.Equals("PC") || (!f.ContainsKey(currentFragment) && !currentFragment.Equals(""))) return;
+            if (!currentHeadgroup.Equals("PCaeae") || (!f.ContainsKey(currentFragment) && !currentFragment.Equals(""))) return;
             
             
             string structureId = currentHeadgroup + (!currentFragment.Equals("") ? "/" + currentFragment + currentPolarity : "");

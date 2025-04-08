@@ -1,6 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net472</TargetFramework>
@@ -10,6 +8,7 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <!-- we generate a custom assembly info -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <DefaultLanguage>en-US</DefaultLanguage>
     <Authors>Dominik Kopczynski, Nils Hoffmann, Bing Peng, Robert Ahrends</Authors>

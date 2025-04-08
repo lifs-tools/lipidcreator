@@ -33,7 +33,7 @@ using System.Data;
 namespace LipidCreator
 {
     
-    public enum FunctionalGroupType {Alkoxy, Amino, Carboxyl, Cyano, Epoxy, Ethyl, Hydroperoxy, Hydroxy, Methoxy, Methyl, Nitro, Oxo, Peroxy, Phosphate, Sulfanyl, Sulfate};
+    public enum FunctionalGroupType {Alkoxy, Amino, Arsenic, Boron, Bromine, Carboxyl, Chlorine, Cyano, Epoxy, Ethyl, Fluorine, Hydroperoxy, Hydroxy, Iodine, Methoxy, Methyl, Nitro, Oxo, Peroxy, Phosphate, Sulfanyl, Sulfate};
 
     [Serializable]
     public partial class FunctionalGroup

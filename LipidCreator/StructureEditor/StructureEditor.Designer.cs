@@ -7,6 +7,25 @@ using System.Collections.Generic;
 namespace LipidCreatorStructureEditor
 {
     
+    
+    
+    public class ComboBoxItem
+    {
+        public string Text { get; set; }
+        public object Value { get; set; }
+        
+        public ComboBoxItem(string t, object v)
+        {
+            Text = t;
+            Value = v;
+        }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+    }
+    
     public class InputBox : Form
     {
         TextBox inputBox = new TextBox();
@@ -106,6 +125,7 @@ namespace LipidCreatorStructureEditor
         public Label sumFormulaLabel = new Label();
         
         public ComboBox adductComboBox = new ComboBox();
+        public ComboBox lipidClassComboBox = new ComboBox();
         
         public Button addPositiveFragmentButton = new Button();
         public Button removePositiveFragmentButton = new Button();
@@ -135,58 +155,71 @@ namespace LipidCreatorStructureEditor
             this.Controls.Add(actionChangeAtom);
             actionChangeAtom.Size = new Size(120, 25);
             actionChangeAtom.Text = "Change atom";
-            actionChangeAtom.Location = new Point(10, actionChangeAtomState.Top + 35);
+            actionChangeAtom.Location = new Point(actionChangeAtomState.Left, actionChangeAtomState.Top + 35);
             actionChangeAtom.Click += actionChangeAtomClicked;
-            
-            
-            this.Controls.Add(actionChangeBondState);
-            actionChangeBondState.Size = new Size(120, 25);
-            actionChangeBondState.Text = "Change bond state";
-            actionChangeBondState.Location = new Point(10, actionChangeAtom.Top + 35);
-            actionChangeBondState.Click += actionChangeBondStateClicked;
-            
-            
-            this.Controls.Add(actionChangeGlobalCharge);
-            actionChangeGlobalCharge.Size = new Size(120, 25);
-            actionChangeGlobalCharge.Text = "Change global charge";
-            actionChangeGlobalCharge.Location = new Point(10, actionChangeBondState.Top + 35);
-            actionChangeGlobalCharge.Click += actionChangeGlobalChargeClicked;
             
             this.Controls.Add(actionDrawAtom);
             actionDrawAtom.Size = new Size(120, 25);
             actionDrawAtom.Text = "Draw atom";
-            actionDrawAtom.Location = new Point(10, actionChangeGlobalCharge.Top + 35);
+            actionDrawAtom.Location = new Point(actionChangeAtom.Left, actionChangeAtom.Top + 35);
             actionDrawAtom.Click += actionDrawAtomClicked;
-            
-            this.Controls.Add(actionDrawBond);
-            actionDrawBond.Size = new Size(120, 25);
-            actionDrawBond.Text = "Draw bond";
-            actionDrawBond.Location = new Point(10, actionDrawAtom.Top + 35);
-            actionDrawBond.Click += actionDrawBondClicked;
             
             this.Controls.Add(actionRemoveAtom);
             actionRemoveAtom.Size = new Size(120, 25);
             actionRemoveAtom.Text = "Remove atom";
-            actionRemoveAtom.Location = new Point(10, actionDrawBond.Top + 35);
+            actionRemoveAtom.Location = new Point(actionDrawAtom.Left, actionDrawAtom.Top + 35);
             actionRemoveAtom.Click += actionRemoveAtomClicked;
-            
-            this.Controls.Add(actionRemoveBond);
-            actionRemoveBond.Size = new Size(120, 25);
-            actionRemoveBond.Text = "Remove bond";
-            actionRemoveBond.Location = new Point(10, actionRemoveAtom.Top + 35);
-            actionRemoveBond.Click += actionRemoveBondClicked;
             
             this.Controls.Add(actionMoveAtom);
             actionMoveAtom.Size = new Size(120, 25);
             actionMoveAtom.Text = "Move atom";
-            actionMoveAtom.Location = new Point(10, actionRemoveBond.Top + 35);
+            actionMoveAtom.Location = new Point(actionRemoveAtom.Left, actionRemoveAtom.Top + 35);
             actionMoveAtom.Click += actionMoveAtomClicked;
             
             this.Controls.Add(actionFinalView);
             actionFinalView.Size = new Size(120, 25);
             actionFinalView.Text = "Final View";
-            actionFinalView.Location = new Point(10, actionMoveAtom.Top + 55);
+            actionFinalView.Location = new Point(actionMoveAtom.Left, actionMoveAtom.Top + 60);
             actionFinalView.Click += actionFinalViewClicked;
+            
+            this.Controls.Add(actionSaveStructure);
+            actionSaveStructure.Size = new Size(120, 25);
+            actionSaveStructure.Text = "Save structure";
+            actionSaveStructure.Location = new Point(actionFinalView.Left + 140, actionFinalView.Top);
+            actionSaveStructure.Click += saveStructure;
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            this.Controls.Add(actionChangeBondState);
+            actionChangeBondState.Size = new Size(120, 25);
+            actionChangeBondState.Text = "Change bond state";
+            actionChangeBondState.Location = new Point(150, actionChangeAtomState.Top);
+            actionChangeBondState.Click += actionChangeBondStateClicked;
+            
+            this.Controls.Add(actionDrawBond);
+            actionDrawBond.Size = new Size(120, 25);
+            actionDrawBond.Text = "Draw bond";
+            actionDrawBond.Location = new Point(actionChangeBondState.Left, actionChangeBondState.Top + 35);
+            actionDrawBond.Click += actionDrawBondClicked;
+            
+            this.Controls.Add(actionRemoveBond);
+            actionRemoveBond.Size = new Size(120, 25);
+            actionRemoveBond.Text = "Remove bond";
+            actionRemoveBond.Location = new Point(actionDrawBond.Left, actionDrawBond.Top + 35);
+            actionRemoveBond.Click += actionRemoveBondClicked;
+            
+            this.Controls.Add(actionChangeGlobalCharge);
+            actionChangeGlobalCharge.Size = new Size(120, 25);
+            actionChangeGlobalCharge.Text = "Change global charge";
+            actionChangeGlobalCharge.Location = new Point(actionRemoveBond.Left, actionRemoveBond.Top + 35);
+            actionChangeGlobalCharge.Click += actionChangeGlobalChargeClicked;
+            
             
             
             actionButtons.Add(actionChangeAtomState);
@@ -199,10 +232,18 @@ namespace LipidCreatorStructureEditor
             actionButtons.Add(actionMoveAtom);
             
             
+            
+            
+            
+            
+            
+            
+            
+            
             this.Controls.Add(positiveFragmentsListBox);
             positiveFragmentsListBox.Width = 130;
             positiveFragmentsListBox.Height = 300;
-            positiveFragmentsListBox.Location = new Point(10, actionFinalView.Top + 35);
+            positiveFragmentsListBox.Location = new Point(10, actionFinalView.Top + 60);
             positiveFragmentsListBox.KeyUp += fragmentKeyPressed;
             positiveFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             positiveFragmentsListBox.DoubleClick += positiveFragmentDoubleClicked;
@@ -210,7 +251,7 @@ namespace LipidCreatorStructureEditor
             this.Controls.Add(negativeFragmentsListBox);
             negativeFragmentsListBox.Width = 130;
             negativeFragmentsListBox.Height = 300;
-            negativeFragmentsListBox.Location = new Point(150, actionFinalView.Top + 35);
+            negativeFragmentsListBox.Location = new Point(150, actionFinalView.Top + 60);
             negativeFragmentsListBox.KeyUp += fragmentKeyPressed;
             negativeFragmentsListBox.SelectedIndexChanged += fragmentClicked;
             negativeFragmentsListBox.DoubleClick += negativeFragmentDoubleClicked;
@@ -243,49 +284,51 @@ namespace LipidCreatorStructureEditor
             
             
             
+            
+            
+            
             this.Controls.Add(bb1Carbon);
-            bb1Carbon.Location = new Point(200, 10);
+            bb1Carbon.Location = new Point(350, 35);
             bb1Carbon.Size = new Size(120, 25);
             bb1Carbon.Text = "18";
             bb1Carbon.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb1DB);
-            bb1DB.Location = new Point(200, 40);
+            bb1DB.Location = new Point(bb1Carbon.Left, bb1Carbon.Top + 30);
             bb1DB.Size = new Size(120, 25);
             bb1DB.Text = "0";
             bb1DB.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb1Hydro);
-            bb1Hydro.Location = new Point(200, 70);
+            bb1Hydro.Location = new Point(bb1DB.Left, bb1DB.Top + 30);
             bb1Hydro.Size = new Size(120, 25);
             bb1Hydro.Text = "0";
             bb1Hydro.TextChanged += computeFragmentMass;
             
-            this.Controls.Add(massLabel);
-            massLabel.Location = new Point(200, 100);
-            massLabel.Size = new Size(220, 25);
             
-            this.Controls.Add(sumFormulaLabel);
-            sumFormulaLabel.Location = new Point(200, 120);
-            sumFormulaLabel.Size = new Size(220, 25);
-            sumFormulaLabel.BringToFront();
+            this.Controls.Add(lipidClassComboBox);
+            lipidClassComboBox.Location = new Point(bb1Carbon.Left, bb1Carbon.Top - 25);
+            lipidClassComboBox.Size = new Size(120, 25);
+            lipidClassComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            lipidClassComboBox.SelectedIndexChanged += lipidClassChange;
+            
             
             
             
             this.Controls.Add(bb2Carbon);
-            bb2Carbon.Location = new Point(350, 10);
+            bb2Carbon.Location = new Point(bb1Carbon.Left + 150, bb1Carbon.Top);
             bb2Carbon.Size = new Size(120, 25);
             bb2Carbon.Text = "18";
             bb2Carbon.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb2DB);
-            bb2DB.Location = new Point(350, 40);
+            bb2DB.Location = new Point(bb2Carbon.Left, bb2Carbon.Top + 30);
             bb2DB.Size = new Size(120, 25);
             bb2DB.Text = "0";
             bb2DB.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb2Hydro);
-            bb2Hydro.Location = new Point(350, 70);
+            bb2Hydro.Location = new Point(bb2DB.Left, bb2DB.Top + 30);
             bb2Hydro.Size = new Size(120, 25);
             bb2Hydro.Text = "0";
             bb2Hydro.TextChanged += computeFragmentMass;
@@ -293,19 +336,19 @@ namespace LipidCreatorStructureEditor
             
             
             this.Controls.Add(bb3Carbon);
-            bb3Carbon.Location = new Point(500, 10);
+            bb3Carbon.Location = new Point(bb2Carbon.Left + 150, bb2Carbon.Top);
             bb3Carbon.Size = new Size(120, 25);
             bb3Carbon.Text = "18";
             bb3Carbon.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb3DB);
-            bb3DB.Location = new Point(500, 40);
+            bb3DB.Location = new Point(bb3Carbon.Left, bb3Carbon.Top + 30);
             bb3DB.Size = new Size(120, 25);
             bb3DB.Text = "0";
             bb3DB.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb3Hydro);
-            bb3Hydro.Location = new Point(500, 70);
+            bb3Hydro.Location = new Point(bb3DB.Left, bb3DB.Top + 30);
             bb3Hydro.Size = new Size(120, 25);
             bb3Hydro.Text = "0";
             bb3Hydro.TextChanged += computeFragmentMass;
@@ -313,34 +356,36 @@ namespace LipidCreatorStructureEditor
             
             
             this.Controls.Add(bb4Carbon);
-            bb4Carbon.Location = new Point(650, 10);
+            bb4Carbon.Location = new Point(bb3Carbon.Left + 150, bb3Carbon.Top);
             bb4Carbon.Size = new Size(120, 25);
             bb4Carbon.Text = "18";
             bb4Carbon.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb4DB);
-            bb4DB.Location = new Point(650, 40);
+            bb4DB.Location = new Point(bb4Carbon.Left, bb4Carbon.Top + 30);
             bb4DB.Size = new Size(120, 25);
             bb4DB.Text = "0";
             bb4DB.TextChanged += computeFragmentMass;
             
             this.Controls.Add(bb4Hydro);
-            bb4Hydro.Location = new Point(650, 70);
+            bb4Hydro.Location = new Point(bb4DB.Left, bb4DB.Top + 30);
             bb4Hydro.Size = new Size(120, 25);
             bb4Hydro.Text = "0";
             bb4Hydro.TextChanged += computeFragmentMass;
             
             
+            this.Controls.Add(massLabel);
+            massLabel.Location = new Point(bb1Carbon.Left, bb1Hydro.Top + 30);
+            massLabel.Size = new Size(220, 25);
             
-            this.Controls.Add(actionSaveStructure);
-            actionSaveStructure.Size = new Size(120, 25);
-            actionSaveStructure.Text = "Save structure";
-            actionSaveStructure.Location = new Point(10, 750);
-            actionSaveStructure.Click += saveStructure;
+            this.Controls.Add(sumFormulaLabel);
+            sumFormulaLabel.Location = new Point(bb1Carbon.Left, massLabel.Top + 20);
+            sumFormulaLabel.Size = new Size(220, 25);
+            sumFormulaLabel.BringToFront();
             
             
             this.Controls.Add(adductComboBox);
-            adductComboBox.Location = new Point(800, 10);
+            adductComboBox.Location = new Point(bb2Carbon.Left, lipidClassComboBox.Top);
             adductComboBox.Size = new Size(120, 25);
             adductComboBox.Items.Add("+H+");
             adductComboBox.Items.Add("+2H+");

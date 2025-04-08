@@ -65,9 +65,14 @@ namespace LipidCreator
             {Molecule.O18, new Element("O''", "18O", "O18", "[18]O", 10, 17.9991604, true, new Molecule[]{}, Molecule.O)},
             {Molecule.P32, new Element("P'", "32P", "P32", "[32]P", 11, 31.973907274, true, new Molecule[]{}, Molecule.P)},
             {Molecule.S33, new Element("S'", "33S", "S33", "[33]S", 12, 32.97145876, true, new Molecule[]{}, Molecule.S)},
-            {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new Molecule[]{}, Molecule.S)}
+            {Molecule.S34, new Element("S''", "34S", "S34", "[34]S", 13, 33.96786690, true, new Molecule[]{}, Molecule.S)},
+            {Molecule.B, new Element("B", "B", "B", "B", 14, 11.0093052, false, new Molecule[]{}, Molecule.B)},
+            {Molecule.F, new Element("F", "F", "F", "F", 15, 18.998403162, false, new Molecule[]{}, Molecule.F)},
+            {Molecule.Cl, new Element("Cl", "Cl", "Cl", "Cl", 16, 34.968852694, false, new Molecule[]{}, Molecule.Cl)},
+            {Molecule.As, new Element("As", "As", "As", "As", 17, 74.92159456, false, new Molecule[]{}, Molecule.As)},
+            {Molecule.Br, new Element("Br", "Br", "Br", "Br", 18, 78.9183376, false, new Molecule[]{}, Molecule.Br)},
+            {Molecule.I, new Element("I", "I", "I", "I", 19, 126.9044726, false, new Molecule[]{}, Molecule.I)}
         };
-
 
 
 

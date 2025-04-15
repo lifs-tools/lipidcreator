@@ -109,7 +109,7 @@ namespace LipidCreator
         public int onlyPrecursors;
         public int onlyHeavyLabeled;
         public List<string> headGroupNames;
-        public static string ID_SEPARATOR_UNSPECIFIC = "-";
+        public static string ID_SEPARATOR_UNSPECIFIC = "_";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
         public bool speciesLevel = false;
@@ -492,25 +492,32 @@ namespace LipidCreator
                 
                 
                 ElementDictionary atomsCountFragment = fragment.copyElementDict();
+                double extraMass = 0;
+
                 foreach (string fbase in fragment.fragmentBase)
                 {
                     switch(fbase)
                     {
                         case "LCB":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
+                            extraMass += (precursorData.lcb.directMass > -1) ? precursorData.lcb.directMass : 0;
                             break;
                         case "FA":
                         case "FA1":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
+                            extraMass += (precursorData.fa1.directMass > -1) ? precursorData.fa1.directMass : 0;
                             break;
                         case "FA2":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
+                            extraMass += (precursorData.fa2.directMass > -1) ? precursorData.fa2.directMass : 0;
                             break;
                         case "FA3":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
+                            extraMass += (precursorData.fa3.directMass > -1) ? precursorData.fa3.directMass : 0;
                             break;
                         case "FA4":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
+                            extraMass += (precursorData.fa4.directMass > -1) ? precursorData.fa4.directMass : 0;
                             break;
                         case "HG":
                             MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
@@ -542,7 +549,7 @@ namespace LipidCreator
                 {
                     try
                     {
-                        massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge);
+                        massFragment = LipidCreator.computeMass(atomsCountFragment, fragment.fragmentAdduct.charge, extraMass);
                     }
                     catch (LipidException lipidException)
                     {
@@ -558,7 +565,10 @@ namespace LipidCreator
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
                 }
-                
+                if (extraMass > 0){
+                    rowString[(int)LabelPosition.PRECURSOR_NEUTRAL_FORMULA_POS] = "";
+                    chemFormFragment = "";
+                }
                 
                 
                 string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);

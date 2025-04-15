@@ -70,7 +70,7 @@ namespace LipidCreator
     [Serializable]
     public class FattyAcidGroup
     {
-        public int chainType; // 0 = no restriction, 1 = odd carbon number, 2 = even carbon number
+        public int chainType; // 0 = no restriction, 1 = odd carbon number, 2 = even carbon number, 3 = direct mass
         public string lengthInfo;
         public string dbInfo;
         public string hydroxylInfo;
@@ -79,6 +79,7 @@ namespace LipidCreator
         public HashSet<int> carbonCounts;
         public HashSet<int> doubleBondCounts;
         public HashSet<int> hydroxylCounts;
+        public double directMass;
         public DataTable functionalGroups = new DataTable();
         public Dictionary<FunctionalGroupType, HashSet<int>> functionalGroupCounts = null;
     
@@ -89,6 +90,7 @@ namespace LipidCreator
             lengthInfo = "12-15";
             dbInfo = "0";
             hydroxylInfo = "0";
+            directMass = -1;
             faTypes = new Dictionary<FattyAcidType, bool>();
             faTypes.Add(FattyAcidType.Ester, !dummy);
             faTypes.Add(FattyAcidType.Plasmanyl, false);
@@ -107,6 +109,7 @@ namespace LipidCreator
             lengthInfo = copy.lengthInfo;
             dbInfo = copy.dbInfo;
             isLCB = copy.isLCB;
+            directMass = copy.directMass;
             hydroxylInfo = copy.hydroxylInfo;
             faTypes = new Dictionary<FattyAcidType, bool>();
             faTypes.Add(FattyAcidType.Ester, copy.faTypes[FattyAcidType.Ester]);
@@ -156,7 +159,7 @@ namespace LipidCreator
                 
                 int minRange = LipidCreator.MIN_HYDROXY_LENGTH;
                 int maxRange = LipidCreator.MAX_HYDROXY_LENGTH;
-                var parsed = LipidCreator.parseRange(value, minRange,  maxRange, (ChainType)4);
+                var parsed = LipidCreator.parseRange(value, minRange,  maxRange, ChainType.hydroxylLength);
                 if (parsed == null)
                 {
                     functionalGroupCounts = null;
@@ -174,6 +177,11 @@ namespace LipidCreator
         public override string ToString()
         {
             string faLCB = (isLCB) ? "long chain base" : "fatty acyl";
+
+            if (chainType == (int)ChainType.directMass){
+                return String.Format("The {0} group of {1} mass", faLCB, lengthInfo);
+            }
+
             string allFaTypes = "";
             string restrictions = chainType == 0 ? "no restriction" : (chainType == 1 ? "odd chain numbers" : "even chain numbers"); 
             foreach (KeyValuePair<FattyAcidType, bool> kvp in faTypes)
@@ -213,6 +221,9 @@ namespace LipidCreator
                     hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[h & 255], i & 63);
                     i++;
                 }
+
+                hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[(int)(directMass * 10000) & 255], i & 63);
+                i++;
                 
                 hashCode += LipidCreator.rotateHash(LipidCreator.randomNumbers[isLCB ? 2 : 8], i & 63);
                 
@@ -228,6 +239,31 @@ namespace LipidCreator
                 
                 return hashCode;
             }
+        }
+
+
+
+
+        public string FARepresentation()
+        {
+            string faRepresentation = "";
+            if (isLCB)
+            {
+                faRepresentation = "LCB";
+            }
+            else
+            {
+                faRepresentation = string.Join(", ",(from faType in faTypes.Keys where faTypes[faType] select Lipid.FARepresentationString[faType]));
+            }
+            if (chainType == (int)ChainType.directMass){
+                faRepresentation += " :" + directMass + "Da";
+            }
+            else {
+                faRepresentation += " " + (new string[]{":", " (odd):", " (even):"})[chainType];
+                faRepresentation += lengthInfo + "; DB: " + dbInfo + functionalGroupsInfo();
+            }
+
+            return faRepresentation;
         }
         
         
@@ -344,7 +380,10 @@ namespace LipidCreator
         // hydroxyl / (ether / ester) bonding combinations for a fatty acid
         public System.Collections.Generic.IEnumerable<FattyAcid> getFattyAcids()
         {
-            if (!faTypes[FattyAcidType.NoType])
+            if ((ChainType)chainType == ChainType.directMass){
+                yield return new FattyAcid(directMass);
+            }
+            else if (!faTypes[FattyAcidType.NoType])
             {
                 // iterate for all carbon lengths
                 foreach (int fattyAcidLength in carbonCounts)

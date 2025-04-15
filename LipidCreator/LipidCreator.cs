@@ -62,7 +62,7 @@ namespace LipidCreator
     public enum MonitoringTypes {NoMonitoring, SRM, PRM};
     public enum PRMTypes {PRMAutomatically, PRMManually};
     public enum RunMode {commandline, standalone, external};
-    public enum ChainType {carbonLength, carbonLengthOdd, carbonLengthEven, dbLength, hydroxylLength};
+    public enum ChainType {carbonLength, carbonLengthOdd, carbonLengthEven, directMass, dbLength, hydroxylLength};
     public enum LabelPosition {UNIQUE_POS = 0,
         SPECIFIC_POS = 1,
         MOLECULE_LIST_NAME_POS = 2,
@@ -1698,7 +1698,7 @@ namespace LipidCreator
         
         
         
-        public static double computeMass(ElementDictionary elements, double charge)
+        public static double computeMass(ElementDictionary elements, double charge, double extraMass = 0)
         {
             double mass = 0;
             for (int m = 0; m < elements.Count; ++m)
@@ -1706,6 +1706,7 @@ namespace LipidCreator
                 if (elements[m] < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
                 mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
             }
+            mass += extraMass;
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);
         }
         

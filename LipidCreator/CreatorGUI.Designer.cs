@@ -1284,10 +1284,12 @@ namespace LipidCreator
             plFA3Combobox.Items.Add("Fatty acyl chain");
             plFA3Combobox.Items.Add("Fatty acyl chain - odd");
             plFA3Combobox.Items.Add("Fatty acyl chain - even");
+            plFA3Combobox.Items.Add("Direct mass");
             plFA4Combobox = new ComboBox();
             plFA4Combobox.Items.Add("Fatty acyl chain");
             plFA4Combobox.Items.Add("Fatty acyl chain - odd");
             plFA4Combobox.Items.Add("Fatty acyl chain - even");
+            plFA4Combobox.Items.Add("Direct mass");
             plDB3Textbox = new TextBox();
             plDB4Textbox = new TextBox();
             plDB3Label = new Label();
@@ -1299,14 +1301,17 @@ namespace LipidCreator
             glFA1Combobox.Items.Add("Fatty acyl chain");
             glFA1Combobox.Items.Add("Fatty acyl chain - odd");
             glFA1Combobox.Items.Add("Fatty acyl chain - even");
+            glFA1Combobox.Items.Add("Direct mass");
             glFA2Combobox = new ComboBox();
             glFA2Combobox.Items.Add("Fatty acyl chain");
             glFA2Combobox.Items.Add("Fatty acyl chain - odd");
             glFA2Combobox.Items.Add("Fatty acyl chain - even");
+            glFA2Combobox.Items.Add("Direct mass");
             glFA3Combobox = new ComboBox();
             glFA3Combobox.Items.Add("Fatty acyl chain");
             glFA3Combobox.Items.Add("Fatty acyl chain - odd");
             glFA3Combobox.Items.Add("Fatty acyl chain - even");
+            glFA3Combobox.Items.Add("Direct mass");
             glDB1Textbox = new TextBox();
             glDB2Textbox = new TextBox();
             glDB3Textbox = new TextBox();
@@ -1320,10 +1325,12 @@ namespace LipidCreator
             plFA1Combobox.Items.Add("Fatty acyl chain");
             plFA1Combobox.Items.Add("Fatty acyl chain - odd");
             plFA1Combobox.Items.Add("Fatty acyl chain - even");
+            plFA1Combobox.Items.Add("Direct mass");
             plFA2Combobox = new ComboBox();
             plFA2Combobox.Items.Add("Fatty acyl chain");
             plFA2Combobox.Items.Add("Fatty acyl chain - odd");
             plFA2Combobox.Items.Add("Fatty acyl chain - even");
+            plFA2Combobox.Items.Add("Direct mass");
             plDB1Textbox = new TextBox();
             plDB2Textbox = new TextBox();
             plDB1Label = new Label();
@@ -1335,10 +1342,12 @@ namespace LipidCreator
             slLCBCombobox.Items.Add("Long chain base");
             slLCBCombobox.Items.Add("Long chain base - odd");
             slLCBCombobox.Items.Add("Long chain base - even");
+            slLCBCombobox.Items.Add("Direct mass");
             slFACombobox = new ComboBox();
             slFACombobox.Items.Add("Fatty acyl chain");
             slFACombobox.Items.Add("Fatty acyl chain - odd");
             slFACombobox.Items.Add("Fatty acyl chain - even");
+            slFACombobox.Items.Add("Direct mass");
             slDB1Textbox = new TextBox();
             slDB2Textbox = new TextBox();
             slDB1Label = new Label();
@@ -1350,6 +1359,7 @@ namespace LipidCreator
             stFACombobox.Items.Add("Fatty acyl chain");
             stFACombobox.Items.Add("Fatty acyl chain - odd");
             stFACombobox.Items.Add("Fatty acyl chain - even");
+            stFACombobox.Items.Add("Direct mass");
             stFATextbox = new TextBox();
             stDBLabel = new Label();
             stDBTextbox = new TextBox();
@@ -1414,6 +1424,8 @@ namespace LipidCreator
             plFA4FuncGroups = new DataGridView();
             slFAFuncGroups = new DataGridView();
             stFAFuncGroups = new DataGridView();
+            plFA1FuncGroups.CellValueChanged += delegate(object s, DataGridViewCellEventArgs e){  updatePLRepresentative(); };
+            glFA1FuncGroups.CellValueChanged += delegate(object s, DataGridViewCellEventArgs e){  updateGLRepresentative(); };
             
             glStep1 = new GroupBox();
             plStep1 = new GroupBox();

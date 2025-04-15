@@ -36,6 +36,7 @@ namespace LipidCreator
         public int length;
         public int db;
         public int hydroxyl;
+        public double directMass;
         public FattyAcidType fattyAcidType;
         public ElementDictionary atomsCount;
         public bool isLCB;
@@ -53,6 +54,7 @@ namespace LipidCreator
             this.db = db;
             hydroxyl = hydro;
             isLCB = _isLCB;
+            directMass = -1;
             atomsCount = MS2Fragment.createEmptyElementDict();
             this.fattyAcidType = fattyAcidType;
             if (funcGroups != null)
@@ -100,6 +102,14 @@ namespace LipidCreator
                 MS2Fragment.addCounts(atomsCount, Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].elements);
             }
         }
+
+        public FattyAcid(double _directMass){
+            directMass = _directMass;
+            atomsCount = MS2Fragment.createEmptyElementDict();
+            fattyAcidType = FattyAcidType.Ester;
+        }
+
+
         
         public FattyAcid(FattyAcid copy)
         {
@@ -107,6 +117,7 @@ namespace LipidCreator
             db = copy.db;
             isLCB = copy.isLCB;
             hydroxyl = copy.hydroxyl;
+            directMass = copy.directMass;
             fattyAcidType = copy.fattyAcidType;
             atomsCount = MS2Fragment.createEmptyElementDict();
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
@@ -123,6 +134,14 @@ namespace LipidCreator
             db += copy.db;
             isLCB |= copy.isLCB;
             hydroxyl += copy.hydroxyl;
+            if (directMass > -1 || copy.directMass > -1){
+                if (directMass > -1 && copy.directMass > -1){
+                    directMass += copy.directMass;
+                }
+                else if (copy.directMass > -1){
+                    directMass = copy.directMass;
+                }
+            }
             fattyAcidType = copy.fattyAcidType;
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
@@ -130,23 +149,34 @@ namespace LipidCreator
         
         public string ToString(bool fullFormat = true)
         {
-            string key = Lipid.FAPrefix[fattyAcidType] + Convert.ToString(length) + ":" + Convert.ToString(db);
-            if (isLCB)
-            {
-                key += ";O" + Convert.ToString(hydroxyl);
-            }
-            else
-            {
-                if (fullFormat)
+            string key = Lipid.FAPrefix[fattyAcidType];
+            if (length > 0){
+                key += Convert.ToString(length) + ":" + Convert.ToString(db);
+                if (isLCB)
                 {
-                    if (hydroxyl > 0) key += ";O" + Convert.ToString(hydroxyl);
+                    key += ";O" + Convert.ToString(hydroxyl);
                 }
+                else
+                {
+                    if (fullFormat)
+                    {
+                        if (hydroxyl > 0) key += ";O" + Convert.ToString(hydroxyl);
+                    }
+                }
+                foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups)
+                {
+                    if (kvp.Value > 0) key += ";(" + Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation + ")" + Convert.ToString(kvp.Value);
+                }
+                if (directMass > -1){
+                    key += ";" + directMass + "da";
+                }
+
+                key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
             }
-            foreach (KeyValuePair<FunctionalGroupType, int> kvp in functionalGroups)
-            {
-                if (kvp.Value > 0) key += ";(" + Lipid.ALL_FUNCTIONAL_GROUPS[kvp.Key].abbreviation + ")" + Convert.ToString(kvp.Value);
+            else if (directMass > -1){
+                return key + directMass + "da";
             }
-            key += LipidCreator.computeHeavyIsotopeLabel(atomsCount);
+
             return key;
         }
         
@@ -177,8 +207,15 @@ namespace LipidCreator
 
         public int CompareTo(FattyAcid other)
         {
-            if (other.isLCB) return -1;
-            if (isLCB) return 1;
+            if (directMass > -1 || other.directMass > -1){
+                if (directMass > -1 && other.directMass > -1){
+                    return (directMass < other.directMass) ? -1 : 1;
+                }
+                else if (directMass > -1) return -1;
+                return 1;
+            }
+            else if (other.isLCB) return -1;
+            else if (isLCB) return 1;
             if ((int)fattyAcidType != (int)other.fattyAcidType)
             {
                 return (int)fattyAcidType - (int)other.fattyAcidType;

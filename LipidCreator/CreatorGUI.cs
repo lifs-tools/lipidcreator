@@ -1222,13 +1222,13 @@ namespace LipidCreator
                     
                     
                     updateRanges(currentGlycerolipid.fag1, glFA1Textbox, glFA1Combobox.SelectedIndex);
-                    updateRanges(currentGlycerolipid.fag1, glDB1Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag1, glDB1Textbox, (int)ChainType.dbLength);
                     updateFunctionalGroupGridView(currentGlycerolipid.fag1, glFA1FuncGroups);
                     updateRanges(currentGlycerolipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
-                    updateRanges(currentGlycerolipid.fag2, glDB2Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag2, glDB2Textbox, (int)ChainType.dbLength);
                     updateFunctionalGroupGridView(currentGlycerolipid.fag2, glFA2FuncGroups);
                     updateRanges(currentGlycerolipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-                    updateRanges(currentGlycerolipid.fag3, glDB3Textbox, 3);
+                    updateRanges(currentGlycerolipid.fag3, glDB3Textbox, (int)ChainType.dbLength);
                     updateFunctionalGroupGridView(currentGlycerolipid.fag3, glFA3FuncGroups);
                     
                     glRepresentativeFA.Checked = currentGlycerolipid.representativeFA;
@@ -1323,16 +1323,16 @@ namespace LipidCreator
                         plHasPlasmalogen.Checked = false;
                         
                         updateRanges(currentPhospholipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
-                        updateRanges(currentPhospholipid.fag1, plDB1Textbox, 3);
+                        updateRanges(currentPhospholipid.fag1, plDB1Textbox, (int)ChainType.dbLength);
                         updateFunctionalGroupGridView(currentPhospholipid.fag1, plFA1FuncGroups);
                         updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-                        updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
+                        updateRanges(currentPhospholipid.fag2, plDB2Textbox, (int)ChainType.dbLength);
                         updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
                         updateRanges(currentPhospholipid.fag3, plFA3Textbox, plFA3Combobox.SelectedIndex);
-                        updateRanges(currentPhospholipid.fag3, plDB3Textbox, 3);
+                        updateRanges(currentPhospholipid.fag3, plDB3Textbox, (int)ChainType.dbLength);
                         updateFunctionalGroupGridView(currentPhospholipid.fag3, plFA3FuncGroups);
                         updateRanges(currentPhospholipid.fag4, plFA4Textbox, plFA4Combobox.SelectedIndex);
-                        updateRanges(currentPhospholipid.fag4, plDB4Textbox, 3);
+                        updateRanges(currentPhospholipid.fag4, plDB4Textbox, (int)ChainType.dbLength);
                         updateFunctionalGroupGridView(currentPhospholipid.fag4, plFA4FuncGroups);
                         
                         plRepresentativeFA.Checked = currentPhospholipid.representativeFA;
@@ -1423,12 +1423,12 @@ namespace LipidCreator
                         
                         
                         updateRanges(currentPhospholipid.fag1, plFA1Textbox, plFA1Combobox.SelectedIndex);
-                        updateRanges(currentPhospholipid.fag1, plDB1Textbox, 3);
+                        updateRanges(currentPhospholipid.fag1, plDB1Textbox, (int)ChainType.dbLength);
                         updateFunctionalGroupGridView(currentPhospholipid.fag1, plFA1FuncGroups);
                         if (!currentPhospholipid.isLyso)
                         {
                             updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
-                            updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
+                            updateRanges(currentPhospholipid.fag2, plDB2Textbox, (int)ChainType.dbLength);
                             updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
                         }
                         plRepresentativeFA.Checked = currentPhospholipid.representativeFA;
@@ -1486,9 +1486,9 @@ namespace LipidCreator
                     addLipidButton.Text = "Add sphingolipids";
                     
                     updateRanges(currentSphingolipid.lcb, slLCBTextbox, slLCBCombobox.SelectedIndex, true);
-                    updateRanges(currentSphingolipid.lcb, slDB2Textbox, 3);
+                    updateRanges(currentSphingolipid.lcb, slDB2Textbox, (int)ChainType.dbLength);
                     updateRanges(currentSphingolipid.fag, slFATextbox, slFACombobox.SelectedIndex);
-                    updateRanges(currentSphingolipid.fag, slDB1Textbox, 3);
+                    updateRanges(currentSphingolipid.fag, slDB1Textbox, (int)ChainType.dbLength);
                     updateFunctionalGroupGridView(currentSphingolipid.fag, slFAFuncGroups);
                     slPictureBox.SendToBack();
                     break;
@@ -1521,7 +1521,7 @@ namespace LipidCreator
                     stFAFuncGroups.DataSource = currentSTLipid.fag.functionalGroups;
                     stFACombobox.SelectedIndex = currentSTLipid.fag.chainType;
                     updateRanges(currentSTLipid.fag, stFATextbox, stFACombobox.SelectedIndex);
-                    updateRanges(currentSTLipid.fag, stDBTextbox, 3);
+                    updateRanges(currentSTLipid.fag, stDBTextbox, (int)ChainType.dbLength);
                     updateFunctionalGroupGridView(currentSTLipid.fag, stFAFuncGroups);
                     break;
                     
@@ -1624,7 +1624,7 @@ namespace LipidCreator
         
         
         
-        // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = db length, 4 = hydroxyl length
+        // objectType (Object type): 0 = carbon length, 1 = carbon length odd, 2 = carbon length even, 3 = direct mass, 4 = db length, 5 = hydroxyl length
         public void updateRanges(FattyAcidGroup fag, TextBox tb, int objectTypeI, bool isLCB = false)
         {
             ChainType objectType = (ChainType)objectTypeI;
@@ -1640,6 +1640,17 @@ namespace LipidCreator
                 {
                     incorrectParsing = true;
                     fag.carbonCounts = new HashSet<int>();
+                }
+            }
+            else if (objectType == ChainType.directMass){
+                double n;
+                bool isNumeric = double.TryParse(fag.lengthInfo, out n);
+                if (isNumeric & n > 0){
+                    fag.directMass = n;
+                }
+                else {
+                    fag.directMass = -1;
+                    incorrectParsing = true;
                 }
             }
             else if (objectType == ChainType.dbLength)
@@ -1704,13 +1715,7 @@ namespace LipidCreator
             fag.createFunctionalGroupCount();
         }
         
-        
-        
-        
-        
-        
-        
-        
+
         
         public void updateCarbon(Object sender, FattyAcidGroup fag)
         {
@@ -1725,7 +1730,7 @@ namespace LipidCreator
         public void updateDB(Object sender, FattyAcidGroup fag)
         {
             fag.dbInfo = ((TextBox)sender).Text;
-            updateRanges(fag, (TextBox)sender, 3);
+            updateRanges(fag, (TextBox)sender, (int)ChainType.dbLength);
         }
         
         
@@ -1735,7 +1740,7 @@ namespace LipidCreator
         public void updateHydroxyl(Object sender, FattyAcidGroup fag)
         {
             fag.hydroxylInfo = ((TextBox)sender).Text;
-            updateRanges(fag, (TextBox)sender, 4);
+            updateRanges(fag, (TextBox)sender, (int)ChainType.hydroxylLength);
         }
         
         
@@ -1745,11 +1750,55 @@ namespace LipidCreator
         {
             fag.chainType = ((ComboBox)sender).SelectedIndex;
             updateRanges(fag, textbox, fag.chainType);
+            updateDirectMass(sender, (ChainType)fag.chainType);
         }
         
         
         
-        
+        public void updateDirectMass(Object sender, ChainType chainType)
+        {
+            bool visible = chainType != ChainType.directMass;
+            if (sender == plFA1Combobox)
+            {
+                plDB1Textbox.Visible = visible;
+                plDB1Label.Visible = visible;
+                plFA1FuncGroups.Visible = visible;
+                plFA1Checkbox1.Checked = true;
+                plFA1Checkbox2.Checked = false;
+                plFA1Checkbox3.Checked = false;
+                plFA1Checkbox1.Visible = visible;
+                plFA1Checkbox2.Visible = visible;
+                plFA1Checkbox3.Visible = visible;
+            }
+            else if (sender == plFA2Combobox)
+            {
+                plDB2Textbox.Visible = visible;
+                plDB2Label.Visible = visible;
+                plFA2FuncGroups.Visible = visible;
+                plFA2Checkbox1.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA2Checkbox2.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA2Checkbox3.Visible = visible && ((Phospholipid)currentLipid).isCL;
+
+            }
+            else if (sender == plFA3Combobox)
+            {
+                plDB3Textbox.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plDB3Label.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA3FuncGroups.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA3Checkbox1.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA3Checkbox2.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA3Checkbox3.Visible = visible && ((Phospholipid)currentLipid).isCL;
+            }
+            else if (sender == plFA4Combobox)
+            {
+                plDB4Textbox.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plDB4Label.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA4FuncGroups.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA4Checkbox1.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA4Checkbox2.Visible = visible && ((Phospholipid)currentLipid).isCL;
+                plFA4Checkbox3.Visible = visible && ((Phospholipid)currentLipid).isCL;
+            }
+        }
         
         
         
@@ -1837,30 +1886,28 @@ namespace LipidCreator
                 plFA4Checkbox1.Checked = plFA1Checkbox1.Checked;
                 plFA4Checkbox2.Checked = plFA1Checkbox2.Checked;
                 plFA4Checkbox3.Checked = plFA1Checkbox3.Checked;
-                
-                
-                
+
                 DataTable pl1Table = (DataTable)plFA1FuncGroups.DataSource;
                 DataTable pl2Table = (DataTable)plFA2FuncGroups.DataSource;
                 DataTable pl3Table = (DataTable)plFA3FuncGroups.DataSource;
                 DataTable pl4Table = (DataTable)plFA4FuncGroups.DataSource;
-                
+
                 pl2Table.Clear();
                 pl3Table.Clear();
                 pl4Table.Clear();
-                
+
                 foreach (DataRow dr in pl1Table.Rows)
                 {
                     DataRow pl2dr = pl2Table.NewRow();
                     pl2dr[0] = dr[0];
                     pl2dr[1] = dr[1];
                     pl2Table.Rows.Add(pl2dr);
-                    
+
                     DataRow pl3dr = pl3Table.NewRow();
                     pl3dr[0] = dr[0];
                     pl3dr[1] = dr[1];
                     pl3Table.Rows.Add(pl3dr);
-                    
+
                     DataRow pl4dr = pl4Table.NewRow();
                     pl4dr[0] = dr[0];
                     pl4dr[1] = dr[1];
@@ -1973,9 +2020,9 @@ namespace LipidCreator
             updateRanges(currentPhospholipid.fag2, plFA2Textbox, plFA2Combobox.SelectedIndex);
             updateRanges(currentPhospholipid.fag3, plFA3Textbox, plFA3Combobox.SelectedIndex);
             updateRanges(currentPhospholipid.fag4, plFA4Textbox, plFA4Combobox.SelectedIndex);
-            updateRanges(currentPhospholipid.fag2, plDB2Textbox, 3);
-            updateRanges(currentPhospholipid.fag3, plDB3Textbox, 3);
-            updateRanges(currentPhospholipid.fag4, plDB4Textbox, 3);
+            updateRanges(currentPhospholipid.fag2, plDB2Textbox, (int)ChainType.dbLength);
+            updateRanges(currentPhospholipid.fag3, plDB3Textbox, (int)ChainType.dbLength);
+            updateRanges(currentPhospholipid.fag4, plDB4Textbox, (int)ChainType.dbLength);
             
             updateFunctionalGroupGridView(currentPhospholipid.fag2, plFA2FuncGroups);
             updateFunctionalGroupGridView(currentPhospholipid.fag3, plFA3FuncGroups);
@@ -2167,8 +2214,8 @@ namespace LipidCreator
             }
             updateRanges(currentGlycerolipid.fag2, glFA2Textbox, glFA2Combobox.SelectedIndex);
             updateRanges(currentGlycerolipid.fag3, glFA3Textbox, glFA3Combobox.SelectedIndex);
-            updateRanges(currentGlycerolipid.fag2, glDB2Textbox, 3);
-            updateRanges(currentGlycerolipid.fag3, glDB3Textbox, 3);
+            updateRanges(currentGlycerolipid.fag2, glDB2Textbox, (int)ChainType.dbLength);
+            updateRanges(currentGlycerolipid.fag3, glDB3Textbox, (int)ChainType.dbLength);
             updateFunctionalGroupGridView(currentGlycerolipid.fag2, glFA2FuncGroups);
             updateFunctionalGroupGridView(currentGlycerolipid.fag3, glFA3FuncGroups);
         }
@@ -2190,8 +2237,8 @@ namespace LipidCreator
             ((Phospholipid)currentLipid).isLyso = plIsLyso.Checked;
             ((Phospholipid)currentLipid).hasPlasmalogen = plHasPlasmalogen.Checked;
 
-            plRepresentativeFA.Visible = !((Phospholipid)currentLipid).isLyso;
             changeTab((int)LipidCategory.Glycerophospholipid);
+            plRepresentativeFA.Visible = !plIsLyso.Checked && !plHasPlasmalogen.Checked;
         }
         
         
@@ -2330,7 +2377,6 @@ namespace LipidCreator
             List<String> plHgList = new List<String>();
             plHgListbox.Items.Clear();
             
-            
             if (lyso)
             {
                 if (plHasPlasmalogen.Checked)
@@ -2346,6 +2392,7 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;
                     plFA1Checkbox1.Visible = false;
+                    plRepresentativeFA.Visible = false;
                     plPictureBox.Image = phosphoLysoBackboneImageFA1e;
                 }
                 else
@@ -2384,6 +2431,7 @@ namespace LipidCreator
                     plFA1Checkbox3.Visible = false;
                     plFA1Checkbox2.Visible = false;
                     plFA1Checkbox1.Visible = false;
+                    plRepresentativeFA.Visible = false;
                     plPictureBox.Image = phosphoBackboneImageFA1e;
                 }
                 else
@@ -3033,7 +3081,6 @@ namespace LipidCreator
                                         lipidCreator.registeredLipidDictionary.Add(lipidHash, newLipid);
                                         lipidCreator.registeredLipids.Add(lipidHash);
                                         registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(newLipid));
-                                        
                                         if (currentPhospholipid.fag1.faTypes[FattyAcidType.Ester])
                                         {
                                             lipidHash = pureLipid.getHashCode();
@@ -3041,7 +3088,6 @@ namespace LipidCreator
                                             lipidCreator.registeredLipids.Add(lipidHash);
                                             registeredLipidsDatatable.Rows.Add(createLipidsGridviewRow(pureLipid));
                                         }
-                                        
                                         refreshRegisteredLipidsTable();
                                     }
                                     catch
@@ -3306,6 +3352,7 @@ namespace LipidCreator
                             break;
                             
                         case LipidCategory.Glycerophospholipid:
+
                             lipidHash = ((Phospholipid)currentLipid).getHashCode();
                             lipidCreator.registeredLipidDictionary.Add(lipidHash, new Phospholipid((Phospholipid)currentLipid));
                             lipidCreator.registeredLipids.Add(lipidHash);
@@ -3421,19 +3468,18 @@ namespace LipidCreator
                 if (currentPhospholipid.isCL)
                 {
                     row["Category"] = "Cardiolipin";
-                    row["Building Block 1"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + currentPhospholipid.fag1.functionalGroupsInfo();
-                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + currentPhospholipid.fag2.functionalGroupsInfo();
-                    row["Building Block 3"] = FARepresentation(currentPhospholipid.fag3) + currentPhospholipid.fag3.lengthInfo + "; DB: " + currentPhospholipid.fag3.dbInfo + currentPhospholipid.fag3.functionalGroupsInfo();
-                    if (!currentPhospholipid.fag4.faTypes[FattyAcidType.NoType]) row["Building Block 4"] = FARepresentation(currentPhospholipid.fag4) + currentPhospholipid.fag4.lengthInfo + "; DB: " + currentPhospholipid.fag4.dbInfo + currentPhospholipid.fag4.functionalGroupsInfo();
-                    headGroupNames.Add("CL");
+                    row["Building Block 1"] = currentPhospholipid.fag1.FARepresentation();
+                    row["Building Block 2"] = currentPhospholipid.fag2.FARepresentation();
+                    row["Building Block 3"] = currentPhospholipid.fag3.FARepresentation();
+                    if (!currentPhospholipid.fag4.faTypes[FattyAcidType.NoType]) row["Building Block 4"] = currentPhospholipid.fag4.FARepresentation();
                 }
                 else
                 {
                     row["Category"] = "Glycerophospholipid";
                     headGroupNames.AddRange(currentPhospholipid.headGroupNames);
                     row["Building Block 1"] = "HG: " + String.Join(", ", currentPhospholipid.headGroupNames);
-                    row["Building Block 2"] = FARepresentation(currentPhospholipid.fag1) + currentPhospholipid.fag1.lengthInfo + "; DB: " + currentPhospholipid.fag1.dbInfo + currentPhospholipid.fag1.functionalGroupsInfo();
-                    if (!currentPhospholipid.isLyso) row["Building Block 3"] = FARepresentation(currentPhospholipid.fag2) + currentPhospholipid.fag2.lengthInfo + "; DB: " + currentPhospholipid.fag2.dbInfo + currentPhospholipid.fag2.functionalGroupsInfo();
+                    row["Building Block 2"] = currentPhospholipid.fag1.FARepresentation();
+                    if (!currentPhospholipid.isLyso) row["Building Block 3"] = currentPhospholipid.fag2.FARepresentation();
                 }
             }
             else if (currentRegisteredLipid is Sphingolipid)

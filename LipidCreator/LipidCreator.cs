@@ -1703,7 +1703,7 @@ namespace LipidCreator
             double mass = 0;
             for (int m = 0; m < elements.Count; ++m)
             {
-                if (elements[m] < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
+                if (elements[m] < 0 && extraMass < 0) throw new LipidException((Molecule)m, elements[m], "For element '" + MS2Fragment.ALL_ELEMENTS[(Molecule)m].shortcut + "' the count dropped below zero to " + elements[m]);
                 mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
             }
             mass += extraMass;

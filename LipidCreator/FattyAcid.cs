@@ -37,6 +37,8 @@ namespace LipidCreator
         public int db;
         public int hydroxyl;
         public double directMass;
+        public int directMassOffsetFA;
+        public int directMassOffsetLCB;
         public FattyAcidType fattyAcidType;
         public ElementDictionary atomsCount;
         public bool isLCB;
@@ -55,6 +57,8 @@ namespace LipidCreator
             hydroxyl = hydro;
             isLCB = _isLCB;
             directMass = -1;
+            directMassOffsetFA = 0;
+            directMassOffsetLCB = 0;
             atomsCount = MS2Fragment.createEmptyElementDict();
             this.fattyAcidType = fattyAcidType;
             if (funcGroups != null)
@@ -103,10 +107,12 @@ namespace LipidCreator
             }
         }
 
-        public FattyAcid(double _directMass){
+        public FattyAcid(double _directMass, bool _isLCB){
             directMass = _directMass;
             atomsCount = MS2Fragment.createEmptyElementDict();
             fattyAcidType = FattyAcidType.Ester;
+            directMassOffsetFA = _isLCB ? 0 : 1;
+            directMassOffsetLCB = _isLCB ? 1 : 0;
         }
 
 
@@ -119,6 +125,8 @@ namespace LipidCreator
             hydroxyl = copy.hydroxyl;
             directMass = copy.directMass;
             fattyAcidType = copy.fattyAcidType;
+            directMassOffsetFA = copy.directMassOffsetFA;
+            directMassOffsetLCB = copy.directMassOffsetLCB;
             atomsCount = MS2Fragment.createEmptyElementDict();
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
@@ -142,6 +150,8 @@ namespace LipidCreator
                     directMass = copy.directMass;
                 }
             }
+            directMassOffsetFA += copy.directMassOffsetFA;
+            directMassOffsetLCB += copy.directMassOffsetLCB;
             fattyAcidType = copy.fattyAcidType;
             for (int m = 0; m < copy.atomsCount.Count; ++m) atomsCount[m] += copy.atomsCount[m];
         }
@@ -178,6 +188,12 @@ namespace LipidCreator
             }
 
             return key;
+        }
+
+
+
+        public double getDirectMass(){
+            return directMass - directMassOffsetFA * 17.002739665 - directMassOffsetLCB * 1.007825; // mass of O + H
         }
         
         

@@ -137,36 +137,54 @@ namespace LipidCreator
         
         public override void computePrecursorData(IDictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
+            bool has_direct_mass = false;
             foreach (FattyAcid lcbType in lcb.getFattyAcids())
             {
                 
+                has_direct_mass |= lcbType.directMass > -1;
                 foreach (string headgroup in headGroupNames)
                 {
                     
-                    csgoslin.Headgroup cs_headgroup = new csgoslin.Headgroup(headgroup);        
+                    csgoslin.Headgroup cs_headgroup = new csgoslin.Headgroup(headgroup);
                     FattyAcid lcbType_goslin = new FattyAcid(lcbType);
                     if (!cs_headgroup.sp_exception) lcbType_goslin.hydroxyl = Math.Min(1, lcbType_goslin.hydroxyl - 1);
+                    string headgroup_listname = convertLipid(cs_headgroup, new List<FattyAcid>()).get_lipid_string(csgoslin.LipidLevel.CLASS);
                     
-                    
-                 
                     if (!isLyso) // sphingolipids with fatty acid
                     {
                         foreach (FattyAcid fa in fag.getFattyAcids())
                         {
-                            string key = " " + lcbType.ToString() + ID_SEPARATOR_SPECIFIC + fa.ToString();
-                                
-                            // goslin
-                            csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin, fa});
-                            
-                            // species name
-                            string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
+                            has_direct_mass |= fa.directMass > -1;
+
+                            string lipid_name = "";
+                            string speciesName = "";
+                            double extraMass = 0;
+                            if (!has_direct_mass)
+                            {
+                                // goslin
+                                csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin, fa});
+                                lipid_name = lipidSpecies.get_lipid_string();
+
+                                // species name
+                                speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
+                            }
+                            else
+                            {
+                                FattyAcid speciesFA = new FattyAcid(lcbType);
+                                speciesFA.merge(fa);
+                                string key = " " + lcbType.ToString() + ID_SEPARATOR_SPECIFIC + fa.ToString();
+                                lipid_name = headgroup_listname + key;
+                                speciesName = headgroup_listname + " " + speciesFA.ToString();
+                                extraMass = speciesFA.getDirectMass();
+                            }
+                            string completeKey = lipid_name;
                             
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
                                 if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
-                                if (usedKeys.Contains(headgroup + key + adductKey)) continue;
+                                if (usedKeys.Contains(completeKey + adductKey)) continue;
                                 
-                                usedKeys.Add(headgroup + key + adductKey);
+                                usedKeys.Add(completeKey + adductKey);
                                 
                                 ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
@@ -179,14 +197,14 @@ namespace LipidCreator
                                 string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                                 int charge = adduct.charge;
                                 MS2Fragment.addCounts(atomsCount, adduct.elements);
-                                double mass = LipidCreator.computeMass(atomsCount, charge);
+                                double mass = LipidCreator.computeMass(atomsCount, charge, extraMass);
                             
                                 PrecursorData precursorData = new PrecursorData();
                                 precursorData.lipidCategory = LipidCategory.Sphingolipid;
-                                precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                                precursorData.moleculeListName = headgroup_listname;
                                 precursorData.fullMoleculeListName = headgroup;
-                                precursorData.precursorExportName = lipidSpecies.get_lipid_string();
-                                precursorData.precursorName = lipidSpecies.get_lipid_string();
+                                precursorData.precursorExportName = lipid_name;
+                                precursorData.precursorName = lipid_name;
                                 precursorData.precursorSpeciesName = speciesName;
                                 precursorData.precursorIonFormula = chemForm;
                                 precursorData.precursorAdduct = adduct;
@@ -239,7 +257,7 @@ namespace LipidCreator
                                     heavyPrecursorData.lipidCategory = LipidCategory.Sphingolipid;
                                     heavyPrecursorData.moleculeListName = headgroup;
                                     heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                    heavyPrecursorData.precursorExportName = headgroup + key;
+                                    heavyPrecursorData.precursorExportName = completeKey;
                                     heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
                                     heavyPrecursorData.precursorSpeciesName = heavyKey + " " + heavySpeciesFA.ToString();
                                     heavyPrecursorData.precursorIonFormula = heavyChemForm;
@@ -262,18 +280,34 @@ namespace LipidCreator
                     }
                     else
                     {
-                        String key = " " + lcbType.ToString();
-                        
-                        // goslin
-                        csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, new List<FattyAcid>{lcbType});
-                        string speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
+                        string lipid_name = "";
+                        string speciesName = "";
+                        double extraMass = 0;
+                        if (!has_direct_mass)
+                        {
+                            // goslin
+                            csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin});
+                            lipid_name = lipidSpecies.get_lipid_string();
+
+                            // species name
+                            speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
+                        }
+                        else
+                        {
+                            FattyAcid speciesFA = new FattyAcid(lcbType);
+                            string key = " " + lcbType.ToString();
+                            lipid_name = headgroup_listname + key;
+                            speciesName = headgroup_listname + " " + speciesFA.ToString();
+                            extraMass = speciesFA.getDirectMass();
+                        }
+                        string completeKey = lipid_name;
                         
                         foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                         {
                             if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
-                            if (usedKeys.Contains(headgroup + key + adductKey)) continue;
+                            if (usedKeys.Contains(completeKey + adductKey)) continue;
                             
-                            usedKeys.Add(headgroup + key + adductKey);
+                            usedKeys.Add(completeKey + adductKey);
                             
                             
                             
@@ -287,15 +321,15 @@ namespace LipidCreator
                             string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                             int charge = adduct.charge;
                             MS2Fragment.addCounts(atomsCount, adduct.elements);
-                            double mass = LipidCreator.computeMass(atomsCount, charge);
+                            double mass = LipidCreator.computeMass(atomsCount, charge, extraMass);
                                     
                                 
                             PrecursorData precursorData = new PrecursorData();
                             precursorData.lipidCategory = LipidCategory.Sphingolipid;
-                            precursorData.moleculeListName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.CLASS);
+                            precursorData.moleculeListName = headgroup_listname;
                             precursorData.fullMoleculeListName = headgroup;
-                            precursorData.precursorExportName = lipidSpecies.get_lipid_string();
-                            precursorData.precursorName = lipidSpecies.get_lipid_string();
+                            precursorData.precursorExportName = lipid_name;
+                            precursorData.precursorName = lipid_name;
                             precursorData.precursorSpeciesName = speciesName;
                             precursorData.precursorIonFormula = chemForm;
                             precursorData.precursorAdduct = adduct;
@@ -343,7 +377,7 @@ namespace LipidCreator
                                 heavyPrecursorData.lipidCategory = LipidCategory.Sphingolipid;
                                 heavyPrecursorData.moleculeListName = headgroup;
                                 heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                heavyPrecursorData.precursorExportName = headgroup + key;
+                                heavyPrecursorData.precursorExportName = completeKey;
                                 heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
                                 heavyPrecursorData.precursorSpeciesName = heavyKey + heavyFattyComp;
                                 heavyPrecursorData.precursorIonFormula = heavyChemForm;

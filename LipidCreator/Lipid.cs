@@ -435,14 +435,13 @@ namespace LipidCreator
             {
                 
                 if (!precursorFragments.ContainsKey(fragmentName)) continue;
-            
+
                 // Exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("LCB") && fragmentName.Equals("LCB(60)") && precursorData.lcb.db > 0) continue;
                 
                 
                 // Exception for LCB, only HG fragment occurs when LCB contains no double bond
                 if (precursorData.moleculeListName.Equals("Cer") && fragmentName.Equals("FA1(-CH2O)") && precursorData.fa1.hydroxyl == 0) continue;
-                
                 
                 MS2Fragment fragment = precursorFragments[fragmentName];
                 
@@ -500,24 +499,24 @@ namespace LipidCreator
                     {
                         case "LCB":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.lcb.atomsCount);
-                            extraMass += (precursorData.lcb.directMass > -1) ? precursorData.lcb.directMass : 0;
+                            extraMass += (precursorData.lcb.directMass > -1) ? precursorData.lcb.getDirectMass() : 0;
                             break;
                         case "FA":
                         case "FA1":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa1.atomsCount);
-                            extraMass += (precursorData.fa1.directMass > -1) ? precursorData.fa1.directMass : 0;
+                            extraMass += (precursorData.fa1.directMass > -1) ? precursorData.fa1.getDirectMass() : 0;
                             break;
                         case "FA2":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa2.atomsCount);
-                            extraMass += (precursorData.fa2.directMass > -1) ? precursorData.fa2.directMass : 0;
+                            extraMass += (precursorData.fa2.directMass > -1) ? precursorData.fa2.getDirectMass() : 0;
                             break;
                         case "FA3":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa3.atomsCount);
-                            extraMass += (precursorData.fa3.directMass > -1) ? precursorData.fa3.directMass : 0;
+                            extraMass += (precursorData.fa3.directMass > -1) ? precursorData.fa3.getDirectMass() : 0;
                             break;
                         case "FA4":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.fa4.atomsCount);
-                            extraMass += (precursorData.fa4.directMass > -1) ? precursorData.fa4.directMass : 0;
+                            extraMass += (precursorData.fa4.directMass > -1) ? precursorData.fa4.getDirectMass() : 0;
                             break;
                         case "HG":
                             MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
@@ -529,17 +528,12 @@ namespace LipidCreator
                             break;
                     }
                 }
+
                 
                 
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
-                
-                
-                // exclude duplicate fragments within the same lipid species
-                //if (insertedFragments.Contains(fragName + "/" + fragAdduct)) continue;
-                //insertedFragments.Add(fragName + "/" + fragAdduct);
-                
                 
                 MS2Fragment.addCounts(atomsCountFragment, fragment.fragmentAdduct.elements);
                 double massFragment = 0;
@@ -569,8 +563,6 @@ namespace LipidCreator
                     rowString[(int)LabelPosition.PRECURSOR_NEUTRAL_FORMULA_POS] = "";
                     chemFormFragment = "";
                 }
-                
-                
                 string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);
                 
                 

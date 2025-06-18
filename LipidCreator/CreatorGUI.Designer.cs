@@ -1614,7 +1614,6 @@ namespace LipidCreator
             glStep1.Controls.Add(glFA3FuncGroups);
             glycerolipidsTab.Parent = tabControl;
             glycerolipidsTab.Text = "Glycerolipids";
-            //glycerolipidsTab.ToolTipText = "Glycerolipids";
             glycerolipidsTab.Location = new Point(0, 0);
             glycerolipidsTab.Size = this.Size;
             glycerolipidsTab.AutoSize = true;
@@ -1632,7 +1631,7 @@ namespace LipidCreator
 
             setupFattyAcidControls(glFA1Textbox, glFA1Combobox, glDB1Textbox, glDB1Label, glFA1FuncGroups, 236, 70, 1);
             glFA1Textbox.TextChanged += delegate(object s, EventArgs e){ updateCarbon(s, ((Glycerolipid)currentLipid).fag1); updateGLRepresentative(); };
-            glFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Glycerolipid)currentLipid).fag1, glFA2Textbox); updateGLRepresentative(); };
+            glFA1Combobox.SelectedIndexChanged += delegate(object s, EventArgs e){ updateOddEven(s, ((Glycerolipid)currentLipid).fag1, glFA1Textbox); updateGLRepresentative(); };
             glDB1Textbox.TextChanged += delegate(object s, EventArgs e){ updateDB(s, ((Glycerolipid)currentLipid).fag1); updateGLRepresentative(); };
             gridViewActions.Add(glFA1FuncGroups, updateGLRepresentative);
             

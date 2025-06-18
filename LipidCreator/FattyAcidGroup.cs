@@ -381,7 +381,7 @@ namespace LipidCreator
         public System.Collections.Generic.IEnumerable<FattyAcid> getFattyAcids()
         {
             if ((ChainType)chainType == ChainType.directMass){
-                yield return new FattyAcid(directMass);
+                yield return new FattyAcid(directMass, isLCB);
             }
             else if (!faTypes[FattyAcidType.NoType])
             {

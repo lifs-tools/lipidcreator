@@ -229,7 +229,6 @@ namespace LipidCreator
                                 string lipid_name = "";
                                 string speciesName = "";
                                 double extraMass = 0;
-
                                 if (!has_direct_mass)
                                 {
                                 
@@ -628,7 +627,7 @@ namespace LipidCreator
                                 string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
                                 lipid_name = modifiedHeadgroup + key;
                                 speciesName = modifiedHeadgroup + PLsep + speciesFA.ToString();
-                                extraMass = speciesFA.directMass;
+                                extraMass = speciesFA.getDirectMass();
                             }
                             string completeKey = lipid_name;
                           

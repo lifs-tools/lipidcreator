@@ -1798,6 +1798,61 @@ namespace LipidCreator
                 plFA4Checkbox2.Visible = visible && ((Phospholipid)currentLipid).isCL;
                 plFA4Checkbox3.Visible = visible && ((Phospholipid)currentLipid).isCL;
             }
+            else if (sender == glFA1Combobox)
+            {
+                glDB1Textbox.Visible = visible;
+                glDB1Label.Visible = visible;
+                glFA1FuncGroups.Visible = visible;
+                glFA1Checkbox1.Checked = true;
+                glFA1Checkbox2.Checked = false;
+                glFA1Checkbox3.Checked = false;
+                glFA1Checkbox1.Visible = visible;
+                glFA1Checkbox2.Visible = visible;
+                glFA1Checkbox3.Visible = visible;
+            }
+            else if (sender == glFA2Combobox)
+            {
+                glDB2Textbox.Visible = visible;
+                glDB2Label.Visible = visible;
+                glFA2FuncGroups.Visible = visible;
+                glFA2Checkbox1.Checked = true;
+                glFA2Checkbox2.Checked = false;
+                glFA2Checkbox3.Checked = false;
+                glFA2Checkbox1.Visible = visible;
+                glFA2Checkbox2.Visible = visible;
+                glFA2Checkbox3.Visible = visible;
+            }
+            else if (sender == glFA3Combobox)
+            {
+                glDB3Textbox.Visible = visible;
+                glDB3Label.Visible = visible;
+                glFA3FuncGroups.Visible = visible;
+                glFA3Checkbox1.Checked = true;
+                glFA3Checkbox2.Checked = false;
+                glFA3Checkbox3.Checked = false;
+                glFA3Checkbox1.Visible = visible;
+                glFA3Checkbox2.Visible = visible;
+                glFA3Checkbox3.Visible = visible;
+            }
+            else if (sender == slLCBCombobox)
+            {
+                slDB2Textbox.Visible = visible;
+                slDB2Label.Visible = visible;
+                slLCBHydroxyCombobox.Visible = visible;
+                slLCBHydroxyLabel.Visible = visible;
+            }
+            else if (sender == slFACombobox)
+            {
+                slDB1Textbox.Visible = visible;
+                slDB1Label.Visible = visible;
+                slFAFuncGroups.Visible = visible;
+            }
+            else if (sender == stFACombobox)
+            {
+                stDBTextbox.Visible = visible;
+                stDBLabel.Visible = visible;
+                stFAFuncGroups.Visible = visible;
+            }
         }
         
         
@@ -3443,24 +3498,24 @@ namespace LipidCreator
                 {
                     row["Building Block 3"] = "HG: " + String.Join(", ", currentGlycerolipid.headGroupNames);
                     headGroupNames.AddRange(currentGlycerolipid.headGroupNames);
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
+                    row["Building Block 2"] = currentGlycerolipid.fag2.FARepresentation();
                 }
                 else if (!currentGlycerolipid.fag3.faTypes[FattyAcidType.NoType])
                 {
-                    row["Building Block 3"] = FARepresentation(currentGlycerolipid.fag3) + currentGlycerolipid.fag3.lengthInfo + "; DB: " + currentGlycerolipid.fag3.dbInfo + currentGlycerolipid.fag3.functionalGroupsInfo();
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
+                    row["Building Block 3"] = currentGlycerolipid.fag3.FARepresentation();
+                    row["Building Block 2"] = currentGlycerolipid.fag2.FARepresentation();
                     headGroupNames.Add("TG");
                 }
                 else if (!currentGlycerolipid.fag2.faTypes[FattyAcidType.NoType])
                 {
-                    row["Building Block 2"] = FARepresentation(currentGlycerolipid.fag2) + currentGlycerolipid.fag2.lengthInfo + "; DB: " + currentGlycerolipid.fag2.dbInfo + currentGlycerolipid.fag2.functionalGroupsInfo();
+                    row["Building Block 2"] = currentGlycerolipid.fag2.FARepresentation();
                     headGroupNames.Add("DG"); 
                 }
                 else
                 {
                     headGroupNames.Add("MG");
                 }
-                row["Building Block 1"] = FARepresentation(currentGlycerolipid.fag1) + currentGlycerolipid.fag1.lengthInfo + "; DB: " + currentGlycerolipid.fag1.dbInfo + currentGlycerolipid.fag1.functionalGroupsInfo();
+                row["Building Block 1"] = currentGlycerolipid.fag1.FARepresentation();
             }
             else if (currentRegisteredLipid is Phospholipid)
             {
@@ -3488,8 +3543,8 @@ namespace LipidCreator
                 row["Category"] = "Sphingolipid";
                 headGroupNames.AddRange(currentSphingolipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSphingolipid.headGroupNames);
-                row["Building Block 2"] = FARepresentation(currentSphingolipid.lcb) + currentSphingolipid.lcb.lengthInfo + "; DB: " + currentSphingolipid.lcb.dbInfo + "; OH: " + currentSphingolipid.lcb.hydroxylCounts.First();
-                if (!currentSphingolipid.isLyso) row["Building Block 3"] = FARepresentation(currentSphingolipid.fag) + currentSphingolipid.fag.lengthInfo + "; DB: " + currentSphingolipid.fag.dbInfo + currentSphingolipid.fag.functionalGroupsInfo();
+                row["Building Block 2"] = currentSphingolipid.lcb.FARepresentation();
+                if (!currentSphingolipid.isLyso) row["Building Block 3"] = currentSphingolipid.fag.FARepresentation();
             }
             
             else if (currentRegisteredLipid is Sterol)
@@ -3499,7 +3554,7 @@ namespace LipidCreator
                 headGroupNames.AddRange(currentSTLipid.headGroupNames);
                 row["Building Block 1"] = "HG: " + String.Join(", ", currentSTLipid.headGroupNames);
 
-                if (currentSTLipid.containsEster) row["Building Block 2"] = FARepresentation(currentSTLipid.fag) + currentSTLipid.fag.lengthInfo + "; DB: " + currentSTLipid.fag.dbInfo + currentSTLipid.fag.functionalGroupsInfo();
+                if (currentSTLipid.containsEster) row["Building Block 2"] = currentSTLipid.fag.FARepresentation();
             }
             
             else if (currentRegisteredLipid is Mediator)

@@ -57,6 +57,7 @@ namespace LipidCreator
         public string precursorSpeciesName;
         public string precursorIonFormula;
         public Adduct precursorAdduct;
+        public HeadgroupModification headgroupModification = null;
         public ulong lipidHash = 0;
         public string precursorAdductFormula;
         public double precursorM_Z;
@@ -520,17 +521,27 @@ namespace LipidCreator
                             break;
                         case "HG":
                             MS2Fragment.addCounts(atomsCountFragment, headgroups[precursorData.fullMoleculeListName].elements);
+                            if (precursorData.headgroupModification != null)
+                            {
+                                if (precursorData.headgroupModification.modificationElements != null)
+                                {
+                                    MS2Fragment.addCounts(atomsCountFragment, precursorData.headgroupModification.modificationElements);
+                                }
+                                extraMass += precursorData.headgroupModification.getExtraMass();
+                            }
+
                             break;
                         case "M":
                             MS2Fragment.addCounts(atomsCountFragment, precursorData.moleculeElements);
+                            if (precursorData.headgroupModification != null)
+                            {
+                                extraMass += precursorData.headgroupModification.getExtraMass();
+                            }
                             break;
                         default:
                             break;
                     }
                 }
-
-                
-                
                 
                 string chemFormFragment = LipidCreator.computeChemicalFormula(atomsCountFragment);
                 string fragAdduct = LipidCreator.computeAdductFormula(atomsCountFragment, fragment.fragmentAdduct);
@@ -559,10 +570,12 @@ namespace LipidCreator
                     massFragment = Convert.ToDouble(fragment.fragmentName.Substring(MEDIATOR_PREFIX_LENGTH), CultureInfo.InvariantCulture);
                     chemFormFragment = "";
                 }
-                if (extraMass > 0){
+                if (extraMass != 0){
                     rowString[(int)LabelPosition.PRECURSOR_NEUTRAL_FORMULA_POS] = "";
                     chemFormFragment = "";
                 }
+                if (massFragment <= 0) continue;
+
                 string fragCharge = ((fragment.fragmentAdduct.charge > 0) ? "+" : "") + Convert.ToString(fragment.fragmentAdduct.charge);
                 
                 

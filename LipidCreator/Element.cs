@@ -38,7 +38,8 @@ namespace LipidCreator
     //public static List<Molecule> ElementOrder = new List<Molecule>(){Molecule.C, MoleculeC13, Molecule.H, Molecule.H2, Molecule.N, Molecule.N15, Molecule.O, Molecule.O17, Molecule.O18, Molecule.P, Molecule.P32, Molecule.S, Molecule.S34, Molecule.S33};
     
     public class ElementDictionary : List<int> {
-        public const int ElementCount = 20;
+        public int ElementCount = Enum.GetNames(typeof(Molecule)).Length;
+
         public ElementDictionary(ElementDictionary elementDictionary)
         {
             for (int i = 0; i < ElementCount; ++i) 

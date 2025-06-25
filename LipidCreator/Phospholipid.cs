@@ -45,6 +45,7 @@ namespace LipidCreator
         public bool isCL;
         public bool isLyso;
         public bool hasPlasmalogen;
+        public IDictionary<string, List<HeadgroupModification>> headgroupModifications;
     
         public Phospholipid(LipidCreator lipidCreator) : base(lipidCreator, LipidCategory.Glycerophospholipid)
         {
@@ -56,11 +57,21 @@ namespace LipidCreator
             isLyso = false;
             hasPlasmalogen = false;
             adducts["-H"] = true;
+            headgroupModifications = new Dictionary<string, List<HeadgroupModification>>();
+
+            headgroupModifications["LPC"] = new List<HeadgroupModification>();
+            headgroupModifications["LPC"].Add(new HeadgroupModification("-200,02"));
+            headgroupModifications["LPE"] = new List<HeadgroupModification>();
+            ElementDictionary eee = new ElementDictionary();
+            eee[(int)Molecule.C] = 2;
+            eee[(int)Molecule.H] = 4;
+            eee[(int)Molecule.O] = 1;
+            headgroupModifications["LPE"].Add(new HeadgroupModification(eee));
         }
     
-    
-    
-    
+
+
+
         public Phospholipid(Phospholipid copy) : base((Lipid)copy)
         {
             fag1 = new FattyAcidGroup(copy.fag1);
@@ -70,6 +81,16 @@ namespace LipidCreator
             isCL = copy.isCL;
             isLyso = copy.isLyso;
             hasPlasmalogen = copy.hasPlasmalogen;
+            headgroupModifications = new Dictionary<string, List<HeadgroupModification>>();
+            foreach (var hmKVP in copy.headgroupModifications)
+            {
+                List<HeadgroupModification> headgroupModificationList = new List<HeadgroupModification>();
+                headgroupModifications[hmKVP.Key] = headgroupModificationList;
+                foreach(var shm in hmKVP.Value)
+                {
+                    headgroupModificationList.Add(new HeadgroupModification(shm));
+                }
+            }
         }
         
         
@@ -118,6 +139,9 @@ namespace LipidCreator
             sb.Append("</lipid>\n");
         }
         
+
+
+
         // synchronize the fragment list with list from LipidCreator root
         public override void Update(object sender, EventArgs e)
         {
@@ -125,6 +149,7 @@ namespace LipidCreator
         }
         
         
+
         
         public override void import(XElement node, string importVersion)
         {
@@ -583,15 +608,20 @@ namespace LipidCreator
                             
                             bool isSorted = true;
                             string PLsep = " ";
-                            string modifiedHeadgroup = headgroup;
+                            string headgroupSuffix = "";
                             string goslinHeadgroup = headgroup;
                             if ((isFAa || isPlamalogen) && (headgroup.Equals("PC") || headgroup.Equals("PE"))) continue;
                             
+                            if (!headgroupModifications.ContainsKey(headgroup))
+                            {
+                                headgroupModifications[headgroup] = new List<HeadgroupModification>();
+                                headgroupModifications[headgroup].Add(new HeadgroupModification());
+                            }
                             
                             if (headgroup.Equals("PC P") || headgroup.Equals("PE P"))
                             {
                                 if (isFAa || !isPlamalogen) continue;
-                                modifiedHeadgroup += "-";
+                                headgroupSuffix = "-";
                                 goslinHeadgroup = headgroup.Replace(" P", "");
                                 PLsep = "";
                                 fa1.fattyAcidType = FattyAcidType.Plasmenyl;
@@ -599,165 +629,171 @@ namespace LipidCreator
                             else if (headgroup.Equals("PC O") || headgroup.Equals("PE O"))
                             {
                                 if (!isFAa || isPlamalogen) continue;
-                                modifiedHeadgroup += "-";
+                                headgroupSuffix = "-";
                                 goslinHeadgroup = headgroup.Replace(" O", "");
                                 PLsep = "";
                                 fa1.fattyAcidType = FattyAcidType.Plasmanyl;
                             }
                             if (isPlamalogen || isFAa) isSorted = false;
                             
-
-                            string lipid_name = "";
-                            string speciesName = "";
-                            double extraMass = 0;
-                            if (!has_direct_mass)
+                            foreach(var hgModification in headgroupModifications[headgroup])
                             {
-                                // goslin
-                                csgoslin.LipidSpecies lipidSpecies = convertLipid(goslinHeadgroup, sortedAcids);
-                                lipid_name = lipidSpecies.get_lipid_string();
-
-                                // species name
-                                speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
-                            }
-                            else
-                            {
-                                FattyAcid speciesFA = new FattyAcid(fa1);
-                                speciesFA.merge(fa2);
-                                var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where (fa.length > 0 || fa.directMass > -1) && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
-                                string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
-                                lipid_name = modifiedHeadgroup + key;
-                                speciesName = modifiedHeadgroup + PLsep + speciesFA.ToString();
-                                extraMass = speciesFA.getDirectMass();
-                            }
-                            string completeKey = lipid_name;
-                          
-                            foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
-                            {
-                                
-                                if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
-                                if (usedKeys.Contains(completeKey + adductKey)) continue;
-                                
-                                usedKeys.Add(completeKey + adductKey);
-                                
-                                ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
-                                MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
-                                MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
-                                MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
-                                ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
-                                string chemForm = has_direct_mass ? "" : LipidCreator.computeChemicalFormula(atomsCount);
-                                Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
-                                string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
-                                int charge = adduct.charge;
-                                MS2Fragment.addCounts(atomsCount, adduct.elements);
-                                double mass = LipidCreator.computeMass(atomsCount, charge, extraMass);
-                                    
-                                                                    
-                                // filling information on MS1 level for phospholipid
-                                PrecursorData precursorData = new PrecursorData();
-                                precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                                precursorData.moleculeListName = headgroup;
-                                precursorData.fullMoleculeListName = headgroup;
-                                precursorData.precursorExportName = lipid_name;
-                                precursorData.precursorName = lipid_name;
-                                precursorData.precursorSpeciesName = speciesName;
-                                precursorData.precursorIonFormula = chemForm;
-                                precursorData.precursorAdduct = adduct;
-                                precursorData.precursorAdductFormula = adductForm;
-                                precursorData.precursorM_Z = mass;
-                                precursorData.moleculeElements = moleculeDictionary;
-                                
-                                if (!isSorted)
+                                string lipid_name = "";
+                                string speciesName = "";
+                                double extraMass = 0;
+                                string hgModificationString = hgModification.ToString();
+                                has_direct_mass |= hgModification.modificationIsMass && hgModificationString.Length > 0;
+                                if (!has_direct_mass && hgModificationString.Length == 0)
                                 {
-                                    precursorData.fa1 = fa1;
-                                    precursorData.fa2 = fa2;
+                                    // goslin
+                                    csgoslin.LipidSpecies lipidSpecies = convertLipid(goslinHeadgroup, sortedAcids);
+                                    lipid_name = lipidSpecies.get_lipid_string();
+
+                                    // species name
+                                    speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
                                 }
                                 else
                                 {
-                                    precursorData.fa1 = sortedAcids[0];
-                                    precursorData.fa2 = sortedAcids[1];
+                                    FattyAcid speciesFA = new FattyAcid(fa1);
+                                    speciesFA.merge(fa2);
+                                    var fattys = from fa in (isSorted ? sortedAcids : unsortedAcids) where (fa.length > 0 || fa.directMass > -1) && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
+                                    string key = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, fattys);
+                                    lipid_name = headgroup + hgModificationString + headgroupSuffix + key;
+                                    speciesName = headgroup + hgModificationString + headgroupSuffix + PLsep + speciesFA.ToString();
+                                    extraMass = (speciesFA.getDirectMass() > 0 ? speciesFA.getDirectMass() : 0) + hgModification.getExtraMass();
                                 }
-                                precursorData.fa3 = null;
-                                precursorData.fa4 = null;
-                                precursorData.lcb = null;
-                                precursorData.addPrecursor = (onlyPrecursors != 0);
-                                precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
-                                
-                                if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
-                                
-                                if (onlyHeavyLabeled == 0) continue;
-                                foreach (Precursor heavyPrecursor in headgroups[headgroup].heavyLabeledPrecursors)
+                                string completeKey = lipid_name;
+                          
+                                foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                                 {
-                                    
-                                    string heavyHeadgroup = heavyPrecursor.name;
-                                    string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
-                                    if (isPlamalogen)
+                                    if (!headgroups[headgroup].adductRestrictions[adductKey]) continue;
+                                    if (usedKeys.Contains(completeKey + adductKey)) continue;
+                                    usedKeys.Add(completeKey + adductKey);
+                                    ElementDictionary atomsCount = MS2Fragment.createEmptyElementDict();
+                                    MS2Fragment.addCounts(atomsCount, fa1.atomsCount);
+                                    MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
+                                    MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
+                                    if (hgModification.modificationElements != null)
                                     {
-                                        heavyModifiedHeadgroup += "-";
+                                        MS2Fragment.addCounts(atomsCount, hgModification.modificationElements);
                                     }
-                                    else if (isFAa)
+                                    ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
+                                    string chemForm = has_direct_mass ? "" : LipidCreator.computeChemicalFormula(atomsCount);
+                                    Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
+                                    string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
+                                    int charge = adduct.charge;
+                                    MS2Fragment.addCounts(atomsCount, adduct.elements);
+                                    double mass = LipidCreator.computeMass(atomsCount, charge, extraMass);
+                                    if (mass <= 0) continue;
+
+                                    // filling information on MS1 level for phospholipid
+                                    PrecursorData precursorData = new PrecursorData();
+                                    precursorData.lipidCategory = LipidCategory.Glycerophospholipid;
+                                    precursorData.moleculeListName = headgroup;
+                                    precursorData.fullMoleculeListName = headgroup;
+                                    precursorData.precursorExportName = lipid_name;
+                                    precursorData.precursorName = lipid_name;
+                                    precursorData.precursorSpeciesName = speciesName;
+                                    precursorData.precursorIonFormula = chemForm;
+                                    precursorData.precursorAdduct = adduct;
+                                    precursorData.precursorAdductFormula = adductForm;
+                                    precursorData.precursorM_Z = mass;
+                                    precursorData.moleculeElements = moleculeDictionary;
+                                    precursorData.headgroupModification = hgModification;
+
+                                    if (!isSorted)
                                     {
-                                        heavyModifiedHeadgroup += "-";
+                                        precursorData.fa1 = fa1;
+                                        precursorData.fa2 = fa2;
                                     }
-                                    
-                                    if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
-                                
-                                    FattyAcid heavyFA1 = new FattyAcid(fa1);
-                                    FattyAcid heavyFA2 = new FattyAcid(fa2);
-                                    
-                                    heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
-                                    heavyFA2.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[1]);
-                                    List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
-                                    List<FattyAcid> heavyUnsortedAcids = new List<FattyAcid>();
-                                    heavySortedAcids.Add(heavyFA1);
-                                    heavySortedAcids.Add(heavyFA2);
-                                    heavyUnsortedAcids.Add(heavyFA1);
-                                    heavyUnsortedAcids.Add(heavyFA2);
-                                    if (!isFAa && !isPlamalogen) heavySortedAcids.Sort();
-                        
-                                    ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
-                                    MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
-                                    MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
-                                    MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
-                                    ElementDictionary moleculeDictionaryHeavy = new ElementDictionary(heavyAtomsCount);
-                                    string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
-                                    string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
-                                    MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
-                                    double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
-                                    
-                                    string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
-                                    
-                                    
-                                    var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
-                                    string heavyFattyComp = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
-                                    
-                                    
-                                    // species name
-                                    FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
-                                    heavySpeciesFA.merge(heavyFA2);
-                                    
-                                                                        
-                                    // filling information on MS1 level for heavy phospholipid
-                                    PrecursorData heavyPrecursorData = new PrecursorData();
-                                    heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
-                                    heavyPrecursorData.moleculeListName = headgroup;
-                                    heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
-                                    heavyPrecursorData.precursorExportName = completeKey;
-                                    heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
-                                    heavyPrecursorData.precursorSpeciesName = heavyKey + PLsep + heavySpeciesFA.ToString();
-                                    heavyPrecursorData.precursorIonFormula = heavyChemForm;
-                                    heavyPrecursorData.precursorAdduct = adduct;
-                                    heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
-                                    heavyPrecursorData.precursorM_Z = heavyMass;
-                                    heavyPrecursorData.moleculeElements = moleculeDictionaryHeavy;
-                                    heavyPrecursorData.fa1 = heavySortedAcids[0];
-                                    heavyPrecursorData.fa2 = heavySortedAcids[1];
-                                    heavyPrecursorData.fa3 = null;
-                                    heavyPrecursorData.fa4 = null;
-                                    heavyPrecursorData.lcb = null;
-                                    heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
-                                    heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
-                                    
-                                    precursorDataList.Add(heavyPrecursorData);
+                                    else
+                                    {
+                                        precursorData.fa1 = sortedAcids[0];
+                                        precursorData.fa2 = sortedAcids[1];
+                                    }
+                                    precursorData.fa3 = null;
+                                    precursorData.fa4 = null;
+                                    precursorData.lcb = null;
+                                    precursorData.addPrecursor = (onlyPrecursors != 0);
+                                    precursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[headgroup] : negativeFragments[headgroup]) : new HashSet<string>();
+
+                                    if (onlyHeavyLabeled != 1) precursorDataList.Add(precursorData);
+
+                                    if (onlyHeavyLabeled == 0) continue;
+                                    foreach (Precursor heavyPrecursor in headgroups[headgroup].heavyLabeledPrecursors)
+                                    {
+
+                                        string heavyHeadgroup = heavyPrecursor.name;
+                                        string heavyModifiedHeadgroup = LipidCreator.precursorNameSplit(heavyHeadgroup)[0];
+                                        if (isPlamalogen)
+                                        {
+                                            heavyModifiedHeadgroup += "-";
+                                        }
+                                        else if (isFAa)
+                                        {
+                                            heavyModifiedHeadgroup += "-";
+                                        }
+
+                                        if (!headgroups[heavyHeadgroup].adductRestrictions[adductKey]) continue;
+
+                                        FattyAcid heavyFA1 = new FattyAcid(fa1);
+                                        FattyAcid heavyFA2 = new FattyAcid(fa2);
+
+                                        heavyFA1.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[0]);
+                                        heavyFA2.updateForHeavyLabeled((ElementDictionary)heavyPrecursor.userDefinedFattyAcids[1]);
+                                        List<FattyAcid> heavySortedAcids = new List<FattyAcid>();
+                                        List<FattyAcid> heavyUnsortedAcids = new List<FattyAcid>();
+                                        heavySortedAcids.Add(heavyFA1);
+                                        heavySortedAcids.Add(heavyFA2);
+                                        heavyUnsortedAcids.Add(heavyFA1);
+                                        heavyUnsortedAcids.Add(heavyFA2);
+                                        if (!isFAa && !isPlamalogen) heavySortedAcids.Sort();
+
+                                        ElementDictionary heavyAtomsCount = MS2Fragment.createEmptyElementDict();
+                                        MS2Fragment.addCounts(heavyAtomsCount, heavyFA1.atomsCount);
+                                        MS2Fragment.addCounts(heavyAtomsCount, heavyFA2.atomsCount);
+                                        MS2Fragment.addCounts(heavyAtomsCount, headgroups[heavyHeadgroup].elements);
+                                        ElementDictionary moleculeDictionaryHeavy = new ElementDictionary(heavyAtomsCount);
+                                        string heavyChemForm = LipidCreator.computeChemicalFormula(heavyAtomsCount);
+                                        string heavyAdductForm = LipidCreator.computeAdductFormula(heavyAtomsCount, adduct);
+                                        MS2Fragment.addCounts(heavyAtomsCount, adduct.elements);
+                                        double heavyMass = LipidCreator.computeMass(heavyAtomsCount, charge);
+
+                                        string heavyKey = (heavyModifiedHeadgroup.IndexOf(" O-") > -1) ? heavyModifiedHeadgroup.Replace(" O-", LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements) + " O-") : heavyModifiedHeadgroup + LipidCreator.computeHeavyIsotopeLabel(headgroups[heavyHeadgroup].elements);
+
+
+                                        var heavyFattys = from fa in (isSorted ? heavySortedAcids : heavyUnsortedAcids) where fa.length > 0 && fa.fattyAcidType != FattyAcidType.NoType select fa.ToString();
+                                        string heavyFattyComp = PLsep + string.Join(isSorted ? ID_SEPARATOR_UNSPECIFIC : ID_SEPARATOR_SPECIFIC, heavyFattys);
+
+
+                                        // species name
+                                        FattyAcid heavySpeciesFA = new FattyAcid(heavyFA1);
+                                        heavySpeciesFA.merge(heavyFA2);
+
+
+                                        // filling information on MS1 level for heavy phospholipid
+                                        PrecursorData heavyPrecursorData = new PrecursorData();
+                                        heavyPrecursorData.lipidCategory = LipidCategory.Glycerophospholipid;
+                                        heavyPrecursorData.moleculeListName = headgroup;
+                                        heavyPrecursorData.fullMoleculeListName = heavyHeadgroup;
+                                        heavyPrecursorData.precursorExportName = completeKey;
+                                        heavyPrecursorData.precursorName = heavyKey + heavyFattyComp;
+                                        heavyPrecursorData.precursorSpeciesName = heavyKey + PLsep + heavySpeciesFA.ToString();
+                                        heavyPrecursorData.precursorIonFormula = heavyChemForm;
+                                        heavyPrecursorData.precursorAdduct = adduct;
+                                        heavyPrecursorData.precursorAdductFormula = heavyAdductForm;
+                                        heavyPrecursorData.precursorM_Z = heavyMass;
+                                        heavyPrecursorData.moleculeElements = moleculeDictionaryHeavy;
+                                        heavyPrecursorData.fa1 = heavySortedAcids[0];
+                                        heavyPrecursorData.fa2 = heavySortedAcids[1];
+                                        heavyPrecursorData.fa3 = null;
+                                        heavyPrecursorData.fa4 = null;
+                                        heavyPrecursorData.lcb = null;
+                                        heavyPrecursorData.addPrecursor = (onlyPrecursors != 0);
+                                        heavyPrecursorData.fragmentNames = (onlyPrecursors != 1) ? ((charge > 0) ? positiveFragments[heavyHeadgroup] : negativeFragments[heavyHeadgroup]) : new HashSet<string>();
+
+                                        precursorDataList.Add(heavyPrecursorData);
+                                    }
                                 }
                             }
                         }

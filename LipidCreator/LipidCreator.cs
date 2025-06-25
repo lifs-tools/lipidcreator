@@ -1698,7 +1698,7 @@ namespace LipidCreator
         
         
         
-        public static double computeMass(ElementDictionary elements, double charge, double extraMass = 0)
+        public static double computeMass(ElementDictionary elements, double charge = 0, double extraMass = 0)
         {
             double mass = 0;
             for (int m = 0; m < elements.Count; ++m)
@@ -1707,6 +1707,10 @@ namespace LipidCreator
                 mass += elements[m] * MS2Fragment.ALL_ELEMENTS[(Molecule)m].mass;
             }
             mass += extraMass;
+            if (charge == 0)
+            {
+                return mass;
+            }
             return (mass - charge * ELECTRON_REST_MASS) / Math.Abs(charge);
         }
         

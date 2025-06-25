@@ -32,6 +32,67 @@ using System.Text;
 
 namespace LipidCreator
 {    
+    [Serializable]
+    public class HeadgroupModification
+    {
+        public bool modificationIsMass;
+        public string modificationMass;
+        public ElementDictionary modificationElements;
+
+        public HeadgroupModification()
+        {
+            modificationMass = "";
+            modificationElements = null;
+            modificationIsMass = true;
+        }
+
+        public HeadgroupModification(string m)
+        {
+            modificationMass = m;
+            modificationElements = null;
+            modificationIsMass = true;
+        }
+
+        public HeadgroupModification(ElementDictionary m)
+        {
+            modificationElements = m;
+            modificationMass = "";
+            modificationIsMass = false;
+        }
+
+        public HeadgroupModification(HeadgroupModification hm)
+        {
+            modificationElements = hm.modificationElements != null ? new ElementDictionary(hm.modificationElements) : null;
+            modificationMass = hm.modificationMass;
+            modificationIsMass = hm.modificationIsMass;
+        }
+
+        public string ToString()
+        {
+            if (modificationIsMass)
+            {
+                if (modificationMass.Equals(""))
+                {
+                    return "";
+                }
+                return "[" + modificationMass + "]";
+            }
+            return "[" + LipidCreator.computeChemicalFormula(modificationElements) + "]";
+        }
+
+        public double getExtraMass()
+        {
+            if (modificationIsMass)
+            {
+                if (modificationMass.Equals(""))
+                {
+                    return 0;
+                }
+                return Convert.ToDouble(modificationMass);
+            }
+            return 0;
+        }
+    }
     
     [Serializable]
     public class Precursor

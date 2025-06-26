@@ -1613,9 +1613,9 @@ namespace LipidCreator
         
         
         
-        public static string computeChemicalFormula(ElementDictionary elements)
+        public static string computeChemicalFormula(ElementDictionary elements, bool ignore_negative = true)
         {
-            String chemForm = "";
+            List<string> chemForm = new List<string>();
             foreach (Molecule molecule in MS2Fragment.ALL_ELEMENTS.Keys.OrderBy(x => MS2Fragment.ALL_ELEMENTS[x].position).Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
                 int numElements = elements[(int)molecule];
@@ -1624,12 +1624,12 @@ namespace LipidCreator
                     numElements += elements[(int)heavyMolecule];
                 }
             
-                if (numElements > 0)
+                if (numElements > 0 || (numElements != 0 && !ignore_negative))
                 {
-                    chemForm += MS2Fragment.ALL_ELEMENTS[molecule].shortcut + ((numElements > 1) ? Convert.ToString(numElements) : "");
+                    chemForm.Add(MS2Fragment.ALL_ELEMENTS[molecule].shortcut + ((numElements > 1 || numElements < 0) ? Convert.ToString(numElements) : ""));
                 }
             }
-            return chemForm;
+            return String.Join("", chemForm.ToArray());
         }
         
         

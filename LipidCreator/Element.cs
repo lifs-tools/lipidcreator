@@ -34,8 +34,31 @@ using System.Linq;
 
 namespace LipidCreator
 {
-    public enum Molecule {C = 0, C13 = 1, H = 2, H2 = 3, N = 4, N15 = 5, O = 6, O17 = 7, O18 = 8, P = 9, P32 = 10, S = 11, S34 = 12, S33 = 13, B = 14, F = 15, Cl = 16, As = 17, Br = 18, I = 19};
-    //public static List<Molecule> ElementOrder = new List<Molecule>(){Molecule.C, MoleculeC13, Molecule.H, Molecule.H2, Molecule.N, Molecule.N15, Molecule.O, Molecule.O17, Molecule.O18, Molecule.P, Molecule.P32, Molecule.S, Molecule.S34, Molecule.S33};
+    public enum Molecule {
+        C = 0,
+        C13 = 1,
+        H = 2,
+        H2 = 3,
+        B = 4,
+        B10 = 5,
+        N = 6,
+        N15 = 7,
+        O = 8,
+        O17 = 9,
+        O18 = 10,
+        F = 11,
+        P = 12,
+        P32 = 13,
+        S = 14,
+        S34 = 15,
+        S33 = 16,
+        Cl = 17,
+        Cl37 = 18,
+        As = 19,
+        Br = 20,
+        Br81 = 21,
+        I = 22
+    };
     
     public class ElementDictionary : List<int> {
         public int ElementCount = Enum.GetNames(typeof(Molecule)).Length;

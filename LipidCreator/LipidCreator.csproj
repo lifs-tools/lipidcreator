@@ -113,7 +113,7 @@
     <Exec Command="git -C $(ProjectDir) &gt; $(BuildFile)" Condition=" '$(OS)' == 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --long --always &gt; &quot;$(VerFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command="git -C &quot;$(ProjectDir)&quot; rev-parse --abbrev-ref HEAD &gt; &quot;$(BranchFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --tags --abbrev=0 &gt; &quot;$(BuildFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command="git -C &quot;$(ProjectDir)&quot; describe --tags --abbrev=0 | cut -d &apos;-&apos; -f2 &gt; &quot;$(BuildFile)&quot;" Condition=" '$(OS)' != 'Windows_NT' " />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />

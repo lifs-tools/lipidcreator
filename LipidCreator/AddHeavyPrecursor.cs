@@ -95,6 +95,7 @@ namespace LipidCreator
         
         public void fillGridContent()
         {
+
             updating = true;
             foreach (Molecule m in MS2Fragment.ALL_ELEMENTS.Keys.Where(x => !MS2Fragment.ALL_ELEMENTS[x].isHeavy))
             {
@@ -249,7 +250,7 @@ namespace LipidCreator
                 string headgroup = (string)comboBox1.Items[comboBox1.SelectedIndex];
                 Precursor precursor = creatorGUI.lipidCreator.headgroups[headgroup];
                 buildingBlockElementDicts.Add(createGridData(MS2Fragment.createFilledElementDict(precursor.elements)));
-                        
+
                 switch(precursor.buildingBlockType)
                 {
                     case 0:

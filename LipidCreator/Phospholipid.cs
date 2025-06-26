@@ -414,7 +414,6 @@ namespace LipidCreator
                         
                         
                         string PLsep = " ";
-                        string headgroupSuffix = "";
                         string goslinHeadgroup = headgroup;
 
                         if (!headgroupModifications.ContainsKey(headgroup))
@@ -428,7 +427,6 @@ namespace LipidCreator
                         if (headgroup.Equals("LPC P") || headgroup.Equals("LPE P"))
                         {
                             if (isFAa || !isPlamalogen) continue;
-                            headgroupSuffix = "-";
                             goslinHeadgroup = headgroup.Replace(" P", "");
                             PLsep = "";
                             fa1.fattyAcidType = FattyAcidType.Plasmenyl;
@@ -436,7 +434,6 @@ namespace LipidCreator
                         else if (headgroup.Equals("LPC O") || headgroup.Equals("LPE O"))
                         {
                             if (!isFAa || isPlamalogen) continue;
-                            headgroupSuffix = "-";
                             goslinHeadgroup = headgroup.Replace(" O", "");
                             PLsep = "";
                             fa1.fattyAcidType = FattyAcidType.Plasmanyl;

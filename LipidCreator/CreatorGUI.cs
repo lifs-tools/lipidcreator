@@ -103,11 +103,9 @@ namespace LipidCreator
                 string item = row.Cells[0].Value?.ToString();
 
                 bool valid = item.Length == 0 || regex.Match(item).Success || int.TryParse(item, out int value);
-                Console.WriteLine($"{item} {valid}");
                 row.Cells[0].Style.BackColor = valid ? Color.White : Color.Red;
                 okButtonEnabled &= valid;
             }
-            Console.WriteLine("");
             this.buttonOk.Enabled = okButtonEnabled;
             dataGridViewItems.Invalidate();
         }

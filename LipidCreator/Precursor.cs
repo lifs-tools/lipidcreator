@@ -67,7 +67,7 @@ namespace LipidCreator
             modificationIsMass = hm.modificationIsMass;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             if (modificationIsMass)
             {
@@ -77,7 +77,7 @@ namespace LipidCreator
                 }
                 return "[" + modificationMass + "]";
             }
-            return "[" + LipidCreator.computeChemicalFormula(modificationElements) + "]";
+            return "[" + LipidCreator.computeChemicalFormula(modificationElements, false) + "]";
         }
 
         public double getExtraMass()

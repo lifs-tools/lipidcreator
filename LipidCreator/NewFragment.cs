@@ -411,6 +411,7 @@ namespace LipidCreator
             {
                 if (row.Value.isHeavy) continue;
                 
+
                 string element = MS2Fragment.ALL_ELEMENTS[row.Key].shortcut;
                 int elementCount = (int)elements[element][0];
                 int heavyElementCount = (int)elements[element][1];

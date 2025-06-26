@@ -161,18 +161,18 @@ namespace LipidCreator
         {
             if (containsEster)
             {   
+                int has_direct_mass = 0;
                 foreach (FattyAcid fa in fag.getFattyAcids())
                 {
-                    bool has_direct_mass = fa.directMass > -1;
+                    has_direct_mass = (has_direct_mass & ~1) | (fa.directMass > -1 ? 1 : 0);
                     foreach (string headgroup in headGroupNames)
                     {
                         string lipid_name = "";
                         string speciesName = "";
                         double extraMass = 0;
                         string headgroup_listname = convertLipid(headgroup, new List<FattyAcid>{fa}).get_lipid_string(csgoslin.LipidLevel.CLASS);
-                        if (!has_direct_mass)
+                        if (has_direct_mass == 0)
                         {
-
                             // goslin
                             csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, new List<FattyAcid>{fa});
                             speciesName = lipidSpecies.get_lipid_string(csgoslin.LipidLevel.SPECIES);
@@ -203,7 +203,7 @@ namespace LipidCreator
                             MS2Fragment.addCounts(atomsCount, fa.atomsCount);
                             MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                             ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
-                            string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                            string chemForm = has_direct_mass != 0 ? "" : LipidCreator.computeChemicalFormula(atomsCount);
                             Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
                             string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                             int charge = adduct.charge;

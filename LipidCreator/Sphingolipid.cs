@@ -137,11 +137,10 @@ namespace LipidCreator
         
         public override void computePrecursorData(IDictionary<String, Precursor> headgroups, HashSet<String> usedKeys, ArrayList precursorDataList)
         {
-            bool has_direct_mass = false;
+            int has_direct_mass = 0;
             foreach (FattyAcid lcbType in lcb.getFattyAcids())
             {
-                
-                has_direct_mass |= lcbType.directMass > -1;
+                has_direct_mass = (has_direct_mass & ~1) | (lcbType.directMass > -1 ? 1 : 0);
                 foreach (string headgroup in headGroupNames)
                 {
                     
@@ -154,12 +153,12 @@ namespace LipidCreator
                     {
                         foreach (FattyAcid fa in fag.getFattyAcids())
                         {
-                            has_direct_mass |= fa.directMass > -1;
+                            has_direct_mass = (has_direct_mass & ~2) | (fa.directMass > -1 ? 2 : 0);
 
                             string lipid_name = "";
                             string speciesName = "";
                             double extraMass = 0;
-                            if (!has_direct_mass)
+                            if (has_direct_mass == 0)
                             {
                                 // goslin
                                 csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin, fa});
@@ -192,7 +191,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(atomsCount, lcbType.atomsCount);
                                 ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
                                 // do not change the order, chem formula must be computed before adding the adduct
-                                string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                                string chemForm = has_direct_mass != 0 ? "" : LipidCreator.computeChemicalFormula(atomsCount);
                                 Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
                                 string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                                 int charge = adduct.charge;
@@ -283,7 +282,7 @@ namespace LipidCreator
                         string lipid_name = "";
                         string speciesName = "";
                         double extraMass = 0;
-                        if (!has_direct_mass)
+                        if (has_direct_mass == 0)
                         {
                             // goslin
                             csgoslin.LipidSpecies lipidSpecies = convertLipid(cs_headgroup, new List<FattyAcid>{lcbType_goslin});

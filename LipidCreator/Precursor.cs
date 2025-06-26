@@ -41,7 +41,7 @@ namespace LipidCreator
 
         public HeadgroupModification()
         {
-            modificationMass = "";
+            modificationMass = "0";
             modificationElements = null;
             modificationIsMass = true;
         }
@@ -71,7 +71,7 @@ namespace LipidCreator
         {
             if (modificationIsMass)
             {
-                if (modificationMass.Equals(""))
+                if (modificationMass.Equals("") || modificationMass.Equals("0"))
                 {
                     return "";
                 }

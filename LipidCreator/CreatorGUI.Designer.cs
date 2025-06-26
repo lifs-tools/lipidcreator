@@ -36,6 +36,97 @@ using System.IO;
 namespace LipidCreator
 {
 
+    partial class HeadgroupModificationUI
+    {
+        private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.DataGridView dataGridViewItems;
+        private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Button buttonCancel;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null)) components.Dispose();
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            this.dataGridViewItems = new System.Windows.Forms.DataGridView();
+            this.buttonOk = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.ItemColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).BeginInit();
+            this.SuspendLayout();
+
+            //
+            // dataGridViewItems
+            //
+            this.dataGridViewItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ItemColumn});
+            this.dataGridViewItems.Location = new System.Drawing.Point(12, 12);
+            this.dataGridViewItems.Name = "dataGridViewItems";
+            this.dataGridViewItems.RowTemplate.Height = 25;
+            this.dataGridViewItems.Size = new System.Drawing.Size(360, 300);
+            this.dataGridViewItems.TabIndex = 0;
+            this.dataGridViewItems.CellValueChanged += (s, e) => { checkAllItems(); };
+            this.dataGridViewItems.RowsRemoved += (s, e) => { checkAllItems(); };
+            this.dataGridViewItems.RowStateChanged += (s, e) => { checkAllItems(); };
+
+            //
+            // ItemColumn
+            //
+            this.ItemColumn.HeaderText = "Modification (mass or chemical formula)";
+            this.ItemColumn.Name = "ItemColumn";
+            this.ItemColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+
+            //
+            // buttonOk
+            //
+            this.buttonOk.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            this.buttonOk.Location = new System.Drawing.Point(213, 320);
+            this.buttonOk.Name = "buttonOk";
+            this.buttonOk.Size = new System.Drawing.Size(75, 25);
+            this.buttonOk.TabIndex = 1;
+            this.buttonOk.Text = "OK";
+            this.buttonOk.UseVisualStyleBackColor = true;
+            this.buttonOk.MouseClick += (s, e) => { this.ApplyModifications(); };
+
+            //
+            // buttonRemove
+            //
+            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            this.buttonCancel.Location = new System.Drawing.Point(298, 320);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 25);
+            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.MouseClick += (s, e) => { this.Close(); };
+
+            //
+            // ItemListDialog
+            //
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(384, 361);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonOk);
+            this.Controls.Add(this.dataGridViewItems);
+            this.Name = "ItemListDialog";
+            this.Text = "Item List";
+
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewItems)).EndInit();
+            this.ResumeLayout(false);
+        }
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemColumn;
+    }
+
     
     public class Overlay : Control
     {
@@ -931,9 +1022,6 @@ namespace LipidCreator
                     dgv.CommitEdit(DataGridViewDataErrorContexts.Commit);
                     dgv.EndEdit();
                 }
-            };
-            view.DoubleClick += delegate(object sender, EventArgs e){
-                Console.WriteLine("huhu");
             };
 
             functionalGroupGridViews[tabIndex].Add(view);
@@ -1934,6 +2022,7 @@ namespace LipidCreator
             plHgListbox.MouseLeave += new System.EventHandler(plHGListboxMouseLeave);
             plHgListbox.MouseMove += new System.Windows.Forms.MouseEventHandler(plHGListboxMouseHover);
             plHgListbox.KeyDown += ListboxSelectAll;
+            plHgListbox.MouseDown += ListboxMouseClick;
             
             plHGLabel.Location = new Point(plHgListbox.Left, plHgListbox.Top - sep);
             plHGLabel.Text = "Head group";

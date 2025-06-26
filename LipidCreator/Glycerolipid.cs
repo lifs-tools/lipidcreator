@@ -195,18 +195,18 @@ namespace LipidCreator
             int containsMonoLyso = 0;
             
             // calling all possible fatty acid 1 combinations
-            bool has_direct_mass = false;
+            int has_direct_mass = 0;
             foreach (FattyAcid fa1 in fag1.getFattyAcids())
             {
                 containsMonoLyso &= ~1;
-                has_direct_mass |= fa1.directMass > -1;
+                has_direct_mass = (has_direct_mass & ~1) | (fa1.directMass > -1 ? 1 : 0);
                 if (fa1.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 1;
                     
                 // calling all possible fatty acid 2 combinations
                 foreach (FattyAcid fa2 in fag2.getFattyAcids())
                 {
                     containsMonoLyso &= ~2;
-                    has_direct_mass |= fa2.directMass > -1;
+                    has_direct_mass = (has_direct_mass & ~2) | (fa2.directMass > -1 ? 2 : 0);
                     if (fa2.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 2;
                     if (containsSugar)
                     {
@@ -221,7 +221,7 @@ namespace LipidCreator
                             string lipid_name = "";
                             string speciesName = "";
                             double extraMass = 0;
-                            if (!has_direct_mass)
+                            if (has_direct_mass == 0)
                             {
                             
                                 // goslin
@@ -255,7 +255,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(atomsCount, fa2.atomsCount);
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                 ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
-                                string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                                string chemForm = has_direct_mass != 0 ? "" : LipidCreator.computeChemicalFormula(atomsCount);
                                 Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
                                 string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                                 int charge = adduct.charge;
@@ -354,7 +354,7 @@ namespace LipidCreator
                         foreach (FattyAcid fa3 in fag3.getFattyAcids())
                         {
                             containsMonoLyso &= ~4;
-                            has_direct_mass |= fa3.directMass > -1;
+                            has_direct_mass = (has_direct_mass & ~4) | (fa3.directMass > -1 ? 4 : 0);
                             if (fa3.fattyAcidType == FattyAcidType.NoType) containsMonoLyso |= 4;
                                                             
                             List<FattyAcid> sortedAcids = new List<FattyAcid>();
@@ -384,7 +384,7 @@ namespace LipidCreator
                             string speciesName = "";
                             double extraMass = 0;
                             string lipid_name = "";
-                            if (!has_direct_mass)
+                            if (has_direct_mass == 0)
                             {
                                 // goslin
                                 csgoslin.LipidSpecies lipidSpecies = convertLipid(headgroup, sortedAcids);
@@ -403,8 +403,6 @@ namespace LipidCreator
                                 extraMass = speciesFA.getDirectMass();
                             }
                             string completeKey = lipid_name;
-                            Console.WriteLine(lipid_name + " " + speciesName + " " + completeKey);
-                            
                             
                             foreach (string adductKey in adducts.Keys.Where(x => adducts[x]))
                             {
@@ -419,7 +417,7 @@ namespace LipidCreator
                                 MS2Fragment.addCounts(atomsCount, fa3.atomsCount);
                                 MS2Fragment.addCounts(atomsCount, headgroups[headgroup].elements);
                                 ElementDictionary moleculeDictionary = new ElementDictionary(atomsCount);
-                                string chemForm = LipidCreator.computeChemicalFormula(atomsCount);
+                                string chemForm = has_direct_mass != 0 ? "" : LipidCreator.computeChemicalFormula(atomsCount);
                                 Adduct adduct = Lipid.ALL_ADDUCTS[Lipid.ADDUCT_POSITIONS[adductKey]];
                                 string adductForm = LipidCreator.computeAdductFormula(atomsCount, adduct);
                                 int charge = adduct.charge;

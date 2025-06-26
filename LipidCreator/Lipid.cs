@@ -110,6 +110,7 @@ namespace LipidCreator
         public int onlyPrecursors;
         public int onlyHeavyLabeled;
         public List<string> headGroupNames;
+        public IDictionary<string, List<HeadgroupModification>> headgroupModifications;
         public static string ID_SEPARATOR_UNSPECIFIC = "_";
         public static string ID_SEPARATOR_SPECIFIC = "/";
         public LipidCreator lipidCreator;
@@ -1019,6 +1020,17 @@ namespace LipidCreator
             foreach (string headgroup in copy.headGroupNames)
             {
                 headGroupNames.Add(headgroup);
+            }
+
+            headgroupModifications = new Dictionary<string, List<HeadgroupModification>>();
+            foreach (var hmKVP in copy.headgroupModifications)
+            {
+                List<HeadgroupModification> headgroupModificationList = new List<HeadgroupModification>();
+                headgroupModifications[hmKVP.Key] = headgroupModificationList;
+                foreach(var shm in hmKVP.Value)
+                {
+                    headgroupModificationList.Add(new HeadgroupModification(shm));
+                }
             }
         }
         

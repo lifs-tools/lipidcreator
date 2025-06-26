@@ -42,10 +42,111 @@ using System.Drawing.Drawing2D;
 using ExtensionMethods;
 using csgoslin;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace LipidCreator
 {
     using ElementTable = System.Collections.Generic.Dictionary<csgoslin.Element, int>;
+
+
+    public partial class HeadgroupModificationUI : Form
+    {
+        public CreatorGUI creatorGUI;
+        public Lipid lipid;
+        public string headgroup;
+        public Regex regex;
+
+        public HeadgroupModificationUI(CreatorGUI _creatorGUI, Lipid _lipid, string _headgroup)
+        {
+            List<string> validElements = new List<string>();
+            foreach (var kvp in MS2Fragment.ALL_ELEMENTS)
+            {
+                if (!kvp.Value.isHeavy) validElements.Add(kvp.Value.shortcut);
+            }
+            regex = new Regex(@"(" + String.Join("|", validElements.ToArray()) + @")(-?\d*)");
+
+            creatorGUI = _creatorGUI;
+            lipid = _lipid;
+            if (!_lipid.headgroupModifications.ContainsKey(_headgroup))
+            {
+                _lipid.headgroupModifications[_headgroup] = new List<HeadgroupModification>{new HeadgroupModification()};
+            }
+            headgroup = _headgroup;
+
+            InitializeComponent();
+            this.Text = $"{headgroup} headgroup modifications";
+
+            foreach (var hm in lipid.headgroupModifications[_headgroup])
+            {
+                if (hm.modificationIsMass)
+                {
+                    dataGridViewItems.Rows.Add(hm.modificationMass);
+                }
+                else
+                {
+                    dataGridViewItems.Rows.Add(LipidCreator.computeChemicalFormula(hm.modificationElements));
+                }
+            }
+        }
+
+
+        private void checkAllItems()
+        {
+            bool okButtonEnabled = true;
+            foreach (DataGridViewRow row in dataGridViewItems.Rows)
+            {
+                if (row.Cells[0].Value == null)
+                {
+                    row.Cells[0].Style.BackColor = Color.White;
+                    continue;
+                }
+                string item = row.Cells[0].Value?.ToString();
+
+                bool valid = item.Length == 0 || regex.Match(item).Success || int.TryParse(item, out int value);
+                Console.WriteLine($"{item} {valid}");
+                row.Cells[0].Style.BackColor = valid ? Color.White : Color.Red;
+                okButtonEnabled &= valid;
+            }
+            Console.WriteLine("");
+            this.buttonOk.Enabled = okButtonEnabled;
+            dataGridViewItems.Invalidate();
+        }
+
+
+
+        public void ApplyModifications()
+        {
+            lipid.headgroupModifications[headgroup].Clear();
+            foreach (DataGridViewRow row in dataGridViewItems.Rows)
+            {
+                if (row.Cells[0].Value == null) continue;
+                string item = row.Cells[0].Value?.ToString();
+                if (item.Length == 0) continue;
+                if (regex.Match(item).Success)
+                {
+                    ElementDictionary moleculeElements = new ElementDictionary();
+                    foreach (Match match in regex.Matches(item))
+                    {
+                        string element = match.Groups[1].Value;
+                        string quantityStr = match.Groups[2].Value;
+
+                        if (!MS2Fragment.ELEMENT_POSITIONS.ContainsKey(element)) continue;
+                        int quantity = string.IsNullOrEmpty(quantityStr) ? 1 : int.Parse(quantityStr);
+                        moleculeElements[(int)MS2Fragment.ELEMENT_POSITIONS[element]] = quantity;
+                    }
+                    lipid.headgroupModifications[headgroup].Add(new HeadgroupModification(moleculeElements));
+                }
+                else if(int.TryParse(item, out int value))
+                {
+                    lipid.headgroupModifications[headgroup].Add(new HeadgroupModification(item));
+                }
+
+            }
+            this.Close();
+        }
+    }
+
+
 
     public class FattyAcidAssembly
     {
@@ -112,6 +213,7 @@ namespace LipidCreator
         public bool lipidCreatorInitError = false;
         public List<LipidAssembly> searchLipids = new List<LipidAssembly>();
         private Lipid searchLipid = null;
+        private bool tabChangeSemaphore = false;
         
         public CreatorGUI(string _inputParameters)
         {
@@ -979,6 +1081,8 @@ namespace LipidCreator
         
         public void changeTab(int index)
         {
+            if (tabChangeSemaphore) return;
+            tabChangeSemaphore = true;
             tabControl.SelectedIndex = index;
             if (lipidTabList.Count <= index) return;
             changingTabForced = true;
@@ -987,6 +1091,7 @@ namespace LipidCreator
             changeTabElements(index);
             tabControl.Refresh();
             changingTabForced = false;
+            tabChangeSemaphore = false;
         }
         
         
@@ -1245,9 +1350,9 @@ namespace LipidCreator
                     // unset lyso
                     plFA2Combobox.Visible = true;
                     plFA2Textbox.Visible = true;
-                    plDB2Textbox.Visible = true;
-                    plFA2FuncGroups.Visible = true;
-                    plDB2Label.Visible = true;
+                    plDB2Textbox.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plFA2FuncGroups.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plDB2Label.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
                     
                     
                     
@@ -1256,25 +1361,28 @@ namespace LipidCreator
                         plHGLabel.Visible = false;
                         plHgListbox.Visible = false;
                         
-                        plFA3Checkbox3.Visible = true;
-                        plFA3Checkbox2.Visible = true;
-                        plFA3Checkbox1.Visible = true;
-                        plFA4Checkbox3.Visible = true;
-                        plFA4Checkbox2.Visible = true;
-                        plFA4Checkbox1.Visible = true;
+                        plFA3Checkbox3.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA3Checkbox2.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA3Checkbox1.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA4Checkbox3.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA4Checkbox2.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA4Checkbox1.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
                         plFA3Textbox.Visible = true;
                         plFA4Textbox.Visible = true;
-                        plDB3Textbox.Visible = true;
-                        plDB4Textbox.Visible = true;
-                        plFA3FuncGroups.Visible = true;
-                        plFA4FuncGroups.Visible = true;
+                        plDB3Textbox.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plDB4Textbox.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA3FuncGroups.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA4FuncGroups.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
                         plFA3Combobox.Visible = true;
                         plFA4Combobox.Visible = true;
-                        plDB3Label.Visible = true;
-                        plDB4Label.Visible = true;
-                        plFA2Checkbox3.Visible = true;
-                        plFA2Checkbox2.Visible = true;
-                        plFA2Checkbox1.Visible = true;
+                        plDB3Label.Visible = plFA3Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plDB4Label.Visible = plFA4Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA2Checkbox3.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA2Checkbox2.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA2Checkbox1.Visible = plFA2Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA1Checkbox3.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA1Checkbox2.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                        plFA1Checkbox1.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
                         
                         
                         plFA1Textbox.Text = currentPhospholipid.fag1.lengthInfo;
@@ -1435,6 +1543,7 @@ namespace LipidCreator
                         plHasPlasmalogen.Checked = currentPhospholipid.hasPlasmalogen;
                     }
                     
+                    plRepresentativeFA.Visible = !currentPhospholipid.isLyso && !currentPhospholipid.hasPlasmalogen;
                     //currentPhospholipid.fag1.functionalGroups.RowChanged += delegate(object s, DataRowChangeEventArgs e){ updatePLRepresentative(); };
                     
                     break;
@@ -2288,6 +2397,7 @@ namespace LipidCreator
         
         public void plTypeCheckedChanged(Object sender, EventArgs e)
         {
+
             ((Phospholipid)currentLipid).isCL = plIsCL.Checked;
             ((Phospholipid)currentLipid).isLyso = plIsLyso.Checked;
             ((Phospholipid)currentLipid).hasPlasmalogen = plHasPlasmalogen.Checked;
@@ -2368,7 +2478,40 @@ namespace LipidCreator
         
         
         
-        
+        private void ListboxMouseClick(object sender, MouseEventArgs e)
+        {
+            if (tutorial.tutorial != Tutorials.NoTutorial || e.Button != System.Windows.Forms.MouseButtons.Right) return;
+            ListBox listBox = (ListBox)sender;
+
+            int index = listBox.IndexFromPoint(e.Location);
+            if (index == ListBox.NoMatches) return;
+
+            var item = listBox.Items[index].ToString();
+            listBox.ContextMenu = new ContextMenu();
+            MenuItem menuItem = new MenuItem($"Manage {item} headgroup modifications");
+            menuItem.Click += (s, ee) => {
+                HeadgroupModificationUI hmui = new HeadgroupModificationUI(this, currentLipid, item);
+                hmui.Owner = this;
+                hmui.ShowInTaskbar = false;
+                hmui.ShowDialog();
+                hmui.Dispose();
+            };
+            listBox.ContextMenu.MenuItems.Add(menuItem);
+            listBox.ContextMenu.Popup += (s, ee) => { plHgListbox.ContextMenu = null; };
+
+            switch (LipidCreator.LC_OS)
+            {
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.WinCE:
+                    listBox.ContextMenu.Show(listBox, new Point(e.X, e.Y) );
+                    break;
+
+                default: break;
+            }
+        }
+
         
         
         
@@ -2456,9 +2599,9 @@ namespace LipidCreator
                     {
                         if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && lipidCreator.headgroups[headgroup].attributes.Contains("lyso")) plHgList.Add(headgroup);
                     }
-                    plFA1Checkbox3.Visible = true;
-                    plFA1Checkbox2.Visible = true;
-                    plFA1Checkbox1.Visible = true;
+                    plFA1Checkbox3.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plFA1Checkbox2.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plFA1Checkbox1.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
                     plPictureBox.Image = phosphoLysoBackboneImage;
                 }
                 plPictureBox.Left = 106;
@@ -2495,9 +2638,9 @@ namespace LipidCreator
                     {
                         if (lipidCreator.headgroups.ContainsKey(headgroup) && !lipidCreator.headgroups[headgroup].attributes.Contains("heavy") && !lipidCreator.headgroups[headgroup].attributes.Contains("ether") && !lipidCreator.headgroups[headgroup].attributes.Contains("lyso") && !headgroup.Equals("CL") && !headgroup.Equals("LCL")) plHgList.Add(headgroup);
                     }
-                    plFA1Checkbox3.Visible = true;
-                    plFA1Checkbox2.Visible = true;
-                    plFA1Checkbox1.Visible = true;
+                    plFA1Checkbox3.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plFA1Checkbox2.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
+                    plFA1Checkbox1.Visible = plFA1Combobox.SelectedIndex != (int)ChainType.directMass;
                     plPictureBox.Image = phosphoBackboneImage;
                 }
                 plPictureBox.Left = 107;
